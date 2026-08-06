@@ -117,9 +117,11 @@ private struct ReminderListView: View {
         do {
             reminders = try await ReminderStore.shared.refresh()
             WidgetCenter.shared.reloadAllTimelines()
+            await ReminderLiveActivityController.sync(reminders: reminders)
         } catch {
             reminders = await ReminderStore.shared.cached()
             self.error = error.localizedDescription
+            await ReminderLiveActivityController.sync(reminders: reminders)
         }
         isLoading = false
     }

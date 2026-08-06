@@ -199,7 +199,9 @@ Deno.serve(async (request) => {
         },
         body: JSON.stringify({
           aps: {
-            alert: { title: "New reminder", body: payload.record.text },
+            // Body-only alert: no title/header. System draws the full-width
+            // notification bar with the user's Liquid Glass (Clear) setting.
+            alert: { body: payload.record.text },
             sound: "default",
             "content-available": 1,
           },

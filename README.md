@@ -11,18 +11,15 @@ As of 6 August 2026:
 - Supabase project: `lazy-mans-reminders` (`biwmsxbqrevtjwgsvsmu`, Singapore)
 - Database migrations: **deployed**
 - Supabase Auth production URL and redirects: **deployed** (site URL `https://lmr.edmundlim.systems`)
-- `send-reminder-push` Edge Function: **deployed, but inactive until APNs secrets and its database webhook are configured**
+- `send-reminder-push` Edge Function: **deployed with APNs secrets + INSERT webhook trigger** (end-to-end push still needs a physical device)
 - iOS app and widget: **implemented; XcodeGen project generated locally, not yet signed or uploaded to TestFlight**
+- Lock Screen surface: **Live Activity** (full-width clear-glass banner, body text only) plus optional accessory widgets; push alerts are body-only (no title)
+- Custom domain DNS: **proxied CNAME + Pages domain active**
 
 ### Deferred launch checklist
 
-Complete these items from a Mac with the Apple Developer account:
+See [HUMANS.md](HUMANS.md) for the live checklist. Remaining human work:
 
-- [ ] Confirm DNS: proxied CNAME `lmr` → `lazy-mans-reminders.pages.dev` on the `edmundlim.systems` zone (Pages domain already registered).
-- [ ] Create App IDs `systems.edmundlim.LazyMansReminders` + `.Widget`, and App Group `group.systems.edmundlim.LazyMansReminders`; enable Push Notifications and the App Group capability.
-- [ ] Create an APNs `.p8` key and put `APNS_KEY_ID`, `APNS_TEAM_ID`, `APNS_PRIVATE_KEY`, `APNS_TOPIC`, and a generated `WEBHOOK_SECRET` in `supabase/.env.functions`.
-- [ ] Run `supabase secrets set --env-file supabase/.env.functions`.
-- [ ] Create the `public.reminders` `INSERT` database webhook described below, using the same `WEBHOOK_SECRET`.
 - [ ] Open `ios/LazyMansReminders.xcodeproj`, sign both targets, then test magic-link login, push delivery, and both lock-screen widget sizes on a physical iPhone.
 - [ ] Upload to TestFlight and complete the paid-app release at US $2.99.
 - [ ] Enroll in Apple's App Store Small Business Program before release.

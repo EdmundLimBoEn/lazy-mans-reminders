@@ -40,6 +40,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
                 let previous = await ReminderStore.shared.cached()
                 let refreshed = try await ReminderStore.shared.refresh()
                 WidgetCenter.shared.reloadAllTimelines()
+                await ReminderLiveActivityController.sync(reminders: refreshed)
                 completionHandler(previous == refreshed ? .noData : .newData)
             } catch {
                 completionHandler(.failed)
@@ -51,6 +52,17 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        [.banner, .sound]
+        // Banner uses system notification chrome (full-width clear glass when
+        // the user has Clear enabled). Payload is body-only — no title header.
+        [.banner, .sound, .list]
+    }
+
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse
+    ) async {
+        let reminders = await ReminderStore.shared.cached()
+        await ReminderLiveActivityController.sync(reminders: reminders)
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }

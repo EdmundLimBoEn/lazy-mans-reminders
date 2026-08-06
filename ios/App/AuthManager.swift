@@ -74,6 +74,7 @@ final class AuthManager: ObservableObject {
         session = nil
         await ReminderStore.shared.clearUserData()
         WidgetCenter.shared.reloadAllTimelines()
+        await ReminderLiveActivityController.sync(reminders: [])
     }
 
     func registerDevice(token: String) async {
@@ -94,6 +95,7 @@ final class AuthManager: ObservableObject {
         guard let session else {
             await ReminderStore.shared.clearUserData()
             WidgetCenter.shared.reloadAllTimelines()
+            await ReminderLiveActivityController.sync(reminders: [])
             return
         }
         try? await ReminderStore.shared.saveSession(
