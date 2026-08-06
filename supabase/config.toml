@@ -1,0 +1,30 @@
+project_id = "lazy-mans-reminders"
+
+[auth]
+site_url = "https://lazy-mans-reminders.pages.dev"
+additional_redirect_urls = [
+  "http://localhost:5173",
+  "http://localhost:5173/auth/callback",
+  "https://lazy-mans-reminders.pages.dev",
+  "https://lazy-mans-reminders.pages.dev/auth/callback",
+  "lazymansreminders://auth/callback",
+]
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+secure_password_change = true
+otp_expiry = 3600
+otp_length = 6
+max_frequency = "1m"
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
+[functions.send-reminder-push]
+# Database webhooks do not carry a user JWT; the function authenticates them
+# with WEBHOOK_SECRET instead.
+verify_jwt = false

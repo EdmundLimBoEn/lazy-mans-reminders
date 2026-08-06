@@ -1,0 +1,37 @@
+# OS and editors
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+web/.env.local
+ios/Config.xcconfig
+supabase/.env.functions
+*.p8
+*.p12
+*.mobileprovision
+
+# Web
+web/node_modules/
+web/dist/
+web/*.tsbuildinfo
+web/.wrangler/
+
+# Supabase CLI
+supabase/.temp/
+
+# Xcode / XcodeGen
+ios/*.xcodeproj/
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+
+# Logs
+*.log
+npm-debug.log*
