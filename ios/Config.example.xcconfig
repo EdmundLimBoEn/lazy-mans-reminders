@@ -1,7 +1,8 @@
 // Copy to Config.xcconfig and replace every placeholder.
+// SUPABASE_URL uses https:/$()/… so xcconfig does not treat // as a comment.
 DEVELOPMENT_TEAM = YOUR_APPLE_TEAM_ID
-PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.LazyMansReminders
-WIDGET_BUNDLE_IDENTIFIER = com.yourcompany.LazyMansReminders.Widget
-APP_GROUP_ID = group.com.yourcompany.LazyMansReminders
+PRODUCT_BUNDLE_IDENTIFIER = systems.edmundlim.LazyMansReminders
+WIDGET_BUNDLE_IDENTIFIER = systems.edmundlim.LazyMansReminders.Widget
+APP_GROUP_ID = group.systems.edmundlim.LazyMansReminders
 SUPABASE_URL = https:/$()/biwmsxbqrevtjwgsvsmu.supabase.co
 SUPABASE_ANON_KEY = sb_publishable_5Q63pv_PuD01ClkoVVLfog_YblFUzoQ

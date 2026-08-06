@@ -6,26 +6,24 @@ A Supabase-backed reminder board with a React/Vite web app and an iOS 17 app plu
 
 As of 6 August 2026:
 
-- Web app: **live** at <https://lazy-mans-reminders.pages.dev>
+- Web app: **live** at <https://lmr.edmundlim.systems> (alias) and <https://lazy-mans-reminders.pages.dev>
 - Cloudflare Pages project: `lazy-mans-reminders`
 - Supabase project: `lazy-mans-reminders` (`biwmsxbqrevtjwgsvsmu`, Singapore)
 - Database migrations: **deployed**
-- Supabase Auth production URL and redirects: **deployed**
+- Supabase Auth production URL and redirects: **deployed** (site URL `https://lmr.edmundlim.systems`)
 - `send-reminder-push` Edge Function: **deployed, but inactive until APNs secrets and its database webhook are configured**
-- iOS app and widget: **implemented, but not generated, signed, or uploaded to TestFlight**
-- The generated Supabase database password is stored locally in the ignored file `supabase/.env.local`.
+- iOS app and widget: **implemented; XcodeGen project generated locally, not yet signed or uploaded to TestFlight**
 
 ### Deferred launch checklist
 
 Complete these items from a Mac with the Apple Developer account:
 
-- [ ] Copy `ios/Config.example.xcconfig` to `ios/Config.xcconfig`.
-- [ ] Fill in the Apple Team ID, app bundle ID, widget bundle ID, and App Group ID. The production Supabase client values are already present in the example.
-- [ ] Create matching App IDs and App Group in the Apple Developer portal; enable Push Notifications and the App Group capability.
+- [ ] Confirm DNS: proxied CNAME `lmr` → `lazy-mans-reminders.pages.dev` on the `edmundlim.systems` zone (Pages domain already registered).
+- [ ] Create App IDs `systems.edmundlim.LazyMansReminders` + `.Widget`, and App Group `group.systems.edmundlim.LazyMansReminders`; enable Push Notifications and the App Group capability.
 - [ ] Create an APNs `.p8` key and put `APNS_KEY_ID`, `APNS_TEAM_ID`, `APNS_PRIVATE_KEY`, `APNS_TOPIC`, and a generated `WEBHOOK_SECRET` in `supabase/.env.functions`.
 - [ ] Run `supabase secrets set --env-file supabase/.env.functions`.
 - [ ] Create the `public.reminders` `INSERT` database webhook described below, using the same `WEBHOOK_SECRET`.
-- [ ] Generate the Xcode project, test magic-link login, push delivery, and both lock-screen widget sizes on a physical iPhone.
+- [ ] Open `ios/LazyMansReminders.xcodeproj`, sign both targets, then test magic-link login, push delivery, and both lock-screen widget sizes on a physical iPhone.
 - [ ] Upload to TestFlight and complete the paid-app release at US $2.99.
 - [ ] Enroll in Apple's App Store Small Business Program before release.
 
@@ -92,10 +90,10 @@ supabase db reset
 
 In Supabase **Authentication → URL Configuration**:
 
-- Set the Site URL to the production Cloudflare Pages URL, for example `https://lazy-mans-reminders.pages.dev`.
+- Set the Site URL to `https://lmr.edmundlim.systems`.
 - Add `http://localhost:5173/auth/callback`.
-- Add `https://lazy-mans-reminders.pages.dev/auth/callback`.
-- Add the callback for every custom domain, for example `https://reminders.example.com/auth/callback`.
+- Add `https://lmr.edmundlim.systems/auth/callback`.
+- Add `https://lazy-mans-reminders.pages.dev/auth/callback` as a fallback.
 - Add `lazymansreminders://auth/callback` for iOS.
 
 Keep `supabase/config.toml` aligned for local development. In **Authentication → Providers → Email**, enable email sign-in and confirmations. Test a magic link from both the web app and a physical iPhone; the production hostname must exactly match an allowed redirect.
@@ -158,7 +156,7 @@ npm run build
 npx wrangler pages deploy dist --project-name lazy-mans-reminders
 ```
 
-After the first deployment, add the final Pages/custom-domain callback URL to Supabase Auth before testing magic links.
+Custom domain: `lmr.edmundlim.systems` is registered on the Pages project. Ensure a proxied CNAME `lmr` → `lazy-mans-reminders.pages.dev` exists on the `edmundlim.systems` zone, then keep Supabase Auth redirects in sync (see above).
 
 ## iOS
 
@@ -176,13 +174,21 @@ The `PRODUCT_BUNDLE_IDENTIFIER`, widget identifier, and `APP_GROUP_ID` in `ios/C
 
 ### Generate and run the Xcode project
 
-Install XcodeGen and generate the project:
+Copy config, install XcodeGen if needed, and generate the project:
 
 ```sh
+cp ios/Config.example.xcconfig ios/Config.xcconfig
+# set DEVELOPMENT_TEAM (DUU8J39BA7 for Edmund Lim) if needed
 brew install xcodegen
 xcodegen generate --spec ios/project.yml
 open ios/LazyMansReminders.xcodeproj
 ```
+
+Bundle IDs (must match Apple Developer portal):
+
+- App: `systems.edmundlim.LazyMansReminders`
+- Widget: `systems.edmundlim.LazyMansReminders.Widget`
+- App Group: `group.systems.edmundlim.LazyMansReminders`
 
 In Xcode:
 
