@@ -12,7 +12,37 @@ import {
   Trash2,
   X,
 } from 'lucide-react'
+import { LegalFooterLinks, PrivacyPage, SupportPage, TermsPage } from './LegalPages'
 import { supabase } from './supabase'
+
+type AppRoute = '/' | '/privacy' | '/terms' | '/support'
+
+function normalizePath(pathname: string): AppRoute {
+  const path = pathname.replace(/\/+$/, '') || '/'
+  if (path === '/privacy' || path === '/terms' || path === '/support') return path
+  return '/'
+}
+
+function usePathname(): [AppRoute, (path: string) => void] {
+  const [path, setPath] = useState<AppRoute>(() => normalizePath(window.location.pathname))
+
+  useEffect(() => {
+    const onPopState = () => setPath(normalizePath(window.location.pathname))
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [])
+
+  const navigate = useCallback((next: string) => {
+    const normalized = normalizePath(next)
+    if (normalized !== normalizePath(window.location.pathname)) {
+      window.history.pushState({}, '', normalized)
+    }
+    setPath(normalized)
+    window.scrollTo(0, 0)
+  }, [])
+
+  return [path, navigate]
+}
 
 type Reminder = {
   id: string
@@ -25,10 +55,11 @@ type Reminder = {
 
 type ReminderChanges = Pick<Reminder, 'is_done' | 'sort_order' | 'text'>
 
-function SignIn() {
+function SignIn({ onNavigate }: { onNavigate: (path: string) => void }) {
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [oauthLoading, setOauthLoading] = useState<'apple' | 'google' | null>(null)
   const [error, setError] = useState('')
 
   async function submit(event: FormEvent) {
@@ -48,6 +79,23 @@ function SignIn() {
       setSent(true)
     }
   }
+
+  async function signInWithProvider(provider: 'apple' | 'google') {
+    setOauthLoading(provider)
+    setError('')
+    const { error: authError } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: `${window.location.origin}/`,
+      },
+    })
+    if (authError) {
+      setError(authError.message)
+      setOauthLoading(null)
+    }
+  }
+
+  const busy = loading || oauthLoading !== null
 
   return (
     <main className="auth-shell">
@@ -76,34 +124,63 @@ function SignIn() {
           <p aria-live="polite">
             {sent
               ? `We sent a secure sign-in link to ${email}.`
-              : 'Sign in with email. No password to remember.'}
+              : 'Sign in with Apple, Google, or email. No password to remember.'}
           </p>
           {!sent && (
-            <form onSubmit={submit}>
-              <label htmlFor="email">Email address</label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="you@example.com"
-                autoComplete="email"
-                required
-              />
-              {error && <p className="error" role="alert">{error}</p>}
-              <button className="primary" type="submit" disabled={loading}>
-                {loading ? 'Sending…' : 'Send sign-in link'}
-              </button>
-            </form>
+            <>
+              <div className="oauth-stack">
+                <button
+                  className="oauth-button oauth-apple"
+                  type="button"
+                  disabled={busy}
+                  onClick={() => void signInWithProvider('apple')}
+                >
+                  {oauthLoading === 'apple' ? 'Redirecting…' : 'Continue with Apple'}
+                </button>
+                <button
+                  className="oauth-button oauth-google"
+                  type="button"
+                  disabled={busy}
+                  onClick={() => void signInWithProvider('google')}
+                >
+                  {oauthLoading === 'google' ? 'Redirecting…' : 'Continue with Google'}
+                </button>
+              </div>
+              <div className="auth-divider" role="separator" aria-label="or">
+                <span>or email</span>
+              </div>
+              <form onSubmit={submit}>
+                <label htmlFor="email">Email address</label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  required
+                />
+                {error && <p className="error" role="alert">{error}</p>}
+                <button className="primary" type="submit" disabled={busy}>
+                  {loading ? 'Sending…' : 'Send sign-in link'}
+                </button>
+              </form>
+            </>
           )}
-          {sent && <button className="text-button" type="button" onClick={() => setSent(false)}>Use another email</button>}
+          {sent && (
+            <>
+              {error && <p className="error" role="alert">{error}</p>}
+              <button className="text-button" type="button" onClick={() => setSent(false)}>Use another email</button>
+            </>
+          )}
+          <LegalFooterLinks onNavigate={onNavigate} />
         </div>
       </section>
     </main>
   )
 }
 
-function Board({ session }: { session: Session }) {
+function Board({ session, onNavigate }: { session: Session; onNavigate: (path: string) => void }) {
   const [reminders, setReminders] = useState<Reminder[]>([])
   const [text, setText] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -112,8 +189,19 @@ function Board({ session }: { session: Session }) {
   const [error, setError] = useState('')
   const [adding, setAdding] = useState(false)
   const [reordering, setReordering] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deletingAccount, setDeletingAccount] = useState(false)
   const loadSequence = useRef(0)
   const reorderingRef = useRef(false)
+
+  useEffect(() => {
+    if (!confirmDelete) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !deletingAccount) setConfirmDelete(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [confirmDelete, deletingAccount])
 
   const sorted = useMemo(
     () => [...reminders].sort((a, b) =>
@@ -264,6 +352,42 @@ function Board({ session }: { session: Session }) {
     if (signOutError) setError(signOutError.message)
   }
 
+  async function deleteAccount() {
+    setDeletingAccount(true)
+    setError('')
+    const { data, error: invokeError } = await supabase.functions.invoke('delete-account', {
+      method: 'POST',
+    })
+    if (invokeError || data?.ok !== true) {
+      // Fallback: clear user-owned rows via RLS, then sign out with support instructions.
+      const [{ error: remindersError }, { error: tokensError }] = await Promise.all([
+        supabase.from('reminders').delete().eq('user_id', session.user.id),
+        supabase.from('device_tokens').delete().eq('user_id', session.user.id),
+      ])
+      if (remindersError || tokensError) {
+        setError(
+          remindersError?.message
+          ?? tokensError?.message
+          ?? invokeError?.message
+          ?? 'Could not delete account. Visit Support for help.',
+        )
+        setDeletingAccount(false)
+        return
+      }
+      await supabase.auth.signOut()
+      setConfirmDelete(false)
+      setDeletingAccount(false)
+      window.alert(
+        'Your reminders were deleted and you have been signed out. '
+        + 'To finish removing your sign-in account, email support via the Support page.',
+      )
+      return
+    }
+    await supabase.auth.signOut()
+    setConfirmDelete(false)
+    setDeletingAccount(false)
+  }
+
   return (
     <main className="board-shell">
       <header>
@@ -272,7 +396,17 @@ function Board({ session }: { session: Session }) {
           <h1>Your board</h1>
         </div>
         <div className="account">
-          <span>{session.user.email}</span>
+          <div className="account-meta">
+            <span>{session.user.email}</span>
+            <button
+              className="text-button danger-text"
+              type="button"
+              disabled={deletingAccount}
+              onClick={() => setConfirmDelete(true)}
+            >
+              Delete account
+            </button>
+          </div>
           <button className="icon-button" type="button" aria-label="Sign out" title="Sign out" onClick={() => void signOut()}>
             <LogOut size={18} />
           </button>
@@ -359,12 +493,56 @@ function Board({ session }: { session: Session }) {
           </ul>
         )}
       </section>
-      <footer><Smartphone size={16} /> Open the app once after signing in to add the lock-screen widget.</footer>
+      <footer className="board-footer">
+        <p className="footer-note"><Smartphone size={16} /> Open the app once after signing in to add the lock-screen widget.</p>
+        <LegalFooterLinks onNavigate={onNavigate} />
+      </footer>
+      {confirmDelete && (
+        <div
+          className="delete-dialog-backdrop"
+          role="presentation"
+          onClick={() => { if (!deletingAccount) setConfirmDelete(false) }}
+        >
+          <div
+            className="delete-dialog"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="delete-account-title"
+            aria-describedby="delete-account-copy"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h2 id="delete-account-title">Delete your account?</h2>
+            <p id="delete-account-copy">
+              This permanently removes your reminders, device registrations, and sign-in.
+              This cannot be undone.
+            </p>
+            <div className="delete-dialog-actions">
+              <button
+                className="danger"
+                type="button"
+                disabled={deletingAccount}
+                onClick={() => void deleteAccount()}
+              >
+                {deletingAccount ? 'Deleting…' : 'Delete forever'}
+              </button>
+              <button
+                className="text-button"
+                type="button"
+                disabled={deletingAccount}
+                onClick={() => setConfirmDelete(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }
 
 export default function App() {
+  const [path, navigate] = usePathname()
   const [session, setSession] = useState<Session | null>(null)
   const [ready, setReady] = useState(false)
   const [authError, setAuthError] = useState('')
@@ -383,6 +561,10 @@ export default function App() {
     return () => data.subscription.unsubscribe()
   }, [])
 
+  if (path === '/privacy') return <PrivacyPage onNavigate={navigate} />
+  if (path === '/terms') return <TermsPage onNavigate={navigate} />
+  if (path === '/support') return <SupportPage onNavigate={navigate} />
+
   if (!ready) return <div className="splash" role="status" aria-label="Loading">LM</div>
   if (authError) {
     return (
@@ -393,5 +575,7 @@ export default function App() {
       </main>
     )
   }
-  return session ? <Board session={session} /> : <SignIn />
+  return session
+    ? <Board session={session} onNavigate={navigate} />
+    : <SignIn onNavigate={navigate} />
 }

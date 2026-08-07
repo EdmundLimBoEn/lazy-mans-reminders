@@ -26,7 +26,26 @@ max_frequency = "1m"
 enroll_enabled = true
 verify_enabled = true
 
+# Social providers are configured in the hosted Supabase dashboard for production.
+# Keep these stubs for local `supabase start` once secrets are available.
+[auth.external.apple]
+enabled = false
+client_id = "env(APPLE_CLIENT_ID)"
+secret = "env(APPLE_SECRET)"
+# comma-separated additional client IDs (native iOS bundle ID, etc.)
+# additional_client_ids = "systems.edmundlim.LazyMansReminders"
+
+[auth.external.google]
+enabled = false
+client_id = "env(GOOGLE_CLIENT_ID)"
+secret = "env(GOOGLE_SECRET)"
+# skip_nonce_check = false
+
 [functions.send-reminder-push]
 # Database webhooks do not carry a user JWT; the function authenticates them
 # with WEBHOOK_SECRET instead.
 verify_jwt = false
+
+[functions.delete-account]
+# Browser clients call this with the signed-in user's JWT.
+verify_jwt = true

@@ -76,6 +76,44 @@ actor ReminderStore {
         return reminders
     }
 
+    /// Marks a reminder done via PATCH, updates the App Group cache, and returns the remaining active reminders.
+    func markDone(id: UUID) async throws -> [Reminder] {
+        guard
+            let data = defaults.data(forKey: sessionKey),
+            let session = try? JSONDecoder().decode(SharedSession.self, from: data),
+            session.expiresAt > Date()
+        else {
+            throw StoreError.requestFailed(401)
+        }
+
+        var components = URLComponents(
+            url: AppConfig.supabaseURL.appending(path: "rest/v1/reminders"),
+            resolvingAgainstBaseURL: false
+        )!
+        components.queryItems = [
+            URLQueryItem(name: "id", value: "eq.\(id.uuidString)")
+        ]
+        var request = URLRequest(url: components.url!)
+        request.httpMethod = "PATCH"
+        request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
+        request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("return=minimal", forHTTPHeaderField: "Prefer")
+        request.httpBody = try Self.encoder.encode(["is_done": true])
+
+        let (_, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse else {
+            throw StoreError.invalidResponse
+        }
+        guard 200..<300 ~= http.statusCode else {
+            throw StoreError.requestFailed(http.statusCode)
+        }
+
+        let reminders = cached().filter { $0.id != id }
+        defaults.set(try Self.encoder.encode(reminders), forKey: cacheKey)
+        return reminders
+    }
+
     private static let encoder: JSONEncoder = {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601

@@ -83,7 +83,7 @@ supabase start
 supabase db reset
 ```
 
-### Configure passwordless authentication
+### Configure authentication
 
 In Supabase **Authentication → URL Configuration**:
 
@@ -92,18 +92,27 @@ In Supabase **Authentication → URL Configuration**:
 - Add `https://lmr.edmundlim.systems/auth/callback`.
 - Add `https://lazy-mans-reminders.pages.dev/auth/callback` as a fallback.
 - Add `lazymansreminders://auth/callback` for iOS.
+- Also allow the bare origins used by OAuth returns: `http://localhost:5173`, `https://lmr.edmundlim.systems`, and `https://lazy-mans-reminders.pages.dev`.
 
-Keep `supabase/config.toml` aligned for local development. In **Authentication → Providers → Email**, enable email sign-in and confirmations. Test a magic link from both the web app and a physical iPhone; the production hostname must exactly match an allowed redirect.
+Keep `supabase/config.toml` aligned for local development. In **Authentication → Providers**:
+
+- Enable **Email** (magic link) with confirmations.
+- Enable **Apple** and **Google** using the steps in `HUMANS.md` (Services ID + secret for web Apple; Web OAuth client for Google; iOS App ID in Apple Client IDs).
+
+Test Apple, Google, and a magic link from both the web app and a physical iPhone; the production hostname must exactly match an allowed redirect.
 
 ### Deploy push delivery
 
-Upload the server-only secrets first, then deploy the Edge Function:
+Upload the server-only secrets first, then deploy the Edge Functions:
 
 ```sh
 supabase functions deploy send-reminder-push --no-verify-jwt
+supabase functions deploy delete-account
 ```
 
-JWT verification is intentionally disabled because the database webhook authenticates with `x-webhook-secret`. The function checks that shared secret before using the service-role client.
+`send-reminder-push` disables JWT verification because the database webhook authenticates with `x-webhook-secret`. The function checks that shared secret before using the service-role client.
+
+`delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, and auth user (service role).
 
 In Supabase **Database → Webhooks**, create a webhook with:
 

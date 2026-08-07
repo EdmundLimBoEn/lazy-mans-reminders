@@ -60,6 +60,8 @@ targets:
       path: App/LazyMansReminders.entitlements
       properties:
         aps-environment: "$(APNS_ENVIRONMENT)"
+        com.apple.developer.applesignin:
+          - Default
         com.apple.security.application-groups:
           - "$(APP_GROUP_ID)"
     attributes:
@@ -67,6 +69,8 @@ targets:
         com.apple.ApplicationGroups.iOS:
           enabled: 1
         com.apple.Push:
+          enabled: 1
+        com.apple.SignInWithApple:
           enabled: 1
   ReminderWidgetExtension:
     type: app-extension

@@ -1,4 +1,6 @@
+import AuthenticationServices
 import Combine
+import CryptoKit
 import Foundation
 import Supabase
 import WidgetKit
@@ -25,6 +27,9 @@ final class AuthManager: ObservableObject {
         supabaseKey: AppConfig.supabaseAnonKey
     )
 
+    private var pendingAppleNonce: String?
+    private let authRedirectURL = URL(string: "lazymansreminders://auth/callback")!
+
     init() {
         Task {
             session = try? await client.auth.session
@@ -44,9 +49,87 @@ final class AuthManager: ObservableObject {
         do {
             try await client.auth.signInWithOTP(
                 email: email,
-                redirectTo: URL(string: "lazymansreminders://auth/callback")
+                redirectTo: authRedirectURL
             )
             message = "Check your inbox for the sign-in link."
+        } catch {
+            message = error.localizedDescription
+        }
+        isLoading = false
+    }
+
+    func configureAppleRequest(_ request: ASAuthorizationAppleIDRequest) {
+        let nonce = Self.randomNonceString()
+        pendingAppleNonce = nonce
+        request.requestedScopes = [.email, .fullName]
+        request.nonce = Self.sha256(nonce)
+    }
+
+    func handleAppleSignIn(_ result: Result<ASAuthorization, Error>) async {
+        message = nil
+        switch result {
+        case .failure(let error):
+            if let authError = error as? ASAuthorizationError, authError.code == .canceled {
+                return
+            }
+            message = error.localizedDescription
+        case .success(let authorization):
+            guard
+                let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
+                let tokenData = credential.identityToken,
+                let idToken = String(data: tokenData, encoding: .utf8)
+            else {
+                message = "Apple did not return a usable identity token."
+                return
+            }
+
+            isLoading = true
+            do {
+                session = try await client.auth.signInWithIdToken(
+                    credentials: .init(
+                        provider: .apple,
+                        idToken: idToken,
+                        nonce: pendingAppleNonce
+                    )
+                )
+                pendingAppleNonce = nil
+                await shareSession()
+
+                if let fullName = credential.fullName {
+                    let parts = [fullName.givenName, fullName.middleName, fullName.familyName]
+                        .compactMap { $0 }
+                        .filter { !$0.isEmpty }
+                    if !parts.isEmpty {
+                        try? await client.auth.update(
+                            user: UserAttributes(
+                                data: [
+                                    "full_name": .string(parts.joined(separator: " ")),
+                                    "given_name": .string(fullName.givenName ?? ""),
+                                    "family_name": .string(fullName.familyName ?? ""),
+                                ]
+                            )
+                        )
+                    }
+                }
+            } catch {
+                message = error.localizedDescription
+            }
+            isLoading = false
+        }
+    }
+
+    /// Opens Google via the system browser (ASWebAuthenticationSession). No GoogleSignIn SDK required.
+    func signInWithGoogle() async {
+        isLoading = true
+        message = nil
+        do {
+            session = try await client.auth.signInWithOAuth(
+                provider: .google,
+                redirectTo: authRedirectURL
+            ) { session in
+                session.prefersEphemeralWebBrowserSession = true
+            }
+            await shareSession()
         } catch {
             message = error.localizedDescription
         }
@@ -77,6 +160,17 @@ final class AuthManager: ObservableObject {
         await ReminderLiveActivityController.sync(reminders: [])
     }
 
+    /// Deletes the signed-in user's data and auth account via the `delete-account` Edge Function.
+    func deleteAccount() async throws {
+        try await client.functions.invoke("delete-account")
+        // Auth user is already gone; local sign-out may fail — clear client state either way.
+        try? await client.auth.signOut()
+        session = nil
+        message = nil
+        await ReminderStore.shared.clearUserData()
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+
     func registerDevice(token: String) async {
         guard let userID = session?.user.id else { return }
         #if DEBUG
@@ -102,5 +196,29 @@ final class AuthManager: ObservableObject {
             accessToken: session.accessToken,
             expiresAt: Date(timeIntervalSince1970: session.expiresAt)
         )
+    }
+
+    private static func randomNonceString(length: Int = 32) -> String {
+        precondition(length > 0)
+        let charset = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        var result = ""
+        var remaining = length
+        while remaining > 0 {
+            var random: UInt8 = 0
+            let status = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
+            if status != errSecSuccess {
+                fatalError("Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(status)")
+            }
+            if random < charset.count {
+                result.append(charset[Int(random)])
+                remaining -= 1
+            }
+        }
+        return result
+    }
+
+    private static func sha256(_ input: String) -> String {
+        let data = Data(input.utf8)
+        return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
     }
 }
