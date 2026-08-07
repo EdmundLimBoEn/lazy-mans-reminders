@@ -18,6 +18,6 @@
   - Authorized JavaScript origins: `https://lmr.edmundlim.systems`, `https://lazy-mans-reminders.pages.dev`, `http://localhost:5173`
   - Optional iOS client with bundle ID `systems.edmundlim.LazyMansReminders`
   - Enable Google in Supabase → Authentication → Providers → Google with the Web client ID + secret
-- [ ] **Deploy delete-account function** — `supabase functions deploy delete-account` (JWT verification on; used by web + iOS account deletion).
+- [x] **Deploy delete-account function** — Deployed to project `biwmsxbqrevtjwgsvsmu` (`supabase functions deploy delete-account`). JWT verification on; used by web + iOS account deletion.
 - [ ] **Device test** — Open `ios/LazyMansReminders.xcodeproj`, sign both targets with team `DUU8J39BA7`, run on a physical iPhone (Apple / Google / magic link, complete-tap, push, lock-screen widgets, account deletion). No device build has been run yet.
 - [ ] **Legal review** — Privacy / Terms / Support templates are live at `/privacy`, `/terms`, `/support` after web deploy. Have counsel review before monetized App Store submission. Contact email currently `hello@edmundlim.systems`.
