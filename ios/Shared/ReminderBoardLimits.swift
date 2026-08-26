@@ -9,7 +9,7 @@ enum ReminderBoardLimits {
     static var lockScreenMaxLines: Int { LockScreenLineBudget.cachedMaxLines }
 
     static let postItHint =
-        "Hint: This app is more like a post it note, you can combine different reminders into 1 line, or find other ways to optimise"
+        "Hint: This board is more like a post-it note. Combine reminders into one line, or find other ways to keep it short."
 
     static func isAtCapacity(_ activeCount: Int) -> Bool {
         activeCount >= maxActive
