@@ -13,7 +13,10 @@ import {
   X,
 } from 'lucide-react'
 import { nextSortOrder, sortReminders, swapSortOrders, temporarySortOrder, isAtCapacity, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
+import { AuthCallback } from './AuthCallback'
+import { Connect } from './Connect'
 import { LegalFooterLinks, PrivacyPage, SupportPage, TermsPage } from './LegalPages'
+import { authCallbackUrl, MCP_URL, rememberReturnTo } from './mcp'
 import { normalizePath, type AppRoute } from './routing'
 import { supabase } from './supabase'
 
@@ -62,9 +65,10 @@ function SignIn({ onNavigate }: { onNavigate: (path: string) => void }) {
     if (!normalizedEmail) return
     setLoading(true)
     setError('')
+    rememberReturnTo()
     const { error: authError } = await supabase.auth.signInWithOtp({
       email: normalizedEmail,
-      options: { emailRedirectTo: `${window.location.origin}/` },
+      options: { emailRedirectTo: authCallbackUrl() },
     })
     setLoading(false)
     if (authError) setError(authError.message)
@@ -77,10 +81,15 @@ function SignIn({ onNavigate }: { onNavigate: (path: string) => void }) {
   async function signInWithProvider(provider: 'apple' | 'google') {
     setOauthLoading(provider)
     setError('')
+    rememberReturnTo()
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/`,
+        redirectTo: authCallbackUrl(),
+        queryParams: provider === 'google'
+          ? { prompt: 'select_account', access_type: 'online' }
+          : undefined,
+        scopes: provider === 'apple' ? 'name email' : undefined,
       },
     })
     if (authError) {
@@ -561,8 +570,6 @@ type AgentTokenClient = {
   revoked_at: string | null
 }
 
-const MCP_URL = 'https://mcp.lmr.edmundlim.systems/mcp'
-
 function AgentAccess({ userId }: { userId: string }) {
   const [tokens, setTokens] = useState<AgentTokenClient[]>([])
   const [name, setName] = useState('')
@@ -613,83 +620,70 @@ function AgentAccess({ userId }: { userId: string }) {
   return (
     <section className="agent-access" aria-labelledby="agent-access-heading">
       <h2 id="agent-access-heading">Agent access</h2>
-      <p>Mint a personal key so Cursor, Claude Code, Codex, or Grok Bot can write to this board. Shown once. Revoke anytime.</p>
-      <form className="agent-key-form" onSubmit={mint}>
-        <label className="visually-hidden" htmlFor="agent-key-name">Key name</label>
-        <input
-          id="agent-key-name"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          placeholder="Cursor, Codex, Grok Bot…"
-          maxLength={64}
-          autoComplete="off"
-        />
-        <button className="primary" type="submit" disabled={busy || !name.trim()}>
-          {busy ? 'Creating…' : 'Create key'}
-        </button>
-      </form>
-      {error && <p className="error" role="alert">{error}</p>}
-      {minted && (
-        <div className="minted-key" role="status">
-          <p>Copy this now. It will not be shown again.</p>
-          <input readOnly value={minted} onFocus={(event) => event.currentTarget.select()} aria-label="New agent token" />
-          <button className="text-button" type="button" onClick={() => setMinted(null)}>I saved it</button>
-        </div>
-      )}
-      {tokens.length > 0 && (
-        <ul className="agent-token-list" aria-label="Active agent keys">
-          {tokens.map((token) => (
-            <li key={token.id}>
-              <div>
-                <strong>{token.name}</strong>
-                <span>Created {new Date(token.created_at).toLocaleString()}</span>
-                {token.last_used_at && <span>Last used {new Date(token.last_used_at).toLocaleString()}</span>}
-              </div>
-              <button className="text-button danger-text" type="button" disabled={busy} onClick={() => void revoke(token.id)}>
-                Revoke
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <p>
+        In Grok, Claude, Cursor, or Codex, add the plugin or paste {MCP_URL}.
+        Sign in when asked. That is the usual path — no tokens to copy.
+      </p>
       <details className="agent-snippets">
-        <summary>Client snippets</summary>
-        <p>Replace TOKEN with a key from Create key. The board does not call the MCP worker.</p>
+        <summary>Advanced: personal keys</summary>
+        <p>Only if a client cannot sign in. Mint a key below, then paste it once. Shown once. Revoke anytime.</p>
+        <form className="agent-key-form" onSubmit={mint}>
+          <label className="visually-hidden" htmlFor="agent-key-name">Key name</label>
+          <input
+            id="agent-key-name"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            placeholder="Cursor, Codex, Grok Bot…"
+            maxLength={64}
+            autoComplete="off"
+          />
+          <button className="primary" type="submit" disabled={busy || !name.trim()}>
+            {busy ? 'Creating…' : 'Create key'}
+          </button>
+        </form>
+        {error && <p className="error" role="alert">{error}</p>}
+        {minted && (
+          <div className="minted-key" role="status">
+            <p>Copy this now. It will not be shown again.</p>
+            <input readOnly value={minted} onFocus={(event) => event.currentTarget.select()} aria-label="New agent token" />
+            <button className="text-button" type="button" onClick={() => setMinted(null)}>I saved it</button>
+          </div>
+        )}
+        {tokens.length > 0 && (
+          <ul className="agent-token-list" aria-label="Active agent keys">
+            {tokens.map((token) => (
+              <li key={token.id}>
+                <div>
+                  <strong>{token.name}</strong>
+                  <span>Created {new Date(token.created_at).toLocaleString()}</span>
+                  {token.last_used_at && <span>Last used {new Date(token.last_used_at).toLocaleString()}</span>}
+                </div>
+                <button className="text-button danger-text" type="button" disabled={busy} onClick={() => void revoke(token.id)}>
+                  Revoke
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
         <p>Cursor <code>~/.cursor/mcp.json</code></p>
         <pre>{`{
   "mcpServers": {
     "lazy-mans-reminders": {
-      "url": "${MCP_URL}",
-      "headers": {
-        "Authorization": "Bearer TOKEN"
-      }
+      "url": "${MCP_URL}"
     }
   }
 }`}</pre>
-        <p>Claude Code <code>.mcp.json</code></p>
+        <p>Claude Code / Codex <code>.mcp.json</code></p>
         <pre>{`{
   "mcpServers": {
     "lazy-mans-reminders": {
       "type": "http",
-      "url": "${MCP_URL}",
-      "headers": {
-        "Authorization": "Bearer TOKEN"
-      }
+      "url": "${MCP_URL}"
     }
   }
 }`}</pre>
-        <p>Codex <code>.mcp.json</code></p>
-        <pre>{`{
-  "mcpServers": {
-    "lazy-mans-reminders": {
-      "url": "${MCP_URL}",
-      "headers": {
-        "Authorization": "Bearer TOKEN"
-      }
-    }
-  }
-}`}</pre>
-        <p>Grok Bot: Settings → Plugins → custom connector. URL <code>{MCP_URL}</code>. Authorization header <code>Bearer TOKEN</code>.</p>
+        <p>Grok: Settings → Plugins → custom connector. URL only: <code>{MCP_URL}</code>.</p>
+        <p>Personal key header, if you must: <code>Authorization: Bearer TOKEN</code>.</p>
       </details>
     </section>
   )
@@ -707,6 +701,8 @@ export default function App() {
       '/privacy': "Privacy · Lazy Man's Reminders",
       '/terms': "Terms · Lazy Man's Reminders",
       '/support': "Support · Lazy Man's Reminders",
+      '/auth/callback': "Signing in · Lazy Man's Reminders",
+      '/connect': "Connect an agent · Lazy Man's Reminders",
     }
     document.title = titles[path]
   }, [path])
@@ -725,6 +721,7 @@ export default function App() {
     return () => data.subscription.unsubscribe()
   }, [])
 
+  if (path === '/auth/callback') return <AuthCallback />
   if (path === '/privacy') return <PrivacyPage onNavigate={navigate} />
   if (path === '/terms') return <TermsPage onNavigate={navigate} />
   if (path === '/support') return <SupportPage onNavigate={navigate} />
@@ -739,6 +736,12 @@ export default function App() {
       </main>
     )
   }
+  if (path === '/connect') {
+    return session
+      ? <Connect session={session} />
+      : <SignIn onNavigate={navigate} />
+  }
+
   return session
     ? <Board session={session} onNavigate={navigate} />
     : <SignIn onNavigate={navigate} />

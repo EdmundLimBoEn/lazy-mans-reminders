@@ -218,9 +218,12 @@ button:focus-visible, input:focus-visible, a:focus-visible {
 .agent-snippets { margin-top: 1rem; color: var(--muted); font-size: .8rem; }
 .agent-snippets summary { cursor: pointer; font-weight: 600; color: var(--ink); }
 .agent-snippets p { margin: .85rem 0 .35rem; }
-.agent-snippets pre {
-  margin: 0; padding: .75rem .85rem; overflow: auto; border-radius: 8px;
-  background: #efe9dc; color: var(--ink); font-size: .72rem; line-height: 1.45;
+.connect-panel { grid-column: 1 / -1; place-items: center; }
+.connect-actions { display: grid; gap: .85rem; }
+.connect-actions .primary { width: 100%; }
+.fatal-error .primary {
+  display: inline-flex; align-items: center; justify-content: center;
+  text-decoration: none; margin-top: 1rem;
 }
 .visually-hidden {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;

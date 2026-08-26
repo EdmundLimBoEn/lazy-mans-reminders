@@ -137,9 +137,10 @@ final class AuthManager: ObservableObject {
         do {
             session = try await client.auth.signInWithOAuth(
                 provider: .google,
-                redirectTo: authRedirectURL
+                redirectTo: authRedirectURL,
+                queryParams: [("prompt", "select_account")]
             ) { session in
-                session.prefersEphemeralWebBrowserSession = true
+                session.prefersEphemeralWebBrowserSession = false
             }
             await shareSession()
         } catch {

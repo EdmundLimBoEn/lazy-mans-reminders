@@ -1,22 +1,15 @@
+import { OAuthProvider } from '@cloudflare/workers-oauth-provider'
 import { createMcpHandler } from 'agents/mcp/server'
-import { resolveSession } from './auth'
+import { MCP_HOST, MCP_RESOURCE } from './constants'
+import { handlePublicRequest, resolveExternalPat } from './oauth'
 import { createServer } from './server'
+import { sessionFromProps } from './session'
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, DELETE',
   'Access-Control-Allow-Headers': 'Authorization, Content-Type, Accept, MCP-Protocol-Version',
 }
-
-const TOOLS = [
-  'list_reminders',
-  'add_reminder',
-  'complete_reminder',
-  'reopen_reminder',
-  'whoami',
-] as const
-
-const MCP_HOST = 'mcp.lmr.edmundlim.systems'
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -39,37 +32,12 @@ function unauthorized(): Response {
   })
 }
 
-function serverCard() {
-  return {
-    name: "Lazy Man's Reminders",
-    version: '1.0.0',
-    url: '/mcp',
-    auth: { type: 'bearer' },
-    tools: TOOLS,
-  }
-}
-
-async function fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: CORS })
-  }
-
-  const path = new URL(request.url).pathname
-  if (request.method === 'GET' && (path === '/' || path === '/.well-known/mcp/server-card.json')) {
-    return json(serverCard())
-  }
-
-  if (path !== '/mcp') {
-    return json({ error: 'not_found' }, 404)
-  }
-
+async function handleMcp(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
     return json({ error: 'server_misconfigured' }, 500)
   }
 
-  const session = await resolveSession(env, request.headers.get('Authorization'), (promise) => {
-    ctx.waitUntil(promise)
-  })
+  const session = sessionFromProps((ctx as ExecutionContext & { props?: unknown }).props)
   if (!session) return unauthorized()
 
   const hostname = new URL(request.url).hostname
@@ -95,4 +63,24 @@ async function fetch(request: Request, env: Env, ctx: ExecutionContext): Promise
   })
 }
 
-export default { fetch } satisfies ExportedHandler<Env>
+const provider = new OAuthProvider<Env>({
+  apiRoute: '/mcp',
+  apiHandler: { fetch: handleMcp },
+  defaultHandler: { fetch: handlePublicRequest },
+  authorizeEndpoint: '/authorize',
+  tokenEndpoint: '/token',
+  clientRegistrationEndpoint: '/register',
+  scopesSupported: ['board'],
+  clientIdMetadataDocumentEnabled: true,
+  resourceMetadata: {
+    resource: MCP_RESOURCE,
+    authorization_servers: [`https://${MCP_HOST}`],
+    scopes_supported: ['board'],
+    resource_name: "Lazy Man's Reminders",
+  },
+  async resolveExternalToken(input) {
+    return resolveExternalPat(input)
+  },
+})
+
+export default provider

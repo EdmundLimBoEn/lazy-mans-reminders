@@ -19,9 +19,14 @@ describe('normalizePath', () => {
     expect(normalizePath('///')).toBe('/')
   })
 
+  it('keeps auth and connect routes', () => {
+    expect(normalizePath('/auth/callback')).toBe('/auth/callback')
+    expect(normalizePath('/connect')).toBe('/connect')
+    expect(normalizePath('/connect/')).toBe('/connect')
+  })
+
   it('maps unknown paths to /', () => {
     expect(normalizePath('/board')).toBe('/')
     expect(normalizePath('/privacy/extra')).toBe('/')
-    expect(normalizePath('/auth/callback')).toBe('/')
   })
 })

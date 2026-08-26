@@ -1,4 +1,3 @@
-import { timingSafeEqual } from 'node:crypto'
 import type { PresentedToken, TokenHash, TokenId, TokenSecret } from './domain'
 
 const TOKEN = /^lmr_([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})_(.+)$/
@@ -23,7 +22,9 @@ export function secretsEqual(left: TokenHash, right: TokenHash): boolean {
   const a = hexToBytes(left)
   const b = hexToBytes(right)
   if (a.byteLength !== b.byteLength) return false
-  return timingSafeEqual(a, b)
+  let diff = 0
+  for (let i = 0; i < a.byteLength; i += 1) diff |= a[i]! ^ b[i]!
+  return diff === 0
 }
 
 function hexFromBytes(bytes: Uint8Array): string {

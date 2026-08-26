@@ -22,12 +22,20 @@
   ```
 - [ ] **Device test** — Open `ios/LazyMansReminders.xcodeproj`, sign both targets with team `DUU8J39BA7`, run on a physical iPhone (Apple / Google / magic link, complete-tap, push, lock-screen widgets, account deletion). No device build has been run yet.
 - [ ] **Legal review** — Privacy / Terms / Support templates are live at `/privacy`, `/terms`, `/support` after web deploy. Have counsel review before monetized App Store submission. Contact email currently `hello@edmundlim.systems`.
+- [ ] **Google web/iOS sign-in** — Provider is enabled. Confirm the Google Cloud **Web** client still has:
+  - Authorized JavaScript origins: `https://lmr.edmundlim.systems`, `https://lazy-mans-reminders.pages.dev`, `http://localhost:5173`
+  - Authorized redirect URI: `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`
+  Then smoke-test Continue with Google on the live site (callback is `/auth/callback`).
+- [ ] **Apple web sign-in** — Native iOS uses App ID `systems.edmundlim.LazyMansReminders`. **Web** Continue with Apple still needs a Services ID (e.g. `systems.edmundlim.LazyMansReminders.web`) listed **first** in Supabase Apple Client IDs, plus a client secret from an Apple Sign in with Apple key. Return URL `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`.
 - [ ] **Agent MCP Worker** — From `mcp/`:
   ```sh
   cd mcp
   npm ci
+  npx wrangler kv namespace create OAUTH_KV
+  # paste the id into wrangler.jsonc kv_namespaces[0].id
   npx wrangler secret put SUPABASE_URL
   npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+  npx wrangler secret put SUPABASE_ANON_KEY
   npx wrangler deploy
   ```
   Then add a proxied CNAME `mcp.lmr` → the Worker route on `edmundlim.systems` (custom domain `mcp.lmr.edmundlim.systems`).

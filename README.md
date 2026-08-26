@@ -118,24 +118,21 @@ supabase functions deploy delete-account
 
 ## Agent MCP
 
-Remote agents talk to the board at `https://mcp.lmr.edmundlim.systems/mcp` with a Bearer personal token. Mint and revoke keys on the signed-in web board. The Worker uses the service-role key as a Wrangler secret; never put that key on Pages.
+Remote agents talk to the board at `https://mcp.lmr.edmundlim.systems/mcp`. The usual path is OAuth: the client opens a browser, you sign in on the familiar board, tap Allow. No bearer tokens to paste. Personal keys remain under **Advanced** on the signed-in board for clients that cannot do OAuth.
 
-Cursor `mcp.json`:
+Grok: Settings → Plugins → custom connector → URL `https://mcp.lmr.edmundlim.systems/mcp` (no headers). Cursor / Claude Code / Codex can load `plugins/lazy-mans-reminders/` or the same URL in `mcp.json`:
 
 ```json
 {
   "mcpServers": {
     "lazy-mans-reminders": {
-      "url": "https://mcp.lmr.edmundlim.systems/mcp",
-      "headers": {
-        "Authorization": "Bearer TOKEN"
-      }
+      "url": "https://mcp.lmr.edmundlim.systems/mcp"
     }
   }
 }
 ```
 
-Claude Code and Codex use the same URL and `Authorization: Bearer TOKEN` header in `.mcp.json`. Grok Bot: Settings → Plugins → custom connector, then that URL and Bearer header.
+The Worker uses the service-role key as a Wrangler secret; never put that key on Pages. The web app only calls `/bind` with the user's Supabase session.
 
 In Supabase **Database → Webhooks**, create a webhook with:
 
