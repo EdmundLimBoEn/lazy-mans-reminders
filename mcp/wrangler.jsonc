@@ -3,6 +3,7 @@
   "name": "lazy-mans-reminders-mcp",
   "main": "src/index.ts",
   "compatibility_date": "2026-08-26",
+  "workers_dev": true,
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "observability": {
     "enabled": true,
@@ -11,10 +12,16 @@
   "vars": {
     "WEB_ORIGINS": "https://lmr.edmundlim.systems,https://lazy-mans-reminders.pages.dev,http://localhost:5173"
   },
+  "routes": [
+    {
+      "pattern": "mcp.lmr.edmundlim.systems",
+      "custom_domain": true
+    }
+  ],
   "kv_namespaces": [
     {
       "binding": "OAUTH_KV",
-      "id": "REPLACE_WITH_OAUTH_KV_ID"
+      "id": "da71061d020b45ccaf4249050eec6edd"
     }
   ]
 }
