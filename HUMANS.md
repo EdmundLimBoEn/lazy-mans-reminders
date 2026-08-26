@@ -12,7 +12,7 @@
   - `supabase secrets set --env-file supabase/.env.functions` applied (`APNS_*`, `WEBHOOK_SECRET`).
   - INSERT webhook wired as trigger `send_reminder_push` → `notify_reminder_push()` → Edge Function, with secret in Vault (`lmr_webhook_secret`). Function auth verified: bad secret → 401, good secret → `{"sent":0}`.
   - If physical-device push fails with APNs auth errors, create a dedicated APNs Auth Key under Certificates, Identifiers & Profiles → Keys (enable APNs only), replace `APNS_KEY_ID` / `APNS_PRIVATE_KEY`, and re-run `supabase secrets set`.
-- [x] **Sign in with Apple (native / Supabase)** — Provider enabled via Management API with Client ID `systems.edmundlim.LazyMansReminders`. Native iOS Sign in with Apple should work once the App ID capability is on. **Web** Apple still needs a Services ID listed first in Client IDs + client secret (see [Supabase Apple docs](https://supabase.com/docs/guides/auth/social-login/auth-apple)); return URL `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`.
+- [x] **Sign in with Apple (native / Supabase)** — Provider enabled with App ID + Services ID (`systems.edmundlim.LazyMansReminders.web` first). Native + web Apple work; return URL `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`.
 - [x] **Google sign-in (Supabase)** — Web OAuth client created in Google Cloud (`1066799131514-cpr7u3gq5r9hjnq375hee0g1b5be65ir…`); redirect + origins set; Google provider **enabled** in Supabase Auth with that client ID + secret (Mac handoff 7 Aug 2026).
 - [x] **Deploy delete-account function** — Deployed to project `biwmsxbqrevtjwgsvsmu` (`supabase functions deploy delete-account`). JWT verification on; used by web + iOS account deletion.
 - [x] **TestFlight build 1.0 (4)** — Uploaded with Xcode 27 beta 5 (`27A5237l`). Processing **VALID**. On Internal Testers (you) and Friends. TestFlight beta review is **WAITING_FOR_REVIEW** so email testers can install. Not submitted to the App Store. Beta 4 removed; `/Applications/Xcode-beta.app` is now beta 5. EdmundPurple theme kept.
@@ -26,17 +26,7 @@
   - Authorized JavaScript origins: `https://lmr.edmundlim.systems`, `https://lazy-mans-reminders.pages.dev`, `http://localhost:5173`
   - Authorized redirect URI: `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`
   Then smoke-test Continue with Google on the live site (callback is `/auth/callback`).
-- [ ] **Apple web sign-in** — Native iOS uses App ID `systems.edmundlim.LazyMansReminders`. **Web** Continue with Apple still needs a Services ID (e.g. `systems.edmundlim.LazyMansReminders.web`) listed **first** in Supabase Apple Client IDs, plus a client secret from an Apple Sign in with Apple key. Return URL `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`.
-- [ ] **Agent MCP Worker** — From `mcp/`:
-  ```sh
-  cd mcp
-  npm ci
-  npx wrangler kv namespace create OAUTH_KV
-  # paste the id into wrangler.jsonc kv_namespaces[0].id
-  npx wrangler secret put SUPABASE_URL
-  npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
-  npx wrangler secret put SUPABASE_ANON_KEY
-  npx wrangler deploy
-  ```
-  Then add a proxied CNAME `mcp.lmr` → the Worker route on `edmundlim.systems` (custom domain `mcp.lmr.edmundlim.systems`).
-- [ ] **Push agent_tokens migration** — `supabase db push` so `agent_tokens`, `agent_token_clients`, `mint_agent_token`, `revoke_agent_token`, and `add_agent_reminder` exist in production. Redeploy `delete-account` after that.
+- [x] **Apple web sign-in** — Services ID `systems.edmundlim.LazyMansReminders.web` first in Client IDs; Apple client secret set; Continue with Apple works after Services ID Configure + Return URL.
+- [x] **Agent MCP Worker** — Deployed `lazy-mans-reminders-mcp` with OAUTH_KV + secrets. Custom domain `lmr-mcp.edmundlim.systems` (Universal SSL; not `mcp.lmr…` which needs Advanced Certs). Fallback: `https://lazy-mans-reminders-mcp.edmundlim.workers.dev/mcp`.
+- [x] **Push agent_tokens migration** — `202608080002_lock_screen_prefs` + `202608260001_agent_tokens` pushed; `delete-account` redeployed.
+- [x] **Resend SMTP** — Custom SMTP `smtp.resend.com` for `noreply-lmr@auth.edmundlim.systems`; email rate limit raised above built-in 2/hour.

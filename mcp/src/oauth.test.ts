@@ -8,7 +8,7 @@ const env = {
 describe('bind CORS', () => {
   it('allows the web origin', () => {
     const headers = corsHeaders(
-      new Request('https://mcp.lmr.edmundlim.systems/bind', {
+      new Request('https://lmr-mcp.edmundlim.systems/bind', {
         headers: { Origin: 'https://lmr.edmundlim.systems' },
       }),
       env,
@@ -18,7 +18,7 @@ describe('bind CORS', () => {
 
   it('ignores unknown origins', () => {
     const headers = corsHeaders(
-      new Request('https://mcp.lmr.edmundlim.systems/bind', {
+      new Request('https://lmr-mcp.edmundlim.systems/bind', {
         headers: { Origin: 'https://evil.example' },
       }),
       env,

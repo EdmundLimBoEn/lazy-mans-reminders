@@ -1,4 +1,4 @@
-export const MCP_ORIGIN = 'https://mcp.lmr.edmundlim.systems'
+export const MCP_ORIGIN = 'https://lmr-mcp.edmundlim.systems'
 export const MCP_URL = `${MCP_ORIGIN}/mcp`
 export const RETURN_TO_KEY = 'lmr_return_to'
 

@@ -32,7 +32,7 @@ const env = {
 describe('mcp worker routes', () => {
   it('serves an unauthenticated server card', async () => {
     const response = await handlePublicRequest(
-      new Request('https://mcp.lmr.edmundlim.systems/'),
+      new Request('https://lmr-mcp.edmundlim.systems/'),
       env,
     )
     expect(response.status).toBe(200)
@@ -45,7 +45,7 @@ describe('mcp worker routes', () => {
 
   it('rejects bind without a signed-in session', async () => {
     const response = await handlePublicRequest(
-      new Request('https://mcp.lmr.edmundlim.systems/bind', {
+      new Request('https://lmr-mcp.edmundlim.systems/bind', {
         method: 'POST',
         headers: {
           Origin: 'https://lmr.edmundlim.systems',

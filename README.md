@@ -118,15 +118,15 @@ supabase functions deploy delete-account
 
 ## Agent MCP
 
-Remote agents talk to the board at `https://mcp.lmr.edmundlim.systems/mcp`. The usual path is OAuth: the client opens a browser, you sign in on the familiar board, tap Allow. No bearer tokens to paste. Personal keys remain under **Advanced** on the signed-in board for clients that cannot do OAuth.
+Remote agents talk to the board at `https://lmr-mcp.edmundlim.systems/mcp`. The usual path is OAuth: the client opens a browser, you sign in on the familiar board, tap Allow. No bearer tokens to paste. Personal keys remain under **Advanced** on the signed-in board for clients that cannot do OAuth.
 
-Grok: Settings → Plugins → custom connector → URL `https://mcp.lmr.edmundlim.systems/mcp` (no headers). Cursor / Claude Code / Codex can load `plugins/lazy-mans-reminders/` or the same URL in `mcp.json`:
+Grok: Settings → Plugins → custom connector → URL `https://lmr-mcp.edmundlim.systems/mcp` (no headers). Cursor / Claude Code / Codex can load `plugins/lazy-mans-reminders/` or the same URL in `mcp.json`:
 
 ```json
 {
   "mcpServers": {
     "lazy-mans-reminders": {
-      "url": "https://mcp.lmr.edmundlim.systems/mcp"
+      "url": "https://lmr-mcp.edmundlim.systems/mcp"
     }
   }
 }
