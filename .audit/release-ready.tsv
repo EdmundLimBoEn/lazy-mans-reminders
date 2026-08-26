@@ -1,0 +1,11 @@
+ts	phase	decision	why	evidence	result
+2026-08-26T15:44:29Z	frame	defined release-ready predicate	user is asleep so the run needs a checkable stop, not a vibe	HUMANS.md + README.md + web/src/LegalPages.tsx	open
+2026-08-26T15:44:29Z	frame	rigor high for legal/App Store, medium for UI polish	one-way doors are policy text and store metadata; CSS nits are reversible	playbooks/autonomous-run.md + figure-it-out Phase A	open
+2026-08-26T15:47:24Z	frame	exit predicate: tests green, legal pages match product and drop template disclaimer, account deletion is complete, launch chrome (favicon/robots/security.txt/OG) live, data export exists, App Store notes in repo, live pages verified	asleep run needs a stop you can check, not a vibe	.audit/release-ready.tsv	open
+2026-08-26T15:47:24Z	workflow	skip architect/arena; sequence harness then deletion then legal then chrome then export then iOS manifest then docs	shape is concrete, one-way door is policy accuracy not a novel architecture	figure-it-out Phase B	designed
+2026-08-26T15:55:17Z	harness	baseline then post-change web/mcp/deno tests green	prove-it-works on the real suites	web 21, mcp 16, deno 8	tests green
+2026-08-26T15:58:16Z	deletion	delete-account now loops USER_DATA_TABLES including lock_screen_prefs; web fails closed	partial wipe left the auth user when the function failed	commit 5aa9516, supabase functions deploy delete-account	deployed
+2026-08-26T15:58:16Z	legal	rewrote Privacy Terms Support, dropped template disclaimer	App Store reviewers should not see launch template copy	commit 01efab4, web/src/LegalPages.tsx	in repo, not live until Pages deploy
+2026-08-26T15:58:16Z	chrome	added favicon robots security.txt sitemap OG apple-touch-icon	industry launch files were missing from public/	commit 01efab4, web/public/	in dist, not live until Pages deploy
+2026-08-26T15:58:16Z	ios	PrivacyInfo.xcprivacy plus deletion and export copy; XCTest succeeded on a created iPhone 17 sim	Apple wants a privacy manifest; no simulators existed so one was created	commit 01efab4, TEST SUCCEEDED	tests green
+2026-08-26T15:58:16Z	deploy	wrangler pages deploy blocked without CLOUDFLARE_API_TOKEN; ship via git-connected Pages after merge	non-interactive wrangler has no OAuth session	wrangler 4.119.0 error	INCONCLUSIVE until merge

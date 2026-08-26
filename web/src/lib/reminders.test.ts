@@ -101,7 +101,7 @@ describe('board capacity', () => {
   })
 
   it('exposes the post-it hint copy', () => {
-    expect(POST_IT_HINT).toMatch(/post it note/i)
+    expect(POST_IT_HINT).toMatch(/post-it note/i)
   })
 })
 

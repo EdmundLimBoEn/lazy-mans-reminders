@@ -13,7 +13,7 @@ As of 26 August 2026. The iOS app ships as a **free** App Store download (no in-
 - Supabase Auth: site URL and redirects **deployed**; Apple web + native configured; Google provider enabled; Resend SMTP for magic-link email
 - `send-reminder-push` and `delete-account` Edge Functions: **deployed**
 - Agent MCP Worker: **live** at <https://lmr-mcp.edmundlim.systems/mcp> (OAuth plugin path)
-- iOS app and widget: **implemented**; TestFlight build uploaded; physical-device smoke and App Store submission still open
+- iOS app and widget: **implemented**; TestFlight build uploaded; physical-device smoke and App Store submission still open. Submission fields live in [docs/app-store.md](docs/app-store.md).
 - Lock Screen: Live Activity plus accessory widgets; push alerts are body-only (no title)
 - Custom domain DNS: **active** for web and MCP
 
@@ -259,7 +259,7 @@ Increment the marketing version/build number before each upload.
 The iOS app is a free download with no in-app purchases or subscriptions.
 
 1. In App Store Connect, under **Pricing and Availability**, set the price to **Free** for the storefronts you ship.
-2. Complete app metadata, privacy details, age rating, screenshots, support URL (`https://lmr.edmundlim.systems/support`), and privacy URL (`https://lmr.edmundlim.systems/privacy`).
+2. Complete app metadata, privacy details, age rating, screenshots, support URL (`https://lmr.edmundlim.systems/support`), and privacy URL (`https://lmr.edmundlim.systems/privacy`). Use [docs/app-store.md](docs/app-store.md) for nutrition labels and review notes.
 3. Attach a tested build, choose manual or automatic release, and submit for review.
 
 Before submission, confirm account deletion, privacy disclosures, support contact, and reviewer notes match the shipped app.

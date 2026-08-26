@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 const CONTACT_EMAIL = 'hello@edmundlim.systems'
 const LAST_UPDATED = '26 August 2026'
 const SITE_URL = 'https://lmr.edmundlim.systems'
+const PDPC_URL = 'https://www.pdpc.gov.sg'
 
 type LegalPageProps = {
   onNavigate: (path: string) => void
@@ -31,13 +32,6 @@ function LegalShell({
         <p className="legal-updated">Last updated: {LAST_UPDATED}</p>
       </header>
 
-      <aside className="legal-disclaimer" role="note">
-        <strong>Not legal advice.</strong> This page is a launch template drafted from the
-        product's described practices. It is not a substitute for advice from a qualified
-        attorney. Have counsel review and adapt it before relying on it for App Store
-        submission or public launch.
-      </aside>
-
       <article className="legal-body">{children}</article>
 
       <nav className="legal-nav" aria-label="Legal pages">
@@ -53,185 +47,237 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
   return (
     <LegalShell title="Privacy Policy" onNavigate={onNavigate}>
       <p>
-        This Privacy Policy explains how <strong>Edmund Lim</strong> (“we”, “us”, or “operator”),
-        operating Lazy Man's Reminders at {SITE_URL} and related iOS apps/widgets
-        (the “Service”), handles personal information.
+        This Privacy Policy describes how <strong>Edmund Lim</strong> (“we”, “us”, or “operator”),
+        a sole operator in Singapore, handles personal information for Lazy Man's Reminders at{' '}
+        {SITE_URL}, the iOS app, lock-screen widgets, Live Activities, and the agent connector
+        (together, the “Service”).
       </p>
       <p>
         Operator contact: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
       </p>
+      <p>
+        We are the data controller (and, under Singapore’s PDPA, the organisation) for personal
+        data collected through the Service.
+      </p>
 
       <h2>1. Information we collect</h2>
-      <p>Depending on how you use the Service, we may process:</p>
+      <p>Depending on how you use the Service, we process:</p>
       <ul>
         <li>
-          <strong>Account email.</strong> Collected when you sign in with a magic-link / one-time
-          password email via Supabase Auth, or when Apple or Google provides an email address as
-          part of Sign in with Apple or Google sign-in.
+          <strong>Account email.</strong> Collected when you sign in with a magic-link email via
+          Supabase Auth, or when Apple or Google provides an email (including Apple’s Hide My Email
+          relay) as part of sign-in.
         </li>
         <li>
-          <strong>Authentication provider data.</strong> When you use Sign in with Apple or Google,
-          those providers authenticate you and may share a stable account identifier, email
-          (or Apple’s private relay email), and limited profile metadata with Supabase Auth so we
-          can create and maintain your account.
+          <strong>Authentication provider data.</strong> A stable account identifier and limited
+          profile metadata from Apple or Google, stored by Supabase Auth so we can keep your
+          account.
         </li>
         <li>
-          <strong>Reminder content.</strong> The text of reminders you create, plus related
-          metadata such as sort order, completion status, and timestamps.
+          <strong>Reminder content.</strong> The text you or an authorized agent create, plus sort
+          order, completion status, and timestamps.
         </li>
         <li>
-          <strong>Device push tokens.</strong> On iOS, device tokens used to deliver Apple Push
-          Notification service (APNs) alerts related to your reminders.
+          <strong>Lock Screen preferences.</strong> How many reminder lines fit on your iPhone Live
+          Activity, measured on the device and stored so the web board uses the same capacity.
         </li>
         <li>
-          <strong>Agent access.</strong> When you allow an agent (Grok, Claude, Cursor, Codex)
-          to use your board, we store an OAuth grant for that client. Optional personal tokens
-          you mint yourself are stored as a SHA-256 hash of the secret. The plaintext token is
-          shown once at creation and is revocable from the signed-in web board.
+          <strong>Device push tokens.</strong> On iOS, tokens used to send Apple Push Notification
+          service (APNs) alerts when a reminder is added.
         </li>
         <li>
-          <strong>Authentication session data.</strong> Session tokens and related auth state
-          needed to keep you signed in securely.
+          <strong>Agent access.</strong> OAuth grants when you tap Allow for a client such as Grok,
+          Claude, Cursor, or Codex. Optional personal keys you mint are stored as a SHA-256 hash.
+          The plaintext key is shown once and is revocable from the signed-in web board. We do not
+          store the plaintext after that screen.
         </li>
         <li>
-          <strong>Technical/operational data.</strong> Limited server logs and timestamps
-          generated while operating the Service (for example, request timing or error diagnostics
-          from our hosting providers).
+          <strong>Session data.</strong> Tokens in browser storage or the iOS app needed to keep
+          you signed in.
+        </li>
+        <li>
+          <strong>Operational logs.</strong> Limited request timing and error diagnostics from our
+          hosting providers.
         </li>
       </ul>
       <p>
-        We do <strong>not</strong> currently use advertising SDKs, sell personal data, or run
-        third-party product analytics trackers in the Service as described in this policy.
+        We do not use advertising SDKs, sell personal data, run third-party product analytics, or
+        track you across other companies’ apps or websites.
       </p>
 
       <h2>2. How we use information</h2>
       <ul>
-        <li>To create and authenticate your account and sessions.</li>
-        <li>To store, sync, and display your reminders across the web app, iOS app, and widget.</li>
-        <li>To send push notifications related to reminders you create (when push is enabled).</li>
-        <li>To operate, secure, troubleshoot, and improve the Service.</li>
-        <li>To respond to support requests and meet legal obligations.</li>
+        <li>Create and authenticate your account and sessions.</li>
+        <li>Store, sync, and display reminders on the web board, iOS app, widget, and Live Activity.</li>
+        <li>Send push notifications for new reminders when you have allowed notifications.</li>
+        <li>Let an agent you authorized read, add, and complete reminders on your board.</li>
+        <li>Match web-board capacity to your iPhone Lock Screen.</li>
+        <li>Operate, secure, and troubleshoot the Service, and respond to support requests.</li>
+        <li>Meet legal obligations, including PDPA and similar laws.</li>
       </ul>
-
-      <h2>3. Legal bases (where applicable)</h2>
       <p>
-        If you are in a jurisdiction that requires a legal basis (for example, the EEA/UK), we
-        process personal data as needed to perform our contract with you (providing the Service),
-        based on our legitimate interests in operating a secure product, and/or with your consent
-        where required (for example, certain notification permissions on your device).
+        Reminder text you add can appear on your iPhone lock screen (widget and Live Activity).
+        Anyone who can see the phone can see those lines. That is how the product works. Do not
+        store secrets or highly sensitive notes if that visibility is a problem.
       </p>
 
-      <h2>4. How we share information</h2>
+      <h2>3. Legal bases and PDPA purposes</h2>
+      <p>
+        We collect and use this data to provide the Service you asked for (contract / purpose
+        limitation under PDPA). Where a law such as the GDPR requires a legal basis, we rely on
+        performance of a contract, legitimate interests in running a secure product, and consent
+        where a platform requires it (for example, notification permission on iOS).
+      </p>
+      <p>
+        We do not use your data for automated decision-making that produces legal or similarly
+        significant effects.
+      </p>
+
+      <h2>4. Subprocessors and sharing</h2>
       <p>We share information only as needed to run the Service:</p>
       <ul>
         <li>
-          <strong>Supabase.</strong> Authentication, Postgres database hosting (including reminder
-          content and device tokens), and related backend services. Our Supabase project is
-          configured in the Singapore region. Supabase acts as a service provider / processor for
-          these operations.
+          <strong>Supabase</strong> (Singapore region). Authentication, Postgres, Realtime, and
+          Edge Functions. Processor for account, reminders, tokens, and prefs.{' '}
+          <a href="https://supabase.com/privacy">Supabase privacy</a>
         </li>
         <li>
-          <strong>Apple.</strong> If you use Sign in with Apple, the iOS app, App Store
-          distribution, or APNs, Apple processes related account, device, and push information
-          under Apple's terms and privacy policy. The iOS app is free and we do not process App
-          Store payments for this Service.
+          <strong>Cloudflare.</strong> Pages hosting for the website and a Worker for the agent
+          MCP/OAuth connector. May process IP addresses and request metadata.{' '}
+          <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare privacy</a>
         </li>
         <li>
-          <strong>Google.</strong> If you use Google sign-in, Google authenticates you and may
-          share account identifiers and email with Supabase Auth under Google's terms and privacy
-          policy.
+          <strong>Resend.</strong> Delivery of magic-link email through our auth domain.{' '}
+          <a href="https://resend.com/legal/privacy-policy">Resend privacy</a>
         </li>
         <li>
-          <strong>Infrastructure providers.</strong> The web app may be hosted on Cloudflare Pages
-          or similar static hosting. Those providers may process IP addresses and request metadata
-          as part of delivering the site.
+          <strong>Apple.</strong> Sign in with Apple, App Store distribution, APNs, and widgets.
+          Apple’s terms and privacy policy apply.{' '}
+          <a href="https://www.apple.com/legal/privacy/">Apple privacy</a>
+        </li>
+        <li>
+          <strong>Google.</strong> Google sign-in when you choose it.{' '}
+          <a href="https://policies.google.com/privacy">Google privacy</a>
+        </li>
+        <li>
+          <strong>Agents you authorize.</strong> If you Allow an MCP client, that client can read
+          and change reminder text on your board until you revoke access. Those tools are not our
+          subprocessors. They are acting with your permission. Their own policies apply to what
+          they retain.
         </li>
         <li>
           <strong>Legal and safety.</strong> We may disclose information if required by law or to
           protect rights, safety, and the integrity of the Service.
         </li>
       </ul>
-      <p>We do not sell your personal information.</p>
+      <p>
+        We do not sell personal information. We do not share it for cross-context behavioural
+        advertising.
+      </p>
 
       <h2>5. Cookies and local storage</h2>
       <p>
-        The web app uses browser storage (such as local storage) as needed for authentication
-        session persistence with Supabase Auth. We do not use advertising cookies. Essential
-        storage required to keep you signed in may be used without a separate cookie banner where
-        permitted by law.
+        The web app uses browser local storage (and similar) only to keep your Supabase Auth
+        session. There are no advertising cookies and no optional analytics cookies. We do not
+        show a cookie banner because this storage is required to sign you in. You can clear it
+        by signing out or clearing site data in your browser.
       </p>
 
       <h2>6. Retention</h2>
       <ul>
         <li>
-          Account, reminder, and device-token data are retained while your account remains active
-          and as needed to provide the Service.
+          Account, active reminders, device tokens, lock-screen prefs, and agent grants are kept
+          while the account exists.
         </li>
         <li>
-          If you ask us to delete your account or data, we will delete or anonymize personal data
-          we control within a reasonable period, except where we must retain information for
-          security, dispute resolution, backups for a limited time, or legal compliance.
+          Completed reminders are deleted automatically after 7 days when a client opens the
+          board (and, if configured, by a daily database job).
         </li>
         <li>
-          Invalid or unused push tokens may be removed as part of normal APNs delivery handling.
+          Invalid APNs tokens may be removed during normal push delivery.
+        </li>
+        <li>
+          If you delete your account, we delete personal data we control. Backups and logs may
+          lag for a short period. We keep information only if we must for security, disputes, or
+          law.
         </li>
       </ul>
 
       <h2>7. International transfers</h2>
       <p>
-        Primary application data is hosted with Supabase in Singapore. Providers such as Apple and
-        Cloudflare may process data in other countries. Where required, we rely on appropriate
-        safeguards offered by those providers (such as standard contractual clauses) and your
-        use of the Service.
+        Application data sits with Supabase in Singapore. Apple, Google, Cloudflare, and Resend
+        may process data in other countries. Where a transfer law applies, we rely on those
+        providers’ published safeguards (such as standard contractual clauses) and on the fact
+        that you chose this Service.
       </p>
 
       <h2>8. Security</h2>
       <p>
-        We use industry-standard measures appropriate to a small consumer app, including encrypted
-        transport (HTTPS), authenticated access controls, and database row-level security policies
-        in Supabase. No method of transmission or storage is perfectly secure.
+        We use HTTPS, authenticated access, and Supabase row-level security so one user cannot
+        read another user’s board. Personal agent keys are stored hashed. No method of
+        transmission or storage is perfectly secure. Report a vulnerability to{' '}
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. If a notifiable data breach
+        occurs, we will notify the PDPC and affected individuals as Singapore law requires.
       </p>
 
       <h2>9. Children's privacy</h2>
       <p>
-        The Service is not directed to children under 13 (or the minimum age required in your
-        country). We do not knowingly collect personal information from children. If you believe a
-        child has provided personal information, contact us and we will take appropriate steps to
-        delete it.
+        The Service is not directed to children under 13, or under the digital consent age in
+        your country if that age is higher. We do not knowingly collect personal information from
+        children. If you believe a child has created an account, email us and we will delete it.
       </p>
 
       <h2>10. Your rights</h2>
       <p>
-        Depending on your location, you may have rights to access, correct, delete, or export your
-        personal data, or to object to / restrict certain processing. To exercise these rights,
-        email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> from the address associated
-        with your account. You may also delete individual reminders in the product.
+        Depending on where you live, you may have rights to access, correct, delete, or export
+        your personal data, to withdraw consent, and to object to or restrict some processing.
+        Singapore PDPA also covers access and correction. You can:
+      </p>
+      <ul>
+        <li>Edit or delete individual reminders in the product.</li>
+        <li>
+          Download a JSON copy of your account, reminders, lock-screen preference, and agent-key
+          names from the signed-in web board (<em>Download my data</em>).
+        </li>
+        <li>
+          Delete the account in the product (web board or iOS More menu). That removes reminders,
+          device tokens, lock-screen prefs, agent keys, OAuth grants we store, and the auth user.
+        </li>
+        <li>
+          Email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> from the address on the
+          account if you need help. We will verify the request.
+        </li>
+      </ul>
+      <p>
+        You may lodge a complaint with the Personal Data Protection Commission of Singapore at{' '}
+        <a href={PDPC_URL}>{PDPC_URL}</a>. If you are in the EEA, UK, or another region with a
+        supervisory authority, you may also complain there.
       </p>
       <p>
-        You can delete your account in the product: use <em>Delete account</em> on the signed-in
-        web board or in the iOS app. That removes your reminders, device push tokens, agent
-        grants and access tokens, and auth account. You may also email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> from
-        the address associated with your account if you need help. We will verify email requests
-        and delete account data we control, subject to the retention exceptions above.
+        California residents. We do not sell or share personal information as those terms are
+        used in the CCPA/CPRA. We do not use or disclose sensitive personal information for
+        purposes that require a right to limit.
       </p>
 
       <h2>11. Pricing</h2>
       <p>
-        Lazy Man's Reminders is offered free of charge on the App Store and on the web. We do not
-        sell in-app purchases or subscriptions for this Service.
+        Lazy Man's Reminders is free on the App Store and on the web. There are no in-app
+        purchases or subscriptions.
       </p>
 
       <h2>12. Changes</h2>
       <p>
-        We may update this Privacy Policy from time to time. The “Last updated” date at the top
-        will change when we do. Continued use of the Service after an update means you accept the
-        revised policy, except where applicable law requires additional notice or consent.
+        We may update this Privacy Policy. The “Last updated” date at the top will change when
+        we do. For material changes we will post the new policy on this page. Continued use
+        after an update means you accept the revised policy, except where law requires extra
+        notice or consent.
       </p>
 
       <h2>13. Contact</h2>
       <p>
-        Questions about privacy: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a><br />
-        Operator: Edmund Lim / edmundlim.systems<br />
+        Privacy questions and data requests:{' '}
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a><br />
+        Operator: Edmund Lim, Singapore / edmundlim.systems<br />
         Service: Lazy Man's Reminders ({SITE_URL})
       </p>
     </LegalShell>
@@ -242,36 +288,34 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
   return (
     <LegalShell title="Terms of Use" onNavigate={onNavigate}>
       <p>
-        These Terms of Use (“Terms”) govern access to and use of Lazy Man's Reminders, including
-        the website at {SITE_URL}, the iOS application, and related WidgetKit experiences
-        (collectively, the “Service”), operated by <strong>Edmund Lim</strong> (“we”, “us”).
+        These Terms of Use (“Terms”) govern access to Lazy Man's Reminders, including the
+        website at {SITE_URL}, the iOS application, widgets, Live Activities, and the agent
+        connector (collectively, the “Service”), operated by <strong>Edmund Lim</strong> in
+        Singapore (“we”, “us”).
       </p>
       <p>
         By creating an account or using the Service, you agree to these Terms. If you do not
         agree, do not use the Service.
       </p>
-      <aside className="legal-callout" role="note">
-        <strong>Governing-law note.</strong> These Terms currently designate Singapore law as a
-        working default. Have a lawyer confirm the correct governing law, venue, and entity
-        naming before App Store submission if you want counsel sign-off.
-      </aside>
 
       <h2>1. The Service</h2>
       <p>
-        Lazy Man's Reminders is a personal reminder board that syncs reminder text across web and
-        iOS experiences and may deliver push notifications and lock-screen widget updates. Features
-        may change, be limited, or be discontinued as the product evolves.
+        Lazy Man's Reminders is a personal reminder board. It syncs short reminder lines across
+        web and iOS and may show them on your lock screen and send push notifications. Features
+        may change or stop as the product evolves. The Service is not a medical device, not an
+        alarm for emergencies, and not a system of record for regulated records.
       </p>
 
       <h2>2. Eligibility and accounts</h2>
       <ul>
         <li>You must be able to form a binding contract in your jurisdiction.</li>
-        <li>You must provide a valid email address (or use Sign in with Apple / Google) and keep access to your sign-in method secure.</li>
         <li>
-          You are responsible for activity under your account. Contact us promptly if you suspect
-          unauthorized access.
+          You must keep access to your email or Sign in with Apple / Google secure. You are
+          responsible for activity under your account, including actions taken by agents you
+          authorize.
         </li>
-        <li>One person should use one account; do not share sign-in links or credentials with others.</li>
+        <li>Do not share sign-in links, session tokens, or personal agent keys.</li>
+        <li>Contact us promptly if you suspect unauthorized access.</li>
       </ul>
 
       <h2>3. Acceptable use</h2>
@@ -281,45 +325,57 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
         <li>Attempt to access other users' data or bypass security or rate limits.</li>
         <li>Reverse engineer, scrape, or overload the Service except as allowed by law.</li>
         <li>Upload malware or content that infringes others' rights.</li>
-        <li>Misrepresent your identity or affiliation when contacting support.</li>
+        <li>Misrepresent your identity when contacting support.</li>
+        <li>
+          Point an agent at the Service in a way that violates these Terms. If an agent adds a
+          reminder, you are the one who added it.
+        </li>
       </ul>
       <p>
-        Reminder content is user-generated. You remain responsible for what you store. The Service
-        is intended for personal reminder use, not as a system of record for regulated, medical,
-        or emergency communications.
+        Reminder content is yours. You remain responsible for what you store, including text an
+        authorized agent writes.
       </p>
 
-      <h2>4. Intellectual property</h2>
+      <h2>4. Agent access</h2>
+      <p>
+        You may connect a client (for example Grok, Claude, Cursor, or Codex) through OAuth or a
+        personal key. Allowing a client lets it read, add, and complete reminders until you
+        revoke it on the web board or delete your account. Revoke access you no longer want.
+        We are not responsible for what a third-party agent does with reminder text after you
+        share it with that agent.
+      </p>
+
+      <h2>5. Intellectual property</h2>
       <p>
         The Service's branding, design, software, and documentation are owned by us or our
-        licensors. You retain ownership of the reminder content you create. You grant us a limited
-        license to host, transmit, and display that content solely to operate the Service for you.
+        licensors. You retain ownership of the reminder content you create. You grant us a
+        limited license to host, transmit, and display that content solely to operate the
+        Service for you.
       </p>
 
-      <h2>5. Price</h2>
+      <h2>6. Price</h2>
       <p>
-        The Service is free. There is no paid download fee and no in-app purchase or subscription
-        for Lazy Man's Reminders. Apple may still distribute the iOS app through the App Store
-        under Apple's terms.
+        The Service is free. There is no download fee and no in-app purchase or subscription.
+        Apple still distributes the iOS app under Apple's terms.
       </p>
 
-      <h2>6. Third-party services</h2>
+      <h2>7. Third-party services</h2>
       <p>
-        The Service depends on third parties including Supabase (auth and database) and Apple
-        (App Store distribution and APNs). Their availability and policies affect the
-        Service. We are not responsible for outages or changes outside our reasonable control.
+        The Service depends on third parties including Supabase, Cloudflare, Resend, Apple, and
+        Google. Their availability and policies affect the Service. We are not responsible for
+        outages or changes outside our reasonable control.
       </p>
 
-      <h2>7. Disclaimer of warranties</h2>
+      <h2>8. Disclaimer of warranties</h2>
       <p>
         THE SERVICE IS PROVIDED “AS IS” AND “AS AVAILABLE.” TO THE MAXIMUM EXTENT PERMITTED BY
         LAW, WE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS
         FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. We do not warrant that reminders or
-        notifications will be delivered without delay or interruption, or that the Service will be
+        notifications will arrive without delay or interruption, or that the Service will be
         error-free.
       </p>
 
-      <h2>8. Limitation of liability</h2>
+      <h2>9. Limitation of liability</h2>
       <p>
         TO THE MAXIMUM EXTENT PERMITTED BY LAW, WE WILL NOT BE LIABLE FOR INDIRECT, INCIDENTAL,
         SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR FOR LOST PROFITS, DATA, OR GOODWILL,
@@ -329,39 +385,40 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
         ordinarily US $30.
       </p>
       <p>
-        Some jurisdictions do not allow certain limitations; in those places, our liability is
-        limited to the fullest extent allowed.
+        Some jurisdictions do not allow certain limitations. In those places, our liability is
+        limited to the fullest extent allowed. Nothing in these Terms excludes liability that
+        cannot be excluded under Singapore law.
       </p>
 
-      <h2>9. Termination</h2>
+      <h2>10. Termination</h2>
       <p>
         You may stop using the Service at any time. You may delete your account in the product
         (web board or iOS app) or by contacting support. Deletion removes your reminders, device
-        registrations, and sign-in. We may suspend or terminate access if you violate these Terms,
-        if required by law, or if we discontinue the Service. Provisions that by nature should
-        survive (including IP, disclaimers, limitations, and governing law) will survive
-        termination.
+        registrations, lock-screen prefs, agent access, and sign-in. We may suspend or terminate
+        access if you violate these Terms, if required by law, or if we discontinue the Service.
+        Provisions that by nature should survive (including IP, disclaimers, limitations, and
+        governing law) will survive termination.
       </p>
 
-      <h2>10. Changes to the Service or Terms</h2>
+      <h2>11. Changes to the Service or Terms</h2>
       <p>
         We may modify the Service or these Terms. Material changes will be reflected by updating
-        the “Last updated” date and, where appropriate, posting the revised Terms on the site.
-        Continued use after changes become effective constitutes acceptance, except where
-        applicable law requires otherwise.
+        the “Last updated” date and posting the revised Terms on this page. Continued use after
+        changes become effective constitutes acceptance, except where applicable law requires
+        otherwise.
       </p>
 
-      <h2>11. Governing law</h2>
+      <h2>12. Governing law</h2>
       <p>
         These Terms are governed by the laws of <strong>Singapore</strong>, without regard to
-        conflict-of-law rules. Courts in Singapore shall have exclusive jurisdiction over disputes,
+        conflict-of-law rules. Courts in Singapore have exclusive jurisdiction over disputes,
         except where mandatory consumer protections in your country require otherwise.
       </p>
 
-      <h2>12. Contact</h2>
+      <h2>13. Contact</h2>
       <p>
         Questions about these Terms: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a><br />
-        Operator: Edmund Lim / edmundlim.systems
+        Operator: Edmund Lim, Singapore / edmundlim.systems
       </p>
     </LegalShell>
   )
@@ -376,24 +433,38 @@ export function SupportPage({ onNavigate }: LegalPageProps) {
       </p>
       <ul>
         <li>The email address on your account</li>
-        <li>Whether you're using the web app, iOS app, and/or lock-screen widget</li>
+        <li>Whether you're using the web app, iOS app, lock-screen widget, or an agent</li>
         <li>What you expected vs. what happened</li>
       </ul>
+      <p>
+        There is no guaranteed response time. This is a small free product. We still read the
+        inbox.
+      </p>
 
       <h2>Common topics</h2>
       <ul>
         <li>
-          <strong>Sign-in.</strong> Magic links expire; request a new link from the sign-in screen
-          if yours no longer works. You can also use Sign in with Apple or Google where offered.
+          <strong>Sign-in.</strong> Magic links expire. Request a new link from the sign-in
+          screen. You can also use Sign in with Apple or Google.
         </li>
         <li>
-          <strong>Widget / push.</strong> Open the iOS app after signing in, keep notifications
-          enabled if you want alerts, and add the widget from the lock-screen gallery.
+          <strong>Widget / push.</strong> Open the iOS app after signing in, allow
+          notifications if you want alerts, and add the widget from the lock-screen gallery.
         </li>
         <li>
-          <strong>Account or data deletion.</strong> Use <em>Delete account</em> on the signed-in
-          web board or in the iOS app (More menu), or email us from your account address if you
-          need help completing deletion.
+          <strong>Download your data.</strong> On the signed-in web board, use{' '}
+          <em>Download my data</em>. That saves a JSON file with your email, reminders,
+          lock-screen line budget, and agent-key names (not plaintext keys).
+        </li>
+        <li>
+          <strong>Revoke an agent.</strong> On the signed-in web board, open Advanced under
+          Agent access and revoke the key, or disconnect the OAuth client and delete the
+          account if you want a full wipe.
+        </li>
+        <li>
+          <strong>Account deletion.</strong> Use <em>Delete account</em> on the signed-in web
+          board or in the iOS app (More menu). Or email us from your account address if the
+          in-product path fails.
         </li>
         <li>
           <strong>Price.</strong> The app and web board are free. There are no in-app purchases.

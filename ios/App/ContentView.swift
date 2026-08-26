@@ -191,6 +191,7 @@ private struct ReminderListView: View {
                         Link("Privacy", destination: URL(string: "https://lmr.edmundlim.systems/privacy")!)
                         Link("Terms", destination: URL(string: "https://lmr.edmundlim.systems/terms")!)
                         Link("Support", destination: URL(string: "https://lmr.edmundlim.systems/support")!)
+                        Link("Download my data", destination: URL(string: "https://lmr.edmundlim.systems/")!)
                         Divider()
                         Button("Delete Account…", role: .destructive) {
                             showDeleteAccount = true
@@ -222,7 +223,7 @@ private struct ReminderListView: View {
                 }
                 Button("Cancel", role: .cancel) {}
             } message: {
-                Text("This permanently deletes your reminders, device registrations, and sign-in. This can’t be undone.")
+                Text("This permanently deletes your reminders, device registrations, lock-screen prefs, agent access, and sign-in. This can’t be undone.")
             }
         }
     }

@@ -15,7 +15,7 @@ export const MAX_ACTIVE_REMINDERS = 16
 export const COMPLETED_REMINDER_RETENTION_DAYS = 7
 
 export const POST_IT_HINT =
-  'Hint: This app is more like a post it note, you can combine different reminders into 1 line, or find other ways to optimise'
+  'Hint: This board is more like a post-it note. Combine reminders into one line, or find other ways to keep it short.'
 
 export function isAtCapacity(
   activeCount: number,

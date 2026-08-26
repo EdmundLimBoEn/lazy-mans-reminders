@@ -21,7 +21,8 @@
   asc testflight testers add --app 6799138197 --email FRIEND@EMAIL --group Friends
   ```
 - [ ] **Device test** — Open `ios/LazyMansReminders.xcodeproj`, sign both targets with team `DUU8J39BA7`, run on a physical iPhone (Apple / Google / magic link, complete-tap, push, lock-screen widgets, account deletion). No device build has been run yet.
-- [ ] **Legal review** — Privacy / Terms / Support are live at `/privacy`, `/terms`, `/support`. The app is a free download (no IAP). Have counsel review before App Store submission if you want lawyer sign-off. Contact: `hello@edmundlim.systems`.
+- [ ] **Legal review** — Privacy / Terms / Support are live at `/privacy`, `/terms`, `/support` (updated 26 Aug 2026: subprocessors, PDPA/PDPC, 7-day completed retention, lock-screen visibility, agent access, in-product export). The app is a free download (no IAP). Counsel review is optional. Contact: `hello@edmundlim.systems`.
+- [ ] **App Store Connect fields** — Copy nutrition labels and review notes from `docs/app-store.md`. Attach screenshots from a physical device.
 - [ ] **Google web/iOS sign-in** — Provider is enabled. Confirm the Google Cloud **Web** client still has:
   - Authorized JavaScript origins: `https://lmr.edmundlim.systems`, `https://lazy-mans-reminders.pages.dev`, `http://localhost:5173`
   - Authorized redirect URI: `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`

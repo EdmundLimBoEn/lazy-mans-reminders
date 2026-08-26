@@ -39,7 +39,9 @@ build/
 *.xcuserstate
 xcuserdata/
 
-# Logs
-*.log
-npm-debug.log*
-.wrangler/
+# Finder duplicate artifacts
+* 2.*
+* 2/
+
+# Local decision-log helper
+.audit/log.sh

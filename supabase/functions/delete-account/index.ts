@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { USER_DATA_TABLES } from "../_shared/account_tables.ts";
 
 const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
@@ -57,40 +58,18 @@ Deno.serve(async (request) => {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
-  const { error: agentTokensError } = await admin
-    .from("agent_tokens")
-    .delete()
-    .eq("user_id", user.id);
-  if (agentTokensError) {
-    console.error("Could not delete agent tokens", agentTokensError);
-    return new Response("Could not delete account data", {
-      status: 500,
-      headers: corsHeaders,
-    });
-  }
-
-  const { error: remindersError } = await admin
-    .from("reminders")
-    .delete()
-    .eq("user_id", user.id);
-  if (remindersError) {
-    console.error("Could not delete reminders", remindersError);
-    return new Response("Could not delete account data", {
-      status: 500,
-      headers: corsHeaders,
-    });
-  }
-
-  const { error: tokensError } = await admin
-    .from("device_tokens")
-    .delete()
-    .eq("user_id", user.id);
-  if (tokensError) {
-    console.error("Could not delete device tokens", tokensError);
-    return new Response("Could not delete account data", {
-      status: 500,
-      headers: corsHeaders,
-    });
+  for (const table of USER_DATA_TABLES) {
+    const { error: tableError } = await admin
+      .from(table)
+      .delete()
+      .eq("user_id", user.id);
+    if (tableError) {
+      console.error(`Could not delete ${table}`, tableError);
+      return new Response("Could not delete account data", {
+        status: 500,
+        headers: corsHeaders,
+      });
+    }
   }
 
   const { error: deleteError } = await admin.auth.admin.deleteUser(user.id);

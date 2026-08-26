@@ -12,6 +12,13 @@ import {
   Trash2,
   X,
 } from 'lucide-react'
+import {
+  accountExportFilename,
+  buildAccountExport,
+  serializeAccountExport,
+  type AccountExportAgentKey,
+  type AccountExportReminder,
+} from './lib/accountExport'
 import { nextSortOrder, sortReminders, swapSortOrders, temporarySortOrder, isAtCapacity, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
 import { AuthCallback } from './AuthCallback'
 import { Connect } from './Connect'
@@ -196,6 +203,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
   const [reordering, setReordering] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [deletingAccount, setDeletingAccount] = useState(false)
+  const [exporting, setExporting] = useState(false)
   const [maxLines, setMaxLines] = useState(DEFAULT_LOCK_SCREEN_MAX_LINES)
   const loadSequence = useRef(0)
   const reorderingRef = useRef(false)
@@ -364,6 +372,49 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
     if (signOutError) setError(signOutError.message)
   }
 
+  async function downloadMyData() {
+    if (exporting) return
+    setExporting(true)
+    setError('')
+    const [{ data: reminderRows, error: reminderError }, { data: prefs }, { data: keys, error: keyError }] =
+      await Promise.all([
+        supabase
+          .from('reminders')
+          .select('id, text, sort_order, is_done, created_at')
+          .eq('user_id', session.user.id),
+        supabase
+          .from('lock_screen_prefs')
+          .select('max_lines')
+          .eq('user_id', session.user.id)
+          .maybeSingle(),
+        supabase
+          .from('agent_token_clients')
+          .select('id, name, created_at, last_used_at')
+          .eq('user_id', session.user.id)
+          .is('revoked_at', null),
+      ])
+    if (reminderError || keyError) {
+      setError(reminderError?.message ?? keyError?.message ?? 'Could not export your data.')
+      setExporting(false)
+      return
+    }
+    const payload = buildAccountExport({
+      email: session.user.email ?? null,
+      userId: session.user.id,
+      maxLines: typeof prefs?.max_lines === 'number' ? prefs.max_lines : maxLines,
+      reminders: (reminderRows ?? []) as AccountExportReminder[],
+      agentKeys: (keys ?? []) as AccountExportAgentKey[],
+    })
+    const blob = new Blob([serializeAccountExport(payload)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = accountExportFilename()
+    link.click()
+    URL.revokeObjectURL(url)
+    setExporting(false)
+  }
+
   async function deleteAccount() {
     setDeletingAccount(true)
     setError('')
@@ -371,29 +422,11 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
       method: 'POST',
     })
     if (invokeError || data?.ok !== true) {
-      const [{ error: remindersError }, { error: tokensError }, { error: agentKeysError }] = await Promise.all([
-        supabase.from('reminders').delete().eq('user_id', session.user.id),
-        supabase.from('device_tokens').delete().eq('user_id', session.user.id),
-        supabase.from('agent_tokens').delete().eq('user_id', session.user.id),
-      ])
-      if (remindersError || tokensError || agentKeysError) {
-        setError(
-          remindersError?.message
-          ?? tokensError?.message
-          ?? agentKeysError?.message
-          ?? invokeError?.message
-          ?? 'Could not delete account. Visit Support for help.',
-        )
-        setDeletingAccount(false)
-        return
-      }
-      await supabase.auth.signOut()
-      setConfirmDelete(false)
-      setDeletingAccount(false)
-      window.alert(
-        'Your reminders were deleted and you have been signed out. '
-        + 'To finish removing your sign-in account, email support via the Support page.',
+      setError(
+        invokeError?.message
+          ?? 'Could not delete your account. Stay signed in and try again, or email support from the Support page.',
       )
+      setDeletingAccount(false)
       return
     }
     await supabase.auth.signOut()
@@ -412,6 +445,14 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
         <div className="account">
           <div className="account-meta">
             <span>{session.user.email}</span>
+            <button
+              className="text-button"
+              type="button"
+              disabled={exporting || deletingAccount}
+              onClick={() => void downloadMyData()}
+            >
+              {exporting ? 'Preparing…' : 'Download my data'}
+            </button>
             <button
               className="text-button danger-text"
               type="button"
@@ -533,8 +574,8 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
           >
             <h2 id="delete-account-title">Delete your account?</h2>
             <p id="delete-account-copy">
-              This permanently removes your reminders, device registrations, agent keys, and sign-in.
-              This cannot be undone.
+              This permanently removes your reminders, device registrations, lock-screen prefs,
+              agent access, and sign-in. This cannot be undone.
             </p>
             <div className="delete-dialog-actions">
               <button
@@ -738,7 +779,7 @@ export default function App() {
   }
   if (path === '/connect') {
     return session
-      ? <Connect session={session} />
+      ? <Connect session={session} onNavigate={navigate} />
       : <SignIn onNavigate={navigate} />
   }
 
