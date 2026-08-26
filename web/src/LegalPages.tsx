@@ -35,7 +35,7 @@ function LegalShell({
         <strong>Not legal advice.</strong> This page is a launch template drafted from the
         product's described practices. It is not a substitute for advice from a qualified
         attorney. Have counsel review and adapt it before relying on it for App Store
-        submission, monetization, or public launch.
+        submission or public launch.
       </aside>
 
       <article className="legal-body">{children}</article>
@@ -131,10 +131,10 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           these operations.
         </li>
         <li>
-          <strong>Apple.</strong> If you use Sign in with Apple, the iOS app, App Store purchases,
-          or APNs, Apple processes related account, device, payment, and push information under
-          Apple's terms and privacy policy. We do not receive your full payment card details from
-          Apple for in-app/App Store purchases.
+          <strong>Apple.</strong> If you use Sign in with Apple, the iOS app, App Store
+          distribution, or APNs, Apple processes related account, device, and push information
+          under Apple's terms and privacy policy. The iOS app is free and we do not process App
+          Store payments for this Service.
         </li>
         <li>
           <strong>Google.</strong> If you use Google sign-in, Google authenticates you and may
@@ -215,12 +215,10 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
         and delete account data we control, subject to the retention exceptions above.
       </p>
 
-      <h2>11. Paid features and Apple</h2>
+      <h2>11. Pricing</h2>
       <p>
-        If a paid iOS version or in-app purchase is offered (for example, a planned one-time App
-        Store purchase), Apple processes the payment. Purchase records are also subject to Apple's
-        privacy practices. We only use purchase/entitlement signals as needed to unlock paid
-        features.
+        Lazy Man's Reminders is offered free of charge on the App Store and on the web. We do not
+        sell in-app purchases or subscriptions for this Service.
       </p>
 
       <h2>12. Changes</h2>
@@ -255,7 +253,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
       <aside className="legal-callout" role="note">
         <strong>Governing-law note.</strong> These Terms currently designate Singapore law as a
         working default. Have a lawyer confirm the correct governing law, venue, and entity
-        naming before monetized launch.
+        naming before App Store submission if you want counsel sign-off.
       </aside>
 
       <h2>1. The Service</h2>
@@ -298,29 +296,17 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
         license to host, transmit, and display that content solely to operate the Service for you.
       </p>
 
-      <h2>5. Paid App Store purchases</h2>
+      <h2>5. Price</h2>
       <p>
-        If the iOS app is offered as a paid download or includes a one-time purchase (planned
-        price: US $1.50 / S$2.00, subject to change in the App Store), payment is processed by
-        Apple, not directly by us.
+        The Service is free. There is no paid download fee and no in-app purchase or subscription
+        for Lazy Man's Reminders. Apple may still distribute the iOS app through the App Store
+        under Apple's terms.
       </p>
-      <ul>
-        <li>Pricing, taxes, billing, refunds, and cancellations are handled under Apple's App Store
-          terms and policies.</li>
-        <li>
-          To the extent a purchase dispute or refund request relates to Apple billing, contact
-          Apple. We can assist with Service access issues after purchase verification.
-        </li>
-        <li>
-          Paid features, if any, are licensed to you for personal, non-transferable use on Apple
-          platforms under these Terms and Apple's terms.
-        </li>
-      </ul>
 
       <h2>6. Third-party services</h2>
       <p>
         The Service depends on third parties including Supabase (auth and database) and Apple
-        (App Store distribution, payments, and APNs). Their availability and policies affect the
+        (App Store distribution and APNs). Their availability and policies affect the
         Service. We are not responsible for outages or changes outside our reasonable control.
       </p>
 
@@ -339,7 +325,8 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
         SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR FOR LOST PROFITS, DATA, OR GOODWILL,
         ARISING FROM YOUR USE OF THE SERVICE. OUR TOTAL LIABILITY FOR ANY CLAIM RELATING TO THE
         SERVICE WILL NOT EXCEED THE GREATER OF (A) THE AMOUNT YOU PAID US FOR THE SERVICE IN THE
-        12 MONTHS BEFORE THE CLAIM OR (B) US $30.
+        12 MONTHS BEFORE THE CLAIM OR (B) US $30. Because the Service is free, that amount is
+        ordinarily US $30.
       </p>
       <p>
         Some jurisdictions do not allow certain limitations; in those places, our liability is
@@ -391,7 +378,6 @@ export function SupportPage({ onNavigate }: LegalPageProps) {
         <li>The email address on your account</li>
         <li>Whether you're using the web app, iOS app, and/or lock-screen widget</li>
         <li>What you expected vs. what happened</li>
-        <li>For purchase issues: your App Store transaction details (do not send card numbers)</li>
       </ul>
 
       <h2>Common topics</h2>
@@ -410,8 +396,7 @@ export function SupportPage({ onNavigate }: LegalPageProps) {
           need help completing deletion.
         </li>
         <li>
-          <strong>Refunds.</strong> App Store billing and refunds are handled by Apple under
-          Apple's policies.
+          <strong>Price.</strong> The app and web board are free. There are no in-app purchases.
         </li>
       </ul>
 

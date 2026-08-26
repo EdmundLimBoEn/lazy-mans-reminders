@@ -1,7 +1,7 @@
 # Mac handoff — Lazy Man's Reminders
 
 **Date:** 7 August 2026  
-**From:** Linux agent session (launch-ready / monetization prep)  
+**From:** Linux agent session (launch-ready / free App Store release)  
 **Repo:** `git@github.com:EdmundLimBoEn/lazy-mans-reminders.git`  
 **Branch:** `main` @ `89c0abb` (pulled/pushed; includes launch work + prior lock-screen widget fix)  
 **Operator:** Edmund Lim · team `DUU8J39BA7` · contact `hello@edmundlim.systems`
@@ -28,12 +28,13 @@ Passwordless reminder board:
 | Privacy | https://lmr.edmundlim.systems/privacy |
 | Terms | https://lmr.edmundlim.systems/terms |
 | Support | https://lmr.edmundlim.systems/support |
+| Agent MCP | https://lmr-mcp.edmundlim.systems/mcp |
 | Supabase project | `biwmsxbqrevtjwgsvsmu` (Singapore / `ap-southeast-1`) |
 | Dashboard | https://supabase.com/dashboard/project/biwmsxbqrevtjwgsvsmu |
 | Auth providers | https://supabase.com/dashboard/project/biwmsxbqrevtjwgsvsmu/auth/providers |
 | Functions | https://supabase.com/dashboard/project/biwmsxbqrevtjwgsvsmu/functions |
 
-**Planned monetization:** paid App Store app ~US $1.50 / S$2.00 (one-time). Email magic link alone does **not** require Sign in with Apple; offering Google **does** (Guideline 4.8). Code already includes Apple + Google.
+**Pricing:** free App Store download, no in-app purchases. Email magic link alone does **not** require Sign in with Apple; offering Google **does** (Guideline 4.8). Code already includes Apple + Google.
 
 ---
 
@@ -162,11 +163,11 @@ Sign both targets with team `DUU8J39BA7`. On a **physical iPhone** test:
 6. Lock Screen widget (rectangular + inline)
 7. Delete account (More menu → Delete permanently)
 
-Then: App Store Connect metadata, privacy URL, support URL, screenshots, paid price US $1.50 / S$2.00, Small Business Program if eligible.
+Then: App Store Connect metadata, privacy URL, support URL, screenshots, **Pricing and Availability → Free**.
 
 ### E. Legal
 
-Templates are live; disclaimer says not legal advice. Confirm `hello@edmundlim.systems` inbox works. Counsel review before paid launch.
+Templates are live; disclaimer says not legal advice. Confirm `hello@edmundlim.systems` inbox works. Optional counsel review before App Store submission.
 
 ---
 

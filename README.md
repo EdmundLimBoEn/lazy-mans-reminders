@@ -1,28 +1,28 @@
 # Lazy Man's Reminders
 
-A Supabase-backed reminder board with a React/Vite web app and an iOS 17 app plus WidgetKit extension. The iOS app receives APNs notifications and refreshes the shared widget data.
+A Supabase-backed reminder board with a React/Vite web app and an iOS 17 app plus WidgetKit extension. The iOS app receives APNs notifications and refreshes the shared widget data. The App Store release is **free** (no in-app purchases).
 
 ## Current deployment status
 
-As of 6 August 2026:
+As of 26 August 2026. The iOS app ships as a **free** App Store download (no in-app purchases).
 
-- Web app: **live** at <https://lmr.edmundlim.systems> (alias) and <https://lazy-mans-reminders.pages.dev>
+- Web app: **live** at <https://lmr.edmundlim.systems> and <https://lazy-mans-reminders.pages.dev>
 - Cloudflare Pages project: `lazy-mans-reminders`
 - Supabase project: `lazy-mans-reminders` (`biwmsxbqrevtjwgsvsmu`, Singapore)
-- Database migrations: **deployed**
-- Supabase Auth production URL and redirects: **deployed** (site URL `https://lmr.edmundlim.systems`)
-- `send-reminder-push` Edge Function: **deployed with APNs secrets + INSERT webhook trigger** (end-to-end push still needs a physical device)
-- iOS app and widget: **implemented; XcodeGen project generated locally, not yet signed or uploaded to TestFlight**
-- Lock Screen surface: **Live Activity** (full-width clear-glass banner, body text only) plus optional accessory widgets; push alerts are body-only (no title)
-- Custom domain DNS: **proxied CNAME + Pages domain active**
+- Database migrations: **deployed** (including agent tokens)
+- Supabase Auth: site URL and redirects **deployed**; Apple web + native configured; Google provider enabled; Resend SMTP for magic-link email
+- `send-reminder-push` and `delete-account` Edge Functions: **deployed**
+- Agent MCP Worker: **live** at <https://lmr-mcp.edmundlim.systems/mcp> (OAuth plugin path)
+- iOS app and widget: **implemented**; TestFlight build uploaded; physical-device smoke and App Store submission still open
+- Lock Screen: Live Activity plus accessory widgets; push alerts are body-only (no title)
+- Custom domain DNS: **active** for web and MCP
 
 ### Deferred launch checklist
 
 See [HUMANS.md](HUMANS.md) for the live checklist. Remaining human work:
 
-- [ ] Open `ios/LazyMansReminders.xcodeproj`, sign both targets, then test magic-link login, push delivery, and both lock-screen widget sizes on a physical iPhone.
-- [ ] Upload to TestFlight and complete the paid-app release at US $1.50 / S$2.00.
-- [ ] Enroll in Apple's App Store Small Business Program before release.
+- [ ] Open `ios/LazyMansReminders.xcodeproj`, sign both targets, then test Apple / Google / magic-link login, push, widgets, and account deletion on a physical iPhone.
+- [ ] Finish TestFlight external testing as needed, then submit the **free** App Store release (Pricing and Availability: Free).
 
 ## Prerequisites
 
@@ -254,24 +254,12 @@ The generated project can be recreated; make lasting project-setting changes in 
 
 Increment the marketing version/build number before each upload.
 
-## Paid App Store release (US $1.50 / S$2.00)
+## Free App Store release
 
-This is a paid download, not an in-app purchase:
+The iOS app is a free download with no in-app purchases or subscriptions.
 
-1. Accept the latest **Paid Apps Agreement** and complete tax and banking details in App Store Connect.
-2. Under the app's **Pricing and Availability**, set the US storefront to **$1.50** and the Singapore storefront to **S$2.00** (or the nearest Apple price tiers that match).
-3. Complete app metadata, privacy details, age rating, screenshots, support/privacy URLs, and App Review notes.
-4. Attach the tested build, choose manual or automatic release, and submit for review.
+1. In App Store Connect, under **Pricing and Availability**, set the price to **Free** for the storefronts you ship.
+2. Complete app metadata, privacy details, age rating, screenshots, support URL (`https://lmr.edmundlim.systems/support`), and privacy URL (`https://lmr.edmundlim.systems/privacy`).
+3. Attach a tested build, choose manual or automatic release, and submit for review.
 
-Before submission, verify that account deletion requirements, privacy disclosures, support contact, and reviewer access/instructions match the shipped app.
-
-## App Store Small Business Program
-
-Eligible developers can apply for Apple's App Store Small Business Program for a reduced commission (generally 15%). Enrollment is not automatic:
-
-1. Review Apple's current eligibility rules, including the prior-calendar-year proceeds threshold and associated developer accounts.
-2. Ensure all agreements, tax, banking, and membership details are current.
-3. Apply from the Apple Developer/App Store Connect enrollment page and disclose associated accounts.
-4. Wait for approval before assuming the reduced rate in financial forecasts; Apple applies the current program terms and eligibility rules.
-
-Re-check Apple's official terms before launch because thresholds, definitions, and commissions can change.
+Before submission, confirm account deletion, privacy disclosures, support contact, and reviewer notes match the shipped app.
