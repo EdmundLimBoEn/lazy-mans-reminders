@@ -18,6 +18,18 @@ final class AuthManager: ObservableObject {
         }
     }
 
+    private struct LockScreenPrefs: Encodable {
+        let userID: UUID
+        let maxLines: Int
+        let pointSize: Double
+
+        enum CodingKeys: String, CodingKey {
+            case userID = "user_id"
+            case maxLines = "max_lines"
+            case pointSize = "point_size"
+        }
+    }
+
     @Published private(set) var session: Session?
     @Published var isLoading = true
     @Published var message: String?
@@ -125,9 +137,10 @@ final class AuthManager: ObservableObject {
         do {
             session = try await client.auth.signInWithOAuth(
                 provider: .google,
-                redirectTo: authRedirectURL
+                redirectTo: authRedirectURL,
+                queryParams: [("prompt", "select_account")]
             ) { session in
-                session.prefersEphemeralWebBrowserSession = true
+                session.prefersEphemeralWebBrowserSession = false
             }
             await shareSession()
         } catch {
@@ -185,6 +198,21 @@ final class AuthManager: ObservableObject {
             .execute()
     }
 
+    /// Measures this phone’s Live Activity line budget and upserts `lock_screen_prefs`.
+    func syncLockScreenPrefs() async {
+        let maxLines = LockScreenLineBudget.refreshLocalCache()
+        guard let userID = session?.user.id else { return }
+        let prefs = LockScreenPrefs(
+            userID: userID,
+            maxLines: maxLines,
+            pointSize: Double(LockScreenLineBudget.pointSize)
+        )
+        try? await client
+            .from("lock_screen_prefs")
+            .upsert(prefs, onConflict: "user_id")
+            .execute()
+    }
+
     private func shareSession() async {
         guard let session else {
             await ReminderStore.shared.clearUserData()
@@ -196,6 +224,7 @@ final class AuthManager: ObservableObject {
             accessToken: session.accessToken,
             expiresAt: Date(timeIntervalSince1970: session.expiresAt)
         )
+        await syncLockScreenPrefs()
     }
 
     private static func randomNonceString(length: Int = 32) -> String {

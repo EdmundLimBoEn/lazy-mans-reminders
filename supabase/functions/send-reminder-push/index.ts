@@ -1,23 +1,14 @@
 import { timingSafeEqual } from "node:crypto";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-type ReminderRecord = {
-  id: string;
-  user_id: string;
-  text: string;
-};
-
-type WebhookPayload = {
-  type: "INSERT" | "UPDATE" | "DELETE";
-  table: string;
-  schema: string;
-  record: ReminderRecord;
-};
+import {
+  APNS_TOKEN_PATTERN,
+  apnsHostForEnvironment,
+  base64url,
+  classifyWebhookPayload,
+  type WebhookPayload,
+} from "../_shared/push_helpers.ts";
 
 const encoder = new TextEncoder();
-const APNS_TOKEN_PATTERN = /^[0-9a-f]{64}$/i;
-const UUID_PATTERN =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const APNS_JWT_TTL_MS = 50 * 60 * 1000;
 
 let cachedAPNSJWT: { value: string; createdAt: number } | undefined;
@@ -26,16 +17,6 @@ function requiredEnv(name: string): string {
   const value = Deno.env.get(name);
   if (!value) throw new Error(`Missing required environment variable: ${name}`);
   return value;
-}
-
-function base64url(input: Uint8Array | string): string {
-  const bytes = typeof input === "string" ? encoder.encode(input) : input;
-  let binary = "";
-  for (const byte of bytes) binary += String.fromCharCode(byte);
-  return btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replace(
-    /=+$/,
-    "",
-  );
 }
 
 async function apnsJWT(): Promise<string> {
@@ -125,22 +106,12 @@ Deno.serve(async (request) => {
     return new Response("Invalid JSON", { status: 400 });
   }
 
-  if (
-    payload.type !== "INSERT" ||
-    payload.table !== "reminders" ||
-    payload.schema !== "public"
-  ) {
-    return new Response("Ignored", { status: 202 });
+  const check = classifyWebhookPayload(payload);
+  if (!check.ok) {
+    return new Response(check.message, { status: check.status });
   }
-  if (
-    !payload.record ||
-    !UUID_PATTERN.test(payload.record.id) ||
-    !UUID_PATTERN.test(payload.record.user_id) ||
-    typeof payload.record.text !== "string" ||
-    payload.record.text.length === 0 ||
-    payload.record.text.length > 500
-  ) {
-    return new Response("Invalid webhook payload", { status: 400 });
+  if (check.kind === "ignore") {
+    return new Response("Ignored", { status: 202 });
   }
 
   let supabase;
@@ -184,9 +155,7 @@ Deno.serve(async (request) => {
       return;
     }
 
-    const host = environment === "development"
-      ? "https://api.sandbox.push.apple.com"
-      : "https://api.push.apple.com";
+    const host = apnsHostForEnvironment(environment);
     try {
       const response = await fetch(`${host}/3/device/${token}`, {
         method: "POST",

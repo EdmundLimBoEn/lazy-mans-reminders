@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
 const CONTACT_EMAIL = 'hello@edmundlim.systems'
-const LAST_UPDATED = '7 August 2026'
+const LAST_UPDATED = '26 August 2026'
 const SITE_URL = 'https://lmr.edmundlim.systems'
 
 type LegalPageProps = {
@@ -58,7 +58,6 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
         (the “Service”), handles personal information.
       </p>
       <p>
-        {/* NOTE: Replace with a registered legal entity name if/when you incorporate. */}
         Operator contact: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
       </p>
 
@@ -83,6 +82,12 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
         <li>
           <strong>Device push tokens.</strong> On iOS, device tokens used to deliver Apple Push
           Notification service (APNs) alerts related to your reminders.
+        </li>
+        <li>
+          <strong>Agent access.</strong> When you allow an agent (Grok, Claude, Cursor, Codex)
+          to use your board, we store an OAuth grant for that client. Optional personal tokens
+          you mint yourself are stored as a SHA-256 hash of the secret. The plaintext token is
+          shown once at creation and is revocable from the signed-in web board.
         </li>
         <li>
           <strong>Authentication session data.</strong> Session tokens and related auth state
@@ -204,8 +209,8 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
       </p>
       <p>
         You can delete your account in the product: use <em>Delete account</em> on the signed-in
-        web board or in the iOS app. That removes your reminders, device push tokens, and auth
-        account. You may also email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> from
+        web board or in the iOS app. That removes your reminders, device push tokens, agent
+        grants and access tokens, and auth account. You may also email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> from
         the address associated with your account if you need help. We will verify email requests
         and delete account data we control, subject to the retention exceptions above.
       </p>
@@ -248,7 +253,6 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
         agree, do not use the Service.
       </p>
       <aside className="legal-callout" role="note">
-        {/* NOTE: Confirm governing law / venue with counsel before launch. Singapore is used as a working default because the operator and Supabase region are Singapore-oriented. */}
         <strong>Governing-law note.</strong> These Terms currently designate Singapore law as a
         working default. Have a lawyer confirm the correct governing law, venue, and entity
         naming before monetized launch.
@@ -297,8 +301,8 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
       <h2>5. Paid App Store purchases</h2>
       <p>
         If the iOS app is offered as a paid download or includes a one-time purchase (planned
-        price: US $2.99, subject to change in the App Store), payment is processed by Apple, not
-        directly by us.
+        price: US $1.50 / S$2.00, subject to change in the App Store), payment is processed by
+        Apple, not directly by us.
       </p>
       <ul>
         <li>Pricing, taxes, billing, refunds, and cancellations are handled under Apple's App Store
@@ -362,7 +366,6 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
 
       <h2>11. Governing law</h2>
       <p>
-        {/* NOTE: Placeholder pending counsel review — Singapore chosen as operator/hosting-aligned default. */}
         These Terms are governed by the laws of <strong>Singapore</strong>, without regard to
         conflict-of-law rules. Courts in Singapore shall have exclusive jurisdiction over disputes,
         except where mandatory consumer protections in your country require otherwise.

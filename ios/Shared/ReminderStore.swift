@@ -38,7 +38,7 @@ actor ReminderStore {
 
     func cached() -> [Reminder] {
         guard let data = defaults.data(forKey: cacheKey) else { return [] }
-        return (try? Self.decoder.decode([Reminder].self, from: data)) ?? []
+        return (try? ReminderJSON.decoder.decode([Reminder].self, from: data)) ?? []
     }
 
     func refresh() async throws -> [Reminder] {
@@ -49,6 +49,9 @@ actor ReminderStore {
         else {
             return cached()
         }
+
+        // Best-effort: drop this user's done reminders older than 7 days (DB trigger sets completed_at).
+        await deleteOldCompletedReminders(accessToken: session.accessToken)
 
         var components = URLComponents(
             url: AppConfig.supabaseURL.appending(path: "rest/v1/reminders"),
@@ -71,8 +74,78 @@ actor ReminderStore {
             throw StoreError.requestFailed(http.statusCode)
         }
 
-        let reminders = try Self.decoder.decode([Reminder].self, from: responseData)
-        defaults.set(try Self.encoder.encode(reminders), forKey: cacheKey)
+        let reminders = try ReminderJSON.decoder.decode([Reminder].self, from: responseData)
+        defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
+        return reminders
+    }
+
+    /// Invokes `delete_old_completed_reminders` RPC. Failures are ignored so refresh still works.
+    private func deleteOldCompletedReminders(accessToken: String) async {
+        var request = URLRequest(
+            url: AppConfig.supabaseURL.appending(path: "rest/v1/rpc/delete_old_completed_reminders")
+        )
+        request.httpMethod = "POST"
+        request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = Data("{}".utf8)
+        _ = try? await URLSession.shared.data(for: request)
+    }
+
+    /// Creates a reminder via POST, updates the App Group cache, and returns the active reminders.
+    func create(text: String, userID: UUID) async throws -> [Reminder] {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            throw StoreError.invalidResponse
+        }
+        if ReminderBoardLimits.isAtCapacity(cached().filter { !$0.isDone }.count) {
+            throw StoreError.requestFailed(409)
+        }
+        guard
+            let data = defaults.data(forKey: sessionKey),
+            let session = try? JSONDecoder().decode(SharedSession.self, from: data),
+            session.expiresAt > Date()
+        else {
+            throw StoreError.requestFailed(401)
+        }
+
+        let nextOrder = (cached().map(\.sortOrder).max() ?? -1) + 1
+        struct CreateBody: Encodable {
+            let text: String
+            let userID: UUID
+            let sortOrder: Int
+
+            enum CodingKeys: String, CodingKey {
+                case text
+                case userID = "user_id"
+                case sortOrder = "sort_order"
+            }
+        }
+        var request = URLRequest(url: AppConfig.supabaseURL.appending(path: "rest/v1/reminders"))
+        request.httpMethod = "POST"
+        request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
+        request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("return=representation", forHTTPHeaderField: "Prefer")
+        request.httpBody = try ReminderJSON.encoder.encode(
+            CreateBody(text: trimmed, userID: userID, sortOrder: nextOrder)
+        )
+        let (responseData, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse else {
+            throw StoreError.invalidResponse
+        }
+        guard 200..<300 ~= http.statusCode else {
+            throw StoreError.requestFailed(http.statusCode)
+        }
+
+        let created = try ReminderJSON.decoder.decode([Reminder].self, from: responseData)
+        var reminders = cached()
+        reminders.append(contentsOf: created)
+        reminders.sort {
+            if $0.sortOrder != $1.sortOrder { return $0.sortOrder < $1.sortOrder }
+            return $0.createdAt < $1.createdAt
+        }
+        defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
         return reminders
     }
 
@@ -99,7 +172,7 @@ actor ReminderStore {
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("return=minimal", forHTTPHeaderField: "Prefer")
-        request.httpBody = try Self.encoder.encode(["is_done": true])
+        request.httpBody = try ReminderJSON.encoder.encode(["is_done": true])
 
         let (_, response) = try await URLSession.shared.data(for: request)
         guard let http = response as? HTTPURLResponse else {
@@ -110,30 +183,7 @@ actor ReminderStore {
         }
 
         let reminders = cached().filter { $0.id != id }
-        defaults.set(try Self.encoder.encode(reminders), forKey: cacheKey)
+        defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
         return reminders
     }
-
-    private static let encoder: JSONEncoder = {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-        return encoder
-    }()
-
-    private static let decoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .custom { decoder in
-            let value = try decoder.singleValueContainer().decode(String.self)
-            let fractional = ISO8601DateFormatter()
-            fractional.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-            if let date = fractional.date(from: value) { return date }
-            let regular = ISO8601DateFormatter()
-            if let date = regular.date(from: value) { return date }
-            throw DecodingError.dataCorruptedError(
-                in: try decoder.singleValueContainer(),
-                debugDescription: "Invalid ISO-8601 date"
-            )
-        }
-        return decoder
-    }()
 }

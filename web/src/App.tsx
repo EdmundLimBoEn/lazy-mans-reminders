@@ -12,16 +12,13 @@ import {
   Trash2,
   X,
 } from 'lucide-react'
+import { nextSortOrder, sortReminders, swapSortOrders, temporarySortOrder, isAtCapacity, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
+import { AuthCallback } from './AuthCallback'
+import { Connect } from './Connect'
 import { LegalFooterLinks, PrivacyPage, SupportPage, TermsPage } from './LegalPages'
+import { authCallbackUrl, MCP_URL, rememberReturnTo } from './mcp'
+import { normalizePath, type AppRoute } from './routing'
 import { supabase } from './supabase'
-
-type AppRoute = '/' | '/privacy' | '/terms' | '/support'
-
-function normalizePath(pathname: string): AppRoute {
-  const path = pathname.replace(/\/+$/, '') || '/'
-  if (path === '/privacy' || path === '/terms' || path === '/support') return path
-  return '/'
-}
 
 function usePathname(): [AppRoute, (path: string) => void] {
   const [path, setPath] = useState<AppRoute>(() => normalizePath(window.location.pathname))
@@ -68,9 +65,10 @@ function SignIn({ onNavigate }: { onNavigate: (path: string) => void }) {
     if (!normalizedEmail) return
     setLoading(true)
     setError('')
+    rememberReturnTo()
     const { error: authError } = await supabase.auth.signInWithOtp({
       email: normalizedEmail,
-      options: { emailRedirectTo: `${window.location.origin}/` },
+      options: { emailRedirectTo: authCallbackUrl() },
     })
     setLoading(false)
     if (authError) setError(authError.message)
@@ -83,10 +81,15 @@ function SignIn({ onNavigate }: { onNavigate: (path: string) => void }) {
   async function signInWithProvider(provider: 'apple' | 'google') {
     setOauthLoading(provider)
     setError('')
+    rememberReturnTo()
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/`,
+        redirectTo: authCallbackUrl(),
+        queryParams: provider === 'google'
+          ? { prompt: 'select_account', access_type: 'online' }
+          : undefined,
+        scopes: provider === 'apple' ? 'name email' : undefined,
       },
     })
     if (authError) {
@@ -119,7 +122,7 @@ function SignIn({ onNavigate }: { onNavigate: (path: string) => void }) {
       </section>
       <section className="auth-panel">
         <div className="auth-card">
-          <Smartphone size={24} />
+          <Smartphone size={24} aria-hidden="true" />
           <h2>{sent ? 'Check your inbox' : 'Your board, everywhere'}</h2>
           <p aria-live="polite">
             {sent
@@ -133,6 +136,7 @@ function SignIn({ onNavigate }: { onNavigate: (path: string) => void }) {
                   className="oauth-button oauth-apple"
                   type="button"
                   disabled={busy}
+                  aria-busy={oauthLoading === 'apple' || undefined}
                   onClick={() => void signInWithProvider('apple')}
                 >
                   {oauthLoading === 'apple' ? 'Redirecting…' : 'Continue with Apple'}
@@ -141,6 +145,7 @@ function SignIn({ onNavigate }: { onNavigate: (path: string) => void }) {
                   className="oauth-button oauth-google"
                   type="button"
                   disabled={busy}
+                  aria-busy={oauthLoading === 'google' || undefined}
                   onClick={() => void signInWithProvider('google')}
                 >
                   {oauthLoading === 'google' ? 'Redirecting…' : 'Continue with Google'}
@@ -191,6 +196,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
   const [reordering, setReordering] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [deletingAccount, setDeletingAccount] = useState(false)
+  const [maxLines, setMaxLines] = useState(DEFAULT_LOCK_SCREEN_MAX_LINES)
   const loadSequence = useRef(0)
   const reorderingRef = useRef(false)
 
@@ -203,29 +209,33 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [confirmDelete, deletingAccount])
 
-  const sorted = useMemo(
-    () => [...reminders].sort((a, b) =>
-      Number(a.is_done) - Number(b.is_done)
-      || a.sort_order - b.sort_order
-      || a.created_at.localeCompare(b.created_at)
-      || a.id.localeCompare(b.id),
-    ),
-    [reminders],
-  )
+  const sorted = useMemo(() => sortReminders(reminders), [reminders])
   const active = useMemo(() => sorted.filter((item) => !item.is_done), [sorted])
 
   const load = useCallback(async () => {
     const sequence = ++loadSequence.current
-    const { data, error: fetchError } = await supabase
-      .from('reminders')
-      .select('id, user_id, text, sort_order, is_done, created_at')
-      .eq('user_id', session.user.id)
-      .order('is_done')
-      .order('sort_order')
-      .order('created_at')
+    await supabase.rpc('delete_old_completed_reminders')
+    if (sequence !== loadSequence.current) return
+
+    const [{ data, error: fetchError }, prefsResult] = await Promise.all([
+      supabase
+        .from('reminders')
+        .select('id, user_id, text, sort_order, is_done, created_at')
+        .eq('user_id', session.user.id)
+        .order('is_done')
+        .order('sort_order')
+        .order('created_at'),
+      supabase
+        .from('lock_screen_prefs')
+        .select('max_lines')
+        .eq('user_id', session.user.id)
+        .maybeSingle(),
+    ])
     if (sequence !== loadSequence.current) return
     if (fetchError) setError(fetchError.message)
     else setReminders(data ?? [])
+    const synced = prefsResult.data?.max_lines
+    if (typeof synced === 'number' && synced >= 1) setMaxLines(synced)
     setLoading(false)
   }, [session.user.id])
 
@@ -254,10 +264,14 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
     event.preventDefault()
     const value = text.trim()
     if (!value || adding) return
+    if (isAtCapacity(active.length, maxLines)) {
+      setError(POST_IT_HINT)
+      return
+    }
     setAdding(true)
     setText('')
     setError('')
-    const nextOrder = Math.max(-1, ...reminders.map((item) => item.sort_order)) + 1
+    const nextOrder = nextSortOrder(reminders)
     const { error: insertError } = await supabase
       .from('reminders')
       .insert({ text: value, user_id: session.user.id, sort_order: nextOrder })
@@ -307,11 +321,8 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
     setReordering(true)
     reorderingRef.current = true
     setError('')
-    setReminders((items) => items.map((item) =>
-      item.id === a.id ? { ...item, sort_order: b.sort_order } :
-      item.id === b.id ? { ...item, sort_order: a.sort_order } : item,
-    ))
-    const temporaryOrder = Math.min(...reminders.map((item) => item.sort_order)) - 1
+    setReminders((items) => swapSortOrders(items, a.id, b.id))
+    const temporaryOrder = temporarySortOrder(reminders)
     const updateOrder = (id: string, sortOrder: number) => supabase
       .from('reminders')
       .update({ sort_order: sortOrder })
@@ -345,6 +356,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
   }
 
   const activeCount = reminders.filter((item) => !item.is_done).length
+  const boardFull = isAtCapacity(activeCount, maxLines)
 
   async function signOut() {
     setError('')
@@ -359,15 +371,16 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
       method: 'POST',
     })
     if (invokeError || data?.ok !== true) {
-      // Fallback: clear user-owned rows via RLS, then sign out with support instructions.
-      const [{ error: remindersError }, { error: tokensError }] = await Promise.all([
+      const [{ error: remindersError }, { error: tokensError }, { error: agentKeysError }] = await Promise.all([
         supabase.from('reminders').delete().eq('user_id', session.user.id),
         supabase.from('device_tokens').delete().eq('user_id', session.user.id),
+        supabase.from('agent_tokens').delete().eq('user_id', session.user.id),
       ])
-      if (remindersError || tokensError) {
+      if (remindersError || tokensError || agentKeysError) {
         setError(
           remindersError?.message
           ?? tokensError?.message
+          ?? agentKeysError?.message
           ?? invokeError?.message
           ?? 'Could not delete account. Visit Support for help.',
         )
@@ -390,10 +403,11 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
 
   return (
     <main className="board-shell">
+      <a className="skip-link" href="#board-main">Skip to board</a>
       <header>
         <div>
           <p className="eyebrow">Lazy Man's Reminders</p>
-          <h1>Your board</h1>
+          <h1 id="board-heading">Your board</h1>
         </div>
         <div className="account">
           <div className="account-meta">
@@ -408,46 +422,50 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
             </button>
           </div>
           <button className="icon-button" type="button" aria-label="Sign out" title="Sign out" onClick={() => void signOut()}>
-            <LogOut size={18} />
+            <LogOut size={18} aria-hidden="true" />
           </button>
         </div>
       </header>
 
-      <section className="board">
+      <section className="board" id="board-main" aria-labelledby="board-heading">
         <form className="add-form" onSubmit={add}>
-          <Plus size={22} />
+          <Plus size={22} aria-hidden="true" />
           <input
             value={text}
             onChange={(event) => setText(event.target.value)}
-            placeholder="What shouldn't you forget?"
+            placeholder={boardFull ? 'Board full — combine lines instead' : "What shouldn't you forget?"}
             maxLength={500}
             autoFocus
+            disabled={boardFull || adding}
             aria-label="New reminder"
+            aria-describedby="board-hint board-capacity"
+            aria-invalid={boardFull ? true : undefined}
           />
-          <button className="primary" type="submit" disabled={!text.trim() || adding}>
+          <button className="primary" type="submit" disabled={boardFull || !text.trim() || adding} aria-busy={adding || undefined}>
             {adding ? 'Adding…' : 'Add'}
           </button>
         </form>
-        <div className="board-meta">
-          <span>{activeCount} {activeCount === 1 ? 'thing' : 'things'} on your mind</span>
-          <span>Updates sync to your lock screen</span>
+        <div className="board-meta" id="board-capacity" aria-live="polite">
+          <span>{activeCount}/{maxLines} {activeCount === 1 ? 'thing' : 'things'} on your mind</span>
+          <span>Capacity set by your iPhone Lock Screen</span>
         </div>
+        <p className="board-hint" id="board-hint">{POST_IT_HINT}</p>
         {error && (
           <div className="error-banner" role="alert">
             <span>{error}</span>
-            <button type="button" aria-label="Dismiss error" onClick={() => setError('')}><X size={16} /></button>
+            <button type="button" aria-label="Dismiss error" onClick={() => setError('')}><X size={16} aria-hidden="true" /></button>
           </div>
         )}
         {loading ? (
           <div className="empty" role="status">Loading your board…</div>
         ) : sorted.length === 0 ? (
           <div className="empty">
-            <Circle size={30} />
+            <Circle size={30} aria-hidden="true" />
             <h2>Nothing to remember.</h2>
             <p>That's either excellent or suspicious.</p>
           </div>
         ) : (
-          <ul className="reminder-list">
+          <ul className="reminder-list" aria-label="Reminders">
             {sorted.map((reminder) => {
               const activeIndex = active.findIndex((item) => item.id === reminder.id)
               return (
@@ -456,10 +474,11 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
                     className="check-button"
                     type="button"
                     aria-label={reminder.is_done ? `Mark "${reminder.text}" active` : `Complete "${reminder.text}"`}
+                    aria-pressed={reminder.is_done}
                     title={reminder.is_done ? 'Mark active' : 'Complete'}
                     onClick={() => void patch(reminder.id, { is_done: !reminder.is_done })}
                   >
-                    {reminder.is_done ? <Check size={17} /> : <Circle size={19} />}
+                    {reminder.is_done ? <Check size={17} aria-hidden="true" /> : <Circle size={19} aria-hidden="true" />}
                   </button>
                   {editingId === reminder.id ? (
                     <form className="edit-form" onSubmit={(event) => { event.preventDefault(); void saveEdit(reminder.id) }}>
@@ -471,8 +490,8 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
                         aria-label={`Edit reminder: ${reminder.text}`}
                         autoFocus
                       />
-                      <button type="submit" aria-label="Save reminder" title="Save"><Check size={17} /></button>
-                      <button type="button" aria-label="Cancel editing" title="Cancel" onClick={() => setEditingId(null)}><X size={17} /></button>
+                      <button type="submit" aria-label="Save reminder" title="Save"><Check size={17} aria-hidden="true" /></button>
+                      <button type="button" aria-label="Cancel editing" title="Cancel" onClick={() => setEditingId(null)}><X size={17} aria-hidden="true" /></button>
                     </form>
                   ) : (
                     <span className="reminder-text">{reminder.text}</span>
@@ -480,11 +499,11 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
                   {editingId !== reminder.id && (
                     <div className="actions">
                       {!reminder.is_done && <>
-                        <button type="button" aria-label={`Move "${reminder.text}" up`} title="Move up" disabled={reordering || activeIndex === 0} onClick={() => void move(activeIndex, -1)}><ArrowUp size={16} /></button>
-                        <button type="button" aria-label={`Move "${reminder.text}" down`} title="Move down" disabled={reordering || activeIndex === activeCount - 1} onClick={() => void move(activeIndex, 1)}><ArrowDown size={16} /></button>
+                        <button type="button" aria-label={`Move "${reminder.text}" up`} title="Move up" disabled={reordering || activeIndex === 0} onClick={() => void move(activeIndex, -1)}><ArrowUp size={16} aria-hidden="true" /></button>
+                        <button type="button" aria-label={`Move "${reminder.text}" down`} title="Move down" disabled={reordering || activeIndex === activeCount - 1} onClick={() => void move(activeIndex, 1)}><ArrowDown size={16} aria-hidden="true" /></button>
                       </>}
-                      <button type="button" aria-label={`Edit "${reminder.text}"`} title="Edit" onClick={() => { setEditingId(reminder.id); setEditText(reminder.text) }}><Pencil size={16} /></button>
-                      <button type="button" aria-label={`Delete "${reminder.text}"`} title="Delete" onClick={() => void remove(reminder.id)}><Trash2 size={16} /></button>
+                      <button type="button" aria-label={`Edit "${reminder.text}"`} title="Edit" onClick={() => { setEditingId(reminder.id); setEditText(reminder.text) }}><Pencil size={16} aria-hidden="true" /></button>
+                      <button type="button" aria-label={`Delete "${reminder.text}"`} title="Delete" onClick={() => void remove(reminder.id)}><Trash2 size={16} aria-hidden="true" /></button>
                     </div>
                   )}
                 </li>
@@ -493,8 +512,9 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
           </ul>
         )}
       </section>
+      <AgentAccess userId={session.user.id} />
       <footer className="board-footer">
-        <p className="footer-note"><Smartphone size={16} /> Open the app once after signing in to add the lock-screen widget.</p>
+        <p className="footer-note"><Smartphone size={16} aria-hidden="true" /> Open the app once after signing in to add the lock-screen widget.</p>
         <LegalFooterLinks onNavigate={onNavigate} />
       </footer>
       {confirmDelete && (
@@ -513,7 +533,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
           >
             <h2 id="delete-account-title">Delete your account?</h2>
             <p id="delete-account-copy">
-              This permanently removes your reminders, device registrations, and sign-in.
+              This permanently removes your reminders, device registrations, agent keys, and sign-in.
               This cannot be undone.
             </p>
             <div className="delete-dialog-actions">
@@ -529,6 +549,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
                 className="text-button"
                 type="button"
                 disabled={deletingAccount}
+                autoFocus
                 onClick={() => setConfirmDelete(false)}
               >
                 Cancel
@@ -541,11 +562,150 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
   )
 }
 
+type AgentTokenClient = {
+  id: string
+  name: string
+  created_at: string
+  last_used_at: string | null
+  revoked_at: string | null
+}
+
+function AgentAccess({ userId }: { userId: string }) {
+  const [tokens, setTokens] = useState<AgentTokenClient[]>([])
+  const [name, setName] = useState('')
+  const [minted, setMinted] = useState<string | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+
+  const load = useCallback(async () => {
+    const { data, error: fetchError } = await supabase
+      .from('agent_token_clients')
+      .select('id, name, created_at, last_used_at, revoked_at')
+      .eq('user_id', userId)
+      .is('revoked_at', null)
+      .order('created_at', { ascending: false })
+    if (fetchError) setError(fetchError.message)
+    else setTokens(data ?? [])
+  }, [userId])
+
+  useEffect(() => { void load() }, [load])
+
+  async function mint(event: FormEvent) {
+    event.preventDefault()
+    const trimmed = name.trim()
+    if (!trimmed || busy) return
+    setBusy(true)
+    setError('')
+    const { data, error: rpcError } = await supabase.rpc('mint_agent_token', { p_name: trimmed })
+    setBusy(false)
+    if (rpcError || typeof data !== 'string') {
+      setError(rpcError?.message ?? 'Could not create key')
+      return
+    }
+    setName('')
+    setMinted(data)
+    await load()
+  }
+
+  async function revoke(id: string) {
+    if (busy) return
+    setBusy(true)
+    setError('')
+    const { error: rpcError } = await supabase.rpc('revoke_agent_token', { p_id: id })
+    setBusy(false)
+    if (rpcError) setError(rpcError.message)
+    else await load()
+  }
+
+  return (
+    <section className="agent-access" aria-labelledby="agent-access-heading">
+      <h2 id="agent-access-heading">Agent access</h2>
+      <p>
+        In Grok, Claude, Cursor, or Codex, add the plugin or paste {MCP_URL}.
+        Sign in when asked. That is the usual path — no tokens to copy.
+      </p>
+      <details className="agent-snippets">
+        <summary>Advanced: personal keys</summary>
+        <p>Only if a client cannot sign in. Mint a key below, then paste it once. Shown once. Revoke anytime.</p>
+        <form className="agent-key-form" onSubmit={mint}>
+          <label className="visually-hidden" htmlFor="agent-key-name">Key name</label>
+          <input
+            id="agent-key-name"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            placeholder="Cursor, Codex, Grok Bot…"
+            maxLength={64}
+            autoComplete="off"
+          />
+          <button className="primary" type="submit" disabled={busy || !name.trim()}>
+            {busy ? 'Creating…' : 'Create key'}
+          </button>
+        </form>
+        {error && <p className="error" role="alert">{error}</p>}
+        {minted && (
+          <div className="minted-key" role="status">
+            <p>Copy this now. It will not be shown again.</p>
+            <input readOnly value={minted} onFocus={(event) => event.currentTarget.select()} aria-label="New agent token" />
+            <button className="text-button" type="button" onClick={() => setMinted(null)}>I saved it</button>
+          </div>
+        )}
+        {tokens.length > 0 && (
+          <ul className="agent-token-list" aria-label="Active agent keys">
+            {tokens.map((token) => (
+              <li key={token.id}>
+                <div>
+                  <strong>{token.name}</strong>
+                  <span>Created {new Date(token.created_at).toLocaleString()}</span>
+                  {token.last_used_at && <span>Last used {new Date(token.last_used_at).toLocaleString()}</span>}
+                </div>
+                <button className="text-button danger-text" type="button" disabled={busy} onClick={() => void revoke(token.id)}>
+                  Revoke
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+        <p>Cursor <code>~/.cursor/mcp.json</code></p>
+        <pre>{`{
+  "mcpServers": {
+    "lazy-mans-reminders": {
+      "url": "${MCP_URL}"
+    }
+  }
+}`}</pre>
+        <p>Claude Code / Codex <code>.mcp.json</code></p>
+        <pre>{`{
+  "mcpServers": {
+    "lazy-mans-reminders": {
+      "type": "http",
+      "url": "${MCP_URL}"
+    }
+  }
+}`}</pre>
+        <p>Grok: Settings → Plugins → custom connector. URL only: <code>{MCP_URL}</code>.</p>
+        <p>Personal key header, if you must: <code>Authorization: Bearer TOKEN</code>.</p>
+      </details>
+    </section>
+  )
+}
+
 export default function App() {
   const [path, navigate] = usePathname()
   const [session, setSession] = useState<Session | null>(null)
   const [ready, setReady] = useState(false)
   const [authError, setAuthError] = useState('')
+
+  useEffect(() => {
+    const titles: Record<AppRoute, string> = {
+      '/': "Lazy Man's Reminders",
+      '/privacy': "Privacy · Lazy Man's Reminders",
+      '/terms': "Terms · Lazy Man's Reminders",
+      '/support': "Support · Lazy Man's Reminders",
+      '/auth/callback': "Signing in · Lazy Man's Reminders",
+      '/connect': "Connect an agent · Lazy Man's Reminders",
+    }
+    document.title = titles[path]
+  }, [path])
 
   useEffect(() => {
     void supabase.auth.getSession().then(({ data, error }) => {
@@ -561,6 +721,7 @@ export default function App() {
     return () => data.subscription.unsubscribe()
   }, [])
 
+  if (path === '/auth/callback') return <AuthCallback />
   if (path === '/privacy') return <PrivacyPage onNavigate={navigate} />
   if (path === '/terms') return <TermsPage onNavigate={navigate} />
   if (path === '/support') return <SupportPage onNavigate={navigate} />
@@ -575,6 +736,12 @@ export default function App() {
       </main>
     )
   }
+  if (path === '/connect') {
+    return session
+      ? <Connect session={session} />
+      : <SignIn onNavigate={navigate} />
+  }
+
   return session
     ? <Board session={session} onNavigate={navigate} />
     : <SignIn onNavigate={navigate} />

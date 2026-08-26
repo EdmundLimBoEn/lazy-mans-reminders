@@ -33,7 +33,7 @@ Passwordless reminder board:
 | Auth providers | https://supabase.com/dashboard/project/biwmsxbqrevtjwgsvsmu/auth/providers |
 | Functions | https://supabase.com/dashboard/project/biwmsxbqrevtjwgsvsmu/functions |
 
-**Planned monetization:** paid App Store app ~US $2.99 (one-time). Email magic link alone does **not** require Sign in with Apple; offering Google **does** (Guideline 4.8). Code already includes Apple + Google.
+**Planned monetization:** paid App Store app ~US $1.50 / S$2.00 (one-time). Email magic link alone does **not** require Sign in with Apple; offering Google **does** (Guideline 4.8). Code already includes Apple + Google.
 
 ---
 
@@ -162,7 +162,7 @@ Sign both targets with team `DUU8J39BA7`. On a **physical iPhone** test:
 6. Lock Screen widget (rectangular + inline)
 7. Delete account (More menu → Delete permanently)
 
-Then: App Store Connect metadata, privacy URL, support URL, screenshots, paid price $2.99, Small Business Program if eligible.
+Then: App Store Connect metadata, privacy URL, support URL, screenshots, paid price US $1.50 / S$2.00, Small Business Program if eligible.
 
 ### E. Legal
 
