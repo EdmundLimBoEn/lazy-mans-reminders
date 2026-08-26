@@ -359,7 +359,6 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
       method: 'POST',
     })
     if (invokeError || data?.ok !== true) {
-      // Fallback: clear user-owned rows via RLS, then sign out with support instructions.
       const [{ error: remindersError }, { error: tokensError }, { error: agentKeysError }] = await Promise.all([
         supabase.from('reminders').delete().eq('user_id', session.user.id),
         supabase.from('device_tokens').delete().eq('user_id', session.user.id),

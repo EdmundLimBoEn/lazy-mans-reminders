@@ -58,7 +58,6 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
         (the “Service”), handles personal information.
       </p>
       <p>
-        {/* NOTE: Replace with a registered legal entity name if/when you incorporate. */}
         Operator contact: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
       </p>
 
@@ -254,7 +253,6 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
         agree, do not use the Service.
       </p>
       <aside className="legal-callout" role="note">
-        {/* NOTE: Confirm governing law / venue with counsel before launch. Singapore is used as a working default because the operator and Supabase region are Singapore-oriented. */}
         <strong>Governing-law note.</strong> These Terms currently designate Singapore law as a
         working default. Have a lawyer confirm the correct governing law, venue, and entity
         naming before monetized launch.
@@ -368,7 +366,6 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
 
       <h2>11. Governing law</h2>
       <p>
-        {/* NOTE: Placeholder pending counsel review — Singapore chosen as operator/hosting-aligned default. */}
         These Terms are governed by the laws of <strong>Singapore</strong>, without regard to
         conflict-of-law rules. Courts in Singapore shall have exclusive jurisdiction over disputes,
         except where mandatory consumer protections in your country require otherwise.
