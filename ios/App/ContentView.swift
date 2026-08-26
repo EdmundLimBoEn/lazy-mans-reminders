@@ -22,6 +22,9 @@ struct ContentView: View {
         .background(Color(.systemBackground))
         .task(id: auth.session?.accessToken) {
             await auth.syncLockScreenPrefs()
+            if auth.session != nil {
+                await AppDelegate.requestPushIfNeeded()
+            }
             if let token = AppDelegate.latestDeviceToken {
                 await auth.registerDevice(token: token)
             }

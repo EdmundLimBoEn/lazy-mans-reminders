@@ -182,6 +182,7 @@ final class AuthManager: ObservableObject {
         message = nil
         await ReminderStore.shared.clearUserData()
         WidgetCenter.shared.reloadAllTimelines()
+        await ReminderLiveActivityController.sync(reminders: [])
     }
 
     func registerDevice(token: String) async {

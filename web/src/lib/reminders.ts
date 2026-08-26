@@ -21,7 +21,13 @@ export function isAtCapacity(
   activeCount: number,
   maxLines: number = DEFAULT_LOCK_SCREEN_MAX_LINES,
 ): boolean {
-  return activeCount >= maxLines
+  return activeCount >= effectiveMaximum(maxLines)
+}
+
+/** Clamp a phone-synced line budget to the shared 1–16 range. */
+export function effectiveMaximum(syncedMaxLines: number | null | undefined): number {
+  const value = syncedMaxLines ?? DEFAULT_LOCK_SCREEN_MAX_LINES
+  return Math.min(MAX_ACTIVE_REMINDERS, Math.max(1, value))
 }
 
 /** True when a completed_at timestamp is older than the retention window. */

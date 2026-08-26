@@ -19,7 +19,7 @@ import {
   type AccountExportAgentKey,
   type AccountExportReminder,
 } from './lib/accountExport'
-import { nextSortOrder, sortReminders, swapSortOrders, temporarySortOrder, isAtCapacity, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
+import { nextSortOrder, sortReminders, swapSortOrders, temporarySortOrder, isAtCapacity, effectiveMaximum, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
 import { AuthCallback } from './AuthCallback'
 import { Connect } from './Connect'
 import { LegalFooterLinks, PrivacyPage, SupportPage, TermsPage } from './LegalPages'
@@ -243,7 +243,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
     if (fetchError) setError(fetchError.message)
     else setReminders(data ?? [])
     const synced = prefsResult.data?.max_lines
-    if (typeof synced === 'number' && synced >= 1) setMaxLines(synced)
+    if (typeof synced === 'number' && synced >= 1) setMaxLines(effectiveMaximum(synced))
     setLoading(false)
   }, [session.user.id])
 
@@ -476,11 +476,9 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
             onChange={(event) => setText(event.target.value)}
             placeholder={boardFull ? 'Board full — combine lines instead' : "What shouldn't you forget?"}
             maxLength={500}
-            autoFocus
             disabled={boardFull || adding}
             aria-label="New reminder"
             aria-describedby="board-hint board-capacity"
-            aria-invalid={boardFull ? true : undefined}
           />
           <button className="primary" type="submit" disabled={boardFull || !text.trim() || adding} aria-busy={adding || undefined}>
             {adding ? 'Adding…' : 'Add'}
@@ -744,6 +742,7 @@ export default function App() {
       '/support': "Support · Lazy Man's Reminders",
       '/auth/callback': "Signing in · Lazy Man's Reminders",
       '/connect': "Connect an agent · Lazy Man's Reminders",
+      'not-found': "Not found · Lazy Man's Reminders",
     }
     document.title = titles[path]
   }, [path])
@@ -762,10 +761,20 @@ export default function App() {
     return () => data.subscription.unsubscribe()
   }, [])
 
-  if (path === '/auth/callback') return <AuthCallback />
+  if (path === '/auth/callback') return <AuthCallback onNavigate={navigate} />
   if (path === '/privacy') return <PrivacyPage onNavigate={navigate} />
   if (path === '/terms') return <TermsPage onNavigate={navigate} />
   if (path === '/support') return <SupportPage onNavigate={navigate} />
+  if (path === 'not-found') {
+    return (
+      <main className="fatal-error">
+        <h1>Page not found</h1>
+        <p>That URL is not part of Lazy Man's Reminders.</p>
+        <a className="primary" href="/" onClick={(event) => { event.preventDefault(); navigate('/') }}>Back to the board</a>
+        <LegalFooterLinks onNavigate={navigate} />
+      </main>
+    )
+  }
 
   if (!ready) return <div className="splash" role="status" aria-label="Loading">LM</div>
   if (authError) {
@@ -774,6 +783,7 @@ export default function App() {
         <h1>Could not start the app</h1>
         <p>{authError}</p>
         <button className="primary" type="button" onClick={() => window.location.reload()}>Try again</button>
+        <LegalFooterLinks onNavigate={navigate} />
       </main>
     )
   }

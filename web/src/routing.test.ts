@@ -25,8 +25,13 @@ describe('normalizePath', () => {
     expect(normalizePath('/connect/')).toBe('/connect')
   })
 
-  it('maps unknown paths to /', () => {
-    expect(normalizePath('/board')).toBe('/')
-    expect(normalizePath('/privacy/extra')).toBe('/')
+  it('treats legal routes as case-insensitive', () => {
+    expect(normalizePath('/Privacy')).toBe('/privacy')
+    expect(normalizePath('/TERMS/')).toBe('/terms')
+  })
+
+  it('maps unknown paths to not-found', () => {
+    expect(normalizePath('/board')).toBe('not-found')
+    expect(normalizePath('/privacy/extra')).toBe('not-found')
   })
 })

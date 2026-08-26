@@ -13,23 +13,28 @@ export function Connect({ session, onNavigate }: { session: Session; onNavigate:
     if (!state || busy) return
     setBusy(true)
     setError('')
-    const response = await fetch(`${MCP_ORIGIN}/bind`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${session.access_token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ state }),
-    })
-    const body = await response.json().catch(() => ({})) as { redirectTo?: string; error?: string }
-    if (!response.ok || !body.redirectTo) {
+    try {
+      const response = await fetch(`${MCP_ORIGIN}/bind`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ state }),
+      })
+      const body = await response.json().catch(() => ({})) as { redirectTo?: string; error?: string }
+      if (!response.ok || !body.redirectTo) {
+        setError(body.error === 'expired_state'
+          ? 'This link expired. Ask the agent to connect again.'
+          : 'Could not connect the agent. Try signing in again.')
+        return
+      }
+      window.location.assign(body.redirectTo)
+    } catch {
+      setError('Could not connect the agent. Try signing in again.')
+    } finally {
       setBusy(false)
-      setError(body.error === 'expired_state'
-        ? 'This link expired. Ask the agent to connect again.'
-        : 'Could not connect the agent. Try signing in again.')
-      return
     }
-    window.location.assign(body.redirectTo)
   }
 
   if (!state) {
@@ -54,8 +59,8 @@ export function Connect({ session, onNavigate }: { session: Session; onNavigate:
           <h2>Let this agent use your board?</h2>
           <p>
             Signed in as {session.user.email ?? 'your account'}. Allow once and the agent can read,
-            add, and complete reminders until you revoke it on the board. See Privacy for what is
-            shared.
+            add, and complete reminders until you sign it out or delete your account. See Privacy
+            for what is shared.
           </p>
           {error && <p className="error" role="alert">{error}</p>}
           <form className="connect-actions" onSubmit={allow}>

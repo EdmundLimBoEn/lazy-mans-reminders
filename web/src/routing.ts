@@ -1,16 +1,25 @@
-export type AppRoute = '/' | '/privacy' | '/terms' | '/support' | '/auth/callback' | '/connect'
+export type AppRoute =
+  | '/'
+  | '/privacy'
+  | '/terms'
+  | '/support'
+  | '/auth/callback'
+  | '/connect'
+  | 'not-found'
 
-/** Normalize a pathname to a known app route (strip trailing slashes; unknown → `/`). */
+const KNOWN = new Set<AppRoute>([
+  '/',
+  '/privacy',
+  '/terms',
+  '/support',
+  '/auth/callback',
+  '/connect',
+])
+
+/** Normalize a pathname to a known app route. Case-insensitive. Unknown → not-found. */
 export function normalizePath(pathname: string): AppRoute {
-  const path = pathname.replace(/\/+$/, '') || '/'
-  if (
-    path === '/privacy'
-    || path === '/terms'
-    || path === '/support'
-    || path === '/auth/callback'
-    || path === '/connect'
-  ) {
-    return path
-  }
-  return '/'
+  const stripped = pathname.replace(/\/+$/, '') || '/'
+  const path = (stripped === '/' ? '/' : stripped.replace(/\/{2,}/g, '/')).toLowerCase() as AppRoute
+  if (KNOWN.has(path)) return path
+  return 'not-found'
 }

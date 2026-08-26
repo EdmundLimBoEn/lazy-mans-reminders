@@ -9,18 +9,27 @@ extension Notification.Name {
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     static var latestDeviceToken: String?
 
+    static func requestPushIfNeeded() async {
+        let center = UNUserNotificationCenter.current()
+        let settings = await center.notificationSettings()
+        switch settings.authorizationStatus {
+        case .notDetermined:
+            let granted = (try? await center.requestAuthorization(options: [.alert, .sound, .badge])) ?? false
+            if granted {
+                await MainActor.run { UIApplication.shared.registerForRemoteNotifications() }
+            }
+        case .authorized, .provisional, .ephemeral:
+            await MainActor.run { UIApplication.shared.registerForRemoteNotifications() }
+        default:
+            break
+        }
+    }
+
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         UNUserNotificationCenter.current().delegate = self
-        Task {
-            let granted = try? await UNUserNotificationCenter.current()
-                .requestAuthorization(options: [.alert, .sound, .badge])
-            if granted == true {
-                await MainActor.run { application.registerForRemoteNotifications() }
-            }
-        }
         return true
     }
 

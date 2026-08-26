@@ -6,7 +6,7 @@
   --ink: #24231f;
   --paper: #f5f1e8;
   --card: #fffdf8;
-  --red: #d5523e;
+  --red: #b33d2c;
   --muted: #5f5b53;
   --line: #ddd7ca;
 }
@@ -119,7 +119,7 @@ button:focus-visible, input:focus-visible, a:focus-visible {
 .reminder-list li:last-child { border: 0; }
 .check-button { position: relative; z-index: 2; flex: none; color: var(--red); margin-right: .6rem; }
 .reminder-text { flex: 1; min-width: 0; line-height: 1.45; overflow-wrap: anywhere; }
-.done .reminder-text { color: #a09c93; text-decoration: line-through; }
+.done .reminder-text { color: #6e6a62; text-decoration: line-through; }
 .actions { display: flex; gap: .1rem; }
 .actions button:disabled { opacity: .35; cursor: default; }
 .edit-form { display: flex; flex: 1; min-width: 0; align-items: center; gap: .2rem; }
@@ -242,7 +242,14 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   .auth-panel { padding: 1.75rem 1.5rem 2rem; gap: 1.5rem; align-content: start; }
   .board-shell { padding: 1.25rem 0 1.5rem; }
   .board-shell header { align-items: flex-start; margin-bottom: 1.35rem; }
-  .account span, .board-meta span:last-child { display: none; }
+  .account span {
+    display: inline-block;
+    max-width: 12rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .board-meta span:last-child { display: none; }
   .account-meta { align-items: flex-end; }
   .legal-shell { padding: 1.25rem 0 2rem; }
   .legal-shell h1 { font-size: clamp(2rem, 8vw, 2.4rem); }

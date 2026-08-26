@@ -14,5 +14,5 @@ export function rememberReturnTo(): void {
 export function consumeReturnTo(): string {
   const next = sessionStorage.getItem(RETURN_TO_KEY) || '/'
   sessionStorage.removeItem(RETURN_TO_KEY)
-  return next.startsWith('/') ? next : '/'
+  return next.startsWith('/') && !next.startsWith('//') ? next : '/'
 }

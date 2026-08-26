@@ -241,7 +241,8 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
         </li>
         <li>
           Delete the account in the product (web board or iOS More menu). That removes reminders,
-          device tokens, lock-screen prefs, agent keys, OAuth grants we store, and the auth user.
+          device tokens, lock-screen prefs, personal agent keys, and the auth user.
+          MCP OAuth tokens cannot use a deleted account. Sign the agent out as well.
         </li>
         <li>
           Email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> from the address on the
@@ -340,7 +341,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
       <p>
         You may connect a client (for example Grok, Claude, Cursor, or Codex) through OAuth or a
         personal key. Allowing a client lets it read, add, and complete reminders until you
-        revoke it on the web board or delete your account. Revoke access you no longer want.
+        revoke a personal key on the web board, sign the agent out, or delete your account.
         We are not responsible for what a third-party agent does with reminder text after you
         share it with that agent.
       </p>
@@ -457,9 +458,9 @@ export function SupportPage({ onNavigate }: LegalPageProps) {
           lock-screen line budget, and agent-key names (not plaintext keys).
         </li>
         <li>
-          <strong>Revoke an agent.</strong> On the signed-in web board, open Advanced under
-          Agent access and revoke the key, or disconnect the OAuth client and delete the
-          account if you want a full wipe.
+          <strong>Revoke an agent.</strong> Personal keys: signed-in web board → Advanced under
+          Agent access → Revoke. OAuth clients (Grok, Claude, Cursor, Codex): disconnect or sign
+          out in that client, or delete your account for a full wipe. The iOS app has no agent UI.
         </li>
         <li>
           <strong>Account deletion.</strong> Use <em>Delete account</em> on the signed-in web

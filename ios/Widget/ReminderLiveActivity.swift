@@ -8,17 +8,23 @@ struct ReminderLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: ReminderAttributes.self) { context in
             lockScreenBanner(lines: context.state.lines)
-        } dynamicIsland: { _ in
+        } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.center) {
-                    EmptyView()
+                    Text(context.state.lines.first ?? "Reminders")
+                        .font(.caption.weight(.semibold))
+                        .lineLimit(1)
                 }
             } compactLeading: {
-                EmptyView()
+                Text("LM")
+                    .font(.caption2.weight(.bold))
             } compactTrailing: {
-                EmptyView()
+                Text(context.state.lines.first ?? "")
+                    .font(.caption2)
+                    .lineLimit(1)
             } minimal: {
-                EmptyView()
+                Text("LM")
+                    .font(.caption2.weight(.bold))
             }
         }
     }

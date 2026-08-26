@@ -100,6 +100,11 @@ describe('board capacity', () => {
     expect(isAtCapacity(DEFAULT_LOCK_SCREEN_MAX_LINES)).toBe(true)
   })
 
+  it('clamps a phone budget above 16', () => {
+    expect(isAtCapacity(15, 20)).toBe(false)
+    expect(isAtCapacity(16, 20)).toBe(true)
+  })
+
   it('exposes the post-it hint copy', () => {
     expect(POST_IT_HINT).toMatch(/post-it note/i)
   })

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { consumeReturnTo } from './mcp'
 import { supabase } from './supabase'
+import { LegalFooterLinks } from './LegalPages'
 
-export function AuthCallback() {
+export function AuthCallback({ onNavigate }: { onNavigate: (path: string) => void }) {
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -32,6 +33,7 @@ export function AuthCallback() {
         <h1>Could not finish sign-in</h1>
         <p>{error}</p>
         <a className="primary" href="/">Back to the board</a>
+        <LegalFooterLinks onNavigate={onNavigate} />
       </main>
     )
   }

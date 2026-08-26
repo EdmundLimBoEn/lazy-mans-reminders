@@ -16,18 +16,13 @@
 - [x] **Google sign-in (Supabase)** — Web OAuth client created in Google Cloud (`1066799131514-cpr7u3gq5r9hjnq375hee0g1b5be65ir…`); redirect + origins set; Google provider **enabled** in Supabase Auth with that client ID + secret (Mac handoff 7 Aug 2026).
 - [x] **Deploy delete-account function** — Deployed to project `biwmsxbqrevtjwgsvsmu` (`supabase functions deploy delete-account`). Redeployed 26 Aug 2026 so deletion also wipes `lock_screen_prefs`. JWT verification on; used by web + iOS account deletion.
 - [x] **TestFlight build 1.0 (4)** — Uploaded with Xcode 27 beta 5 (`27A5237l`). Processing **VALID**. On Internal Testers (you) and Friends. TestFlight beta review is **WAITING_FOR_REVIEW** so email testers can install. Not submitted to the App Store. Beta 4 removed; `/Applications/Xcode-beta.app` is now beta 5. EdmundPurple theme kept.
-- [ ] **Deploy web** — `main` has the new legal pages, export, favicon, robots, and security.txt. Cloudflare Pages did not rebuild on merge, and Wrangler OAuth in this session is expired. From `web/`:
-  ```sh
-  npx wrangler login
-  npm run deploy
-  ```
-  Then confirm `https://lmr.edmundlim.systems/privacy` no longer says "launch template", and `/robots.txt` plus `/.well-known/security.txt` return 200.
+- [x] **Deploy web** — New legal pages, export, favicon, robots, and security.txt are live on `https://lmr.edmundlim.systems` (Wrangler device login, 27 Aug 2026). Confirm `/privacy` has no "launch template" copy.
 - [ ] **Add your friend's email to TestFlight** — After Apple approves the TestFlight review (or immediately for you as Internal Testers):
   ```sh
   asc testflight testers add --app 6799138197 --email FRIEND@EMAIL --group Friends
   ```
 - [ ] **Device test** — Open `ios/LazyMansReminders.xcodeproj`, sign both targets with team `DUU8J39BA7`, run on a physical iPhone (Apple / Google / magic link, complete-tap, push, lock-screen widgets, account deletion). No device build has been run yet.
-- [ ] **Legal review** — New Privacy / Terms / Support are on `main` (`/privacy`, `/terms`, `/support`). Production still serves the previous bundle until **Deploy web** above. Counsel review is optional. Contact: `hello@edmundlim.systems`.
+- [ ] **Legal review** — Privacy / Terms / Support are live at `/privacy`, `/terms`, `/support`. Counsel review is optional. Contact: `hello@edmundlim.systems`.
 - [ ] **App Store Connect fields** — Copy nutrition labels and review notes from `docs/app-store.md`. Attach screenshots from a physical device.
 - [ ] **Google web/iOS sign-in** — Provider is enabled. Confirm the Google Cloud **Web** client still has:
   - Authorized JavaScript origins: `https://lmr.edmundlim.systems`, `https://lazy-mans-reminders.pages.dev`, `http://localhost:5173`
