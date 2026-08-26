@@ -1,5 +1,7 @@
 # Mac handoff — Lazy Man's Reminders
 
+**Status:** Historical. Auth, MCP, and legal pages on `main` have moved on since 7 August 2026. Use [HUMANS.md](HUMANS.md) and [docs/app-store.md](docs/app-store.md) for what is still on you. Keep the lock-screen widget (clear glass + marquee). Do not follow the “Google not enabled” snapshot below.
+
 **Date:** 7 August 2026  
 **From:** Linux agent session (launch-ready / free App Store release)  
 **Repo:** `git@github.com:EdmundLimBoEn/lazy-mans-reminders.git`  
