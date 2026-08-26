@@ -57,6 +57,18 @@ Deno.serve(async (request) => {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
+  const { error: agentTokensError } = await admin
+    .from("agent_tokens")
+    .delete()
+    .eq("user_id", user.id);
+  if (agentTokensError) {
+    console.error("Could not delete agent tokens", agentTokensError);
+    return new Response("Could not delete account data", {
+      status: 500,
+      headers: corsHeaders,
+    });
+  }
+
   const { error: remindersError } = await admin
     .from("reminders")
     .delete()

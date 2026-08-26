@@ -360,14 +360,16 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
     })
     if (invokeError || data?.ok !== true) {
       // Fallback: clear user-owned rows via RLS, then sign out with support instructions.
-      const [{ error: remindersError }, { error: tokensError }] = await Promise.all([
+      const [{ error: remindersError }, { error: tokensError }, { error: agentKeysError }] = await Promise.all([
         supabase.from('reminders').delete().eq('user_id', session.user.id),
         supabase.from('device_tokens').delete().eq('user_id', session.user.id),
+        supabase.from('agent_tokens').delete().eq('user_id', session.user.id),
       ])
-      if (remindersError || tokensError) {
+      if (remindersError || tokensError || agentKeysError) {
         setError(
           remindersError?.message
           ?? tokensError?.message
+          ?? agentKeysError?.message
           ?? invokeError?.message
           ?? 'Could not delete account. Visit Support for help.',
         )
@@ -493,6 +495,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
           </ul>
         )}
       </section>
+      <AgentAccess userId={session.user.id} />
       <footer className="board-footer">
         <p className="footer-note"><Smartphone size={16} /> Open the app once after signing in to add the lock-screen widget.</p>
         <LegalFooterLinks onNavigate={onNavigate} />
@@ -513,7 +516,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
           >
             <h2 id="delete-account-title">Delete your account?</h2>
             <p id="delete-account-copy">
-              This permanently removes your reminders, device registrations, and sign-in.
+              This permanently removes your reminders, device registrations, agent keys, and sign-in.
               This cannot be undone.
             </p>
             <div className="delete-dialog-actions">
@@ -538,6 +541,148 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
         </div>
       )}
     </main>
+  )
+}
+
+type AgentTokenClient = {
+  id: string
+  name: string
+  created_at: string
+  last_used_at: string | null
+  revoked_at: string | null
+}
+
+const MCP_URL = 'https://mcp.lmr.edmundlim.systems/mcp'
+
+function AgentAccess({ userId }: { userId: string }) {
+  const [tokens, setTokens] = useState<AgentTokenClient[]>([])
+  const [name, setName] = useState('')
+  const [minted, setMinted] = useState<string | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+
+  const load = useCallback(async () => {
+    const { data, error: fetchError } = await supabase
+      .from('agent_token_clients')
+      .select('id, name, created_at, last_used_at, revoked_at')
+      .eq('user_id', userId)
+      .is('revoked_at', null)
+      .order('created_at', { ascending: false })
+    if (fetchError) setError(fetchError.message)
+    else setTokens(data ?? [])
+  }, [userId])
+
+  useEffect(() => { void load() }, [load])
+
+  async function mint(event: FormEvent) {
+    event.preventDefault()
+    const trimmed = name.trim()
+    if (!trimmed || busy) return
+    setBusy(true)
+    setError('')
+    const { data, error: rpcError } = await supabase.rpc('mint_agent_token', { p_name: trimmed })
+    setBusy(false)
+    if (rpcError || typeof data !== 'string') {
+      setError(rpcError?.message ?? 'Could not create key')
+      return
+    }
+    setName('')
+    setMinted(data)
+    await load()
+  }
+
+  async function revoke(id: string) {
+    if (busy) return
+    setBusy(true)
+    setError('')
+    const { error: rpcError } = await supabase.rpc('revoke_agent_token', { p_id: id })
+    setBusy(false)
+    if (rpcError) setError(rpcError.message)
+    else await load()
+  }
+
+  return (
+    <section className="agent-access" aria-labelledby="agent-access-heading">
+      <h2 id="agent-access-heading">Agent access</h2>
+      <p>Mint a personal key so Cursor, Claude Code, Codex, or Grok Bot can write to this board. Shown once. Revoke anytime.</p>
+      <form className="agent-key-form" onSubmit={mint}>
+        <label className="visually-hidden" htmlFor="agent-key-name">Key name</label>
+        <input
+          id="agent-key-name"
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+          placeholder="Cursor, Codex, Grok Bot…"
+          maxLength={64}
+          autoComplete="off"
+        />
+        <button className="primary" type="submit" disabled={busy || !name.trim()}>
+          {busy ? 'Creating…' : 'Create key'}
+        </button>
+      </form>
+      {error && <p className="error" role="alert">{error}</p>}
+      {minted && (
+        <div className="minted-key" role="status">
+          <p>Copy this now. It will not be shown again.</p>
+          <input readOnly value={minted} onFocus={(event) => event.currentTarget.select()} aria-label="New agent token" />
+          <button className="text-button" type="button" onClick={() => setMinted(null)}>I saved it</button>
+        </div>
+      )}
+      {tokens.length > 0 && (
+        <ul className="agent-token-list" aria-label="Active agent keys">
+          {tokens.map((token) => (
+            <li key={token.id}>
+              <div>
+                <strong>{token.name}</strong>
+                <span>Created {new Date(token.created_at).toLocaleString()}</span>
+                {token.last_used_at && <span>Last used {new Date(token.last_used_at).toLocaleString()}</span>}
+              </div>
+              <button className="text-button danger-text" type="button" disabled={busy} onClick={() => void revoke(token.id)}>
+                Revoke
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      <details className="agent-snippets">
+        <summary>Client snippets</summary>
+        <p>Replace TOKEN with a key from Create key. The board does not call the MCP worker.</p>
+        <p>Cursor <code>~/.cursor/mcp.json</code></p>
+        <pre>{`{
+  "mcpServers": {
+    "lazy-mans-reminders": {
+      "url": "${MCP_URL}",
+      "headers": {
+        "Authorization": "Bearer TOKEN"
+      }
+    }
+  }
+}`}</pre>
+        <p>Claude Code <code>.mcp.json</code></p>
+        <pre>{`{
+  "mcpServers": {
+    "lazy-mans-reminders": {
+      "type": "http",
+      "url": "${MCP_URL}",
+      "headers": {
+        "Authorization": "Bearer TOKEN"
+      }
+    }
+  }
+}`}</pre>
+        <p>Codex <code>.mcp.json</code></p>
+        <pre>{`{
+  "mcpServers": {
+    "lazy-mans-reminders": {
+      "url": "${MCP_URL}",
+      "headers": {
+        "Authorization": "Bearer TOKEN"
+      }
+    }
+  }
+}`}</pre>
+        <p>Grok Bot: Settings → Plugins → custom connector. URL <code>{MCP_URL}</code>. Authorization header <code>Bearer TOKEN</code>.</p>
+      </details>
+    </section>
   )
 }
 

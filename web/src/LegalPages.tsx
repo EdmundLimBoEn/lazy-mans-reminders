@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
 const CONTACT_EMAIL = 'hello@edmundlim.systems'
-const LAST_UPDATED = '7 August 2026'
+const LAST_UPDATED = '26 August 2026'
 const SITE_URL = 'https://lmr.edmundlim.systems'
 
 type LegalPageProps = {
@@ -83,6 +83,12 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
         <li>
           <strong>Device push tokens.</strong> On iOS, device tokens used to deliver Apple Push
           Notification service (APNs) alerts related to your reminders.
+        </li>
+        <li>
+          <strong>Agent access tokens.</strong> Optional personal tokens you mint so Cursor,
+          Claude Code, Codex, or Grok Bot can call your board over MCP. We store only a SHA-256
+          hash of the secret. The plaintext token is shown once at creation and is revocable
+          from the signed-in web board.
         </li>
         <li>
           <strong>Authentication session data.</strong> Session tokens and related auth state
@@ -204,8 +210,8 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
       </p>
       <p>
         You can delete your account in the product: use <em>Delete account</em> on the signed-in
-        web board or in the iOS app. That removes your reminders, device push tokens, and auth
-        account. You may also email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> from
+        web board or in the iOS app. That removes your reminders, device push tokens, agent
+        access tokens, and auth account. You may also email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> from
         the address associated with your account if you need help. We will verify email requests
         and delete account data we control, subject to the retention exceptions above.
       </p>

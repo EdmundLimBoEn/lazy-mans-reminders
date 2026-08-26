@@ -21,3 +21,14 @@
 - [x] **Deploy delete-account function** — Deployed to project `biwmsxbqrevtjwgsvsmu` (`supabase functions deploy delete-account`). JWT verification on; used by web + iOS account deletion.
 - [ ] **Device test** — Open `ios/LazyMansReminders.xcodeproj`, sign both targets with team `DUU8J39BA7`, run on a physical iPhone (Apple / Google / magic link, complete-tap, push, lock-screen widgets, account deletion). No device build has been run yet.
 - [ ] **Legal review** — Privacy / Terms / Support templates are live at `/privacy`, `/terms`, `/support` after web deploy. Have counsel review before monetized App Store submission. Contact email currently `hello@edmundlim.systems`.
+
+- [ ] **Agent MCP Worker** — From `mcp/`:
+  ```sh
+  cd mcp
+  npm ci
+  npx wrangler secret put SUPABASE_URL
+  npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+  npx wrangler deploy
+  ```
+  Then add a proxied CNAME `mcp.lmr` to the Worker route on `edmundlim.systems` (custom domain `mcp.lmr.edmundlim.systems`).
+- [ ] **Push agent_tokens migration** — `supabase db push` so `agent_tokens`, `agent_token_clients`, `mint_agent_token`, `revoke_agent_token`, and `add_agent_reminder` exist in production. Redeploy `delete-account` after that.

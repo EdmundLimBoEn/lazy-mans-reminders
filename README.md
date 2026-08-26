@@ -112,7 +112,7 @@ supabase functions deploy delete-account
 
 `send-reminder-push` disables JWT verification because the database webhook authenticates with `x-webhook-secret`. The function checks that shared secret before using the service-role client.
 
-`delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, and auth user (service role).
+`delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, agent tokens, and auth user (service role).
 
 In Supabase **Database → Webhooks**, create a webhook with:
 
@@ -124,6 +124,28 @@ In Supabase **Database → Webhooks**, create a webhook with:
 - Header: `x-webhook-secret: <the exact WEBHOOK_SECRET value>`
 
 Insert a reminder after registering a physical device and inspect **Edge Functions → Logs**. Simulator push tokens and sandbox tokens do not validate production APNs delivery.
+
+
+## Agent MCP
+
+Remote agents talk to the board at `https://mcp.lmr.edmundlim.systems/mcp` with a Bearer personal token. Mint and revoke keys on the signed-in web board. The Worker uses the service-role key as a Wrangler secret. Never put that key on Pages.
+
+Cursor `mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "lazy-mans-reminders": {
+      "url": "https://mcp.lmr.edmundlim.systems/mcp",
+      "headers": {
+        "Authorization": "Bearer TOKEN"
+      }
+    }
+  }
+}
+```
+
+Claude Code and Codex use the same URL and `Authorization: Bearer TOKEN` header in `.mcp.json`. Grok Bot uses Settings, Plugins, custom connector, then that URL and Bearer header.
 
 ## Web app and Cloudflare Pages
 
