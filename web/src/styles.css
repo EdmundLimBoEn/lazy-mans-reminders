@@ -7,7 +7,7 @@
   --paper: #f5f1e8;
   --card: #fffdf8;
   --red: #d5523e;
-  --muted: #77736a;
+  --muted: #5f5b53;
   --line: #ddd7ca;
 }
 
@@ -15,6 +15,18 @@
 body { margin: 0; min-width: 320px; min-height: 100vh; }
 button, input { font: inherit; }
 button { color: inherit; }
+
+.skip-link {
+  position: absolute; left: .75rem; top: .75rem; z-index: 100;
+  padding: .55rem .85rem; border-radius: 8px; background: var(--ink); color: var(--paper);
+  text-decoration: none; font-weight: 600; font-size: .85rem;
+  transform: translateY(-160%);
+}
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 3px solid #2f68bd;
+  outline-offset: 2px;
+}
 
 .splash {
   min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; font: 4rem Georgia, serif;
@@ -98,15 +110,18 @@ button:focus-visible, input:focus-visible, a:focus-visible {
 .add-form > svg { color: var(--red); }
 .add-form input { border: 0; background: transparent; box-shadow: none; padding-left: 0; font-size: 1.05rem; }
 .board-meta { display: flex; justify-content: space-between; padding: .7rem 1.25rem; border-block: 1px solid var(--line); color: var(--muted); font-size: .72rem; }
+.board-hint {
+  margin: 0; padding: .85rem 1.25rem 1rem; color: var(--muted); font-size: .8rem; line-height: 1.45;
+  border-bottom: 1px solid var(--line);
+}
 .reminder-list { margin: 0; padding: 0; list-style: none; }
 .reminder-list li { display: flex; align-items: center; min-height: 64px; padding: .65rem 1rem; border-bottom: 1px solid #ebe6db; }
 .reminder-list li:last-child { border: 0; }
 .check-button { position: relative; z-index: 2; flex: none; color: var(--red); margin-right: .6rem; }
 .reminder-text { flex: 1; min-width: 0; line-height: 1.45; overflow-wrap: anywhere; }
 .done .reminder-text { color: #a09c93; text-decoration: line-through; }
-.actions { display: flex; opacity: 0; pointer-events: none; transition: opacity .15s; }
-li:hover .actions, li:focus-within .actions { opacity: 1; pointer-events: auto; }
-.actions button:disabled { opacity: .2; cursor: default; }
+.actions { display: flex; gap: .1rem; }
+.actions button:disabled { opacity: .35; cursor: default; }
 .edit-form { display: flex; flex: 1; min-width: 0; align-items: center; gap: .2rem; }
 .edit-form input { padding: .55rem .7rem; }
 .empty { min-height: 220px; display: grid; place-content: center; text-align: center; color: var(--muted); padding: 2rem 1rem; }
@@ -235,6 +250,7 @@ li:hover .actions, li:focus-within .actions { opacity: 1; pointer-events: auto; 
   .legal-shell h1 { font-size: clamp(2rem, 8vw, 2.4rem); }
   .add-form { grid-template-columns: auto 1fr; }
   .add-form .primary { grid-column: 1 / -1; }
+  .agent-key-form { grid-template-columns: 1fr; }
   .reminder-list li {
     display: grid;
     grid-template-columns: 48px minmax(0, 1fr);
@@ -268,8 +284,6 @@ li:hover .actions, li:focus-within .actions { opacity: 1; pointer-events: auto; 
     grid-column: 2;
     grid-row: 2;
     margin-left: 0;
-    opacity: 1;
-    pointer-events: auto;
     gap: .1rem;
   }
 }

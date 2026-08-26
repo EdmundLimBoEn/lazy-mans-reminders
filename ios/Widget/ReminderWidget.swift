@@ -5,35 +5,28 @@ import WidgetKit
 struct ReminderEntry: TimelineEntry {
     let date: Date
     let reminders: [Reminder]
-    /// Horizontal pixel offset applied when a line is wider than the card.
     let scrollOffset: CGFloat
-    /// Content width used for marquee overflow (from `context.displaySize`).
     let contentWidth: CGFloat
 
-    /// One visible line per reminder (and per embedded newline).
     var lines: [String] {
-        if reminders.isEmpty { return ["Nothing to remember"] }
-        return reminders.flatMap { reminder in
-            reminder.text
-                .components(separatedBy: .newlines)
-                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-                .filter { !$0.isEmpty }
-        }
+        ReminderActivityPresentation.displayLines(
+            from: reminders,
+            limit: ReminderBoardLimits.lockScreenMaxLines
+        )
     }
 }
 
-enum LockScreenCardMetrics {
-    static let fontSize: CGFloat = 15
+enum LockScreenAccessoryMetrics {
+    static let fontSize = LockScreenLineBudget.pointSize
     static let fontWeight = UIFont.Weight.semibold
-    static let lineSpacing: CGFloat = 3
+    static let lineSpacing = LockScreenLineBudget.lineSpacing
     static let horizontalPadding: CGFloat = 16
-    static let verticalPadding: CGFloat = 12
+    static let topPadding: CGFloat = 12
+    static let bottomPadding: CGFloat = 12
     static let holdDuration: TimeInterval = 1.0
     static let endHoldDuration: TimeInterval = 1.0
     static let pointsPerSecond: CGFloat = 28
     static let frameInterval: TimeInterval = 1.0 / 20.0
-    /// Fallback when `displaySize` is unavailable (previews).
-    static let fallbackContentWidth: CGFloat = 320
 
     static var uiFont: UIFont {
         .systemFont(ofSize: fontSize, weight: fontWeight)
@@ -62,7 +55,7 @@ struct ReminderProvider: TimelineProvider {
             date: .now,
             reminders: Self.samples,
             scrollOffset: 0,
-            contentWidth: LockScreenCardMetrics.contentWidth(from: context)
+            contentWidth: LockScreenAccessoryMetrics.contentWidth(from: context)
         )
     }
 
@@ -75,7 +68,7 @@ struct ReminderProvider: TimelineProvider {
                     date: .now,
                     reminders: reminders,
                     scrollOffset: 0,
-                    contentWidth: LockScreenCardMetrics.contentWidth(from: context)
+                    contentWidth: LockScreenAccessoryMetrics.contentWidth(from: context)
                 )
             )
         }
@@ -87,15 +80,13 @@ struct ReminderProvider: TimelineProvider {
             completion(
                 Self.timeline(
                     for: reminders,
-                    contentWidth: LockScreenCardMetrics.contentWidth(from: context),
+                    contentWidth: LockScreenAccessoryMetrics.contentWidth(from: context),
                     startingAt: .now
                 )
             )
         }
     }
 
-    /// Hold 1s, then step the scroll offset via WidgetKit timeline entries.
-    /// (`TimelineView` animations do not reliably tick on the Lock Screen.)
     private static func timeline(
         for reminders: [Reminder],
         contentWidth: CGFloat,
@@ -107,7 +98,7 @@ struct ReminderProvider: TimelineProvider {
             scrollOffset: 0,
             contentWidth: contentWidth
         )
-        let overflow = LockScreenCardMetrics.overflowWidth(
+        let overflow = LockScreenAccessoryMetrics.overflowWidth(
             for: probe.lines,
             contentWidth: contentWidth
         )
@@ -119,14 +110,14 @@ struct ReminderProvider: TimelineProvider {
             )
         }
 
-        let scrollDuration = TimeInterval(overflow / LockScreenCardMetrics.pointsPerSecond)
+        let scrollDuration = TimeInterval(overflow / LockScreenAccessoryMetrics.pointsPerSecond)
         let cycle =
-            LockScreenCardMetrics.holdDuration
+            LockScreenAccessoryMetrics.holdDuration
             + scrollDuration
-            + LockScreenCardMetrics.endHoldDuration
+            + LockScreenAccessoryMetrics.endHoldDuration
 
         let loopCount = 3
-        let step = LockScreenCardMetrics.frameInterval
+        let step = LockScreenAccessoryMetrics.frameInterval
         var entries: [ReminderEntry] = []
         var t: TimeInterval = 0
         let total = cycle * Double(loopCount)
@@ -158,11 +149,11 @@ struct ReminderProvider: TimelineProvider {
         scrollDuration: TimeInterval
     ) -> CGFloat {
         let t = elapsed.truncatingRemainder(dividingBy: max(cycle, 0.001))
-        if t < LockScreenCardMetrics.holdDuration {
+        if t < LockScreenAccessoryMetrics.holdDuration {
             return 0
         }
-        if t < LockScreenCardMetrics.holdDuration + scrollDuration {
-            let progress = (t - LockScreenCardMetrics.holdDuration) / scrollDuration
+        if t < LockScreenAccessoryMetrics.holdDuration + scrollDuration {
+            let progress = (t - LockScreenAccessoryMetrics.holdDuration) / scrollDuration
             return CGFloat(progress) * overflow
         }
         return overflow
@@ -176,10 +167,20 @@ struct ReminderProvider: TimelineProvider {
             sortOrder: 0,
             isDone: false,
             createdAt: .now
-        )
+        ),
+        Reminder(
+            id: UUID(),
+            userID: UUID(),
+            text: "do chinese homework",
+            sortOrder: 1,
+            isDone: false,
+            createdAt: .now
+        ),
     ]
 }
 
+/// Lock Screen accessories only — Home Screen widgets can't match the
+/// notification clear-glass Live Activity look, so we don't ship them.
 struct ReminderWidgetView: View {
     @Environment(\.widgetFamily) private var family
     let entry: ReminderEntry
@@ -190,33 +191,27 @@ struct ReminderWidgetView: View {
             Text(entry.lines.joined(separator: " · "))
                 .containerBackground(for: .widget) { Color.clear }
         default:
-            // Body-only notification layout: text fills the full system slot.
-            // Do NOT use `AccessoryWidgetBackground` — that paints the old murky
-            // accessory material and insets a smaller card. Clear container
-            // background lets iOS 26 Liquid Glass (user's Clear setting) own the
-            // full widget bounds.
-            VStack(alignment: .leading, spacing: LockScreenCardMetrics.lineSpacing) {
+            VStack(alignment: .leading, spacing: LockScreenAccessoryMetrics.lineSpacing) {
                 ForEach(Array(entry.lines.enumerated()), id: \.offset) { _, line in
                     reminderLine(line)
                 }
             }
-            .padding(.horizontal, LockScreenCardMetrics.horizontalPadding)
-            .padding(.vertical, LockScreenCardMetrics.verticalPadding)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .containerBackground(for: .widget) {
-                Color.clear
-            }
+            .padding(.horizontal, LockScreenAccessoryMetrics.horizontalPadding)
+            .padding(.top, LockScreenAccessoryMetrics.topPadding)
+            .padding(.bottom, LockScreenAccessoryMetrics.bottomPadding)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .containerBackground(for: .widget) { Color.clear }
         }
     }
 
     @ViewBuilder
     private func reminderLine(_ line: String) -> some View {
         let overflows =
-            LockScreenCardMetrics.textWidth(line) > entry.contentWidth + 0.5
+            LockScreenAccessoryMetrics.textWidth(line) > entry.contentWidth + 0.5
 
         if overflows {
             Text(line)
-                .font(LockScreenCardMetrics.font)
+                .font(LockScreenAccessoryMetrics.font)
                 .foregroundStyle(.primary)
                 .lineLimit(1)
                 .fixedSize(horizontal: true, vertical: false)
@@ -225,10 +220,11 @@ struct ReminderWidgetView: View {
                 .clipped()
         } else {
             Text(line)
-                .font(LockScreenCardMetrics.font)
+                .font(LockScreenAccessoryMetrics.font)
                 .foregroundStyle(.primary)
                 .lineLimit(1)
-                .minimumScaleFactor(1)
+                .truncationMode(.tail)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }
@@ -241,7 +237,7 @@ struct ReminderWidget: Widget {
             ReminderWidgetView(entry: entry)
         }
         .configurationDisplayName("Lazy Man's Reminders")
-        .description("Your reminders, where you can't ignore them.")
+        .description("Lock Screen reminder lines (same budget as the Live Activity).")
         .supportedFamilies([.accessoryRectangular, .accessoryInline])
         .contentMarginsDisabled()
     }

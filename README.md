@@ -21,7 +21,7 @@ As of 6 August 2026:
 See [HUMANS.md](HUMANS.md) for the live checklist. Remaining human work:
 
 - [ ] Open `ios/LazyMansReminders.xcodeproj`, sign both targets, then test magic-link login, push delivery, and both lock-screen widget sizes on a physical iPhone.
-- [ ] Upload to TestFlight and complete the paid-app release at US $2.99.
+- [ ] Upload to TestFlight and complete the paid-app release at US $1.50 / S$2.00.
 - [ ] Enroll in Apple's App Store Small Business Program before release.
 
 ## Prerequisites
@@ -66,7 +66,7 @@ supabase secrets set --env-file supabase/.env.functions
 ### Create and migrate the project
 
 1. Create a project in the Supabase dashboard and record its project ref, URL, and publishable/anon key.
-2. Authenticate the CLI, link this checkout, and apply both migrations:
+2. Authenticate the CLI, link this checkout, and apply migrations:
 
 ```sh
 supabase login
@@ -74,7 +74,9 @@ supabase link --project-ref YOUR_PROJECT_REF
 supabase db push
 ```
 
-The migrations create `reminders` and `device_tokens`, enable RLS, add per-user policies, and enable Realtime for reminders.
+The migrations create `reminders`, `device_tokens`, `lock_screen_prefs`, and `agent_tokens`, enable RLS, add per-user policies, and enable Realtime for reminders. Agent keys are minted with `mint_agent_token` and listed through the `agent_token_clients` view (no hash). Concurrent agent adds go through `add_agent_reminder`, which locks per user and clamps capacity at 16. The iPhone measures how many lines fit in the Lock Screen Live Activity and upserts `lock_screen_prefs.max_lines` so the web board uses the same capacity. Completed reminders get a `completed_at` timestamp (maintained by a trigger); web and iOS call `delete_old_completed_reminders()` on board load so done rows older than 7 days are removed without requiring dashboard cron.
+
+Optional: if you enable the `pg_cron` extension in the Supabase dashboard, you can also schedule `select public.delete_old_completed_reminders();` daily so cleanup runs even when no client opens the board.
 
 For a fully local stack:
 
@@ -114,21 +116,9 @@ supabase functions deploy delete-account
 
 `delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, agent tokens, and auth user (service role).
 
-In Supabase **Database → Webhooks**, create a webhook with:
-
-- Name: `send-reminder-push`
-- Table: `public.reminders`
-- Event: `INSERT`
-- Method: `POST`
-- URL: `https://YOUR_PROJECT_REF.supabase.co/functions/v1/send-reminder-push`
-- Header: `x-webhook-secret: <the exact WEBHOOK_SECRET value>`
-
-Insert a reminder after registering a physical device and inspect **Edge Functions → Logs**. Simulator push tokens and sandbox tokens do not validate production APNs delivery.
-
-
 ## Agent MCP
 
-Remote agents talk to the board at `https://mcp.lmr.edmundlim.systems/mcp` with a Bearer personal token. Mint and revoke keys on the signed-in web board. The Worker uses the service-role key as a Wrangler secret. Never put that key on Pages.
+Remote agents talk to the board at `https://mcp.lmr.edmundlim.systems/mcp` with a Bearer personal token. Mint and revoke keys on the signed-in web board. The Worker uses the service-role key as a Wrangler secret; never put that key on Pages.
 
 Cursor `mcp.json`:
 
@@ -145,7 +135,18 @@ Cursor `mcp.json`:
 }
 ```
 
-Claude Code and Codex use the same URL and `Authorization: Bearer TOKEN` header in `.mcp.json`. Grok Bot uses Settings, Plugins, custom connector, then that URL and Bearer header.
+Claude Code and Codex use the same URL and `Authorization: Bearer TOKEN` header in `.mcp.json`. Grok Bot: Settings → Plugins → custom connector, then that URL and Bearer header.
+
+In Supabase **Database → Webhooks**, create a webhook with:
+
+- Name: `send-reminder-push`
+- Table: `public.reminders`
+- Event: `INSERT`
+- Method: `POST`
+- URL: `https://YOUR_PROJECT_REF.supabase.co/functions/v1/send-reminder-push`
+- Header: `x-webhook-secret: <the exact WEBHOOK_SECRET value>`
+
+Insert a reminder after registering a physical device and inspect **Edge Functions → Logs**. Simulator push tokens and sandbox tokens do not validate production APNs delivery.
 
 ## Web app and Cloudflare Pages
 
@@ -164,6 +165,25 @@ cd web
 npm ci
 npm run lint
 npm run build
+```
+
+### Tests
+
+```sh
+# Web (Vitest — routing + reminder sort/reorder helpers)
+cd web && npm test
+
+# MCP Worker (Vitest — token parse/hash + add prefix/capacity mapping)
+cd mcp && npm test
+
+# Edge Function helpers (Deno — webhook payload classification / APNs host)
+deno test supabase/functions/_shared/push_helpers_test.ts
+
+# iOS (XCTest — Reminder JSON coding; regenerate project first if needed)
+cd ios && xcodegen generate --spec project.yml
+xcodebuild -project LazyMansReminders.xcodeproj -scheme LazyMansReminders \
+  -destination 'platform=iOS Simulator,name=iPhone 17' \
+  -only-testing:LazyMansRemindersTests test
 ```
 
 For a Git-connected Cloudflare Pages project, configure:
@@ -237,12 +257,12 @@ The generated project can be recreated; make lasting project-setting changes in 
 
 Increment the marketing version/build number before each upload.
 
-## Paid App Store release ($2.99)
+## Paid App Store release (US $1.50 / S$2.00)
 
 This is a paid download, not an in-app purchase:
 
 1. Accept the latest **Paid Apps Agreement** and complete tax and banking details in App Store Connect.
-2. Under the app's **Pricing and Availability**, choose the price point whose US storefront price is **$2.99**. Apple calculates local storefront prices and taxes.
+2. Under the app's **Pricing and Availability**, set the US storefront to **$1.50** and the Singapore storefront to **S$2.00** (or the nearest Apple price tiers that match).
 3. Complete app metadata, privacy details, age rating, screenshots, support/privacy URLs, and App Review notes.
 4. Attach the tested build, choose manual or automatic release, and submit for review.
 

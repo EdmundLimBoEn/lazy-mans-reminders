@@ -6,22 +6,22 @@
   - Widget `systems.edmundlim.LazyMansReminders.Widget` (`PBM95Q8YTQ`) with **App Groups**
   - Team `DUU8J39BA7`. Config.xcconfig points at `group.systems.edmundlim.LazyMansReminders`.
   - First signed Xcode build may still prompt to register the App Group identifier if Apple has not materialised the group container yet — accept the prompt if it appears.
-  - Still needed: enable **Sign in with Apple** on the app ID (capability + entitlements are in the repo).
+  - Still needed: ~~enable **Sign in with Apple** on the app ID~~ **Done** (capability enabled on App ID `9H8ZY6WGY6`, Mac handoff 7 Aug 2026).
 - [x] **APNs + webhook** —
   - `supabase/.env.functions` written (gitignored) from `AuthKey_YK47N2PQ54.p8` (team `DUU8J39BA7`, topic `systems.edmundlim.LazyMansReminders`).
   - `supabase secrets set --env-file supabase/.env.functions` applied (`APNS_*`, `WEBHOOK_SECRET`).
   - INSERT webhook wired as trigger `send_reminder_push` → `notify_reminder_push()` → Edge Function, with secret in Vault (`lmr_webhook_secret`). Function auth verified: bad secret → 401, good secret → `{"sent":0}`.
   - If physical-device push fails with APNs auth errors, create a dedicated APNs Auth Key under Certificates, Identifiers & Profiles → Keys (enable APNs only), replace `APNS_KEY_ID` / `APNS_PRIVATE_KEY`, and re-run `supabase secrets set`.
 - [x] **Sign in with Apple (native / Supabase)** — Provider enabled via Management API with Client ID `systems.edmundlim.LazyMansReminders`. Native iOS Sign in with Apple should work once the App ID capability is on. **Web** Apple still needs a Services ID listed first in Client IDs + client secret (see [Supabase Apple docs](https://supabase.com/docs/guides/auth/social-login/auth-apple)); return URL `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`.
-- [ ] **Google sign-in (Supabase)** — In Google Cloud Console create a **Web application** OAuth client:
-  - Authorized redirect URI: `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`
-  - Authorized JavaScript origins: `https://lmr.edmundlim.systems`, `https://lazy-mans-reminders.pages.dev`, `http://localhost:5173`
-  - Optional iOS client with bundle ID `systems.edmundlim.LazyMansReminders`
-  - Enable Google in Supabase → Authentication → Providers → Google with the Web client ID + secret
+- [x] **Google sign-in (Supabase)** — Web OAuth client created in Google Cloud (`1066799131514-cpr7u3gq5r9hjnq375hee0g1b5be65ir…`); redirect + origins set; Google provider **enabled** in Supabase Auth with that client ID + secret (Mac handoff 7 Aug 2026).
 - [x] **Deploy delete-account function** — Deployed to project `biwmsxbqrevtjwgsvsmu` (`supabase functions deploy delete-account`). JWT verification on; used by web + iOS account deletion.
+- [x] **TestFlight build 1.0 (4)** — Uploaded with Xcode 27 beta 5 (`27A5237l`). Processing **VALID**. On Internal Testers (you) and Friends. TestFlight beta review is **WAITING_FOR_REVIEW** so email testers can install. Not submitted to the App Store. Beta 4 removed; `/Applications/Xcode-beta.app` is now beta 5. EdmundPurple theme kept.
+- [ ] **Add your friend's email to TestFlight** — After Apple approves the TestFlight review (or immediately for you as Internal Testers):
+  ```sh
+  asc testflight testers add --app 6799138197 --email FRIEND@EMAIL --group Friends
+  ```
 - [ ] **Device test** — Open `ios/LazyMansReminders.xcodeproj`, sign both targets with team `DUU8J39BA7`, run on a physical iPhone (Apple / Google / magic link, complete-tap, push, lock-screen widgets, account deletion). No device build has been run yet.
 - [ ] **Legal review** — Privacy / Terms / Support templates are live at `/privacy`, `/terms`, `/support` after web deploy. Have counsel review before monetized App Store submission. Contact email currently `hello@edmundlim.systems`.
-
 - [ ] **Agent MCP Worker** — From `mcp/`:
   ```sh
   cd mcp
@@ -30,5 +30,5 @@
   npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
   npx wrangler deploy
   ```
-  Then add a proxied CNAME `mcp.lmr` to the Worker route on `edmundlim.systems` (custom domain `mcp.lmr.edmundlim.systems`).
+  Then add a proxied CNAME `mcp.lmr` → the Worker route on `edmundlim.systems` (custom domain `mcp.lmr.edmundlim.systems`).
 - [ ] **Push agent_tokens migration** — `supabase db push` so `agent_tokens`, `agent_token_clients`, `mint_agent_token`, `revoke_agent_token`, and `add_agent_reminder` exist in production. Redeploy `delete-account` after that.

@@ -12,16 +12,10 @@ import {
   Trash2,
   X,
 } from 'lucide-react'
+import { nextSortOrder, sortReminders, swapSortOrders, temporarySortOrder, isAtCapacity, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
 import { LegalFooterLinks, PrivacyPage, SupportPage, TermsPage } from './LegalPages'
+import { normalizePath, type AppRoute } from './routing'
 import { supabase } from './supabase'
-
-type AppRoute = '/' | '/privacy' | '/terms' | '/support'
-
-function normalizePath(pathname: string): AppRoute {
-  const path = pathname.replace(/\/+$/, '') || '/'
-  if (path === '/privacy' || path === '/terms' || path === '/support') return path
-  return '/'
-}
 
 function usePathname(): [AppRoute, (path: string) => void] {
   const [path, setPath] = useState<AppRoute>(() => normalizePath(window.location.pathname))
@@ -119,7 +113,7 @@ function SignIn({ onNavigate }: { onNavigate: (path: string) => void }) {
       </section>
       <section className="auth-panel">
         <div className="auth-card">
-          <Smartphone size={24} />
+          <Smartphone size={24} aria-hidden="true" />
           <h2>{sent ? 'Check your inbox' : 'Your board, everywhere'}</h2>
           <p aria-live="polite">
             {sent
@@ -133,6 +127,7 @@ function SignIn({ onNavigate }: { onNavigate: (path: string) => void }) {
                   className="oauth-button oauth-apple"
                   type="button"
                   disabled={busy}
+                  aria-busy={oauthLoading === 'apple' || undefined}
                   onClick={() => void signInWithProvider('apple')}
                 >
                   {oauthLoading === 'apple' ? 'Redirecting…' : 'Continue with Apple'}
@@ -141,6 +136,7 @@ function SignIn({ onNavigate }: { onNavigate: (path: string) => void }) {
                   className="oauth-button oauth-google"
                   type="button"
                   disabled={busy}
+                  aria-busy={oauthLoading === 'google' || undefined}
                   onClick={() => void signInWithProvider('google')}
                 >
                   {oauthLoading === 'google' ? 'Redirecting…' : 'Continue with Google'}
@@ -191,6 +187,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
   const [reordering, setReordering] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [deletingAccount, setDeletingAccount] = useState(false)
+  const [maxLines, setMaxLines] = useState(DEFAULT_LOCK_SCREEN_MAX_LINES)
   const loadSequence = useRef(0)
   const reorderingRef = useRef(false)
 
@@ -203,29 +200,33 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [confirmDelete, deletingAccount])
 
-  const sorted = useMemo(
-    () => [...reminders].sort((a, b) =>
-      Number(a.is_done) - Number(b.is_done)
-      || a.sort_order - b.sort_order
-      || a.created_at.localeCompare(b.created_at)
-      || a.id.localeCompare(b.id),
-    ),
-    [reminders],
-  )
+  const sorted = useMemo(() => sortReminders(reminders), [reminders])
   const active = useMemo(() => sorted.filter((item) => !item.is_done), [sorted])
 
   const load = useCallback(async () => {
     const sequence = ++loadSequence.current
-    const { data, error: fetchError } = await supabase
-      .from('reminders')
-      .select('id, user_id, text, sort_order, is_done, created_at')
-      .eq('user_id', session.user.id)
-      .order('is_done')
-      .order('sort_order')
-      .order('created_at')
+    await supabase.rpc('delete_old_completed_reminders')
+    if (sequence !== loadSequence.current) return
+
+    const [{ data, error: fetchError }, prefsResult] = await Promise.all([
+      supabase
+        .from('reminders')
+        .select('id, user_id, text, sort_order, is_done, created_at')
+        .eq('user_id', session.user.id)
+        .order('is_done')
+        .order('sort_order')
+        .order('created_at'),
+      supabase
+        .from('lock_screen_prefs')
+        .select('max_lines')
+        .eq('user_id', session.user.id)
+        .maybeSingle(),
+    ])
     if (sequence !== loadSequence.current) return
     if (fetchError) setError(fetchError.message)
     else setReminders(data ?? [])
+    const synced = prefsResult.data?.max_lines
+    if (typeof synced === 'number' && synced >= 1) setMaxLines(synced)
     setLoading(false)
   }, [session.user.id])
 
@@ -254,10 +255,14 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
     event.preventDefault()
     const value = text.trim()
     if (!value || adding) return
+    if (isAtCapacity(active.length, maxLines)) {
+      setError(POST_IT_HINT)
+      return
+    }
     setAdding(true)
     setText('')
     setError('')
-    const nextOrder = Math.max(-1, ...reminders.map((item) => item.sort_order)) + 1
+    const nextOrder = nextSortOrder(reminders)
     const { error: insertError } = await supabase
       .from('reminders')
       .insert({ text: value, user_id: session.user.id, sort_order: nextOrder })
@@ -307,11 +312,8 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
     setReordering(true)
     reorderingRef.current = true
     setError('')
-    setReminders((items) => items.map((item) =>
-      item.id === a.id ? { ...item, sort_order: b.sort_order } :
-      item.id === b.id ? { ...item, sort_order: a.sort_order } : item,
-    ))
-    const temporaryOrder = Math.min(...reminders.map((item) => item.sort_order)) - 1
+    setReminders((items) => swapSortOrders(items, a.id, b.id))
+    const temporaryOrder = temporarySortOrder(reminders)
     const updateOrder = (id: string, sortOrder: number) => supabase
       .from('reminders')
       .update({ sort_order: sortOrder })
@@ -345,6 +347,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
   }
 
   const activeCount = reminders.filter((item) => !item.is_done).length
+  const boardFull = isAtCapacity(activeCount, maxLines)
 
   async function signOut() {
     setError('')
@@ -391,10 +394,11 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
 
   return (
     <main className="board-shell">
+      <a className="skip-link" href="#board-main">Skip to board</a>
       <header>
         <div>
           <p className="eyebrow">Lazy Man's Reminders</p>
-          <h1>Your board</h1>
+          <h1 id="board-heading">Your board</h1>
         </div>
         <div className="account">
           <div className="account-meta">
@@ -409,46 +413,50 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
             </button>
           </div>
           <button className="icon-button" type="button" aria-label="Sign out" title="Sign out" onClick={() => void signOut()}>
-            <LogOut size={18} />
+            <LogOut size={18} aria-hidden="true" />
           </button>
         </div>
       </header>
 
-      <section className="board">
+      <section className="board" id="board-main" aria-labelledby="board-heading">
         <form className="add-form" onSubmit={add}>
-          <Plus size={22} />
+          <Plus size={22} aria-hidden="true" />
           <input
             value={text}
             onChange={(event) => setText(event.target.value)}
-            placeholder="What shouldn't you forget?"
+            placeholder={boardFull ? 'Board full — combine lines instead' : "What shouldn't you forget?"}
             maxLength={500}
             autoFocus
+            disabled={boardFull || adding}
             aria-label="New reminder"
+            aria-describedby="board-hint board-capacity"
+            aria-invalid={boardFull ? true : undefined}
           />
-          <button className="primary" type="submit" disabled={!text.trim() || adding}>
+          <button className="primary" type="submit" disabled={boardFull || !text.trim() || adding} aria-busy={adding || undefined}>
             {adding ? 'Adding…' : 'Add'}
           </button>
         </form>
-        <div className="board-meta">
-          <span>{activeCount} {activeCount === 1 ? 'thing' : 'things'} on your mind</span>
-          <span>Updates sync to your lock screen</span>
+        <div className="board-meta" id="board-capacity" aria-live="polite">
+          <span>{activeCount}/{maxLines} {activeCount === 1 ? 'thing' : 'things'} on your mind</span>
+          <span>Capacity set by your iPhone Lock Screen</span>
         </div>
+        <p className="board-hint" id="board-hint">{POST_IT_HINT}</p>
         {error && (
           <div className="error-banner" role="alert">
             <span>{error}</span>
-            <button type="button" aria-label="Dismiss error" onClick={() => setError('')}><X size={16} /></button>
+            <button type="button" aria-label="Dismiss error" onClick={() => setError('')}><X size={16} aria-hidden="true" /></button>
           </div>
         )}
         {loading ? (
           <div className="empty" role="status">Loading your board…</div>
         ) : sorted.length === 0 ? (
           <div className="empty">
-            <Circle size={30} />
+            <Circle size={30} aria-hidden="true" />
             <h2>Nothing to remember.</h2>
             <p>That's either excellent or suspicious.</p>
           </div>
         ) : (
-          <ul className="reminder-list">
+          <ul className="reminder-list" aria-label="Reminders">
             {sorted.map((reminder) => {
               const activeIndex = active.findIndex((item) => item.id === reminder.id)
               return (
@@ -457,10 +465,11 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
                     className="check-button"
                     type="button"
                     aria-label={reminder.is_done ? `Mark "${reminder.text}" active` : `Complete "${reminder.text}"`}
+                    aria-pressed={reminder.is_done}
                     title={reminder.is_done ? 'Mark active' : 'Complete'}
                     onClick={() => void patch(reminder.id, { is_done: !reminder.is_done })}
                   >
-                    {reminder.is_done ? <Check size={17} /> : <Circle size={19} />}
+                    {reminder.is_done ? <Check size={17} aria-hidden="true" /> : <Circle size={19} aria-hidden="true" />}
                   </button>
                   {editingId === reminder.id ? (
                     <form className="edit-form" onSubmit={(event) => { event.preventDefault(); void saveEdit(reminder.id) }}>
@@ -472,8 +481,8 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
                         aria-label={`Edit reminder: ${reminder.text}`}
                         autoFocus
                       />
-                      <button type="submit" aria-label="Save reminder" title="Save"><Check size={17} /></button>
-                      <button type="button" aria-label="Cancel editing" title="Cancel" onClick={() => setEditingId(null)}><X size={17} /></button>
+                      <button type="submit" aria-label="Save reminder" title="Save"><Check size={17} aria-hidden="true" /></button>
+                      <button type="button" aria-label="Cancel editing" title="Cancel" onClick={() => setEditingId(null)}><X size={17} aria-hidden="true" /></button>
                     </form>
                   ) : (
                     <span className="reminder-text">{reminder.text}</span>
@@ -481,11 +490,11 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
                   {editingId !== reminder.id && (
                     <div className="actions">
                       {!reminder.is_done && <>
-                        <button type="button" aria-label={`Move "${reminder.text}" up`} title="Move up" disabled={reordering || activeIndex === 0} onClick={() => void move(activeIndex, -1)}><ArrowUp size={16} /></button>
-                        <button type="button" aria-label={`Move "${reminder.text}" down`} title="Move down" disabled={reordering || activeIndex === activeCount - 1} onClick={() => void move(activeIndex, 1)}><ArrowDown size={16} /></button>
+                        <button type="button" aria-label={`Move "${reminder.text}" up`} title="Move up" disabled={reordering || activeIndex === 0} onClick={() => void move(activeIndex, -1)}><ArrowUp size={16} aria-hidden="true" /></button>
+                        <button type="button" aria-label={`Move "${reminder.text}" down`} title="Move down" disabled={reordering || activeIndex === activeCount - 1} onClick={() => void move(activeIndex, 1)}><ArrowDown size={16} aria-hidden="true" /></button>
                       </>}
-                      <button type="button" aria-label={`Edit "${reminder.text}"`} title="Edit" onClick={() => { setEditingId(reminder.id); setEditText(reminder.text) }}><Pencil size={16} /></button>
-                      <button type="button" aria-label={`Delete "${reminder.text}"`} title="Delete" onClick={() => void remove(reminder.id)}><Trash2 size={16} /></button>
+                      <button type="button" aria-label={`Edit "${reminder.text}"`} title="Edit" onClick={() => { setEditingId(reminder.id); setEditText(reminder.text) }}><Pencil size={16} aria-hidden="true" /></button>
+                      <button type="button" aria-label={`Delete "${reminder.text}"`} title="Delete" onClick={() => void remove(reminder.id)}><Trash2 size={16} aria-hidden="true" /></button>
                     </div>
                   )}
                 </li>
@@ -496,7 +505,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
       </section>
       <AgentAccess userId={session.user.id} />
       <footer className="board-footer">
-        <p className="footer-note"><Smartphone size={16} /> Open the app once after signing in to add the lock-screen widget.</p>
+        <p className="footer-note"><Smartphone size={16} aria-hidden="true" /> Open the app once after signing in to add the lock-screen widget.</p>
         <LegalFooterLinks onNavigate={onNavigate} />
       </footer>
       {confirmDelete && (
@@ -531,6 +540,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
                 className="text-button"
                 type="button"
                 disabled={deletingAccount}
+                autoFocus
                 onClick={() => setConfirmDelete(false)}
               >
                 Cancel
@@ -690,6 +700,16 @@ export default function App() {
   const [session, setSession] = useState<Session | null>(null)
   const [ready, setReady] = useState(false)
   const [authError, setAuthError] = useState('')
+
+  useEffect(() => {
+    const titles: Record<AppRoute, string> = {
+      '/': "Lazy Man's Reminders",
+      '/privacy': "Privacy · Lazy Man's Reminders",
+      '/terms': "Terms · Lazy Man's Reminders",
+      '/support': "Support · Lazy Man's Reminders",
+    }
+    document.title = titles[path]
+  }, [path])
 
   useEffect(() => {
     void supabase.auth.getSession().then(({ data, error }) => {

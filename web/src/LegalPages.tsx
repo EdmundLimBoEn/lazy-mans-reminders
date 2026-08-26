@@ -301,8 +301,8 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
       <h2>5. Paid App Store purchases</h2>
       <p>
         If the iOS app is offered as a paid download or includes a one-time purchase (planned
-        price: US $2.99, subject to change in the App Store), payment is processed by Apple, not
-        directly by us.
+        price: US $1.50 / S$2.00, subject to change in the App Store), payment is processed by
+        Apple, not directly by us.
       </p>
       <ul>
         <li>Pricing, taxes, billing, refunds, and cancellations are handled under Apple's App Store

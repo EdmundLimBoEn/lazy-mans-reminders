@@ -21,8 +21,9 @@ settings:
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: "$(DEVELOPMENT_TEAM)"
     TARGETED_DEVICE_FAMILY: "1"
-    MARKETING_VERSION: "0.1"
-    CURRENT_PROJECT_VERSION: "1"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "4"
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 targets:
   LazyMansReminders:
     type: application
@@ -35,6 +36,9 @@ targets:
         product: Supabase
       - target: ReminderWidgetExtension
         embed: true
+    scheme:
+      testTargets:
+        - LazyMansRemindersTests
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: "$(PRODUCT_BUNDLE_IDENTIFIER)"
@@ -54,8 +58,18 @@ targets:
         SUPABASE_ANON_KEY: "$(SUPABASE_ANON_KEY)"
         APP_GROUP_ID: "$(APP_GROUP_ID)"
         NSSupportsLiveActivities: true
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        "UISupportedInterfaceOrientations~ipad":
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIRequiresFullScreen: true
         UIBackgroundModes:
           - remote-notification
+        ITSAppUsesNonExemptEncryption: false
     entitlements:
       path: App/LazyMansReminders.entitlements
       properties:
@@ -98,3 +112,16 @@ targets:
       SystemCapabilities:
         com.apple.ApplicationGroups.iOS:
           enabled: 1
+  LazyMansRemindersTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests
+    dependencies:
+      - target: LazyMansReminders
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: systems.edmundlim.LazyMansRemindersTests
+        GENERATE_INFOPLIST_FILE: YES
+        # Hosted unit tests; ReminderStore App Group/network paths are not covered here.
+        CODE_SIGN_STYLE: Automatic
