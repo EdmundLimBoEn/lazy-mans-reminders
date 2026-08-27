@@ -39,6 +39,10 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         NotificationCenter.default.post(name: .didRegisterPushToken, object: token)
     }
 
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("APNs registration failed: \(error.localizedDescription)")
+    }
+
     func application(
         _ application: UIApplication,
         didReceiveRemoteNotification userInfo: [AnyHashable: Any],

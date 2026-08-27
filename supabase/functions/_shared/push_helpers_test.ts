@@ -5,10 +5,19 @@ import {
 } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import {
   APNS_TOKEN_PATTERN,
+  apnsCollapseId,
+  apnsExpirationUnix,
   apnsHostForEnvironment,
+  APNS_EXPIRATION_TTL_SECONDS,
   base64url,
+  buildApnsHeaders,
+  buildApnsPayload,
+  classifyApnsResponse,
   classifyWebhookPayload,
+  delayMsForAttempt,
+  parseApnsReason,
   UUID_PATTERN,
+  webhookStatusForResults,
 } from "./push_helpers.ts";
 
 Deno.test("base64url encodes without padding and uses URL-safe alphabet", () => {
@@ -96,4 +105,106 @@ Deno.test("apnsHostForEnvironment picks sandbox vs production", () => {
     apnsHostForEnvironment("production"),
     "https://api.push.apple.com",
   );
+  assertEquals(
+    apnsHostForEnvironment("unexpected"),
+    "https://api.push.apple.com",
+  );
+});
+
+Deno.test("apnsExpirationUnix is a future UNIX timestamp 24h out", () => {
+  const now = Date.parse("2026-08-27T01:00:00Z");
+  assertEquals(apnsExpirationUnix(now), now / 1000 + APNS_EXPIRATION_TTL_SECONDS);
+});
+
+Deno.test("apnsCollapseId is the reminder id (fits APNs 64-byte limit)", () => {
+  const id = "11111111-1111-4111-8111-111111111111";
+  assertEquals(apnsCollapseId(id), id);
+  assertEquals(apnsCollapseId(id).length <= 64, true);
+});
+
+Deno.test("delayMsForAttempt backs off then clamps", () => {
+  assertEquals(delayMsForAttempt(0), 200);
+  assertEquals(delayMsForAttempt(1), 400);
+  assertEquals(delayMsForAttempt(2), 400);
+});
+
+Deno.test("parseApnsReason reads JSON reason and ignores junk", () => {
+  assertEquals(parseApnsReason('{"reason":"BadDeviceToken"}'), "BadDeviceToken");
+  assertEquals(parseApnsReason("not-json"), "");
+  assertEquals(parseApnsReason("{}"), "");
+});
+
+Deno.test("classifyApnsResponse sent / prune / retry / jwt / permanent", () => {
+  assertEquals(classifyApnsResponse(200, ""), { kind: "sent" });
+  assertEquals(classifyApnsResponse(410, '{"reason":"Unregistered"}'), {
+    kind: "prune",
+    status: 410,
+    reason: "Unregistered",
+  });
+  assertEquals(classifyApnsResponse(400, '{"reason":"BadDeviceToken"}'), {
+    kind: "prune",
+    status: 400,
+    reason: "BadDeviceToken",
+  });
+  assertEquals(classifyApnsResponse(400, '{"reason":"DeviceTokenNotForTopic"}'), {
+    kind: "prune",
+    status: 400,
+    reason: "DeviceTokenNotForTopic",
+  });
+  assertEquals(classifyApnsResponse(403, '{"reason":"ExpiredProviderToken"}'), {
+    kind: "expired_jwt",
+    status: 403,
+    reason: "ExpiredProviderToken",
+  });
+  assertEquals(classifyApnsResponse(429, '{"reason":"TooManyRequests"}'), {
+    kind: "retryable",
+    status: 429,
+    reason: "TooManyRequests",
+  });
+  assertEquals(classifyApnsResponse(503, '{"reason":"Shutdown"}'), {
+    kind: "retryable",
+    status: 503,
+    reason: "Shutdown",
+  });
+  assertEquals(classifyApnsResponse(400, '{"reason":"BadCollapseId"}'), {
+    kind: "permanent",
+    status: 400,
+    reason: "BadCollapseId",
+  });
+});
+
+Deno.test("buildApnsHeaders sets expiration, collapse id, and alert type", () => {
+  const headers = buildApnsHeaders({
+    jwt: "token",
+    topic: "systems.edmundlim.LazyMansReminders",
+    collapseId: "11111111-1111-4111-8111-111111111111",
+    expirationUnix: 1_775_000_000,
+  });
+  assertEquals(headers.authorization, "bearer token");
+  assertEquals(headers["apns-topic"], "systems.edmundlim.LazyMansReminders");
+  assertEquals(headers["apns-push-type"], "alert");
+  assertEquals(headers["apns-priority"], "10");
+  assertEquals(headers["apns-expiration"], "1775000000");
+  assertEquals(
+    headers["apns-collapse-id"],
+    "11111111-1111-4111-8111-111111111111",
+  );
+});
+
+Deno.test("buildApnsPayload is body-only with reminder_id for the client", () => {
+  const body = JSON.parse(buildApnsPayload({
+    id: "11111111-1111-4111-8111-111111111111",
+    user_id: "22222222-2222-4222-8222-222222222222",
+    text: "Book dentist",
+  }));
+  assertEquals(body.aps.alert, { body: "Book dentist" });
+  assertEquals(body.aps.sound, "default");
+  assertEquals(body.aps["content-available"], 1);
+  assertEquals(body.reminder_id, "11111111-1111-4111-8111-111111111111");
+  assertEquals(body.aps.alert.title, undefined);
+});
+
+Deno.test("webhookStatusForResults is 503 only while APNs might still succeed", () => {
+  assertEquals(webhookStatusForResults(0), 200);
+  assertEquals(webhookStatusForResults(1), 503);
 });

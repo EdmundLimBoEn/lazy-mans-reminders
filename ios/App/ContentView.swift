@@ -5,6 +5,7 @@ import WidgetKit
 
 struct ContentView: View {
     @EnvironmentObject private var auth: AuthManager
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         Group {
@@ -32,6 +33,15 @@ struct ContentView: View {
         .onReceive(NotificationCenter.default.publisher(for: .didRegisterPushToken)) { notification in
             guard let token = notification.object as? String else { return }
             Task { await auth.registerDevice(token: token) }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            guard phase == .active, auth.session != nil else { return }
+            Task {
+                await AppDelegate.requestPushIfNeeded()
+                if let token = AppDelegate.latestDeviceToken {
+                    await auth.registerDevice(token: token)
+                }
+            }
         }
     }
 }

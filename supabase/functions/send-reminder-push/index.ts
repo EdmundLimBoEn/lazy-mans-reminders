@@ -1,10 +1,20 @@
 import { timingSafeEqual } from "node:crypto";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
+  APNS_MAX_ATTEMPTS,
+  APNS_REQUEST_TIMEOUT_MS,
   APNS_TOKEN_PATTERN,
+  apnsCollapseId,
+  apnsExpirationUnix,
   apnsHostForEnvironment,
   base64url,
+  buildApnsHeaders,
+  buildApnsPayload,
+  classifyApnsResponse,
   classifyWebhookPayload,
+  delayMsForAttempt,
+  webhookStatusForResults,
+  type ReminderRecord,
   type WebhookPayload,
 } from "../_shared/push_helpers.ts";
 
@@ -17,6 +27,10 @@ function requiredEnv(name: string): string {
   const value = Deno.env.get(name);
   if (!value) throw new Error(`Missing required environment variable: ${name}`);
   return value;
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function apnsJWT(): Promise<string> {
@@ -70,6 +84,10 @@ async function apnsJWT(): Promise<string> {
   return value;
 }
 
+function invalidateAPNSJWT(): void {
+  cachedAPNSJWT = undefined;
+}
+
 async function secretsMatch(
   expected: string,
   actual: string | null,
@@ -81,6 +99,98 @@ async function secretsMatch(
   const expectedBytes = new Uint8Array(expectedHash);
   const actualBytes = new Uint8Array(actualHash);
   return actual !== null && timingSafeEqual(expectedBytes, actualBytes);
+}
+
+// Service-role client is untyped here — Edge Function env has no generated DB types.
+// deno-lint-ignore no-explicit-any
+type ServiceClient = { from: (table: string) => any };
+type DeviceSendResult = "sent" | "retryable" | "failed";
+
+async function pruneToken(
+  supabase: ServiceClient,
+  userId: string,
+  token: string,
+): Promise<void> {
+  const { error: deleteError } = await supabase
+    .from("device_tokens")
+    .delete()
+    .eq("token", token)
+    .eq("user_id", userId);
+  if (deleteError) {
+    console.error("Could not remove expired APNs token", deleteError);
+  }
+}
+
+async function sendOnce(input: {
+  host: string;
+  token: string;
+  topic: string;
+  record: ReminderRecord;
+}): Promise<ReturnType<typeof classifyApnsResponse> | { kind: "retryable"; status: number; reason: string }> {
+  try {
+    const jwt = await apnsJWT();
+    const response = await fetch(`${input.host}/3/device/${input.token}`, {
+      method: "POST",
+      headers: buildApnsHeaders({
+        jwt,
+        topic: input.topic,
+        collapseId: apnsCollapseId(input.record.id),
+        expirationUnix: apnsExpirationUnix(),
+      }),
+      body: buildApnsPayload(input.record),
+      signal: AbortSignal.timeout(APNS_REQUEST_TIMEOUT_MS),
+    });
+    const responseBody = await response.text();
+    const outcome = classifyApnsResponse(response.status, responseBody);
+    if (outcome.kind !== "sent") {
+      console.error("APNs rejected push", response.status, responseBody);
+    }
+    return outcome;
+  } catch (error) {
+    console.error("APNs request failed", error);
+    return { kind: "retryable", status: 0, reason: "network" };
+  }
+}
+
+async function sendToDevice(input: {
+  supabase: ServiceClient;
+  userId: string;
+  token: string;
+  environment: string;
+  topic: string;
+  record: ReminderRecord;
+}): Promise<DeviceSendResult> {
+  if (!APNS_TOKEN_PATTERN.test(input.token)) {
+    console.error("Skipping malformed APNs token");
+    return "failed";
+  }
+
+  const host = apnsHostForEnvironment(input.environment);
+  let lastRetryable = false;
+
+  for (let attempt = 0; attempt < APNS_MAX_ATTEMPTS; attempt++) {
+    const outcome = await sendOnce({
+      host,
+      token: input.token,
+      topic: input.topic,
+      record: input.record,
+    });
+
+    if (outcome.kind === "sent") return "sent";
+    if (outcome.kind === "prune") {
+      await pruneToken(input.supabase, input.userId, input.token);
+      return "failed";
+    }
+    if (outcome.kind === "permanent") return "failed";
+
+    lastRetryable = true;
+    if (outcome.kind === "expired_jwt") invalidateAPNSJWT();
+    if (attempt < APNS_MAX_ATTEMPTS - 1) {
+      await sleep(delayMsForAttempt(attempt));
+    }
+  }
+
+  return lastRetryable ? "retryable" : "failed";
 }
 
 Deno.serve(async (request) => {
@@ -133,72 +243,32 @@ Deno.serve(async (request) => {
     console.error("Could not load device tokens", error);
     return new Response("Could not load device tokens", { status: 500 });
   }
-  if (!devices?.length) return Response.json({ sent: 0 });
+  if (!devices?.length) return Response.json({ sent: 0, failed: 0, retryable: 0 });
 
-  let jwt: string;
   let topic: string;
   try {
-    jwt = await apnsJWT();
+    await apnsJWT();
     topic = requiredEnv("APNS_TOPIC");
   } catch (error) {
     console.error("APNs configuration error", error);
     return new Response("Push service configuration error", { status: 500 });
   }
 
-  let sent = 0;
-  let failed = 0;
+  const results = await Promise.all(devices.map(({ token, environment }) =>
+    sendToDevice({
+      supabase,
+      userId: payload.record.user_id,
+      token,
+      environment,
+      topic,
+      record: payload.record,
+    })
+  ));
 
-  await Promise.all(devices.map(async ({ token, environment }) => {
-    if (!APNS_TOKEN_PATTERN.test(token)) {
-      failed += 1;
-      console.error("Skipping malformed APNs token");
-      return;
-    }
+  const sent = results.filter((result) => result === "sent").length;
+  const retryable = results.filter((result) => result === "retryable").length;
+  const failed = results.length - sent - retryable;
+  const status = webhookStatusForResults(retryable);
 
-    const host = apnsHostForEnvironment(environment);
-    try {
-      const response = await fetch(`${host}/3/device/${token}`, {
-        method: "POST",
-        headers: {
-          authorization: `bearer ${jwt}`,
-          "content-type": "application/json",
-          "apns-topic": topic,
-          "apns-push-type": "alert",
-          "apns-priority": "10",
-        },
-        body: JSON.stringify({
-          aps: {
-            // Body-only alert: no title/header. System draws the full-width
-            // notification bar with the user's Liquid Glass (Clear) setting.
-            alert: { body: payload.record.text },
-            sound: "default",
-            "content-available": 1,
-          },
-          reminder_id: payload.record.id,
-        }),
-      });
-      if (response.ok) {
-        sent += 1;
-      } else {
-        failed += 1;
-        const responseBody = await response.text();
-        if (response.status === 410) {
-          const { error: deleteError } = await supabase
-            .from("device_tokens")
-            .delete()
-            .eq("token", token)
-            .eq("user_id", payload.record.user_id);
-          if (deleteError) {
-            console.error("Could not remove expired APNs token", deleteError);
-          }
-        }
-        console.error("APNs rejected push", response.status, responseBody);
-      }
-    } catch (error) {
-      failed += 1;
-      console.error("APNs request failed", error);
-    }
-  }));
-
-  return Response.json({ sent, failed });
+  return Response.json({ sent, failed, retryable }, { status });
 });
