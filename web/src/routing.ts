@@ -4,6 +4,7 @@ export type AppRoute =
   | '/terms'
   | '/support'
   | '/auth/callback'
+  | '/auth/ios'
   | '/connect'
   | 'not-found'
 
@@ -13,6 +14,7 @@ const KNOWN = new Set<AppRoute>([
   '/terms',
   '/support',
   '/auth/callback',
+  '/auth/ios',
   '/connect',
 ])
 

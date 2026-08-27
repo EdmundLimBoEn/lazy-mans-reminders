@@ -21,6 +21,7 @@ describe('normalizePath', () => {
 
   it('keeps auth and connect routes', () => {
     expect(normalizePath('/auth/callback')).toBe('/auth/callback')
+    expect(normalizePath('/auth/ios')).toBe('/auth/ios')
     expect(normalizePath('/connect')).toBe('/connect')
     expect(normalizePath('/connect/')).toBe('/connect')
   })

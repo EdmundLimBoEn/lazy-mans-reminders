@@ -21,6 +21,7 @@ import {
 } from './lib/accountExport'
 import { nextSortOrder, sortReminders, swapSortOrders, temporarySortOrder, isAtCapacity, effectiveMaximum, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
 import { AuthCallback } from './AuthCallback'
+import { IosAuthHandoff } from './IosAuthHandoff'
 import { Connect } from './Connect'
 import { LegalFooterLinks, PrivacyPage, SupportPage, TermsPage } from './LegalPages'
 import { authCallbackUrl, MCP_URL, rememberReturnTo } from './mcp'
@@ -741,6 +742,7 @@ export default function App() {
       '/terms': "Terms · Lazy Man's Reminders",
       '/support': "Support · Lazy Man's Reminders",
       '/auth/callback': "Signing in · Lazy Man's Reminders",
+      '/auth/ios': "Open the app · Lazy Man's Reminders",
       '/connect': "Connect an agent · Lazy Man's Reminders",
       'not-found': "Not found · Lazy Man's Reminders",
     }
@@ -762,6 +764,7 @@ export default function App() {
   }, [])
 
   if (path === '/auth/callback') return <AuthCallback onNavigate={navigate} />
+  if (path === '/auth/ios') return <IosAuthHandoff onNavigate={navigate} />
   if (path === '/privacy') return <PrivacyPage onNavigate={navigate} />
   if (path === '/terms') return <TermsPage onNavigate={navigate} />
   if (path === '/support') return <SupportPage onNavigate={navigate} />
