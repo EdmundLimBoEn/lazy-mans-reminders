@@ -53,6 +53,7 @@ final class AuthManager: ObservableObject {
                 await shareSession()
             }
         }
+        Task { await observeSharedSessionRefresh() }
     }
 
     func sendMagicLink(to email: String) async {
@@ -193,10 +194,18 @@ final class AuthManager: ObservableObject {
         let environment = "production"
         #endif
         let device = DeviceToken(token: token, userID: userID, environment: environment)
-        try? await client
-            .from("device_tokens")
-            .upsert(device, onConflict: "token")
-            .execute()
+        for attempt in 0..<3 {
+            do {
+                try await client
+                    .from("device_tokens")
+                    .upsert(device, onConflict: "token")
+                    .execute()
+                return
+            } catch {
+                if attempt == 2 { return }
+                try? await Task.sleep(nanoseconds: UInt64(400_000_000 * (attempt + 1)))
+            }
+        }
     }
 
     /// Measures this phone’s Live Activity line budget and upserts `lock_screen_prefs`.
@@ -223,9 +232,23 @@ final class AuthManager: ObservableObject {
         }
         try? await ReminderStore.shared.saveSession(
             accessToken: session.accessToken,
+            refreshToken: session.refreshToken,
             expiresAt: Date(timeIntervalSince1970: session.expiresAt)
         )
         await syncLockScreenPrefs()
+    }
+
+    /// Keep the Supabase Swift client in sync when ReminderStore rotates the
+    /// refresh token from a background push (GoTrue rotation invalidates the old one).
+    private func observeSharedSessionRefresh() async {
+        for await notification in NotificationCenter.default.notifications(named: .didRefreshSharedSession) {
+            guard
+                let accessToken = notification.userInfo?["accessToken"] as? String,
+                let refreshToken = notification.userInfo?["refreshToken"] as? String,
+                !refreshToken.isEmpty
+            else { continue }
+            _ = try? await client.auth.setSession(accessToken: accessToken, refreshToken: refreshToken)
+        }
     }
 
     private static func randomNonceString(length: Int = 32) -> String {

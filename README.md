@@ -114,6 +114,12 @@ supabase functions deploy delete-account
 
 `send-reminder-push` disables JWT verification because the database webhook authenticates with `x-webhook-secret`. The function checks that shared secret before using the service-role client.
 
+Delivery behaviour:
+
+- Each APNs request sets `apns-expiration` 24 hours out so alerts are stored if the phone is offline, and `apns-collapse-id` equal to the reminder id so webhook retries replace the same banner instead of stacking duplicates.
+- Transient APNs failures (network, 429, 5xx, expired provider JWT) are retried inside the function. If any device is still retryable afterwards the function returns **503** so the webhook / `pg_net` trigger can try the whole job again. Permanent failures (including `410 Unregistered` and `400 BadDeviceToken`) prune that token and still return 200.
+- After changing this function, redeploy with `supabase functions deploy send-reminder-push --no-verify-jwt`. The INSERT trigger itself (`notify_reminder_push` / dashboard webhook) is configured in the project, not this repo.
+
 `delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, agent tokens, and auth user (service role).
 
 ## Agent MCP
