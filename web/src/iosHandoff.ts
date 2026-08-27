@@ -13,7 +13,6 @@ function firstParam(params: URLSearchParams[], name: string): string | null {
   return null
 }
 
-/** Map an HTTPS magic-link landing URL onto the iOS custom-scheme callback. */
 export function iosHandoffFromLocation(href: string): IosHandoff {
   const url = new URL(href)
   const search = new URLSearchParams(url.search)
