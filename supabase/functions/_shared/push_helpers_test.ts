@@ -39,17 +39,13 @@ Deno.test("APNS_TOKEN_PATTERN requires 64 hex chars", () => {
   assertFalse(APNS_TOKEN_PATTERN.test("g".repeat(64)));
 });
 
-Deno.test("classifyWebhookPayload ignores non-insert reminder events", () => {
+Deno.test("classifyWebhookPayload ignores events that are not reminder board changes", () => {
   assertEquals(
     classifyWebhookPayload({
-      type: "UPDATE",
-      table: "reminders",
+      type: "INSERT",
+      table: "lock_screen_prefs",
       schema: "public",
-      record: {
-        id: "11111111-1111-4111-8111-111111111111",
-        user_id: "22222222-2222-4222-8222-222222222222",
-        text: "x",
-      },
+      record: { user_id: "22222222-2222-4222-8222-222222222222" },
     }),
     { ok: true, kind: "ignore" },
   );
@@ -67,8 +63,56 @@ Deno.test("classifyWebhookPayload accepts a valid INSERT", () => {
         text: "Book dentist",
       },
     }),
-    { ok: true, kind: "process" },
+    {
+      ok: true,
+      kind: "process",
+      sendsAlert: true,
+      userId: "22222222-2222-4222-8222-222222222222",
+    },
   );
+});
+
+Deno.test("classifyWebhookPayload processes reminder UPDATE/DELETE without an alert", () => {
+  const record = {
+    id: "11111111-1111-4111-8111-111111111111",
+    user_id: "22222222-2222-4222-8222-222222222222",
+    text: "Book dentist",
+  };
+  assertEquals(
+    classifyWebhookPayload({
+      type: "UPDATE",
+      table: "reminders",
+      schema: "public",
+      record,
+    }),
+    {
+      ok: true,
+      kind: "process",
+      sendsAlert: false,
+      userId: "22222222-2222-4222-8222-222222222222",
+    },
+  );
+  assertEquals(
+    classifyWebhookPayload({
+      type: "DELETE",
+      table: "reminders",
+      schema: "public",
+      record,
+    }),
+    {
+      ok: true,
+      kind: "process",
+      sendsAlert: false,
+      userId: "22222222-2222-4222-8222-222222222222",
+    },
+  );
+});
+
+Deno.test("classifyWebhookPayload treats live_activity_refresh as a recycle pass", () => {
+  assertEquals(classifyWebhookPayload({ type: "live_activity_refresh" }), {
+    ok: true,
+    kind: "refresh",
+  });
 });
 
 Deno.test("classifyWebhookPayload rejects empty or oversized text", () => {

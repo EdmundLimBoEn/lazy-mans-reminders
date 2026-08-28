@@ -8,6 +8,8 @@ extension Notification.Name {
 
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     static var latestDeviceToken: String?
+    static var latestPushToStartToken: String?
+    static var latestActivityPushToken: String?
 
     static func requestPushIfNeeded() async {
         let center = UNUserNotificationCenter.current()
@@ -30,6 +32,21 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         UNUserNotificationCenter.current().delegate = self
+        NotificationCenter.default.addObserver(
+            forName: .didRegisterPushToStartToken,
+            object: nil,
+            queue: .main
+        ) { notification in
+            Self.latestPushToStartToken = notification.object as? String
+        }
+        NotificationCenter.default.addObserver(
+            forName: .didRegisterActivityPushToken,
+            object: nil,
+            queue: .main
+        ) { notification in
+            Self.latestActivityPushToken = notification.object as? String
+        }
+        ReminderLiveActivityController.startObservingTokens()
         return true
     }
 

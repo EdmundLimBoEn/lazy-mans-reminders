@@ -34,6 +34,14 @@ struct ContentView: View {
             guard let token = notification.object as? String else { return }
             Task { await auth.registerDevice(token: token) }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .didRegisterPushToStartToken)) { notification in
+            AppDelegate.latestPushToStartToken = notification.object as? String
+            Task { await auth.registerLiveActivityTokens() }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .didRegisterActivityPushToken)) { notification in
+            AppDelegate.latestActivityPushToken = notification.object as? String
+            Task { await auth.registerLiveActivityTokens() }
+        }
         .onChange(of: scenePhase) { _, phase in
             guard phase == .active, auth.session != nil else { return }
             Task {

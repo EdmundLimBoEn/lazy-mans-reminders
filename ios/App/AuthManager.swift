@@ -18,6 +18,28 @@ final class AuthManager: ObservableObject {
         }
     }
 
+    private struct LiveActivityTokenPatch: Encodable {
+        var pushToStartToken: String?
+        var activityPushToken: String?
+
+        enum CodingKeys: String, CodingKey {
+            case pushToStartToken = "push_to_start_token"
+            case activityPushToken = "activity_push_token"
+        }
+
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            if let pushToStartToken {
+                try container.encode(pushToStartToken, forKey: .pushToStartToken)
+            }
+            if let activityPushToken {
+                try container.encode(activityPushToken, forKey: .activityPushToken)
+            }
+        }
+
+        var isEmpty: Bool { pushToStartToken == nil && activityPushToken == nil }
+    }
+
     private struct LockScreenPrefs: Encodable {
         let userID: UUID
         let maxLines: Int
@@ -199,6 +221,33 @@ final class AuthManager: ObservableObject {
                 try await client
                     .from("device_tokens")
                     .upsert(device, onConflict: "token")
+                    .execute()
+                await registerLiveActivityTokens()
+                return
+            } catch {
+                if attempt == 2 { return }
+                try? await Task.sleep(nanoseconds: UInt64(400_000_000 * (attempt + 1)))
+            }
+        }
+    }
+
+    func registerLiveActivityTokens() async {
+        guard
+            let userID = session?.user.id,
+            let deviceToken = AppDelegate.latestDeviceToken
+        else { return }
+        let patch = LiveActivityTokenPatch(
+            pushToStartToken: AppDelegate.latestPushToStartToken,
+            activityPushToken: AppDelegate.latestActivityPushToken
+        )
+        guard !patch.isEmpty else { return }
+        for attempt in 0..<3 {
+            do {
+                try await client
+                    .from("device_tokens")
+                    .update(patch)
+                    .eq("token", value: deviceToken)
+                    .eq("user_id", value: userID)
                     .execute()
                 return
             } catch {

@@ -37,45 +37,67 @@ export function base64url(input: Uint8Array | string): string {
 }
 
 export type PayloadCheck =
-  | { ok: true; kind: "process" }
+  | { ok: true; kind: "process"; sendsAlert: boolean; userId: string }
+  | { ok: true; kind: "refresh" }
   | { ok: true; kind: "ignore" }
   | { ok: false; status: 400; message: string };
 
+function recordUserId(record: unknown): string | null {
+  if (typeof record !== "object" || record === null) return null;
+  if (!("user_id" in record) || typeof record.user_id !== "string") return null;
+  return UUID_PATTERN.test(record.user_id) ? record.user_id : null;
+}
+
 /** Decide whether a parsed webhook body should send a push, be ignored, or rejected. */
 export function classifyWebhookPayload(payload: unknown): PayloadCheck {
-  if (
-    typeof payload !== "object" ||
-    payload === null ||
-    !("type" in payload) ||
-    !("table" in payload) ||
-    !("schema" in payload)
-  ) {
+  if (typeof payload !== "object" || payload === null || !("type" in payload)) {
     return { ok: false, status: 400, message: "Invalid webhook payload" };
   }
 
-  const body = payload as Partial<WebhookPayload>;
-  if (
-    body.type !== "INSERT" ||
-    body.table !== "reminders" ||
-    body.schema !== "public"
-  ) {
+  const body = payload as { type?: unknown };
+  if (body.type === "live_activity_refresh") {
+    return { ok: true, kind: "refresh" };
+  }
+
+  if (!("table" in payload) || !("schema" in payload)) {
+    return { ok: false, status: 400, message: "Invalid webhook payload" };
+  }
+
+  const reminderBody = payload as Partial<WebhookPayload>;
+  if (reminderBody.table !== "reminders" || reminderBody.schema !== "public") {
     return { ok: true, kind: "ignore" };
   }
 
-  const record = body.record;
-  if (
-    !record ||
-    typeof record !== "object" ||
-    !UUID_PATTERN.test(record.id) ||
-    !UUID_PATTERN.test(record.user_id) ||
-    typeof record.text !== "string" ||
-    record.text.length === 0 ||
-    record.text.length > 500
-  ) {
-    return { ok: false, status: 400, message: "Invalid webhook payload" };
+  if (reminderBody.type === "INSERT") {
+    const record = reminderBody.record;
+    if (
+      !record ||
+      typeof record !== "object" ||
+      !UUID_PATTERN.test(record.id) ||
+      !UUID_PATTERN.test(record.user_id) ||
+      typeof record.text !== "string" ||
+      record.text.length === 0 ||
+      record.text.length > 500
+    ) {
+      return { ok: false, status: 400, message: "Invalid webhook payload" };
+    }
+    return {
+      ok: true,
+      kind: "process",
+      sendsAlert: true,
+      userId: record.user_id,
+    };
   }
 
-  return { ok: true, kind: "process" };
+  if (reminderBody.type === "UPDATE" || reminderBody.type === "DELETE") {
+    const userId = recordUserId(reminderBody.record);
+    if (!userId) {
+      return { ok: false, status: 400, message: "Invalid webhook payload" };
+    }
+    return { ok: true, kind: "process", sendsAlert: false, userId };
+  }
+
+  return { ok: true, kind: "ignore" };
 }
 
 export function apnsHostForEnvironment(environment: string): string {
