@@ -17,6 +17,7 @@
 - [x] **Deploy delete-account function** — Deployed to project `biwmsxbqrevtjwgsvsmu` (`supabase functions deploy delete-account`). Redeployed 26 Aug 2026 so deletion also wipes `lock_screen_prefs`. JWT verification on; used by web + iOS account deletion.
 - [x] **TestFlight build 1.0 (4)** — Uploaded with Xcode 27 beta 5 (`27A5237l`). Processing **VALID**. On Internal Testers (you) and Friends. TestFlight beta review is **WAITING_FOR_REVIEW** so email testers can install. Not submitted to the App Store. Beta 4 removed; `/Applications/Xcode-beta.app` is now beta 5. EdmundPurple theme kept.
 - [x] **Deploy web** — New legal pages, export, favicon, robots, and security.txt are live on `https://lmr.edmundlim.systems` (Wrangler device login, 27 Aug 2026). Confirm `/privacy` has no "launch template" copy.
+- [ ] **Rebuild iOS for email sign-in** — Web handoff is live at `https://lmr.edmundlim.systems/auth/ios` (PR #5). Ship a new Xcode or TestFlight build so `sendMagicLink` uses that HTTPS redirect, then tap a fresh email link on the phone.
 - [ ] **Add your friend's email to TestFlight** — After Apple approves the TestFlight review (or immediately for you as Internal Testers):
   ```sh
   asc testflight testers add --app 6799138197 --email FRIEND@EMAIL --group Friends

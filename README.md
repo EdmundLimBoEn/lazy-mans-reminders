@@ -93,7 +93,8 @@ In Supabase **Authentication → URL Configuration**:
 - Add `http://localhost:5173/auth/callback`.
 - Add `https://lmr.edmundlim.systems/auth/callback`.
 - Add `https://lazy-mans-reminders.pages.dev/auth/callback` as a fallback.
-- Add `lazymansreminders://auth/callback` for iOS.
+- Add `lazymansreminders://auth/callback` for iOS Google OAuth.
+- Add `https://lmr.edmundlim.systems/auth/ios` and `https://lazy-mans-reminders.pages.dev/auth/ios` for iOS magic-link handoff.
 - Also allow the bare origins used by OAuth returns: `http://localhost:5173`, `https://lmr.edmundlim.systems`, and `https://lazy-mans-reminders.pages.dev`.
 
 Keep `supabase/config.toml` aligned for local development. In **Authentication → Providers**:

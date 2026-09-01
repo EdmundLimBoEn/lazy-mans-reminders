@@ -62,7 +62,9 @@ final class AuthManager: ObservableObject {
     )
 
     private var pendingAppleNonce: String?
-    private let authRedirectURL = URL(string: "lazymansreminders://auth/callback")!
+    /// Safari cannot follow a 303 onto a custom scheme, so magic links land on HTTPS first.
+    private let magicLinkRedirectURL = URL(string: "https://lmr.edmundlim.systems/auth/ios")!
+    private let oauthRedirectURL = URL(string: "lazymansreminders://auth/callback")!
 
     init() {
         Task {
@@ -84,7 +86,7 @@ final class AuthManager: ObservableObject {
         do {
             try await client.auth.signInWithOTP(
                 email: email,
-                redirectTo: authRedirectURL
+                redirectTo: magicLinkRedirectURL
             )
             message = "Check your inbox for the sign-in link."
         } catch {
@@ -160,7 +162,7 @@ final class AuthManager: ObservableObject {
         do {
             session = try await client.auth.signInWithOAuth(
                 provider: .google,
-                redirectTo: authRedirectURL,
+                redirectTo: oauthRedirectURL,
                 queryParams: [("prompt", "select_account")]
             ) { session in
                 session.prefersEphemeralWebBrowserSession = false
