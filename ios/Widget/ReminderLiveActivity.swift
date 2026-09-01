@@ -4,27 +4,22 @@ import WidgetKit
 
 /// Full-width Lock Screen banner — notification-style clear glass.
 /// Compact type so the phone-measured line budget can actually fit.
+/// Dynamic Island stays empty so the status icons stay visible off Lock Screen.
 struct ReminderLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: ReminderAttributes.self) { context in
             lockScreenBanner(lines: context.state.lines)
-        } dynamicIsland: { context in
+        } dynamicIsland: { _ in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.center) {
-                    Text(context.state.lines.first ?? "Reminders")
-                        .font(.caption.weight(.semibold))
-                        .lineLimit(1)
+                    EmptyView()
                 }
             } compactLeading: {
-                Text("LM")
-                    .font(.caption2.weight(.bold))
+                EmptyView()
             } compactTrailing: {
-                Text(context.state.lines.first ?? "")
-                    .font(.caption2)
-                    .lineLimit(1)
+                EmptyView()
             } minimal: {
-                Text("LM")
-                    .font(.caption2.weight(.bold))
+                EmptyView()
             }
         }
     }
