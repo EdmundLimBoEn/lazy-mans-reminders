@@ -46,6 +46,7 @@ Paste into App Review Information:
 Demo: create an account with Sign in with Apple, Google, or a magic-link email.
 The board holds a small number of reminder lines (matched to the Lock Screen Live Activity).
 Tap a circle to complete a line. The Lock Screen Live Activity starts from the reminder notification and stays until the board is empty.
+Siri (iOS 26+ / Apple Intelligence): list reminders, add a reminder, or mark one done while signed in. Unsigned-in, Siri asks you to sign in on the phone.
 Push: add a reminder from the web board at https://lmr.edmundlim.systems while the iPhone has notifications and Live Activities allowed.
 Account deletion: More (ellipsis) → Delete Account. Also on the signed-in web board.
 Data export: signed-in web board → Download my data.

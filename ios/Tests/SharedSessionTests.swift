@@ -24,6 +24,7 @@ final class SharedSessionTests: XCTestCase {
         XCTAssertFalse(expiring.isFresh(at: now))
         XCTAssertTrue(expiring.isFresh(at: now, leeway: 0))
         XCTAssertFalse(expired.isFresh(at: now, leeway: 0))
+        XCTAssertNil(fresh.userID)
     }
 
     func testDecodesLegacySessionWithoutRefreshToken() throws {
@@ -33,6 +34,7 @@ final class SharedSessionTests: XCTestCase {
         let session = try JSONDecoder().decode(SharedSession.self, from: payload)
         XCTAssertEqual(session.accessToken, "legacy")
         XCTAssertNil(session.refreshToken)
+        XCTAssertNil(session.userID)
     }
 
     func testTokenRefreshResponsePrefersExpiresAtUnix() throws {

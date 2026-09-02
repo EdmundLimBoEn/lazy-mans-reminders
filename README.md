@@ -249,6 +249,8 @@ In Xcode:
 3. Confirm both targets show the same App Group.
 4. Run on a physical iPhone, sign in through the `lazymansreminders://auth/callback` link, allow notifications, and add the widget.
 
+Siri (iOS 26+, Apple Intelligence on iOS 27): after a signed-in launch, the app donates the board to Spotlight and exposes App Intents in the reminders domain. From Siri you can list the board, add a line, or mark one done (“complete milk”, “mark this as done”). The phone must be signed in; unsigned-in requests tell you to open the app first. Shortcuts phrases use the app name **Lazy Man's Reminders**.
+
 The generated project can be recreated; make lasting project-setting changes in `ios/project.yml`.
 
 ## TestFlight

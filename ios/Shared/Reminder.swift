@@ -21,11 +21,25 @@ struct SharedSession: Codable, Equatable {
     let accessToken: String
     let expiresAt: Date
     var refreshToken: String?
+    /// Supabase user id. Optional so App Group sessions written before Siri
+    /// support still decode. Resolved from the JWT `sub` when missing.
+    var userID: UUID? = nil
 
     /// True when the access token is usable, with a short leeway so in-flight
     /// widget / background refresh does not race the JWT expiry.
     func isFresh(at now: Date = Date(), leeway: TimeInterval = 60) -> Bool {
         expiresAt > now.addingTimeInterval(leeway)
+    }
+
+    func resolvingUserID() -> SharedSession {
+        guard userID == nil else { return self }
+        guard let decoded = JWTUserID.uuid(fromAccessToken: accessToken) else { return self }
+        return SharedSession(
+            accessToken: accessToken,
+            expiresAt: expiresAt,
+            refreshToken: refreshToken,
+            userID: decoded
+        )
     }
 }
 
@@ -45,7 +59,11 @@ struct TokenRefreshResponse: Decodable, Equatable {
         case expiresIn = "expires_in"
     }
 
-    func makeSession(fallbackRefreshToken: String, now: Date = Date()) -> SharedSession {
+    func makeSession(
+        fallbackRefreshToken: String,
+        userID: UUID? = nil,
+        now: Date = Date()
+    ) -> SharedSession {
         let expires: Date
         if let expiresAt {
             expires = Date(timeIntervalSince1970: expiresAt)
@@ -57,13 +75,16 @@ struct TokenRefreshResponse: Decodable, Equatable {
         return SharedSession(
             accessToken: accessToken,
             expiresAt: expires,
-            refreshToken: refreshToken ?? fallbackRefreshToken
+            refreshToken: refreshToken ?? fallbackRefreshToken,
+            userID: userID ?? JWTUserID.uuid(fromAccessToken: accessToken)
         )
     }
 }
 
 extension Notification.Name {
     static let didRefreshSharedSession = Notification.Name("didRefreshSharedSession")
+    /// Posted after Siri / Shortcuts (or the in-app board) mutates the cached reminders.
+    static let didUpdateReminders = Notification.Name("didUpdateReminders")
 }
 
 enum ReminderJSON {

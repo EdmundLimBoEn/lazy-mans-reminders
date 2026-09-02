@@ -1,6 +1,5 @@
 import UIKit
 import UserNotifications
-import WidgetKit
 
 extension Notification.Name {
     static let didRegisterPushToken = Notification.Name("didRegisterPushToken")
@@ -69,8 +68,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
             do {
                 let previous = await ReminderStore.shared.cached()
                 let refreshed = try await ReminderStore.shared.refresh()
-                WidgetCenter.shared.reloadAllTimelines()
-                await ReminderLiveActivityController.sync(reminders: refreshed)
+                await ReminderBoardSync.apply(refreshed)
                 completionHandler(previous == refreshed ? .noData : .newData)
             } catch {
                 completionHandler(.failed)
@@ -92,7 +90,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         didReceive response: UNNotificationResponse
     ) async {
         let reminders = await ReminderStore.shared.cached()
-        await ReminderLiveActivityController.sync(reminders: reminders)
-        WidgetCenter.shared.reloadAllTimelines()
+        await ReminderBoardSync.apply(reminders)
     }
 }
