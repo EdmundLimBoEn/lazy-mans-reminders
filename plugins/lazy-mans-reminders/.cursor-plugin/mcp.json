@@ -1,7 +1,10 @@
 {
   "mcpServers": {
     "lazy-mans-reminders": {
-      "url": "https://lmr-mcp.edmundlim.systems/mcp"
+      "url": "https://lmr-mcp.edmundlim.systems/mcp",
+      "headers": {
+        "Authorization": "Bearer ${LMR_AGENT_TOKEN}"
+      }
     }
   }
 }

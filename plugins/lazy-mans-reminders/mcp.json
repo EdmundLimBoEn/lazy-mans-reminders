@@ -1,7 +1,12 @@
 {
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
   "mcpServers": {
     "lazy-mans-reminders": {
-      "url": "https://lmr-mcp.edmundlim.systems/mcp"
+      "type": "streamable-http",
+      "url": "https://lmr-mcp.edmundlim.systems/mcp",
+      "headers": {
+        "Authorization": "Bearer ${LMR_AGENT_TOKEN}"
+      }
     }
   }
 }
