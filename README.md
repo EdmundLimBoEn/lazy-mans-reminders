@@ -125,9 +125,23 @@ Delivery behaviour:
 
 ## Agent MCP
 
-Remote agents talk to the board at `https://lmr-mcp.edmundlim.systems/mcp`. The usual path is OAuth: the client opens a browser, you sign in on the familiar board, tap Allow. No bearer tokens to paste. Personal keys remain under **Advanced** on the signed-in board for clients that cannot do OAuth.
+Remote agents talk to the board at `https://lmr-mcp.edmundlim.systems/mcp`.
 
-Grok: Settings → Plugins → custom connector → URL `https://lmr-mcp.edmundlim.systems/mcp` (no headers). Cursor / Claude Code / Codex can load `plugins/lazy-mans-reminders/` or the same URL in `mcp.json`:
+### Grok Bot
+
+OAuth on Grok is still WIP. Mint a personal agent key on the signed-in board (**Agent access → Advanced**), then add a custom connector with the URL **and** a bearer header:
+
+1. Settings → Plugins → custom connector
+2. URL: `https://lmr-mcp.edmundlim.systems/mcp`
+3. Header: `Authorization: Bearer TOKEN` (placeholder — never commit the real key)
+
+Plugin installs can set `LMR_AGENT_TOKEN` instead of pasting the header by hand.
+
+### Cursor, Claude, Codex
+
+OAuth is the usual path for clients that complete `/connect`: the client opens a browser, you sign in on the familiar board, tap Allow. No bearer tokens to paste. Personal keys remain under **Advanced** for clients that cannot do OAuth.
+
+Cursor / Claude Code / Codex can load `plugins/lazy-mans-reminders/` or the same URL in `mcp.json`:
 
 ```json
 {

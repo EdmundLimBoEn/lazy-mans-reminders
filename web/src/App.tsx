@@ -24,7 +24,17 @@ import { AuthCallback } from './AuthCallback'
 import { IosAuthHandoff } from './IosAuthHandoff'
 import { Connect } from './Connect'
 import { LegalFooterLinks, PrivacyPage, SupportPage, TermsPage } from './LegalPages'
-import { authCallbackUrl, MCP_URL, rememberReturnTo } from './mcp'
+import {
+  AGENT_TOKEN_PLACEHOLDER,
+  LMR_AGENT_TOKEN_VAR,
+  MCP_URL,
+  authCallbackUrl,
+  claudeMcpConfig,
+  cursorMcpConfig,
+  grokConnectorConfig,
+  lmrAgentTokenHeaderTemplate,
+  rememberReturnTo,
+} from './mcp'
 import { normalizePath, type AppRoute } from './routing'
 import { supabase } from './supabase'
 
@@ -661,12 +671,20 @@ function AgentAccess({ userId }: { userId: string }) {
     <section className="agent-access" aria-labelledby="agent-access-heading">
       <h2 id="agent-access-heading">Agent access</h2>
       <p>
-        In Grok, Claude, Cursor, or Codex, add the plugin or paste {MCP_URL}.
-        Sign in when asked. That is the usual path — no tokens to copy.
+        Clients that can finish <code>/connect</code> — Cursor, Claude, Codex — add the plugin
+        or paste {MCP_URL}, then sign in when asked. That is the usual path. No tokens to copy.
+      </p>
+      <p>
+        Grok Bot and hosts that struggle with OAuth: mint a key under Advanced, then set
+        {' '}<code>Authorization: Bearer {AGENT_TOKEN_PLACEHOLDER}</code>
+        {' '}(or plugin variable <code>{LMR_AGENT_TOKEN_VAR}</code>).
       </p>
       <details className="agent-snippets">
         <summary>Advanced: personal keys</summary>
-        <p>Only if a client cannot sign in. Mint a key below, then paste it once. Shown once. Revoke anytime.</p>
+        <p>
+          Mint a key below, then paste it once into the header or <code>{LMR_AGENT_TOKEN_VAR}</code>.
+          Shown once. Revoke anytime.
+        </p>
         <form className="agent-key-form" onSubmit={mint}>
           <label className="visually-hidden" htmlFor="agent-key-name">Key name</label>
           <input
@@ -706,24 +724,15 @@ function AgentAccess({ userId }: { userId: string }) {
           </ul>
         )}
         <p>Cursor <code>~/.cursor/mcp.json</code></p>
-        <pre>{`{
-  "mcpServers": {
-    "lazy-mans-reminders": {
-      "url": "${MCP_URL}"
-    }
-  }
-}`}</pre>
+        <pre>{cursorMcpConfig(MCP_URL)}</pre>
         <p>Claude Code / Codex <code>.mcp.json</code></p>
-        <pre>{`{
-  "mcpServers": {
-    "lazy-mans-reminders": {
-      "type": "http",
-      "url": "${MCP_URL}"
-    }
-  }
-}`}</pre>
-        <p>Grok: Settings → Plugins → custom connector. URL only: <code>{MCP_URL}</code>.</p>
-        <p>Personal key header, if you must: <code>Authorization: Bearer TOKEN</code>.</p>
+        <pre>{claudeMcpConfig(MCP_URL)}</pre>
+        <p>Grok Bot: Settings → Plugins → custom connector. URL and header (placeholder {AGENT_TOKEN_PLACEHOLDER}, never a real secret):</p>
+        <pre>{grokConnectorConfig(MCP_URL)}</pre>
+        <p>
+          Plugin hosts can set <code>{LMR_AGENT_TOKEN_VAR}</code> instead of pasting the header:
+          {' '}<code>{lmrAgentTokenHeaderTemplate()}</code>
+        </p>
       </details>
     </section>
   )
