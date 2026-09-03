@@ -216,6 +216,15 @@ button:focus-visible, input:focus-visible, a:focus-visible {
 .connect-panel { grid-column: 1 / -1; place-items: center; }
 .connect-actions { display: grid; gap: .85rem; }
 .connect-actions .primary { width: 100%; }
+.connect-hint {
+  margin: 0 0 1rem;
+  padding: .75rem .85rem;
+  border-radius: 8px;
+  background: #fae2dd;
+  color: #822516;
+  font-size: .9rem;
+  line-height: 1.5;
+}
 .fatal-error .primary {
   display: inline-flex; align-items: center; justify-content: center;
   text-decoration: none; margin-top: 1rem;

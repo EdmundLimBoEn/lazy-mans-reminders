@@ -1,5 +1,8 @@
 export const MCP_HOST = 'lmr-mcp.edmundlim.systems'
 export const MCP_RESOURCE = `https://${MCP_HOST}/mcp`
+export const MCP_RESOURCE_METADATA = `https://${MCP_HOST}/.well-known/oauth-protected-resource/mcp`
+export const MCP_WWW_AUTHENTICATE =
+  `Bearer realm="OAuth", resource_metadata="${MCP_RESOURCE_METADATA}", scope="board"`
 export const OAUTH_TOKEN_ID = 'oauth'
 export const PENDING_AUTH_TTL_SECONDS = 600
 

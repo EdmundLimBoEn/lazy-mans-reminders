@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import {
   pkceCodeFromCallbackUrl,
   pkceFlowIdFromCallbackUrl,
+  pkceReturnToFromCallbackUrl,
   safeReturnPath,
 } from './pkceCallback'
 import { consumeReturnTo } from './mcp'
@@ -18,19 +19,19 @@ export function AuthCallback({ onNavigate }: { onNavigate: (path: string) => voi
   const [retryHref, setRetryHref] = useState('/')
 
   useEffect(() => {
+    const href = window.location.href
     const params = new URLSearchParams(window.location.search)
     const oauthError = params.get('error_description') || params.get('error')
+    const returnTo = safeReturnPath(pkceReturnToFromCallbackUrl(href) || consumeReturnTo())
     if (oauthError) {
       setError(oauthError)
-      setRetryHref(safeReturnPath(params.get('return_to') || consumeReturnTo()))
+      setRetryHref(returnTo)
       return
     }
 
     void (async () => {
-      const href = window.location.href
       const code = pkceCodeFromCallbackUrl(href)
       const flowId = pkceFlowIdFromCallbackUrl(href)
-      const returnTo = safeReturnPath(params.get('return_to') || consumeReturnTo())
 
       if (!code) {
         setError('Missing sign-in code. Start sign-in again from the board or connect link.')
@@ -54,6 +55,7 @@ export function AuthCallback({ onNavigate }: { onNavigate: (path: string) => voi
           return
         }
       }
+      // Full navigation keeps /connect?state=…; client navigate() would drop the query.
       window.location.replace(returnTo)
     })()
   }, [])

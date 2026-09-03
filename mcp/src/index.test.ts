@@ -58,4 +58,26 @@ describe('mcp worker routes', () => {
     expect(response.status).toBe(401)
     expect(response.headers.get('Access-Control-Allow-Origin')).toBe('https://lmr.edmundlim.systems')
   })
+
+  it('accepts POST /authorize and trailing-slash bind as public routes', async () => {
+    const authorize = await handlePublicRequest(
+      new Request('https://lmr-mcp.edmundlim.systems/authorize', { method: 'POST' }),
+      env,
+    )
+    expect(authorize.status).toBe(500)
+    expect(await authorize.json()).toEqual({ error: 'server_misconfigured' })
+
+    const bind = await handlePublicRequest(
+      new Request('https://lmr-mcp.edmundlim.systems/bind/', {
+        method: 'POST',
+        headers: {
+          Origin: 'https://lmr.edmundlim.systems',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ state: '550e8400-e29b-41d4-a716-446655440000' }),
+      }),
+      env,
+    )
+    expect(bind.status).toBe(401)
+  })
 })

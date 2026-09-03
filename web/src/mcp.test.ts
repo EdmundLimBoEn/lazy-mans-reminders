@@ -3,7 +3,9 @@ import {
   AGENT_TOKEN_PLACEHOLDER,
   LMR_AGENT_TOKEN_VAR,
   MCP_URL,
+  authCallbackUrlFrom,
   claudeMcpConfig,
+  connectReturnTo,
   cursorMcpConfig,
   grokConnectorConfig,
   lmrAgentTokenHeaderTemplate,
@@ -30,5 +32,30 @@ describe('agent MCP snippets', () => {
     expect(LMR_AGENT_TOKEN_VAR).toBe('LMR_AGENT_TOKEN')
     expect(lmrAgentTokenHeaderTemplate()).toBe(`Authorization: Bearer \${${LMR_AGENT_TOKEN_VAR}}`)
     expect(lmrAgentTokenHeaderTemplate()).not.toMatch(/lmr__/)
+  })
+})
+
+describe('connectReturnTo', () => {
+  it('keeps the connect path and query, and ignores other routes', () => {
+    expect(connectReturnTo('/connect', '?state=abc')).toBe('/connect?state=abc')
+    expect(connectReturnTo('/connect')).toBe('/connect')
+    expect(connectReturnTo('/')).toBeNull()
+    expect(connectReturnTo('/privacy')).toBeNull()
+  })
+})
+
+describe('authCallbackUrlFrom', () => {
+  it('puts return_to on the callback URL so a new tab can still finish Allow', () => {
+    expect(
+      authCallbackUrlFrom('https://lmr.edmundlim.systems', '/connect', '?state=abc'),
+    ).toBe(
+      'https://lmr.edmundlim.systems/auth/callback?return_to=%2Fconnect%3Fstate%3Dabc',
+    )
+  })
+
+  it('leaves homepage sign-in callbacks clean', () => {
+    expect(authCallbackUrlFrom('https://lmr.edmundlim.systems', '/')).toBe(
+      'https://lmr.edmundlim.systems/auth/callback',
+    )
   })
 })
