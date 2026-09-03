@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { corsHeaders, serverCard } from './oauth'
+import { corsHeaders, handlePublicRequest, resolveExternalPat, serverCard } from './oauth'
 
 const env = {
   WEB_ORIGINS: 'https://lmr.edmundlim.systems,http://localhost:5173',
@@ -34,5 +34,20 @@ describe('serverCard', () => {
     expect(card).not.toHaveProperty('authentication')
     expect(card).not.toHaveProperty('authTypes')
     expect(Object.keys(card.auth)).toEqual(['type'])
+  })
+})
+
+describe('resolveExternalPat', () => {
+  it('returns null for bearer tokens that are not personal agent keys', async () => {
+    const result = await resolveExternalPat({
+      token: 'not-an-lmr-pat',
+      request: new Request('https://lmr-mcp.edmundlim.systems/mcp'),
+      env: {
+        ...env,
+        SUPABASE_URL: 'https://example.supabase.co',
+        SUPABASE_SERVICE_ROLE_KEY: 'test-service-role',
+      } as Env,
+    })
+    expect(result).toBeNull()
   })
 })

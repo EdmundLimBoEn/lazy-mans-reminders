@@ -137,6 +137,8 @@ OAuth on Grok is still WIP. Mint a personal agent key on the signed-in board (**
 
 Plugin installs can set `LMR_AGENT_TOKEN` instead of pasting the header by hand.
 
+If you still try OAuth, finish sign-in in the **same browser window** that started it. Supabase PKCE stores a code verifier in that origin’s storage; Grok’s in-app WebView (or handing the link to Mail / another browser) cannot see it. If Allow never returns to Grok, use the agent token path above instead of retrying OAuth.
+
 ### Cursor, Claude, Codex
 
 OAuth is the usual path for clients that complete `/connect`: the client opens a browser, you sign in on the familiar board, tap Allow. No bearer tokens to paste. Personal keys remain under **Advanced** for clients that cannot do OAuth.

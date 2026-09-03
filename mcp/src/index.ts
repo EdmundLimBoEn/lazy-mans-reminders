@@ -1,7 +1,8 @@
 import { OAuthProvider } from '@cloudflare/workers-oauth-provider'
 import { createMcpHandler } from 'agents/mcp/server'
-import { MCP_HOST, MCP_RESOURCE } from './constants'
+import { MCP_HOST, MCP_RESOURCE, MCP_WWW_AUTHENTICATE } from './constants'
 import { handlePublicRequest, resolveExternalPat } from './oauth'
+import { prepareOauthRequest } from './oauthCompat'
 import { createServer } from './server'
 import { sessionFromProps } from './session'
 
@@ -27,7 +28,7 @@ function unauthorized(): Response {
     headers: {
       ...CORS,
       'Content-Type': 'application/json',
-      'WWW-Authenticate': 'Bearer',
+      'WWW-Authenticate': MCP_WWW_AUTHENTICATE,
     },
   })
 }
@@ -83,4 +84,8 @@ const provider = new OAuthProvider<Env>({
   },
 })
 
-export default provider
+export default {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    return provider.fetch(await prepareOauthRequest(request), env, ctx)
+  },
+}

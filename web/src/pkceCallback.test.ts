@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   pkceCodeFromCallbackUrl,
   pkceFlowIdFromCallbackUrl,
+  pkceReturnToFromCallbackUrl,
   safeReturnPath,
 } from './pkceCallback'
 
@@ -24,15 +25,38 @@ describe('pkceCodeFromCallbackUrl', () => {
   it('returns null when no code is present', () => {
     expect(pkceCodeFromCallbackUrl('https://lmr.edmundlim.systems/auth/callback')).toBeNull()
   })
+
+  it('reads a hash code when the query has no code', () => {
+    expect(
+      pkceCodeFromCallbackUrl(
+        'https://lmr.edmundlim.systems/auth/callback?return_to=%2Fconnect#code=from-hash',
+      ),
+    ).toBe('from-hash')
+  })
 })
 
 describe('pkceFlowIdFromCallbackUrl', () => {
-  it('reads sb_flow_id when present', () => {
+  it('reads sb_flow_id from query or hash', () => {
     expect(
       pkceFlowIdFromCallbackUrl(
         'https://lmr.edmundlim.systems/auth/callback?code=abc&sb_flow_id=flow-1',
       ),
     ).toBe('flow-1')
+    expect(
+      pkceFlowIdFromCallbackUrl(
+        'https://lmr.edmundlim.systems/auth/callback?code=abc#sb_flow_id=flow-hash',
+      ),
+    ).toBe('flow-hash')
+  })
+})
+
+describe('pkceReturnToFromCallbackUrl', () => {
+  it('reads return_to so Allow survives a new tab on the same origin', () => {
+    expect(
+      pkceReturnToFromCallbackUrl(
+        'https://lmr.edmundlim.systems/auth/callback?code=abc&return_to=%2Fconnect%3Fstate%3Dx',
+      ),
+    ).toBe('/connect?state=x')
   })
 })
 

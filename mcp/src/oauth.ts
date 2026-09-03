@@ -184,11 +184,11 @@ export async function handlePublicRequest(request: Request, env: Env): Promise<R
     return new Response(null, { status: 204, headers: cors })
   }
 
-  const path = new URL(request.url).pathname
+  const path = new URL(request.url).pathname.replace(/\/+$/, '') || '/'
   if (request.method === 'GET' && (path === '/' || path === '/.well-known/mcp/server-card.json')) {
     return json(serverCard())
   }
-  if (request.method === 'GET' && path === '/authorize') {
+  if ((request.method === 'GET' || request.method === 'POST') && path === '/authorize') {
     return startAuthorize(request, env)
   }
   if (request.method === 'POST' && path === '/bind') {

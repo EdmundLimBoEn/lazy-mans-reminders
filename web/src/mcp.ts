@@ -1,3 +1,5 @@
+import { safeReturnPath } from './pkceCallback'
+
 export const MCP_ORIGIN = 'https://lmr-mcp.edmundlim.systems'
 export const MCP_URL = `${MCP_ORIGIN}/mcp`
 export const RETURN_TO_KEY = 'lmr_return_to'
@@ -36,17 +38,40 @@ export function lmrAgentTokenHeaderTemplate(): string {
   return `Authorization: Bearer \${${LMR_AGENT_TOKEN_VAR}}`
 }
 
+/** Persist /connect?state=… across OAuth so AuthCallback can return to Allow. */
+export function connectReturnTo(pathname: string, search = ''): string | null {
+  if (pathname !== '/connect') return null
+  return `${pathname}${search}`
+}
+
+export function authCallbackUrlFrom(origin: string, pathname: string, search = ''): string {
+  const url = new URL('/auth/callback', origin)
+  const returnTo = connectReturnTo(pathname, search)
+  if (returnTo) url.searchParams.set('return_to', returnTo)
+  return url.toString()
+}
+
 export function authCallbackUrl(): string {
-  return `${window.location.origin}/auth/callback`
+  return authCallbackUrlFrom(window.location.origin, window.location.pathname, window.location.search)
 }
 
 export function rememberReturnTo(): void {
-  const next = `${window.location.pathname}${window.location.search}`
-  if (next.startsWith('/connect')) sessionStorage.setItem(RETURN_TO_KEY, next)
+  const next = connectReturnTo(window.location.pathname, window.location.search)
+  if (!next) return
+  try {
+    sessionStorage.setItem(RETURN_TO_KEY, next)
+  } catch {
+    // Private mode can throw; return_to on the callback URL is the durable path.
+  }
 }
 
 export function consumeReturnTo(): string {
-  const next = sessionStorage.getItem(RETURN_TO_KEY) || '/'
-  sessionStorage.removeItem(RETURN_TO_KEY)
-  return next.startsWith('/') && !next.startsWith('//') ? next : '/'
+  let stored = '/'
+  try {
+    stored = sessionStorage.getItem(RETURN_TO_KEY) || '/'
+    sessionStorage.removeItem(RETURN_TO_KEY)
+  } catch {
+    stored = '/'
+  }
+  return safeReturnPath(stored, '/')
 }

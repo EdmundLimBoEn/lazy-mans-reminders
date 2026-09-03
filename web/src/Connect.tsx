@@ -2,6 +2,18 @@ import { FormEvent, useMemo, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { LegalFooterLinks } from './LegalPages'
 import { MCP_ORIGIN } from './mcp'
+import { bindFailureMessage, isEmbeddedBrowser, isSafeOauthRedirect } from './oauthConnect'
+
+function SameWindowNote({ userAgent }: { userAgent: string }) {
+  const embedded = isEmbeddedBrowser(userAgent)
+  return (
+    <p className="connect-hint" role="status">
+      {embedded
+        ? 'This in-app browser often cannot finish sign-in. Copy this page’s address into Safari or Chrome, sign in there, then tap Allow.'
+        : 'Stay in this browser window until the agent finishes connecting. Opening the link in another app can lose the sign-in proof.'}
+    </p>
+  )
+}
 
 export function Connect({ session, onNavigate }: { session: Session; onNavigate: (path: string) => void }) {
   const state = useMemo(() => new URLSearchParams(window.location.search).get('state') ?? '', [])
@@ -24,14 +36,16 @@ export function Connect({ session, onNavigate }: { session: Session; onNavigate:
       })
       const body = await response.json().catch(() => ({})) as { redirectTo?: string; error?: string }
       if (!response.ok || !body.redirectTo) {
-        setError(body.error === 'expired_state'
-          ? 'This link expired. Ask the agent to connect again.'
-          : 'Could not connect the agent. Try signing in again.')
+        setError(bindFailureMessage(body.error))
         return
       }
-      window.location.assign(body.redirectTo)
+      if (!isSafeOauthRedirect(body.redirectTo)) {
+        setError('The agent sent an unsafe return address. Ask it to connect again.')
+        return
+      }
+      window.location.replace(body.redirectTo)
     } catch {
-      setError('Could not connect the agent. Try signing in again.')
+      setError('Could not reach the agent connector. Stay on this page and try Allow again.')
     } finally {
       setBusy(false)
     }
@@ -62,6 +76,7 @@ export function Connect({ session, onNavigate }: { session: Session; onNavigate:
             add, and complete reminders until you sign it out or delete your account. See Privacy
             for what is shared.
           </p>
+          <SameWindowNote userAgent={typeof navigator === 'undefined' ? '' : navigator.userAgent} />
           {error && <p className="error" role="alert">{error}</p>}
           <form className="connect-actions" onSubmit={allow}>
             <button className="primary" type="submit" disabled={busy}>

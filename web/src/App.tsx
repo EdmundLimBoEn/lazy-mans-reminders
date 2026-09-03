@@ -70,7 +70,13 @@ type Reminder = {
 
 type ReminderChanges = Pick<Reminder, 'is_done' | 'sort_order' | 'text'>
 
-function SignIn({ onNavigate }: { onNavigate: (path: string) => void }) {
+function SignIn({
+  onNavigate,
+  connectingAgent = false,
+}: {
+  onNavigate: (path: string) => void
+  connectingAgent?: boolean
+}) {
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -141,12 +147,20 @@ function SignIn({ onNavigate }: { onNavigate: (path: string) => void }) {
       <section className="auth-panel">
         <div className="auth-card">
           <Smartphone size={24} aria-hidden="true" />
-          <h2>{sent ? 'Check your inbox' : 'Your board, everywhere'}</h2>
+          <h2>{sent ? 'Check your inbox' : connectingAgent ? 'Sign in to connect this agent' : 'Your board, everywhere'}</h2>
           <p aria-live="polite">
             {sent
-              ? `We sent a secure sign-in link to ${email}.`
-              : 'Sign in with Apple, Google, or email. No password to remember.'}
+              ? `We sent a secure sign-in link to ${email}. Open it in this same browser window.`
+              : connectingAgent
+                ? 'Sign in with Apple or Google in this same window, then tap Allow. Email links often open in another app and fail this step.'
+                : 'Sign in with Apple, Google, or email. No password to remember.'}
           </p>
+          {connectingAgent && !sent && (
+            <p className="connect-hint" role="status">
+              Stay in this browser until you return to Allow. Grok’s in-app browser can lose the
+              sign-in proof if the callback opens somewhere else.
+            </p>
+          )}
           {!sent && (
             <>
               <div className="oauth-stack">
@@ -802,7 +816,7 @@ export default function App() {
   if (path === '/connect') {
     return session
       ? <Connect session={session} onNavigate={navigate} />
-      : <SignIn onNavigate={navigate} />
+      : <SignIn onNavigate={navigate} connectingAgent />
   }
 
   return session
