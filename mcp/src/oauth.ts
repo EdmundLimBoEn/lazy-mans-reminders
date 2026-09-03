@@ -33,6 +33,13 @@ export function corsHeaders(request: Request, env: Env): Record<string, string> 
 }
 
 export function serverCard() {
+  // This card's `auth.type` is a single string. Cloudflare workers-oauth-provider
+  // has no dual-auth discovery field: RFC 9728 resource metadata is OAuth-only,
+  // while `resolveExternalToken` still accepts bearer agent keys at request time.
+  // SEP-1649 `authentication.schemes` is a different document shape than this
+  // card (`name` / `url` / `auth` / `tools`). Do not invent `auth.types` or similar.
+  // Grok Bot and other static-header hosts should use board copy plus plugin
+  // variable LMR_AGENT_TOKEN rather than this card.
   return {
     name: "Lazy Man's Reminders",
     version: '1.0.0',
