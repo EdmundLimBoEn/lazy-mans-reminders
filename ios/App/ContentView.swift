@@ -1,7 +1,6 @@
 import AuthenticationServices
 import SwiftUI
 import UIKit
-import WidgetKit
 
 struct ContentView: View {
     @EnvironmentObject private var auth: AuthManager
@@ -164,6 +163,7 @@ private struct ReminderListView: View {
                             ) {
                                 Task { await markDone(reminder) }
                             }
+                            .reminderOnscreenIdentity(reminder.id)
                         }
 
                         Section {
@@ -226,6 +226,9 @@ private struct ReminderListView: View {
             }
             .refreshable { await refresh() }
             .task { await refresh() }
+            .onReceive(NotificationCenter.default.publisher(for: .didUpdateReminders)) { _ in
+                Task { reminders = await ReminderStore.shared.cached() }
+            }
             .alert("Couldn't update", isPresented: Binding(
                 get: { error != nil },
                 set: { if !$0 { error = nil } }
@@ -371,12 +374,11 @@ private struct ReminderListView: View {
         isLoading = true
         do {
             reminders = try await ReminderStore.shared.refresh()
-            WidgetCenter.shared.reloadAllTimelines()
-            await ReminderLiveActivityController.sync(reminders: reminders)
+            await ReminderBoardSync.apply(reminders, notify: false)
         } catch {
             reminders = await ReminderStore.shared.cached()
             self.error = error.localizedDescription
-            await ReminderLiveActivityController.sync(reminders: reminders)
+            await ReminderBoardSync.apply(reminders, notify: false)
         }
         isLoading = false
     }
@@ -393,8 +395,7 @@ private struct ReminderListView: View {
         do {
             let updated = try await ReminderStore.shared.create(text: value, userID: userID)
             animateBoard { reminders = updated }
-            WidgetCenter.shared.reloadAllTimelines()
-            await ReminderLiveActivityController.sync(reminders: reminders)
+            await ReminderBoardSync.apply(reminders, notify: false)
             composerFocused = true
             UIAccessibility.post(
                 notification: .announcement,
@@ -413,8 +414,7 @@ private struct ReminderListView: View {
         do {
             let updated = try await ReminderStore.shared.markDone(id: reminder.id)
             animateBoard { reminders = updated }
-            WidgetCenter.shared.reloadAllTimelines()
-            await ReminderLiveActivityController.sync(reminders: reminders)
+            await ReminderBoardSync.apply(reminders, notify: false)
             UIAccessibility.post(
                 notification: .announcement,
                 argument: "Completed \(reminder.text)"

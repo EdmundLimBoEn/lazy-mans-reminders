@@ -4,6 +4,10 @@ actor ReminderStore {
     private enum StoreError: LocalizedError {
         case invalidResponse
         case requestFailed(Int)
+        case signedOut
+        case atCapacity
+        case emptyText
+        case tooLong
 
         var errorDescription: String? {
             switch self {
@@ -11,6 +15,14 @@ actor ReminderStore {
                 return "The reminders service returned an invalid response."
             case .requestFailed(let statusCode):
                 return "The reminders service returned HTTP \(statusCode)."
+            case .signedOut:
+                return "Sign in to Lazy Man's Reminders on this iPhone first."
+            case .atCapacity:
+                return ReminderBoardLimits.postItHint
+            case .emptyText:
+                return "Reminder text is empty."
+            case .tooLong:
+                return "Keep each reminder to 500 characters."
             }
         }
     }
@@ -27,13 +39,30 @@ actor ReminderStore {
         return defaults
     }
 
-    func saveSession(accessToken: String, refreshToken: String, expiresAt: Date) throws {
-        defaults.set(
-            try JSONEncoder().encode(
-                SharedSession(accessToken: accessToken, expiresAt: expiresAt, refreshToken: refreshToken)
-            ),
-            forKey: sessionKey
+    func saveSession(
+        accessToken: String,
+        refreshToken: String,
+        expiresAt: Date,
+        userID: UUID? = nil
+    ) throws {
+        let session = SharedSession(
+            accessToken: accessToken,
+            expiresAt: expiresAt,
+            refreshToken: refreshToken,
+            userID: userID ?? JWTUserID.uuid(fromAccessToken: accessToken)
         )
+        persist(session)
+    }
+
+    func currentUserID() async -> UUID? {
+        if let session = await loadFreshSession(), let userID = session.userID {
+            return userID
+        }
+        return cached().first?.userID
+    }
+
+    func isSignedIn() async -> Bool {
+        await loadFreshSession() != nil
     }
 
     func clearUserData() {
@@ -103,14 +132,16 @@ actor ReminderStore {
         else {
             return nil
         }
-        if session.isFresh() { return session }
-        guard let refreshToken = session.refreshToken, !refreshToken.isEmpty else {
-            return session.expiresAt > Date() ? session : nil
+        let resolved = session.resolvingUserID()
+        if resolved.userID != session.userID {
+            persist(resolved)
         }
-        if let refreshed = await refreshAccessToken(refreshToken) {
-            if let encoded = try? JSONEncoder().encode(refreshed) {
-                defaults.set(encoded, forKey: sessionKey)
-            }
+        if resolved.isFresh() { return resolved }
+        guard let refreshToken = resolved.refreshToken, !refreshToken.isEmpty else {
+            return resolved.expiresAt > Date() ? resolved : nil
+        }
+        if let refreshed = await refreshAccessToken(refreshToken, userID: resolved.userID) {
+            persist(refreshed)
             NotificationCenter.default.post(
                 name: .didRefreshSharedSession,
                 object: nil,
@@ -121,10 +152,16 @@ actor ReminderStore {
             )
             return refreshed
         }
-        return session.expiresAt > Date() ? session : nil
+        return resolved.expiresAt > Date() ? resolved : nil
     }
 
-    private func refreshAccessToken(_ refreshToken: String) async -> SharedSession? {
+    private func persist(_ session: SharedSession) {
+        if let encoded = try? JSONEncoder().encode(session) {
+            defaults.set(encoded, forKey: sessionKey)
+        }
+    }
+
+    private func refreshAccessToken(_ refreshToken: String, userID: UUID?) async -> SharedSession? {
         var components = URLComponents(
             url: AppConfig.supabaseURL.appending(path: "auth/v1/token"),
             resolvingAgainstBaseURL: false
@@ -146,20 +183,26 @@ actor ReminderStore {
         else {
             return nil
         }
-        return payload.makeSession(fallbackRefreshToken: refreshToken)
+        return payload.makeSession(fallbackRefreshToken: refreshToken, userID: userID)
     }
 
     /// Creates a reminder via POST, updates the App Group cache, and returns the active reminders.
-    func create(text: String, userID: UUID) async throws -> [Reminder] {
+    func create(text: String, userID: UUID? = nil) async throws -> [Reminder] {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
-            throw StoreError.invalidResponse
+            throw StoreError.emptyText
+        }
+        guard trimmed.count <= 500 else {
+            throw StoreError.tooLong
         }
         if ReminderBoardLimits.isAtCapacity(cached().filter { !$0.isDone }.count) {
-            throw StoreError.requestFailed(409)
+            throw StoreError.atCapacity
         }
         guard let session = await loadFreshSession() else {
-            throw StoreError.requestFailed(401)
+            throw StoreError.signedOut
+        }
+        guard let userID = userID ?? session.userID ?? cached().first?.userID else {
+            throw StoreError.signedOut
         }
 
         let nextOrder = (cached().map(\.sortOrder).max() ?? -1) + 1
@@ -204,8 +247,37 @@ actor ReminderStore {
 
     /// Marks a reminder done via PATCH, updates the App Group cache, and returns the remaining active reminders.
     func markDone(id: UUID) async throws -> [Reminder] {
+        try await update(id: id, isDone: true)
+    }
+
+    /// Patches text and/or completion. Returns the active (not done) cache afterwards.
+    func update(id: UUID, text: String? = nil, isDone: Bool? = nil) async throws -> [Reminder] {
+        let trimmed = text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let trimmed {
+            guard !trimmed.isEmpty else { throw StoreError.emptyText }
+            guard trimmed.count <= 500 else { throw StoreError.tooLong }
+        }
+        guard trimmed != nil || isDone != nil else {
+            return cached()
+        }
         guard let session = await loadFreshSession() else {
-            throw StoreError.requestFailed(401)
+            throw StoreError.signedOut
+        }
+
+        struct UpdateBody: Encodable {
+            var text: String?
+            var isDone: Bool?
+
+            enum CodingKeys: String, CodingKey {
+                case text
+                case isDone = "is_done"
+            }
+
+            func encode(to encoder: Encoder) throws {
+                var container = encoder.container(keyedBy: CodingKeys.self)
+                if let text { try container.encode(text, forKey: .text) }
+                if let isDone { try container.encode(isDone, forKey: .isDone) }
+            }
         }
 
         var components = URLComponents(
@@ -221,7 +293,9 @@ actor ReminderStore {
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("return=minimal", forHTTPHeaderField: "Prefer")
-        request.httpBody = try ReminderJSON.encoder.encode(["is_done": true])
+        request.httpBody = try ReminderJSON.encoder.encode(
+            UpdateBody(text: trimmed, isDone: isDone)
+        )
 
         let (_, response) = try await URLSession.shared.data(for: request)
         guard let http = response as? HTTPURLResponse else {
@@ -231,8 +305,22 @@ actor ReminderStore {
             throw StoreError.requestFailed(http.statusCode)
         }
 
-        let reminders = cached().filter { $0.id != id }
-        defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
-        return reminders
+        if isDone == true {
+            let reminders = cached().filter { $0.id != id }
+            defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
+            return reminders
+        }
+        if isDone == false {
+            return try await refresh()
+        }
+        if let trimmed {
+            var reminders = cached()
+            if let index = reminders.firstIndex(where: { $0.id == id }) {
+                reminders[index].text = trimmed
+                defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
+            }
+            return reminders
+        }
+        return cached()
     }
 }

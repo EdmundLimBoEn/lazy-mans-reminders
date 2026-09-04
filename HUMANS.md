@@ -24,6 +24,11 @@
   asc testflight testers add --app 6799138197 --email FRIEND@EMAIL --group Friends
   ```
 - [ ] **Device test** — Open `ios/LazyMansReminders.xcodeproj`, sign both targets with team `DUU8J39BA7`, run on a physical iPhone (Apple / Google / magic link, complete-tap, push, lock-screen widgets, account deletion). No device build has been run yet.
+- [ ] **Siri / App Intents (iOS 26+, Apple Intelligence on iOS 27)** — After a signed-in launch on a physical iPhone, confirm:
+  - “Hey Siri, list reminders in Lazy Man's Reminders”
+  - “Hey Siri, add a reminder in Lazy Man's Reminders” / “remind me to …” (in this app)
+  - “Hey Siri, mark this as done” (with the board on screen) or “complete *milk* in Lazy Man's Reminders”
+  - Spotlight shows an active reminder by its text. Unsigned-in, Siri should ask you to sign in.
 - [ ] **Live Activity persistence (2026-08-28)** — Code is in the repo. Migration `202608280001_live_activity_tokens` applied to `biwmsxbqrevtjwgsvsmu` via `supabase db push --linked` (28 Aug 2026). Still needs:
   - [x] Apply migration `202608280001_live_activity_tokens`.
   - Redeploy `send-reminder-push` with JWT verification off:

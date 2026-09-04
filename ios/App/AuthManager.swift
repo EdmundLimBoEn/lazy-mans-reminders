@@ -3,7 +3,6 @@ import Combine
 import CryptoKit
 import Foundation
 import Supabase
-import WidgetKit
 
 @MainActor
 final class AuthManager: ObservableObject {
@@ -194,8 +193,7 @@ final class AuthManager: ObservableObject {
         try? await client.auth.signOut()
         session = nil
         await ReminderStore.shared.clearUserData()
-        WidgetCenter.shared.reloadAllTimelines()
-        await ReminderLiveActivityController.sync(reminders: [])
+        await ReminderBoardSync.clear()
     }
 
     /// Deletes the signed-in user's data and auth account via the `delete-account` Edge Function.
@@ -206,8 +204,7 @@ final class AuthManager: ObservableObject {
         session = nil
         message = nil
         await ReminderStore.shared.clearUserData()
-        WidgetCenter.shared.reloadAllTimelines()
-        await ReminderLiveActivityController.sync(reminders: [])
+        await ReminderBoardSync.clear()
     }
 
     func registerDevice(token: String) async {
@@ -277,14 +274,14 @@ final class AuthManager: ObservableObject {
     private func shareSession() async {
         guard let session else {
             await ReminderStore.shared.clearUserData()
-            WidgetCenter.shared.reloadAllTimelines()
-            await ReminderLiveActivityController.sync(reminders: [])
+            await ReminderBoardSync.clear()
             return
         }
         try? await ReminderStore.shared.saveSession(
             accessToken: session.accessToken,
             refreshToken: session.refreshToken,
-            expiresAt: Date(timeIntervalSince1970: session.expiresAt)
+            expiresAt: Date(timeIntervalSince1970: session.expiresAt),
+            userID: session.user.id
         )
         await syncLockScreenPrefs()
     }
