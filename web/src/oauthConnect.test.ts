@@ -1,18 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { bindFailureMessage, isEmbeddedBrowser, isSafeOauthRedirect } from './oauthConnect'
-
-describe('isEmbeddedBrowser', () => {
-  it('detects in-app browsers that partition PKCE storage', () => {
-    expect(isEmbeddedBrowser('Mozilla/5.0 (iPhone) AppleWebKit Grok/1.0 Mobile')).toBe(true)
-    expect(isEmbeddedBrowser('Mozilla/5.0 (Linux; Android 14; wv) AppleWebKit Chrome')).toBe(true)
-    expect(isEmbeddedBrowser('Mozilla/5.0 (iPhone) AppleWebKit FBAN/FBIOS')).toBe(true)
-    expect(
-      isEmbeddedBrowser(
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15',
-      ),
-    ).toBe(false)
-  })
-})
+import { bindFailureMessage, isSafeOauthRedirect } from './oauthConnect'
 
 describe('isSafeOauthRedirect', () => {
   it('allows agent callbacks and rejects script URLs', () => {

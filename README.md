@@ -129,15 +129,13 @@ Remote agents talk to the board at `https://lmr-mcp.edmundlim.systems/mcp`.
 
 ### Grok Bot
 
-OAuth on Grok is still WIP. Mint a personal agent key on the signed-in board (**Agent access → Advanced**), then add a custom connector with the URL **and** a bearer header:
+Add a custom connector and use OAuth:
 
 1. Settings → Plugins → custom connector
 2. URL: `https://lmr-mcp.edmundlim.systems/mcp`
-3. Header: `Authorization: Bearer TOKEN` (placeholder — never commit the real key)
+3. Sign in with Google or Apple in the browser that opens, then tap **Allow**.
 
-Plugin installs can set `LMR_AGENT_TOKEN` instead of pasting the header by hand.
-
-If you still try OAuth, finish sign-in in the **same browser window** that started it. Supabase PKCE stores a code verifier in that origin’s storage; Grok’s in-app WebView (or handing the link to Mail / another browser) cannot see it. If Allow never returns to Grok, use the agent token path above instead of retrying OAuth.
+Personal agent keys remain available under **Agent access → Advanced** for hosts that cannot use OAuth. Plugin installs can set `LMR_AGENT_TOKEN`.
 
 ### Cursor, Claude, Codex
 

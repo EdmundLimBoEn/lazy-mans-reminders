@@ -48,7 +48,7 @@ export function AuthCallback({ onNavigate }: { onNavigate: (path: string) => voi
         if (!data.session) {
           setError(
             isFlowStateError(exchangeError.message)
-              ? `${exchangeError.message} Finish sign-in in the same browser window that started it. For Grok, open the connect link in Safari or Chrome, sign in there, then tap Allow.`
+              ? `${exchangeError.message} Start sign-in again so this callback gets a fresh verification code.`
               : exchangeError.message,
           )
           setRetryHref(returnTo)

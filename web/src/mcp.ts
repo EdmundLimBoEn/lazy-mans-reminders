@@ -30,8 +30,7 @@ export function claudeMcpConfig(url: string): string {
 }
 
 export function grokConnectorConfig(url: string): string {
-  return `URL: ${url}
-Authorization: Bearer ${AGENT_TOKEN_PLACEHOLDER}`
+  return `URL: ${url}`
 }
 
 export function lmrAgentTokenHeaderTemplate(): string {

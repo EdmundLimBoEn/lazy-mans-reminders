@@ -9,11 +9,9 @@ This directory ships two manifests so both Agent Plugins and Cursor Plugins can 
 
 ## Grok Bot
 
-Configure a personal agent token. OAuth connect is still flaky on Grok Bot:
+Add a custom connector for `https://lmr-mcp.edmundlim.systems/mcp`. Sign in with Google or Apple in the browser that opens, then tap **Allow**.
 
-1. Sign in on the board at [lmr.edmundlim.systems](https://lmr.edmundlim.systems).
-2. Open **Agent access → Advanced** and mint a key. It is shown once. The format is `lmr_<uuid>_<secret>`.
-3. Set `LMR_AGENT_TOKEN` on the plugin (Plugins → Configure), or on a custom connector set header `Authorization: Bearer <token>`.
+If a host cannot use OAuth, sign in on the [board](https://lmr.edmundlim.systems), open **Agent access → Advanced**, and mint a personal key. Set `LMR_AGENT_TOKEN` on the plugin or add `Authorization: Bearer <token>` to a custom connector.
 
 Never commit the token, paste it into chat, or put it in this repo. The plugin only declares the variable name; you supply the value on the host.
 

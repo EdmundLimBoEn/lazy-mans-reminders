@@ -12,11 +12,10 @@ import {
 } from './mcp'
 
 describe('agent MCP snippets', () => {
-  it('shows Grok with the URL and a header placeholder, never a real secret', () => {
+  it('shows Grok the OAuth URL without a bearer header', () => {
     const snippet = grokConnectorConfig(MCP_URL)
     expect(snippet).toContain(`URL: ${MCP_URL}`)
-    expect(snippet).toContain(`Authorization: Bearer ${AGENT_TOKEN_PLACEHOLDER}`)
-    expect(snippet).not.toMatch(/url only/i)
+    expect(snippet).not.toMatch(/Authorization/)
     expect(snippet).not.toMatch(/lmr__/)
     expect(AGENT_TOKEN_PLACEHOLDER).toBe('TOKEN')
   })

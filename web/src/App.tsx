@@ -157,8 +157,7 @@ function SignIn({
           </p>
           {connectingAgent && !sent && (
             <p className="connect-hint" role="status">
-              Stay in this browser until you return to Allow. Grok’s in-app browser can lose the
-              sign-in proof if the callback opens somewhere else.
+              Finish sign-in in the browser that opened. You will return here to tap Allow.
             </p>
           )}
           {!sent && (
@@ -685,11 +684,11 @@ function AgentAccess({ userId }: { userId: string }) {
     <section className="agent-access" aria-labelledby="agent-access-heading">
       <h2 id="agent-access-heading">Agent access</h2>
       <p>
-        Clients that can finish <code>/connect</code> — Cursor, Claude, Codex — add the plugin
-        or paste {MCP_URL}, then sign in when asked. That is the usual path. No tokens to copy.
+        Grok, Cursor, Claude, and Codex can finish <code>/connect</code>. Add the plugin or paste
+        {' '}{MCP_URL}, then sign in when asked. That is the usual path. No tokens to copy.
       </p>
       <p>
-        Grok Bot and hosts that struggle with OAuth: mint a key under Advanced, then set
+        For hosts that cannot use OAuth, mint a key under Advanced, then set
         {' '}<code>Authorization: Bearer {AGENT_TOKEN_PLACEHOLDER}</code>
         {' '}(or plugin variable <code>{LMR_AGENT_TOKEN_VAR}</code>).
       </p>
@@ -741,7 +740,7 @@ function AgentAccess({ userId }: { userId: string }) {
         <pre>{cursorMcpConfig(MCP_URL)}</pre>
         <p>Claude Code / Codex <code>.mcp.json</code></p>
         <pre>{claudeMcpConfig(MCP_URL)}</pre>
-        <p>Grok Bot: Settings → Plugins → custom connector. URL and header (placeholder {AGENT_TOKEN_PLACEHOLDER}, never a real secret):</p>
+        <p>Grok Bot: Settings → Plugins → custom connector. Add the URL and sign in when prompted.</p>
         <pre>{grokConnectorConfig(MCP_URL)}</pre>
         <p>
           Plugin hosts can set <code>{LMR_AGENT_TOKEN_VAR}</code> instead of pasting the header:

@@ -13,5 +13,8 @@ export const supabase = createClient(url, anonKey, {
     detectSessionInUrl: false,
     persistSession: true,
     autoRefreshToken: true,
+    experimental: {
+      appendPkceFlowIdToRedirects: true,
+    },
   },
 })

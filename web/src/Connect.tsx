@@ -2,15 +2,12 @@ import { FormEvent, useMemo, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { LegalFooterLinks } from './LegalPages'
 import { MCP_ORIGIN } from './mcp'
-import { bindFailureMessage, isEmbeddedBrowser, isSafeOauthRedirect } from './oauthConnect'
+import { bindFailureMessage, isSafeOauthRedirect } from './oauthConnect'
 
-function SameWindowNote({ userAgent }: { userAgent: string }) {
-  const embedded = isEmbeddedBrowser(userAgent)
+function SameWindowNote() {
   return (
     <p className="connect-hint" role="status">
-      {embedded
-        ? 'This in-app browser often cannot finish sign-in. Copy this page’s address into Safari or Chrome, sign in there, then tap Allow.'
-        : 'Stay in this browser window until the agent finishes connecting. Opening the link in another app can lose the sign-in proof.'}
+      Finish sign-in in the browser that opened, then tap Allow.
     </p>
   )
 }
@@ -76,7 +73,7 @@ export function Connect({ session, onNavigate }: { session: Session; onNavigate:
             add, and complete reminders until you sign it out or delete your account. See Privacy
             for what is shared.
           </p>
-          <SameWindowNote userAgent={typeof navigator === 'undefined' ? '' : navigator.userAgent} />
+          <SameWindowNote />
           {error && <p className="error" role="alert">{error}</p>}
           <form className="connect-actions" onSubmit={allow}>
             <button className="primary" type="submit" disabled={busy}>

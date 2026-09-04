@@ -1,9 +1,3 @@
-const EMBEDDED_BROWSER = /(?:FBAN|FBAV|Instagram|Line\/|MicroMessenger|Twitter|Grok\/|; wv\)|LinkedInApp|GSA\/|Snapchat)/i
-
-export function isEmbeddedBrowser(userAgent: string): boolean {
-  return EMBEDDED_BROWSER.test(userAgent)
-}
-
 /** Allow http(s) and custom schemes used by agent hosts. Reject javascript/data/file. */
 export function isSafeOauthRedirect(redirectTo: string): boolean {
   try {
