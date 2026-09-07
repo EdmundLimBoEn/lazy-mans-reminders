@@ -127,6 +127,21 @@ Deno.test("decideLiveActivity recycles before the 8h Apple cap", () => {
   );
 });
 
+Deno.test("decideLiveActivity recovers legacy activity tokens with unknown age", () => {
+  for (const hasPushToStartToken of [true, false]) {
+    assertEquals(
+      decideLiveActivity({
+        lines: ["Milk"],
+        hasPushToStartToken,
+        hasActivityToken: true,
+        startedAtMs: null,
+        nowMs: 10_000,
+      }),
+      { kind: hasPushToStartToken ? "recycle" : "update" },
+    );
+  }
+});
+
 Deno.test("start payload is ReminderAttributes with an alert and lines", () => {
   const body = JSON.parse(buildLiveActivityPayload({
     event: "start",
