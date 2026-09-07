@@ -41,6 +41,8 @@ targets:
         product: Supabase
       - target: ReminderWidgetExtension
         embed: true
+      - sdk: GeoToolbox.framework
+        weak: true
     scheme:
       testTargets:
         - LazyMansRemindersTests

@@ -173,6 +173,8 @@ struct CreateReminderIntent {
     var urls: [URL]
     var dueDate: DateComponents?
     var recurrence: Calendar.RecurrenceRule?
+    var locationTrigger: ReminderLocationTriggerEntity?
+    var section: ReminderSectionEntity?
 
     @MainActor
     func perform() async throws -> some ReturnsValue<ReminderEntity> & ProvidesDialog & ShowsSnippetView {
@@ -200,6 +202,8 @@ struct UpdateReminderIntent {
     var target: ReminderEntity
     var title: String?
     var note: AttributedString?
+    var images: [IntentFile]?
+    var subtasks: [ReminderEntity]?
     var tags: Set<String>?
     var urls: [URL]?
     var dueDate: DateComponents?
@@ -207,6 +211,8 @@ struct UpdateReminderIntent {
     var isCompleted: Bool?
     var isFlagged: Bool?
     var list: ReminderListEntity?
+    var section: ReminderSectionEntity?
+    var locationTrigger: ReminderLocationTriggerEntity?
 
     @MainActor
     func perform() async throws -> some ReturnsValue<ReminderEntity> & ProvidesDialog & ShowsSnippetView {
