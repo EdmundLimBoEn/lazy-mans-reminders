@@ -1,5 +1,6 @@
 import AppIntents
 import CoreSpotlight
+import GeoToolbox
 import UniformTypeIdentifiers
 
 /// Single board in this app. The reminders schema requires a list entity even
@@ -45,7 +46,7 @@ struct ReminderListEntity {
 }
 
 @available(iOS 27.0, *)
-struct ReminderListEntityQuery: EntityQuery, EnumerableEntityQuery {
+struct ReminderListEntityQuery: EntityQuery, EnumerableEntityQuery, EntityStringQuery {
     func entities(for identifiers: [ReminderListEntity.ID]) async throws -> [ReminderListEntity] {
         identifiers.contains(ReminderListEntity.boardID) ? [.board] : []
     }
@@ -57,6 +58,82 @@ struct ReminderListEntityQuery: EntityQuery, EnumerableEntityQuery {
     func suggestedEntities() async throws -> [ReminderListEntity] {
         try await allEntities()
     }
+
+    func entities(matching string: String) async throws -> [ReminderListEntity] {
+        [.board]
+    }
+}
+
+@available(iOS 27.0, *)
+@AppEnum(schema: .reminders.locationTriggerEvent)
+enum ReminderLocationTriggerEvent: String {
+    case arrive
+    case depart
+
+    static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
+        .arrive: "Arrive",
+        .depart: "Depart"
+    ]
+}
+
+/// Schema requires a location-trigger type. This board has no geofences, so queries are empty.
+@available(iOS 27.0, *)
+@AppEntity(schema: .reminders.locationTrigger)
+struct ReminderLocationTriggerEntity {
+    static let defaultQuery = ReminderLocationTriggerEntityQuery()
+
+    let id: UUID
+    var place: PlaceDescriptor
+    var event: ReminderLocationTriggerEvent
+
+    var displayRepresentation: DisplayRepresentation {
+        DisplayRepresentation(title: "Place reminder")
+    }
+}
+
+@available(iOS 27.0, *)
+struct ReminderLocationTriggerEntityQuery: EntityQuery, EntityStringQuery {
+    func entities(for identifiers: [ReminderLocationTriggerEntity.ID]) async throws -> [ReminderLocationTriggerEntity] {
+        []
+    }
+
+    func suggestedEntities() async throws -> [ReminderLocationTriggerEntity] {
+        []
+    }
+
+    func entities(matching string: String) async throws -> [ReminderLocationTriggerEntity] {
+        []
+    }
+}
+
+/// Schema requires a section type. This board has no sections, so queries are empty.
+@available(iOS 27.0, *)
+@AppEntity(schema: .reminders.section)
+struct ReminderSectionEntity {
+    static let defaultQuery = ReminderSectionEntityQuery()
+
+    let id: UUID
+    var name: String
+    var list: ReminderListEntity
+
+    var displayRepresentation: DisplayRepresentation {
+        DisplayRepresentation(title: "\(name)")
+    }
+}
+
+@available(iOS 27.0, *)
+struct ReminderSectionEntityQuery: EntityQuery, EntityStringQuery {
+    func entities(for identifiers: [ReminderSectionEntity.ID]) async throws -> [ReminderSectionEntity] {
+        []
+    }
+
+    func suggestedEntities() async throws -> [ReminderSectionEntity] {
+        []
+    }
+
+    func entities(matching string: String) async throws -> [ReminderSectionEntity] {
+        []
+    }
 }
 
 @available(iOS 27.0, *)
@@ -67,6 +144,8 @@ struct ReminderEntity: IndexedEntity {
     let id: UUID
     var title: String
     var note: AttributedString?
+    var images: [IntentFile]
+    var subtasks: [ReminderEntity]
     var tags: Set<String>
     var urls: [URL]
     var dueDate: DateComponents?
@@ -76,6 +155,8 @@ struct ReminderEntity: IndexedEntity {
     var creationDate: Date?
     var completionDate: Date?
     var list: ReminderListEntity
+    var section: ReminderSectionEntity?
+    var locationTrigger: ReminderLocationTriggerEntity?
 
     var displayRepresentation: DisplayRepresentation {
         DisplayRepresentation(
@@ -99,6 +180,8 @@ struct ReminderEntity: IndexedEntity {
         self.id = reminder.id
         self.title = reminder.text
         self.note = nil
+        self.images = []
+        self.subtasks = []
         self.tags = []
         self.urls = []
         self.dueDate = nil
@@ -108,6 +191,8 @@ struct ReminderEntity: IndexedEntity {
         self.creationDate = reminder.createdAt
         self.completionDate = nil
         self.list = ReminderListEntity.board
+        self.section = nil
+        self.locationTrigger = nil
     }
 }
 
