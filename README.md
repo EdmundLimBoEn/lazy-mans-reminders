@@ -263,11 +263,17 @@ In Xcode:
 3. Confirm both targets show the same App Group.
 4. Run on a physical iPhone, sign in through the `lazymansreminders://auth/callback` link, allow notifications, and add the widget.
 
-Siri (iOS 26+, Apple Intelligence on iOS 27): after a signed-in launch, the app donates the board to Spotlight and exposes App Intents in the reminders domain. From Siri you can list the board, add a line, or mark one done (“complete milk”, “mark this as done”). The phone must be signed in; unsigned-in requests tell you to open the app first. Shortcuts phrases use the app name **Lazy Man's Reminders**.
+Siri / Shortcuts: after a signed-in launch, the app exposes App Intents to list the board, add a line, or mark one done (“complete milk”, “mark this as done”). Unsigned-in requests tell you to open the app first. Shortcuts phrases use the app name **Lazy Man's Reminders**. Builds with the iOS 27 SDK also compile the reminders-domain schema for Apple Intelligence; hosted TestFlight uses stable Xcode and the plain App Intents path.
 
 The generated project can be recreated; make lasting project-setting changes in `ios/project.yml`.
 
 ## TestFlight
+
+The default upload path is GitHub Actions: [`.github/workflows/ios-testflight.yml`](.github/workflows/ios-testflight.yml) on hosted `macos-latest` with latest-stable Xcode. It runs on `workflow_dispatch` and on pushes to `main` that touch `ios/` or the workflow file. `CURRENT_PROJECT_VERSION` in `ios/project.yml` is the build number (`CFBundleVersion`). Do not upload from Xcode 27 beta; App Store Connect rejects that SDK.
+
+Jeremy sets the secrets listed at the top of the workflow and in [HUMANS.md](HUMANS.md). The job fails immediately if any are missing.
+
+Manual archive (Organizer) is still possible on stable Xcode:
 
 1. Create the app record in App Store Connect using the exact app bundle ID.
 2. In Xcode, select **Any iOS Device (arm64)**, then **Product → Archive**.
@@ -275,7 +281,7 @@ The generated project can be recreated; make lasting project-setting changes in 
 4. Wait for processing, answer export-compliance questions, add internal testers, and verify sign-in, sync, widget refresh, and production push delivery.
 5. For external testing, create a group, add testing notes, and submit the build for Beta App Review.
 
-Increment the marketing version/build number before each upload.
+Increment `CURRENT_PROJECT_VERSION` in `ios/project.yml` before each upload.
 
 ## Free App Store release
 
