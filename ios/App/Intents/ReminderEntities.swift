@@ -306,22 +306,4 @@ extension ReminderEntity: IndexedEntity {
     }
 }
 
-@available(iOS 18.0, *)
-extension ReminderEntityQuery: IndexedEntityQuery {
-    func reindexEntities(
-        for identifiers: [ReminderEntity.ID],
-        indexDescription: CSSearchableIndexDescription
-    ) async throws {
-        let reminders = await ReminderStore.shared.refreshOrCached()
-        try await ReminderSpotlightIndex.index(
-            reminders.filter { identifiers.contains($0.id) }
-        )
-    }
-
-    func reindexAllEntities(indexDescription: CSSearchableIndexDescription) async throws {
-        let reminders = await ReminderStore.shared.refreshOrCached()
-        try await ReminderSpotlightIndex.replaceAll(reminders)
-    }
-}
-
 #endif
