@@ -144,8 +144,6 @@ struct ReminderEntity: IndexedEntity {
     let id: UUID
     var title: String
     var note: AttributedString?
-    var images: [IntentFile]
-    var subtasks: [ReminderEntity]
     var tags: Set<String>
     var urls: [URL]
     var dueDate: DateComponents?
@@ -180,8 +178,6 @@ struct ReminderEntity: IndexedEntity {
         self.id = reminder.id
         self.title = reminder.text
         self.note = nil
-        self.images = []
-        self.subtasks = []
         self.tags = []
         self.urls = []
         self.dueDate = nil
