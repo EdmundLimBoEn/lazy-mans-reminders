@@ -11,7 +11,7 @@ As of 26 August 2026. The iOS app ships as a **free** App Store download (no in-
 - Supabase project: `lazy-mans-reminders` (`biwmsxbqrevtjwgsvsmu`, Singapore)
 - Database migrations: **deployed** (including agent tokens)
 - Supabase Auth: site URL and redirects **deployed**; Apple web + native configured; Google provider enabled; Resend SMTP for magic-link email
-- `send-reminder-push` and `delete-account` Edge Functions: **deployed**
+- `send-reminder-push` and `delete-account` Edge Functions: **deployed**. Live Activity renewal deployed 8 September 2026.
 - Agent MCP Worker: **live** at <https://lmr-mcp.edmundlim.systems/mcp> (OAuth plugin path)
 - iOS app and widget: **implemented**; TestFlight build uploaded; physical-device smoke and App Store submission still open. Submission fields live in [docs/app-store.md](docs/app-store.md).
 - Lock Screen: Live Activity plus accessory widgets; push alerts are body-only (no title)
@@ -119,7 +119,7 @@ Delivery behaviour:
 
 - Each APNs request sets `apns-expiration` 24 hours out so alerts are stored if the phone is offline, and `apns-collapse-id` equal to the reminder id so webhook retries replace the same banner instead of stacking duplicates.
 - Transient APNs failures (network, 429, 5xx, expired provider JWT) are retried inside the function. If any device is still retryable afterwards the function returns **503** so the webhook / `pg_net` trigger can try the whole job again. Permanent failures (including `410 Unregistered` and `400 BadDeviceToken`) prune that token and still return 200.
-- After changing this function, redeploy with `supabase functions deploy send-reminder-push --no-verify-jwt`. The INSERT trigger itself (`notify_reminder_push` / dashboard webhook) is configured in the project, not this repo.
+- After changing this function, redeploy with `supabase functions deploy send-reminder-push --no-verify-jwt`. Migration `202609080001_live_activity_refresh` manages the INSERT, UPDATE, and DELETE trigger and a renewal job that runs every 15 minutes. It reads `lmr_webhook_secret` from Vault. Activities become eligible for replacement after seven hours, before the iOS eight-hour limit.
 
 `delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, agent tokens, and auth user (service role).
 
@@ -155,14 +155,7 @@ Cursor / Claude Code / Codex can load `plugins/lazy-mans-reminders/` or the same
 
 The Worker uses the service-role key as a Wrangler secret; never put that key on Pages. The web app only calls `/bind` with the user's Supabase session.
 
-In Supabase **Database → Webhooks**, create a webhook with:
-
-- Name: `send-reminder-push`
-- Table: `public.reminders`
-- Event: `INSERT`
-- Method: `POST`
-- URL: `https://YOUR_PROJECT_REF.supabase.co/functions/v1/send-reminder-push`
-- Header: `x-webhook-secret: <the exact WEBHOOK_SECRET value>`
+Migration `202609080001_live_activity_refresh` configures reminder change delivery and scheduled Live Activity renewal. Store the webhook secret as `lmr_webhook_secret` in Supabase Vault before applying it. Keep the Vault value equal to the Edge Function's `WEBHOOK_SECRET`. Do not add a second dashboard webhook for the same reminder events.
 
 Insert a reminder after registering a physical device and inspect **Edge Functions → Logs**. Simulator push tokens and sandbox tokens do not validate production APNs delivery.
 
@@ -194,8 +187,11 @@ cd web && npm test
 # MCP Worker (Vitest — token parse/hash + add prefix/capacity mapping)
 cd mcp && npm test
 
-# Edge Function helpers (Deno — webhook payload classification / APNs host)
-deno test supabase/functions/_shared/push_helpers_test.ts
+# Edge Function helpers and mocked request-handler tests
+deno test --allow-env supabase/functions/_shared supabase/functions/send-reminder-push/index_test.ts
+
+# Database lifecycle checks. All probes roll back without sending notifications.
+supabase db query --linked --file supabase/tests/live_activity_refresh.sql
 
 # iOS (XCTest — Reminder JSON coding; regenerate project first if needed)
 cd ios && xcodegen generate --spec project.yml
