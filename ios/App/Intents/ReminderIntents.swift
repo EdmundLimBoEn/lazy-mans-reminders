@@ -1,7 +1,6 @@
 import AppIntents
 import SwiftUI
 
-@available(iOS 27.0, *)
 enum ReminderIntentError: Error, CustomLocalizedStringResourceConvertible {
     case signedOut
     case emptyText
@@ -28,7 +27,6 @@ enum ReminderIntentError: Error, CustomLocalizedStringResourceConvertible {
     }
 }
 
-@available(iOS 27.0, *)
 enum ReminderIntentActions {
     static func requireSession() async throws {
         guard await ReminderStore.shared.isSignedIn() else {
@@ -105,7 +103,6 @@ enum ReminderIntentActions {
             if let reminder = updated.first(where: { $0.id == id }) {
                 return reminder
             }
-            // Completed items drop out of the active cache.
             return Reminder(
                 id: id,
                 userID: await ReminderStore.shared.currentUserID() ?? UUID(),
@@ -136,7 +133,6 @@ enum ReminderIntentActions {
     }
 }
 
-@available(iOS 27.0, *)
 struct ReminderIntentSnippetView: View {
     let headline: String
     let lines: [String]
@@ -159,6 +155,8 @@ struct ReminderIntentSnippetView: View {
         .padding()
     }
 }
+
+#if LMR_REMINDERS_SCHEMA
 
 /// Siri AI (iOS 27) uses this schema for “add a reminder / remind me to …”.
 @available(iOS 27.0, *)
@@ -248,7 +246,18 @@ struct UpdateReminderIntent {
     }
 }
 
-/// Shortcuts-friendly complete path. Siri AI still prefers `UpdateReminderIntent`.
+@available(iOS 27.0, *)
+@AppIntent(schema: .system.open)
+struct OpenReminderIntent: OpenIntent {
+    var target: ReminderEntity
+
+    @MainActor
+    func perform() async throws -> some IntentResult {
+        NotificationCenter.default.post(name: .didUpdateReminders, object: nil)
+        return .result()
+    }
+}
+
 @available(iOS 27.0, *)
 struct CompleteReminderIntent: AppIntent {
     static var title: LocalizedStringResource = "Complete Reminder"
@@ -275,7 +284,6 @@ struct CompleteReminderIntent: AppIntent {
     }
 }
 
-/// Explicit list action for “list my reminders / what’s on my board”.
 @available(iOS 27.0, *)
 struct ListRemindersIntent: AppIntent {
     static var title: LocalizedStringResource = "List Reminders"
@@ -304,9 +312,87 @@ struct ListRemindersIntent: AppIntent {
     }
 }
 
-@available(iOS 27.0, *)
-@AppIntent(schema: .system.open)
+#else
+
+struct CreateReminderIntent: AppIntent {
+    static var title: LocalizedStringResource = "Add Reminder"
+    static var description = IntentDescription(
+        "Adds a reminder to your board.",
+        categoryName: "Reminders",
+        searchKeywords: ["add", "create", "remind", "new"]
+    )
+
+    static var parameterSummary: some ParameterSummary {
+        Summary("Add \(\.$title) to the board")
+    }
+
+    @Parameter(title: "Title", requestValueDialog: "What should I add to your board?")
+    var title: String
+
+    @MainActor
+    func perform() async throws -> some ReturnsValue<ReminderEntity> & ProvidesDialog & ShowsSnippetView {
+        let reminder = try await ReminderIntentActions.create(title: title)
+        let entity = ReminderEntity(reminder)
+        return .result(
+            value: entity,
+            dialog: "Added \(reminder.text) to your board.",
+            view: ReminderIntentSnippetView(headline: "Added", lines: [reminder.text])
+        )
+    }
+}
+
+struct UpdateReminderIntent: AppIntent {
+    static var title: LocalizedStringResource = "Update Reminder"
+    static var description = IntentDescription(
+        "Updates a reminder on your board.",
+        categoryName: "Reminders",
+        searchKeywords: ["update", "edit", "complete"]
+    )
+
+    static var parameterSummary: some ParameterSummary {
+        Summary("Update \(\.$target)")
+    }
+
+    @Parameter(title: "Reminder")
+    var target: ReminderEntity
+
+    @Parameter(title: "Title")
+    var title: String?
+
+    @Parameter(title: "Completed")
+    var isCompleted: Bool?
+
+    @MainActor
+    func perform() async throws -> some ReturnsValue<ReminderEntity> & ProvidesDialog & ShowsSnippetView {
+        let updated = try await ReminderIntentActions.update(
+            id: target.id,
+            title: title,
+            isCompleted: isCompleted
+        )
+        let entity = ReminderEntity(updated)
+        let dialog: String
+        if updated.isDone {
+            dialog = "Completed \(updated.text)."
+        } else if let title {
+            dialog = "Updated the reminder to \(title)."
+        } else {
+            dialog = "Updated \(updated.text)."
+        }
+        return .result(
+            value: entity,
+            dialog: IntentDialog(stringLiteral: dialog),
+            view: ReminderIntentSnippetView(
+                headline: updated.isDone ? "Completed" : "Updated",
+                lines: [updated.text]
+            )
+        )
+    }
+}
+
 struct OpenReminderIntent: OpenIntent {
+    static var title: LocalizedStringResource = "Open Reminder"
+
+    @Parameter(title: "Reminder")
     var target: ReminderEntity
 
     @MainActor
@@ -316,14 +402,72 @@ struct OpenReminderIntent: OpenIntent {
     }
 }
 
+struct CompleteReminderIntent: AppIntent {
+    static var title: LocalizedStringResource = "Complete Reminder"
+    static var description = IntentDescription(
+        "Marks a reminder on your board as done.",
+        categoryName: "Reminders",
+        searchKeywords: ["complete", "done", "finish", "check off"]
+    )
+
+    static var parameterSummary: some ParameterSummary {
+        Summary("Complete \(\.$reminder)")
+    }
+
+    @Parameter(title: "Reminder")
+    var reminder: ReminderEntity
+
+    @MainActor
+    func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+        let text = try await ReminderIntentActions.complete(id: reminder.id)
+        return .result(
+            dialog: "Completed \(text).",
+            view: ReminderIntentSnippetView(headline: "Completed", lines: [text])
+        )
+    }
+}
+
+struct ListRemindersIntent: AppIntent {
+    static var title: LocalizedStringResource = "List Reminders"
+    static var description = IntentDescription(
+        "Lists the reminders currently on your board.",
+        categoryName: "Reminders",
+        searchKeywords: ["list", "show", "board", "reminders", "what's on"]
+    )
+
+    static var parameterSummary: some ParameterSummary {
+        Summary("List reminders")
+    }
+
+    @MainActor
+    func perform() async throws -> some IntentResult & ReturnsValue<[ReminderEntity]> & ProvidesDialog & ShowsSnippetView {
+        let reminders = try await ReminderIntentActions.loadActive(preferNetwork: true)
+        let active = reminders.filter { !$0.isDone }
+        let entities = active.map(ReminderEntity.init)
+        let spoken = ReminderListSpoken.dialog(for: active)
+        let headline = active.isEmpty ? "All clear" : "Your board"
+        return .result(
+            value: entities,
+            dialog: IntentDialog(stringLiteral: spoken),
+            view: ReminderIntentSnippetView(headline: headline, lines: active.map(\.text))
+        )
+    }
+}
+
+#endif
+
 extension View {
     /// Lets Siri resolve “this reminder” / “that third one” from the on-screen board.
     @ViewBuilder
     func reminderOnscreenIdentity(_ id: UUID) -> some View {
+#if LMR_REMINDERS_SCHEMA
         if #available(iOS 27.0, *) {
             self.appEntityIdentifier(EntityIdentifier(for: ReminderEntity.self, identifier: id))
         } else {
             self
         }
+#else
+        self
+#endif
     }
 }

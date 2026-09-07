@@ -8,9 +8,15 @@ enum ReminderBoardSync {
     static func apply(_ reminders: [Reminder], notify: Bool = true) async {
         WidgetCenter.shared.reloadAllTimelines()
         await ReminderLiveActivityController.sync(reminders: reminders)
+#if LMR_REMINDERS_SCHEMA
         if #available(iOS 27.0, *) {
             await ReminderSpotlightIndex.replaceAll(reminders)
         }
+#else
+        if #available(iOS 18.0, *) {
+            await ReminderSpotlightIndex.replaceAll(reminders)
+        }
+#endif
         if notify {
             NotificationCenter.default.post(name: .didUpdateReminders, object: nil)
         }
@@ -21,7 +27,11 @@ enum ReminderBoardSync {
     }
 }
 
+#if LMR_REMINDERS_SCHEMA
 @available(iOS 27.0, *)
+#else
+@available(iOS 18.0, *)
+#endif
 enum ReminderSpotlightIndex {
     static let name = "systems.edmundlim.LazyMansReminders.reminders"
 

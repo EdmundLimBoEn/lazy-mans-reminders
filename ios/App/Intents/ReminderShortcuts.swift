@@ -1,6 +1,8 @@
 import AppIntents
 
+#if LMR_REMINDERS_SCHEMA
 @available(iOS 27.0, *)
+#endif
 struct ReminderShortcuts: AppShortcutsProvider {
     static var shortcutTileColor: ShortcutTileColor { .purple }
 
