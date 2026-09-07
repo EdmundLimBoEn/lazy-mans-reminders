@@ -1,7 +1,9 @@
 import AppIntents
 import CoreSpotlight
-import GeoToolbox
 import UniformTypeIdentifiers
+
+#if LMR_REMINDERS_SCHEMA
+import GeoToolbox
 
 /// Single board in this app. The reminders schema requires a list entity even
 /// though Lazy Man's Reminders does not have multiple lists.
@@ -235,3 +237,91 @@ struct ReminderEntityQuery: IndexedEntityQuery, EnumerableEntityQuery, EntityStr
         try await ReminderSpotlightIndex.replaceAll(reminders)
     }
 }
+
+#else
+
+struct ReminderEntity: AppEntity {
+    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Reminder"
+    static var defaultQuery = ReminderEntityQuery()
+
+    var id: UUID
+    @Property(title: "Title")
+    var title: String
+    @Property(title: "Completed")
+    var isCompleted: Bool
+
+    var displayRepresentation: DisplayRepresentation {
+        DisplayRepresentation(
+            title: "\(title)",
+            subtitle: isCompleted ? "Completed" : "On your board",
+            image: .init(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
+        )
+    }
+
+    init(_ reminder: Reminder) {
+        self.id = reminder.id
+        self.title = reminder.text
+        self.isCompleted = reminder.isDone
+    }
+}
+
+struct ReminderEntityQuery: EntityQuery, EnumerableEntityQuery, EntityStringQuery {
+    func entities(for identifiers: [ReminderEntity.ID]) async throws -> [ReminderEntity] {
+        var reminders = await ReminderStore.shared.cached()
+        let missing = identifiers.filter { id in !reminders.contains { $0.id == id } }
+        if !missing.isEmpty {
+            reminders = await ReminderStore.shared.refreshOrCached()
+        }
+        return identifiers.compactMap { id in
+            reminders.first { $0.id == id }.map(ReminderEntity.init)
+        }
+    }
+
+    func allEntities() async throws -> [ReminderEntity] {
+        let reminders = await ReminderStore.shared.refreshOrCached()
+        return reminders.filter { !$0.isDone }.map(ReminderEntity.init)
+    }
+
+    func suggestedEntities() async throws -> [ReminderEntity] {
+        let reminders = await ReminderStore.shared.cached()
+        return reminders.filter { !$0.isDone }.map(ReminderEntity.init)
+    }
+
+    func entities(matching string: String) async throws -> [ReminderEntity] {
+        let reminders = await ReminderStore.shared.refreshOrCached()
+        return ReminderTitleMatcher.matches(reminders, query: string).map(ReminderEntity.init)
+    }
+}
+
+@available(iOS 18.0, *)
+extension ReminderEntity: IndexedEntity {
+    var attributeSet: CSSearchableItemAttributeSet {
+        let attributes = CSSearchableItemAttributeSet(itemContentType: UTType.text.identifier)
+        attributes.displayName = title
+        attributes.title = title
+        attributes.textContent = title
+        attributes.contentDescription = "Reminder on your Lazy Man's Reminders board"
+        attributes.identifier = id.uuidString
+        return attributes
+    }
+}
+
+@available(iOS 18.0, *)
+extension ReminderEntityQuery: IndexedEntityQuery {
+    func reindexEntities(
+        for identifiers: [ReminderEntity.ID],
+        indexDescription: CSSearchableIndexDescription
+    ) async throws {
+        let reminders = await ReminderStore.shared.refreshOrCached()
+        try await ReminderSpotlightIndex.index(
+            reminders.filter { identifiers.contains($0.id) }
+        )
+    }
+
+    func reindexAllEntities(indexDescription: CSSearchableIndexDescription) async throws {
+        let reminders = await ReminderStore.shared.refreshOrCached()
+        try await ReminderSpotlightIndex.replaceAll(reminders)
+    }
+}
+
+#endif

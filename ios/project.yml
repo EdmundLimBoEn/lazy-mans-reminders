@@ -23,7 +23,22 @@ settings:
     TARGETED_DEVICE_FAMILY: "1"
     MARKETING_VERSION: "1.0"
     CURRENT_PROJECT_VERSION: "6"
+    VERSIONING_SYSTEM: apple-generic
+    GENERATE_INFOPLIST_FILE: "NO"
     ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    LMR_SCHEMA_270000: LMR_REMINDERS_SCHEMA
+    LMR_SCHEMA_280000: LMR_REMINDERS_SCHEMA
+    LMR_SCHEMA_290000: LMR_REMINDERS_SCHEMA
+    SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) $(LMR_SCHEMA_$(SDK_VERSION_MAJOR))
+    "SWIFT_ACTIVE_COMPILATION_CONDITIONS[sdk=iphoneos27*]": $(inherited) LMR_REMINDERS_SCHEMA
+    "SWIFT_ACTIVE_COMPILATION_CONDITIONS[sdk=iphonesimulator27*]": $(inherited) LMR_REMINDERS_SCHEMA
+    "SWIFT_ACTIVE_COMPILATION_CONDITIONS[sdk=iphoneos28*]": $(inherited) LMR_REMINDERS_SCHEMA
+    "SWIFT_ACTIVE_COMPILATION_CONDITIONS[sdk=iphonesimulator28*]": $(inherited) LMR_REMINDERS_SCHEMA
+  configs:
+    Debug:
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG $(inherited) $(LMR_SCHEMA_$(SDK_VERSION_MAJOR))
+    Release:
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) $(LMR_SCHEMA_$(SDK_VERSION_MAJOR))
 targets:
   LazyMansReminders:
     type: application
@@ -41,8 +56,6 @@ targets:
         product: Supabase
       - target: ReminderWidgetExtension
         embed: true
-      - sdk: GeoToolbox.framework
-        weak: true
     scheme:
       testTargets:
         - LazyMansRemindersTests
@@ -57,6 +70,8 @@ targets:
     info:
       path: App/Info.plist
       properties:
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         CFBundleDisplayName: "Lazy Man's Reminders"
         CFBundleURLTypes:
           - CFBundleURLSchemes:
@@ -111,6 +126,8 @@ targets:
     info:
       path: Widget/Info.plist
       properties:
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         CFBundleDisplayName: Reminders
         APP_GROUP_ID: "$(APP_GROUP_ID)"
         NSExtension:
@@ -135,5 +152,4 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: systems.edmundlim.LazyMansRemindersTests
         GENERATE_INFOPLIST_FILE: YES
-        # Hosted unit tests; ReminderStore App Group/network paths are not covered here.
         CODE_SIGN_STYLE: Automatic

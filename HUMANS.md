@@ -18,7 +18,14 @@
 - [x] **TestFlight build 1.0 (4)** — Uploaded with Xcode 27 beta 5 (`27A5237l`). Processing **VALID**. On Internal Testers (you) and Friends. TestFlight beta review is **WAITING_FOR_REVIEW** so email testers can install. Not submitted to the App Store. Beta 4 removed; `/Applications/Xcode-beta.app` is now beta 5. EdmundPurple theme kept.
 - [x] **Deploy web** — New legal pages, export, favicon, robots, and security.txt are live on `https://lmr.edmundlim.systems` (Wrangler device login, 27 Aug 2026). Confirm `/privacy` has no "launch template" copy. Redeployed 1 Sep 2026 from `main` (`a27de02`); `/auth/ios` was already in the production bundle.
 - [x] **Supabase iOS magic-link redirects** — Hosted Auth `uri_allow_list` now includes `https://lmr.edmundlim.systems/auth/ios` and `https://lazy-mans-reminders.pages.dev/auth/ios` (patched via Management API on project `biwmsxbqrevtjwgsvsmu`, 1 Sep 2026). Did not `supabase config push` the local stubs (that would disable Apple/Google).
-- [x] **Rebuild iOS for email sign-in** — TestFlight **1.0 (5)** uploaded 1 Sep 2026 with Xcode 27 beta 5 (`27A5237l`). Processing **VALID**. Added to Internal Testers and Friends. Binary contains `https://lmr.edmundlim.systems/auth/ios`. Install 5 from TestFlight (not 4, and not the accidental 1.0 (1) from the first upload). Then request a **new** email link on the phone.
+- [x] **Rebuild iOS for email sign-in** — TestFlight **1.0 (5)** uploaded 1 Sep 2026 with Xcode 27 beta 5 (`27A5237l`). Processing **VALID**. Added to Internal Testers and Friends. Binary contains `https://lmr.edmundlim.systems/auth/ios`. Install 5 from TestFlight (not 4, and not the accidental 1.0 (1) from the first upload). Then request a **new** email link on the phone. Build 5 is internal-only: App Store Connect rejects Xcode 27 beta (`Unsupported SDK or Xcode version`). New TestFlight builds go through `.github/workflows/ios-testflight.yml` on hosted `macos-latest` (stable Xcode). Next build number is **6**.
+- [ ] **GitHub Actions TestFlight secrets (Jeremy)** — Set repository secrets, then re-run **iOS TestFlight** (`workflow_dispatch` or a push under `ios/`). Do not commit values, `.p8` / `.p12` files, or `ios/Config.xcconfig`.
+  - `ASC_KEY_ID` — App Store Connect API Key ID
+  - `ASC_ISSUER_ID` — App Store Connect Issuer ID
+  - `ASC_PRIVATE_KEY_B64` — `base64` of the `AuthKey_*.p8` (App Store Connect API key, not the APNs key)
+  - `APPSTORE_CERTIFICATES_FILE_BASE64` — `base64` of the Apple Distribution `.p12`
+  - `APPSTORE_CERTIFICATES_PASSWORD` — password for that `.p12`
+  App id `6799138197` and team `DUU8J39BA7` are hardcoded. The API key needs access to create App Store provisioning profiles and upload builds.
 - [ ] **Add your friend's email to TestFlight** — After Apple approves the TestFlight review (or immediately for you as Internal Testers):
   ```sh
   asc testflight testers add --app 6799138197 --email FRIEND@EMAIL --group Friends

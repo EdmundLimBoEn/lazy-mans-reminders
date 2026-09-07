@@ -62,3 +62,5 @@ Need 6.7" and 6.1" (and any other sizes Apple requires at submit time). Capture 
 ## Human steps still required
 
 See HUMANS.md. A reviewer still needs a signed TestFlight build, device smoke, and the Submit button in App Store Connect.
+
+TestFlight binaries come from `.github/workflows/ios-testflight.yml` (stable Xcode). Jeremy owns the GitHub secrets named in that file and in HUMANS.md. Do not put those values in this repo.
