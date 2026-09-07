@@ -60,8 +60,7 @@ export function decideLiveActivity(input: {
 
   if (
     input.hasActivityToken &&
-    ageMs != null &&
-    ageMs >= LIVE_ACTIVITY_RECYCLE_AFTER_MS
+    (ageMs == null || ageMs >= LIVE_ACTIVITY_RECYCLE_AFTER_MS)
   ) {
     return input.hasPushToStartToken ? { kind: "recycle" } : { kind: "update" };
   }
