@@ -29,6 +29,12 @@ struct ReminderListEntity {
     var name: String
     var type: ReminderListType
 
+    init(id: UUID, name: String, type: ReminderListType) {
+        self.id = id
+        self.name = name
+        self.type = type
+    }
+
     var displayRepresentation: DisplayRepresentation {
         DisplayRepresentation(
             title: "\(name)",
@@ -55,7 +61,7 @@ struct ReminderListEntityQuery: EntityQuery, EnumerableEntityQuery {
 
 @available(iOS 27.0, *)
 @AppEntity(schema: .reminders.reminder)
-struct ReminderEntity {
+struct ReminderEntity: IndexedEntity {
     static let defaultQuery = ReminderEntityQuery()
 
     let id: UUID
@@ -88,25 +94,20 @@ struct ReminderEntity {
         attributes.identifier = id.uuidString
         return attributes
     }
-}
 
-@available(iOS 27.0, *)
-extension ReminderEntity: IndexedEntity {
     init(_ reminder: Reminder) {
-        self.init(
-            id: reminder.id,
-            title: reminder.text,
-            note: nil,
-            tags: [],
-            urls: [],
-            dueDate: nil,
-            recurrence: nil,
-            isCompleted: reminder.isDone,
-            isFlagged: nil,
-            creationDate: reminder.createdAt,
-            completionDate: nil,
-            list: .board
-        )
+        self.id = reminder.id
+        self.title = reminder.text
+        self.note = nil
+        self.tags = []
+        self.urls = []
+        self.dueDate = nil
+        self.recurrence = nil
+        self.isCompleted = reminder.isDone
+        self.isFlagged = nil
+        self.creationDate = reminder.createdAt
+        self.completionDate = nil
+        self.list = ReminderListEntity.board
     }
 }
 
