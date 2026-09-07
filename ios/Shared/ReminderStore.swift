@@ -75,6 +75,15 @@ actor ReminderStore {
         return (try? ReminderJSON.decoder.decode([Reminder].self, from: data)) ?? []
     }
 
+    /// Fallback helper. `??` uses a sync autoclosure, so `?? await cached()` does not compile.
+    func refreshOrCached() async -> [Reminder] {
+        do {
+            return try await refresh()
+        } catch {
+            return cached()
+        }
+    }
+
     func refresh() async throws -> [Reminder] {
         guard let session = await loadFreshSession() else {
             return cached()

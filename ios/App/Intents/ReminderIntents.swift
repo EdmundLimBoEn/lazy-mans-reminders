@@ -1,7 +1,7 @@
 import AppIntents
 import SwiftUI
 
-@available(iOS 26.0, *)
+@available(iOS 27.0, *)
 enum ReminderIntentError: Error, CustomLocalizedStringResourceConvertible {
     case signedOut
     case emptyText
@@ -28,7 +28,7 @@ enum ReminderIntentError: Error, CustomLocalizedStringResourceConvertible {
     }
 }
 
-@available(iOS 26.0, *)
+@available(iOS 27.0, *)
 enum ReminderIntentActions {
     static func requireSession() async throws {
         guard await ReminderStore.shared.isSignedIn() else {
@@ -39,7 +39,7 @@ enum ReminderIntentActions {
     static func loadActive(preferNetwork: Bool) async throws -> [Reminder] {
         try await requireSession()
         if preferNetwork {
-            return (try? await ReminderStore.shared.refresh()) ?? await ReminderStore.shared.cached()
+            return await ReminderStore.shared.refreshOrCached()
         }
         return await ReminderStore.shared.cached()
     }
@@ -48,7 +48,7 @@ enum ReminderIntentActions {
         try await requireSession()
         let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { throw ReminderIntentError.emptyText }
-        let current = (try? await ReminderStore.shared.refresh()) ?? await ReminderStore.shared.cached()
+        let current = await ReminderStore.shared.refreshOrCached()
         if ReminderBoardLimits.isAtCapacity(current.filter { !$0.isDone }.count) {
             throw ReminderIntentError.atCapacity
         }
@@ -136,7 +136,7 @@ enum ReminderIntentActions {
     }
 }
 
-@available(iOS 26.0, *)
+@available(iOS 27.0, *)
 struct ReminderIntentSnippetView: View {
     let headline: String
     let lines: [String]
@@ -161,16 +161,16 @@ struct ReminderIntentSnippetView: View {
 }
 
 /// Siri AI (iOS 27) uses this schema for “add a reminder / remind me to …”.
-@available(iOS 26.0, *)
+@available(iOS 27.0, *)
 @AppIntent(schema: .reminders.createReminder)
 struct CreateReminderIntent {
-    var title: String = ""
+    var title: String
     var list: ReminderListEntity?
     var note: AttributedString?
     var isFlagged: Bool?
-    var images: [IntentFile] = []
-    var tags: Set<String> = []
-    var urls: [URL] = []
+    var images: [IntentFile]
+    var tags: Set<String>
+    var urls: [URL]
     var dueDate: DateComponents?
     var recurrence: Calendar.RecurrenceRule?
 
@@ -194,7 +194,7 @@ struct CreateReminderIntent {
 }
 
 /// Siri AI uses this schema for “mark this as done / complete …” and title edits.
-@available(iOS 26.0, *)
+@available(iOS 27.0, *)
 @AppIntent(schema: .reminders.updateReminder)
 struct UpdateReminderIntent {
     var target: ReminderEntity
@@ -243,7 +243,7 @@ struct UpdateReminderIntent {
 }
 
 /// Shortcuts-friendly complete path. Siri AI still prefers `UpdateReminderIntent`.
-@available(iOS 26.0, *)
+@available(iOS 27.0, *)
 struct CompleteReminderIntent: AppIntent {
     static var title: LocalizedStringResource = "Complete Reminder"
     static var description = IntentDescription(
@@ -270,7 +270,7 @@ struct CompleteReminderIntent: AppIntent {
 }
 
 /// Explicit list action for “list my reminders / what’s on my board”.
-@available(iOS 26.0, *)
+@available(iOS 27.0, *)
 struct ListRemindersIntent: AppIntent {
     static var title: LocalizedStringResource = "List Reminders"
     static var description = IntentDescription(
@@ -298,7 +298,7 @@ struct ListRemindersIntent: AppIntent {
     }
 }
 
-@available(iOS 26.0, *)
+@available(iOS 27.0, *)
 @AppIntent(schema: .system.open)
 struct OpenReminderIntent: OpenIntent {
     var target: ReminderEntity
@@ -314,7 +314,7 @@ extension View {
     /// Lets Siri resolve “this reminder” / “that third one” from the on-screen board.
     @ViewBuilder
     func reminderOnscreenIdentity(_ id: UUID) -> some View {
-        if #available(iOS 26.0, *) {
+        if #available(iOS 27.0, *) {
             self.appEntityIdentifier(EntityIdentifier(for: ReminderEntity.self, identifier: id))
         } else {
             self

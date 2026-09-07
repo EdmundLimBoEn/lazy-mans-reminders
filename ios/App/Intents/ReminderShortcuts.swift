@@ -1,6 +1,6 @@
 import AppIntents
 
-@available(iOS 26.0, *)
+@available(iOS 27.0, *)
 struct ReminderShortcuts: AppShortcutsProvider {
     static var shortcutTileColor: ShortcutTileColor { .purple }
 
