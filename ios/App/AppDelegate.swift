@@ -1,11 +1,19 @@
+import Combine
 import UIKit
 import UserNotifications
 
-extension Notification.Name {
-    static let didRegisterPushToken = Notification.Name("didRegisterPushToken")
-}
-
+@MainActor
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+    let auth = AuthManager()
+    private var subscriptions = Set<AnyCancellable>()
+    private lazy var deviceRegistration = DeviceRegistrationCoordinator(
+        readyToken: { [weak self] in
+            guard self?.auth.session != nil else { return nil }
+            return Self.latestDeviceToken
+        },
+        upload: { [weak self] token in await self?.auth.registerDevice(token: token) }
+    )
+
     static var latestDeviceToken: String?
     static var latestPushToStartToken: String?
     static var latestActivityPushToken: String?
@@ -31,28 +39,39 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         UNUserNotificationCenter.current().delegate = self
-        NotificationCenter.default.addObserver(
-            forName: .didRegisterPushToStartToken,
-            object: nil,
-            queue: .main
-        ) { notification in
-            Self.latestPushToStartToken = notification.object as? String
-        }
-        NotificationCenter.default.addObserver(
-            forName: .didRegisterActivityPushToken,
-            object: nil,
-            queue: .main
-        ) { notification in
-            Self.latestActivityPushToken = notification.object as? String
-        }
+        NotificationCenter.default.publisher(for: .didRegisterPushToStartToken)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] notification in
+                Self.latestPushToStartToken = notification.object as? String
+                self?.reconcileDeviceRegistration()
+            }
+            .store(in: &subscriptions)
+        NotificationCenter.default.publisher(for: .didRegisterActivityPushToken)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] notification in
+                Self.latestActivityPushToken = notification.object as? String
+                self?.reconcileDeviceRegistration()
+            }
+            .store(in: &subscriptions)
+        auth.$session
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.reconcileDeviceRegistration() }
+            .store(in: &subscriptions)
         ReminderLiveActivityController.startObservingTokens()
+        // APNs registration does not prompt for notification permission, and a
+        // push-to-start background launch needs a fresh device token too.
+        application.registerForRemoteNotifications()
         return true
     }
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken data: Data) {
         let token = data.map { String(format: "%02x", $0) }.joined()
         Self.latestDeviceToken = token
-        NotificationCenter.default.post(name: .didRegisterPushToken, object: token)
+        reconcileDeviceRegistration()
+    }
+
+    private func reconcileDeviceRegistration() {
+        deviceRegistration.reconcile()
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -91,5 +110,34 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
     ) async {
         let reminders = await ReminderStore.shared.cached()
         await ReminderBoardSync.apply(reminders)
+    }
+}
+
+@MainActor
+final class DeviceRegistrationCoordinator {
+    private let readyToken: () -> String?
+    private let upload: (String) async -> Void
+    private var registrationTask: Task<Void, Never>?
+    private var registrationPending = false
+
+    init(readyToken: @escaping () -> String?, upload: @escaping (String) async -> Void) {
+        self.readyToken = readyToken
+        self.upload = upload
+    }
+
+    @discardableResult
+    func reconcile() -> Task<Void, Never> {
+        registrationPending = true
+        if let registrationTask { return registrationTask }
+        let task = Task {
+            while registrationPending {
+                registrationPending = false
+                guard let token = readyToken() else { continue }
+                await upload(token)
+            }
+            registrationTask = nil
+        }
+        registrationTask = task
+        return task
     }
 }

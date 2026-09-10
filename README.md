@@ -120,6 +120,7 @@ Delivery behaviour:
 - Each APNs request sets `apns-expiration` 24 hours out so alerts are stored if the phone is offline, and `apns-collapse-id` equal to the reminder id so webhook retries replace the same banner instead of stacking duplicates.
 - Transient APNs failures (network, 429, 5xx, expired provider JWT) are retried inside the function. If any device is still retryable afterwards the function returns **503** so the webhook / `pg_net` trigger can try the whole job again. Permanent failures (including `410 Unregistered` and `400 BadDeviceToken`) prune that token and still return 200.
 - After changing this function, redeploy with `supabase functions deploy send-reminder-push --no-verify-jwt`. Migration `202609080001_live_activity_refresh` manages the INSERT, UPDATE, and DELETE trigger and a renewal job that runs every 15 minutes. It reads `lmr_webhook_secret` from Vault. Activities become eligible for replacement after seven hours, before the iOS eight-hour limit.
+- Remote starts request an update token with `input-push-token: 1`. The iOS app registers tokens from its application lifecycle, including background launches, and retries registration when authentication or APNs becomes ready. Ended activities do not count as an updateable banner.
 
 `delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, agent tokens, and auth user (service role).
 

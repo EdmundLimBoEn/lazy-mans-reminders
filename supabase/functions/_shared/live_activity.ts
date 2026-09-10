@@ -118,6 +118,7 @@ export function buildLiveActivityPayload(input: {
   };
 
   if (input.event === "start") {
+    aps["input-push-token"] = 1;
     aps["attributes-type"] = LIVE_ACTIVITY_ATTRIBUTES_TYPE;
     aps.attributes = {};
     aps.alert = {
