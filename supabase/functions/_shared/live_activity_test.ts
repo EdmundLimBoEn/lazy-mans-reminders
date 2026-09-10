@@ -127,6 +127,21 @@ Deno.test("decideLiveActivity recycles before the 8h Apple cap", () => {
   );
 });
 
+Deno.test("decideLiveActivity recovers legacy activity tokens with unknown age", () => {
+  for (const hasPushToStartToken of [true, false]) {
+    assertEquals(
+      decideLiveActivity({
+        lines: ["Milk"],
+        hasPushToStartToken,
+        hasActivityToken: true,
+        startedAtMs: null,
+        nowMs: 10_000,
+      }),
+      { kind: hasPushToStartToken ? "recycle" : "update" },
+    );
+  }
+});
+
 Deno.test("start payload is ReminderAttributes with an alert and lines", () => {
   const body = JSON.parse(buildLiveActivityPayload({
     event: "start",
@@ -136,11 +151,24 @@ Deno.test("start payload is ReminderAttributes with an alert and lines", () => {
     staleDate: 1_775_028_800,
   }));
   assertEquals(body.aps.event, "start");
+  assertEquals(body.aps["input-push-token"], 1);
   assertEquals(body.aps["attributes-type"], LIVE_ACTIVITY_ATTRIBUTES_TYPE);
   assertEquals(body.aps.attributes, {});
   assertEquals(body.aps["content-state"], { lines: ["Milk", "Eggs"] });
   assertEquals(body.aps.alert, { body: "Milk" });
   assertEquals(body.aps["stale-date"], 1_775_028_800);
+});
+
+Deno.test("update and end payloads do not request a new push token", () => {
+  for (const event of ["update", "end"] as const) {
+    const body = JSON.parse(buildLiveActivityPayload({
+      event,
+      lines: ["Milk"],
+      timestamp: 1_775_000_000,
+      staleDate: 1_775_028_800,
+    }));
+    assertFalse("input-push-token" in body.aps);
+  }
 });
 
 Deno.test("end payload dismisses immediately", () => {

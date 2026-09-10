@@ -1,3 +1,4 @@
+import ActivityKit
 import Foundation
 
 enum LiveActivityPolicy {
@@ -6,6 +7,10 @@ enum LiveActivityPolicy {
         case end
         case update
         case start
+    }
+
+    static func canUpdate(_ state: ActivityState) -> Bool {
+        state == .active || state == .stale
     }
 
     /// Local reconciliation. Remote start/recycle lives on the server.

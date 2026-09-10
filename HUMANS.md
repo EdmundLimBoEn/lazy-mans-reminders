@@ -36,16 +36,9 @@
   - “Hey Siri, add a reminder in Lazy Man's Reminders” / “remind me to …” (in this app)
   - “Hey Siri, mark this as done” (with the board on screen) or “complete *milk* in Lazy Man's Reminders”
   - Spotlight shows an active reminder by its text. Unsigned-in, Siri should ask you to sign in.
-- [ ] **Live Activity persistence (2026-08-28)** — Code is in the repo. Migration `202608280001_live_activity_tokens` applied to `biwmsxbqrevtjwgsvsmu` via `supabase db push --linked` (28 Aug 2026). Still needs:
-  - [x] Apply migration `202608280001_live_activity_tokens`.
-  - Redeploy `send-reminder-push` with JWT verification off:
-    ```sh
-    supabase functions deploy send-reminder-push --no-verify-jwt
-    ```
-  - In Supabase **Database → Webhooks**, edit `send-reminder-push` so it fires on `INSERT`, `UPDATE`, and `DELETE` for `public.reminders` (same URL and `x-webhook-secret`). Completing or deleting the last reminder is what ends the Lock Screen banner.
-  - Optional but needed so a quiet board does not vanish after Apple's 8h cap: schedule an hourly POST to the same function with header `x-webhook-secret` and body `{"type":"live_activity_refresh"}`.
-  - After installing the new build, open the app once while signed in (Settings → Live Activities on for this app). That uploads the push-to-start token. Later reminder notifications should raise the Lock Screen banner without opening the app.
-  - Physical iPhone test: add a reminder from the web with the app killed; confirm the Lock Screen banner appears. Complete every reminder; confirm it goes away. Leave one reminder overnight and confirm the banner is still there after the hourly refresh.
+- [x] **Live Activity renewal backend (2026-09-08)** — Deployed the current `send-reminder-push` and migration `202609080001_live_activity_refresh`. Production previously ran the pre-Live-Activity function and had no scheduler. Reminder INSERT, UPDATE, and DELETE now invoke the function. `pg_cron` refreshes every 15 minutes and activities become eligible for replacement after seven hours. Token registration records missing start times without resetting age during token rotation. Verified the database-to-function path returned HTTP 200 with `{"sent":2,"failed":0,"retryable":0}`. All 38 server tests and transactional database checks passed.
+- [x] **Live Activity token payload (2026-09-10)**. Deployed `send-reminder-push` version 5 with `input-push-token: 1` on remote starts. All 39 server tests pass. The production device row had no Live Activity tokens even though the scheduler was running successfully. The iOS correction moves token registration out of SwiftUI into the application lifecycle and excludes ended activities from local updates.
+- [ ] **Live Activity device verification**. The corrected development build is installed on the connected iPhone. Unlock it, open the signed-in app, and verify a cold background start uploads its update token. Then leave one reminder active beyond eight hours and confirm the Lock Screen banner renews. The connected iPhone was locked during debugging on 10 September. APNs acceptance and simulator tests do not prove overnight visibility.
 
 - [ ] **Legal review** — Privacy / Terms / Support are live at `/privacy`, `/terms`, `/support`. Counsel review is optional. Contact: `hello@edmundlim.systems`.
 - [ ] **App Store Connect fields** — Copy nutrition labels and review notes from `docs/app-store.md`. Attach screenshots from a physical device.

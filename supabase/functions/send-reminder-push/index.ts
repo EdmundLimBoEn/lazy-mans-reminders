@@ -147,12 +147,16 @@ async function clearLiveActivityColumn(
   userId: string,
   alertToken: string,
   column: "push_to_start_token" | "activity_push_token" | "activity_started_at",
+  expectedValue: string | null,
 ): Promise<void> {
-  const { error } = await supabase
+  const update = supabase
     .from("device_tokens")
     .update({ [column]: null })
     .eq("token", alertToken)
     .eq("user_id", userId);
+  const { error } = await (expectedValue === null
+    ? update.is(column, null)
+    : update.eq(column, expectedValue));
   if (error) {
     console.error(`Could not clear ${column}`, error);
   }
@@ -163,18 +167,21 @@ async function markActivityStarted(
   userId: string,
   alertToken: string,
   startedAt: string,
+  previousActivityToken: string | null,
 ): Promise<void> {
   const { error } = await supabase
     .from("device_tokens")
     .update({
       activity_started_at: startedAt,
-      activity_push_token: null,
     })
     .eq("token", alertToken)
     .eq("user_id", userId);
   if (error) {
     console.error("Could not record Live Activity start", error);
   }
+  await clearLiveActivityColumn(
+    supabase, userId, alertToken, "activity_push_token", previousActivityToken,
+  );
 }
 
 async function markActivityEnded(
@@ -325,6 +332,7 @@ async function sendLiveActivityEvent(input: {
         input.device.user_id,
         input.device.token,
         pruneColumn,
+        token,
       ),
   });
 }
@@ -364,6 +372,7 @@ async function syncLiveActivity(input: {
         input.device.user_id,
         input.device.token,
         startedAt,
+        input.device.activity_push_token,
       );
     }
     return { results: [result], deliveredAlert: result === "sent" && Boolean(input.alertBody) };
@@ -395,6 +404,7 @@ async function syncLiveActivity(input: {
         input.device.user_id,
         input.device.token,
         startedAt,
+        input.device.activity_push_token,
       );
     }
     return {
@@ -438,6 +448,7 @@ async function syncLiveActivity(input: {
     input.device.user_id,
     input.device.token,
     startedAt,
+    input.device.activity_push_token,
   );
   return {
     results: [start, end],
@@ -449,7 +460,7 @@ async function loadBoardLines(
   supabase: ServiceClient,
   userId: string,
   insertedText?: string,
-): Promise<string[]> {
+): Promise<string[] | { error: unknown }> {
   const [{ data: reminders, error: reminderError }, { data: prefs }] =
     await Promise.all([
       supabase
@@ -467,6 +478,7 @@ async function loadBoardLines(
     ]);
   if (reminderError) {
     console.error("Could not load reminders for Live Activity", reminderError);
+    return { error: reminderError };
   }
   const texts = (reminders ?? []).map((row: { text: string }) => row.text);
   if (insertedText && !texts.includes(insertedText)) texts.push(insertedText);
@@ -602,6 +614,10 @@ Deno.serve(async (request) => {
     const results: DeviceSendResult[] = [];
     for (const [userId, userDevices] of byUser) {
       const lines = await loadBoardLines(supabase, userId);
+      if ("error" in lines) {
+        results.push("retryable");
+        continue;
+      }
       results.push(
         ...await syncDevices({
           supabase,
@@ -629,6 +645,9 @@ Deno.serve(async (request) => {
     check.userId,
     check.sendsAlert ? record?.text : undefined,
   );
+  if ("error" in lines) {
+    return new Response("Could not load reminders", { status: 503 });
+  }
   const results = await syncDevices({
     supabase,
     devices,

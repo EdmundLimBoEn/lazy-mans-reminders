@@ -60,8 +60,7 @@ export function decideLiveActivity(input: {
 
   if (
     input.hasActivityToken &&
-    ageMs != null &&
-    ageMs >= LIVE_ACTIVITY_RECYCLE_AFTER_MS
+    (ageMs == null || ageMs >= LIVE_ACTIVITY_RECYCLE_AFTER_MS)
   ) {
     return input.hasPushToStartToken ? { kind: "recycle" } : { kind: "update" };
   }
@@ -119,6 +118,7 @@ export function buildLiveActivityPayload(input: {
   };
 
   if (input.event === "start") {
+    aps["input-push-token"] = 1;
     aps["attributes-type"] = LIVE_ACTIVITY_ATTRIBUTES_TYPE;
     aps.attributes = {};
     aps.alert = {

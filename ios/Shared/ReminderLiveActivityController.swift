@@ -33,7 +33,9 @@ enum ReminderLiveActivityController {
         startObservingTokens()
         let lines = ReminderActivityPresentation.lines(from: reminders)
         let state = ReminderAttributes.ContentState(lines: lines)
-        let existing = Activity<ReminderAttributes>.activities
+        let existing = Activity<ReminderAttributes>.activities.filter {
+            LiveActivityPolicy.canUpdate($0.activityState)
+        }
         let staleDate = Date().addingTimeInterval(8 * 60 * 60)
 
         switch LiveActivityPolicy.action(
@@ -90,6 +92,7 @@ enum ReminderLiveActivityController {
     }
 
     private static func observe(_ activity: Activity<ReminderAttributes>) {
+        guard LiveActivityPolicy.canUpdate(activity.activityState) else { return }
         lock.lock()
         let isNew = observedActivityIDs.insert(activity.id).inserted
         lock.unlock()
@@ -97,6 +100,7 @@ enum ReminderLiveActivityController {
 
         Task {
             for await tokenData in activity.pushTokenUpdates {
+                guard LiveActivityPolicy.canUpdate(activity.activityState) else { break }
                 NotificationCenter.default.post(
                     name: .didRegisterActivityPushToken,
                     object: hex(tokenData)
@@ -105,16 +109,18 @@ enum ReminderLiveActivityController {
         }
         Task {
             for await state in activity.activityStateUpdates {
-                guard state == .ended else { continue }
+                guard state == .ended || state == .dismissed else { continue }
                 lock.lock()
                 observedActivityIDs.remove(activity.id)
                 lock.unlock()
+                guard state == .ended else { break }
                 let othersActive = Activity<ReminderAttributes>.activities.contains {
-                    $0.id != activity.id && $0.activityState == .active
+                    $0.id != activity.id && LiveActivityPolicy.canUpdate($0.activityState)
                 }
-                guard !othersActive else { continue }
+                guard !othersActive else { break }
                 let reminders = await ReminderStore.shared.cached()
                 await sync(reminders: reminders)
+                break
             }
         }
     }
