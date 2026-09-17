@@ -292,3 +292,7 @@ The iOS app is a free download with no in-app purchases or subscriptions.
 3. Attach a tested build, choose manual or automatic release, and submit for review.
 
 Before submission, confirm account deletion, privacy disclosures, support contact, and reviewer notes match the shipped app.
+
+## License
+
+This project is licensed under [CC BY-NC-4.0](https://creativecommons.org/licenses/by-nc/4.0/). See [LICENSE](./LICENSE).
