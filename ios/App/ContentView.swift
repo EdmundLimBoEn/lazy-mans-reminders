@@ -67,7 +67,7 @@ private struct SignInView: View {
                     } onCompletion: { result in
                         Task { await auth.handleAppleSignIn(result) }
                     }
-                    .signInWithAppleButtonStyle(colorScheme == .dark ? .white : .black)
+                    .signInWithAppleButtonStyle(colorScheme == .dark ? .black : .white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 44)
                     .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
