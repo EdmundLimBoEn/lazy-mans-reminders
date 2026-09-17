@@ -67,6 +67,27 @@ final class ReminderPresentationTests: XCTestCase {
         )
     }
 
+    func testPresentedLinesUseTheEmptyBoardPlaceholder() {
+        XCTAssertEqual(
+            ReminderActivityPresentation.presentedLines([]),
+            ["Nothing to remember"]
+        )
+    }
+
+    func testPresentedLinesKeepAShortBoardInOrder() {
+        XCTAssertEqual(
+            ReminderActivityPresentation.presentedLines(["Milk", "Eggs"]),
+            ["Milk", "Eggs"]
+        )
+    }
+
+    func testPresentedLinesClipToTheLockScreenBudgetWithoutAnOverflowFooter() {
+        let lines = (0..<20).map { "Item \($0)" }
+        let display = ReminderActivityPresentation.presentedLines(lines)
+        XCTAssertEqual(display, Array(lines.prefix(ReminderBoardLimits.lockScreenMaxLines)))
+        XCTAssertFalse(display.contains { $0.hasPrefix("+") && $0.hasSuffix(" more") })
+    }
+
     func testMarqueeStopsWhenReduceMotionIsOn() {
         XCTAssertTrue(
             LockScreenMarqueePolicy.shouldScroll(overflow: 20, reduceMotion: false)
