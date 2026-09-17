@@ -13,16 +13,20 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
     static func requestPushIfNeeded() async {
         let center = UNUserNotificationCenter.current()
         let settings = await center.notificationSettings()
-        switch settings.authorizationStatus {
-        case .notDetermined:
-            let granted = (try? await center.requestAuthorization(options: [.alert, .sound, .badge])) ?? false
+        if NotificationAccessPolicy.shouldPrompt(
+            isRestoringSession: false,
+            status: settings.authorizationStatus
+        ) {
+            let granted = (try? await center.requestAuthorization(
+                options: NotificationAccessPolicy.authorizationOptions
+            )) ?? false
             if granted {
                 await MainActor.run { UIApplication.shared.registerForRemoteNotifications() }
             }
-        case .authorized, .provisional, .ephemeral:
+            return
+        }
+        if NotificationAccessPolicy.access(for: settings.authorizationStatus) == .allowed {
             await MainActor.run { UIApplication.shared.registerForRemoteNotifications() }
-        default:
-            break
         }
     }
 
@@ -31,6 +35,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().setNotificationCategories([
+            NotificationAccessPolicy.makeReminderCategory()
+        ])
         NotificationCenter.default.addObserver(
             forName: .didRegisterPushToStartToken,
             object: nil,
@@ -80,16 +87,28 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        // Banner uses system notification chrome (full-width clear glass when
-        // the user has Clear enabled). Payload is body-only — no title header.
-        [.banner, .sound, .list]
+        Task {
+            do {
+                let refreshed = try await ReminderStore.shared.refresh()
+                await ReminderBoardSync.apply(refreshed)
+            } catch {
+                let cached = await ReminderStore.shared.cached()
+                await ReminderBoardSync.apply(cached)
+            }
+        }
+        return NotificationAccessPolicy.foregroundPresentation
     }
 
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
     ) async {
-        let reminders = await ReminderStore.shared.cached()
-        await ReminderBoardSync.apply(reminders)
+        do {
+            let refreshed = try await ReminderStore.shared.refresh()
+            await ReminderBoardSync.apply(refreshed)
+        } catch {
+            let cached = await ReminderStore.shared.cached()
+            await ReminderBoardSync.apply(cached)
+        }
     }
 }

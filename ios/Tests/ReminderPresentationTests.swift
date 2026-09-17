@@ -55,6 +55,18 @@ final class ReminderPresentationTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(huge, tiny)
     }
 
+    func testPreviewLinesCapLikeTheLockScreenOverflow() {
+        let lines = (0..<8).map { "Item \($0)" }
+        XCTAssertEqual(
+            ReminderActivityPresentation.previewLines(lines, limit: 3),
+            ["Item 0", "Item 1", "+6 more"]
+        )
+        XCTAssertEqual(
+            ReminderActivityPresentation.previewLines(["Milk", "Eggs"]),
+            ["Milk", "Eggs"]
+        )
+    }
+
     func testMarqueeStopsWhenReduceMotionIsOn() {
         XCTAssertTrue(
             LockScreenMarqueePolicy.shouldScroll(overflow: 20, reduceMotion: false)

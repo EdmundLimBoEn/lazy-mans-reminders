@@ -18,7 +18,8 @@ struct ContentView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
-        .task(id: auth.session?.accessToken) {
+        .task(id: "\(auth.session?.accessToken ?? "")-\(auth.isRestoringSession)") {
+            guard !auth.isRestoringSession else { return }
             await auth.syncLockScreenPrefs()
             if auth.session != nil {
                 await AppDelegate.requestPushIfNeeded()
@@ -40,7 +41,7 @@ struct ContentView: View {
             Task { await auth.registerLiveActivityTokens() }
         }
         .onChange(of: scenePhase) { _, phase in
-            guard phase == .active, auth.session != nil else { return }
+            guard phase == .active, auth.session != nil, !auth.isRestoringSession else { return }
             Task {
                 await AppDelegate.requestPushIfNeeded()
                 if let token = AppDelegate.latestDeviceToken {

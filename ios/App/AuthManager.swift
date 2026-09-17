@@ -103,7 +103,7 @@ final class AuthManager: ObservableObject {
     func configureAppleRequest(_ request: ASAuthorizationAppleIDRequest) {
         let nonce = Self.randomNonceString()
         pendingAppleNonce = nonce
-        request.requestedScopes = [.email, .fullName]
+        request.requestedScopes = [.email]
         request.nonce = Self.sha256(nonce)
     }
 

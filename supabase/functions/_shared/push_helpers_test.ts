@@ -244,6 +244,7 @@ Deno.test("buildApnsPayload is body-only with reminder_id for the client", () =>
   assertEquals(body.aps.alert, { body: "Book dentist" });
   assertEquals(body.aps.sound, "default");
   assertEquals(body.aps["content-available"], 1);
+  assertEquals(body.aps.category, "reminder");
   assertEquals(body.reminder_id, "11111111-1111-4111-8111-111111111111");
   assertEquals(body.aps.alert.title, undefined);
 });

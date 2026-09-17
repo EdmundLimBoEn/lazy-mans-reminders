@@ -30,6 +30,10 @@ enum ReminderActivityPresentation {
         return capped(flattened(from: active), limit: limit)
     }
 
+    static func previewLines(_ lines: [String], limit: Int = 6) -> [String] {
+        capped(lines, limit: limit)
+    }
+
     private static func flattened(from reminders: [Reminder]) -> [String] {
         reminders.flatMap { reminder in
             reminder.text
