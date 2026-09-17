@@ -108,7 +108,7 @@ struct SignInView: View {
                     }
                 }
             }
-            .signInWithAppleButtonStyle(SignInAppleFill.fill(for: colorScheme).buttonStyle)
+            .signInWithAppleFill(SignInAppleFill.fill(for: colorScheme))
             .frame(maxWidth: .infinity)
             .frame(height: max(44, signInButtonHeight))
             .disabled(busy)
@@ -296,5 +296,17 @@ private struct SignInCard<Content: View>: View {
             Color(.secondarySystemGroupedBackground),
             in: RoundedRectangle(cornerRadius: 16, style: .continuous)
         )
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func signInWithAppleFill(_ fill: SignInAppleFill) -> some View {
+        switch fill {
+        case .black:
+            signInWithAppleButtonStyle(.black)
+        case .white:
+            signInWithAppleButtonStyle(.white)
+        }
     }
 }
