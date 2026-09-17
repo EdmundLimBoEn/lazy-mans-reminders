@@ -30,6 +30,13 @@ enum ReminderActivityPresentation {
         return capped(flattened(from: active), limit: limit)
     }
 
+    /// Lock Screen banner and expanded Dynamic Island lines from content state.
+    /// Adds the empty placeholder and clips to the current device budget.
+    static func presentedLines(_ lines: [String]) -> [String] {
+        let source = lines.isEmpty ? ["Nothing to remember"] : lines
+        return Array(source.prefix(ReminderBoardLimits.lockScreenMaxLines))
+    }
+
     static func previewLines(_ lines: [String], limit: Int = 6) -> [String] {
         capped(lines, limit: limit)
     }

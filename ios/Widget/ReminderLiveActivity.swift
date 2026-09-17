@@ -4,18 +4,20 @@ import WidgetKit
 
 /// Full-width Lock Screen banner — notification-style clear glass.
 /// Compact type so the phone-measured line budget can actually fit.
-/// Compact, minimal, and expanded Dynamic Island slots stay EmptyView so
-/// status icons remain visible. Live Activities HIG still requires those
-/// presentations; filling them would cover the status bar, which this
-/// product refuses to do.
+///
+/// Compact leading, compact trailing, and minimal stay `EmptyView`. Any
+/// compact text widens the collapsed Dynamic Island over status icons.
+/// Live Activities HIG asks that compact content stay as narrow as possible
+/// and not cover the status bar. Press-and-hold uses the expanded
+/// presentation for the same board lines as the Lock Screen banner.
 struct ReminderLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: ReminderAttributes.self) { context in
             lockScreenBanner(lines: context.state.lines)
-        } dynamicIsland: { _ in
+        } dynamicIsland: { context in
             DynamicIsland {
-                DynamicIslandExpandedRegion(.center) {
-                    EmptyView()
+                DynamicIslandExpandedRegion(.bottom) {
+                    expandedIsland(lines: context.state.lines)
                 }
             } compactLeading: {
                 EmptyView()
@@ -29,21 +31,10 @@ struct ReminderLiveActivity: Widget {
 
     @ViewBuilder
     private func lockScreenBanner(lines: [String]) -> some View {
-        let limit = ReminderBoardLimits.lockScreenMaxLines
-        let display = Array(
-            (lines.isEmpty ? ["Nothing to remember"] : lines).prefix(limit)
+        reminderLineStack(
+            lines: lines,
+            font: .system(size: LockScreenLineBudget.pointSize, weight: .semibold)
         )
-
-        VStack(alignment: .leading, spacing: LockScreenLineBudget.lineSpacing) {
-            ForEach(Array(display.enumerated()), id: \.offset) { _, line in
-                Text(line)
-                    .font(.system(size: LockScreenLineBudget.pointSize, weight: .semibold))
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-        }
         .padding(.top, 14)
         .padding(.bottom, 12)
         .padding(.horizontal, 16)
@@ -51,5 +42,33 @@ struct ReminderLiveActivity: Widget {
         // `.clear` → system Liquid Glass (matches notification Clear look).
         .activityBackgroundTint(.clear)
         .activitySystemActionForegroundColor(.primary)
+    }
+
+    @ViewBuilder
+    private func expandedIsland(lines: [String]) -> some View {
+        reminderLineStack(
+            lines: lines,
+            font: .subheadline.weight(.semibold)
+        )
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        // The island background is always black. Force dark so `.primary`
+        // text stays light when the phone is in light mode.
+        .environment(\.colorScheme, .dark)
+    }
+
+    @ViewBuilder
+    private func reminderLineStack(lines: [String], font: Font) -> some View {
+        let display = ReminderActivityPresentation.presentedLines(lines)
+        VStack(alignment: .leading, spacing: LockScreenLineBudget.lineSpacing) {
+            ForEach(Array(display.enumerated()), id: \.offset) { _, line in
+                Text(line)
+                    .font(font)
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
     }
 }
