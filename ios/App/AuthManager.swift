@@ -4,6 +4,11 @@ import CryptoKit
 import Foundation
 import Supabase
 
+enum AuthNotice: Equatable {
+    case checkInbox(email: String)
+    case error(String)
+}
+
 @MainActor
 final class AuthManager: ObservableObject {
     private struct DeviceToken: Encodable {
@@ -52,8 +57,9 @@ final class AuthManager: ObservableObject {
     }
 
     @Published private(set) var session: Session?
-    @Published var isLoading = true
-    @Published var message: String?
+    @Published private(set) var isRestoringSession = true
+    @Published private(set) var isAuthenticating = false
+    @Published private(set) var notice: AuthNotice?
 
     let client = SupabaseClient(
         supabaseURL: AppConfig.supabaseURL,
@@ -69,7 +75,7 @@ final class AuthManager: ObservableObject {
         Task {
             session = try? await client.auth.session
             await shareSession()
-            isLoading = false
+            isRestoringSession = false
 
             for await (_, nextSession) in await client.auth.authStateChanges {
                 session = nextSession
@@ -80,18 +86,18 @@ final class AuthManager: ObservableObject {
     }
 
     func sendMagicLink(to email: String) async {
-        isLoading = true
-        message = nil
+        isAuthenticating = true
+        notice = nil
+        defer { isAuthenticating = false }
         do {
             try await client.auth.signInWithOTP(
                 email: email,
                 redirectTo: magicLinkRedirectURL
             )
-            message = "Check your inbox for the sign-in link."
+            notice = .checkInbox(email: email)
         } catch {
-            message = error.localizedDescription
+            notice = .error(error.localizedDescription)
         }
-        isLoading = false
     }
 
     func configureAppleRequest(_ request: ASAuthorizationAppleIDRequest) {
@@ -102,24 +108,25 @@ final class AuthManager: ObservableObject {
     }
 
     func handleAppleSignIn(_ result: Result<ASAuthorization, Error>) async {
-        message = nil
+        notice = nil
         switch result {
         case .failure(let error):
             if let authError = error as? ASAuthorizationError, authError.code == .canceled {
                 return
             }
-            message = error.localizedDescription
+            notice = .error(error.localizedDescription)
         case .success(let authorization):
             guard
                 let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
                 let tokenData = credential.identityToken,
                 let idToken = String(data: tokenData, encoding: .utf8)
             else {
-                message = "Apple did not return a usable identity token."
+                notice = .error("Apple did not return a usable identity token.")
                 return
             }
 
-            isLoading = true
+            isAuthenticating = true
+            defer { isAuthenticating = false }
             do {
                 session = try await client.auth.signInWithIdToken(
                     credentials: .init(
@@ -148,16 +155,16 @@ final class AuthManager: ObservableObject {
                     }
                 }
             } catch {
-                message = error.localizedDescription
+                notice = .error(error.localizedDescription)
             }
-            isLoading = false
         }
     }
 
     /// Opens Google via the system browser (ASWebAuthenticationSession). No GoogleSignIn SDK required.
     func signInWithGoogle() async {
-        isLoading = true
-        message = nil
+        isAuthenticating = true
+        notice = nil
+        defer { isAuthenticating = false }
         do {
             session = try await client.auth.signInWithOAuth(
                 provider: .google,
@@ -168,18 +175,22 @@ final class AuthManager: ObservableObject {
             }
             await shareSession()
         } catch {
-            message = error.localizedDescription
+            notice = .error(error.localizedDescription)
         }
-        isLoading = false
     }
 
     func handle(url: URL) async {
         do {
             session = try await client.auth.session(from: url)
+            notice = nil
             await shareSession()
         } catch {
-            message = error.localizedDescription
+            notice = .error(error.localizedDescription)
         }
+    }
+
+    func clearNotice() {
+        notice = nil
     }
 
     func signOut() async {
@@ -192,6 +203,7 @@ final class AuthManager: ObservableObject {
         }
         try? await client.auth.signOut()
         session = nil
+        notice = nil
         await ReminderStore.shared.clearUserData()
         await ReminderBoardSync.clear()
     }
@@ -202,7 +214,7 @@ final class AuthManager: ObservableObject {
         // Auth user is already gone; local sign-out may fail — clear client state either way.
         try? await client.auth.signOut()
         session = nil
-        message = nil
+        notice = nil
         await ReminderStore.shared.clearUserData()
         await ReminderBoardSync.clear()
     }

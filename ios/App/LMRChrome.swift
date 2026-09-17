@@ -1,0 +1,37 @@
+import AuthenticationServices
+import SwiftUI
+
+enum LMRWeb {
+    static let origin = URL(string: "https://lmr.edmundlim.systems")!
+    static let privacy = URL(string: "https://lmr.edmundlim.systems/privacy")!
+    static let terms = URL(string: "https://lmr.edmundlim.systems/terms")!
+    static let support = URL(string: "https://lmr.edmundlim.systems/support")!
+    static let dataExport = origin
+}
+
+/// Fill for `SignInWithAppleButton`. Dark mode uses `.black` so the control
+/// matches the rest of a dark grouped card instead of a light-mode pill (#22).
+enum SignInAppleFill: Equatable {
+    case black
+    case white
+
+    static func fill(for colorScheme: ColorScheme) -> SignInAppleFill {
+        colorScheme == .dark ? .black : .white
+    }
+
+    var buttonStyle: SignInWithAppleButtonStyle {
+        switch self {
+        case .black: return .black
+        case .white: return .white
+        }
+    }
+}
+
+enum AccountSessionCaption {
+    static func methodCaption(providers: [String]) -> String? {
+        let set = Set(providers)
+        if set.contains("apple") { return "Using Sign in with Apple" }
+        if set.contains("google") { return "Using Google" }
+        return nil
+    }
+}
