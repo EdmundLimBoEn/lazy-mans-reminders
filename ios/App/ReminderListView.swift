@@ -5,9 +5,13 @@ struct ReminderListView: View {
     @EnvironmentObject private var auth: AuthManager
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @State private var hapticTick = 0
+    @State private var errorTick = 0
     @State private var reminders: [Reminder] = []
     @State private var draft = ""
     @State private var isLoading = true
+    @State private var hasLoaded = false
     @State private var isAdding = false
     @State private var error: String?
     @State private var completingIDs: Set<UUID> = []
@@ -18,11 +22,12 @@ struct ReminderListView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if isLoading && reminders.isEmpty {
+                if isLoading && !hasLoaded && reminders.isEmpty {
                     ProgressView("Loading reminders")
                         .controlSize(.large)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .accessibilityLabel("Loading reminders")
+                } else if reminders.isEmpty, let error {
+                    failedBoard(error)
                 } else if reminders.isEmpty {
                     emptyBoard
                 } else {
@@ -38,7 +43,7 @@ struct ReminderListView: View {
                 composer
             }
             .safeAreaInset(edge: .top, spacing: 0) {
-                if let error {
+                if let error, !reminders.isEmpty {
                     BoardErrorBanner(message: error) {
                         self.error = nil
                     }
@@ -49,14 +54,19 @@ struct ReminderListView: View {
                     Button {
                         showAccount = true
                     } label: {
-                        accountToolbarSymbol
+                        Label("Account", systemImage: "person.crop.circle")
                     }
-                    .accessibilityLabel("Account")
                     .accessibilityHint("Sign out, privacy, and delete account")
+                }
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { composerFocused = false }
                 }
             }
             .refreshable { await refresh() }
             .task { await refresh() }
+            .sensoryFeedback(.success, trigger: hapticTick)
+            .sensoryFeedback(.error, trigger: errorTick)
             .onReceive(NotificationCenter.default.publisher(for: .didUpdateReminders)) { _ in
                 Task { reminders = await ReminderStore.shared.cached() }
             }
@@ -74,13 +84,41 @@ struct ReminderListView: View {
         "\(reminders.count) of \(ReminderBoardLimits.maxActive)"
     }
 
+    private var prefersSolidChrome: Bool {
+        reduceTransparency || colorSchemeContrast == .increased
+    }
+
     private var emptyBoard: some View {
         ScrollView {
-            ContentUnavailableView(
-                "All Clear",
-                systemImage: "checkmark.circle",
-                description: Text("Nothing on your board. Add a reminder below.")
-            )
+            ContentUnavailableView {
+                Label("All Clear", systemImage: "checkmark.circle")
+            } description: {
+                Text("Nothing on your board. Add a reminder below.")
+            }
+            .frame(maxWidth: .infinity, minHeight: 320)
+        }
+    }
+
+    private func failedBoard(_ message: String) -> some View {
+        ScrollView {
+            ContentUnavailableView {
+                Label("Couldn’t Load Board", systemImage: "exclamationmark.triangle")
+            } description: {
+                Text(message)
+            } actions: {
+                Button {
+                    Task { await refresh() }
+                } label: {
+                    if isLoading {
+                        ProgressView()
+                            .controlSize(.regular)
+                    } else {
+                        Text("Try Again")
+                    }
+                }
+                .disabled(isLoading)
+                .accessibilityLabel("Try Again")
+            }
             .frame(maxWidth: .infinity, minHeight: 320)
         }
     }
@@ -93,6 +131,14 @@ struct ReminderListView: View {
                     isCompleting: completingIDs.contains(reminder.id)
                 ) {
                     Task { await markDone(reminder) }
+                }
+                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    Button("Complete", systemImage: "checkmark.circle") {
+                        Task { await markDone(reminder) }
+                    }
+                    .tint(.accentColor)
+                    .disabled(completingIDs.contains(reminder.id))
+                    .accessibilityHint("Marks this reminder complete")
                 }
                 .reminderOnscreenIdentity(reminder.id)
             }
@@ -139,11 +185,12 @@ struct ReminderListView: View {
                         if isAdding {
                             ProgressView()
                                 .controlSize(.small)
-                                .accessibilityLabel("Adding reminder")
+                                .accessibilityHidden(true)
                         } else {
                             Image(systemName: "arrow.up")
                                 .font(.body.weight(.bold))
                                 .foregroundStyle(canAdd ? Color.white : Color.secondary)
+                                .accessibilityHidden(true)
                         }
                     }
                     .frame(width: addVisualSize, height: addVisualSize)
@@ -156,7 +203,7 @@ struct ReminderListView: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(!canAdd)
-                .accessibilityLabel("Add reminder")
+                .accessibilityLabel(isAdding ? "Adding reminder" : "Add reminder")
                 .accessibilityHint("Saves the text as a new reminder")
             }
             .padding(.leading, 14)
@@ -176,8 +223,12 @@ struct ReminderListView: View {
     @ViewBuilder
     private var composerFieldBackground: some View {
         let shape = RoundedRectangle(cornerRadius: 20, style: .continuous)
-        if reduceTransparency {
-            shape.fill(Color(.secondarySystemGroupedBackground))
+        if prefersSolidChrome {
+            shape
+                .fill(Color(.secondarySystemGroupedBackground))
+                .overlay {
+                    shape.strokeBorder(Color(.separator), lineWidth: colorSchemeContrast == .increased ? 1 : 0.5)
+                }
         } else if #available(iOS 26.0, *) {
             shape
                 .fill(.clear)
@@ -186,17 +237,8 @@ struct ReminderListView: View {
             shape
                 .fill(.ultraThinMaterial)
                 .overlay {
-                    shape.strokeBorder(.white.opacity(0.14), lineWidth: 0.5)
+                    shape.strokeBorder(Color(.separator), lineWidth: 0.5)
                 }
-        }
-    }
-
-    @ViewBuilder
-    private var accountToolbarSymbol: some View {
-        if #available(iOS 26.0, *) {
-            Image(systemName: "person.fill")
-        } else {
-            Image(systemName: "person.crop.circle")
         }
     }
 
@@ -222,24 +264,35 @@ struct ReminderListView: View {
         }
     }
 
+    private func presentError(_ message: String) {
+        error = message
+        errorTick += 1
+    }
+
     private func refresh() async {
-        isLoading = true
+        if !hasLoaded {
+            isLoading = true
+        } else if reminders.isEmpty && error != nil {
+            isLoading = true
+        }
         do {
             reminders = try await ReminderStore.shared.refresh()
+            error = nil
             await ReminderBoardSync.apply(reminders, notify: false)
         } catch {
             reminders = await ReminderStore.shared.cached()
-            self.error = error.localizedDescription
+            presentError(error.localizedDescription)
             await ReminderBoardSync.apply(reminders, notify: false)
         }
         isLoading = false
+        hasLoaded = true
     }
 
     private func addReminder() async {
         let value = draft.trimmingCharacters(in: .whitespacesAndNewlines)
         guard canAdd, let userID = auth.session?.user.id else { return }
         if atCapacity {
-            error = ReminderBoardLimits.postItHint
+            presentError(ReminderBoardLimits.postItHint)
             return
         }
         isAdding = true
@@ -249,13 +302,14 @@ struct ReminderListView: View {
             animateBoard { reminders = updated }
             await ReminderBoardSync.apply(reminders, notify: false)
             composerFocused = true
+            hapticTick += 1
             UIAccessibility.post(
                 notification: .announcement,
                 argument: "Reminder added"
             )
         } catch {
             draft = value
-            self.error = error.localizedDescription
+            presentError(error.localizedDescription)
         }
         isAdding = false
     }
@@ -267,13 +321,14 @@ struct ReminderListView: View {
             let updated = try await ReminderStore.shared.markDone(id: reminder.id)
             animateBoard { reminders = updated }
             await ReminderBoardSync.apply(reminders, notify: false)
+            hapticTick += 1
             UIAccessibility.post(
                 notification: .announcement,
                 argument: "Completed \(reminder.text)"
             )
         } catch {
             completingIDs.remove(reminder.id)
-            self.error = error.localizedDescription
+            presentError(error.localizedDescription)
         }
     }
 }
@@ -281,6 +336,8 @@ struct ReminderListView: View {
 private struct BoardErrorBanner: View {
     let message: String
     let onDismiss: () -> Void
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
 
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -291,6 +348,7 @@ private struct BoardErrorBanner: View {
             Text(message)
                 .font(.footnote)
                 .foregroundStyle(.primary)
+                .textSelection(.enabled)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
             Button(action: onDismiss) {
@@ -307,7 +365,16 @@ private struct BoardErrorBanner: View {
         .padding(.trailing, 4)
         .padding(.vertical, 4)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.regularMaterial)
+        .background {
+            if reduceTransparency || colorSchemeContrast == .increased {
+                Color(.secondarySystemGroupedBackground)
+            } else {
+                Rectangle().fill(.regularMaterial)
+            }
+        }
+        .overlay(alignment: .bottom) {
+            Divider()
+        }
         .accessibilityElement(children: .contain)
         .accessibilityAddTraits(.updatesFrequently)
     }

@@ -8,6 +8,8 @@ struct SignInView: View {
     @ScaledMetric(relativeTo: .body) private var signInButtonHeight: CGFloat = 44
     @State private var email = ""
     @State private var pending: PendingSignIn?
+    @State private var inboxPulse = 0
+    @State private var errorPulse = 0
     @FocusState private var emailFocused: Bool
 
     private enum PendingSignIn {
@@ -18,7 +20,16 @@ struct SignInView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    header
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Lazy Man's Reminders")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        Text("Your board on this iPhone, the web, and the Lock Screen.")
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+
                     providerCard
                     emailCard
                     if case .error(let message) = auth.notice {
@@ -26,21 +37,22 @@ struct SignInView: View {
                             .font(.footnote)
                             .foregroundStyle(.red)
                             .symbolRenderingMode(.hierarchical)
+                            .textSelection(.enabled)
                             .fixedSize(horizontal: false, vertical: true)
                             .accessibilityAddTraits(.updatesFrequently)
                     }
                     legalFooter
                 }
                 .padding(.horizontal, 20)
-                .padding(.top, 12)
+                .padding(.top, 8)
                 .padding(.bottom, 32)
                 .frame(maxWidth: 560)
                 .frame(maxWidth: .infinity)
             }
             .scrollDismissesKeyboard(.interactively)
             .background(Color(.systemGroupedBackground))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar(.hidden, for: .navigationBar)
+            .navigationTitle("Sign In")
+            .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
@@ -48,6 +60,8 @@ struct SignInView: View {
                 }
             }
         }
+        .sensoryFeedback(.success, trigger: inboxPulse)
+        .sensoryFeedback(.error, trigger: errorPulse)
         .onChange(of: email) { _, _ in
             if case .error = auth.notice {
                 auth.clearNotice()
@@ -57,12 +71,14 @@ struct SignInView: View {
             if case .checkInbox = notice {
                 pending = nil
                 emailFocused = false
+                inboxPulse += 1
                 UIAccessibility.post(
                     notification: .announcement,
                     argument: "Check your inbox for the sign-in link"
                 )
             } else if case .error = notice {
                 pending = nil
+                errorPulse += 1
             }
         }
     }
@@ -75,20 +91,8 @@ struct SignInView: View {
         email.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Lazy Man's Reminders")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
-            Text("Sign In")
-                .font(.largeTitle.bold())
-                .accessibilityAddTraits(.isHeader)
-            Text("Your board on this iPhone, the web, and the Lock Screen.")
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
+    private var emailIsPlausible: Bool {
+        SignInEmail.isPlausible(normalizedEmail)
     }
 
     private var providerCard: some View {
@@ -108,7 +112,6 @@ struct SignInView: View {
             .frame(maxWidth: .infinity)
             .frame(height: max(44, signInButtonHeight))
             .disabled(busy)
-            .accessibilityLabel("Sign in with Apple")
 
             Button {
                 pending = .google
@@ -139,10 +142,12 @@ struct SignInView: View {
                 Label("Check Your Inbox", systemImage: "envelope.badge")
                     .font(.headline)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
                     .accessibilityAddTraits(.updatesFrequently)
                 Text("We sent a sign-in link to \(sentTo).")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
                     .fixedSize(horizontal: false, vertical: true)
                 Button("Use a Different Email") {
                     auth.clearNotice()
@@ -158,25 +163,17 @@ struct SignInView: View {
             SignInCard {
                 Text("Email")
                     .font(.headline)
+                    .accessibilityAddTraits(.isHeader)
                 Text("Use the same address as the web board.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
-                TextField("you@example.com", text: $email)
-                    .textContentType(.emailAddress)
-                    .keyboardType(.emailAddress)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .font(.body)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 10)
-                    .frame(minHeight: 44)
-                    .background(Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-                    .focused($emailFocused)
-                    .submitLabel(.send)
-                    .accessibilityLabel("Email address")
-                    .onSubmit { Task { await sendMagicLink() } }
-                    .disabled(busy)
-
+                emailField
+                if !normalizedEmail.isEmpty && !emailIsPlausible {
+                    Text("Enter a valid email address.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .accessibilityAddTraits(.updatesFrequently)
+                }
                 Button {
                     Task { await sendMagicLink() }
                 } label: {
@@ -189,9 +186,43 @@ struct SignInView: View {
                 .buttonBorderShape(.roundedRectangle)
                 .controlSize(.large)
                 .frame(maxWidth: .infinity)
-                .disabled(normalizedEmail.isEmpty || busy)
+                .disabled(!emailIsPlausible || busy)
             }
         }
+    }
+
+    private var emailField: some View {
+        HStack(spacing: 0) {
+            TextField("you@example.com", text: $email)
+                .textContentType(.emailAddress)
+                .keyboardType(.emailAddress)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .font(.body)
+                .focused($emailFocused)
+                .submitLabel(.send)
+                .accessibilityLabel("Email address")
+                .onSubmit { Task { await sendMagicLink() } }
+                .disabled(busy)
+
+            if !email.isEmpty {
+                Button {
+                    email = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.tertiary)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .disabled(busy)
+                .accessibilityLabel("Clear text")
+            }
+        }
+        .padding(.leading, 12)
+        .padding(.trailing, email.isEmpty ? 12 : 0)
+        .frame(minHeight: 44)
+        .background(Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 
     private var legalFooter: some View {
@@ -230,16 +261,18 @@ struct SignInView: View {
                 .opacity(showsProgress ? 0 : 1)
             if showsProgress {
                 ProgressView()
-                    .accessibilityLabel(title)
+                    .accessibilityHidden(true)
             }
         }
         .frame(maxWidth: .infinity)
         .frame(minHeight: 22)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(showsProgress ? "\(title), in progress" : title)
     }
 
     private func sendMagicLink() async {
         let value = normalizedEmail
-        guard !value.isEmpty, !busy else { return }
+        guard SignInEmail.isPlausible(value), !busy else { return }
         pending = .magicLink
         await auth.sendMagicLink(to: value)
         pending = nil

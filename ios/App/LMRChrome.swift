@@ -35,3 +35,12 @@ enum AccountSessionCaption {
         return nil
     }
 }
+
+enum SignInEmail {
+    static func isPlausible(_ raw: String) -> Bool {
+        let value = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        let parts = value.split(separator: "@", maxSplits: 1, omittingEmptySubsequences: false)
+        guard parts.count == 2 else { return false }
+        return !parts[0].isEmpty && !parts[1].isEmpty
+    }
+}

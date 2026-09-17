@@ -16,6 +16,7 @@ struct AccountView: View {
                         Label(error, systemImage: "exclamationmark.triangle.fill")
                             .font(.footnote)
                             .foregroundStyle(.red)
+                            .textSelection(.enabled)
                             .accessibilityAddTraits(.updatesFrequently)
                     }
                 }
@@ -25,6 +26,7 @@ struct AccountView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(accountTitle)
                                 .font(.headline)
+                                .textSelection(.enabled)
                             if let subtitle = accountSubtitle {
                                 Text(subtitle)
                                     .font(.subheadline)
@@ -68,8 +70,10 @@ struct AccountView: View {
                 }
 
                 Section {
-                    Button("Delete Account…", role: .destructive) {
+                    Button(role: .destructive) {
                         showDeleteAccount = true
+                    } label: {
+                        Label("Delete Account…", systemImage: "trash")
                     }
                     .disabled(isDeletingAccount)
                 } footer: {
@@ -80,6 +84,7 @@ struct AccountView: View {
             .navigationTitle("Account")
             .navigationBarTitleDisplayMode(.inline)
             .interactiveDismissDisabled(isDeletingAccount)
+            .sensoryFeedback(.error, trigger: error)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     if isDeletingAccount {

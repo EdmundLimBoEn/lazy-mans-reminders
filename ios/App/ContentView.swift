@@ -7,10 +7,9 @@ struct ContentView: View {
     var body: some View {
         Group {
             if auth.isRestoringSession {
-                ProgressView("Loading")
+                ProgressView("Restoring session")
                     .controlSize(.large)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .accessibilityLabel("Loading")
             } else if auth.session == nil {
                 SignInView()
             } else {

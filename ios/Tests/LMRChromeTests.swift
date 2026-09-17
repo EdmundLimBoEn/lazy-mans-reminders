@@ -40,4 +40,13 @@ final class LMRChromeTests: XCTestCase {
         )
         XCTAssertNil(AccountSessionCaption.methodCaption(providers: ["email"]))
     }
+
+    func testSignInEmailRequiresBothSidesOfAtSign() {
+        XCTAssertFalse(SignInEmail.isPlausible(""))
+        XCTAssertFalse(SignInEmail.isPlausible("nope"))
+        XCTAssertFalse(SignInEmail.isPlausible("@example.com"))
+        XCTAssertFalse(SignInEmail.isPlausible("you@"))
+        XCTAssertTrue(SignInEmail.isPlausible("you@example.com"))
+        XCTAssertTrue(SignInEmail.isPlausible("  you@example.com  "))
+    }
 }
