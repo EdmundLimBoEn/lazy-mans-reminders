@@ -58,3 +58,11 @@ enum LockScreenLineBudget {
         return lines
     }
 }
+
+enum LockScreenMarqueePolicy {
+    static let overflowThreshold: CGFloat = 0.5
+
+    static func shouldScroll(overflow: CGFloat, reduceMotion: Bool) -> Bool {
+        overflow > overflowThreshold && !reduceMotion
+    }
+}

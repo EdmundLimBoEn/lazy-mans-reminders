@@ -103,7 +103,10 @@ struct ReminderProvider: TimelineProvider {
             contentWidth: contentWidth
         )
 
-        guard overflow > 0.5 else {
+        guard LockScreenMarqueePolicy.shouldScroll(
+            overflow: overflow,
+            reduceMotion: UIAccessibility.isReduceMotionEnabled
+        ) else {
             return Timeline(
                 entries: [probe],
                 policy: .after(now.addingTimeInterval(15 * 60))
@@ -183,6 +186,7 @@ struct ReminderProvider: TimelineProvider {
 /// notification clear-glass Live Activity look, so we don't ship them.
 struct ReminderWidgetView: View {
     @Environment(\.widgetFamily) private var family
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let entry: ReminderEntry
 
     var body: some View {
@@ -206,10 +210,14 @@ struct ReminderWidgetView: View {
 
     @ViewBuilder
     private func reminderLine(_ line: String) -> some View {
-        let overflows =
-            LockScreenAccessoryMetrics.textWidth(line) > entry.contentWidth + 0.5
+        let overflow =
+            LockScreenAccessoryMetrics.textWidth(line) - entry.contentWidth
+        let marquee = LockScreenMarqueePolicy.shouldScroll(
+            overflow: overflow,
+            reduceMotion: reduceMotion
+        )
 
-        if overflows {
+        if marquee {
             Text(line)
                 .font(LockScreenAccessoryMetrics.font)
                 .foregroundStyle(.primary)

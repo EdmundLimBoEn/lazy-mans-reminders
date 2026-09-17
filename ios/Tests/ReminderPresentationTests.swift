@@ -54,4 +54,16 @@ final class ReminderPresentationTests: XCTestCase {
         XCTAssertLessThanOrEqual(huge, LockScreenLineBudget.maxLinesCap)
         XCTAssertGreaterThanOrEqual(huge, tiny)
     }
+
+    func testMarqueeStopsWhenReduceMotionIsOn() {
+        XCTAssertTrue(
+            LockScreenMarqueePolicy.shouldScroll(overflow: 20, reduceMotion: false)
+        )
+        XCTAssertFalse(
+            LockScreenMarqueePolicy.shouldScroll(overflow: 20, reduceMotion: true)
+        )
+        XCTAssertFalse(
+            LockScreenMarqueePolicy.shouldScroll(overflow: 0.2, reduceMotion: false)
+        )
+    }
 }
