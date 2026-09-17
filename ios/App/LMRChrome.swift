@@ -10,15 +10,17 @@ enum LMRWeb {
 
 /// Fill for `SignInWithAppleButton`. Dark mode uses `.black` so the control
 /// matches the rest of a dark grouped card instead of a light-mode pill (#22).
-/// Do not name `SignInWithAppleButtonStyle` here: on the iOS 27 SDK that type
-/// lives in the `_AuthenticationServices_SwiftUI` overlay and is not in scope
-/// as a return type even with `import AuthenticationServices`.
+/// Light mode uses `.whiteOutline` so a white fill still has a bezel on a
+/// light grouped card. Do not name `SignInWithAppleButtonStyle` here: on the
+/// iOS 27 SDK that type lives in the `_AuthenticationServices_SwiftUI`
+/// overlay and is not in scope as a return type even with
+/// `import AuthenticationServices`.
 enum SignInAppleFill: Equatable {
     case black
-    case white
+    case whiteOutline
 
     static func fill(for colorScheme: ColorScheme) -> SignInAppleFill {
-        colorScheme == .dark ? .black : .white
+        colorScheme == .dark ? .black : .whiteOutline
     }
 }
 
@@ -27,6 +29,7 @@ enum AccountSessionCaption {
         let set = Set(providers)
         if set.contains("apple") { return "Using Sign in with Apple" }
         if set.contains("google") { return "Using Google" }
+        if set.contains("email") { return "Using Email" }
         return nil
     }
 }

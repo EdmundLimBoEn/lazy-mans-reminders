@@ -133,20 +133,31 @@ enum ReminderIntentActions {
     }
 }
 
+extension ForegroundContinuableIntent {
+    fileprivate func performAuthenticated<T>(_ work: () async throws -> T) async throws -> T {
+        do {
+            return try await work()
+        } catch ReminderIntentError.signedOut {
+            throw needsToContinueInForegroundError("Sign in on this iPhone first.")
+        }
+    }
+}
+
 struct ReminderIntentSnippetView: View {
     let headline: String
     let lines: [String]
 
     var body: some View {
+        let visible = ReminderActivityPresentation.previewLines(lines)
         VStack(alignment: .leading, spacing: 8) {
             Text(headline)
                 .font(.headline)
-            if lines.isEmpty {
+            if visible.isEmpty {
                 Text("Nothing on your board.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             } else {
-                Text(lines.joined(separator: "\n"))
+                Text(visible.joined(separator: "\n"))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -161,7 +172,7 @@ struct ReminderIntentSnippetView: View {
 /// Siri AI (iOS 27) uses this schema for “add a reminder / remind me to …”.
 @available(iOS 27.0, *)
 @AppIntent(schema: .reminders.createReminder)
-struct CreateReminderIntent {
+struct CreateReminderIntent: ForegroundContinuableIntent {
     var title: String
     var list: ReminderListEntity?
     var note: AttributedString?
@@ -183,7 +194,9 @@ struct CreateReminderIntent {
                 text = "\(text) — \(extra)"
             }
         }
-        let reminder = try await ReminderIntentActions.create(title: text)
+        let reminder = try await performAuthenticated {
+            try await ReminderIntentActions.create(title: text)
+        }
         let entity = ReminderEntity(reminder)
         return .result(
             value: entity,
@@ -196,7 +209,7 @@ struct CreateReminderIntent {
 /// Siri AI uses this schema for “mark this as done / complete …” and title edits.
 @available(iOS 27.0, *)
 @AppIntent(schema: .reminders.updateReminder)
-struct UpdateReminderIntent {
+struct UpdateReminderIntent: ForegroundContinuableIntent {
     var target: ReminderEntity
     var title: String?
     var note: AttributedString?
@@ -221,11 +234,13 @@ struct UpdateReminderIntent {
                 nextTitle = extra
             }
         }
-        let updated = try await ReminderIntentActions.update(
-            id: target.id,
-            title: nextTitle,
-            isCompleted: isCompleted
-        )
+        let updated = try await performAuthenticated {
+            try await ReminderIntentActions.update(
+                id: target.id,
+                title: nextTitle,
+                isCompleted: isCompleted
+            )
+        }
         let entity = ReminderEntity(updated)
         let dialog: String
         if updated.isDone {
@@ -259,7 +274,7 @@ struct OpenReminderIntent: OpenIntent {
 }
 
 @available(iOS 27.0, *)
-struct CompleteReminderIntent: AppIntent {
+struct CompleteReminderIntent: ForegroundContinuableIntent {
     static var title: LocalizedStringResource = "Complete Reminder"
     static var description = IntentDescription(
         "Marks a reminder on your board as done.",
@@ -271,12 +286,14 @@ struct CompleteReminderIntent: AppIntent {
         Summary("Complete \(\.$reminder)")
     }
 
-    @Parameter(title: "Reminder")
+    @Parameter(title: "Reminder", requestValueDialog: "Which reminder should I complete?")
     var reminder: ReminderEntity
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
-        let text = try await ReminderIntentActions.complete(id: reminder.id)
+        let text = try await performAuthenticated {
+            try await ReminderIntentActions.complete(id: reminder.id)
+        }
         return .result(
             dialog: "Completed \(text).",
             view: ReminderIntentSnippetView(headline: "Completed", lines: [text])
@@ -285,7 +302,7 @@ struct CompleteReminderIntent: AppIntent {
 }
 
 @available(iOS 27.0, *)
-struct ListRemindersIntent: AppIntent {
+struct ListRemindersIntent: ForegroundContinuableIntent {
     static var title: LocalizedStringResource = "List Reminders"
     static var description = IntentDescription(
         "Lists the reminders currently on your board.",
@@ -299,7 +316,9 @@ struct ListRemindersIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<[ReminderEntity]> & ProvidesDialog & ShowsSnippetView {
-        let reminders = try await ReminderIntentActions.loadActive(preferNetwork: true)
+        let reminders = try await performAuthenticated {
+            try await ReminderIntentActions.loadActive(preferNetwork: true)
+        }
         let active = reminders.filter { !$0.isDone }
         let entities = active.map(ReminderEntity.init)
         let spoken = ReminderListSpoken.dialog(for: active)
@@ -314,7 +333,7 @@ struct ListRemindersIntent: AppIntent {
 
 #else
 
-struct CreateReminderIntent: AppIntent {
+struct CreateReminderIntent: ForegroundContinuableIntent {
     static var title: LocalizedStringResource = "Add Reminder"
     static var description = IntentDescription(
         "Adds a reminder to your board.",
@@ -331,7 +350,9 @@ struct CreateReminderIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some ReturnsValue<ReminderEntity> & ProvidesDialog & ShowsSnippetView {
-        let reminder = try await ReminderIntentActions.create(title: title)
+        let reminder = try await performAuthenticated {
+            try await ReminderIntentActions.create(title: title)
+        }
         let entity = ReminderEntity(reminder)
         return .result(
             value: entity,
@@ -341,7 +362,7 @@ struct CreateReminderIntent: AppIntent {
     }
 }
 
-struct UpdateReminderIntent: AppIntent {
+struct UpdateReminderIntent: ForegroundContinuableIntent {
     static var title: LocalizedStringResource = "Update Reminder"
     static var description = IntentDescription(
         "Updates a reminder on your board.",
@@ -353,7 +374,7 @@ struct UpdateReminderIntent: AppIntent {
         Summary("Update \(\.$target)")
     }
 
-    @Parameter(title: "Reminder")
+    @Parameter(title: "Reminder", requestValueDialog: "Which reminder should I update?")
     var target: ReminderEntity
 
     @Parameter(title: "Title")
@@ -364,11 +385,13 @@ struct UpdateReminderIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some ReturnsValue<ReminderEntity> & ProvidesDialog & ShowsSnippetView {
-        let updated = try await ReminderIntentActions.update(
-            id: target.id,
-            title: title,
-            isCompleted: isCompleted
-        )
+        let updated = try await performAuthenticated {
+            try await ReminderIntentActions.update(
+                id: target.id,
+                title: title,
+                isCompleted: isCompleted
+            )
+        }
         let entity = ReminderEntity(updated)
         let dialog: String
         if updated.isDone {
@@ -402,7 +425,7 @@ struct OpenReminderIntent: OpenIntent {
     }
 }
 
-struct CompleteReminderIntent: AppIntent {
+struct CompleteReminderIntent: ForegroundContinuableIntent {
     static var title: LocalizedStringResource = "Complete Reminder"
     static var description = IntentDescription(
         "Marks a reminder on your board as done.",
@@ -414,12 +437,14 @@ struct CompleteReminderIntent: AppIntent {
         Summary("Complete \(\.$reminder)")
     }
 
-    @Parameter(title: "Reminder")
+    @Parameter(title: "Reminder", requestValueDialog: "Which reminder should I complete?")
     var reminder: ReminderEntity
 
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
-        let text = try await ReminderIntentActions.complete(id: reminder.id)
+        let text = try await performAuthenticated {
+            try await ReminderIntentActions.complete(id: reminder.id)
+        }
         return .result(
             dialog: "Completed \(text).",
             view: ReminderIntentSnippetView(headline: "Completed", lines: [text])
@@ -427,7 +452,7 @@ struct CompleteReminderIntent: AppIntent {
     }
 }
 
-struct ListRemindersIntent: AppIntent {
+struct ListRemindersIntent: ForegroundContinuableIntent {
     static var title: LocalizedStringResource = "List Reminders"
     static var description = IntentDescription(
         "Lists the reminders currently on your board.",
@@ -441,7 +466,9 @@ struct ListRemindersIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<[ReminderEntity]> & ProvidesDialog & ShowsSnippetView {
-        let reminders = try await ReminderIntentActions.loadActive(preferNetwork: true)
+        let reminders = try await performAuthenticated {
+            try await ReminderIntentActions.loadActive(preferNetwork: true)
+        }
         let active = reminders.filter { !$0.isDone }
         let entities = active.map(ReminderEntity.init)
         let spoken = ReminderListSpoken.dialog(for: active)

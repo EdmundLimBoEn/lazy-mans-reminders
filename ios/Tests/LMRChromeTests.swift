@@ -7,8 +7,8 @@ final class LMRChromeTests: XCTestCase {
         XCTAssertEqual(SignInAppleFill.fill(for: .dark), .black)
     }
 
-    func testAppleFillIsWhiteInLightMode() {
-        XCTAssertEqual(SignInAppleFill.fill(for: .light), .white)
+    func testAppleFillIsWhiteOutlineInLightMode() {
+        XCTAssertEqual(SignInAppleFill.fill(for: .light), .whiteOutline)
     }
 
     func testLegalPageURLs() {
@@ -38,7 +38,11 @@ final class LMRChromeTests: XCTestCase {
             AccountSessionCaption.methodCaption(providers: ["google"]),
             "Using Google"
         )
-        XCTAssertNil(AccountSessionCaption.methodCaption(providers: ["email"]))
+        XCTAssertEqual(
+            AccountSessionCaption.methodCaption(providers: ["email"]),
+            "Using Email"
+        )
+        XCTAssertNil(AccountSessionCaption.methodCaption(providers: ["phone"]))
     }
 
     func testSignInEmailRequiresBothSidesOfAtSign() {

@@ -244,8 +244,8 @@ struct ReminderWidget: Widget {
         StaticConfiguration(kind: kind, provider: ReminderProvider()) { entry in
             ReminderWidgetView(entry: entry)
         }
-        .configurationDisplayName("Lazy Man's Reminders")
-        .description("Lock Screen reminder lines (same budget as the Live Activity).")
+        .configurationDisplayName("Lock Screen")
+        .description("See your active reminders on the Lock Screen.")
         .supportedFamilies([.accessoryRectangular, .accessoryInline])
         .contentMarginsDisabled()
     }

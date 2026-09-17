@@ -121,7 +121,7 @@ struct SignInView: View {
                 }
             } label: {
                 signInButtonLabel(
-                    title: "Continue with Google",
+                    title: "Sign in with Google",
                     showsProgress: pending == .google
                 )
             }
@@ -305,8 +305,8 @@ private extension View {
         switch fill {
         case .black:
             signInWithAppleButtonStyle(.black)
-        case .white:
-            signInWithAppleButtonStyle(.white)
+        case .whiteOutline:
+            signInWithAppleButtonStyle(.whiteOutline)
         }
     }
 }

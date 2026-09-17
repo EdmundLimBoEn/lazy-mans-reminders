@@ -1,3 +1,4 @@
+import AppIntents
 import SwiftUI
 import UIKit
 
@@ -90,13 +91,29 @@ struct ReminderListView: View {
 
     private var emptyBoard: some View {
         ScrollView {
-            ContentUnavailableView {
-                Label("All Clear", systemImage: "checkmark.circle")
-            } description: {
-                Text("Nothing on your board. Add a reminder below.")
+            VStack(spacing: 24) {
+                ContentUnavailableView {
+                    Label("All Clear", systemImage: "checkmark.circle")
+                } description: {
+                    Text("Nothing on your board. Add a reminder below.")
+                }
+                boardSiriTip
             }
             .frame(maxWidth: .infinity, minHeight: 320)
         }
+    }
+
+    @ViewBuilder
+    private var boardSiriTip: some View {
+#if LMR_REMINDERS_SCHEMA
+        if #available(iOS 27.0, *) {
+            SiriTipView(intent: ListRemindersIntent())
+                .padding(.horizontal, 20)
+        }
+#else
+        SiriTipView(intent: ListRemindersIntent())
+            .padding(.horizontal, 20)
+#endif
     }
 
     private func failedBoard(_ message: String) -> some View {
@@ -117,7 +134,7 @@ struct ReminderListView: View {
                     }
                 }
                 .disabled(isLoading)
-                .accessibilityLabel("Try Again")
+                .accessibilityLabel(isLoading ? "Loading reminders" : "Try Again")
             }
             .frame(maxWidth: .infinity, minHeight: 320)
         }

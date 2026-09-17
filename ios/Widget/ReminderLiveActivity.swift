@@ -4,7 +4,10 @@ import WidgetKit
 
 /// Full-width Lock Screen banner — notification-style clear glass.
 /// Compact type so the phone-measured line budget can actually fit.
-/// Dynamic Island stays empty so the status icons stay visible off Lock Screen.
+/// Compact, minimal, and expanded Dynamic Island slots stay EmptyView so
+/// status icons remain visible. Live Activities HIG still requires those
+/// presentations; filling them would cover the status bar, which this
+/// product refuses to do.
 struct ReminderLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: ReminderAttributes.self) { context in

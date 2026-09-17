@@ -1,12 +1,16 @@
 import SwiftUI
+import UserNotifications
 
 struct AccountView: View {
     @EnvironmentObject private var auth: AuthManager
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
+    @Environment(\.scenePhase) private var scenePhase
     @State private var showSignOut = false
     @State private var showDeleteAccount = false
     @State private var isDeletingAccount = false
     @State private var error: String?
+    @State private var notificationAccess = NotificationAccessPolicy.Access.ask
 
     var body: some View {
         NavigationStack {
@@ -42,6 +46,12 @@ struct AccountView: View {
                     }
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel(accountAccessibilityLabel)
+                }
+
+                Section {
+                    notificationRow
+                } footer: {
+                    Text(NotificationAccessPolicy.footer(notificationAccess))
                 }
 
                 Section {
@@ -85,6 +95,11 @@ struct AccountView: View {
             .navigationBarTitleDisplayMode(.inline)
             .interactiveDismissDisabled(isDeletingAccount)
             .sensoryFeedback(.error, trigger: error)
+            .task { await refreshNotificationAccess() }
+            .onChange(of: scenePhase) { _, phase in
+                guard phase == .active else { return }
+                Task { await refreshNotificationAccess() }
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     if isDeletingAccount {
@@ -108,12 +123,8 @@ struct AccountView: View {
             } message: {
                 Text("You can sign back in with Apple, Google, or email.")
             }
-            .confirmationDialog(
-                "Delete Account",
-                isPresented: $showDeleteAccount,
-                titleVisibility: .visible
-            ) {
-                Button("Delete Permanently", role: .destructive) {
+            .alert("Delete Account?", isPresented: $showDeleteAccount) {
+                Button("Delete Account", role: .destructive) {
                     Task { await deleteAccount() }
                 }
                 Button("Cancel", role: .cancel) {}
@@ -150,6 +161,40 @@ struct AccountView: View {
             return "Account, \(accountEmail)"
         }
         return "Account, signed in"
+    }
+
+    @ViewBuilder
+    private var notificationRow: some View {
+        switch notificationAccess {
+        case .allowed:
+            LabeledContent("Notifications", value: NotificationAccessPolicy.value(notificationAccess))
+        case .ask:
+            Button("Allow Notifications") {
+                Task {
+                    await AppDelegate.requestPushIfNeeded()
+                    await refreshNotificationAccess()
+                }
+            }
+        case .blocked:
+            Button {
+                if let url = NotificationAccessPolicy.notificationSettingsURL() {
+                    openURL(url)
+                }
+            } label: {
+                HStack {
+                    Text("Notifications")
+                    Spacer()
+                    Text(NotificationAccessPolicy.value(notificationAccess))
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .accessibilityHint("Opens Settings so you can allow notifications")
+        }
+    }
+
+    private func refreshNotificationAccess() async {
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        notificationAccess = NotificationAccessPolicy.access(for: settings.authorizationStatus)
     }
 
     private func deleteAccount() async {

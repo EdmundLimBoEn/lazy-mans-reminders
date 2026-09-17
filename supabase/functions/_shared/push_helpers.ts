@@ -10,6 +10,7 @@ export const APNS_EXPIRATION_TTL_SECONDS = 24 * 60 * 60;
 export const APNS_MAX_ATTEMPTS = 3;
 export const APNS_RETRY_DELAYS_MS = [200, 400] as const;
 export const APNS_REQUEST_TIMEOUT_MS = 10_000;
+export const APNS_ALERT_CATEGORY = "reminder";
 
 export type ReminderRecord = {
   id: string;
@@ -183,6 +184,7 @@ export function buildApnsPayload(record: ReminderRecord): string {
       // notification bar with the user's Liquid Glass (Clear) setting.
       alert: { body: record.text },
       sound: "default",
+      category: APNS_ALERT_CATEGORY,
       "content-available": 1,
     },
     reminder_id: record.id,
