@@ -172,7 +172,7 @@ struct ReminderIntentSnippetView: View {
 /// Siri AI (iOS 27) uses this schema for “add a reminder / remind me to …”.
 @available(iOS 27.0, *)
 @AppIntent(schema: .reminders.createReminder)
-struct CreateReminderIntent: ForegroundContinuableIntent {
+struct CreateReminderIntent {
     var title: String
     var list: ReminderListEntity?
     var note: AttributedString?
@@ -194,9 +194,7 @@ struct CreateReminderIntent: ForegroundContinuableIntent {
                 text = "\(text) — \(extra)"
             }
         }
-        let reminder = try await performAuthenticated {
-            try await ReminderIntentActions.create(title: text)
-        }
+        let reminder = try await ReminderIntentActions.create(title: text)
         let entity = ReminderEntity(reminder)
         return .result(
             value: entity,
@@ -209,7 +207,7 @@ struct CreateReminderIntent: ForegroundContinuableIntent {
 /// Siri AI uses this schema for “mark this as done / complete …” and title edits.
 @available(iOS 27.0, *)
 @AppIntent(schema: .reminders.updateReminder)
-struct UpdateReminderIntent: ForegroundContinuableIntent {
+struct UpdateReminderIntent {
     var target: ReminderEntity
     var title: String?
     var note: AttributedString?
@@ -234,13 +232,11 @@ struct UpdateReminderIntent: ForegroundContinuableIntent {
                 nextTitle = extra
             }
         }
-        let updated = try await performAuthenticated {
-            try await ReminderIntentActions.update(
-                id: target.id,
-                title: nextTitle,
-                isCompleted: isCompleted
-            )
-        }
+        let updated = try await ReminderIntentActions.update(
+            id: target.id,
+            title: nextTitle,
+            isCompleted: isCompleted
+        )
         let entity = ReminderEntity(updated)
         let dialog: String
         if updated.isDone {

@@ -87,12 +87,14 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        do {
-            let refreshed = try await ReminderStore.shared.refresh()
-            await ReminderBoardSync.apply(refreshed)
-        } catch {
-            let cached = await ReminderStore.shared.cached()
-            await ReminderBoardSync.apply(cached)
+        Task {
+            do {
+                let refreshed = try await ReminderStore.shared.refresh()
+                await ReminderBoardSync.apply(refreshed)
+            } catch {
+                let cached = await ReminderStore.shared.cached()
+                await ReminderBoardSync.apply(cached)
+            }
         }
         return NotificationAccessPolicy.foregroundPresentation
     }

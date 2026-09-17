@@ -244,7 +244,7 @@ struct ReminderWidget: Widget {
         StaticConfiguration(kind: kind, provider: ReminderProvider()) { entry in
             ReminderWidgetView(entry: entry)
         }
-        .configurationDisplayName("Lock Screen")
+        .configurationDisplayName("Board")
         .description("See your active reminders on the Lock Screen.")
         .supportedFamilies([.accessoryRectangular, .accessoryInline])
         .contentMarginsDisabled()
