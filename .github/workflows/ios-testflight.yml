@@ -1,6 +1,9 @@
 # Hosted TestFlight path for Lazy Man's Reminders.
 # Uses macos-latest + latest-stable Xcode (never Xcode-beta). App Store Connect
 # rejects Xcode 27 beta uploads; build 5 stays internal-only.
+# Pin CURRENT_PROJECT_VERSION in ios/project.yml as the floor. Export sets
+# manageAppVersionAndBuildNumber so App Store Connect can raise CFBundleVersion
+# when that pin was already used.
 #
 # Jeremy: set these repository secrets before the first green upload.
 # Do not commit values, .p8/.p12 files, or ios/Config.xcconfig.
@@ -176,7 +179,7 @@ jobs:
             <key>uploadSymbols</key>
             <true/>
             <key>manageAppVersionAndBuildNumber</key>
-            <false/>
+            <true/>
             <key>stripSwiftSymbols</key>
             <true/>
           </dict>
