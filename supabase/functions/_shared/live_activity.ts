@@ -50,7 +50,6 @@ export function decideLiveActivity(input: {
   hasActivityToken: boolean;
   startedAtMs: number | null;
   nowMs: number;
-  /** Periodic refresh. A content change omits this and still updates immediately. */
   quiet?: boolean;
 }): LiveActivityDecision {
   if (input.lines.length === 0) {
@@ -67,6 +66,19 @@ export function decideLiveActivity(input: {
     ageMs >= LIVE_ACTIVITY_RECYCLE_AFTER_MS
   ) {
     return input.hasPushToStartToken ? { kind: "recycle" } : { kind: "update" };
+  }
+
+  if (input.quiet) {
+    if (input.hasActivityToken && ageMs == null) return { kind: "adopt" };
+    if (input.hasActivityToken) return { kind: "noop" };
+    if (
+      input.hasPushToStartToken &&
+      ageMs != null &&
+      ageMs >= 0 &&
+      ageMs < LIVE_ACTIVITY_RECYCLE_AFTER_MS
+    ) {
+      return { kind: "noop" };
+    }
   }
 
   if (input.hasActivityToken) return { kind: "update" };
@@ -124,6 +136,7 @@ export function buildLiveActivityPayload(input: {
   if (input.event === "start") {
     aps["attributes-type"] = LIVE_ACTIVITY_ATTRIBUTES_TYPE;
     aps.attributes = {};
+    aps["input-push-token"] = 1;
     aps.alert = {
       body: input.alertBody ?? input.lines[0] ?? "Reminders",
     };

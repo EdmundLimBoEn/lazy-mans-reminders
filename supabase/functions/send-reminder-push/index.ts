@@ -158,6 +158,23 @@ async function clearLiveActivityColumn(
   }
 }
 
+async function stampActivityStartedIfMissing(
+  supabase: ServiceClient,
+  userId: string,
+  alertToken: string,
+  startedAt: string,
+): Promise<void> {
+  const { error } = await supabase
+    .from("device_tokens")
+    .update({ activity_started_at: startedAt })
+    .eq("token", alertToken)
+    .eq("user_id", userId)
+    .is("activity_started_at", null);
+  if (error) {
+    console.error("Could not record Live Activity start time", error);
+  }
+}
+
 async function markActivityStarted(
   supabase: ServiceClient,
   userId: string,
@@ -335,15 +352,18 @@ async function syncLiveActivity(input: {
   bundleId: string;
   lines: string[];
   alertBody?: string;
+  quiet?: boolean;
 }): Promise<{ results: DeviceSendResult[]; deliveredAlert: boolean }> {
+  const startedAtMs = parseStartedAtMs(input.device.activity_started_at);
   const decision = decideLiveActivity({
     lines: input.lines,
     hasPushToStartToken: parseLiveActivityToken(input.device.push_to_start_token) !=
       null,
     hasActivityToken: parseLiveActivityToken(input.device.activity_push_token) !=
       null,
-    startedAtMs: parseStartedAtMs(input.device.activity_started_at),
+    startedAtMs,
     nowMs: Date.now(),
+    quiet: input.quiet,
   });
 
   if (decision.kind === "noop") {
@@ -351,6 +371,16 @@ async function syncLiveActivity(input: {
   }
 
   const startedAt = new Date().toISOString();
+
+  if (decision.kind === "adopt") {
+    await stampActivityStartedIfMissing(
+      input.supabase,
+      input.device.user_id,
+      input.device.token,
+      startedAt,
+    );
+    return { results: [], deliveredAlert: false };
+  }
 
   if (decision.kind === "start") {
     const result = await sendLiveActivityEvent({
@@ -376,6 +406,14 @@ async function syncLiveActivity(input: {
       destination: "activity",
     });
     if (result === "sent") {
+      if (startedAtMs == null) {
+        await stampActivityStartedIfMissing(
+          input.supabase,
+          input.device.user_id,
+          input.device.token,
+          startedAt,
+        );
+      }
       return {
         results: [result],
         deliveredAlert: Boolean(input.alertBody),
@@ -514,6 +552,7 @@ async function syncDevices(input: {
   bundleId: string;
   lines: string[];
   alertRecord?: ReminderRecord;
+  quiet?: boolean;
 }): Promise<DeviceSendResult[]> {
   const results: DeviceSendResult[] = [];
   for (const device of input.devices) {
@@ -523,6 +562,7 @@ async function syncDevices(input: {
       bundleId: input.bundleId,
       lines: input.lines,
       alertBody: input.alertRecord?.text,
+      quiet: input.quiet,
     });
     results.push(...live.results);
     if (input.alertRecord && !live.deliveredAlert) {
@@ -608,6 +648,7 @@ Deno.serve(async (request) => {
           devices: userDevices,
           bundleId,
           lines,
+          quiet: true,
         }),
       );
     }
