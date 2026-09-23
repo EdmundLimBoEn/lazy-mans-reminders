@@ -19,6 +19,10 @@ struct ReminderLiveActivity: Widget {
                 DynamicIslandExpandedRegion(.bottom) {
                     expandedIsland(lines: context.state.lines)
                 }
+                // The expanded pill's bottom corner starts curving while the
+                // last line is still drawing. Extra bottom margin keeps that
+                // curve below the text.
+                .contentMargins(.bottom, 14)
             } compactLeading: {
                 EmptyView()
             } compactTrailing: {
