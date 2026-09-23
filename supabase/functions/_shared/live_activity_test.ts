@@ -77,6 +77,65 @@ Deno.test("decideLiveActivity starts from push-to-start without an open activity
   );
 });
 
+Deno.test("a quiet refresh leaves a young banner alone", () => {
+  const startedAtMs = 1_000;
+  assertEquals(
+    decideLiveActivity({
+      lines: ["Milk"],
+      hasPushToStartToken: true,
+      hasActivityToken: true,
+      startedAtMs,
+      nowMs: startedAtMs + 60 * 60 * 1000,
+      quiet: true,
+    }),
+    { kind: "noop" },
+  );
+});
+
+Deno.test("a quiet refresh does not start another banner 15 minutes later", () => {
+  const startedAtMs = 1_000;
+  assertEquals(
+    decideLiveActivity({
+      lines: ["Milk"],
+      hasPushToStartToken: true,
+      hasActivityToken: false,
+      startedAtMs,
+      nowMs: startedAtMs + 15 * 60 * 1000,
+      quiet: true,
+    }),
+    { kind: "noop" },
+  );
+});
+
+Deno.test("a quiet refresh still recycles at the 7h mark", () => {
+  const startedAtMs = 1_000;
+  assertEquals(
+    decideLiveActivity({
+      lines: ["Milk"],
+      hasPushToStartToken: true,
+      hasActivityToken: true,
+      startedAtMs,
+      nowMs: startedAtMs + LIVE_ACTIVITY_RECYCLE_AFTER_MS,
+      quiet: true,
+    }),
+    { kind: "recycle" },
+  );
+});
+
+Deno.test("a quiet refresh adopts a local banner that has no clock", () => {
+  assertEquals(
+    decideLiveActivity({
+      lines: ["Milk"],
+      hasPushToStartToken: true,
+      hasActivityToken: true,
+      startedAtMs: null,
+      nowMs: 10_000,
+      quiet: true,
+    }),
+    { kind: "adopt" },
+  );
+});
+
 Deno.test("decideLiveActivity updates while the current activity is young", () => {
   assertEquals(
     decideLiveActivity({
@@ -140,6 +199,7 @@ Deno.test("start payload is ReminderAttributes with an alert and lines", () => {
   assertEquals(body.aps.attributes, {});
   assertEquals(body.aps["content-state"], { lines: ["Milk", "Eggs"] });
   assertEquals(body.aps.alert, { body: "Milk" });
+  assertEquals(body.aps["input-push-token"], 1);
   assertEquals(body.aps["stale-date"], 1_775_028_800);
 });
 

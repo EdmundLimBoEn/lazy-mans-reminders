@@ -14,7 +14,8 @@ export type LiveActivityDecision =
   | { kind: "start" }
   | { kind: "update" }
   | { kind: "end" }
-  | { kind: "recycle" };
+  | { kind: "recycle" }
+  | { kind: "adopt" };
 
 export function parseLiveActivityToken(
   value: string | null | undefined,
@@ -49,6 +50,8 @@ export function decideLiveActivity(input: {
   hasActivityToken: boolean;
   startedAtMs: number | null;
   nowMs: number;
+  /** Periodic refresh. A content change omits this and still updates immediately. */
+  quiet?: boolean;
 }): LiveActivityDecision {
   if (input.lines.length === 0) {
     return input.hasActivityToken ? { kind: "end" } : { kind: "noop" };
