@@ -38,10 +38,7 @@
   - Spotlight shows an active reminder by its text. Unsigned-in, Siri should ask you to sign in.
 - [ ] **Live Activity persistence (2026-08-28)** — Code is in the repo. Migration `202608280001_live_activity_tokens` applied to `biwmsxbqrevtjwgsvsmu` via `supabase db push --linked` (28 Aug 2026). Still needs:
   - [x] Apply migration `202608280001_live_activity_tokens`.
-  - Redeploy `send-reminder-push` with JWT verification off:
-    ```sh
-    supabase functions deploy send-reminder-push --no-verify-jwt
-    ```
+  - [x] Redeploy `send-reminder-push` with JWT verification off (24 Sep 2026, includes the quiet Live Activity refresh).
   - In Supabase **Database → Webhooks**, edit `send-reminder-push` so it fires on `INSERT`, `UPDATE`, and `DELETE` for `public.reminders` (same URL and `x-webhook-secret`). Completing or deleting the last reminder is what ends the Lock Screen banner.
   - Optional but needed so a quiet board does not vanish after Apple's 8h cap: schedule an hourly POST to the same function with header `x-webhook-secret` and body `{"type":"live_activity_refresh"}`.
   - After installing the new build, open the app once while signed in (Settings → Live Activities on for this app). That uploads the push-to-start token. Later reminder notifications should raise the Lock Screen banner without opening the app.
