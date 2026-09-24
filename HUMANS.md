@@ -31,6 +31,7 @@
   asc testflight testers add --app 6799138197 --email FRIEND@EMAIL --group Friends
   ```
 - [ ] **Device test** — Open `ios/LazyMansReminders.xcodeproj`, sign both targets with team `DUU8J39BA7`, run on a physical iPhone (Apple / Google / magic link, complete-tap, push, lock-screen widgets, account deletion). No device build has been run yet.
+- [ ] **Expanded island spacing** — After TestFlight processing finishes for the 24 Sep 2026 upload ([run 35936302830](https://github.com/EdmundLimBoEn/lazy-mans-reminders/actions/runs/35936302830)), install that build and press-and-hold the island. The last reminder line should sit above the bottom curve.
 - [ ] **Siri / App Intents (iOS 26+, Apple Intelligence on iOS 27)** — After a signed-in launch on a physical iPhone, confirm:
   - “Hey Siri, list reminders in Lazy Man's Reminders”
   - “Hey Siri, add a reminder in Lazy Man's Reminders” / “remind me to …” (in this app)
