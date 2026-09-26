@@ -1,14 +1,16 @@
+import {
+  reconcileLiveActivity,
+  type SendResult,
+} from "../_shared/live_activity_lifecycle.ts";
 import { timingSafeEqual } from "node:crypto";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
   boardLines,
   buildLiveActivityHeaders,
   buildLiveActivityPayload,
-  decideLiveActivity,
   LIVE_ACTIVITY_FALLBACK_MAX_LINES,
   liveActivityStaleDateUnix,
   parseLiveActivityToken,
-  parseStartedAtMs,
 } from "../_shared/live_activity.ts";
 import {
   APNS_MAX_ATTEMPTS,
@@ -23,8 +25,8 @@ import {
   classifyApnsResponse,
   classifyWebhookPayload,
   delayMsForAttempt,
-  webhookStatusForResults,
   type ReminderRecord,
+  webhookStatusForResults,
 } from "../_shared/push_helpers.ts";
 
 const encoder = new TextEncoder();
@@ -111,9 +113,15 @@ async function secretsMatch(
 }
 
 // Service-role client is untyped here — Edge Function env has no generated DB types.
-// deno-lint-ignore no-explicit-any
-type ServiceClient = { from: (table: string) => any };
-type DeviceSendResult = "sent" | "retryable" | "failed";
+type ServiceClient = {
+  // deno-lint-ignore no-explicit-any
+  from: (table: string) => any;
+  rpc: (
+    name: string,
+    args: Record<string, unknown>,
+  ) => PromiseLike<{ error: unknown }>;
+};
+type DeviceSendResult = SendResult;
 
 type DeviceRow = {
   token: string;
@@ -122,10 +130,11 @@ type DeviceRow = {
   push_to_start_token: string | null;
   activity_push_token: string | null;
   activity_started_at: string | null;
+  retiring_activity_push_token: string | null;
 };
 
 const DEVICE_SELECT =
-  "token, user_id, environment, push_to_start_token, activity_push_token, activity_started_at";
+  "token, user_id, environment, push_to_start_token, activity_push_token, activity_started_at, retiring_activity_push_token";
 
 async function pruneAlertToken(
   supabase: ServiceClient,
@@ -146,13 +155,23 @@ async function clearLiveActivityColumn(
   supabase: ServiceClient,
   userId: string,
   alertToken: string,
-  column: "push_to_start_token" | "activity_push_token" | "activity_started_at",
+  column:
+    | "push_to_start_token"
+    | "activity_push_token"
+    | "activity_started_at"
+    | "retiring_activity_push_token",
+  expectedToken?: string,
 ): Promise<void> {
-  const { error } = await supabase
+  const patch = column === "activity_push_token"
+    ? { activity_push_token: null, activity_started_at: null }
+    : { [column]: null };
+  let query = supabase
     .from("device_tokens")
-    .update({ [column]: null })
+    .update(patch)
     .eq("token", alertToken)
     .eq("user_id", userId);
+  if (expectedToken) query = query.eq(column, expectedToken);
+  const { error } = await query;
   if (error) {
     console.error(`Could not clear ${column}`, error);
   }
@@ -177,21 +196,20 @@ async function stampActivityStartedIfMissing(
 
 async function markActivityStarted(
   supabase: ServiceClient,
-  userId: string,
-  alertToken: string,
+  device: DeviceRow,
   startedAt: string,
+  replacing: boolean,
 ): Promise<void> {
-  const { error } = await supabase
-    .from("device_tokens")
-    .update({
-      activity_started_at: startedAt,
-      activity_push_token: null,
-    })
-    .eq("token", alertToken)
-    .eq("user_id", userId);
-  if (error) {
-    console.error("Could not record Live Activity start", error);
-  }
+  // The phone may upload the new token before APNs returns. Clear only the
+  // token we read, never an acknowledgement that arrived during delivery.
+  const { error } = await supabase.rpc("record_live_activity_start", {
+    p_device_token: device.token,
+    p_user_id: device.user_id,
+    p_previous_token: device.activity_push_token,
+    p_started_at: startedAt,
+    p_replacing: replacing,
+  });
+  if (error) throw new Error("Could not record Live Activity start");
 }
 
 async function markActivityEnded(
@@ -263,7 +281,7 @@ async function sendWithRetries(input: {
     if (outcome.kind === "sent") return "sent";
     if (outcome.kind === "prune") {
       await input.onPrune();
-      return "failed";
+      return "invalid";
     }
     if (outcome.kind === "permanent") return "failed";
 
@@ -312,23 +330,35 @@ async function sendLiveActivityEvent(input: {
   event: "start" | "update" | "end";
   lines: string[];
   alertBody?: string;
-  destination: "push-to-start" | "activity";
+  destination: "push-to-start" | "activity" | "retiring";
+  quiet?: boolean;
 }): Promise<DeviceSendResult> {
   const token = input.destination === "push-to-start"
     ? parseLiveActivityToken(input.device.push_to_start_token)
-    : parseLiveActivityToken(input.device.activity_push_token);
+    : parseLiveActivityToken(
+      input.destination === "retiring"
+        ? input.device.retiring_activity_push_token
+        : input.device.activity_push_token,
+    );
   if (!token) return "failed";
 
   const jwt = await apnsJWT();
   const nowUnix = Math.floor(Date.now() / 1000);
   const pruneColumn = input.destination === "push-to-start"
     ? "push_to_start_token" as const
+    : input.destination === "retiring"
+    ? "retiring_activity_push_token" as const
     : "activity_push_token" as const;
 
   return await sendWithRetries({
     host: apnsHostForEnvironment(input.device.environment),
     token,
-    headers: buildLiveActivityHeaders({ jwt, bundleId: input.bundleId }),
+    headers: buildLiveActivityHeaders({
+      jwt,
+      bundleId: input.bundleId,
+      event: input.event,
+      quiet: input.quiet,
+    }),
     body: buildLiveActivityPayload({
       event: input.event,
       lines: input.lines,
@@ -342,6 +372,7 @@ async function sendLiveActivityEvent(input: {
         input.device.user_id,
         input.device.token,
         pruneColumn,
+        token,
       ),
   });
 }
@@ -354,133 +385,52 @@ async function syncLiveActivity(input: {
   alertBody?: string;
   quiet?: boolean;
 }): Promise<{ results: DeviceSendResult[]; deliveredAlert: boolean }> {
-  const startedAtMs = parseStartedAtMs(input.device.activity_started_at);
-  const decision = decideLiveActivity({
+  return await reconcileLiveActivity({
     lines: input.lines,
-    hasPushToStartToken: parseLiveActivityToken(input.device.push_to_start_token) !=
-      null,
-    hasActivityToken: parseLiveActivityToken(input.device.activity_push_token) !=
-      null,
-    startedAtMs,
+    activityToken: parseLiveActivityToken(input.device.activity_push_token),
+    startToken: parseLiveActivityToken(input.device.push_to_start_token),
+    retiringToken: parseLiveActivityToken(
+      input.device.retiring_activity_push_token,
+    ),
+    startedAt: input.device.activity_started_at,
     nowMs: Date.now(),
     quiet: input.quiet,
-  });
-
-  if (decision.kind === "noop") {
-    return { results: [], deliveredAlert: false };
-  }
-
-  const startedAt = new Date().toISOString();
-
-  if (decision.kind === "adopt") {
-    await stampActivityStartedIfMissing(
-      input.supabase,
-      input.device.user_id,
-      input.device.token,
-      startedAt,
-    );
-    return { results: [], deliveredAlert: false };
-  }
-
-  if (decision.kind === "start") {
-    const result = await sendLiveActivityEvent({
-      ...input,
-      event: "start",
-      destination: "push-to-start",
-    });
-    if (result === "sent") {
-      await markActivityStarted(
+    hasAlert: Boolean(input.alertBody),
+    send: (event, destination) =>
+      sendLiveActivityEvent({
+        ...input,
+        event,
+        destination,
+        alertBody: destination === "retiring" ? undefined : input.alertBody,
+      }),
+    recordStart: (replacing) =>
+      markActivityStarted(
+        input.supabase,
+        input.device,
+        new Date().toISOString(),
+        replacing,
+      ),
+    recordEnd: () =>
+      markActivityEnded(
         input.supabase,
         input.device.user_id,
         input.device.token,
-        startedAt,
-      );
-    }
-    return { results: [result], deliveredAlert: result === "sent" && Boolean(input.alertBody) };
-  }
-
-  if (decision.kind === "update") {
-    const result = await sendLiveActivityEvent({
-      ...input,
-      event: "update",
-      destination: "activity",
-    });
-    if (result === "sent") {
-      if (startedAtMs == null) {
-        await stampActivityStartedIfMissing(
-          input.supabase,
-          input.device.user_id,
-          input.device.token,
-          startedAt,
-        );
-      }
-      return {
-        results: [result],
-        deliveredAlert: Boolean(input.alertBody),
-      };
-    }
-    if (parseLiveActivityToken(input.device.push_to_start_token) == null) {
-      return { results: [result], deliveredAlert: false };
-    }
-    const started = await sendLiveActivityEvent({
-      ...input,
-      event: "start",
-      destination: "push-to-start",
-    });
-    if (started === "sent") {
-      await markActivityStarted(
+      ),
+    recordAdoption: () =>
+      stampActivityStartedIfMissing(
         input.supabase,
         input.device.user_id,
         input.device.token,
-        startedAt,
-      );
-    }
-    return {
-      results: [result, started],
-      deliveredAlert: started === "sent" && Boolean(input.alertBody),
-    };
-  }
-
-  if (decision.kind === "end") {
-    const result = await sendLiveActivityEvent({
-      ...input,
-      event: "end",
-      destination: "activity",
-    });
-    if (result === "sent" || result === "failed") {
-      await markActivityEnded(
+        new Date().toISOString(),
+      ),
+    clearRetiring: () =>
+      clearLiveActivityColumn(
         input.supabase,
         input.device.user_id,
         input.device.token,
-      );
-    }
-    return { results: [result], deliveredAlert: false };
-  }
-
-  const start = await sendLiveActivityEvent({
-    ...input,
-    event: "start",
-    destination: "push-to-start",
+        "retiring_activity_push_token",
+      ),
   });
-  if (start !== "sent") {
-    return { results: [start], deliveredAlert: false };
-  }
-  const end = await sendLiveActivityEvent({
-    ...input,
-    event: "end",
-    destination: "activity",
-    alertBody: undefined,
-  });
-  await markActivityStarted(
-    input.supabase,
-    input.device.user_id,
-    input.device.token,
-    startedAt,
-  );
-  return {
-    results: [start, end],
-    deliveredAlert: Boolean(input.alertBody),
-  };
 }
 
 async function loadBoardLines(
@@ -532,7 +482,9 @@ async function loadDevicesForRefresh(
   const { data, error } = await supabase
     .from("device_tokens")
     .select(DEVICE_SELECT)
-    .or("push_to_start_token.not.is.null,activity_push_token.not.is.null");
+    .or(
+      "push_to_start_token.not.is.null,activity_push_token.not.is.null,retiring_activity_push_token.not.is.null",
+    );
   if (error) return { error };
   return (data ?? []) as DeviceRow[];
 }

@@ -14,8 +14,7 @@ export type LiveActivityDecision =
   | { kind: "start" }
   | { kind: "update" }
   | { kind: "end" }
-  | { kind: "recycle" }
-  | { kind: "adopt" };
+  | { kind: "recycle" };
 
 export function parseLiveActivityToken(
   value: string | null | undefined,
@@ -35,7 +34,9 @@ export function parseStartedAtMs(
 export function boardLines(texts: string[], limit: number): string[] {
   const cap = Math.max(1, limit);
   const flattened = texts.flatMap((text) =>
-    text.split("\n").map((line) => line.trim()).filter((line) => line.length > 0)
+    text.split("\n").map((line) => line.trim()).filter((line) =>
+      line.length > 0
+    )
   );
   if (flattened.length === 0) return [];
   if (flattened.length <= cap) return flattened;
@@ -68,9 +69,11 @@ export function decideLiveActivity(input: {
     return input.hasPushToStartToken ? { kind: "recycle" } : { kind: "update" };
   }
 
+  // Probe existing activities even on a quiet board; an expired token must
+  // be discovered before the seven-hour renewal window.
+  if (input.hasActivityToken) return { kind: "update" };
+
   if (input.quiet) {
-    if (input.hasActivityToken && ageMs == null) return { kind: "adopt" };
-    if (input.hasActivityToken) return { kind: "noop" };
     if (
       input.hasPushToStartToken &&
       ageMs != null &&
@@ -80,8 +83,6 @@ export function decideLiveActivity(input: {
       return { kind: "noop" };
     }
   }
-
-  if (input.hasActivityToken) return { kind: "update" };
 
   if (
     input.hasPushToStartToken &&
@@ -103,13 +104,15 @@ export function liveActivityTopic(bundleId: string): string {
 export function buildLiveActivityHeaders(input: {
   jwt: string;
   bundleId: string;
+  event?: "start" | "update" | "end";
+  quiet?: boolean;
 }): Record<string, string> {
   return {
     authorization: `bearer ${input.jwt}`,
     "content-type": "application/json",
     "apns-topic": liveActivityTopic(input.bundleId),
     "apns-push-type": "liveactivity",
-    "apns-priority": "10",
+    "apns-priority": input.quiet && input.event === "update" ? "5" : "10",
   };
 }
 
