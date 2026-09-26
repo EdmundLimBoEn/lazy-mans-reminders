@@ -1,6 +1,6 @@
 import { decideLiveActivity, parseStartedAtMs } from "./live_activity.ts";
 
-type SendResult = "sent" | "retryable" | "failed";
+export type SendResult = "sent" | "retryable" | "failed" | "invalid";
 
 export async function reconcileLiveActivity(input: {
   lines: string[];
@@ -33,7 +33,7 @@ export async function reconcileLiveActivity(input: {
       results.push(result);
       if (result === "sent") {
         await input.clearRetiring();
-      } else {
+      } else if (result !== "invalid") {
         // An invalid token is cleared by the transport. Other failures leave
         // it for the next pass, without losing another banner to retirement.
         return { results, deliveredAlert: false };
@@ -57,14 +57,10 @@ export async function reconcileLiveActivity(input: {
   });
 
   if (decision.kind === "noop") return { results, deliveredAlert: false };
-  if (decision.kind === "adopt") {
-    await input.recordAdoption();
-    return { results, deliveredAlert: false };
-  }
   if (decision.kind === "end") {
     const result = await input.send("end", "activity");
     results.push(result);
-    if (result === "sent") await input.recordEnd();
+    if (result === "sent" || result === "invalid") await input.recordEnd();
     return { results, deliveredAlert: false };
   }
   if (decision.kind === "update") {
@@ -74,8 +70,8 @@ export async function reconcileLiveActivity(input: {
       if (startedAtMs === null) await input.recordAdoption();
       return { results, deliveredAlert: input.hasAlert };
     }
-    // Transient APNs failure does not mean the existing activity disappeared.
-    if (result === "retryable" || !input.startToken) {
+    // Only an invalid activity token confirms that this destination is gone.
+    if (result !== "invalid" || !input.startToken) {
       return { results, deliveredAlert: false };
     }
   }

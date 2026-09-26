@@ -1,4 +1,7 @@
-import { reconcileLiveActivity } from "../_shared/live_activity_lifecycle.ts";
+import {
+  reconcileLiveActivity,
+  type SendResult,
+} from "../_shared/live_activity_lifecycle.ts";
 import { timingSafeEqual } from "node:crypto";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
@@ -118,7 +121,7 @@ type ServiceClient = {
     args: Record<string, unknown>,
   ) => PromiseLike<{ error: unknown }>;
 };
-type DeviceSendResult = "sent" | "retryable" | "failed";
+type DeviceSendResult = SendResult;
 
 type DeviceRow = {
   token: string;
@@ -157,12 +160,18 @@ async function clearLiveActivityColumn(
     | "activity_push_token"
     | "activity_started_at"
     | "retiring_activity_push_token",
+  expectedToken?: string,
 ): Promise<void> {
-  const { error } = await supabase
+  const patch = column === "activity_push_token"
+    ? { activity_push_token: null, activity_started_at: null }
+    : { [column]: null };
+  let query = supabase
     .from("device_tokens")
-    .update({ [column]: null })
+    .update(patch)
     .eq("token", alertToken)
     .eq("user_id", userId);
+  if (expectedToken) query = query.eq(column, expectedToken);
+  const { error } = await query;
   if (error) {
     console.error(`Could not clear ${column}`, error);
   }
@@ -272,7 +281,7 @@ async function sendWithRetries(input: {
     if (outcome.kind === "sent") return "sent";
     if (outcome.kind === "prune") {
       await input.onPrune();
-      return "failed";
+      return "invalid";
     }
     if (outcome.kind === "permanent") return "failed";
 
@@ -322,6 +331,7 @@ async function sendLiveActivityEvent(input: {
   lines: string[];
   alertBody?: string;
   destination: "push-to-start" | "activity" | "retiring";
+  quiet?: boolean;
 }): Promise<DeviceSendResult> {
   const token = input.destination === "push-to-start"
     ? parseLiveActivityToken(input.device.push_to_start_token)
@@ -343,7 +353,12 @@ async function sendLiveActivityEvent(input: {
   return await sendWithRetries({
     host: apnsHostForEnvironment(input.device.environment),
     token,
-    headers: buildLiveActivityHeaders({ jwt, bundleId: input.bundleId }),
+    headers: buildLiveActivityHeaders({
+      jwt,
+      bundleId: input.bundleId,
+      event: input.event,
+      quiet: input.quiet,
+    }),
     body: buildLiveActivityPayload({
       event: input.event,
       lines: input.lines,
@@ -357,6 +372,7 @@ async function sendLiveActivityEvent(input: {
         input.device.user_id,
         input.device.token,
         pruneColumn,
+        token,
       ),
   });
 }
