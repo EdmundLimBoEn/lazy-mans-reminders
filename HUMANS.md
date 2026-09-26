@@ -41,7 +41,7 @@
   - [x] Apply migration `202608280001_live_activity_tokens`.
   - [x] Redeploy `send-reminder-push` with JWT verification off (24 Sep 2026, includes the quiet Live Activity refresh).
   - In Supabase **Database → Webhooks**, edit `send-reminder-push` so it fires on `INSERT`, `UPDATE`, and `DELETE` for `public.reminders` (same URL and `x-webhook-secret`). Completing or deleting the last reminder is what ends the Lock Screen banner.
-  - Optional but needed so a quiet board does not vanish after Apple's 8h cap: schedule an hourly POST to the same function with header `x-webhook-secret` and body `{"type":"live_activity_refresh"}`.
+  - [x] Confirmed `live-activity-refresh` is active every 15 minutes (26 Sep 2026); recent requests returned HTTP 200. This is required for renewal while the app is closed.
   - After installing the new build, open the app once while signed in (Settings → Live Activities on for this app). That uploads the push-to-start token. Later reminder notifications should raise the Lock Screen banner without opening the app.
   - Physical iPhone test: add a reminder from the web with the app killed; confirm the Lock Screen banner appears. Complete every reminder; confirm it goes away. Leave one reminder overnight and confirm the banner is still there after the hourly refresh.
 
@@ -56,3 +56,5 @@
 - [x] **Agent MCP Worker** — Deployed `lazy-mans-reminders-mcp` with OAUTH_KV + secrets. Custom domain `lmr-mcp.edmundlim.systems` (Universal SSL; not `mcp.lmr…` which needs Advanced Certs). Fallback: `https://lazy-mans-reminders-mcp.edmundlim.workers.dev/mcp`.
 - [x] **Push agent_tokens migration** — `202608080002_lock_screen_prefs` + `202608260001_agent_tokens` pushed; `delete-account` redeployed.
 - [x] **Resend SMTP** — Custom SMTP `smtp.resend.com` for `noreply-lmr@auth.edmundlim.systems`; email rate limit raised above built-in 2/hour.
+
+- [ ] **Live Activity renewal handoff (26 Sep 2026)** — Backend renewal now retains the old banner until the phone uploads the replacement token. Open the signed-in app once, leave an active reminder overnight with the app in the background, and confirm the board remains visible beyond eight hours. Brief overlap during renewal can last until the next 15-minute refresh. Then complete the board and confirm both banners disappear. TestFlight's production device row had no Live Activity tokens at investigation time; opening the signed-in app should register them. No new iOS build is required for this backend change.
