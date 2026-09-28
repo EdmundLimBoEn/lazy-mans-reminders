@@ -4,15 +4,15 @@ import {
   assertMatch,
 } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import {
+  boardLines,
+  buildLiveActivityHeaders,
+  buildLiveActivityPayload,
+  decideLiveActivity,
   LIVE_ACTIVITY_ATTRIBUTES_TYPE,
   LIVE_ACTIVITY_FALLBACK_MAX_LINES,
   LIVE_ACTIVITY_RECYCLE_AFTER_MS,
   LIVE_ACTIVITY_START_GRACE_MS,
   LIVE_ACTIVITY_TOKEN_PATTERN,
-  boardLines,
-  buildLiveActivityHeaders,
-  buildLiveActivityPayload,
-  decideLiveActivity,
   liveActivityStaleDateUnix,
   liveActivityTopic,
   parseLiveActivityToken,
@@ -77,7 +77,7 @@ Deno.test("decideLiveActivity starts from push-to-start without an open activity
   );
 });
 
-Deno.test("a quiet refresh leaves a young banner alone", () => {
+Deno.test("a quiet refresh updates a young banner without replacing it", () => {
   const startedAtMs = 1_000;
   assertEquals(
     decideLiveActivity({
@@ -88,7 +88,7 @@ Deno.test("a quiet refresh leaves a young banner alone", () => {
       nowMs: startedAtMs + 60 * 60 * 1000,
       quiet: true,
     }),
-    { kind: "noop" },
+    { kind: "update" },
   );
 });
 
@@ -122,7 +122,7 @@ Deno.test("a quiet refresh still recycles at the 7h mark", () => {
   );
 });
 
-Deno.test("a quiet refresh adopts a local banner that has no clock", () => {
+Deno.test("a quiet refresh probes a local banner that has no clock", () => {
   assertEquals(
     decideLiveActivity({
       lines: ["Milk"],
@@ -132,7 +132,7 @@ Deno.test("a quiet refresh adopts a local banner that has no clock", () => {
       nowMs: 10_000,
       quiet: true,
     }),
-    { kind: "adopt" },
+    { kind: "update" },
   );
 });
 
@@ -242,7 +242,48 @@ Deno.test("live activity token parse rejects alert-device-token lookalikes that 
 });
 
 Deno.test("parseStartedAtMs and stale-date helpers", () => {
-  assertEquals(parseStartedAtMs("2026-08-28T00:00:00.000Z"), Date.parse("2026-08-28T00:00:00.000Z"));
+  assertEquals(
+    parseStartedAtMs("2026-08-28T00:00:00.000Z"),
+    Date.parse("2026-08-28T00:00:00.000Z"),
+  );
   assertEquals(parseStartedAtMs("not-a-date"), null);
   assertEquals(liveActivityStaleDateUnix(1_000), 1_000 + 8 * 60 * 60);
+});
+
+Deno.test("scheduled updates use low priority without an alert or sound", () => {
+  const headers = buildLiveActivityHeaders({
+    jwt: "token",
+    bundleId: "test",
+    quiet: true,
+    event: "update",
+  });
+  assertEquals(headers["apns-priority"], "5");
+  const body = JSON.parse(buildLiveActivityPayload({
+    event: "update",
+    lines: ["Milk"],
+    timestamp: 100,
+    staleDate: 200,
+  }));
+  assertEquals(body.aps.alert, undefined);
+  assertEquals(body.aps.sound, undefined);
+  for (const event of ["start", "end"] as const) {
+    assertEquals(
+      buildLiveActivityHeaders({
+        jwt: "token",
+        bundleId: "test",
+        quiet: true,
+        event,
+      })["apns-priority"],
+      "10",
+    );
+  }
+  assertEquals(
+    buildLiveActivityHeaders({
+      jwt: "token",
+      bundleId: "test",
+      quiet: false,
+      event: "update",
+    })["apns-priority"],
+    "10",
+  );
 });
