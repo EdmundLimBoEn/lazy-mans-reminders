@@ -12,7 +12,7 @@ struct BoardPersistenceSection: View {
     @State private var result: String?
 
     var body: some View {
-        Section("Keep Your Board Visible") {
+        Section {
             LabeledContent("Live Activities", value: liveActivitiesEnabled ? "Allowed" : "Off")
             LabeledContent("Background App Refresh", value: refreshStatus)
             if let lastSuccess = registration.lastSuccess {
@@ -39,6 +39,8 @@ struct BoardPersistenceSection: View {
                 Text("Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.")
             }
             .font(.footnote)
+        } header: {
+            Text("Keep Your Board Visible")
         } footer: {
             Text("iOS limits each Live Activity to eight hours. We use server pushes to renew it, but delivery can be delayed. Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.")
         }
