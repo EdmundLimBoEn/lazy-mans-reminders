@@ -50,3 +50,11 @@ For each failure, record build number, iOS version, device model, last foregroun
 - **By 15 November:** at least seven consecutive days of TestFlight use, including two overnight runs without foregrounding, with no unexplained disappearing/duplicate boards or account data leaks. Investigate failures with device ActivityKit logs rather than adding keep-alive loops.
 - **By 22 November:** release candidate; finish the existing sign-in, Siri, account deletion, widget layout/accessibility, privacy and App Store metadata checks in `HUMANS.md`. Describe Live Activities as best effort and widgets as the long-lived surface.
 - **By 30 November:** submit/release only after the gates pass. App Review timing is external; submit before the deadline with time for review fixes.
+
+## Verified build handoff (3 October)
+
+- Implementation commit: `7fcfc2f`.
+- [Hosted simulator checks](https://github.com/EdmundLimBoEn/lazy-mans-reminders/actions/runs/37136940945): app and widget compile with stable Xcode; **54 Swift tests passed**, including relaunch retry, acknowledgement ordering, sign-out, and activity selection. **52 backend tests passed**, with Edge Function type checking. A pre-existing Siri test expected the word “three” while the implementation returned “3”; the assertion now matches the existing behavior.
+- [Signed release build and upload](https://github.com/EdmundLimBoEn/lazy-mans-reminders/actions/runs/37137028085): archive, export, and App Store Connect upload succeeded. Apple processing and tester availability have not been verified. Install this new build when available; the old development build does not contain the client fixes.
+- `send-reminder-push` version **10** is deployed. The first scheduled request after deployment returned HTTP 200. Database-read regression tests fail when the old empty-board fallback is restored.
+- Physical-device cold-launch delivery, overnight persistence, widget layout, and battery behavior remain unchecked. Passing simulator tests does not close those release gates.
