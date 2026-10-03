@@ -24,7 +24,7 @@ jobs:
       - name: Build app, widget and tests
         working-directory: ios
         run: |
-          xcodebuild test -quiet \
+          xcodebuild test \
             -project LazyMansReminders.xcodeproj \
             -scheme LazyMansReminders \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
@@ -34,7 +34,7 @@ jobs:
         if: always()
         run: |
           if [ -d "${RUNNER_TEMP}/ios-tests.xcresult" ]; then
-            xcrun xcresulttool get test-results summary --path "${RUNNER_TEMP}/ios-tests.xcresult" --format json
+            xcrun xcresulttool get test-results summary --path "${RUNNER_TEMP}/ios-tests.xcresult"
           fi
       - name: Save test diagnostics
         if: failure()
