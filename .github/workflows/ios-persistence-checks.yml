@@ -28,7 +28,20 @@ jobs:
             -project LazyMansReminders.xcodeproj \
             -scheme LazyMansReminders \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -resultBundlePath "${RUNNER_TEMP}/ios-tests.xcresult" \
             CODE_SIGNING_ALLOWED=NO
+      - name: Test result summary
+        if: always()
+        run: |
+          if [ -d "${RUNNER_TEMP}/ios-tests.xcresult" ]; then
+            xcrun xcresulttool get test-results summary --path "${RUNNER_TEMP}/ios-tests.xcresult" --format json
+          fi
+      - name: Save test diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-test-results
+          path: ${{ runner.temp }}/ios-tests.xcresult
   server:
     name: Server lifecycle tests
     runs-on: ubuntu-latest
