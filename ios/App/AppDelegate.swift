@@ -99,8 +99,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
                 let refreshed = try await ReminderStore.shared.refresh()
                 await ReminderBoardSync.apply(refreshed)
             } catch {
-                let cached = await ReminderStore.shared.cached()
-                await ReminderBoardSync.apply(cached)
+                print("Could not refresh notification board: \(error.localizedDescription)")
             }
         }
         return NotificationAccessPolicy.foregroundPresentation
@@ -114,8 +113,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
             let refreshed = try await ReminderStore.shared.refresh()
             await ReminderBoardSync.apply(refreshed)
         } catch {
-            let cached = await ReminderStore.shared.cached()
-            await ReminderBoardSync.apply(cached)
+            print("Could not refresh notification board: \(error.localizedDescription)")
         }
     }
 }

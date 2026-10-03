@@ -46,7 +46,9 @@ enum ReminderLiveActivityController {
         let state = ReminderAttributes.ContentState(lines: lines)
         let existing = activeActivities
         let content = ActivityContent(state: state, staleDate: Date().addingTimeInterval(8 * 60 * 60))
-        switch LiveActivityPolicy.action(lineCount: lines.count, activityExists: !existing.isEmpty) {
+        let hasActivity = lines.isEmpty
+            ? !Activity<ReminderAttributes>.activities.isEmpty : !existing.isEmpty
+        switch LiveActivityPolicy.action(lineCount: lines.count, activityExists: hasActivity) {
         case .none:
             return
         case .end:
