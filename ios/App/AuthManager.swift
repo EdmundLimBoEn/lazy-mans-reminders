@@ -41,6 +41,7 @@ final class AuthManager: ObservableObject {
         supabaseKey: AppConfig.supabaseAnonKey
     )
 
+    private var isEndingSession = false
     private var restorationTask: Task<Void, Never>?
     private var pendingAppleNonce: String?
     /// Safari cannot follow a 303 onto a custom scheme, so magic links land on HTTPS first.
@@ -183,6 +184,8 @@ final class AuthManager: ObservableObject {
     }
 
     func signOut() async {
+        isEndingSession = true
+        defer { isEndingSession = false }
         await pushRegistration.unbind()
         if let token = pushRegistration.deviceToken {
             try? await client
@@ -200,6 +203,8 @@ final class AuthManager: ObservableObject {
 
     /// Deletes the signed-in user's data and auth account via the `delete-account` Edge Function.
     func deleteAccount() async throws {
+        isEndingSession = true
+        defer { isEndingSession = false }
         try await client.functions.invoke("delete-account")
         pushRegistration.bind(userID: nil)
         // Auth user is already gone; local sign-out may fail — clear client state either way.
@@ -212,12 +217,12 @@ final class AuthManager: ObservableObject {
 
     func registerDevice(token: String) async {
         pushRegistration.recordDeviceToken(token)
-        guard !isRestoringSession, session != nil else { return }
+        guard !isRestoringSession, !isEndingSession, session != nil else { return }
         await pushRegistration.flush()
     }
 
     func registerLiveActivityTokens() async {
-        guard !isRestoringSession, session != nil else { return }
+        guard !isRestoringSession, !isEndingSession, session != nil else { return }
         await pushRegistration.flush()
     }
 
@@ -237,6 +242,7 @@ final class AuthManager: ObservableObject {
     }
 
     private func shareSession(clearWhenSignedOut: Bool = false) async {
+        guard !isEndingSession else { return }
         guard let session else {
             guard clearWhenSignedOut else { return }
             pushRegistration.bind(userID: nil)

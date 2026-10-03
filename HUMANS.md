@@ -43,7 +43,7 @@
   - In Supabase **Database → Webhooks**, edit `send-reminder-push` so it fires on `INSERT`, `UPDATE`, and `DELETE` for `public.reminders` (same URL and `x-webhook-secret`). Completing or deleting the last reminder is what ends the Lock Screen banner.
   - [x] Confirmed `live-activity-refresh` is active every 15 minutes (26 Sep 2026); recent requests returned HTTP 200. This is required for renewal while the app is closed.
   - After installing the new build, open the app once while signed in (Settings → Live Activities on for this app). That uploads the push-to-start token. Later reminder notifications should raise the Lock Screen banner without opening the app.
-  - Physical iPhone test: add a reminder from the web with the app killed; confirm the Lock Screen banner appears. Complete every reminder; confirm it goes away. Leave one reminder overnight and confirm the banner is still there after the hourly refresh.
+  - Physical iPhone test: add a reminder from the web with the app killed; confirm the Lock Screen banner appears. Complete every reminder; confirm it goes away. Leave one reminder overnight and confirm the banner is still there after the scheduled 15-minute refresh.
 
 - [ ] **Legal review** — Privacy / Terms / Support are live at `/privacy`, `/terms`, `/support`. Counsel review is optional. Contact: `hello@edmundlim.systems`.
 - [ ] **App Store Connect fields** — Copy nutrition labels and review notes from `docs/app-store.md`. Attach screenshots from a physical device.
