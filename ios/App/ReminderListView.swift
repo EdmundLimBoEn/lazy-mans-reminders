@@ -299,7 +299,6 @@ struct ReminderListView: View {
         } catch {
             reminders = await ReminderStore.shared.cached()
             presentError(error.localizedDescription)
-            await ReminderBoardSync.apply(reminders, notify: false)
         }
         isLoading = false
         hasLoaded = true

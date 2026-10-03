@@ -54,6 +54,8 @@ struct AccountView: View {
                     Text(NotificationAccessPolicy.footer(notificationAccess))
                 }
 
+                BoardPersistenceSection(registration: auth.pushRegistration)
+
                 Section {
                     Button {
                         showSignOut = true

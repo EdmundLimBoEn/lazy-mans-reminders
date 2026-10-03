@@ -89,8 +89,11 @@ targets:
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
         UIRequiresFullScreen: true
+        BGTaskSchedulerPermittedIdentifiers:
+          - systems.edmundlim.LazyMansReminders.board-refresh
         UIBackgroundModes:
           - remote-notification
+          - fetch
         ITSAppUsesNonExemptEncryption: false
     entitlements:
       path: App/LazyMansReminders.entitlements
