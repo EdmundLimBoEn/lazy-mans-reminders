@@ -7,6 +7,14 @@ final class PushTokenRegistrarTests: XCTestCase {
         UserDefaults(suiteName: "PushTokenRegistrarTests-\(UUID().uuidString)")!
     }
 
+    func testExpirationAndLateCompletionOnlyFinishBackgroundTaskOnce() {
+        var completions: [Bool] = []
+        let completion = BackgroundRefreshCompletion { completions.append($0) }
+        completion.finish(success: false)
+        completion.finish(success: true)
+        XCTAssertEqual(completions, [false])
+    }
+
     func testBackgroundRelaunchUploadsPendingActivityWithoutAViewOrNewDeviceCallback() async {
         let storage = defaults()
         let user = UUID()

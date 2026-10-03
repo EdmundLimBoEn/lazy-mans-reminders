@@ -37,6 +37,7 @@ final class PushTokenRegistrar: ObservableObject {
     private var pending: Pending
     private var revision = 0
     private var isUploading = false
+    private var flushWaiters: [CheckedContinuation<Void, Never>] = []
 
     init(
         defaults: UserDefaults = .standard,
@@ -76,6 +77,12 @@ final class PushTokenRegistrar: ObservableObject {
         save()
     }
 
+    func unbind() async {
+        bind(userID: nil)
+        guard isUploading else { return }
+        await withCheckedContinuation { flushWaiters.append($0) }
+    }
+
     func recordDeviceToken(_ token: String) {
         pending.deviceToken = token
         save()
@@ -95,7 +102,12 @@ final class PushTokenRegistrar: ObservableObject {
     func flush() async {
         guard !isUploading else { return }
         isUploading = true
-        defer { isUploading = false }
+        defer {
+            isUploading = false
+            let waiters = flushWaiters
+            flushWaiters.removeAll()
+            for waiter in waiters { waiter.resume() }
+        }
         while let deviceToken = pending.deviceToken, let userID = pending.userID {
             let sentRevision = revision
             let registration = Registration(
@@ -121,6 +133,7 @@ final class PushTokenRegistrar: ObservableObject {
             if succeeded {
                 // Replaying an acknowledged old token could undo the server's renewal handoff.
                 pending.activityPushToken = nil
+                pending.pushToStartToken = nil
                 pending.lastSuccess = Date()
                 lastSuccess = pending.lastSuccess
                 save()

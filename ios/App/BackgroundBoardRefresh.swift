@@ -28,9 +28,10 @@ enum BackgroundBoardRefresh {
 
     private static func handle(_ task: BGAppRefreshTask) {
         schedule()
+        let completion = BackgroundRefreshCompletion { task.setTaskCompleted(success: $0) }
         let work = Task { @MainActor in
             var success = false
-            defer { task.setTaskCompleted(success: success) }
+            defer { completion.finish(success: success) }
             do {
                 try Task.checkCancellation()
                 await AuthManager.shared.waitForRestoration()
@@ -44,6 +45,25 @@ enum BackgroundBoardRefresh {
                 print("Background board refresh did not complete: \(error.localizedDescription)")
             }
         }
-        task.expirationHandler = { work.cancel() }
+        task.expirationHandler = {
+            work.cancel()
+            Task { @MainActor in completion.finish(success: false) }
+        }
+    }
+}
+
+@MainActor
+final class BackgroundRefreshCompletion {
+    private var completed = false
+    private let complete: (Bool) -> Void
+
+    init(complete: @escaping (Bool) -> Void) {
+        self.complete = complete
+    }
+
+    func finish(success: Bool) {
+        guard !completed else { return }
+        completed = true
+        complete(success)
     }
 }

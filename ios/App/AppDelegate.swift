@@ -1,10 +1,6 @@
 import UIKit
 import UserNotifications
 
-extension Notification.Name {
-    static let didRegisterPushToken = Notification.Name("didRegisterPushToken")
-}
-
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     static func requestPushIfNeeded() async {
         let center = UNUserNotificationCenter.current()

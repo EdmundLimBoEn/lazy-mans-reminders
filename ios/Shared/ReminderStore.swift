@@ -86,7 +86,7 @@ actor ReminderStore {
 
     func refresh(performMaintenance: Bool = true) async throws -> [Reminder] {
         guard let session = await loadFreshSession() else {
-            return cached()
+            throw StoreError.signedOut
         }
 
         // Best-effort: drop this user's done reminders older than 7 days (DB trigger sets completed_at).

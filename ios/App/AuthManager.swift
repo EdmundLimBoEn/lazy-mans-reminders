@@ -183,7 +183,7 @@ final class AuthManager: ObservableObject {
     }
 
     func signOut() async {
-        pushRegistration.bind(userID: nil)
+        await pushRegistration.unbind()
         if let token = pushRegistration.deviceToken {
             try? await client
                 .from("device_tokens")

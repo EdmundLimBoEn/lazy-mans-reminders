@@ -2,8 +2,6 @@ name: iOS persistence checks
 on:
   pull_request:
     paths: ['ios/**', 'supabase/**', '.github/workflows/ios-persistence-checks.yml']
-  push:
-    branches: [fix/live-activity-background-recovery]
   workflow_dispatch:
 permissions:
   contents: read
