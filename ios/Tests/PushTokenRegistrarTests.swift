@@ -45,6 +45,7 @@ final class PushTokenRegistrarTests: XCTestCase {
         let first = PushTokenRegistrar(defaults: storage) { _ in }
         first.bind(userID: user)
         first.recordDeviceToken("device")
+        first.recordPushToStartToken("start")
         first.recordActivityToken("old")
         await first.flush()
 
@@ -55,6 +56,7 @@ final class PushTokenRegistrarTests: XCTestCase {
         relaunched.bind(userID: user)
         await relaunched.flush()
         XCTAssertNil(encoded["activity_push_token"])
+        XCTAssertEqual(encoded["push_to_start_token"] as? String, "start")
         XCTAssertEqual(encoded["user_id"] as? String, user.uuidString)
     }
 

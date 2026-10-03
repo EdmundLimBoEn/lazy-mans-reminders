@@ -136,7 +136,6 @@ final class PushTokenRegistrar: ObservableObject {
             if succeeded {
                 // Replaying an acknowledged old token could undo the server's renewal handoff.
                 pending.activityPushToken = nil
-                pending.pushToStartToken = nil
                 pending.lastSuccess = Date()
                 lastSuccess = pending.lastSuccess
                 save()

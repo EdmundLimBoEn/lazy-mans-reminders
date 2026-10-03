@@ -40,7 +40,10 @@ struct ReminderWidgetView: View {
     let entry: ReminderEntry
 
     private var lines: [String] {
-        ReminderActivityPresentation.displayLines(from: entry.reminders, limit: lineLimit)
+        if family == .accessoryInline {
+            return Array(ReminderActivityPresentation.displayLines(from: entry.reminders).prefix(1))
+        }
+        return ReminderActivityPresentation.displayLines(from: entry.reminders, limit: lineLimit)
     }
 
     private var lineLimit: Int {
