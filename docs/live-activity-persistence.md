@@ -22,7 +22,7 @@ These fixes address reproducible code weaknesses. They do **not** prove which on
 
 ## Deployment and investigation evidence
 
-On 3 October the production scheduler was active at `*/15 * * * *`; its four most recent hourly responses were HTTP 200. The development registrations had a push-to-start token and a retiring token but no current activity update token, with the latest start at 14:15 UTC. That is consistent with a missing renewal acknowledgement, although it does not show whether the phone displayed a banner. The production registration had no Live Activity tokens; a signed-in launch of the new TestFlight build is necessary to register them.
+On 3 October the production scheduler was active at `*/15 * * * *`; its four responses in the previous hour were HTTP 200. The development registrations had a push-to-start token and a retiring token but no current activity update token, with the latest start at 14:15 UTC. That is consistent with a missing renewal acknowledgement, although it does not show whether the phone displayed a banner. The production registration had no Live Activity tokens; a signed-in launch of the new TestFlight build is necessary to register them.
 
 The database-read protection was deployed to `send-reminder-push` on 3 October after confirming the deployed source matched the merged baseline. No database migration was needed for these changes. iOS additions require a new build.
 

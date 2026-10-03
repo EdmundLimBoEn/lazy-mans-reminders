@@ -25,6 +25,7 @@ final class PushTokenRegistrar: ObservableObject {
         var pushToStartToken: String?
         var activityPushToken: String?
         var lastSuccess: Date?
+        var signedOut: Bool?
     }
 
     @Published private(set) var lastSuccess: Date?
@@ -74,6 +75,7 @@ final class PushTokenRegistrar: ObservableObject {
             lastSuccess = nil
         }
         pending.userID = userID
+        pending.signedOut = userID == nil
         save()
     }
 
@@ -94,6 +96,7 @@ final class PushTokenRegistrar: ObservableObject {
     }
 
     func recordActivityToken(_ token: String) {
+        guard pending.signedOut != true else { return }
         pending.activityPushToken = token
         needsRetry = true
         save()

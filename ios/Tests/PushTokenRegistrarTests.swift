@@ -91,6 +91,7 @@ final class PushTokenRegistrarTests: XCTestCase {
         registrar.recordDeviceToken("device")
         registrar.recordActivityToken("private-old-board")
         registrar.bind(userID: nil)
+        registrar.recordActivityToken("late-old-board")
         await registrar.flush()
         XCTAssertTrue(sent.isEmpty)
         let nextUser = UUID()

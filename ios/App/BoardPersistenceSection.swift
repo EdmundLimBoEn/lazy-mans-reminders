@@ -16,13 +16,13 @@ struct BoardPersistenceSection: View {
             LabeledContent("Live Activities", value: liveActivitiesEnabled ? "Allowed" : "Off")
             LabeledContent("Background App Refresh", value: refreshStatus)
             if let lastSuccess = registration.lastSuccess {
-                LabeledContent("Push registration") {
+                LabeledContent("Live Activity connection") {
                     Text(lastSuccess, style: .relative)
                         .foregroundStyle(.secondary)
                 }
             }
             if registration.needsRetry {
-                Text("Push registration is waiting to retry. Check your connection and refresh the board.")
+                Text("The Live Activity connection needs another try. Check your connection and refresh the board.")
                     .font(.footnote)
             }
             Button(isRefreshing ? "Refreshing…" : "Refresh Board Now") {
@@ -42,7 +42,7 @@ struct BoardPersistenceSection: View {
         } header: {
             Text("Keep Your Board Visible")
         } footer: {
-            Text("iOS limits each Live Activity to eight hours. We use server pushes to renew it, but delivery can be delayed. Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.")
+            Text("iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed. Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.")
         }
         .onChange(of: scenePhase) { _, phase in
             guard phase == .active else { return }
