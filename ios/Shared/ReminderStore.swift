@@ -34,9 +34,9 @@ actor ReminderStore {
     private let identityRevisionKey = "shared-session-identity-revision"
 
     private func storedSession() -> SharedSession? {
-        defaults.data(forKey: sessionKey)
-            .flatMap { try? JSONDecoder().decode(SharedSession.self, from: $0) }
-            ?.resolvingUserID()
+        guard let data = defaults.data(forKey: sessionKey),
+              let session = try? JSONDecoder().decode(SharedSession.self, from: data) else { return nil }
+        return session.resolvingUserID()
     }
 
     private var defaults: UserDefaults {
@@ -87,9 +87,9 @@ actor ReminderStore {
     }
 
     /// Fallback helper. `??` uses a sync autoclosure, so `?? await cached()` does not compile.
-    func refreshOrCached() async -> [Reminder] {
+    func refreshOrCached(refreshAuthentication: Bool = true) async -> [Reminder] {
         do {
-            return try await refresh(performMaintenance: false, refreshAuthentication: false)
+            return try await refresh(performMaintenance: false, refreshAuthentication: refreshAuthentication)
         } catch {
             return cached()
         }

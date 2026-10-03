@@ -20,7 +20,7 @@ struct ReminderProvider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<ReminderEntry>) -> Void) {
         Task {
-            let reminders = await ReminderStore.shared.refreshOrCached()
+            let reminders = await ReminderStore.shared.refreshOrCached(refreshAuthentication: false)
             let now = Date()
             completion(Timeline(
                 entries: [ReminderEntry(date: now, reminders: reminders)],
