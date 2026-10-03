@@ -11,37 +11,12 @@ enum AuthNotice: Equatable {
 
 @MainActor
 final class AuthManager: ObservableObject {
-    private struct DeviceToken: Encodable {
-        let token: String
-        let userID: UUID
-        let environment: String
+    static let shared = AuthManager()
 
-        enum CodingKeys: String, CodingKey {
-            case token, environment
-            case userID = "user_id"
-        }
-    }
-
-    private struct LiveActivityTokenPatch: Encodable {
-        var pushToStartToken: String?
-        var activityPushToken: String?
-
-        enum CodingKeys: String, CodingKey {
-            case pushToStartToken = "push_to_start_token"
-            case activityPushToken = "activity_push_token"
-        }
-
-        func encode(to encoder: Encoder) throws {
-            var container = encoder.container(keyedBy: CodingKeys.self)
-            if let pushToStartToken {
-                try container.encode(pushToStartToken, forKey: .pushToStartToken)
-            }
-            if let activityPushToken {
-                try container.encode(activityPushToken, forKey: .activityPushToken)
-            }
-        }
-
-        var isEmpty: Bool { pushToStartToken == nil && activityPushToken == nil }
+    lazy var pushRegistration = PushTokenRegistrar { [client] registration in
+        try await client.from("device_tokens")
+            .upsert(registration, onConflict: "token")
+            .execute()
     }
 
     private struct LockScreenPrefs: Encodable {
@@ -66,23 +41,36 @@ final class AuthManager: ObservableObject {
         supabaseKey: AppConfig.supabaseAnonKey
     )
 
+    private var restorationTask: Task<Void, Never>?
     private var pendingAppleNonce: String?
     /// Safari cannot follow a 303 onto a custom scheme, so magic links land on HTTPS first.
     private let magicLinkRedirectURL = URL(string: "https://lmr.edmundlim.systems/auth/ios")!
     private let oauthRedirectURL = URL(string: "lazymansreminders://auth/callback")!
 
     init() {
-        Task {
-            session = try? await client.auth.session
+        restorationTask = Task {
+            do {
+                session = try await client.auth.session
+            } catch {
+                // An offline refresh is not a sign-out. Keep the cached board and activity.
+                session = client.auth.currentSession
+            }
             await shareSession()
             isRestoringSession = false
-
-            for await (_, nextSession) in await client.auth.authStateChanges {
+            await registerLiveActivityTokens()
+        }
+        Task {
+            await waitForRestoration()
+            for await (event, nextSession) in await client.auth.authStateChanges {
                 session = nextSession
-                await shareSession()
+                await shareSession(clearWhenSignedOut: event == .signedOut)
             }
         }
         Task { await observeSharedSessionRefresh() }
+    }
+
+    func waitForRestoration() async {
+        await restorationTask?.value
     }
 
     func sendMagicLink(to email: String) async {
@@ -180,6 +168,7 @@ final class AuthManager: ObservableObject {
     }
 
     func handle(url: URL) async {
+        guard url.host != "board" else { return }
         do {
             session = try await client.auth.session(from: url)
             notice = nil
@@ -194,7 +183,8 @@ final class AuthManager: ObservableObject {
     }
 
     func signOut() async {
-        if let token = AppDelegate.latestDeviceToken {
+        pushRegistration.bind(userID: nil)
+        if let token = pushRegistration.deviceToken {
             try? await client
                 .from("device_tokens")
                 .delete()
@@ -211,6 +201,7 @@ final class AuthManager: ObservableObject {
     /// Deletes the signed-in user's data and auth account via the `delete-account` Edge Function.
     func deleteAccount() async throws {
         try await client.functions.invoke("delete-account")
+        pushRegistration.bind(userID: nil)
         // Auth user is already gone; local sign-out may fail — clear client state either way.
         try? await client.auth.signOut()
         session = nil
@@ -220,52 +211,14 @@ final class AuthManager: ObservableObject {
     }
 
     func registerDevice(token: String) async {
-        guard let userID = session?.user.id else { return }
-        #if DEBUG
-        let environment = "development"
-        #else
-        let environment = "production"
-        #endif
-        let device = DeviceToken(token: token, userID: userID, environment: environment)
-        for attempt in 0..<3 {
-            do {
-                try await client
-                    .from("device_tokens")
-                    .upsert(device, onConflict: "token")
-                    .execute()
-                await registerLiveActivityTokens()
-                return
-            } catch {
-                if attempt == 2 { return }
-                try? await Task.sleep(nanoseconds: UInt64(400_000_000 * (attempt + 1)))
-            }
-        }
+        pushRegistration.recordDeviceToken(token)
+        guard !isRestoringSession, session != nil else { return }
+        await pushRegistration.flush()
     }
 
     func registerLiveActivityTokens() async {
-        guard
-            let userID = session?.user.id,
-            let deviceToken = AppDelegate.latestDeviceToken
-        else { return }
-        let patch = LiveActivityTokenPatch(
-            pushToStartToken: AppDelegate.latestPushToStartToken,
-            activityPushToken: AppDelegate.latestActivityPushToken
-        )
-        guard !patch.isEmpty else { return }
-        for attempt in 0..<3 {
-            do {
-                try await client
-                    .from("device_tokens")
-                    .update(patch)
-                    .eq("token", value: deviceToken)
-                    .eq("user_id", value: userID)
-                    .execute()
-                return
-            } catch {
-                if attempt == 2 { return }
-                try? await Task.sleep(nanoseconds: UInt64(400_000_000 * (attempt + 1)))
-            }
-        }
+        guard !isRestoringSession, session != nil else { return }
+        await pushRegistration.flush()
     }
 
     /// Measures this phone’s Live Activity line budget and upserts `lock_screen_prefs`.
@@ -283,8 +236,10 @@ final class AuthManager: ObservableObject {
             .execute()
     }
 
-    private func shareSession() async {
+    private func shareSession(clearWhenSignedOut: Bool = false) async {
         guard let session else {
+            guard clearWhenSignedOut else { return }
+            pushRegistration.bind(userID: nil)
             await ReminderStore.shared.clearUserData()
             await ReminderBoardSync.clear()
             return
@@ -295,6 +250,8 @@ final class AuthManager: ObservableObject {
             expiresAt: Date(timeIntervalSince1970: session.expiresAt),
             userID: session.user.id
         )
+        pushRegistration.bind(userID: session.user.id)
+        await pushRegistration.flush()
         await syncLockScreenPrefs()
     }
 

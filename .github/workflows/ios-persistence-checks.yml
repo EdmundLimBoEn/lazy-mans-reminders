@@ -1,0 +1,43 @@
+name: iOS persistence checks
+on:
+  pull_request:
+    paths: ['ios/**', 'supabase/**', '.github/workflows/ios-persistence-checks.yml']
+  push:
+    branches: [fix/live-activity-background-recovery]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ios:
+    name: iOS simulator tests
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.4'
+      - run: HOMEBREW_NO_AUTO_UPDATE=1 brew install xcodegen
+      - name: Generate project
+        working-directory: ios
+        run: |
+          cp Config.example.xcconfig Config.xcconfig
+          xcodegen generate --spec project.yml
+      - name: Build app, widget and tests
+        working-directory: ios
+        run: |
+          xcodebuild test -quiet \
+            -project LazyMansReminders.xcodeproj \
+            -scheme LazyMansReminders \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            CODE_SIGNING_ALLOWED=NO
+  server:
+    name: Server lifecycle tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno test supabase/functions/_shared
+      - run: deno check supabase/functions/send-reminder-push/index.ts

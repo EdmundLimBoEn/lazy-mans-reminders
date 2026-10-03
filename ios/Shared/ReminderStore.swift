@@ -78,19 +78,21 @@ actor ReminderStore {
     /// Fallback helper. `??` uses a sync autoclosure, so `?? await cached()` does not compile.
     func refreshOrCached() async -> [Reminder] {
         do {
-            return try await refresh()
+            return try await refresh(performMaintenance: false)
         } catch {
             return cached()
         }
     }
 
-    func refresh() async throws -> [Reminder] {
+    func refresh(performMaintenance: Bool = true) async throws -> [Reminder] {
         guard let session = await loadFreshSession() else {
             return cached()
         }
 
         // Best-effort: drop this user's done reminders older than 7 days (DB trigger sets completed_at).
-        await deleteOldCompletedReminders(accessToken: session.accessToken)
+        if performMaintenance {
+            await deleteOldCompletedReminders(accessToken: session.accessToken)
+        }
 
         var components = URLComponents(
             url: AppConfig.supabaseURL.appending(path: "rest/v1/reminders"),
@@ -101,7 +103,7 @@ actor ReminderStore {
             URLQueryItem(name: "is_done", value: "eq.false"),
             URLQueryItem(name: "order", value: "sort_order.asc,created_at.asc")
         ]
-        var request = URLRequest(url: components.url!)
+        var request = URLRequest(url: components.url!, timeoutInterval: 15)
         request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
 
@@ -178,7 +180,7 @@ actor ReminderStore {
         components.queryItems = [URLQueryItem(name: "grant_type", value: "refresh_token")]
         guard let url = components.url else { return nil }
 
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url, timeoutInterval: 10)
         request.httpMethod = "POST"
         request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -296,7 +298,7 @@ actor ReminderStore {
         components.queryItems = [
             URLQueryItem(name: "id", value: "eq.\(id.uuidString)")
         ]
-        var request = URLRequest(url: components.url!)
+        var request = URLRequest(url: components.url!, timeoutInterval: 15)
         request.httpMethod = "PATCH"
         request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
