@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
+    "typecheck": "tsc --noEmit",
     "types": "wrangler types",
     "deploy": "wrangler deploy"
   },
@@ -19,5 +20,13 @@
     "typescript": "~5.8.3",
     "vitest": "^3.2.7",
     "wrangler": "^4.28.0"
+  },
+  "overrides": {
+    "proxy-addr": "2.0.8",
+    "fast-uri": "3.1.8",
+    "hono": "4.13.13",
+    "ip-address": "10.7.3",
+    "qs": "6.16.0",
+    "source-map-js": "1.2.2"
   }
 }

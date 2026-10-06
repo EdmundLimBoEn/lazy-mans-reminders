@@ -6,4 +6,6 @@ interface Env {
   SUPABASE_ANON_KEY: string
   WEB_ORIGINS: string
   OAUTH_KV: KVNamespace
+  AUTH_RATE_LIMIT: RateLimit
+  MCP_RATE_LIMIT: RateLimit
 }

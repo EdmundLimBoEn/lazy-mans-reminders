@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import {
   boardErrorFromStorage,
+  CLIENT_STORAGE_ERROR,
   capacityError,
   capacityMaximumFromError,
   effectiveMaximum,
@@ -56,6 +57,18 @@ describe('capacity mapping', () => {
 
   it('maps invalid text exceptions without treating them as capacity', () => {
     expect(boardErrorFromStorage('LMR_INVALID_TEXT')).toEqual({ kind: 'invalid_text' })
+  })
+
+  it('returns a fixed storage error instead of the provider message', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const result = boardErrorFromStorage(
+      'insert or update on table "reminders" violates foreign key constraint "reminders_user_id_fkey"',
+      'Key (user_id)=(abc) is not present in table "users".',
+    )
+    expect(result).toEqual({ kind: 'storage', message: CLIENT_STORAGE_ERROR })
+    expect(result.kind === 'storage' && result.message).not.toContain('foreign key')
+    expect(spy).toHaveBeenCalled()
+    spy.mockRestore()
   })
 
   it('clamps list capacity to the lock-screen 16 cap', () => {

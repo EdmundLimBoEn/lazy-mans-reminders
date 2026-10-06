@@ -48,9 +48,12 @@ export function capacityMaximumFromError(message: string, details?: string): num
   return Number.isFinite(fromDetail) && fromDetail > 0 ? fromDetail : MCP_MAX_LINES_CAP
 }
 
+export const CLIENT_STORAGE_ERROR = 'Could not update the board. Try again.'
+
 export function boardErrorFromStorage(message: string, details?: string): Exclude<BoardError, { kind: 'capacity' }> {
   if (`${message}\n${details ?? ''}`.includes('LMR_INVALID_TEXT')) return { kind: 'invalid_text' }
-  return { kind: 'storage', message }
+  console.error('board storage failed', message, details ?? '')
+  return { kind: 'storage', message: CLIENT_STORAGE_ERROR }
 }
 
 export function capacityError(snapshot: BoardSnapshot): Extract<BoardError, { kind: 'capacity' }> {
@@ -102,7 +105,7 @@ async function listBoard(
       .eq('user_id', session.userId)
       .maybeSingle(),
   ])
-  if (error) return { kind: 'storage', message: error.message }
+  if (error) return boardErrorFromStorage(error.message, error.details)
 
   const rows = (data ?? []) as ReminderSelect[]
   const used = rows.filter((row) => !row.is_done).length
@@ -142,7 +145,7 @@ async function addReminder(
 
   const row = Array.isArray(data) ? data[0] : data
   if (!row || typeof row !== 'object') {
-    return { kind: 'storage', message: 'Add returned no row' }
+    return boardErrorFromStorage('Add returned no row')
   }
   const written = row as ReminderSelect & {
     capacity_maximum?: number
@@ -172,7 +175,7 @@ async function setCompletion(
     .eq('user_id', session.userId)
     .select('id, text, is_done, sort_order, created_at, completed_at')
     .maybeSingle()
-  if (error) return { kind: 'storage', message: error.message }
+  if (error) return boardErrorFromStorage(error.message, error.details)
   if (!data) return { kind: 'not_found' }
   return { kind: 'changed', reminder: toReminderRow(data as ReminderSelect) }
 }

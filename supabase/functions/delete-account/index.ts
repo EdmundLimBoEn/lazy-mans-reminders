@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { USER_DATA_TABLES } from "../_shared/account_tables.ts";
+import { revokeUserOauthGrants } from "../_shared/oauth_grant_cleanup.ts";
 
 const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
@@ -57,6 +58,15 @@ Deno.serve(async (request) => {
   const admin = createClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
+
+  const cleanup = await revokeUserOauthGrants({ authorization: authHeader });
+  if (!cleanup.ok) {
+    console.error("Could not revoke OAuth grants", cleanup.reason);
+    return new Response("Could not revoke connected agents", {
+      status: 503,
+      headers: corsHeaders,
+    });
+  }
 
   for (const table of USER_DATA_TABLES) {
     const { error: tableError } = await admin
