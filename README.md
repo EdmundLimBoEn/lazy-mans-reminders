@@ -108,6 +108,7 @@ Keep `supabase/config.toml` aligned for local development. In **Authentication â
 
 - Enable **Email** (magic link) with confirmations.
 - Enable **Apple** and **Google** using the steps in `HUMANS.md` (Services ID + secret for web Apple; Web OAuth client for Google; iOS App ID in Apple Client IDs).
+- Optional, iOS only: add **Sign in with Grok** as the custom OIDC provider `custom:grok` with issuer `https://auth.x.ai` and scopes `openid profile email`. This needs an OAuth client from xAI (see `HUMANS.md`). The app hides the button unless `GROK_SIGN_IN_ENABLED = YES` in `ios/Config.xcconfig`. Grok is used for sign-in only and the app never calls the Grok API.
 
 Test Apple, Google, and a magic link from both the web app and a physical iPhone; the production hostname must exactly match an allowed redirect.
 

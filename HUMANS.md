@@ -4,6 +4,22 @@
 
 - [ ] **Remove the extra Pages `Access-Control-Allow-Origin: *`** — Still present on `https://lmr.edmundlim.systems/` after the 6 Oct 2026 production deploy. That response now has HSTS (`max-age=15552000`, no `includeSubDomains`) and the narrowed Supabase `connect-src`. The star is not in `web/public/_headers`, and the same deploy's preview URL sent it too, so it is coming from the dashboard (Transform Rules or another header config). Remove it if nothing needs it. `Access-Control-Allow-Credentials` was not set.
 
+- [ ] **Sign in with Grok (iOS) — blocked on xAI** — The button, flow, and Account row are in the app, but stay hidden until `GROK_SIGN_IN_ENABLED = YES`. It is for sign-in only: no Grok API calls and no token spend. As of 6 Oct 2026, xAI runs a standard OIDC issuer at `https://auth.x.ai` ([discovery](https://auth.x.ai/.well-known/openid-configuration): `openid profile email`, PKCE S256, ES256 ID tokens). docs.x.ai has no third-party client registration, no console, and no "Sign in with Grok" button guidelines.
+  1. Ask xAI, through your xAI contact or developer support, for an OAuth client for Lazy Man's Reminders with:
+     - Scopes `openid profile email` only. Do not ask for `offline_access`, `api:access`, `grok-cli:access`, or `conversations:*`.
+     - A confidential client (`client_secret_basic` or `client_secret_post`) with PKCE S256.
+     - Redirect URI `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`.
+     - Do not reuse the Grok CLI client ID `b1a00492-…` that open-source tools use. It belongs to xAI, it only allows loopback redirects, and reusing it would present this app as xAI's CLI.
+  2. In Supabase **Authentication → Providers → New Provider → Auto-discovery (OIDC)**, enter: identifier `custom:grok` (must match `GrokSignIn.supabaseProvider`), name `Grok`, the xAI client ID and secret, issuer `https://auth.x.ai`, and scopes `openid profile email`. Leave PKCE on and **email optional** off. `lazymansreminders://auth/callback` is already an allowed redirect.
+  3. Set `GROK_SIGN_IN_ENABLED = YES` in `ios/Config.xcconfig` for local builds, and in `ios/Config.example.xcconfig` when TestFlight should ship it.
+  4. Branding: get the official mark from [x.ai/legal/brand-guidelines](https://x.ai/legal/brand-guidelines), use it unaltered, and confirm with xAI that "Continue with Grok" is acceptable. Until then the button is text only.
+  5. Test on a device:
+     - A new account created through Grok.
+     - A Grok account whose verified email matches an existing Apple, Google, or email account should land on that same account. Supabase links verified emails automatically, as it does for Apple and Google.
+     - Account shows the Grok row.
+     - Sign out, then delete the account.
+  6. App Store: keep Sign in with Apple on the same screen (Guideline 4.8). Add Grok to the review notes and the Email Address privacy row in `docs/app-store.md`.
+
 - [x] **DNS for `lmr.edmundlim.systems`** — Proxied CNAME `lmr` → `lazy-mans-reminders.pages.dev` created via `cf dns records create`. Pages custom domain status is **active**. Site returns HTTP 200 (verified via public resolvers). Note: local Tailscale MagicDNS (`100.100.100.100`) may fail to resolve this name; `dig @1.1.1.1` / browsers using public DNS work.
 - [x] **Apple Developer identifiers** — Bundle IDs already exist:
   - App `systems.edmundlim.LazyMansReminders` (`9H8ZY6WGY6`) with **Push Notifications** + **App Groups**
