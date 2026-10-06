@@ -45,6 +45,23 @@ final class LMRChromeTests: XCTestCase {
         XCTAssertNil(AccountSessionCaption.methodCaption(providers: ["phone"]))
     }
 
+    func testAccountCaptionNamesGrokOverEmailButNotOverApple() {
+        XCTAssertEqual(
+            AccountSessionCaption.methodCaption(providers: ["email", "custom:grok"]),
+            "Using Grok"
+        )
+        XCTAssertEqual(
+            AccountSessionCaption.methodCaption(providers: ["custom:grok", "apple"]),
+            "Using Sign in with Apple"
+        )
+        XCTAssertNil(AccountSessionCaption.methodCaption(providers: ["grok"]))
+    }
+
+    func testSignBackInMessageOnlyMentionsGrokWhenEnabled() {
+        XCTAssertTrue(AccountSessionCaption.signBackInMessage(grokEnabled: true).contains("Grok"))
+        XCTAssertFalse(AccountSessionCaption.signBackInMessage(grokEnabled: false).contains("Grok"))
+    }
+
     func testSignInEmailRequiresBothSidesOfAtSign() {
         XCTAssertFalse(SignInEmail.isPlausible(""))
         XCTAssertFalse(SignInEmail.isPlausible("nope"))

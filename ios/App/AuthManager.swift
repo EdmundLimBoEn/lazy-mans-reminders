@@ -3,6 +3,7 @@ import Combine
 import CryptoKit
 import Foundation
 import Supabase
+import UIKit
 
 enum AuthNotice: Equatable {
     case checkInbox(email: String)
@@ -168,6 +169,33 @@ final class AuthManager: ObservableObject {
         }
     }
 
+    /// Opens xAI through Supabase's `custom:grok` OIDC provider. Identity only.
+    func signInWithGrok() async {
+        guard GrokSignIn.isEnabled else { return }
+        isAuthenticating = true
+        notice = nil
+        defer { isAuthenticating = false }
+        let callbackScheme = oauthRedirectURL.scheme ?? "lazymansreminders"
+        do {
+            // `.google` only seeds the SDK's PKCE URL; the provider is replaced below.
+            session = try await client.auth.signInWithOAuth(
+                provider: .google,
+                redirectTo: oauthRedirectURL,
+                launchFlow: { sdkURL in
+                    try await WebAuthSheet.present(
+                        url: GrokSignIn.authorizeURL(rewriting: sdkURL),
+                        callbackScheme: callbackScheme
+                    )
+                }
+            )
+            await shareSession()
+        } catch let error as ASWebAuthenticationSessionError where error.code == .canceledLogin {
+            return
+        } catch {
+            notice = .error(error.localizedDescription)
+        }
+    }
+
     func handle(url: URL) async {
         guard url.host != "board" else { return }
         do {
@@ -296,5 +324,37 @@ final class AuthManager: ObservableObject {
     private static func sha256(_ input: String) -> String {
         let data = Data(input.utf8)
         return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+    }
+}
+
+@MainActor
+private enum WebAuthSheet {
+    private final class Anchor: NSObject, ASWebAuthenticationPresentationContextProviding {
+        func presentationAnchor(for _: ASWebAuthenticationSession) -> ASPresentationAnchor {
+            UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap(\.windows)
+                .first(where: \.isKeyWindow) ?? ASPresentationAnchor()
+        }
+    }
+
+    static func present(url: URL, callbackScheme: String) async throws -> URL {
+        let anchor = Anchor()
+        return try await withCheckedThrowingContinuation { continuation in
+            let session = ASWebAuthenticationSession(
+                url: url,
+                callbackURLScheme: callbackScheme
+            ) { callbackURL, error in
+                _ = anchor
+                if let callbackURL {
+                    continuation.resume(returning: callbackURL)
+                } else {
+                    continuation.resume(throwing: error ?? URLError(.badServerResponse))
+                }
+            }
+            session.presentationContextProvider = anchor
+            session.prefersEphemeralWebBrowserSession = false
+            session.start()
+        }
     }
 }

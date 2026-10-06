@@ -79,6 +79,7 @@ targets:
         SUPABASE_URL: "$(SUPABASE_URL)"
         SUPABASE_ANON_KEY: "$(SUPABASE_ANON_KEY)"
         APP_GROUP_ID: "$(APP_GROUP_ID)"
+        GROK_SIGN_IN_ENABLED: "$(GROK_SIGN_IN_ENABLED)"
         NSSupportsLiveActivities: true
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:

@@ -29,8 +29,15 @@ enum AccountSessionCaption {
         let set = Set(providers)
         if set.contains("apple") { return "Using Sign in with Apple" }
         if set.contains("google") { return "Using Google" }
+        if set.contains(GrokSignIn.supabaseProvider) { return "Using Grok" }
         if set.contains("email") { return "Using Email" }
         return nil
+    }
+
+    static func signBackInMessage(grokEnabled: Bool) -> String {
+        grokEnabled
+            ? "You can sign back in with Apple, Grok, Google, or email."
+            : "You can sign back in with Apple, Google, or email."
     }
 }
 

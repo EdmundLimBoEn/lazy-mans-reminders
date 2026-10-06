@@ -13,7 +13,7 @@ struct SignInView: View {
     @FocusState private var emailFocused: Bool
 
     private enum PendingSignIn {
-        case apple, google, magicLink
+        case apple, grok, google, magicLink
     }
 
     var body: some View {
@@ -113,6 +113,10 @@ struct SignInView: View {
             .frame(height: max(44, signInButtonHeight))
             .disabled(busy)
 
+            if GrokSignIn.isEnabled {
+                grokButton
+            }
+
             Button {
                 pending = .google
                 Task {
@@ -133,6 +137,36 @@ struct SignInView: View {
             .disabled(busy)
             .accessibilityHint("Opens Google sign-in in a secure browser sheet")
         }
+    }
+
+    /// Matches the Apple button's height, width, and fill so neither provider
+    /// outranks the other.
+    private var grokButton: some View {
+        let isBlack = SignInAppleFill.fill(for: colorScheme) == .black
+        let shape = RoundedRectangle(cornerRadius: 6, style: .continuous)
+        return Button {
+            pending = .grok
+            Task {
+                await auth.signInWithGrok()
+                pending = nil
+            }
+        } label: {
+            signInButtonLabel(
+                title: "Continue with Grok",
+                showsProgress: pending == .grok
+            )
+            .font(.body.weight(.semibold))
+            .foregroundStyle(isBlack ? Color.white : Color.black)
+            .frame(maxWidth: .infinity)
+            .frame(height: max(44, signInButtonHeight))
+            .background(isBlack ? Color.black : Color.white, in: shape)
+            .overlay { shape.strokeBorder(Color.black, lineWidth: isBlack ? 0 : 1) }
+            .contentShape(shape)
+        }
+        .buttonStyle(.plain)
+        .disabled(busy)
+        .opacity(busy && pending != .grok ? 0.6 : 1)
+        .accessibilityHint("Opens Grok sign-in in a secure browser sheet")
     }
 
     @ViewBuilder
