@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/server'
 import { z } from 'zod'
 import type { AgentSession, BoardError, BoardResult, ReminderRow } from './domain'
 import { createServiceRoleClient } from './auth'
-import { runBoardCommand } from './board'
+import { CLIENT_STORAGE_ERROR, runBoardCommand } from './board'
 
 export function createServer(session: AgentSession, env: Env): McpServer {
   const server = new McpServer({
@@ -140,7 +140,7 @@ function boardErrorText(error: BoardError): string {
     case 'invalid_text':
       return 'Text must be 1–500 characters after the agent name prefix'
     case 'storage':
-      return error.message
+      return CLIENT_STORAGE_ERROR
     default: {
       const _exhaustive: never = error
       return _exhaustive

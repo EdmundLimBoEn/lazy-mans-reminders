@@ -23,6 +23,7 @@ import { nextSortOrder, sortReminders, swapSortOrders, temporarySortOrder, isAtC
 import { AuthCallback } from './AuthCallback'
 import { IosAuthHandoff } from './IosAuthHandoff'
 import { Connect } from './Connect'
+import { ConnectedAgents } from './ConnectedAgents'
 import { LegalFooterLinks, PrivacyPage, SupportPage, TermsPage } from './LegalPages'
 import {
   AGENT_TOKEN_PLACEHOLDER,
@@ -575,7 +576,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
           </ul>
         )}
       </section>
-      <AgentAccess userId={session.user.id} />
+      <AgentAccess userId={session.user.id} accessToken={session.access_token} />
       <footer className="board-footer">
         <p className="footer-note"><Smartphone size={16} aria-hidden="true" /> Open the app once after signing in to add the lock-screen widget.</p>
         <LegalFooterLinks onNavigate={onNavigate} />
@@ -633,7 +634,7 @@ type AgentTokenClient = {
   revoked_at: string | null
 }
 
-function AgentAccess({ userId }: { userId: string }) {
+function AgentAccess({ userId, accessToken }: { userId: string; accessToken: string }) {
   const [tokens, setTokens] = useState<AgentTokenClient[]>([])
   const [name, setName] = useState('')
   const [minted, setMinted] = useState<string | null>(null)
@@ -683,6 +684,7 @@ function AgentAccess({ userId }: { userId: string }) {
   return (
     <section className="agent-access" aria-labelledby="agent-access-heading">
       <h2 id="agent-access-heading">Agent access</h2>
+      <ConnectedAgents accessToken={accessToken} />
       <p>
         Grok, Cursor, Claude, and Codex can finish <code>/connect</code>. Add the plugin or paste
         {' '}{MCP_URL}, then sign in when asked. That is the usual path. No tokens to copy.

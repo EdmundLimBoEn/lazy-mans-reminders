@@ -22,7 +22,11 @@ export function AuthCallback({ onNavigate }: { onNavigate: (path: string) => voi
     const href = window.location.href
     const params = new URLSearchParams(window.location.search)
     const oauthError = params.get('error_description') || params.get('error')
-    const returnTo = safeReturnPath(pkceReturnToFromCallbackUrl(href) || consumeReturnTo())
+    const returnTo = safeReturnPath(
+      pkceReturnToFromCallbackUrl(href) || consumeReturnTo(),
+      '/',
+      window.location.origin,
+    )
     if (oauthError) {
       setError(oauthError)
       setRetryHref(returnTo)

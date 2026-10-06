@@ -5,6 +5,7 @@ describe('isSafeOauthRedirect', () => {
   it('allows agent callbacks and rejects script URLs', () => {
     expect(isSafeOauthRedirect('https://grok.com/connectors-oauth-exchange-code/?code=x')).toBe(true)
     expect(isSafeOauthRedirect('http://127.0.0.1:8787/callback')).toBe(true)
+    expect(isSafeOauthRedirect('http://evil.example/callback')).toBe(false)
     expect(isSafeOauthRedirect('cursor://anysphere.cursor-mcp/oauth/callback')).toBe(true)
     expect(isSafeOauthRedirect('javascript:alert(1)')).toBe(false)
     expect(isSafeOauthRedirect('data:text/html,hi')).toBe(false)

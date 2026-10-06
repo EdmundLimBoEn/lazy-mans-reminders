@@ -216,6 +216,13 @@ button:focus-visible, input:focus-visible, a:focus-visible {
 .connect-panel { grid-column: 1 / -1; place-items: center; }
 .connect-actions { display: grid; gap: .85rem; }
 .connect-actions .primary { width: 100%; }
+.consent-facts { display: grid; gap: .65rem; margin: 0 0 1rem; }
+.consent-facts div { display: grid; gap: .15rem; }
+.consent-facts dt { font-size: .75rem; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.consent-facts dd { margin: 0; overflow-wrap: anywhere; }
+.connected-agents { margin: 0 0 1.25rem; }
+.connected-agents h3 { margin: 0 0 .35rem; font-size: 1rem; }
+.connected-empty { color: var(--muted); }
 .connect-hint {
   margin: 0 0 1rem;
   padding: .75rem .85rem;

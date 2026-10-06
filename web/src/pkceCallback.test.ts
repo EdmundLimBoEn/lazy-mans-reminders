@@ -65,5 +65,8 @@ describe('safeReturnPath', () => {
     expect(safeReturnPath('/connect?state=abc')).toBe('/connect?state=abc')
     expect(safeReturnPath('https://evil.example/')).toBe('/')
     expect(safeReturnPath('//evil.example')).toBe('/')
+    expect(safeReturnPath('/\\evil.example')).toBe('/')
+    expect(safeReturnPath('/%2f%2fevil.example')).toBe('/')
+    expect(safeReturnPath('/%5cevil.example')).toBe('/')
   })
 })
