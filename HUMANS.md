@@ -19,6 +19,21 @@
 - [x] **Sign in with Apple (native / Supabase)** — Provider enabled with App ID + Services ID (`systems.edmundlim.LazyMansReminders.web` first). Native + web Apple work; return URL `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`.
 - [x] **Google sign-in (Supabase)** — Web OAuth client created in Google Cloud (`1066799131514-cpr7u3gq5r9hjnq375hee0g1b5be65ir…`); redirect + origins set; Google provider **enabled** in Supabase Auth with that client ID + secret (Mac handoff 7 Aug 2026).
 - [x] **Deploy delete-account function** — Deployed to project `biwmsxbqrevtjwgsvsmu` (`supabase functions deploy delete-account`). Redeployed 26 Aug 2026 so deletion also wipes `lock_screen_prefs`. Redeployed 6 Oct 2026 so deletion revokes OAuth grants first and fails if that cleanup does not finish. JWT verification on; used by web + iOS account deletion.
+- [ ] **Revoke Sign in with Apple tokens on account deletion (deploy-bot)** — App Store account-deletion rule. Create a **Sign in with Apple** key in [Apple Developer → Keys](https://developer.apple.com/account/resources/authkeys/list) (enable Sign in with Apple; do not reuse the APNs-only key). Download the `.p8` once. Then set Edge Function secrets on project `biwmsxbqrevtjwgsvsmu` and redeploy `delete-account`. Do not put the `.p8` in git.
+  1. Create the key; record Key ID. Team ID is `DUU8J39BA7`. Client ID is the iOS bundle id `systems.edmundlim.LazyMansReminders` (not `systems.edmundlim.LazyMansReminders.web`).
+  2. Add to gitignored `supabase/.env.functions` (newlines in the p8 as `\n`):
+     ```
+     APPLE_TEAM_ID=DUU8J39BA7
+     APPLE_KEY_ID=YOUR_SIWA_KEY_ID
+     APPLE_CLIENT_ID=systems.edmundlim.LazyMansReminders
+     APPLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
+     ```
+  3. Upload secrets and redeploy:
+     ```sh
+     supabase secrets set --env-file supabase/.env.functions
+     supabase functions deploy delete-account
+     ```
+  Until this is done, iOS/web account deletion still removes the user. Apple token revoke is skipped and `delete-account` logs `{"event":"apple_token_revoke","outcome":"skipped","reason":"missing_secrets",...}`. After deploy, delete an Apple-signed-in TestFlight account and confirm Apple’s token revoke succeeded (no skip/fail warning) and the account is gone.
 - [x] **TestFlight build 1.0 (4)** — Uploaded with Xcode 27 beta 5 (`27A5237l`). Processing **VALID**. On Internal Testers (you) and Friends. TestFlight beta review is **WAITING_FOR_REVIEW** so email testers can install. Not submitted to the App Store. Beta 4 removed; `/Applications/Xcode-beta.app` is now beta 5. EdmundPurple theme kept.
 - [x] **Deploy web** — New legal pages, export, favicon, robots, and security.txt are live on `https://lmr.edmundlim.systems` (Wrangler device login, 27 Aug 2026). Confirm `/privacy` has no "launch template" copy. Redeployed 1 Sep 2026 from `main` (`a27de02`); `/auth/ios` was already in the production bundle.
 - [x] **Supabase iOS magic-link redirects** — Hosted Auth `uri_allow_list` now includes `https://lmr.edmundlim.systems/auth/ios` and `https://lazy-mans-reminders.pages.dev/auth/ios` (patched via Management API on project `biwmsxbqrevtjwgsvsmu`, 1 Sep 2026). Did not `supabase config push` the local stubs (that would disable Apple/Google).

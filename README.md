@@ -54,12 +54,18 @@ Server-only secrets (never put these in Vite, the iOS config, source control, sc
 - `APNS_TOPIC`: the iOS app bundle identifier
 - `WEBHOOK_SECRET`: a long random value shared only by the database webhook and Edge Function
 - `SUPABASE_SERVICE_ROLE_KEY`: provided automatically to the deployed Supabase Edge Function; never expose it to clients
+- `APPLE_TEAM_ID`: Apple Developer Team ID (same team as the app, `DUU8J39BA7` for this project)
+- `APPLE_KEY_ID`: Key ID of a **Sign in with Apple** key (not the APNs key unless that key also has Sign in with Apple enabled)
+- `APPLE_PRIVATE_KEY`: contents of that key's `.p8` file, with newlines represented as `\n`
+- `APPLE_CLIENT_ID`: the iOS app bundle identifier (`systems.edmundlim.LazyMansReminders`). This is the native App ID, not the web Services ID.
 
-Store the five custom function values in an ignored file such as `supabase/.env.functions`, then upload that file:
+Store the custom function values in an ignored file such as `supabase/.env.functions`, then upload that file:
 
 ```sh
 supabase secrets set --env-file supabase/.env.functions
 ```
+
+The four `APPLE_*` secrets are used only by `delete-account` to revoke Sign in with Apple tokens. After setting them, redeploy that function (see below). Missing Apple secrets do not block account deletion.
 
 ## Supabase
 
@@ -122,7 +128,14 @@ Delivery behaviour:
 - Transient APNs failures (network, 429, 5xx, expired provider JWT) are retried inside the function. If any device is still retryable afterwards the function returns **503** so the webhook / `pg_net` trigger can try the whole job again. Permanent failures (including `410 Unregistered` and `400 BadDeviceToken`) prune that token and still return 200.
 - After changing this function, redeploy with `supabase functions deploy send-reminder-push --no-verify-jwt`. The INSERT trigger itself (`notify_reminder_push` / dashboard webhook) is configured in the project, not this repo.
 
-`delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, agent tokens, and auth user (service role).
+`delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, agent tokens, and auth user (service role). For Sign in with Apple users, the iOS app first requests a fresh `authorizationCode` and the function exchanges it at `https://appleid.apple.com/auth/token`, then POSTs `https://appleid.apple.com/auth/revoke` with the refresh token (or the access token if Apple does not return a refresh token). If the Apple secrets are missing or Apple returns an error, deletion still succeeds and the function logs a structured warning. Non-Apple users never hit those endpoints.
+
+After creating the Sign in with Apple key and setting `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY`, and `APPLE_CLIENT_ID`:
+
+```sh
+supabase secrets set --env-file supabase/.env.functions
+supabase functions deploy delete-account
+```
 
 ## Agent MCP
 
@@ -195,8 +208,8 @@ cd web && npm test
 # MCP Worker (Vitest — token parse/hash + add prefix/capacity mapping)
 cd mcp && npm test
 
-# Edge Function helpers (Deno — webhook payload classification / APNs host)
-deno test supabase/functions/_shared/push_helpers_test.ts
+# Edge Function helpers (Deno — webhook payload classification / APNs host / account deletion)
+deno test supabase/functions/_shared supabase/functions/delete-account
 
 # iOS (XCTest — Reminder JSON coding; regenerate project first if needed)
 cd ios && xcodegen generate --spec project.yml
