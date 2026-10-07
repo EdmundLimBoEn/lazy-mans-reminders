@@ -50,5 +50,5 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - run: deno test supabase/functions/_shared
-      - run: deno check supabase/functions/send-reminder-push/index.ts
+      - run: deno test supabase/functions/_shared supabase/functions/delete-account
+      - run: deno check supabase/functions/send-reminder-push/index.ts supabase/functions/delete-account/index.ts
