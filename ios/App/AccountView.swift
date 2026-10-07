@@ -47,6 +47,11 @@ struct AccountView: View {
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel(accountAccessibilityLabel)
 
+                    if let chatgptIdentity {
+                        LabeledContent("ChatGPT", value: chatgptIdentity)
+                            .textSelection(.enabled)
+                            .accessibilityLabel("Connected ChatGPT account, \(chatgptIdentity)")
+                    }
                     if let grokIdentity {
                         LabeledContent("Grok", value: grokIdentity)
                             .textSelection(.enabled)
@@ -129,7 +134,10 @@ struct AccountView: View {
                 }
                 Button("Cancel", role: .cancel) {}
             } message: {
-                Text(AccountSessionCaption.signBackInMessage(grokEnabled: GrokSignIn.isEnabled))
+                Text(AccountSessionCaption.signBackInMessage(
+                    grokEnabled: GrokSignIn.isEnabled,
+                    chatgptEnabled: ChatGPTSignIn.isEnabled
+                ))
             }
             .alert("Delete Account?", isPresented: $showDeleteAccount) {
                 Button("Delete Account", role: .destructive) {
@@ -148,13 +156,21 @@ struct AccountView: View {
         return nil
     }
 
+    private var chatgptIdentity: String? {
+        connectedIdentity(provider: ChatGPTSignIn.supabaseProvider)
+    }
+
     private var grokIdentity: String? {
+        connectedIdentity(provider: GrokSignIn.supabaseProvider)
+    }
+
+    private func connectedIdentity(provider: String) -> String? {
         guard
             let identity = auth.session?.user.identities?
-                .first(where: { $0.provider == GrokSignIn.supabaseProvider })
+                .first(where: { $0.provider == provider })
         else { return nil }
         let claims = (identity.identityData ?? [:]).compactMapValues(\.stringValue)
-        return GrokSignIn.identitySummary(claims: claims)
+        return CustomOIDCSignIn.identitySummary(claims: claims)
     }
 
     private var accountTitle: String {

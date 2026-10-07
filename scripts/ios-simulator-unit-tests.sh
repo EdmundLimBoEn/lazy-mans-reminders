@@ -2,6 +2,8 @@
 # Build LazyMansRemindersTests on an available iPhone simulator.
 # Used by ios-tests.yml and by ios-testflight.yml before archive.
 # Needs no signing secrets: ad-hoc simulator identity, CODE_SIGNING_ALLOWED=NO.
+# IOS_TEST_TARGETS (space-separated) overrides the test targets; the default
+# is LazyMansRemindersTests so the TestFlight pre-archive gate is unchanged.
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
@@ -30,12 +32,18 @@ echo "Using iPhone simulator ${udid}"
 result_bundle="${RESULT_BUNDLE_PATH:-${RUNNER_TEMP:-/tmp}/ios.xcresult}"
 rm -rf "${result_bundle}"
 
+only_testing=()
+for target in ${IOS_TEST_TARGETS:-LazyMansRemindersTests}; do
+  only_testing+=("-only-testing:${target}")
+done
+echo "Testing: ${only_testing[*]}"
+
 xcodebuild test \
   -project LazyMansReminders.xcodeproj \
   -scheme LazyMansReminders \
   -destination "platform=iOS Simulator,id=${udid}" \
   -resultBundlePath "${result_bundle}" \
-  -only-testing:LazyMansRemindersTests \
+  "${only_testing[@]}" \
   CODE_SIGN_STYLE=Manual \
   CODE_SIGN_IDENTITY=- \
   DEVELOPMENT_TEAM= \

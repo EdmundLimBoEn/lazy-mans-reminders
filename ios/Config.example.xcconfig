@@ -8,3 +8,5 @@ SUPABASE_URL = https:/$()/biwmsxbqrevtjwgsvsmu.supabase.co
 SUPABASE_ANON_KEY = sb_publishable_5Q63pv_PuD01ClkoVVLfog_YblFUzoQ
 // YES only after xAI issues an OAuth client and Supabase has the custom:grok provider (HUMANS.md).
 GROK_SIGN_IN_ENABLED = NO
+// YES only after OpenAI partner approval and Supabase has the custom:chatgpt provider (HUMANS.md).
+CHATGPT_SIGN_IN_ENABLED = NO

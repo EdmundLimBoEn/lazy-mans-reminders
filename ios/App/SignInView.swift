@@ -13,7 +13,7 @@ struct SignInView: View {
     @FocusState private var emailFocused: Bool
 
     private enum PendingSignIn {
-        case apple, grok, google, magicLink
+        case apple, chatgpt, grok, google, magicLink
     }
 
     var body: some View {
@@ -97,50 +97,93 @@ struct SignInView: View {
 
     private var providerCard: some View {
         SignInCard {
-            SignInWithAppleButton(.signIn) { request in
-                pending = .apple
-                auth.configureAppleRequest(request)
-            } onCompletion: { result in
-                Task {
-                    await auth.handleAppleSignIn(result)
-                    if auth.session == nil {
-                        pending = nil
-                    }
-                }
+            ForEach(SignInScreen.controls(
+                grokEnabled: GrokSignIn.isEnabled,
+                chatgptEnabled: ChatGPTSignIn.isEnabled
+            )) { control in
+                providerButton(control)
             }
-            .signInWithAppleFill(SignInAppleFill.fill(for: colorScheme))
-            .frame(maxWidth: .infinity)
-            .frame(height: max(44, signInButtonHeight))
-            .disabled(busy)
-
-            if GrokSignIn.isEnabled {
-                grokButton
-            }
-
-            Button {
-                pending = .google
-                Task {
-                    await auth.signInWithGoogle()
-                    pending = nil
-                }
-            } label: {
-                signInButtonLabel(
-                    title: "Sign in with Google",
-                    showsProgress: pending == .google
-                )
-            }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.roundedRectangle)
-            .controlSize(.large)
-            .frame(maxWidth: .infinity)
-            .frame(minHeight: max(44, signInButtonHeight))
-            .disabled(busy)
-            .accessibilityHint("Opens Google sign-in in a secure browser sheet")
         }
     }
 
-    /// Matches the Apple button's height, width, and fill so neither provider
-    /// outranks the other.
+    @ViewBuilder
+    private func providerButton(_ control: SignInScreen.Control) -> some View {
+        switch control {
+        case .apple:
+            appleButton
+        case .chatgpt:
+            chatgptButton
+        case .grok:
+            grokButton
+        case .google:
+            googleButton
+        }
+    }
+
+    private var appleButton: some View {
+        SignInWithAppleButton(.signIn) { request in
+            pending = .apple
+            auth.configureAppleRequest(request)
+        } onCompletion: { result in
+            Task {
+                await auth.handleAppleSignIn(result)
+                if auth.session == nil {
+                    pending = nil
+                }
+            }
+        }
+        .signInWithAppleFill(SignInAppleFill.fill(for: colorScheme))
+        .frame(maxWidth: .infinity)
+        .frame(height: buttonHeight)
+        .disabled(busy)
+        .accessibilityIdentifier(SignInScreen.Control.apple.accessibilityIdentifier)
+    }
+
+    /// Approved "Continue with ChatGPT" format: official logo, black on a
+    /// light surface and white on a dark one. Same height and width as Apple.
+    private var chatgptButton: some View {
+        let isBlack = SignInAppleFill.fill(for: colorScheme) == .black
+        let shape = RoundedRectangle(cornerRadius: 12, style: .continuous)
+        return Button {
+            pending = .chatgpt
+            Task {
+                await auth.signInWithChatGPT()
+                pending = nil
+            }
+        } label: {
+            ZStack {
+                if pending == .chatgpt {
+                    ProgressView()
+                        .tint(isBlack ? Color.white : Color.black)
+                        .accessibilityHidden(true)
+                } else {
+                    HStack(spacing: 12) {
+                        Image("ChatGPTLogo")
+                            .resizable()
+                            .interpolation(.high)
+                            .frame(width: 21, height: 21)
+                            .accessibilityHidden(true)
+                        Text("Continue with ChatGPT")
+                    }
+                }
+            }
+            .font(.system(size: 15, weight: .medium))
+            .foregroundStyle(isBlack ? Color.white : Color.black)
+            .frame(maxWidth: .infinity)
+            .frame(height: buttonHeight)
+            .background(isBlack ? Color.black : Color.white, in: shape)
+            .overlay { shape.strokeBorder(Color.black.opacity(isBlack ? 0 : 0.12), lineWidth: 1) }
+            .contentShape(shape)
+        }
+        .buttonStyle(.plain)
+        .disabled(busy)
+        .opacity(busy && pending != .chatgpt ? 0.6 : 1)
+        .accessibilityIdentifier(SignInScreen.Control.chatgpt.accessibilityIdentifier)
+        .accessibilityLabel(pending == .chatgpt ? "Continue with ChatGPT, in progress" : "Continue with ChatGPT")
+        .accessibilityHint("Opens ChatGPT sign-in in a secure browser sheet")
+    }
+
+    /// Same height and width as the Apple button so neither provider outranks it.
     private var grokButton: some View {
         let isBlack = SignInAppleFill.fill(for: colorScheme) == .black
         let shape = RoundedRectangle(cornerRadius: 6, style: .continuous)
@@ -158,7 +201,7 @@ struct SignInView: View {
             .font(.body.weight(.semibold))
             .foregroundStyle(isBlack ? Color.white : Color.black)
             .frame(maxWidth: .infinity)
-            .frame(height: max(44, signInButtonHeight))
+            .frame(height: buttonHeight)
             .background(isBlack ? Color.black : Color.white, in: shape)
             .overlay { shape.strokeBorder(Color.black, lineWidth: isBlack ? 0 : 1) }
             .contentShape(shape)
@@ -166,8 +209,34 @@ struct SignInView: View {
         .buttonStyle(.plain)
         .disabled(busy)
         .opacity(busy && pending != .grok ? 0.6 : 1)
+        .accessibilityIdentifier(SignInScreen.Control.grok.accessibilityIdentifier)
         .accessibilityHint("Opens Grok sign-in in a secure browser sheet")
     }
+
+    private var googleButton: some View {
+        Button {
+            pending = .google
+            Task {
+                await auth.signInWithGoogle()
+                pending = nil
+            }
+        } label: {
+            signInButtonLabel(
+                title: "Sign in with Google",
+                showsProgress: pending == .google
+            )
+        }
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.roundedRectangle)
+        .controlSize(.large)
+        .frame(maxWidth: .infinity)
+        .frame(minHeight: buttonHeight)
+        .disabled(busy)
+        .accessibilityIdentifier(SignInScreen.Control.google.accessibilityIdentifier)
+        .accessibilityHint("Opens Google sign-in in a secure browser sheet")
+    }
+
+    private var buttonHeight: CGFloat { max(44, signInButtonHeight) }
 
     @ViewBuilder
     private var emailCard: some View {

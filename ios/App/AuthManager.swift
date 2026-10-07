@@ -50,6 +50,12 @@ final class AuthManager: ObservableObject {
     private let oauthRedirectURL = URL(string: "lazymansreminders://auth/callback")!
 
     init() {
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-LMRSkipSessionRestore") {
+            isRestoringSession = false
+            return
+        }
+        #endif
         restorationTask = Task {
             do {
                 session = try await client.auth.session
@@ -169,9 +175,18 @@ final class AuthManager: ObservableObject {
         }
     }
 
-    /// Opens xAI through Supabase's `custom:grok` OIDC provider. Identity only.
     func signInWithGrok() async {
-        guard GrokSignIn.isEnabled else { return }
+        await signIn(with: .grok)
+    }
+
+    func signInWithChatGPT() async {
+        await signIn(with: .chatgpt)
+    }
+
+    /// Opens a Supabase custom OIDC provider. Identity only: the rewritten URL
+    /// carries `openid profile email` and no spend scope.
+    private func signIn(with provider: CustomOIDCSignIn.Provider) async {
+        guard CustomOIDCSignIn.isEnabled(provider) else { return }
         isAuthenticating = true
         notice = nil
         defer { isAuthenticating = false }
@@ -183,7 +198,7 @@ final class AuthManager: ObservableObject {
                 redirectTo: oauthRedirectURL,
                 launchFlow: { sdkURL in
                     try await WebAuthSheet.present(
-                        url: GrokSignIn.authorizeURL(rewriting: sdkURL),
+                        url: try CustomOIDCSignIn.authorizeURL(rewriting: sdkURL, provider: provider),
                         callbackScheme: callbackScheme
                     )
                 }

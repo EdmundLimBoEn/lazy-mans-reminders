@@ -169,7 +169,7 @@ Account (person icon) → Delete Account removes reminders, device tokens, lock-
 No IAP. Contact hello@edmundlim.systems.
 ```
 
-Continue with Grok is off in shipped builds (`GROK_SIGN_IN_ENABLED = NO`). Before a build turns it on, add "or Grok" to the Email Address row and the demo line above, and keep Sign in with Apple beside it at the same size.
+Continue with Grok and Continue with ChatGPT are off in shipped builds (`GROK_SIGN_IN_ENABLED = NO`, `CHATGPT_SIGN_IN_ENABLED = NO`). Before a build turns either on, name it in the Email Address row and the demo line above, and keep Sign in with Apple first and at least as large.
 
 ## Screenshots
 
