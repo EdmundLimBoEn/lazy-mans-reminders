@@ -1,5 +1,6 @@
 import { iosHandoffFromLocation } from './iosHandoff'
 import { LegalFooterLinks } from './LegalPages'
+import { ThemeToggle } from './ThemeToggle'
 
 export function IosAuthHandoff({ onNavigate }: { onNavigate: (path: string) => void }) {
   const result = iosHandoffFromLocation(window.location.href)
@@ -7,6 +8,9 @@ export function IosAuthHandoff({ onNavigate }: { onNavigate: (path: string) => v
   if (result.status === 'error') {
     return (
       <main className="fatal-error" role="alert">
+        <div className="theme-toggle-slot">
+          <ThemeToggle />
+        </div>
         <h1>Could not finish sign-in</h1>
         <p>{result.message}</p>
         <a
@@ -27,6 +31,9 @@ export function IosAuthHandoff({ onNavigate }: { onNavigate: (path: string) => v
   if (result.status === 'empty') {
     return (
       <main className="fatal-error" role="alert">
+        <div className="theme-toggle-slot">
+          <ThemeToggle />
+        </div>
         <h1>This sign-in link is incomplete</h1>
         <p>Return to Lazy Man's Reminders on this iPhone and request a new email link.</p>
         <LegalFooterLinks onNavigate={onNavigate} />
@@ -36,6 +43,9 @@ export function IosAuthHandoff({ onNavigate }: { onNavigate: (path: string) => v
 
   return (
     <main className="fatal-error" role="status">
+      <div className="theme-toggle-slot">
+        <ThemeToggle />
+      </div>
       <h1>Open the app to finish</h1>
       <p>
         Email sign-in has to finish inside Lazy Man's Reminders. Tap below to hand this link to the

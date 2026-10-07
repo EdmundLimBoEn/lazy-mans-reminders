@@ -14,4 +14,11 @@ describe('pages security headers', () => {
     expect(headers).toContain('wss://biwmsxbqrevtjwgsvsmu.supabase.co')
     expect(headers).not.toContain('https://*.supabase.co')
   })
+
+  it('keeps script-src and style-src self-only', () => {
+    expect(headers).toMatch(/script-src 'self'/)
+    expect(headers).toMatch(/style-src 'self'/)
+    expect(headers).not.toContain("'unsafe-inline'")
+    expect(headers).not.toContain("'unsafe-eval'")
+  })
 })
