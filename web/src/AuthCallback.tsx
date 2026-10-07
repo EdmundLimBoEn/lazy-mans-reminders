@@ -8,6 +8,7 @@ import {
 import { consumeReturnTo } from './mcp'
 import { supabase } from './supabase'
 import { LegalFooterLinks } from './LegalPages'
+import { ThemeToggle } from './ThemeToggle'
 
 function isFlowStateError(message: string): boolean {
   const lower = message.toLowerCase()
@@ -67,6 +68,9 @@ export function AuthCallback({ onNavigate }: { onNavigate: (path: string) => voi
   if (error) {
     return (
       <main className="fatal-error" role="alert">
+        <div className="theme-toggle-slot">
+          <ThemeToggle />
+        </div>
         <h1>Could not finish sign-in</h1>
         <p>{error}</p>
         <a className="primary" href={retryHref}>

@@ -4,6 +4,7 @@ import { LegalFooterLinks } from './LegalPages'
 import { MCP_ORIGIN } from './mcp'
 import { consentCanApprove, parseConsentSummary, permissionSentence, type ConsentSummary } from './consentSummary'
 import { bindFailureMessage, isSafeOauthRedirect } from './oauthConnect'
+import { ThemeToggle } from './ThemeToggle'
 
 function SameWindowNote() {
   return (
@@ -117,6 +118,9 @@ export function Connect({ session, onNavigate }: { session: Session; onNavigate:
     return (
       <main className="auth-shell">
         <section className="auth-panel connect-panel">
+          <div className="theme-toggle-slot">
+            <ThemeToggle />
+          </div>
           <div className="auth-card">
             <h2>Nothing to connect</h2>
             <p>Open this page from Grok, Claude, Cursor, or Codex when they ask to use your board.</p>
@@ -134,6 +138,9 @@ export function Connect({ session, onNavigate }: { session: Session; onNavigate:
   return (
     <main className="auth-shell">
       <section className="auth-panel connect-panel">
+        <div className="theme-toggle-slot">
+          <ThemeToggle />
+        </div>
         <div className="auth-card">
           <h2>Let this agent use your board?</h2>
           <p>Signed in as {session.user.email ?? 'your account'}.</p>

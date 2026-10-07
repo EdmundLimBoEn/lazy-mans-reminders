@@ -38,6 +38,7 @@ import {
 } from './mcp'
 import { normalizePath, type AppRoute } from './routing'
 import { supabase } from './supabase'
+import { ThemeToggle } from './ThemeToggle'
 
 function usePathname(): [AppRoute, (path: string) => void] {
   const [path, setPath] = useState<AppRoute>(() => normalizePath(window.location.pathname))
@@ -146,6 +147,9 @@ function SignIn({
         </div>
       </section>
       <section className="auth-panel">
+        <div className="theme-toggle-slot">
+          <ThemeToggle />
+        </div>
         <div className="auth-card">
           <Smartphone size={24} aria-hidden="true" />
           <h2>{sent ? 'Check your inbox' : connectingAgent ? 'Sign in to connect this agent' : 'Your board, everywhere'}</h2>
@@ -468,6 +472,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
           <h1 id="board-heading">Your board</h1>
         </div>
         <div className="account">
+          <ThemeToggle />
           <div className="account-meta">
             <span>{session.user.email}</span>
             <button
@@ -795,6 +800,9 @@ export default function App() {
   if (path === 'not-found') {
     return (
       <main className="fatal-error">
+        <div className="theme-toggle-slot">
+          <ThemeToggle />
+        </div>
         <h1>Page not found</h1>
         <p>That URL is not part of Lazy Man's Reminders.</p>
         <a className="primary" href="/" onClick={(event) => { event.preventDefault(); navigate('/') }}>Back to the board</a>
@@ -807,6 +815,9 @@ export default function App() {
   if (authError) {
     return (
       <main className="fatal-error" role="alert">
+        <div className="theme-toggle-slot">
+          <ThemeToggle />
+        </div>
         <h1>Could not start the app</h1>
         <p>{authError}</p>
         <button className="primary" type="button" onClick={() => window.location.reload()}>Try again</button>

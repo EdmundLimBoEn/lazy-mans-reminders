@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { ThemeToggle } from './ThemeToggle'
 
 const CONTACT_EMAIL = 'hello@edmundlim.systems'
 const LAST_UPDATED = '26 August 2026'
@@ -17,16 +18,19 @@ function LegalShell({
   return (
     <main className="legal-shell">
       <header className="legal-header">
-        <a
-          className="legal-back"
-          href="/"
-          onClick={(event) => {
-            event.preventDefault()
-            onNavigate('/')
-          }}
-        >
-          ← Lazy Man's Reminders
-        </a>
+        <div className="legal-header-top">
+          <a
+            className="legal-back"
+            href="/"
+            onClick={(event) => {
+              event.preventDefault()
+              onNavigate('/')
+            }}
+          >
+            ← Lazy Man's Reminders
+          </a>
+          <ThemeToggle />
+        </div>
         <p className="eyebrow">Legal</p>
         <h1>{title}</h1>
         <p className="legal-updated">Last updated: {LAST_UPDATED}</p>
@@ -177,10 +181,11 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
 
       <h2>5. Cookies and local storage</h2>
       <p>
-        The web app uses browser local storage (and similar) only to keep your Supabase Auth
-        session. There are no advertising cookies and no optional analytics cookies. We do not
-        show a cookie banner because this storage is required to sign you in. You can clear it
-        by signing out or clearing site data in your browser.
+        The web app uses browser local storage (and similar) to keep your Supabase Auth
+        session and, if you choose, a theme preference (System, Light, or Dark). There are no
+        advertising cookies and no optional analytics cookies. We do not show a cookie banner
+        because this storage is required to sign you in (the theme preference is optional). You
+        can clear it by signing out or clearing site data in your browser.
       </p>
 
       <h2>6. Retention</h2>
