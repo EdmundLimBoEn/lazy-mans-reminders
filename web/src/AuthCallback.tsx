@@ -7,8 +7,9 @@ import {
 } from './pkceCallback'
 import { consumeReturnTo } from './mcp'
 import { supabase } from './supabase'
-import { LegalFooterLinks } from './LegalPages'
-import { ThemeToggle } from './ThemeToggle'
+import { Button } from '@/components/ui/button'
+import { Splash } from '@/components/Splash'
+import { StatusShell, StatusText } from '@/components/StatusShell'
 
 function isFlowStateError(message: string): boolean {
   const lower = message.toLowerCase()
@@ -67,19 +68,16 @@ export function AuthCallback({ onNavigate }: { onNavigate: (path: string) => voi
 
   if (error) {
     return (
-      <main className="fatal-error" role="alert">
-        <div className="theme-toggle-slot">
-          <ThemeToggle />
-        </div>
-        <h1>Could not finish sign-in</h1>
-        <p>{error}</p>
-        <a className="primary" href={retryHref}>
-          {retryHref.startsWith('/connect') ? 'Back to connect' : 'Back to the board'}
-        </a>
-        <LegalFooterLinks onNavigate={onNavigate} />
-      </main>
+      <StatusShell title="Could not finish sign-in" role="alert" onNavigate={onNavigate}>
+        <StatusText>{error}</StatusText>
+        <Button asChild className="mt-3">
+          <a href={retryHref}>
+            {retryHref.startsWith('/connect') ? 'Back to connect' : 'Back to the board'}
+          </a>
+        </Button>
+      </StatusShell>
     )
   }
 
-  return <div className="splash" role="status" aria-label="Finishing sign-in">LM</div>
+  return <Splash label="Finishing sign-in" />
 }

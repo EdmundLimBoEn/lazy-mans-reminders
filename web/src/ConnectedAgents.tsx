@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
 import { parseGrantList, type GrantView } from './grantList'
 import { MCP_ORIGIN } from './mcp'
 
@@ -49,23 +50,25 @@ export function ConnectedAgents({ accessToken }: { accessToken: string }) {
   }
 
   return (
-    <div className="connected-agents">
-      <h3>Connected agents</h3>
-      <p>These finished Allow. Revoke ends that agent’s access to your board.</p>
-      {error && <p className="error" role="alert">{error}</p>}
+    <div className="connected-agents flex flex-col gap-3">
+      <div className="space-y-1">
+        <h3 className="text-sm font-medium">Connected agents</h3>
+        <p className="text-sm text-muted-foreground">These finished Allow. Revoke ends that agent’s access to your board.</p>
+      </div>
+      {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
       {grants.length === 0 ? (
-        <p className="connected-empty">No connected agents.</p>
+        <p className="connected-empty rounded-lg border border-dashed px-3 py-4 text-center text-sm text-muted-foreground">No connected agents.</p>
       ) : (
-        <ul className="agent-token-list" aria-label="Connected agents">
+        <ul className="agent-token-list divide-y rounded-lg border" aria-label="Connected agents">
           {grants.map((grant) => (
-            <li key={grant.id}>
-              <div>
-                <strong>{grant.clientName ?? 'Unnamed agent'}</strong>
-                {grant.redirectOrigin && <span>Returns to {grant.redirectOrigin}</span>}
+            <li key={grant.id} className="flex items-center justify-between gap-4 py-2 pr-2 pl-3">
+              <div className="grid min-w-0 gap-0.5">
+                <strong className="truncate text-sm font-medium">{grant.clientName ?? 'Unnamed agent'}</strong>
+                {grant.redirectOrigin && <span className="truncate text-xs text-muted-foreground">Returns to {grant.redirectOrigin}</span>}
               </div>
-              <button className="text-button danger-text" type="button" disabled={busy} onClick={() => void revoke(grant.id)}>
+              <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" type="button" disabled={busy} onClick={() => void revoke(grant.id)}>
                 Revoke
-              </button>
+              </Button>
             </li>
           ))}
         </ul>

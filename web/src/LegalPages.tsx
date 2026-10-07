@@ -1,4 +1,7 @@
-import type { ReactNode } from 'react'
+import type { MouseEvent, ReactNode } from 'react'
+import { SiteHeader } from '@/components/SiteHeader'
+import { Separator } from '@/components/ui/separator'
+import { cn } from '@/lib/utils'
 import { ThemeToggle } from './ThemeToggle'
 
 const CONTACT_EMAIL = 'hello@edmundlim.systems'
@@ -15,35 +18,41 @@ function LegalShell({
   children,
   onNavigate,
 }: LegalPageProps & { title: string; children: ReactNode }) {
+  const go = (path: string) => (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+    onNavigate(path)
+  }
   return (
-    <main className="legal-shell">
-      <header className="legal-header">
-        <div className="legal-header-top">
+    <div className="mx-auto w-full max-w-2xl px-4 pb-16 sm:px-6">
+      <SiteHeader onNavigate={onNavigate}>
+        <ThemeToggle />
+      </SiteHeader>
+      <main className="legal-shell pt-10">
+        <header className="mb-10 space-y-3">
           <a
-            className="legal-back"
+            className="inline-flex items-center gap-1 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
             href="/"
-            onClick={(event) => {
-              event.preventDefault()
-              onNavigate('/')
-            }}
+            onClick={go('/')}
           >
             ← Lazy Man's Reminders
           </a>
-          <ThemeToggle />
-        </div>
-        <p className="eyebrow">Legal</p>
-        <h1>{title}</h1>
-        <p className="legal-updated">Last updated: {LAST_UPDATED}</p>
-      </header>
+          <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Legal</p>
+          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1>
+          <p className="text-sm text-muted-foreground">Last updated: {LAST_UPDATED}</p>
+        </header>
 
-      <article className="legal-body">{children}</article>
+        <article className="text-sm leading-6 text-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a:hover]:text-muted-foreground [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:text-base [&_h2]:font-semibold [&_h2]:tracking-tight [&_li]:my-1 [&_li]:pl-1 [&_p]:mb-4 [&_strong]:font-medium [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:marker:text-muted-foreground">
+          {children}
+        </article>
 
-      <nav className="legal-nav" aria-label="Legal pages">
-        <a href="/privacy" onClick={(e) => { e.preventDefault(); onNavigate('/privacy') }}>Privacy</a>
-        <a href="/terms" onClick={(e) => { e.preventDefault(); onNavigate('/terms') }}>Terms</a>
-        <a href="/support" onClick={(e) => { e.preventDefault(); onNavigate('/support') }}>Support</a>
-      </nav>
-    </main>
+        <Separator className="mt-12 mb-6" />
+        <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground" aria-label="Legal pages">
+          <a className="underline-offset-4 hover:text-foreground hover:underline" href="/privacy" onClick={go('/privacy')}>Privacy</a>
+          <a className="underline-offset-4 hover:text-foreground hover:underline" href="/terms" onClick={go('/terms')}>Terms</a>
+          <a className="underline-offset-4 hover:text-foreground hover:underline" href="/support" onClick={go('/support')}>Support</a>
+        </nav>
+      </main>
+    </div>
   )
 }
 
@@ -494,14 +503,18 @@ export function SupportPage({ onNavigate }: LegalPageProps) {
   )
 }
 
-export function LegalFooterLinks({ onNavigate }: LegalPageProps) {
+export function LegalFooterLinks({ onNavigate, className }: LegalPageProps & { className?: string }) {
+  const link = 'underline underline-offset-4 decoration-border hover:text-foreground hover:decoration-current'
   return (
-    <nav className="legal-footer-links" aria-label="Legal and support">
-      <a href="/privacy" onClick={(e) => { e.preventDefault(); onNavigate('/privacy') }}>Privacy</a>
+    <nav
+      className={cn('legal-footer-links flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-muted-foreground', className)}
+      aria-label="Legal and support"
+    >
+      <a className={link} href="/privacy" onClick={(e) => { e.preventDefault(); onNavigate('/privacy') }}>Privacy</a>
       <span aria-hidden="true">·</span>
-      <a href="/terms" onClick={(e) => { e.preventDefault(); onNavigate('/terms') }}>Terms</a>
+      <a className={link} href="/terms" onClick={(e) => { e.preventDefault(); onNavigate('/terms') }}>Terms</a>
       <span aria-hidden="true">·</span>
-      <a href="/support" onClick={(e) => { e.preventDefault(); onNavigate('/support') }}>Support</a>
+      <a className={link} href="/support" onClick={(e) => { e.preventDefault(); onNavigate('/support') }}>Support</a>
     </nav>
   )
 }
