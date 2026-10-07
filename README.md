@@ -233,7 +233,7 @@ Deploy manually after `wrangler login`:
 cd web
 npm ci
 npm run build
-npx wrangler pages deploy dist --project-name lazy-mans-reminders
+npx wrangler pages deploy dist --project-name lazy-mans-reminders --branch main
 ```
 
 Custom domain: `lmr.sillyapps.co` is the canonical domain on the Pages project, with a proxied CNAME `lmr` → `lazy-mans-reminders.pages.dev` on the `sillyapps.co` zone. The old `lmr.edmundlim.systems` custom domain stays on the project; a Cloudflare Single Redirect rule on the `edmundlim.systems` zone sends it to `https://lmr.sillyapps.co` with a 301 that keeps the path and query. Keep Supabase Auth redirects in sync (see above). The MCP Worker's `WEB_ORIGINS` (in `mcp/wrangler.jsonc`) lists the canonical origin first, because `/authorize` sends the browser to that origin's `/connect`.
