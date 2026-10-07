@@ -1,6 +1,7 @@
-# Simulator unit tests. Needs no secrets: Config.example.xcconfig and
-# ad-hoc simulator signing. Approach copied from draft PR #33's
-# ios-tests.yml, without that PR's Grok/ChatGPT UI tests or screenshots.
+# Simulator unit + sign-in UI tests. Needs no secrets: Config.example.xcconfig
+# and ad-hoc simulator signing. Runs on pull requests, pushes to main, and
+# pushes to cursor/** branches (so draft PR branches get a check without a PR
+# event). Exports sign-in screenshots from the result bundle as an artifact.
 
 name: iOS tests
 
@@ -13,7 +14,9 @@ on:
       - "scripts/check-third-party-sign-in-flags.py"
       - "scripts/ios-simulator-unit-tests.sh"
   push:
-    branches: [main]
+    branches:
+      - main
+      - "cursor/**"
     paths:
       - "ios/**"
       - ".github/workflows/ios-tests.yml"
@@ -70,6 +73,7 @@ jobs:
       - name: Build and test
         env:
           RESULT_BUNDLE_PATH: ${{ runner.temp }}/ios.xcresult
+          IOS_TEST_TARGETS: LazyMansRemindersTests LazyMansRemindersUITests
         run: ./scripts/ios-simulator-unit-tests.sh
 
       - name: Test result summary
@@ -85,3 +89,28 @@ jobs:
         with:
           name: ios-test-results
           path: ${{ runner.temp }}/ios.xcresult
+
+      - name: Export sign-in screenshots
+        if: always()
+        run: |
+          set -euo pipefail
+          result="${RUNNER_TEMP}/ios.xcresult"
+          out="${RUNNER_TEMP}/signin-screenshots"
+          mkdir -p "${out}"
+          if [ ! -d "${result}" ]; then
+            echo "No result bundle to export."
+            exit 0
+          fi
+          xcrun xcresulttool version || true
+          if ! xcrun xcresulttool export attachments --path "${result}" --output-path "${out}"; then
+            xcrun xcresulttool export --type directory --path "${result}" --output-path "${out}" || true
+          fi
+          find "${out}" -type f -print
+
+      - name: Upload sign-in screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sign-in-screenshots
+          path: ${{ runner.temp }}/signin-screenshots
+          if-no-files-found: warn

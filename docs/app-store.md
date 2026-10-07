@@ -169,6 +169,8 @@ Account (person icon) → Delete Account removes reminders, device tokens, lock-
 No IAP. Contact hello@edmundlim.systems.
 ```
 
+Continue with Grok and Continue with ChatGPT are off in shipped builds (`GROK_SIGN_IN_ENABLED = NO`, `CHATGPT_SIGN_IN_ENABLED = NO`). Before a build turns either on, name it in the Email Address row and the demo line above, and keep Sign in with Apple first and at least as large.
+
 ## Screenshots
 
 Required set: **6.9" iPhone** (`APP_IPHONE_69`). Capture on an iPhone 16 Pro Max, 17 Pro Max, or iPhone Air after TestFlight smoke. Portrait sizes Apple accepts include **1320 × 2868** and **1260 × 2736**.

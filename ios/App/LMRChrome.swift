@@ -29,8 +29,21 @@ enum AccountSessionCaption {
         let set = Set(providers)
         if set.contains("apple") { return "Using Sign in with Apple" }
         if set.contains("google") { return "Using Google" }
+        if set.contains(ChatGPTSignIn.supabaseProvider) { return "Using ChatGPT" }
+        if set.contains(GrokSignIn.supabaseProvider) { return "Using Grok" }
         if set.contains("email") { return "Using Email" }
         return nil
+    }
+
+    static func signBackInMessage(grokEnabled: Bool, chatgptEnabled: Bool) -> String {
+        var methods = ["Apple"]
+        if chatgptEnabled { methods.append("ChatGPT") }
+        if grokEnabled { methods.append("Grok") }
+        methods.append(contentsOf: ["Google", "email"])
+        guard let last = methods.popLast() else {
+            return "You can sign back in with Apple, Google, or email."
+        }
+        return "You can sign back in with \(methods.joined(separator: ", ")), or \(last)."
     }
 }
 

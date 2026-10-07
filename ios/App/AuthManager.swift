@@ -3,6 +3,7 @@ import Combine
 import CryptoKit
 import Foundation
 import Supabase
+import UIKit
 
 enum AuthNotice: Equatable {
     case checkInbox(email: String)
@@ -49,6 +50,12 @@ final class AuthManager: ObservableObject {
     private let oauthRedirectURL = URL(string: "lazymansreminders://auth/callback")!
 
     init() {
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-LMRSkipSessionRestore") {
+            isRestoringSession = false
+            return
+        }
+        #endif
         restorationTask = Task {
             do {
                 session = try await client.auth.session
@@ -163,6 +170,42 @@ final class AuthManager: ObservableObject {
                 session.prefersEphemeralWebBrowserSession = false
             }
             await shareSession()
+        } catch {
+            notice = .error(error.localizedDescription)
+        }
+    }
+
+    func signInWithGrok() async {
+        await signIn(with: .grok)
+    }
+
+    func signInWithChatGPT() async {
+        await signIn(with: .chatgpt)
+    }
+
+    /// Opens a Supabase custom OIDC provider. Identity only: the rewritten URL
+    /// carries `openid profile email` and no spend scope.
+    private func signIn(with provider: CustomOIDCSignIn.Provider) async {
+        guard CustomOIDCSignIn.isEnabled(provider) else { return }
+        isAuthenticating = true
+        notice = nil
+        defer { isAuthenticating = false }
+        let callbackScheme = oauthRedirectURL.scheme ?? "lazymansreminders"
+        do {
+            // `.google` only seeds the SDK's PKCE URL; the provider is replaced below.
+            session = try await client.auth.signInWithOAuth(
+                provider: .google,
+                redirectTo: oauthRedirectURL,
+                launchFlow: { sdkURL in
+                    try await WebAuthSheet.present(
+                        url: try CustomOIDCSignIn.authorizeURL(rewriting: sdkURL, provider: provider),
+                        callbackScheme: callbackScheme
+                    )
+                }
+            )
+            await shareSession()
+        } catch let error as ASWebAuthenticationSessionError where error.code == .canceledLogin {
+            return
         } catch {
             notice = .error(error.localizedDescription)
         }
@@ -296,5 +339,37 @@ final class AuthManager: ObservableObject {
     private static func sha256(_ input: String) -> String {
         let data = Data(input.utf8)
         return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+    }
+}
+
+@MainActor
+private enum WebAuthSheet {
+    private final class Anchor: NSObject, ASWebAuthenticationPresentationContextProviding {
+        func presentationAnchor(for _: ASWebAuthenticationSession) -> ASPresentationAnchor {
+            UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap(\.windows)
+                .first(where: \.isKeyWindow) ?? ASPresentationAnchor()
+        }
+    }
+
+    static func present(url: URL, callbackScheme: String) async throws -> URL {
+        let anchor = Anchor()
+        return try await withCheckedThrowingContinuation { continuation in
+            let session = ASWebAuthenticationSession(
+                url: url,
+                callbackURLScheme: callbackScheme
+            ) { callbackURL, error in
+                _ = anchor
+                if let callbackURL {
+                    continuation.resume(returning: callbackURL)
+                } else {
+                    continuation.resume(throwing: error ?? URLError(.badServerResponse))
+                }
+            }
+            session.presentationContextProvider = anchor
+            session.prefersEphemeralWebBrowserSession = false
+            session.start()
+        }
     }
 }

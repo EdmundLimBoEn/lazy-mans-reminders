@@ -108,6 +108,23 @@ Keep `supabase/config.toml` aligned for local development. In **Authentication �
 
 - Enable **Email** (magic link) with confirmations.
 - Enable **Apple** and **Google** using the steps in `HUMANS.md` (Services ID + secret for web Apple; Web OAuth client for Google; iOS App ID in Apple Client IDs).
+- Optional, iOS only: **Sign in with Grok** and **Continue with ChatGPT**. Each is a Supabase custom OIDC provider and each has its own flag, defaulting to off. Neither one calls a model API or spends a plan. See `HUMANS.md`.
+
+### Enabling ChatGPT and Grok sign-in
+
+Both buttons stay hidden until their flag is `YES`. Sign in with Apple stays on the screen either way.
+
+| | Grok | ChatGPT |
+|---|---|---|
+| Flag | `GROK_SIGN_IN_ENABLED` | `CHATGPT_SIGN_IN_ENABLED` |
+| Supabase provider | `custom:grok` | `custom:chatgpt` |
+| Issuer | `https://auth.x.ai` | `https://auth.openai.com` |
+| Scopes | `openid profile email` | `openid profile email` |
+| Who can issue the client | xAI, on request | OpenAI partner approval. The self-serve `dynamic_agent_client` path is for open-source or local apps, not this hosted iOS app. |
+
+For each one: create the client with redirect URI `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`, add it in Supabase under **Authentication → Providers → New Provider → Auto-discovery (OIDC)** with PKCE left on, then set that flag to `YES` in `ios/Config.xcconfig`. Do not request `offline_access`, `resource.invoke`, or `chatgpt.tokens.use.direct`.
+
+This app does not merge accounts on its own. Supabase links a new identity onto an existing user when the provider returns the same verified email, which is the same rule Apple and Google already follow. An unverified email is not treated as that match.
 
 Test Apple, Google, and a magic link from both the web app and a physical iPhone; the production hostname must exactly match an allowed redirect.
 

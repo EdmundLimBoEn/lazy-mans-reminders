@@ -45,6 +45,48 @@ final class LMRChromeTests: XCTestCase {
         XCTAssertNil(AccountSessionCaption.methodCaption(providers: ["phone"]))
     }
 
+    func testAccountCaptionNamesGrokOverEmailButNotOverApple() {
+        XCTAssertEqual(
+            AccountSessionCaption.methodCaption(providers: ["email", "custom:grok"]),
+            "Using Grok"
+        )
+        XCTAssertEqual(
+            AccountSessionCaption.methodCaption(providers: ["custom:grok", "apple"]),
+            "Using Sign in with Apple"
+        )
+        XCTAssertNil(AccountSessionCaption.methodCaption(providers: ["grok"]))
+    }
+
+    func testAccountCaptionNamesChatGPTWithoutConfusingItWithGrok() {
+        XCTAssertEqual(
+            AccountSessionCaption.methodCaption(providers: ["email", "custom:chatgpt"]),
+            "Using ChatGPT"
+        )
+        XCTAssertEqual(
+            AccountSessionCaption.methodCaption(providers: ["custom:chatgpt", "custom:grok"]),
+            "Using ChatGPT"
+        )
+        XCTAssertEqual(
+            AccountSessionCaption.methodCaption(providers: ["custom:chatgpt", "apple"]),
+            "Using Sign in with Apple"
+        )
+        XCTAssertNil(AccountSessionCaption.methodCaption(providers: ["chatgpt"]))
+    }
+
+    func testSignBackInMessageNamesOnlyTheEnabledProviders() {
+        let neither = AccountSessionCaption.signBackInMessage(grokEnabled: false, chatgptEnabled: false)
+        XCTAssertFalse(neither.contains("Grok"))
+        XCTAssertFalse(neither.contains("ChatGPT"))
+
+        let grokOnly = AccountSessionCaption.signBackInMessage(grokEnabled: true, chatgptEnabled: false)
+        XCTAssertTrue(grokOnly.contains("Grok"))
+        XCTAssertFalse(grokOnly.contains("ChatGPT"))
+
+        let chatgptOnly = AccountSessionCaption.signBackInMessage(grokEnabled: false, chatgptEnabled: true)
+        XCTAssertTrue(chatgptOnly.contains("ChatGPT"))
+        XCTAssertFalse(chatgptOnly.contains("Grok"))
+    }
+
     func testSignInEmailRequiresBothSidesOfAtSign() {
         XCTAssertFalse(SignInEmail.isPlausible(""))
         XCTAssertFalse(SignInEmail.isPlausible("nope"))

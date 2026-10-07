@@ -46,6 +46,17 @@ struct AccountView: View {
                     }
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel(accountAccessibilityLabel)
+
+                    if let chatgptIdentity {
+                        LabeledContent("ChatGPT", value: chatgptIdentity)
+                            .textSelection(.enabled)
+                            .accessibilityLabel("Connected ChatGPT account, \(chatgptIdentity)")
+                    }
+                    if let grokIdentity {
+                        LabeledContent("Grok", value: grokIdentity)
+                            .textSelection(.enabled)
+                            .accessibilityLabel("Connected Grok account, \(grokIdentity)")
+                    }
                 }
 
                 Section {
@@ -123,7 +134,10 @@ struct AccountView: View {
                 }
                 Button("Cancel", role: .cancel) {}
             } message: {
-                Text("You can sign back in with Apple, Google, or email.")
+                Text(AccountSessionCaption.signBackInMessage(
+                    grokEnabled: GrokSignIn.isEnabled,
+                    chatgptEnabled: ChatGPTSignIn.isEnabled
+                ))
             }
             .alert("Delete Account?", isPresented: $showDeleteAccount) {
                 Button("Delete Account", role: .destructive) {
@@ -140,6 +154,23 @@ struct AccountView: View {
         let email = auth.session?.user.email?.trimmingCharacters(in: .whitespacesAndNewlines)
         if let email, !email.isEmpty { return email }
         return nil
+    }
+
+    private var chatgptIdentity: String? {
+        connectedIdentity(provider: ChatGPTSignIn.supabaseProvider)
+    }
+
+    private var grokIdentity: String? {
+        connectedIdentity(provider: GrokSignIn.supabaseProvider)
+    }
+
+    private func connectedIdentity(provider: String) -> String? {
+        guard
+            let identity = auth.session?.user.identities?
+                .first(where: { $0.provider == provider })
+        else { return nil }
+        let claims = (identity.identityData ?? [:]).compactMapValues(\.stringValue)
+        return CustomOIDCSignIn.identitySummary(claims: claims)
     }
 
     private var accountTitle: String {

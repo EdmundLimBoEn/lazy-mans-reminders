@@ -59,6 +59,7 @@ targets:
     scheme:
       testTargets:
         - LazyMansRemindersTests
+        - LazyMansRemindersUITests
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: "$(PRODUCT_BUNDLE_IDENTIFIER)"
@@ -79,6 +80,8 @@ targets:
         SUPABASE_URL: "$(SUPABASE_URL)"
         SUPABASE_ANON_KEY: "$(SUPABASE_ANON_KEY)"
         APP_GROUP_ID: "$(APP_GROUP_ID)"
+        GROK_SIGN_IN_ENABLED: "$(GROK_SIGN_IN_ENABLED)"
+        CHATGPT_SIGN_IN_ENABLED: "$(CHATGPT_SIGN_IN_ENABLED)"
         NSSupportsLiveActivities: true
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
@@ -154,5 +157,17 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: systems.edmundlim.LazyMansRemindersTests
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_STYLE: Automatic
+  LazyMansRemindersUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: UITests
+    dependencies:
+      - target: LazyMansReminders
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: systems.edmundlim.LazyMansRemindersUITests
         GENERATE_INFOPLIST_FILE: YES
         CODE_SIGN_STYLE: Automatic
