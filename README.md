@@ -219,7 +219,7 @@ Deploy manually after `wrangler login`:
 cd web
 npm ci
 npm run build
-npx wrangler pages deploy dist --project-name lazy-mans-reminders
+npx wrangler pages deploy dist --project-name lazy-mans-reminders --branch main
 ```
 
 Custom domain: `lmr.edmundlim.systems` is registered on the Pages project. Ensure a proxied CNAME `lmr` → `lazy-mans-reminders.pages.dev` exists on the `edmundlim.systems` zone, then keep Supabase Auth redirects in sync (see above).

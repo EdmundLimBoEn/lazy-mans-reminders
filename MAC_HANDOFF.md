@@ -219,7 +219,7 @@ supabase functions deploy send-reminder-push --no-verify-jwt   # only if push FN
 # Web
 cd web
 npm ci
-npm run deploy   # build + wrangler pages deploy dist -- project lazy-mans-reminders
+npm run deploy   # build + wrangler pages deploy dist --branch main -- project lazy-mans-reminders
 ```
 
 Git: commit on Mac as usual; `main` is the deploy branch.
