@@ -90,7 +90,7 @@ describe('consent and grants', () => {
       SUPABASE_URL: 'https://example.supabase.co',
       SUPABASE_ANON_KEY: 'anon',
       SUPABASE_SERVICE_ROLE_KEY: 'service',
-      WEB_ORIGINS: 'https://lmr.edmundlim.systems',
+      WEB_ORIGINS: 'https://lmr.sillyapps.co',
       OAUTH_KV: kv,
       OAUTH_PROVIDER: oauth,
     } as unknown as Env
@@ -98,7 +98,7 @@ describe('consent and grants', () => {
     function authed(path: string, token: string, init?: RequestInit) {
       const headers = new Headers(init?.headers)
       headers.set('Authorization', `Bearer ${token}`)
-      headers.set('Origin', 'https://lmr.edmundlim.systems')
+      headers.set('Origin', 'https://lmr.sillyapps.co')
       return handlePublicRequest(new Request(`https://lmr-mcp.edmundlim.systems${path}`, { ...init, headers }), env, deps)
     }
 

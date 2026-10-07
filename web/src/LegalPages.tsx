@@ -3,7 +3,7 @@ import { ThemeToggle } from './ThemeToggle'
 
 const CONTACT_EMAIL = 'hello@edmundlim.systems'
 const LAST_UPDATED = '26 August 2026'
-const SITE_URL = 'https://lmr.edmundlim.systems'
+const SITE_URL = 'https://lmr.sillyapps.co'
 const PDPC_URL = 'https://www.pdpc.gov.sg'
 
 type LegalPageProps = {
