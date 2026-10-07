@@ -25,7 +25,7 @@ const env = {
   SUPABASE_URL: 'https://example.supabase.co',
   SUPABASE_SERVICE_ROLE_KEY: 'test-service-role',
   SUPABASE_ANON_KEY: 'test-anon',
-  WEB_ORIGINS: 'https://lmr.edmundlim.systems,http://localhost:5173',
+  WEB_ORIGINS: 'https://lmr.sillyapps.co,http://localhost:5173',
   OAUTH_KV: memoryKv(),
 } as Env
 
@@ -48,7 +48,7 @@ describe('mcp worker routes', () => {
       new Request('https://lmr-mcp.edmundlim.systems/bind', {
         method: 'POST',
         headers: {
-          Origin: 'https://lmr.edmundlim.systems',
+          Origin: 'https://lmr.sillyapps.co',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ state: '550e8400-e29b-41d4-a716-446655440000' }),
@@ -56,7 +56,7 @@ describe('mcp worker routes', () => {
       env,
     )
     expect(response.status).toBe(401)
-    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('https://lmr.edmundlim.systems')
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('https://lmr.sillyapps.co')
   })
 
   it('accepts POST /authorize and trailing-slash bind as public routes', async () => {
@@ -71,7 +71,7 @@ describe('mcp worker routes', () => {
       new Request('https://lmr-mcp.edmundlim.systems/bind/', {
         method: 'POST',
         headers: {
-          Origin: 'https://lmr.edmundlim.systems',
+          Origin: 'https://lmr.sillyapps.co',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ state: '550e8400-e29b-41d4-a716-446655440000' }),

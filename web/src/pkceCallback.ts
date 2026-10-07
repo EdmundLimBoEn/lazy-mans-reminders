@@ -23,7 +23,7 @@ export function pkceReturnToFromCallbackUrl(href: string): string | null {
   return pkceParamFromCallbackUrl(href, 'return_to')
 }
 
-const SITE_ORIGIN = 'https://lmr.edmundlim.systems'
+const SITE_ORIGIN = 'https://lmr.sillyapps.co'
 
 /** Only allow a same-origin relative path. Backslash and encoded slash/backslash forms are rejected. */
 export function safeReturnPath(

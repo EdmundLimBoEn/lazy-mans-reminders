@@ -39,6 +39,8 @@ describe('worker config', () => {
     expect(source).toContain('"workers_dev": false')
     expect(source).toContain('"preview_urls": false')
     const origins = source.match(/"WEB_ORIGINS":\s*"([^"]+)"/)?.[1]
-    expect(origins).toBe('https://lmr.edmundlim.systems,https://lazy-mans-reminders.pages.dev')
+    expect(origins).toBe('https://lmr.sillyapps.co,https://lmr.edmundlim.systems,https://lazy-mans-reminders.pages.dev')
+    // /authorize sends the browser to the FIRST origin's /connect page, so it must be the canonical domain.
+    expect(origins?.split(',')[0]).toBe('https://lmr.sillyapps.co')
   })
 })

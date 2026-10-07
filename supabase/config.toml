@@ -1,10 +1,15 @@
 project_id = "lazy-mans-reminders"
 
 [auth]
-site_url = "https://lmr.edmundlim.systems"
+site_url = "https://lmr.sillyapps.co"
 additional_redirect_urls = [
   "http://localhost:5173",
   "http://localhost:5173/auth/callback",
+  "https://lmr.sillyapps.co",
+  "https://lmr.sillyapps.co/auth/callback",
+  "https://lmr.sillyapps.co/auth/ios",
+  # Old domain: kept while lmr.edmundlim.systems 301s to lmr.sillyapps.co.
+  # Shipped iOS builds still send https://lmr.edmundlim.systems/auth/ios as the magic-link redirect.
   "https://lmr.edmundlim.systems",
   "https://lmr.edmundlim.systems/auth/callback",
   "https://lazy-mans-reminders.pages.dev",

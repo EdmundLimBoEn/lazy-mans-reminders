@@ -6,7 +6,7 @@ A Supabase-backed reminder board with a React/Vite web app and an iOS 17 app plu
 
 As of 26 August 2026. The iOS app ships as a **free** App Store download (no in-app purchases).
 
-- Web app: **live** at <https://lmr.edmundlim.systems> and <https://lazy-mans-reminders.pages.dev>
+- Web app: canonical domain <https://lmr.sillyapps.co>; <https://lazy-mans-reminders.pages.dev> is the Pages fallback. The old domain <https://lmr.edmundlim.systems> stays attached and 301-redirects to `lmr.sillyapps.co` (Cloudflare Redirect Rule on the `edmundlim.systems` zone) so shipped iOS builds and old links keep working.
 - Cloudflare Pages project: `lazy-mans-reminders`
 - Supabase project: `lazy-mans-reminders` (`biwmsxbqrevtjwgsvsmu`, Singapore)
 - Database migrations: **deployed** (including agent tokens)
@@ -15,7 +15,7 @@ As of 26 August 2026. The iOS app ships as a **free** App Store download (no in-
 - Agent MCP Worker: **live** at <https://lmr-mcp.edmundlim.systems/mcp> (OAuth plugin path)
 - iOS app and widget: **implemented**; TestFlight build uploaded; physical-device smoke and App Store submission still open. Submission fields live in [docs/app-store.md](docs/app-store.md).
 - Lock Screen: Live Activity plus accessory widgets; push alerts are body-only (no title)
-- Custom domain DNS: **active** for web and MCP
+- Custom domain DNS: `lmr.sillyapps.co` (web, proxied CNAME → `lazy-mans-reminders.pages.dev`) and `lmr-mcp.edmundlim.systems` (MCP Worker). The MCP host has not moved.
 
 ### Deferred launch checklist
 
@@ -89,13 +89,14 @@ supabase db reset
 
 In Supabase **Authentication → URL Configuration**:
 
-- Set the Site URL to `https://lmr.edmundlim.systems`.
+- Set the Site URL to `https://lmr.sillyapps.co`.
 - Add `http://localhost:5173/auth/callback`.
-- Add `https://lmr.edmundlim.systems/auth/callback`.
+- Add `https://lmr.sillyapps.co/auth/callback`.
 - Add `https://lazy-mans-reminders.pages.dev/auth/callback` as a fallback.
 - Add `lazymansreminders://auth/callback` for iOS Google OAuth.
-- Add `https://lmr.edmundlim.systems/auth/ios` and `https://lazy-mans-reminders.pages.dev/auth/ios` for iOS magic-link handoff.
-- Also allow the bare origins used by OAuth returns: `http://localhost:5173`, `https://lmr.edmundlim.systems`, and `https://lazy-mans-reminders.pages.dev`.
+- Add `https://lmr.sillyapps.co/auth/ios` and `https://lazy-mans-reminders.pages.dev/auth/ios` for iOS magic-link handoff.
+- Also allow the bare origins used by OAuth returns: `http://localhost:5173`, `https://lmr.sillyapps.co`, and `https://lazy-mans-reminders.pages.dev`.
+- Keep the old-domain entries (`https://lmr.edmundlim.systems`, `/auth/callback`, `/auth/ios`) until every TestFlight/App Store build in use sends `lmr.sillyapps.co`. Shipped iOS builds still request `https://lmr.edmundlim.systems/auth/ios` for magic links.
 
 Keep `supabase/config.toml` aligned for local development. In **Authentication → Providers**:
 
@@ -222,7 +223,7 @@ npm run build
 npx wrangler pages deploy dist --project-name lazy-mans-reminders
 ```
 
-Custom domain: `lmr.edmundlim.systems` is registered on the Pages project. Ensure a proxied CNAME `lmr` → `lazy-mans-reminders.pages.dev` exists on the `edmundlim.systems` zone, then keep Supabase Auth redirects in sync (see above).
+Custom domain: `lmr.sillyapps.co` is the canonical domain on the Pages project, with a proxied CNAME `lmr` → `lazy-mans-reminders.pages.dev` on the `sillyapps.co` zone. The old `lmr.edmundlim.systems` custom domain stays on the project; a Cloudflare Single Redirect rule on the `edmundlim.systems` zone sends it to `https://lmr.sillyapps.co` with a 301 that keeps the path and query. Keep Supabase Auth redirects in sync (see above). The MCP Worker's `WEB_ORIGINS` (in `mcp/wrangler.jsonc`) lists the canonical origin first, because `/authorize` sends the browser to that origin's `/connect`.
 
 ## iOS
 
@@ -288,7 +289,7 @@ Increment `CURRENT_PROJECT_VERSION` in `ios/project.yml` before each upload.
 The iOS app is a free download with no in-app purchases or subscriptions.
 
 1. In App Store Connect, under **Pricing and Availability**, set the price to **Free** for the storefronts you ship.
-2. Complete app metadata, privacy details, age rating, screenshots, support URL (`https://lmr.edmundlim.systems/support`), and privacy URL (`https://lmr.edmundlim.systems/privacy`). Use [docs/app-store.md](docs/app-store.md) for nutrition labels and review notes.
+2. Complete app metadata, privacy details, age rating, screenshots, support URL (`https://lmr.sillyapps.co/support`), and privacy URL (`https://lmr.sillyapps.co/privacy`). Use [docs/app-store.md](docs/app-store.md) for nutrition labels and review notes.
 3. Attach a tested build, choose manual or automatic release, and submit for review.
 
 Before submission, confirm account deletion, privacy disclosures, support contact, and reviewer notes match the shipped app.
