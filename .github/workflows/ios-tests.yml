@@ -6,6 +6,12 @@ name: iOS tests
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - "cursor/**"
+    paths:
+      - "ios/**"
+      - ".github/workflows/ios-tests.yml"
   pull_request:
     paths:
       - "ios/**"
