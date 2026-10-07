@@ -1,4 +1,9 @@
-import { FormEvent, useEffect, useMemo, useState } from 'react'
+import { FormEvent, type ReactNode, useEffect, useMemo, useState } from 'react'
+import { Info } from 'lucide-react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { SiteHeader } from '@/components/SiteHeader'
 import type { Session } from '@supabase/supabase-js'
 import { LegalFooterLinks } from './LegalPages'
 import { MCP_ORIGIN } from './mcp'
@@ -8,9 +13,24 @@ import { ThemeToggle } from './ThemeToggle'
 
 function SameWindowNote() {
   return (
-    <p className="connect-hint" role="status">
-      Finish sign-in in the browser that opened, then tap Allow.
-    </p>
+    <Alert role="status">
+      <Info aria-hidden="true" />
+      <AlertDescription>Finish sign-in in the browser that opened, then tap Allow.</AlertDescription>
+    </Alert>
+  )
+}
+
+function ConnectShell({ onNavigate, children }: { onNavigate: (path: string) => void; children: ReactNode }) {
+  return (
+    <div className="mx-auto flex min-h-svh w-full max-w-5xl flex-col px-4 sm:px-6">
+      <SiteHeader onNavigate={onNavigate}>
+        <ThemeToggle />
+      </SiteHeader>
+      <main className="auth-shell flex flex-1 flex-col items-center justify-center gap-6 py-12">
+        {children}
+        <LegalFooterLinks onNavigate={onNavigate} />
+      </main>
+    </div>
   )
 }
 
@@ -116,19 +136,17 @@ export function Connect({ session, onNavigate }: { session: Session; onNavigate:
 
   if (!state) {
     return (
-      <main className="auth-shell">
-        <section className="auth-panel connect-panel">
-          <div className="theme-toggle-slot">
-            <ThemeToggle />
-          </div>
-          <div className="auth-card">
-            <h2>Nothing to connect</h2>
-            <p>Open this page from Grok, Claude, Cursor, or Codex when they ask to use your board.</p>
-            <a className="primary" href="/">Back to the board</a>
-            <LegalFooterLinks onNavigate={onNavigate} />
-          </div>
-        </section>
-      </main>
+      <ConnectShell onNavigate={onNavigate}>
+        <Card className="auth-card w-full max-w-md">
+          <CardHeader>
+            <CardTitle><h2 className="text-lg font-semibold tracking-tight">Nothing to connect</h2></CardTitle>
+            <CardDescription className="leading-relaxed">Open this page from Grok, Claude, Cursor, or Codex when they ask to use your board.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild className="w-full"><a href="/">Back to the board</a></Button>
+          </CardContent>
+        </Card>
+      </ConnectShell>
     )
   }
 
@@ -136,49 +154,47 @@ export function Connect({ session, onNavigate }: { session: Session; onNavigate:
   const agentName = summary?.client.name ?? 'Unnamed agent'
 
   return (
-    <main className="auth-shell">
-      <section className="auth-panel connect-panel">
-        <div className="theme-toggle-slot">
-          <ThemeToggle />
-        </div>
-        <div className="auth-card">
-          <h2>Let this agent use your board?</h2>
-          <p>Signed in as {session.user.email ?? 'your account'}.</p>
-          {phase === 'loading' && <p role="status">Checking which agent asked…</p>}
+    <ConnectShell onNavigate={onNavigate}>
+      <Card className="auth-card w-full max-w-md">
+        <CardHeader>
+          <CardTitle><h2 className="text-lg font-semibold tracking-tight">Let this agent use your board?</h2></CardTitle>
+          <CardDescription className="[overflow-wrap:anywhere]">Signed in as {session.user.email ?? 'your account'}.</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4 text-sm">
+          {phase === 'loading' && <p className="text-muted-foreground" role="status">Checking which agent asked…</p>}
           {summary && (
-            <dl className="consent-facts">
-              <div>
-                <dt>Agent</dt>
-                <dd>{agentName}</dd>
+            <dl className="consent-facts divide-y rounded-lg border">
+              <div className="grid gap-1 px-3 py-2.5 sm:grid-cols-[6rem_1fr] sm:gap-3">
+                <dt className="text-muted-foreground">Agent</dt>
+                <dd className="font-medium [overflow-wrap:anywhere]">{agentName}</dd>
               </div>
-              <div>
-                <dt>Returns to</dt>
-                <dd>{summary.redirectOrigin}</dd>
+              <div className="grid gap-1 px-3 py-2.5 sm:grid-cols-[6rem_1fr] sm:gap-3">
+                <dt className="text-muted-foreground">Returns to</dt>
+                <dd className="font-medium [overflow-wrap:anywhere]">{summary.redirectOrigin}</dd>
               </div>
-              <div>
-                <dt>Access</dt>
-                <dd>{permissionSentence(summary.permissions)}</dd>
+              <div className="grid gap-1 px-3 py-2.5 sm:grid-cols-[6rem_1fr] sm:gap-3">
+                <dt className="text-muted-foreground">Access</dt>
+                <dd className="[overflow-wrap:anywhere]">{permissionSentence(summary.permissions)}</dd>
               </div>
             </dl>
           )}
-          <p>
+          <p className="leading-relaxed text-muted-foreground">
             The agent name is whatever that client typed at registration. Check the return address
             before you allow. You can revoke it later from the board, or it ends when you delete
             your account.
           </p>
           <SameWindowNote />
-          {error && <p className="error" role="alert">{error}</p>}
-          <form className="connect-actions" onSubmit={allow}>
-            <button className="primary" type="submit" disabled={!canAllow}>
+          {error && <p className="text-destructive" role="alert">{error}</p>}
+          <form className="connect-actions grid gap-2" onSubmit={allow}>
+            <Button type="submit" disabled={!canAllow}>
               {busy ? 'Connecting…' : 'Allow'}
-            </button>
-            <button className="text-button" type="button" disabled={busy} onClick={() => void deny()}>
+            </Button>
+            <Button variant="ghost" type="button" disabled={busy} onClick={() => void deny()}>
               Deny
-            </button>
+            </Button>
           </form>
-          <LegalFooterLinks onNavigate={onNavigate} />
-        </div>
-      </section>
-    </main>
+        </CardContent>
+      </Card>
+    </ConnectShell>
   )
 }

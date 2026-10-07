@@ -2,16 +2,26 @@ import { describe, expect, it } from 'vitest'
 import { corsHeaders, handlePublicRequest, resolveExternalPat, serverCard } from './oauth'
 
 const env = {
-  WEB_ORIGINS: 'https://lmr.edmundlim.systems,http://localhost:5173',
+  WEB_ORIGINS: 'https://lmr.sillyapps.co,http://localhost:5173',
 } as Env
 
 describe('bind CORS', () => {
   it('allows the web origin', () => {
     const headers = corsHeaders(
       new Request('https://lmr-mcp.edmundlim.systems/bind', {
-        headers: { Origin: 'https://lmr.edmundlim.systems' },
+        headers: { Origin: 'https://lmr.sillyapps.co' },
       }),
       env,
+    )
+    expect(headers['Access-Control-Allow-Origin']).toBe('https://lmr.sillyapps.co')
+  })
+
+  it('still allows the old lmr.edmundlim.systems alias while it redirects', () => {
+    const headers = corsHeaders(
+      new Request('https://lmr-mcp.edmundlim.systems/bind', {
+        headers: { Origin: 'https://lmr.edmundlim.systems' },
+      }),
+      { WEB_ORIGINS: 'https://lmr.sillyapps.co,https://lmr.edmundlim.systems' } as Env,
     )
     expect(headers['Access-Control-Allow-Origin']).toBe('https://lmr.edmundlim.systems')
   })

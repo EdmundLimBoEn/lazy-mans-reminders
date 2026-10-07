@@ -91,14 +91,12 @@ Confirm with `asc localizations list --app 6799138197 --type app-info --locale e
 
 ## URLs
 
-Canonical host is `https://lmr.sillyapps.co` (parallel domain PR). `https://lmr.edmundlim.systems` 301s to it once that redirect is live.
+Canonical host is `https://lmr.sillyapps.co`. `https://lmr.edmundlim.systems` 301s to it once that redirect is live.
 
 - Privacy: `https://lmr.sillyapps.co/privacy`
 - Support: `https://lmr.sillyapps.co/support`
 - Marketing: `https://lmr.sillyapps.co`
 - Terms (optional field): `https://lmr.sillyapps.co/terms`
-
-If that parallel PR already edited this file, keep its URL changes.
 
 ## Availability, pricing, EU DSA
 

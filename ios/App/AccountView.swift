@@ -202,7 +202,7 @@ struct AccountView: View {
     private func deleteAccount() async {
         isDeletingAccount = true
         do {
-            try await auth.deleteAccount()
+            try await AppleRevocation.deleteAccount(using: auth)
         } catch {
             self.error = error.localizedDescription
             isDeletingAccount = false

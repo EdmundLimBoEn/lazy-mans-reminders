@@ -11,13 +11,16 @@ const indexHtml = readFileSync(join(dir, '../index.html'), 'utf8')
 
 type InitResult = {
   theme: string | null
+  darkClass: boolean
   themeColor: string
   wroteStorage: boolean
   setInlineStyle: boolean
 }
 
-function runThemeInit(stored: string | null, prefersDark: boolean): InitResult {
+function runThemeInit(stored: string | null, prefersDark: boolean, startDark = false): InitResult {
   const attrs: Record<string, string> = {}
+  // startDark simulates a stale class, so the script must remove it as well as add it.
+  const classes = new Set<string>(startDark ? ['dark'] : [])
   const meta = {
     content: THEME_COLOR.light,
     setAttribute(name: string, value: string) {
@@ -33,6 +36,17 @@ function runThemeInit(stored: string | null, prefersDark: boolean): InitResult {
       },
       getAttribute(name: string) {
         return attrs[name] ?? null
+      },
+      classList: {
+        add: (name: string) => { classes.add(name) },
+        remove: (name: string) => { classes.delete(name) },
+        toggle: (name: string, force?: boolean) => {
+          const on = force ?? !classes.has(name)
+          if (on) classes.add(name)
+          else classes.delete(name)
+          return on
+        },
+        contains: (name: string) => classes.has(name),
       },
       style: new Proxy(
         {},
@@ -65,6 +79,7 @@ function runThemeInit(stored: string | null, prefersDark: boolean): InitResult {
   runInNewContext(themeInitSource, { window, document })
   return {
     theme: attrs['data-theme'] ?? null,
+    darkClass: classes.has('dark'),
     themeColor: meta.content,
     wroteStorage,
     setInlineStyle,
@@ -109,6 +124,8 @@ describe('theme-init.js first paint', () => {
       stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system'
     expect(result.theme).toBe(expected)
     expect(result.theme).toBe(resolveTheme(preference, prefersDark))
+    expect(result.darkClass).toBe(expected === 'dark')
+    expect(runThemeInit(stored, prefersDark, true).darkClass).toBe(expected === 'dark')
     expect(result.themeColor).toBe(THEME_COLOR[expected])
     expect(result.wroteStorage).toBe(false)
     expect(result.setInlineStyle).toBe(false)
@@ -116,10 +133,15 @@ describe('theme-init.js first paint', () => {
 
   it('falls back to the media query when localStorage throws', () => {
     const attrs: Record<string, string> = {}
+    const classes = new Set<string>()
     const document = {
       documentElement: {
         setAttribute(name: string, value: string) {
           attrs[name] = value
+        },
+        classList: {
+          add: (name: string) => { classes.add(name) },
+          remove: (name: string) => { classes.delete(name) },
         },
       },
       querySelector() {
@@ -139,5 +161,6 @@ describe('theme-init.js first paint', () => {
     }
     runInNewContext(themeInitSource, { window, document })
     expect(attrs['data-theme']).toBe('dark')
+    expect(classes.has('dark')).toBe(true)
   })
 })

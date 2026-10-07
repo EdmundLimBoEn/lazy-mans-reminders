@@ -46,15 +46,15 @@ describe('connectReturnTo', () => {
 describe('authCallbackUrlFrom', () => {
   it('puts return_to on the callback URL so a new tab can still finish Allow', () => {
     expect(
-      authCallbackUrlFrom('https://lmr.edmundlim.systems', '/connect', '?state=abc'),
+      authCallbackUrlFrom('https://lmr.sillyapps.co', '/connect', '?state=abc'),
     ).toBe(
-      'https://lmr.edmundlim.systems/auth/callback?return_to=%2Fconnect%3Fstate%3Dabc',
+      'https://lmr.sillyapps.co/auth/callback?return_to=%2Fconnect%3Fstate%3Dabc',
     )
   })
 
   it('leaves homepage sign-in callbacks clean', () => {
-    expect(authCallbackUrlFrom('https://lmr.edmundlim.systems', '/')).toBe(
-      'https://lmr.edmundlim.systems/auth/callback',
+    expect(authCallbackUrlFrom('https://lmr.sillyapps.co', '/')).toBe(
+      'https://lmr.sillyapps.co/auth/callback',
     )
   })
 })

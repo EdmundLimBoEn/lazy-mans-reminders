@@ -4,7 +4,13 @@ import {
   ArrowDown,
   ArrowUp,
   Check,
+  ChevronRight,
   Circle,
+  CircleAlert,
+  CircleCheck,
+  Download,
+  Info,
+  KeyRound,
   LogOut,
   Pencil,
   Plus,
@@ -12,6 +18,26 @@ import {
   Trash2,
   X,
 } from 'lucide-react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { FieldSeparator } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { AppleLogo, GoogleLogo, PhonePreview } from '@/components/AuthArt'
+import { SiteHeader } from '@/components/SiteHeader'
+import { Splash } from '@/components/Splash'
+import { StatusShell, StatusText } from '@/components/StatusShell'
+import { cn } from '@/lib/utils'
 import {
   accountExportFilename,
   buildAccountExport,
@@ -127,97 +153,115 @@ function SignIn({
   const busy = loading || oauthLoading !== null
 
   return (
-    <main className="auth-shell">
-      <section className="auth-copy">
-        <div className="brand-mark">LM</div>
-        <p className="eyebrow">Lazy Man's Reminders</p>
-        <h1>Write it once.<br />See it all day.</h1>
-        <p className="lede">
-          A tiny reminder board that lives on your iPhone lock screen.
-          Nothing to organise. Nothing to forget.
-        </p>
-        <div className="phone-preview" aria-hidden="true">
-          <div className="dynamic-island" />
-          <p className="preview-time">9:41</p>
-          <div className="widget-preview">
-            <span>REMINDERS</span>
-            <p>□ Book dentist</p>
-            <p>□ Send the invoice</p>
-          </div>
-        </div>
-      </section>
-      <section className="auth-panel">
-        <div className="theme-toggle-slot">
-          <ThemeToggle />
-        </div>
-        <div className="auth-card">
-          <Smartphone size={24} aria-hidden="true" />
-          <h2>{sent ? 'Check your inbox' : connectingAgent ? 'Sign in to connect this agent' : 'Your board, everywhere'}</h2>
-          <p aria-live="polite">
-            {sent
-              ? `We sent a secure sign-in link to ${email}. Open it in this same browser window.`
-              : connectingAgent
-                ? 'Sign in with Apple or Google in this same window, then tap Allow. Email links often open in another app and fail this step.'
-                : 'Sign in with Apple, Google, or email. No password to remember.'}
-          </p>
-          {connectingAgent && !sent && (
-            <p className="connect-hint" role="status">
-              Finish sign-in in the browser that opened. You will return here to tap Allow.
+    <div className="mx-auto flex min-h-svh w-full max-w-6xl flex-col px-4 sm:px-6">
+      <SiteHeader onNavigate={onNavigate}>
+        <ThemeToggle />
+      </SiteHeader>
+      <main className="auth-shell grid flex-1 content-center gap-10 py-10 lg:grid-cols-[1fr_minmax(0,24rem)] lg:gap-20 lg:py-16">
+        <section className="auth-copy flex flex-col gap-10">
+          <div className="space-y-4">
+            <h1 className="text-3xl font-medium tracking-tight text-balance sm:text-4xl">
+              Write it once.<br />See it all day.
+            </h1>
+            <p className="max-w-md text-base leading-relaxed text-muted-foreground">
+              A tiny reminder board that lives on your iPhone lock screen.
+              Nothing to organise. Nothing to forget.
             </p>
-          )}
-          {!sent && (
-            <>
-              <div className="oauth-stack">
-                <button
-                  className="oauth-button oauth-apple"
-                  type="button"
-                  disabled={busy}
-                  aria-busy={oauthLoading === 'apple' || undefined}
-                  onClick={() => void signInWithProvider('apple')}
-                >
-                  {oauthLoading === 'apple' ? 'Redirecting…' : 'Continue with Apple'}
-                </button>
-                <button
-                  className="oauth-button oauth-google"
-                  type="button"
-                  disabled={busy}
-                  aria-busy={oauthLoading === 'google' || undefined}
-                  onClick={() => void signInWithProvider('google')}
-                >
-                  {oauthLoading === 'google' ? 'Redirecting…' : 'Continue with Google'}
-                </button>
-              </div>
-              <div className="auth-divider" role="separator" aria-label="or">
-                <span>or email</span>
-              </div>
-              <form onSubmit={submit}>
-                <label htmlFor="email">Email address</label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                  required
-                />
-                {error && <p className="error" role="alert">{error}</p>}
-                <button className="primary" type="submit" disabled={busy}>
-                  {loading ? 'Sending…' : 'Send sign-in link'}
-                </button>
-              </form>
-            </>
-          )}
-          {sent && (
-            <>
-              {error && <p className="error" role="alert">{error}</p>}
-              <button className="text-button" type="button" onClick={() => setSent(false)}>Use another email</button>
-            </>
-          )}
+          </div>
+          <PhonePreview />
+        </section>
+        <section className="auth-panel flex flex-col gap-6">
+          <Card className="auth-card gap-5">
+            <CardHeader>
+              <CardTitle>
+                <h2 className="text-lg font-semibold tracking-tight">
+                  {sent ? 'Check your inbox' : connectingAgent ? 'Sign in to connect this agent' : 'Your board, everywhere'}
+                </h2>
+              </CardTitle>
+              <CardDescription aria-live="polite" className="leading-relaxed">
+                {sent
+                  ? `We sent a secure sign-in link to ${email}. Open it in this same browser window.`
+                  : connectingAgent
+                    ? 'Sign in with Apple or Google in this same window, then tap Allow. Email links often open in another app and fail this step.'
+                    : 'Sign in with Apple, Google, or email. No password to remember.'}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+              {connectingAgent && !sent && (
+                <Alert role="status">
+                  <Info aria-hidden="true" />
+                  <AlertDescription>
+                    Finish sign-in in the browser that opened. You will return here to tap Allow.
+                  </AlertDescription>
+                </Alert>
+              )}
+              {!sent && (
+                <>
+                  <div className="grid gap-2">
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      type="button"
+                      disabled={busy}
+                      aria-busy={oauthLoading === 'apple' || undefined}
+                      onClick={() => void signInWithProvider('apple')}
+                    >
+                      <AppleLogo />
+                      {oauthLoading === 'apple' ? 'Redirecting…' : 'Continue with Apple'}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      type="button"
+                      disabled={busy}
+                      aria-busy={oauthLoading === 'google' || undefined}
+                      onClick={() => void signInWithProvider('google')}
+                    >
+                      <GoogleLogo />
+                      {oauthLoading === 'google' ? 'Redirecting…' : 'Continue with Google'}
+                    </Button>
+                  </div>
+                  <FieldSeparator
+                    role="separator"
+                    aria-label="or"
+                    className="my-0 text-xs uppercase *:data-[slot=field-separator-content]:bg-card"
+                  >
+                    or email
+                  </FieldSeparator>
+                  <form onSubmit={submit} className="grid gap-3">
+                    <div className="grid gap-2">
+                      <Label htmlFor="email">Email address</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        placeholder="you@example.com"
+                        autoComplete="email"
+                        required
+                      />
+                    </div>
+                    {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
+                    <Button className="w-full" type="submit" disabled={busy}>
+                      {loading ? 'Sending…' : 'Send sign-in link'}
+                    </Button>
+                  </form>
+                </>
+              )}
+              {sent && (
+                <>
+                  {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
+                  <Button variant="outline" className="w-full" type="button" onClick={() => setSent(false)}>
+                    Use another email
+                  </Button>
+                </>
+              )}
+            </CardContent>
+          </Card>
           <LegalFooterLinks onNavigate={onNavigate} />
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </div>
   )
 }
 
@@ -231,6 +275,7 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
   const [adding, setAdding] = useState(false)
   const [reordering, setReordering] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const deleteButtonRef = useRef<HTMLButtonElement>(null)
   const [deletingAccount, setDeletingAccount] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [maxLines, setMaxLines] = useState(DEFAULT_LOCK_SCREEN_MAX_LINES)
@@ -464,170 +509,206 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
   }
 
   return (
-    <main className="board-shell">
-      <a className="skip-link" href="#board-main">Skip to board</a>
-      <header>
-        <div>
-          <p className="eyebrow">Lazy Man's Reminders</p>
-          <h1 id="board-heading">Your board</h1>
-        </div>
-        <div className="account">
-          <ThemeToggle />
-          <div className="account-meta">
-            <span>{session.user.email}</span>
-            <button
-              className="text-button"
+    <div className="board-shell mx-auto w-full max-w-2xl px-4 pb-12 sm:px-6">
+      <a
+        className="sr-only z-50 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+        href="#board-main"
+      >
+        Skip to board
+      </a>
+      <SiteHeader onNavigate={onNavigate}>
+        <ThemeToggle />
+        <Button variant="ghost" size="icon-sm" type="button" aria-label="Sign out" title="Sign out" onClick={() => void signOut()}>
+          <LogOut aria-hidden="true" />
+        </Button>
+      </SiteHeader>
+
+      <main className="flex flex-col gap-10 pt-8 sm:pt-12">
+        <section className="board flex flex-col gap-4" id="board-main" aria-labelledby="board-heading">
+          <div className="space-y-1">
+            <h1 id="board-heading" className="text-2xl font-semibold tracking-tight">Your board</h1>
+            <p className="board-hint text-sm leading-relaxed text-muted-foreground" id="board-hint">{POST_IT_HINT}</p>
+          </div>
+          <form className="add-form flex gap-2" onSubmit={add}>
+            <div className="relative flex-1">
+              <Plus className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+              <Input
+                className="pl-9"
+                value={text}
+                onChange={(event) => setText(event.target.value)}
+                placeholder={boardFull ? 'Board full — combine lines instead' : "What shouldn't you forget?"}
+                maxLength={500}
+                disabled={boardFull || adding}
+                aria-label="New reminder"
+                aria-describedby="board-hint board-capacity"
+              />
+            </div>
+            <Button type="submit" disabled={boardFull || !text.trim() || adding} aria-busy={adding || undefined}>
+              {adding ? 'Adding…' : 'Add'}
+            </Button>
+          </form>
+          <div className="board-meta flex justify-between gap-4 text-xs text-muted-foreground" id="board-capacity" aria-live="polite">
+            <span>{activeCount}/{maxLines} {activeCount === 1 ? 'thing' : 'things'} on your mind</span>
+            <span className="max-sm:hidden">Capacity set by your iPhone Lock Screen</span>
+          </div>
+          {error && (
+            <Alert variant="destructive" className="pr-12">
+              <CircleAlert aria-hidden="true" />
+              <AlertDescription className="[overflow-wrap:anywhere]">{error}</AlertDescription>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                type="button"
+                className="absolute top-1.5 right-1.5 text-current hover:text-current"
+                aria-label="Dismiss error"
+                onClick={() => setError('')}
+              >
+                <X aria-hidden="true" />
+              </Button>
+            </Alert>
+          )}
+          <div className="rounded-lg border">
+            {loading ? (
+              <div className="empty px-4 py-12 text-center text-sm text-muted-foreground" role="status">Loading your board…</div>
+            ) : sorted.length === 0 ? (
+              <div className="empty flex flex-col items-center gap-1 px-4 py-14 text-center">
+                <Circle className="mb-2 size-5 text-muted-foreground" aria-hidden="true" />
+                <h2 className="text-sm font-medium">Nothing to remember.</h2>
+                <p className="text-sm text-muted-foreground">That's either excellent or suspicious.</p>
+              </div>
+            ) : (
+              <ul className="reminder-list divide-y" aria-label="Reminders">
+                {sorted.map((reminder) => {
+                  const activeIndex = active.findIndex((item) => item.id === reminder.id)
+                  return (
+                    <li key={reminder.id} className="flex min-h-14 items-center gap-2 py-1.5 pr-1.5 pl-1.5">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="shrink-0 text-muted-foreground hover:text-foreground"
+                        type="button"
+                        aria-label={reminder.is_done ? `Mark "${reminder.text}" active` : `Complete "${reminder.text}"`}
+                        aria-pressed={reminder.is_done}
+                        title={reminder.is_done ? 'Mark active' : 'Complete'}
+                        onClick={() => void patch(reminder.id, { is_done: !reminder.is_done })}
+                      >
+                        {reminder.is_done ? <CircleCheck aria-hidden="true" /> : <Circle aria-hidden="true" />}
+                      </Button>
+                      {editingId === reminder.id ? (
+                        <form className="flex min-w-0 flex-1 items-center gap-1" onSubmit={(event) => { event.preventDefault(); void saveEdit(reminder.id) }}>
+                          <Input
+                            className="h-8"
+                            value={editText}
+                            onChange={(event) => setEditText(event.target.value)}
+                            onKeyDown={(event) => { if (event.key === 'Escape') setEditingId(null) }}
+                            maxLength={500}
+                            aria-label={`Edit reminder: ${reminder.text}`}
+                            autoFocus
+                          />
+                          <Button variant="ghost" size="icon" type="submit" aria-label="Save reminder" title="Save"><Check aria-hidden="true" /></Button>
+                          <Button variant="ghost" size="icon" type="button" aria-label="Cancel editing" title="Cancel" onClick={() => setEditingId(null)}><X aria-hidden="true" /></Button>
+                        </form>
+                      ) : (
+                        <span
+                          className={cn(
+                            'reminder-text min-w-0 flex-1 text-sm leading-relaxed [overflow-wrap:anywhere]',
+                            reminder.is_done && 'text-muted-foreground line-through',
+                          )}
+                        >
+                          {reminder.text}
+                        </span>
+                      )}
+                      {editingId !== reminder.id && (
+                        <div className="flex shrink-0 items-center text-muted-foreground">
+                          {!reminder.is_done && <>
+                            <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Move "${reminder.text}" up`} title="Move up" disabled={reordering || activeIndex === 0} onClick={() => void move(activeIndex, -1)}><ArrowUp aria-hidden="true" /></Button>
+                            <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Move "${reminder.text}" down`} title="Move down" disabled={reordering || activeIndex === activeCount - 1} onClick={() => void move(activeIndex, 1)}><ArrowDown aria-hidden="true" /></Button>
+                          </>}
+                          <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Edit "${reminder.text}"`} title="Edit" onClick={() => { setEditingId(reminder.id); setEditText(reminder.text) }}><Pencil aria-hidden="true" /></Button>
+                          <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Delete "${reminder.text}"`} title="Delete" onClick={() => void remove(reminder.id)}><Trash2 aria-hidden="true" /></Button>
+                        </div>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </div>
+        </section>
+
+        <AgentAccess userId={session.user.id} accessToken={session.access_token} />
+
+        <section className="flex flex-col gap-4" aria-labelledby="account-heading">
+          <div className="space-y-1">
+            <h2 id="account-heading" className="text-base font-semibold tracking-tight">Account</h2>
+            <p className="account-email truncate text-sm text-muted-foreground">{session.user.email}</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="outline"
+              size="sm"
               type="button"
               disabled={exporting || deletingAccount}
               onClick={() => void downloadMyData()}
             >
+              <Download aria-hidden="true" />
               {exporting ? 'Preparing…' : 'Download my data'}
-            </button>
-            <button
-              className="text-button danger-text"
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
               type="button"
+              className="text-destructive hover:text-destructive"
+              ref={deleteButtonRef}
               disabled={deletingAccount}
               onClick={() => setConfirmDelete(true)}
             >
+              <Trash2 aria-hidden="true" />
               Delete account
-            </button>
+            </Button>
           </div>
-          <button className="icon-button" type="button" aria-label="Sign out" title="Sign out" onClick={() => void signOut()}>
-            <LogOut size={18} aria-hidden="true" />
-          </button>
-        </div>
-      </header>
+        </section>
+      </main>
 
-      <section className="board" id="board-main" aria-labelledby="board-heading">
-        <form className="add-form" onSubmit={add}>
-          <Plus size={22} aria-hidden="true" />
-          <input
-            value={text}
-            onChange={(event) => setText(event.target.value)}
-            placeholder={boardFull ? 'Board full — combine lines instead' : "What shouldn't you forget?"}
-            maxLength={500}
-            disabled={boardFull || adding}
-            aria-label="New reminder"
-            aria-describedby="board-hint board-capacity"
-          />
-          <button className="primary" type="submit" disabled={boardFull || !text.trim() || adding} aria-busy={adding || undefined}>
-            {adding ? 'Adding…' : 'Add'}
-          </button>
-        </form>
-        <div className="board-meta" id="board-capacity" aria-live="polite">
-          <span>{activeCount}/{maxLines} {activeCount === 1 ? 'thing' : 'things'} on your mind</span>
-          <span>Capacity set by your iPhone Lock Screen</span>
-        </div>
-        <p className="board-hint" id="board-hint">{POST_IT_HINT}</p>
-        {error && (
-          <div className="error-banner" role="alert">
-            <span>{error}</span>
-            <button type="button" aria-label="Dismiss error" onClick={() => setError('')}><X size={16} aria-hidden="true" /></button>
-          </div>
-        )}
-        {loading ? (
-          <div className="empty" role="status">Loading your board…</div>
-        ) : sorted.length === 0 ? (
-          <div className="empty">
-            <Circle size={30} aria-hidden="true" />
-            <h2>Nothing to remember.</h2>
-            <p>That's either excellent or suspicious.</p>
-          </div>
-        ) : (
-          <ul className="reminder-list" aria-label="Reminders">
-            {sorted.map((reminder) => {
-              const activeIndex = active.findIndex((item) => item.id === reminder.id)
-              return (
-                <li key={reminder.id} className={reminder.is_done ? 'done' : ''}>
-                  <button
-                    className="check-button"
-                    type="button"
-                    aria-label={reminder.is_done ? `Mark "${reminder.text}" active` : `Complete "${reminder.text}"`}
-                    aria-pressed={reminder.is_done}
-                    title={reminder.is_done ? 'Mark active' : 'Complete'}
-                    onClick={() => void patch(reminder.id, { is_done: !reminder.is_done })}
-                  >
-                    {reminder.is_done ? <Check size={17} aria-hidden="true" /> : <Circle size={19} aria-hidden="true" />}
-                  </button>
-                  {editingId === reminder.id ? (
-                    <form className="edit-form" onSubmit={(event) => { event.preventDefault(); void saveEdit(reminder.id) }}>
-                      <input
-                        value={editText}
-                        onChange={(event) => setEditText(event.target.value)}
-                        onKeyDown={(event) => { if (event.key === 'Escape') setEditingId(null) }}
-                        maxLength={500}
-                        aria-label={`Edit reminder: ${reminder.text}`}
-                        autoFocus
-                      />
-                      <button type="submit" aria-label="Save reminder" title="Save"><Check size={17} aria-hidden="true" /></button>
-                      <button type="button" aria-label="Cancel editing" title="Cancel" onClick={() => setEditingId(null)}><X size={17} aria-hidden="true" /></button>
-                    </form>
-                  ) : (
-                    <span className="reminder-text">{reminder.text}</span>
-                  )}
-                  {editingId !== reminder.id && (
-                    <div className="actions">
-                      {!reminder.is_done && <>
-                        <button type="button" aria-label={`Move "${reminder.text}" up`} title="Move up" disabled={reordering || activeIndex === 0} onClick={() => void move(activeIndex, -1)}><ArrowUp size={16} aria-hidden="true" /></button>
-                        <button type="button" aria-label={`Move "${reminder.text}" down`} title="Move down" disabled={reordering || activeIndex === activeCount - 1} onClick={() => void move(activeIndex, 1)}><ArrowDown size={16} aria-hidden="true" /></button>
-                      </>}
-                      <button type="button" aria-label={`Edit "${reminder.text}"`} title="Edit" onClick={() => { setEditingId(reminder.id); setEditText(reminder.text) }}><Pencil size={16} aria-hidden="true" /></button>
-                      <button type="button" aria-label={`Delete "${reminder.text}"`} title="Delete" onClick={() => void remove(reminder.id)}><Trash2 size={16} aria-hidden="true" /></button>
-                    </div>
-                  )}
-                </li>
-              )
-            })}
-          </ul>
-        )}
-      </section>
-      <AgentAccess userId={session.user.id} accessToken={session.access_token} />
-      <footer className="board-footer">
-        <p className="footer-note"><Smartphone size={16} aria-hidden="true" /> Open the app once after signing in to add the lock-screen widget.</p>
+      <footer className="board-footer mt-16 flex flex-col items-center gap-3 border-t pt-6 text-center text-xs text-muted-foreground">
+        <p className="flex items-center gap-2"><Smartphone className="size-3.5" aria-hidden="true" /> Open the app once after signing in to add the lock-screen widget.</p>
         <LegalFooterLinks onNavigate={onNavigate} />
       </footer>
-      {confirmDelete && (
-        <div
-          className="delete-dialog-backdrop"
-          role="presentation"
-          onClick={() => { if (!deletingAccount) setConfirmDelete(false) }}
+
+      <AlertDialog
+        open={confirmDelete}
+        onOpenChange={(open) => { if (!open && !deletingAccount) setConfirmDelete(false) }}
+      >
+        <AlertDialogContent
+          className="delete-dialog sm:max-w-md"
+          overlayProps={{ onClick: () => { if (!deletingAccount) setConfirmDelete(false) } }}
+          onCloseAutoFocus={(event) => {
+            // The dialog is opened from state, not a Radix Trigger, so return focus by hand.
+            event.preventDefault()
+            deleteButtonRef.current?.focus()
+          }}
         >
-          <div
-            className="delete-dialog"
-            role="alertdialog"
-            aria-modal="true"
-            aria-labelledby="delete-account-title"
-            aria-describedby="delete-account-copy"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <h2 id="delete-account-title">Delete your account?</h2>
-            <p id="delete-account-copy">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete your account?</AlertDialogTitle>
+            <AlertDialogDescription>
               This permanently removes your reminders, device registrations, lock-screen prefs,
               agent access, and sign-in. This cannot be undone.
-            </p>
-            <div className="delete-dialog-actions">
-              <button
-                className="danger"
-                type="button"
-                disabled={deletingAccount}
-                onClick={() => void deleteAccount()}
-              >
-                {deletingAccount ? 'Deleting…' : 'Delete forever'}
-              </button>
-              <button
-                className="text-button"
-                type="button"
-                disabled={deletingAccount}
-                autoFocus
-                onClick={() => setConfirmDelete(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </main>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deletingAccount}>Cancel</AlertDialogCancel>
+            <Button
+              variant="destructive"
+              type="button"
+              disabled={deletingAccount}
+              onClick={() => void deleteAccount()}
+            >
+              {deletingAccount ? 'Deleting…' : 'Delete forever'}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
   )
 }
 
@@ -686,73 +767,91 @@ function AgentAccess({ userId, accessToken }: { userId: string; accessToken: str
     else await load()
   }
 
+  const code = 'rounded bg-muted px-1 py-0.5 font-mono text-[0.8125em] text-foreground'
+  const pre = 'overflow-x-auto rounded-md border bg-muted/50 p-3 font-mono text-xs leading-relaxed text-foreground'
   return (
-    <section className="agent-access" aria-labelledby="agent-access-heading">
-      <h2 id="agent-access-heading">Agent access</h2>
+    <section className="agent-access flex flex-col gap-4" aria-labelledby="agent-access-heading">
+      <h2 id="agent-access-heading" className="text-base font-semibold tracking-tight">Agent access</h2>
       <ConnectedAgents accessToken={accessToken} />
-      <p>
-        Grok, Cursor, Claude, and Codex can finish <code>/connect</code>. Add the plugin or paste
-        {' '}{MCP_URL}, then sign in when asked. That is the usual path. No tokens to copy.
-      </p>
-      <p>
-        For hosts that cannot use OAuth, mint a key under Advanced, then set
-        {' '}<code>Authorization: Bearer {AGENT_TOKEN_PLACEHOLDER}</code>
-        {' '}(or plugin variable <code>{LMR_AGENT_TOKEN_VAR}</code>).
-      </p>
-      <details className="agent-snippets">
-        <summary>Advanced: personal keys</summary>
+      <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
         <p>
-          Mint a key below, then paste it once into the header or <code>{LMR_AGENT_TOKEN_VAR}</code>.
-          Shown once. Revoke anytime.
+          Grok, Cursor, Claude, and Codex can finish <code className={code}>/connect</code>. Add the plugin or paste
+          {' '}<span className="[overflow-wrap:anywhere] text-foreground">{MCP_URL}</span>, then sign in when asked. That is the usual path. No tokens to copy.
         </p>
-        <form className="agent-key-form" onSubmit={mint}>
-          <label className="visually-hidden" htmlFor="agent-key-name">Key name</label>
-          <input
-            id="agent-key-name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            placeholder="Cursor, Codex, Grok Bot…"
-            maxLength={64}
-            autoComplete="off"
-          />
-          <button className="primary" type="submit" disabled={busy || !name.trim()}>
-            {busy ? 'Creating…' : 'Create key'}
-          </button>
-        </form>
-        {error && <p className="error" role="alert">{error}</p>}
-        {minted && (
-          <div className="minted-key" role="status">
-            <p>Copy this now. It will not be shown again.</p>
-            <input readOnly value={minted} onFocus={(event) => event.currentTarget.select()} aria-label="New agent token" />
-            <button className="text-button" type="button" onClick={() => setMinted(null)}>I saved it</button>
+        <p>
+          For hosts that cannot use OAuth, mint a key under Advanced, then set
+          {' '}<code className={cn(code, '[overflow-wrap:anywhere]')}>Authorization: Bearer {AGENT_TOKEN_PLACEHOLDER}</code>
+          {' '}(or plugin variable <code className={code}>{LMR_AGENT_TOKEN_VAR}</code>).
+        </p>
+      </div>
+      <details className="agent-snippets group rounded-lg border text-sm">
+        <summary className="flex cursor-pointer list-none items-center gap-2 px-4 py-3 font-medium select-none [&::-webkit-details-marker]:hidden">
+          <ChevronRight className="size-4 text-muted-foreground transition-transform group-open:rotate-90" aria-hidden="true" />
+          Advanced: personal keys
+        </summary>
+        <div className="flex flex-col gap-4 border-t px-4 py-4 text-muted-foreground">
+          <p className="leading-relaxed">
+            Mint a key below, then paste it once into the header or <code className={code}>{LMR_AGENT_TOKEN_VAR}</code>.
+            Shown once. Revoke anytime.
+          </p>
+          <form className="agent-key-form flex gap-2 max-sm:flex-col" onSubmit={mint}>
+            <Label className="sr-only" htmlFor="agent-key-name">Key name</Label>
+            <Input
+              id="agent-key-name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="Cursor, Codex, Grok Bot…"
+              maxLength={64}
+              autoComplete="off"
+            />
+            <Button type="submit" disabled={busy || !name.trim()}>
+              {busy ? 'Creating…' : 'Create key'}
+            </Button>
+          </form>
+          {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
+          {minted && (
+            <Alert role="status" className="minted-key">
+              <KeyRound aria-hidden="true" />
+              <AlertDescription className="w-full gap-2 text-foreground">
+                <p>Copy this now. It will not be shown again.</p>
+                <Input readOnly className="font-mono text-xs" value={minted} onFocus={(event) => event.currentTarget.select()} aria-label="New agent token" />
+                <Button variant="outline" size="sm" type="button" onClick={() => setMinted(null)}>I saved it</Button>
+              </AlertDescription>
+            </Alert>
+          )}
+          {tokens.length > 0 && (
+            <ul className="agent-token-list divide-y rounded-md border" aria-label="Active agent keys">
+              {tokens.map((token) => (
+                <li key={token.id} className="flex items-center justify-between gap-4 px-3 py-2.5">
+                  <div className="grid min-w-0 gap-0.5">
+                    <strong className="truncate text-sm font-medium text-foreground">{token.name}</strong>
+                    <span className="text-xs">Created {new Date(token.created_at).toLocaleString()}</span>
+                    {token.last_used_at && <span className="text-xs">Last used {new Date(token.last_used_at).toLocaleString()}</span>}
+                  </div>
+                  <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" type="button" disabled={busy} onClick={() => void revoke(token.id)}>
+                    Revoke
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="grid gap-2">
+            <p>Cursor <code className={code}>~/.cursor/mcp.json</code></p>
+            <pre className={pre}>{cursorMcpConfig(MCP_URL)}</pre>
           </div>
-        )}
-        {tokens.length > 0 && (
-          <ul className="agent-token-list" aria-label="Active agent keys">
-            {tokens.map((token) => (
-              <li key={token.id}>
-                <div>
-                  <strong>{token.name}</strong>
-                  <span>Created {new Date(token.created_at).toLocaleString()}</span>
-                  {token.last_used_at && <span>Last used {new Date(token.last_used_at).toLocaleString()}</span>}
-                </div>
-                <button className="text-button danger-text" type="button" disabled={busy} onClick={() => void revoke(token.id)}>
-                  Revoke
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-        <p>Cursor <code>~/.cursor/mcp.json</code></p>
-        <pre>{cursorMcpConfig(MCP_URL)}</pre>
-        <p>Claude Code / Codex <code>.mcp.json</code></p>
-        <pre>{claudeMcpConfig(MCP_URL)}</pre>
-        <p>Grok Bot: Settings → Plugins → custom connector. Add the URL and sign in when prompted.</p>
-        <pre>{grokConnectorConfig(MCP_URL)}</pre>
-        <p>
-          Plugin hosts can set <code>{LMR_AGENT_TOKEN_VAR}</code> instead of pasting the header:
-          {' '}<code>{lmrAgentTokenHeaderTemplate()}</code>
-        </p>
+          <div className="grid gap-2">
+            <p>Claude Code / Codex <code className={code}>.mcp.json</code></p>
+            <pre className={pre}>{claudeMcpConfig(MCP_URL)}</pre>
+          </div>
+          <div className="grid gap-2">
+            <p>Grok Bot: Settings → Plugins → custom connector. Add the URL and sign in when prompted.</p>
+            <pre className={pre}>{grokConnectorConfig(MCP_URL)}</pre>
+          </div>
+          <p className="leading-relaxed">
+            Plugin hosts can set <code className={code}>{LMR_AGENT_TOKEN_VAR}</code> instead of pasting the header:
+            {' '}<code className={cn(code, '[overflow-wrap:anywhere]')}>{lmrAgentTokenHeaderTemplate()}</code>
+          </p>
+        </div>
       </details>
     </section>
   )
@@ -799,30 +898,22 @@ export default function App() {
   if (path === '/support') return <SupportPage onNavigate={navigate} />
   if (path === 'not-found') {
     return (
-      <main className="fatal-error">
-        <div className="theme-toggle-slot">
-          <ThemeToggle />
-        </div>
-        <h1>Page not found</h1>
-        <p>That URL is not part of Lazy Man's Reminders.</p>
-        <a className="primary" href="/" onClick={(event) => { event.preventDefault(); navigate('/') }}>Back to the board</a>
-        <LegalFooterLinks onNavigate={navigate} />
-      </main>
+      <StatusShell title="Page not found" onNavigate={navigate}>
+        <StatusText>That URL is not part of Lazy Man's Reminders.</StatusText>
+        <Button asChild className="mt-3">
+          <a href="/" onClick={(event) => { event.preventDefault(); navigate('/') }}>Back to the board</a>
+        </Button>
+      </StatusShell>
     )
   }
 
-  if (!ready) return <div className="splash" role="status" aria-label="Loading">LM</div>
+  if (!ready) return <Splash label="Loading" />
   if (authError) {
     return (
-      <main className="fatal-error" role="alert">
-        <div className="theme-toggle-slot">
-          <ThemeToggle />
-        </div>
-        <h1>Could not start the app</h1>
-        <p>{authError}</p>
-        <button className="primary" type="button" onClick={() => window.location.reload()}>Try again</button>
-        <LegalFooterLinks onNavigate={navigate} />
-      </main>
+      <StatusShell title="Could not start the app" role="alert" onNavigate={navigate}>
+        <StatusText>{authError}</StatusText>
+        <Button className="mt-3" type="button" onClick={() => window.location.reload()}>Try again</Button>
+      </StatusShell>
     )
   }
   if (path === '/connect') {

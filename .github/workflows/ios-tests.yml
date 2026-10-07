@@ -1,0 +1,87 @@
+# Simulator unit tests. Needs no secrets: Config.example.xcconfig and
+# ad-hoc simulator signing. Approach copied from draft PR #33's
+# ios-tests.yml, without that PR's Grok/ChatGPT UI tests or screenshots.
+
+name: iOS tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "ios/**"
+      - ".github/workflows/ios-tests.yml"
+      - "scripts/check-third-party-sign-in-flags.py"
+      - "scripts/ios-simulator-unit-tests.sh"
+  push:
+    branches: [main]
+    paths:
+      - "ios/**"
+      - ".github/workflows/ios-tests.yml"
+      - "scripts/check-third-party-sign-in-flags.py"
+      - "scripts/ios-simulator-unit-tests.sh"
+
+concurrency:
+  group: ios-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  sign-in-flags:
+    name: Third-party sign-in flags off
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fail if Grok or ChatGPT sign-in would ship enabled
+        run: python3 scripts/check-third-party-sign-in-flags.py
+
+  test:
+    name: Simulator unit tests
+    needs: sign-in-flags
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Install XcodeGen
+        run: HOMEBREW_NO_AUTO_UPDATE=1 brew install xcodegen
+
+      - name: Generate Xcode project
+        working-directory: ios
+        run: |
+          set -euo pipefail
+          cp Config.example.xcconfig Config.xcconfig
+          xcodegen generate --spec project.yml
+
+      - name: Build and test
+        env:
+          RESULT_BUNDLE_PATH: ${{ runner.temp }}/ios.xcresult
+        run: ./scripts/ios-simulator-unit-tests.sh
+
+      - name: Test result summary
+        if: always()
+        run: |
+          if [ -d "${RUNNER_TEMP}/ios.xcresult" ]; then
+            xcrun xcresulttool get test-results summary --path "${RUNNER_TEMP}/ios.xcresult"
+          fi
+
+      - name: Save test diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-test-results
+          path: ${{ runner.temp }}/ios.xcresult
