@@ -1,7 +1,7 @@
 (function () {
   var KEY = 'lmr-theme'
-  var LIGHT_THEME_COLOR = '#f5f1e8'
-  var DARK_THEME_COLOR = '#171614'
+  var LIGHT_THEME_COLOR = '#ffffff'
+  var DARK_THEME_COLOR = '#0a0a0a'
   var root = document.documentElement
   var stored = null
   try {
@@ -18,6 +18,9 @@
   }
   var theme = preference === 'light' ? 'light' : preference === 'dark' ? 'dark' : prefersDark ? 'dark' : 'light'
   root.setAttribute('data-theme', theme)
+  // shadcn/ui dark tokens live under .dark
+  if (theme === 'dark') root.classList.add('dark')
+  else root.classList.remove('dark')
   var meta = document.querySelector('meta[name="theme-color"]')
   if (meta) meta.setAttribute('content', theme === 'dark' ? DARK_THEME_COLOR : LIGHT_THEME_COLOR)
 })()

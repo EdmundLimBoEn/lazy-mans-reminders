@@ -1,7 +1,7 @@
 export const THEME_STORAGE_KEY = 'lmr-theme'
 export const THEME_COLOR = {
-  light: '#f5f1e8',
-  dark: '#171614',
+  light: '#ffffff',
+  dark: '#0a0a0a',
 } as const
 
 export type ThemePreference = 'system' | 'light' | 'dark'
@@ -33,6 +33,7 @@ export function prefersDarkScheme(): boolean {
 
 export function applyResolvedTheme(theme: ResolvedTheme): void {
   document.documentElement.setAttribute('data-theme', theme)
+  document.documentElement.classList.toggle('dark', theme === 'dark')
   const meta = document.querySelector('meta[name="theme-color"]')
   if (meta) meta.setAttribute('content', THEME_COLOR[theme])
 }
