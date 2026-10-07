@@ -79,6 +79,7 @@ function boardFixture(variant) {
       </header>
       <section class="board">
         <form class="add-form">
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
           <input value="" placeholder="What shouldn't you forget?" aria-label="New reminder" />
           <button class="primary" type="submit">Add</button>
         </form>

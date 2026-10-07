@@ -356,7 +356,10 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   justify-content: flex-end;
 }
 .auth-panel > .theme-toggle-slot { justify-self: end; }
-.fatal-error > .theme-toggle-slot { margin-bottom: 1.25rem; }
+.fatal-error > .theme-toggle-slot {
+  margin-bottom: 1.25rem;
+  width: auto;
+}
 
 @media (max-width: 760px) {
   .auth-shell { grid-template-columns: 1fr; }
