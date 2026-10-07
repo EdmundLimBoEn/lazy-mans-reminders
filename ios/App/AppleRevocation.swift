@@ -25,7 +25,7 @@ enum AppleRevocation {
     static func deleteAccount(using auth: AuthManager) async throws {
         let providers = auth.session?.user.identities?.map(\.provider) ?? []
         let code: String?
-        if hasAppleIdentity(providers) {
+        if hasAppleIdentity(providers: providers) {
             code = await requestAuthorizationCode()
         } else {
             code = nil
