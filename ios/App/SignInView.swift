@@ -60,6 +60,7 @@ struct SignInView: View {
                 }
             }
         }
+        .preferredColorScheme(previewColorScheme)
         .sensoryFeedback(.success, trigger: inboxPulse)
         .sensoryFeedback(.error, trigger: errorPulse)
         .onChange(of: email) { _, _ in
@@ -237,6 +238,19 @@ struct SignInView: View {
     }
 
     private var buttonHeight: CGFloat { max(44, signInButtonHeight) }
+
+    /// Debug-only, so the simulator UI test can capture the dark ChatGPT button.
+    private var previewColorScheme: ColorScheme? {
+        #if DEBUG
+        let arguments = ProcessInfo.processInfo.arguments
+        guard let index = arguments.firstIndex(of: "-LMRColorScheme"),
+              index + 1 < arguments.count
+        else { return nil }
+        return arguments[index + 1] == "dark" ? .dark : .light
+        #else
+        return nil
+        #endif
+    }
 
     @ViewBuilder
     private var emailCard: some View {

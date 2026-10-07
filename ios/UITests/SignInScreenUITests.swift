@@ -14,6 +14,7 @@ final class SignInScreenUITests: XCTestCase {
             let app = XCUIApplication()
             app.launchArguments = [
                 "-LMRSkipSessionRestore",
+                "-LMRColorScheme", item.dark ? "dark" : "light",
                 "-LMRGrokSignIn", item.grok,
                 "-LMRChatGPTSignIn", item.chatgpt,
             ]
