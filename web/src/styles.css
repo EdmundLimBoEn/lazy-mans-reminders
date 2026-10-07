@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "@fontsource-variable/geist";
+/* Tests are not markup; keep their strings out of the generated utilities. */
+@source not "./**/*.test.ts";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -94,5 +96,13 @@
   a:focus-visible,
   summary:focus-visible {
     @apply rounded-sm outline-2 outline-offset-2;
+  }
+  /* theme.ts sets this for two frames while switching light/dark, so controls swap
+     palettes instantly instead of cross-fading through grey (they looked disabled). */
+  .theme-switching,
+  .theme-switching *,
+  .theme-switching *::before,
+  .theme-switching *::after {
+    transition: none !important;
   }
 }
