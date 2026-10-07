@@ -48,7 +48,7 @@
   - Physical iPhone test: add a reminder from the web with the app killed; confirm the Lock Screen banner appears. Complete every reminder; confirm it goes away. Leave one reminder overnight and confirm the banner is still there after the scheduled 15-minute refresh.
 
 - [ ] **Legal review** — Privacy / Terms / Support are live at `/privacy`, `/terms`, `/support`. Counsel review is optional. Contact: `hello@edmundlim.systems`.
-- [ ] **App Store Connect fields** — Copy nutrition labels and review notes from `docs/app-store.md`. Attach screenshots from a physical device.
+- [ ] **App Store Connect fields** — Copy name, subtitle, description, nutrition labels, and review notes from `docs/app-store.md`. Attach the 6.9" iPhone shot list. Full submit checklist is **App Store submission (target 27 Oct 2026)** below.
 - [ ] **Google web/iOS sign-in** — Provider is enabled. Confirm the Google Cloud **Web** client still has:
   - Authorized JavaScript origins: `https://lmr.edmundlim.systems`, `https://lazy-mans-reminders.pages.dev`, `http://localhost:5173`
   - Authorized redirect URI: `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`
@@ -64,3 +64,41 @@
 - [ ] **Early disappearance on development build (26 Sep 2026)** — User reports disappearance after a couple of hours, restored by reopening. Scheduled refreshes now send low-priority, non-alerting updates every 15 minutes even before seven hours; an invalid activity token triggers replacement, while network/auth failures do not create duplicates. A direct update to the development token was accepted by APNs. Leave the app closed during the next disappearance and check whether the scheduled refresh restores the board. Apple accepting a push does not prove that iOS displayed it; the underlying removal cause remains unverified.
 
 - [ ] **Persistence build and release gate (3 Oct 2026)** — [Signed build uploaded to App Store Connect](https://github.com/EdmundLimBoEn/lazy-mans-reminders/actions/runs/37137028085); processing/tester availability is not yet verified. Install the new build containing the background token registrar, Background App Refresh, and Home Screen Board widgets. Follow [the persistence test checklist and November release gates](docs/live-activity-persistence.md). Primary test: leave the app normally backgrounded for 24 hours, including the 7–9h renewal window; test force-quit separately. Record whether the widget and Live Activity remain, and whether recovery happens before reopening. Target release by 30 November, conditional on the seven-day TestFlight soak and remaining release checks.
+
+## App Store submission (target 27 Oct 2026)
+
+Listing copy, review notes, privacy answers, and `asc` rename commands: [docs/app-store.md](docs/app-store.md). App id `6799138197`, version **1.0**. Device name is already **Lazy Man's Reminders**; do not change iOS code. Rename the ASC listing off **Lazy Mans Notepad**. Canonical URLs are `https://lmr.sillyapps.co` (old `lmr.edmundlim.systems` redirects).
+
+### Device QA
+
+- [ ] Install the current TestFlight 1.0 build (stable Xcode, not the Xcode 27 beta internal builds).
+- [ ] Sign in with Apple (creates an account), then also smoke Google and magic-link email.
+- [ ] Add, complete (tap circle and leading swipe), and pull-to-refresh on **Your Board**.
+- [ ] Deny notifications once: board, widgets, Siri, and Account still work; Account → Notifications is Off with a Settings link.
+- [ ] Allow notifications on a second pass: adding a line from the web board banners on the phone.
+- [ ] Live Activity: signed-in, Live Activities on, add a line and confirm the Lock Screen banner. Leave a non-empty board with the app closed and confirm it is still there after renewal. Complete every line until **All Clear** and confirm the banner ends.
+- [ ] Lock Screen Board widget and Home Screen Board widget show the same active lines.
+- [ ] Siri on iOS 27, signed in: “list reminders in Lazy Man's Reminders”, “add a reminder in Lazy Man's Reminders”, “remind me to … in Lazy Man's Reminders”, “mark this as done” with the board on screen, “complete *milk* in Lazy Man's Reminders”. Signed out, Siri asks you to sign in.
+- [ ] Account → Delete Account (and Cancel) copy is correct. Do not delete the reviewer Apple ID by accident.
+
+### Screenshots
+
+- [ ] Capture the 6.9" iPhone set on a physical Pro Max / Air after the QA above. iPhone-only: no iPad.
+- [ ] Guideline 2.3.3: app in use, not the Sign In screen; no device frames.
+- [ ] Upload the 5–6 shot list and captions from `docs/app-store.md` (board, complete, Live Activity, Lock Screen widget, Home Screen widget, Account).
+
+### ASC fields
+
+- [ ] Run the `asc app-setup info set` / `asc apps info edit` commands in `docs/app-store.md` (or set the same fields in the UI) so name, subtitle, and description say **Lazy Man's Reminders**.
+- [ ] Privacy / support / marketing URLs: `https://lmr.sillyapps.co/privacy`, `/support`, `https://lmr.sillyapps.co`.
+- [ ] Pricing: Free, all territories, available in new territories.
+- [ ] EU DSA trader status: Edmund is an individual, not a company.
+- [ ] App Privacy matches `ios/Shared/PrivacyInfo.xcprivacy` (Email Address, User ID, User Content, Device ID; linked; App Functionality; no tracking).
+- [ ] Age rating 4+, export compliance No (HTTPS only).
+- [ ] Review notes from `docs/app-store.md`: sign-in required and why, Sign in with Apple to create an account, Live Activity persist/renew/end, push optional, iOS 27 Siri phrases, demo account placeholder left blank.
+- [ ] Attach a processed 1.0 build.
+
+### Submit
+
+- [ ] `./scripts/asc-preflight.sh` — pass/fail list is green. The script never submits.
+- [ ] Submit 1.0 for App Store review in App Store Connect (human click, or deploy bot `asc` submit after preflight). Do not merge this as a substitute for that click.
