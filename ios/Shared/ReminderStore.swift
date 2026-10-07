@@ -31,6 +31,13 @@ actor ReminderStore {
 
     private let cacheKey = "cached-reminders"
     private let sessionKey = "shared-session"
+    private let identityRevisionKey = "shared-session-identity-revision"
+
+    private func storedSession() -> SharedSession? {
+        guard let data = defaults.data(forKey: sessionKey),
+              let session = try? JSONDecoder().decode(SharedSession.self, from: data) else { return nil }
+        return session.resolvingUserID()
+    }
 
     private var defaults: UserDefaults {
         guard let defaults = UserDefaults(suiteName: AppConfig.appGroupID) else {
@@ -51,6 +58,9 @@ actor ReminderStore {
             refreshToken: refreshToken,
             userID: userID ?? JWTUserID.uuid(fromAccessToken: accessToken)
         )
+        if storedSession()?.userID != session.userID {
+            defaults.set(UUID().uuidString, forKey: identityRevisionKey)
+        }
         persist(session)
     }
 
@@ -66,6 +76,7 @@ actor ReminderStore {
     }
 
     func clearUserData() {
+        defaults.set(UUID().uuidString, forKey: identityRevisionKey)
         defaults.removeObject(forKey: sessionKey)
         defaults.removeObject(forKey: cacheKey)
     }
@@ -76,21 +87,30 @@ actor ReminderStore {
     }
 
     /// Fallback helper. `??` uses a sync autoclosure, so `?? await cached()` does not compile.
-    func refreshOrCached() async -> [Reminder] {
+    func refreshOrCached(refreshAuthentication: Bool = true) async -> [Reminder] {
         do {
-            return try await refresh()
+            return try await refresh(performMaintenance: false, refreshAuthentication: refreshAuthentication)
         } catch {
             return cached()
         }
     }
 
-    func refresh() async throws -> [Reminder] {
-        guard let session = await loadFreshSession() else {
-            return cached()
+    func refresh(
+        performMaintenance: Bool = true,
+        refreshAuthentication: Bool = true
+    ) async throws -> [Reminder] {
+        // Extensions use a valid shared JWT but never rotate the host SDK's refresh token.
+        let candidate = refreshAuthentication ? await loadFreshSession() : storedSession()
+        guard let session = candidate, session.expiresAt > Date() else {
+            throw StoreError.signedOut
         }
 
+        let identityRevision = defaults.string(forKey: identityRevisionKey)
+
         // Best-effort: drop this user's done reminders older than 7 days (DB trigger sets completed_at).
-        await deleteOldCompletedReminders(accessToken: session.accessToken)
+        if performMaintenance {
+            await deleteOldCompletedReminders(accessToken: session.accessToken)
+        }
 
         var components = URLComponents(
             url: AppConfig.supabaseURL.appending(path: "rest/v1/reminders"),
@@ -101,7 +121,7 @@ actor ReminderStore {
             URLQueryItem(name: "is_done", value: "eq.false"),
             URLQueryItem(name: "order", value: "sort_order.asc,created_at.asc")
         ]
-        var request = URLRequest(url: components.url!)
+        var request = URLRequest(url: components.url!, timeoutInterval: 15)
         request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
 
@@ -114,6 +134,8 @@ actor ReminderStore {
         }
 
         let reminders = try ReminderJSON.decoder.decode([Reminder].self, from: responseData)
+        guard defaults.string(forKey: identityRevisionKey) == identityRevision,
+              storedSession()?.userID == session.userID else { throw StoreError.signedOut }
         defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
         return reminders
     }
@@ -141,6 +163,7 @@ actor ReminderStore {
         else {
             return nil
         }
+        let identityRevision = defaults.string(forKey: identityRevisionKey)
         let resolved = session.resolvingUserID()
         if resolved.userID != session.userID {
             persist(resolved)
@@ -150,6 +173,8 @@ actor ReminderStore {
             return resolved.expiresAt > Date() ? resolved : nil
         }
         if let refreshed = await refreshAccessToken(refreshToken, userID: resolved.userID) {
+            guard defaults.string(forKey: identityRevisionKey) == identityRevision,
+                  storedSession()?.refreshToken == refreshToken else { return nil }
             persist(refreshed)
             NotificationCenter.default.post(
                 name: .didRefreshSharedSession,
@@ -178,7 +203,7 @@ actor ReminderStore {
         components.queryItems = [URLQueryItem(name: "grant_type", value: "refresh_token")]
         guard let url = components.url else { return nil }
 
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url, timeoutInterval: 10)
         request.httpMethod = "POST"
         request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -296,7 +321,7 @@ actor ReminderStore {
         components.queryItems = [
             URLQueryItem(name: "id", value: "eq.\(id.uuidString)")
         ]
-        var request = URLRequest(url: components.url!)
+        var request = URLRequest(url: components.url!, timeoutInterval: 15)
         request.httpMethod = "PATCH"
         request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")

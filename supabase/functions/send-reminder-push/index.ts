@@ -1,3 +1,4 @@
+import { loadBoardLines } from "../_shared/board_loader.ts";
 import {
   reconcileLiveActivity,
   type SendResult,
@@ -5,10 +6,8 @@ import {
 import { timingSafeEqual } from "node:crypto";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
-  boardLines,
   buildLiveActivityHeaders,
   buildLiveActivityPayload,
-  LIVE_ACTIVITY_FALLBACK_MAX_LINES,
   liveActivityStaleDateUnix,
   parseLiveActivityToken,
 } from "../_shared/live_activity.ts";
@@ -433,37 +432,6 @@ async function syncLiveActivity(input: {
   });
 }
 
-async function loadBoardLines(
-  supabase: ServiceClient,
-  userId: string,
-  insertedText?: string,
-): Promise<string[]> {
-  const [{ data: reminders, error: reminderError }, { data: prefs }] =
-    await Promise.all([
-      supabase
-        .from("reminders")
-        .select("text")
-        .eq("user_id", userId)
-        .eq("is_done", false)
-        .order("sort_order", { ascending: true })
-        .order("created_at", { ascending: true }),
-      supabase
-        .from("lock_screen_prefs")
-        .select("max_lines")
-        .eq("user_id", userId)
-        .maybeSingle(),
-    ]);
-  if (reminderError) {
-    console.error("Could not load reminders for Live Activity", reminderError);
-  }
-  const texts = (reminders ?? []).map((row: { text: string }) => row.text);
-  if (insertedText && !texts.includes(insertedText)) texts.push(insertedText);
-  const limit = typeof prefs?.max_lines === "number"
-    ? prefs.max_lines
-    : LIVE_ACTIVITY_FALLBACK_MAX_LINES;
-  return boardLines(texts, limit);
-}
-
 async function loadDevicesForUser(
   supabase: ServiceClient,
   userId: string,
@@ -593,16 +561,23 @@ Deno.serve(async (request) => {
     }
     const results: DeviceSendResult[] = [];
     for (const [userId, userDevices] of byUser) {
-      const lines = await loadBoardLines(supabase, userId);
-      results.push(
-        ...await syncDevices({
-          supabase,
-          devices: userDevices,
-          bundleId,
-          lines,
-          quiet: true,
-        }),
-      );
+      try {
+        const lines = await loadBoardLines(supabase, userId);
+        results.push(
+          ...await syncDevices({
+            supabase,
+            devices: userDevices,
+            bundleId,
+            lines,
+            quiet: true,
+          }),
+        );
+      } catch {
+        console.error(
+          "Live Activity refresh failed; retaining existing banners",
+        );
+        results.push("retryable");
+      }
     }
     return summarize(results);
   }
@@ -617,11 +592,16 @@ Deno.serve(async (request) => {
   }
 
   const record = (payload as { record?: ReminderRecord }).record;
-  const lines = await loadBoardLines(
-    supabase,
-    check.userId,
-    check.sendsAlert ? record?.text : undefined,
-  );
+  let lines: string[];
+  try {
+    lines = await loadBoardLines(
+      supabase,
+      check.userId,
+      check.sendsAlert ? record?.text : undefined,
+    );
+  } catch {
+    return new Response("Could not load reminder board", { status: 503 });
+  }
   const results = await syncDevices({
     supabase,
     devices,

@@ -6,66 +6,69 @@ extension Notification.Name {
     static let didRegisterActivityPushToken = Notification.Name("didRegisterActivityPushToken")
 }
 
-/// Keeps one Live Activity in sync with the active reminder board.
-/// Lock Screen presentation is a full-width clear-glass banner (notification
-/// proportions) with body text only — no header row or app icon in our layout.
+@MainActor
 enum ReminderLiveActivityController {
-    private static let lock = NSLock()
     private static var observedActivityIDs = Set<String>()
     private static var didStartObserving = false
+    private static var selectedActivityID: String?
+    private static var isEndingBoard = false
+    private static let selectionKey = "live-activity-selection"
+    private static let knownIDsKey = "live-activity-known-ids"
+
+    private static var defaults: UserDefaults {
+        UserDefaults(suiteName: AppConfig.appGroupID)!
+    }
+
+    private static var activeActivities: [Activity<ReminderAttributes>] {
+        Activity<ReminderAttributes>.activities.filter {
+            $0.activityState == .active || $0.activityState == .stale
+        }
+    }
 
     static func startObservingTokens() {
-        lock.lock()
-        let shouldStart = !didStartObserving
+        guard !didStartObserving else { return }
         didStartObserving = true
-        lock.unlock()
-        guard shouldStart else { return }
-
-        for activity in Activity<ReminderAttributes>.activities {
-            observe(activity)
-        }
+        let existing = activeActivities
+        selectedActivityID = LiveActivityPolicy.selectedActivityID(
+            currentIDs: existing.map(\.id),
+            knownIDs: defaults.stringArray(forKey: knownIDsKey) ?? [],
+            previousSelection: defaults.string(forKey: selectionKey)
+        )
+        persistSelection()
+        for activity in existing { observe(activity) }
         Task { await observePushToStartTokens() }
         Task { await observeActivityList() }
     }
 
-    @MainActor
     static func sync(reminders: [Reminder]) async {
         startObservingTokens()
         let lines = ReminderActivityPresentation.lines(from: reminders)
         let state = ReminderAttributes.ContentState(lines: lines)
-        let existing = Activity<ReminderAttributes>.activities
-        let staleDate = Date().addingTimeInterval(8 * 60 * 60)
-
-        switch LiveActivityPolicy.action(
-            lineCount: lines.count,
-            activityExists: !existing.isEmpty
-        ) {
+        let existing = activeActivities
+        let content = ActivityContent(state: state, staleDate: Date().addingTimeInterval(8 * 60 * 60))
+        let hasActivity = lines.isEmpty
+            ? !Activity<ReminderAttributes>.activities.isEmpty : !existing.isEmpty
+        switch LiveActivityPolicy.action(lineCount: lines.count, activityExists: hasActivity) {
         case .none:
             return
         case .end:
-            for activity in existing {
-                await activity.end(
-                    ActivityContent(state: state, staleDate: nil),
-                    dismissalPolicy: .immediate
-                )
+            isEndingBoard = true
+            defer { isEndingBoard = false }
+            for activity in Activity<ReminderAttributes>.activities {
+                await activity.end(ActivityContent(state: state, staleDate: nil), dismissalPolicy: .immediate)
             }
         case .update:
-            let content = ActivityContent(state: state, staleDate: staleDate)
-            guard let first = existing.first else { return }
-            await first.update(content)
-            for activity in existing where activity.id != first.id {
-                await activity.end(content, dismissalPolicy: .immediate)
-            }
+            // The server retires the old banner after acknowledging the new token.
+            // Activity.activities has no ordering guarantee; ending all but .first
+            // can destroy the replacement during this handoff.
+            for activity in existing { await activity.update(content) }
         case .start:
-            let content = ActivityContent(state: state, staleDate: staleDate)
+            guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
             do {
-                // pushType: .token so the server can update or replace this
-                // banner after Apple's 8h cap without opening the app.
                 let activity = try Activity.request(
-                    attributes: ReminderAttributes(),
-                    content: content,
-                    pushType: .token
+                    attributes: ReminderAttributes(), content: content, pushType: .token
                 )
+                select(activity)
                 observe(activity)
             } catch {
                 print("Reminder Live Activity request failed: \(error.localizedDescription)")
@@ -75,46 +78,48 @@ enum ReminderLiveActivityController {
 
     private static func observePushToStartTokens() async {
         guard #available(iOS 17.2, *) else { return }
-        for await tokenData in Activity<ReminderAttributes>.pushToStartTokenUpdates {
-            NotificationCenter.default.post(
-                name: .didRegisterPushToStartToken,
-                object: hex(tokenData)
-            )
+        for await token in Activity<ReminderAttributes>.pushToStartTokenUpdates {
+            NotificationCenter.default.post(name: .didRegisterPushToStartToken, object: hex(token))
         }
     }
 
     private static func observeActivityList() async {
         for await activity in Activity<ReminderAttributes>.activityUpdates {
+            guard !observedActivityIDs.contains(activity.id),
+                  activity.activityState == .active || activity.activityState == .stale else { continue }
+            select(activity)
             observe(activity)
         }
     }
 
-    private static func observe(_ activity: Activity<ReminderAttributes>) {
-        lock.lock()
-        let isNew = observedActivityIDs.insert(activity.id).inserted
-        lock.unlock()
-        guard isNew else { return }
+    private static func select(_ activity: Activity<ReminderAttributes>) {
+        selectedActivityID = activity.id
+        persistSelection()
+    }
 
+    private static func persistSelection() {
+        defaults.set(selectedActivityID, forKey: selectionKey)
+        defaults.set(activeActivities.map(\.id), forKey: knownIDsKey)
+    }
+
+    private static func observe(_ activity: Activity<ReminderAttributes>) {
+        guard observedActivityIDs.insert(activity.id).inserted else { return }
         Task {
-            for await tokenData in activity.pushTokenUpdates {
-                NotificationCenter.default.post(
-                    name: .didRegisterActivityPushToken,
-                    object: hex(tokenData)
-                )
+            for await token in activity.pushTokenUpdates {
+                guard selectedActivityID == activity.id,
+                      activity.activityState == .active || activity.activityState == .stale else { continue }
+                NotificationCenter.default.post(name: .didRegisterActivityPushToken, object: hex(token))
             }
         }
         Task {
             for await state in activity.activityStateUpdates {
-                guard state == .ended else { continue }
-                lock.lock()
+                guard state == .ended || state == .dismissed else { continue }
                 observedActivityIDs.remove(activity.id)
-                lock.unlock()
-                let othersActive = Activity<ReminderAttributes>.activities.contains {
-                    $0.id != activity.id && $0.activityState == .active
-                }
-                guard !othersActive else { continue }
-                let reminders = await ReminderStore.shared.cached()
-                await sync(reminders: reminders)
+                // Reconcile on the next explicit board sync. Restarting here can
+                // resurrect a banner just ended by a remote clear or sign-out.
+                if selectedActivityID == activity.id { selectedActivityID = nil }
+                if !isEndingBoard { persistSelection() }
+                return
             }
         }
     }

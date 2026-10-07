@@ -1,15 +1,7 @@
 import UIKit
 import UserNotifications
 
-extension Notification.Name {
-    static let didRegisterPushToken = Notification.Name("didRegisterPushToken")
-}
-
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-    static var latestDeviceToken: String?
-    static var latestPushToStartToken: String?
-    static var latestActivityPushToken: String?
-
     static func requestPushIfNeeded() async {
         let center = UNUserNotificationCenter.current()
         let settings = await center.notificationSettings()
@@ -34,6 +26,10 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        _ = AuthManager.shared.pushRegistration
+        BackgroundBoardRefresh.register()
+        // Register on every launch, including an ActivityKit background launch.
+        application.registerForRemoteNotifications()
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().setNotificationCategories([
             NotificationAccessPolicy.makeReminderCategory()
@@ -43,14 +39,22 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
             object: nil,
             queue: .main
         ) { notification in
-            Self.latestPushToStartToken = notification.object as? String
+            guard let token = notification.object as? String else { return }
+            Task { @MainActor in
+                AuthManager.shared.pushRegistration.recordPushToStartToken(token)
+                await AuthManager.shared.registerLiveActivityTokens()
+            }
         }
         NotificationCenter.default.addObserver(
             forName: .didRegisterActivityPushToken,
             object: nil,
             queue: .main
         ) { notification in
-            Self.latestActivityPushToken = notification.object as? String
+            guard let token = notification.object as? String else { return }
+            Task { @MainActor in
+                AuthManager.shared.pushRegistration.recordActivityToken(token)
+                await AuthManager.shared.registerLiveActivityTokens()
+            }
         }
         ReminderLiveActivityController.startObservingTokens()
         return true
@@ -58,8 +62,11 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken data: Data) {
         let token = data.map { String(format: "%02x", $0) }.joined()
-        Self.latestDeviceToken = token
-        NotificationCenter.default.post(name: .didRegisterPushToken, object: token)
+        Task { await AuthManager.shared.registerDevice(token: token) }
+    }
+
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        BackgroundBoardRefresh.schedule()
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -92,8 +99,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
                 let refreshed = try await ReminderStore.shared.refresh()
                 await ReminderBoardSync.apply(refreshed)
             } catch {
-                let cached = await ReminderStore.shared.cached()
-                await ReminderBoardSync.apply(cached)
+                print("Could not refresh notification board: \(error.localizedDescription)")
             }
         }
         return NotificationAccessPolicy.foregroundPresentation
@@ -107,8 +113,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
             let refreshed = try await ReminderStore.shared.refresh()
             await ReminderBoardSync.apply(refreshed)
         } catch {
-            let cached = await ReminderStore.shared.cached()
-            await ReminderBoardSync.apply(cached)
+            print("Could not refresh notification board: \(error.localizedDescription)")
         }
     }
 }

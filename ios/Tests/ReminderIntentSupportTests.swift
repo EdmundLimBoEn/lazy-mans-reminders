@@ -48,7 +48,7 @@ final class ReminderIntentSupportTests: XCTestCase {
         )
         XCTAssertEqual(
             ReminderListSpoken.joinedTitles(["Milk", "Eggs", "Keys"]),
-            "You have three reminders: Milk, Eggs, and Keys."
+            "You have 3 reminders: Milk, Eggs, and Keys."
         )
     }
 
