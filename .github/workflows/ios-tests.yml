@@ -1,17 +1,12 @@
-# Simulator unit tests. Needs no secrets: Config.example.xcconfig and
-# ad-hoc simulator signing. Approach copied from draft PR #33's
-# ios-tests.yml, without that PR's Grok/ChatGPT UI tests or screenshots.
+# Simulator unit + sign-in UI tests. Needs no secrets: Config.example.xcconfig
+# and ad-hoc simulator signing. Runs on pull requests, pushes to main, and
+# pushes to cursor/** branches (so draft PR branches get a check without a PR
+# event). Exports sign-in screenshots from the result bundle as an artifact.
 
 name: iOS tests
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - "cursor/**"
-    paths:
-      - "ios/**"
-      - ".github/workflows/ios-tests.yml"
   pull_request:
     paths:
       - "ios/**"
@@ -19,7 +14,9 @@ on:
       - "scripts/check-third-party-sign-in-flags.py"
       - "scripts/ios-simulator-unit-tests.sh"
   push:
-    branches: [main]
+    branches:
+      - main
+      - "cursor/**"
     paths:
       - "ios/**"
       - ".github/workflows/ios-tests.yml"
