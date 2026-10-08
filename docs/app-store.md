@@ -169,6 +169,74 @@ Account (person icon) → Delete Account removes reminders, device tokens, lock-
 No IAP. Contact hello@edmundlim.systems.
 ```
 
+## TestFlight beta
+
+Paste into App Store Connect → TestFlight → **Test Information** (app `6799138197`, locale en-US) before inviting external testers. Free app, no IAP. Do not paste secrets. Limits: Beta App Description and What to Test are 4000 characters each.
+
+| Field | Value |
+|-------|-------|
+| Feedback Email | `hello@edmundlim.systems` |
+| Marketing URL | `https://lmr.sillyapps.co` |
+| Privacy Policy URL | `https://lmr.sillyapps.co/privacy` |
+
+### Beta App Description
+
+```
+Lazy Man's Reminders is a small reminder board for your iPhone, the web, and the Lock Screen.
+
+Add a few short lines. They show on Your Board, on Lock Screen and Home Screen widgets, and on a Lock Screen Live Activity that stays up while anything is still on the board. Complete every line and the Live Activity goes away.
+
+Sign in with Apple, Google, or email. The same board syncs with https://lmr.sillyapps.co and with any AI agent you allow through MCP (Grok, Claude, Cursor, Codex).
+
+This is a private beta. The app is free, with no in-app purchases or subscriptions.
+```
+
+### What to Test
+
+```
+Thanks for testing. Please try these and tell us what breaks or confuses you.
+
+1. Sign in. Try Sign in with Apple, Google, or an email magic link (open the link on this iPhone).
+
+2. Open the app once after installing and leave it open on Your Board for a few seconds. This registers the iPhone for push and Live Activities. Allow notifications when asked.
+
+3. Allow Live Activities: Settings → Lazy Man's Reminders → Live Activities on.
+
+4. Add the Lock Screen widget: touch and hold the Lock Screen → Customize → Lock Screen → Add Widgets → Lazy Man's Reminders → Board. A Home Screen Board widget is also available.
+
+5. Add a few reminders. Check they appear on the Live Activity and the widget. Complete or delete every line: the Live Activity should end.
+
+6. Push reminders: with the app in the background, add a reminder from https://lmr.sillyapps.co (same account) or from a connected agent. A notification should arrive and the Live Activity should update.
+
+7. Download My Data: Account (person icon) → Download My Data opens the web board. Sign in there and tap Download my data to get a JSON copy.
+
+8. Delete Account: Account → Delete Account. This permanently deletes your reminders, device registrations, agent access, and sign-in. If you used Sign in with Apple, you'll be asked to confirm with Apple so the app's Apple sign-in is revoked. Only do this with an account you don't need.
+
+Send feedback: Account → Send Feedback, or take a screenshot and share it to TestFlight. Crash reports reach us only if you choose to share them.
+```
+
+### Beta App Review Information
+
+Sign-in required: **yes**. Demo account: **none**. Leave username and password empty. Contact: Edmund Lim, `hello@edmundlim.systems`, plus the phone number Apple asks for (not stored in this repo).
+
+Review Notes (mirrors [Review notes](#review-notes) above):
+
+```
+Sign-in is required. There is no guest board. The same reminders sync with the web board at https://lmr.sillyapps.co, the Lock Screen Live Activity is started and renewed from our server over APNs, and MCP agents (Grok, Claude, Cursor, Codex) can only use a signed-in account.
+
+There is no demo account. Please create an account with Sign in with Apple on the Sign In screen. Google and magic-link email also work.
+
+The Lock Screen Live Activity is the board, not a one-shot event. It stays on screen while any reminder is active. The server refreshes it about every 15 minutes and replaces it before Apple's eight-hour cap, so a non-empty board can remain visible with the app closed. That is intended.
+
+To end the Live Activity: complete or delete every reminder until Your Board shows All Clear. Swiping it away is not the supported end path; an active board will be renewed.
+
+Push notification permission is optional. If you deny the prompt, the in-app board, widgets, Siri, and account still work. Live Activities are a separate Settings toggle.
+
+Account (person icon) → Delete Account removes reminders, device tokens, lock-screen prefs, agent access, and the sign-in, and revokes the Sign in with Apple token. Data export is Download My Data, which opens the signed-in web board.
+
+Free. No IAP. Contact hello@edmundlim.systems.
+```
+
 ## Screenshots
 
 Required set: **6.9" iPhone** (`APP_IPHONE_69`). Capture on an iPhone 16 Pro Max, 17 Pro Max, or iPhone Air after TestFlight smoke. Portrait sizes Apple accepts include **1320 × 2868** and **1260 × 2736**.
