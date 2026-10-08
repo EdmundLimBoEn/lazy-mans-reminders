@@ -6,7 +6,7 @@ A Supabase-backed reminder board with a React/Vite web app and an iOS 17 app plu
 
 As of 26 August 2026. The iOS app ships as a **free** App Store download (no in-app purchases).
 
-- Web app: canonical domain <https://lmr.sillyapps.co>; <https://lazy-mans-reminders.pages.dev> is the Pages fallback. The old domain <https://lmr.edmundlim.systems> stays attached and 301-redirects to `lmr.sillyapps.co` (Cloudflare Redirect Rule on the `edmundlim.systems` zone) so shipped iOS builds and old links keep working.
+- Web app: canonical domain <https://lmr.sillyapps.co>; <https://lazy-mans-reminders.pages.dev> is the Pages fallback. The old domain <https://lmr.edmundlim.systems> stays attached and redirects to `lmr.sillyapps.co` (currently a 302; a 301 is planned) (Cloudflare Redirect Rule on the `edmundlim.systems` zone) so shipped iOS builds and old links keep working.
 - Cloudflare Pages project: `lazy-mans-reminders`
 - Supabase project: `lazy-mans-reminders` (`biwmsxbqrevtjwgsvsmu`, Singapore)
 - Database migrations: **deployed** (including agent tokens)
@@ -126,7 +126,7 @@ Delivery behaviour:
 
 - Each APNs request sets `apns-expiration` 24 hours out so alerts are stored if the phone is offline, and `apns-collapse-id` equal to the reminder id so webhook retries replace the same banner instead of stacking duplicates.
 - Transient APNs failures (network, 429, 5xx, expired provider JWT) are retried inside the function. If any device is still retryable afterwards the function returns **503** so the webhook / `pg_net` trigger can try the whole job again. Permanent failures (including `410 Unregistered` and `400 BadDeviceToken`) prune that token and still return 200.
-- After changing this function, redeploy with `supabase functions deploy send-reminder-push --no-verify-jwt`. The INSERT trigger itself (`notify_reminder_push` / dashboard webhook) is configured in the project, not this repo.
+- After changing this function, redeploy with `supabase functions deploy send-reminder-push --no-verify-jwt`. The database trigger itself (`send_reminder_push` → `notify_reminder_push`, on INSERT, UPDATE, and DELETE) is configured in the project, not this repo.
 
 `delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, agent tokens, and auth user (service role). For Sign in with Apple users, the iOS app first requests a fresh `authorizationCode` and the function exchanges it at `https://appleid.apple.com/auth/token`, then POSTs `https://appleid.apple.com/auth/revoke` with the refresh token (or the access token if Apple does not return a refresh token). If the Apple secrets are missing or Apple returns an error, deletion still succeeds and the function logs a structured warning. Non-Apple users never hit those endpoints.
 
@@ -173,7 +173,7 @@ In Supabase **Database → Webhooks**, create a webhook with:
 
 - Name: `send-reminder-push`
 - Table: `public.reminders`
-- Event: `INSERT`
+- Events: `INSERT`, `UPDATE`, `DELETE` (completing or deleting the last reminder is what ends the Live Activity)
 - Method: `POST`
 - URL: `https://YOUR_PROJECT_REF.supabase.co/functions/v1/send-reminder-push`
 - Header: `x-webhook-secret: <the exact WEBHOOK_SECRET value>`
@@ -236,7 +236,7 @@ npm run build
 npx wrangler pages deploy dist --project-name lazy-mans-reminders --branch main
 ```
 
-Custom domain: `lmr.sillyapps.co` is the canonical domain on the Pages project, with a proxied CNAME `lmr` → `lazy-mans-reminders.pages.dev` on the `sillyapps.co` zone. The old `lmr.edmundlim.systems` custom domain stays on the project; a Cloudflare Single Redirect rule on the `edmundlim.systems` zone sends it to `https://lmr.sillyapps.co` with a 301 that keeps the path and query. Keep Supabase Auth redirects in sync (see above). The MCP Worker's `WEB_ORIGINS` (in `mcp/wrangler.jsonc`) lists the canonical origin first, because `/authorize` sends the browser to that origin's `/connect`.
+Custom domain: `lmr.sillyapps.co` is the canonical domain on the Pages project, with a proxied CNAME `lmr` → `lazy-mans-reminders.pages.dev` on the `sillyapps.co` zone. The old `lmr.edmundlim.systems` custom domain stays on the project; a Cloudflare Single Redirect rule on the `edmundlim.systems` zone sends it to `https://lmr.sillyapps.co`, keeping the path and query. It currently answers 302 (temporary); switch it to 301 when the move is final. Keep Supabase Auth redirects in sync (see above). The MCP Worker's `WEB_ORIGINS` (in `mcp/wrangler.jsonc`) lists the canonical origin first, because `/authorize` sends the browser to that origin's `/connect`.
 
 ## iOS
 
