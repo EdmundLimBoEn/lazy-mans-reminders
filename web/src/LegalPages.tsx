@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { ThemeToggle } from './ThemeToggle'
 
 const CONTACT_EMAIL = 'hello@edmundlim.systems'
-const LAST_UPDATED = '26 August 2026'
+const LAST_UPDATED = '8 October 2026'
 const SITE_URL = 'https://lmr.sillyapps.co'
 const PDPC_URL = 'https://www.pdpc.gov.sg'
 
@@ -66,6 +66,10 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
         (together, the “Service”).
       </p>
       <p>
+        The Service’s address is now {SITE_URL}. The old address, lmr.edmundlim.systems, redirects
+        here. Same Service, same operator, same data.
+      </p>
+      <p>
         Operator contact: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
       </p>
       <p>
@@ -111,6 +115,12 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
         <li>
           <strong>Operational logs.</strong> Limited request timing and error diagnostics from our
           hosting providers.
+        </li>
+        <li>
+          <strong>TestFlight feedback and crash data.</strong> If you test a beta of the iOS app
+          through Apple’s TestFlight, Apple shares feedback, screenshots, and crash reports with us
+          only if you choose to send them or opt in to sharing. Apple includes basic device, iOS,
+          and app build details with them. We use this only to fix and improve the app.
         </li>
       </ul>
       <p>
@@ -164,7 +174,8 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           <a href="https://resend.com/legal/privacy-policy">Resend privacy</a>
         </li>
         <li>
-          <strong>Apple.</strong> Sign in with Apple, App Store distribution, APNs, and widgets.
+          <strong>Apple.</strong> Sign in with Apple, App Store and TestFlight distribution, APNs,
+          and widgets.
           Apple’s terms and privacy policy apply.{' '}
           <a href="https://www.apple.com/legal/privacy/">Apple privacy</a>
         </li>
@@ -211,6 +222,10 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           Invalid APNs tokens may be removed during normal push delivery.
         </li>
         <li>
+          TestFlight feedback and crash reports stay in App Store Connect and are kept only as
+          long as needed to fix the issue they describe.
+        </li>
+        <li>
           If you delete your account, we delete personal data we control. Backups and logs may
           lag for a short period. We keep information only if we must for security, disputes, or
           law.
@@ -254,9 +269,12 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           names from the signed-in web board (<em>Download my data</em>).
         </li>
         <li>
-          Delete the account in the product (web board or iOS More menu). That removes reminders,
-          device tokens, lock-screen prefs, personal agent keys, connected-agent grants, and the
-          auth user. If those grants cannot be revoked, deletion stops and the account stays.
+          Delete the account in the product (web board, or Account → Delete Account in the iOS
+          app). That removes reminders, device tokens, lock-screen prefs, personal agent keys, and
+          the auth user. It also revokes every connected-agent grant, so those agents lose access
+          right away. If those grants cannot be revoked, deletion stops and the account stays. If
+          you used Sign in with Apple on the iPhone, deletion also asks Apple to revoke this app’s
+          Sign in with Apple tokens, so the app no longer has access through your Apple ID.
         </li>
         <li>
           Email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> from the address on the
