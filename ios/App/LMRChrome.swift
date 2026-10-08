@@ -1,11 +1,16 @@
 import SwiftUI
 
 enum LMRWeb {
-    static let origin = URL(string: "https://lmr.edmundlim.systems")!
-    static let privacy = URL(string: "https://lmr.edmundlim.systems/privacy")!
-    static let terms = URL(string: "https://lmr.edmundlim.systems/terms")!
-    static let support = URL(string: "https://lmr.edmundlim.systems/support")!
+    static let origin = URL(string: "https://lmr.sillyapps.co")!
+    static let privacy = URL(string: "https://lmr.sillyapps.co/privacy")!
+    static let terms = URL(string: "https://lmr.sillyapps.co/terms")!
+    static let support = URL(string: "https://lmr.sillyapps.co/support")!
     static let dataExport = origin
+    /// Magic-link landing page. Safari cannot follow a 303 onto a custom
+    /// scheme, so the email link opens this HTTPS page, which hands off to
+    /// `lazymansreminders://auth/callback`. Must be in the Supabase Auth
+    /// redirect allow list.
+    static let iosAuthRedirect = URL(string: "https://lmr.sillyapps.co/auth/ios")!
 }
 
 /// Fill for `SignInWithAppleButton`. Dark mode uses `.black` so the control
