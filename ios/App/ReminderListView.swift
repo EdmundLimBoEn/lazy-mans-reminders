@@ -17,6 +17,7 @@ struct ReminderListView: View {
     @State private var error: String?
     @State private var completingIDs: Set<UUID> = []
     @State private var showAccount = false
+    @AppStorage(BoardSetupTip.storageKey) private var setupTipDismissed = false
     @FocusState private var composerFocused: Bool
     @ScaledMetric(relativeTo: .body) private var addVisualSize: CGFloat = 28
 
@@ -96,6 +97,20 @@ struct ReminderListView: View {
                     Label("All Clear", systemImage: "checkmark.circle")
                 } description: {
                     Text("Nothing on your board. Add a reminder below.")
+                }
+                if BoardSetupTip.shouldShow(
+                    hasLoaded: hasLoaded,
+                    isBoardEmpty: reminders.isEmpty,
+                    hasError: error != nil,
+                    isDismissed: setupTipDismissed
+                ) {
+                    BoardSetupTipCard {
+                        withAnimation(reduceMotion ? nil : .default) {
+                            setupTipDismissed = true
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .transition(.opacity)
                 }
                 boardSiriTip
             }
