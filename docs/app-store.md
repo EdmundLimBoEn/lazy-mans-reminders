@@ -91,7 +91,7 @@ Confirm with `asc localizations list --app 6799138197 --type app-info --locale e
 
 ## URLs
 
-Canonical host is `https://lmr.sillyapps.co`. `https://lmr.edmundlim.systems` 301s to it once that redirect is live.
+Canonical host is `https://lmr.sillyapps.co`. `https://lmr.edmundlim.systems` redirects to it (currently a 302; a 301 is planned).
 
 - Privacy: `https://lmr.sillyapps.co/privacy`
 - Support: `https://lmr.sillyapps.co/support`

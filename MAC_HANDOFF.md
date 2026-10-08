@@ -1,6 +1,6 @@
 # Mac handoff — Lazy Man's Reminders
 
-**Status:** Historical. Auth, MCP, and legal pages on `main` have moved on since 7 August 2026. Use [HUMANS.md](HUMANS.md) and [docs/app-store.md](docs/app-store.md) for what is still on you. Keep the lock-screen widget (clear glass + marquee). Do not follow the “Google not enabled” snapshot below.
+**Status:** Historical. Auth, MCP, and legal pages on `main` have moved on since 7 August 2026. Use [HUMANS.md](HUMANS.md) and [docs/app-store.md](docs/app-store.md) for what is still on you. Keep the lock-screen widget (clear glass + marquee). Do not follow the “Google not enabled” snapshot below. As of 8 Oct 2026: canonical web is `https://lmr.sillyapps.co` (old host 302s there), account deletion also revokes Sign in with Apple tokens (#38) and agent grants, and the push trigger fires on INSERT/UPDATE/DELETE.
 
 **Date:** 7 August 2026  
 **From:** Linux agent session (launch-ready / free App Store release)  
@@ -90,7 +90,7 @@ open LazyMansReminders.xcodeproj
 |------|--------|
 | DNS `lmr` → Pages | Done (active) |
 | App / Widget IDs + App Groups + Push | Done (`9H8ZY6WGY6` / `PBM95Q8YTQ`) |
-| APNs secrets + reminder INSERT → push path | Done (verify on device) |
+| APNs secrets + reminder INSERT/UPDATE/DELETE → push path | Done (APNs key being replaced with a Sandbox & Production key, Oct 2026) |
 | Email auth | Enabled |
 | **Apple provider in Supabase** | **Enabled** via API — Client ID = `systems.edmundlim.LazyMansReminders`, **no web secret yet** |
 | Google provider | **Not enabled** (needs OAuth client from Zen/Google Cloud) |
@@ -182,8 +182,8 @@ iOS app ──────┤
               ├── Postgres: reminders, device_tokens (RLS per user)
 Widget ───────┘    App Group cache ← ReminderStore session + reminders
 
-INSERT reminders → notify_reminder_push → send-reminder-push → APNs
-DELETE account  → delete-account (JWT) → wipe reminders + tokens + auth.users
+INSERT/UPDATE/DELETE reminders → notify_reminder_push → send-reminder-push → APNs
+DELETE account  → delete-account (JWT) → revoke agent grants + Apple tokens → wipe reminders + tokens + auth.users
 ```
 
 **Key files**
