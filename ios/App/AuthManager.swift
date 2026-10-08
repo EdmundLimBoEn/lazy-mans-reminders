@@ -45,7 +45,7 @@ final class AuthManager: ObservableObject {
     private var restorationTask: Task<Void, Never>?
     private var pendingAppleNonce: String?
     /// Safari cannot follow a 303 onto a custom scheme, so magic links land on HTTPS first.
-    private let magicLinkRedirectURL = URL(string: "https://lmr.edmundlim.systems/auth/ios")!
+    private let magicLinkRedirectURL = LMRWeb.iosAuthRedirect
     private let oauthRedirectURL = URL(string: "lazymansreminders://auth/callback")!
 
     init() {
