@@ -11,6 +11,7 @@ struct AccountView: View {
     @State private var isDeletingAccount = false
     @State private var error: String?
     @State private var notificationAccess = NotificationAccessPolicy.Access.ask
+    private var appInfo: FeedbackMail.AppInfo { .current }
 
     var body: some View {
         NavigationStack {
@@ -82,6 +83,18 @@ struct AccountView: View {
                 }
 
                 Section {
+                    if let feedbackURL = FeedbackMail.url(appInfo) {
+                        Link(destination: feedbackURL) {
+                            Label("Send Feedback", systemImage: "envelope")
+                        }
+                        .accessibilityHint("Opens Mail with your app and iOS version filled in")
+                    }
+                } footer: {
+                    Text("Or email \(FeedbackMail.address)")
+                        .textSelection(.enabled)
+                }
+
+                Section {
                     Button(role: .destructive) {
                         showDeleteAccount = true
                     } label: {
@@ -89,7 +102,12 @@ struct AccountView: View {
                     }
                     .disabled(isDeletingAccount)
                 } footer: {
-                    Text("Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.")
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.")
+                        Text(FeedbackMail.versionFooter(appInfo))
+                            .textSelection(.enabled)
+                            .accessibilityLabel("App \(FeedbackMail.versionFooter(appInfo))")
+                    }
                 }
             }
             .listStyle(.insetGrouped)
