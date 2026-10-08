@@ -12,10 +12,25 @@ final class LMRChromeTests: XCTestCase {
     }
 
     func testLegalPageURLs() {
-        XCTAssertEqual(LMRWeb.privacy.absoluteString, "https://lmr.edmundlim.systems/privacy")
-        XCTAssertEqual(LMRWeb.terms.absoluteString, "https://lmr.edmundlim.systems/terms")
-        XCTAssertEqual(LMRWeb.support.absoluteString, "https://lmr.edmundlim.systems/support")
-        XCTAssertEqual(LMRWeb.dataExport.absoluteString, "https://lmr.edmundlim.systems")
+        XCTAssertEqual(LMRWeb.privacy.absoluteString, "https://lmr.sillyapps.co/privacy")
+        XCTAssertEqual(LMRWeb.terms.absoluteString, "https://lmr.sillyapps.co/terms")
+        XCTAssertEqual(LMRWeb.support.absoluteString, "https://lmr.sillyapps.co/support")
+        XCTAssertEqual(LMRWeb.dataExport.absoluteString, "https://lmr.sillyapps.co")
+    }
+
+    func testMagicLinkLandsOnCanonicalHost() {
+        XCTAssertEqual(LMRWeb.iosAuthRedirect.absoluteString, "https://lmr.sillyapps.co/auth/ios")
+    }
+
+    func testNoLinkPointsAtRetiredHost() {
+        let urls = [
+            LMRWeb.origin, LMRWeb.privacy, LMRWeb.terms,
+            LMRWeb.support, LMRWeb.dataExport, LMRWeb.iosAuthRedirect,
+        ]
+        for url in urls {
+            XCTAssertEqual(url.scheme, "https", url.absoluteString)
+            XCTAssertEqual(url.host, "lmr.sillyapps.co", url.absoluteString)
+        }
     }
 
     func testAuthNoticeEquality() {
