@@ -7,13 +7,17 @@ struct SignInView: View {
     @Environment(\.colorScheme) private var colorScheme
     @ScaledMetric(relativeTo: .body) private var signInButtonHeight: CGFloat = 44
     @State private var email = ""
+    @State private var password = ""
+    @State private var usesPassword = false
+    @State private var passwordTask: Task<Void, Never>?
     @State private var pending: PendingSignIn?
     @State private var inboxPulse = 0
     @State private var errorPulse = 0
     @FocusState private var emailFocused: Bool
+    @FocusState private var passwordFocused: Bool
 
     private enum PendingSignIn {
-        case apple, google, magicLink
+        case apple, google, magicLink, password
     }
 
     var body: some View {
@@ -56,7 +60,10 @@ struct SignInView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("Done") { emailFocused = false }
+                    Button("Done") {
+                        emailFocused = false
+                        passwordFocused = false
+                    }
                 }
             }
         }
@@ -66,6 +73,16 @@ struct SignInView: View {
             if case .error = auth.notice {
                 auth.clearNotice()
             }
+        }
+        .onChange(of: password) { _, value in
+            if !value.isEmpty, case .error = auth.notice {
+                auth.clearNotice()
+            }
+        }
+        .onDisappear {
+            passwordTask?.cancel()
+            passwordTask = nil
+            password = ""
         }
         .onChange(of: auth.notice) { _, notice in
             if case .checkInbox = notice {
@@ -174,19 +191,40 @@ struct SignInView: View {
                         .foregroundStyle(.secondary)
                         .accessibilityAddTraits(.updatesFrequently)
                 }
+                if usesPassword {
+                    passwordField
+                    Text("For an existing account with a password. You can also use a sign-in link.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 Button {
-                    Task { await sendMagicLink() }
+                    if usesPassword {
+                        startPasswordSignIn()
+                    } else {
+                        Task { await sendMagicLink() }
+                    }
                 } label: {
                     signInButtonLabel(
-                        title: "Send Sign-In Link",
-                        showsProgress: pending == .magicLink
+                        title: usesPassword ? "Sign In with Password" : "Send Sign-In Link",
+                        showsProgress: pending == .magicLink || pending == .password
                     )
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.roundedRectangle)
                 .controlSize(.large)
                 .frame(maxWidth: .infinity)
-                .disabled(!emailIsPlausible || busy)
+                .disabled(!emailIsPlausible || busy || (usesPassword && password.isEmpty))
+                Button(usesPassword ? "Use a Sign-In Link Instead" : "Use an Existing Password") {
+                    usesPassword.toggle()
+                    password = ""
+                    passwordFocused = false
+                    auth.clearNotice()
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .disabled(busy)
             }
         }
     }
@@ -194,15 +232,21 @@ struct SignInView: View {
     private var emailField: some View {
         HStack(spacing: 0) {
             TextField("you@example.com", text: $email)
-                .textContentType(.emailAddress)
+                .textContentType(usesPassword ? .username : .emailAddress)
                 .keyboardType(.emailAddress)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .font(.body)
                 .focused($emailFocused)
-                .submitLabel(.send)
+                .submitLabel(usesPassword ? .next : .send)
                 .accessibilityLabel("Email address")
-                .onSubmit { Task { await sendMagicLink() } }
+                .onSubmit {
+                    if usesPassword {
+                        passwordFocused = true
+                    } else {
+                        Task { await sendMagicLink() }
+                    }
+                }
                 .disabled(busy)
 
             if !email.isEmpty {
@@ -223,6 +267,22 @@ struct SignInView: View {
         .padding(.trailing, email.isEmpty ? 12 : 0)
         .frame(minHeight: 44)
         .background(Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+    }
+
+    private var passwordField: some View {
+        SecureField("Password", text: $password)
+            .textContentType(.password)
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
+            .privacySensitive()
+            .focused($passwordFocused)
+            .submitLabel(.go)
+            .accessibilityLabel("Password")
+            .onSubmit { startPasswordSignIn() }
+            .disabled(busy)
+            .padding(.horizontal, 12)
+            .frame(minHeight: 44)
+            .background(Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 
     private var legalFooter: some View {
@@ -268,6 +328,21 @@ struct SignInView: View {
         .frame(minHeight: 22)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(showsProgress ? "\(title), in progress" : title)
+    }
+
+    private func startPasswordSignIn() {
+        guard !busy,
+              let credentials = PasswordSignInCredentials(email: email, password: password)
+        else { return }
+        emailFocused = false
+        passwordFocused = false
+        pending = .password
+        passwordTask = Task {
+            await auth.signInWithPassword(email: credentials.email, password: credentials.password)
+            password = ""
+            pending = nil
+            passwordTask = nil
+        }
     }
 
     private func sendMagicLink() async {

@@ -1,24 +1,14 @@
-# Simulator unit tests. Needs no secrets: Config.example.xcconfig and
-# ad-hoc simulator signing. Approach copied from draft PR #33's
-# ios-tests.yml, without that PR's Grok/ChatGPT UI tests or screenshots.
-
 name: iOS tests
 
 on:
   workflow_dispatch:
   pull_request:
-    paths:
-      - "ios/**"
-      - ".github/workflows/ios-tests.yml"
-      - "scripts/check-third-party-sign-in-flags.py"
-      - "scripts/ios-simulator-unit-tests.sh"
   push:
     branches: [main]
     paths:
       - "ios/**"
       - ".github/workflows/ios-tests.yml"
-      - "scripts/check-third-party-sign-in-flags.py"
-      - "scripts/ios-simulator-unit-tests.sh"
+      - "scripts/**"
 
 concurrency:
   group: ios-tests-${{ github.ref }}
@@ -46,7 +36,7 @@ jobs:
   test:
     name: Simulator unit tests
     needs: sign-in-flags
-    runs-on: macos-latest
+    runs-on: macos-26
     timeout-minutes: 60
     steps:
       - name: Checkout
@@ -55,7 +45,10 @@ jobs:
       - name: Select stable Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest-stable
+          xcode-version: "26.6"
+
+      - name: Verify submission toolchain
+        run: ./scripts/check-ios-toolchain.sh
 
       - name: Install XcodeGen
         run: HOMEBREW_NO_AUTO_UPDATE=1 brew install xcodegen
@@ -67,8 +60,19 @@ jobs:
           cp Config.example.xcconfig Config.xcconfig
           xcodegen generate --spec project.yml
 
+      - name: Build Release app and embedded widget for devices
+        run: ./scripts/ios-release-build.sh
+
+      - name: Save Release SDK metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-release-sdk-metadata
+          path: ${{ runner.temp }}/ios-release-metadata.json
+          if-no-files-found: error
+
       - name: Build and test
         env:
+          TEST_CONFIGURATION: Release
           RESULT_BUNDLE_PATH: ${{ runner.temp }}/ios.xcresult
         run: ./scripts/ios-simulator-unit-tests.sh
 

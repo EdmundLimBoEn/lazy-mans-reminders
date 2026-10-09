@@ -12,30 +12,25 @@ if [ ! -d LazyMansReminders.xcodeproj ]; then
   exit 1
 fi
 
-udid="$(xcrun simctl list devices available --json | python3 -c '
-import json, sys
-devices = json.load(sys.stdin)["devices"]
-for runtime in sorted(devices, reverse=True):
-    if "iOS" not in runtime:
-        continue
-    for device in devices[runtime]:
-        if device["name"].startswith("iPhone"):
-            print(device["udid"])
-            sys.exit(0)
-sys.exit("No available iPhone simulator")
-')"
+sdk_version="$(xcrun --sdk iphonesimulator --show-sdk-version)"
+udid="$(xcrun simctl list devices available --json | python3 "${root}/scripts/select-ios-simulator.py" "${sdk_version}")"
 
 echo "Using iPhone simulator ${udid}"
 
 result_bundle="${RESULT_BUNDLE_PATH:-${RUNNER_TEMP:-/tmp}/ios.xcresult}"
-rm -rf "${result_bundle}"
+if [ -e "${result_bundle}" ]; then
+  echo "::error::Result bundle already exists: ${result_bundle}. Choose a fresh RESULT_BUNDLE_PATH."
+  exit 1
+fi
 
 xcodebuild test \
   -project LazyMansReminders.xcodeproj \
   -scheme LazyMansReminders \
+  -configuration "${TEST_CONFIGURATION:-Debug}" \
   -destination "platform=iOS Simulator,id=${udid}" \
   -resultBundlePath "${result_bundle}" \
   -only-testing:LazyMansRemindersTests \
+  ENABLE_TESTABILITY=YES \
   CODE_SIGN_STYLE=Manual \
   CODE_SIGN_IDENTITY=- \
   DEVELOPMENT_TEAM= \

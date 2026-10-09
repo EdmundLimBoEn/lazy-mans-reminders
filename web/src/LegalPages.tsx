@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { ThemeToggle } from './ThemeToggle'
 
 const CONTACT_EMAIL = 'hello@edmundlim.systems'
-const LAST_UPDATED = '8 October 2026'
+const LAST_UPDATED = '9 October 2026'
 const SITE_URL = 'https://lmr.sillyapps.co'
 const PDPC_URL = 'https://www.pdpc.gov.sg'
 
@@ -86,9 +86,15 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           relay) as part of sign-in.
         </li>
         <li>
+          <strong>Email/password sign-in (optional).</strong> Your email and password are sent to
+          Supabase Auth to authenticate an existing account. We do not log sign-in credentials or
+          persist your password in app storage. Account email and session tokens are handled as
+          described in this policy.
+        </li>
+        <li>
           <strong>Authentication provider data.</strong> A stable account identifier and limited
-          profile metadata from Apple or Google, stored by Supabase Auth so we can keep your
-          account.
+          profile metadata from Apple or Google, including your name when the provider supplies
+          it, stored by Supabase Auth so we can keep your account.
         </li>
         <li>
           <strong>Reminder content.</strong> The text you or an authorized agent create, plus sort
@@ -99,8 +105,10 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           Activity, measured on the device and stored so the web board uses the same capacity.
         </li>
         <li>
-          <strong>Device push tokens.</strong> On iOS, tokens used to send Apple Push Notification
-          service (APNs) alerts when a reminder is added.
+          <strong>Device push tokens.</strong> On iOS, device, push-to-start, and Live Activity
+          tokens used with Apple Push Notification service (APNs). We send reminder text through APNs to deliver alerts
+          and start or update your Live Activity. Tokens and delivery state are stored with your
+          account to route these updates.
         </li>
         <li>
           <strong>Agent access.</strong> OAuth grants when you tap Allow for a client such as Grok,
@@ -113,14 +121,17 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           you signed in.
         </li>
         <li>
-          <strong>Operational logs.</strong> Limited request timing and error diagnostics from our
-          hosting providers.
+          <strong>Operational logs.</strong> Request metadata (which may include IP addresses),
+          timing, and error diagnostics processed by Supabase and Cloudflare to operate and troubleshoot
+          the Service. These records may include account or device identifiers.
         </li>
         <li>
-          <strong>TestFlight feedback and crash data.</strong> If you test a beta of the iOS app
-          through Apple’s TestFlight, Apple shares feedback, screenshots, and crash reports with us
-          only if you choose to send them or opt in to sharing. Apple includes basic device, iOS,
-          and app build details with them. We use this only to fix and improve the app.
+          <strong>TestFlight feedback and diagnostics.</strong> When you test a beta through
+          TestFlight, Apple automatically collects and shares crash logs and usage information
+          with us, including device and app build details. Feedback and screenshots are shared
+          when you submit them; Apple may also provide tester name and email information. We use
+          this information to fix and improve the app. See{' '}
+          <a href="https://www.apple.com/legal/privacy/data/en/test-flight/">TestFlight privacy</a>.
         </li>
       </ul>
       <p>
@@ -132,7 +143,10 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
       <ul>
         <li>Create and authenticate your account and sessions.</li>
         <li>Store, sync, and display reminders on the web board, iOS app, widget, and Live Activity.</li>
-        <li>Send push notifications for new reminders when you have allowed notifications.</li>
+        <li>
+          Send alerts for new reminders when you have allowed notifications, and sync Live
+          Activities when enabled.
+        </li>
         <li>Let an agent you authorized read, add, and complete reminders on your board.</li>
         <li>Match web-board capacity to your iPhone Lock Screen.</li>
         <li>Operate, secure, and troubleshoot the Service, and respond to support requests.</li>
@@ -161,7 +175,8 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
       <ul>
         <li>
           <strong>Supabase</strong> (Singapore region). Authentication, Postgres, Realtime, and
-          Edge Functions. Processor for account, reminders, tokens, and prefs.{' '}
+          Edge Functions. Processor for account, reminders, device and Live Activity tokens, prefs,
+          and request diagnostics.{' '}
           <a href="https://supabase.com/privacy">Supabase privacy</a>
         </li>
         <li>
@@ -174,8 +189,8 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           <a href="https://resend.com/legal/privacy-policy">Resend privacy</a>
         </li>
         <li>
-          <strong>Apple.</strong> Sign in with Apple, App Store and TestFlight distribution, APNs,
-          and widgets.
+          <strong>Apple.</strong> Sign in with Apple, App Store and TestFlight distribution, APNs
+          (including reminder text and push tokens for alerts and Live Activities), and widgets.
           Apple’s terms and privacy policy apply.{' '}
           <a href="https://www.apple.com/legal/privacy/">Apple privacy</a>
         </li>
@@ -215,20 +230,24 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           while the account exists.
         </li>
         <li>
-          Completed reminders are deleted automatically after 7 days when a client opens the
-          board (and, if configured, by a daily database job).
+          The web and iOS clients request deletion of reminders completed more than 7 days ago
+          when loading the board. This cleanup is best effort: reminders may remain longer if
+          the board is not opened or cleanup fails. A daily database job may also perform this
+          cleanup if configured.
         </li>
         <li>
           Invalid APNs tokens may be removed during normal push delivery.
         </li>
         <li>
-          TestFlight feedback and crash reports stay in App Store Connect and are kept only as
-          long as needed to fix the issue they describe.
+          TestFlight feedback and diagnostics are available through Apple’s developer tools,
+          subject to Apple’s retention. Deleting your Service account does not delete records
+          held by Apple or copies already shared with agents you authorized.
         </li>
         <li>
-          If you delete your account, we delete personal data we control. Backups and logs may
-          lag for a short period. We keep information only if we must for security, disputes, or
-          law.
+          Successful account deletion removes your auth user, reminders, device and Live Activity
+          tokens, lock-screen preferences, personal agent keys, and connected-agent grants from
+          the active Service. It does not immediately erase provider backups or operational logs;
+          these follow the providers’ retention settings. Contact us for retention questions.
         </li>
       </ul>
 
@@ -272,9 +291,12 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           Delete the account in the product (web board, or Account → Delete Account in the iOS
           app). That removes reminders, device tokens, lock-screen prefs, personal agent keys, and
           the auth user. It also revokes every connected-agent grant, so those agents lose access
-          right away. If those grants cannot be revoked, deletion stops and the account stays. If
-          you used Sign in with Apple on the iPhone, deletion also asks Apple to revoke this app’s
-          Sign in with Apple tokens, so the app no longer has access through your Apple ID.
+          right away. If those grants cannot be revoked, deletion stops and the account stays. For
+          Sign in with Apple accounts, iPhone deletion attempts to obtain a fresh authorization
+          code and asks the server to revoke Sign in with Apple tokens. This is best effort and
+          may fail or be skipped; account deletion does not guarantee Apple authorization has
+          been revoked. You can also manage this app’s authorization in your Apple Account
+          settings. Deleting the Service account does not delete your Apple or Google account.
         </li>
         <li>
           Email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> from the address on the
