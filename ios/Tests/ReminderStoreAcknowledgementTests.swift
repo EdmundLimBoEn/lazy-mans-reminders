@@ -171,6 +171,92 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
         XCTAssertEqual(cache, [original])
     }
 
+    func testDelayedEditCannotResurrectRowAfterCompletionResponseArrivesFirst() async throws {
+        try await checkOverlappingMutations(sameID: true)
+    }
+
+    func testOverlappingUpdatesForDifferentIDsBothSucceed() async throws {
+        try await checkOverlappingMutations(sameID: false)
+    }
+
+    private func checkOverlappingMutations(sameID: Bool) async throws {
+        let suiteName = "ReminderStoreOverlapTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let editStarted = XCTestExpectation(description: "Edit committed; response held")
+        let completionStarted = XCTestExpectation(description: "Completion committed; response held")
+        let network = OverlappingNetwork(editStarted: editStarted, completionStarted: completionStarted)
+        let store = ReminderStore(
+            defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+            anonKey: "test-anon-key", requestData: { try await network.send($0) }
+        )
+        let original = sample()
+        let toComplete = sameID ? original : sample(userID: original.userID)
+        try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
+                                    expiresAt: Date().addingTimeInterval(3600), userID: original.userID)
+        defaults.set(try ReminderJSON.encoder.encode(sameID ? [original] : [original, toComplete]),
+                     forKey: "cached-reminders")
+
+        let editTask = Task { try await store.update(id: original.id, text: "Edited") }
+        await fulfillment(of: [editStarted], timeout: 3)
+        let completionTask = Task { try await store.markDone(id: toComplete.id) }
+        await fulfillment(of: [completionStarted], timeout: 3)
+
+        var completed = toComplete
+        completed.isDone = true
+        await network.finish(completion: true, data: try ReminderJSON.encoder.encode([completed]))
+        let completionResult = try await completionTask.value
+        XCTAssertEqual(completionResult, sameID ? [] : [original])
+
+        var editedSnapshot = original
+        editedSnapshot.text = "Edited"
+        await network.finish(completion: false, data: try ReminderJSON.encoder.encode([editedSnapshot]))
+        if sameID {
+            do {
+                _ = try await editTask.value
+                XCTFail("Superseded edit must throw instead of resurrecting the completed row")
+            } catch {
+                XCTAssertEqual(error.localizedDescription,
+                               "The reminder change could not be confirmed. Refresh your board and try again.")
+            }
+        } else {
+            let result = try await editTask.value
+            XCTAssertEqual(result, [editedSnapshot])
+        }
+        let cache = await store.cached()
+        XCTAssertEqual(cache, sameID ? [] : [editedSnapshot])
+    }
+
+    private actor OverlappingNetwork {
+        let editStarted: XCTestExpectation
+        let completionStarted: XCTestExpectation
+        private var pending: [Bool: CheckedContinuation<(Data, URLResponse), Error>] = [:]
+
+        init(editStarted: XCTestExpectation, completionStarted: XCTestExpectation) {
+            self.editStarted = editStarted
+            self.completionStarted = completionStarted
+        }
+
+        func send(_ request: URLRequest) async throws -> (Data, URLResponse) {
+            XCTAssertEqual(request.httpMethod, "PATCH")
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Prefer"), "return=representation")
+            let body = try XCTUnwrap(request.httpBody)
+            let fields = try XCTUnwrap(JSONSerialization.jsonObject(with: body) as? [String: Any])
+            let completion = fields["is_done"] as? Bool == true
+            return try await withCheckedThrowingContinuation { continuation in
+                pending[completion] = continuation
+                (completion ? completionStarted : editStarted).fulfill()
+            }
+        }
+
+        func finish(completion: Bool, data: Data) {
+            pending.removeValue(forKey: completion)?.resume(returning: (
+                data, HTTPURLResponse(url: URL(string: "https://reminders.invalid/rest/v1/reminders")!,
+                                      statusCode: 200, httpVersion: nil, headerFields: nil)!
+            ))
+        }
+    }
+
     private func assertRejected(
         _ data: Data, original: Reminder? = nil, mutation: Mutation,
         status: Int = 200, message: String
