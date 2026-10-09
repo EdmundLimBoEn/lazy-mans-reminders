@@ -306,18 +306,22 @@ actor ReminderStore {
         }
 
         try requireCurrentIdentity(session, revision: identityRevision)
-        let created = try acknowledgedReminder(responseData, ownerID: ownerID)
+        let created = try acknowledgedReminder(responseData, ownerID: ownerID, text: trimmed, isDone: false)
         return try cacheAcknowledgedReminder(created)
     }
 
-    private func acknowledgedReminder(_ data: Data, ownerID: UUID, id: UUID? = nil) throws -> Reminder {
+    private func acknowledgedReminder(
+        _ data: Data, ownerID: UUID, id: UUID? = nil, text: String? = nil, isDone: Bool? = nil
+    ) throws -> Reminder {
         guard let rows = try? ReminderJSON.decoder.decode([Reminder].self, from: data) else {
             throw StoreError.invalidResponse
         }
         guard !rows.isEmpty else { throw StoreError.reminderUnavailable }
         guard rows.count == 1, let reminder = rows.first,
               reminder.userID == ownerID,
-              id == nil || reminder.id == id else {
+              id == nil || reminder.id == id,
+              text == nil || reminder.text == text,
+              isDone == nil || reminder.isDone == isDone else {
             throw StoreError.mutationConflict
         }
         return reminder
@@ -397,7 +401,7 @@ actor ReminderStore {
         }
 
         try requireCurrentIdentity(session, revision: identityRevision)
-        let updated = try acknowledgedReminder(responseData, ownerID: ownerID, id: id)
+        let updated = try acknowledgedReminder(responseData, ownerID: ownerID, id: id, text: trimmed, isDone: isDone)
         return try cacheAcknowledgedReminder(updated)
     }
 }

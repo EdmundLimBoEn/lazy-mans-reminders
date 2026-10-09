@@ -65,7 +65,7 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             var original = sample()
             original.isDone = mutation == .reopen
             var returned = original
-            returned.text = "Server text"
+            returned.text = mutation == .edit ? "Client text" : "Server text"
             returned.sortOrder = -1
             returned.isDone = mutation == .complete
             let fixture = Fixture(data: try ReminderJSON.encoder.encode([returned]))
@@ -78,22 +78,46 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
         }
     }
 
-    func testReturnedCompletionStateWinsOverClientIntention() async throws {
+    func testIgnoredRequestedFieldsRejectCompletionEditReopenAndCombinedUpdate() async throws {
         let original = sample()
-        let fixture = Fixture(data: try ReminderJSON.encoder.encode([original]))
-        defer { fixture.cleanUp() }
-        try await fixture.signInAndSeed(original)
-        let result = try await fixture.store.markDone(id: original.id)
-        XCTAssertEqual(result, [original], "Do not remove a row the server still reports as active")
+        let conflict = "The reminder change could not be confirmed. Refresh your board and try again."
+        try await assertRejected(try ReminderJSON.encoder.encode([original]), original: original,
+                                 mutation: .complete, message: conflict)
+        try await assertRejected(try ReminderJSON.encoder.encode([original]), original: original,
+                                 mutation: .edit, message: conflict)
+        var completed = original
+        completed.isDone = true
+        try await assertRejected(try ReminderJSON.encoder.encode([completed]), original: completed,
+                                 mutation: .reopen, message: conflict)
+        for matchesText in [false, true] {
+            var returned = original
+            returned.text = matchesText ? "Client text" : original.text
+            returned.isDone = !matchesText
+            let fixture = Fixture(data: try ReminderJSON.encoder.encode([returned]))
+            defer { fixture.cleanUp() }
+            try await fixture.signInAndSeed(original)
+            do {
+                _ = try await fixture.store.update(id: original.id, text: "Client text", isDone: true)
+                XCTFail("Both requested fields must match")
+            } catch {
+                XCTAssertEqual(error.localizedDescription, conflict)
+            }
+            let cache = await fixture.store.cached()
+            XCTAssertEqual(cache, [original])
+        }
     }
 
     func testCreateRequiresOneValidOwnedRowAndUsesServerValues() async throws {
         let original = sample()
         var created = sample(userID: original.userID)
-        created.text = "Server-created text"
+        created.text = "New reminder"
         created.sortOrder = -1
         let wrongOwner = sample()
-        for rows in [[], [wrongOwner], [created, created]] {
+        var wrongText = created
+        wrongText.text = "Ignored request"
+        var wrongCompletion = created
+        wrongCompletion.isDone = true
+        for rows in [[], [wrongOwner], [created, created], [wrongText], [wrongCompletion]] {
             let fixture = Fixture(data: try ReminderJSON.encoder.encode(rows), method: "POST")
             defer { fixture.cleanUp() }
             try await fixture.signInAndSeed(original)
