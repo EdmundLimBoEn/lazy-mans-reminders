@@ -146,6 +146,32 @@ final class AuthManager: ObservableObject {
         }
     }
 
+    func signInWithPassword(email: String, password: String) async {
+        guard !Task.isCancelled,
+              let credentials = PasswordSignInCredentials(email: email, password: password)
+        else { return }
+        await waitForRestoration()
+        await authSessionGate.acquire()
+        defer { authSessionGate.release() }
+        guard !Task.isCancelled else { return }
+        isAuthenticating = true
+        notice = nil
+        defer { isAuthenticating = false }
+        do {
+            try Task.checkCancellation()
+            let nextSession = try await client.auth.signIn(
+                email: credentials.email,
+                password: credentials.password
+            )
+            installSession(nextSession, loginProvider: "email")
+            // The SDK has already persisted/emitted the session; finish sharing even if the view disappears.
+            await shareSession()
+        } catch {
+            guard !Task.isCancelled, !(error is CancellationError) else { return }
+            notice = .error("Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.")
+        }
+    }
+
     func configureAppleRequest(_ request: ASAuthorizationAppleIDRequest) {
         let nonce = Self.randomNonceString()
         pendingAppleNonce = nonce
