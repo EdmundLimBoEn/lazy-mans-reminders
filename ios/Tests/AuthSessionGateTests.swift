@@ -3,6 +3,7 @@ import XCTest
 
 @MainActor
 final class AuthSessionGateTests: XCTestCase {
+    @MainActor
     private final class Signal {
         private var arrived = false
         private var waiter: CheckedContinuation<Void, Never>?
