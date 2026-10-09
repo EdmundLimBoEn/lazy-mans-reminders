@@ -10,10 +10,9 @@ struct ReminderListView: View {
     @State private var hapticTick = 0
     @State private var errorTick = 0
     @State private var reminders: [Reminder] = []
-    @State private var draft = ""
+    @State private var draft = ReminderDraft()
     @State private var isLoading = true
     @State private var hasLoaded = false
-    @State private var isAdding = false
     @State private var error: String?
     @State private var completingIDs: Set<UUID> = []
     @State private var showAccount = false
@@ -193,7 +192,7 @@ struct ReminderListView: View {
             HStack(alignment: .center, spacing: 8) {
                 TextField(
                     atCapacity ? "Board full — combine lines instead" : "New reminder",
-                    text: $draft,
+                    text: Binding(get: { draft.text }, set: { draft.edit($0) }),
                     axis: .vertical
                 )
                 .font(.body)
@@ -214,7 +213,7 @@ struct ReminderListView: View {
                     Task { await addReminder() }
                 } label: {
                     Group {
-                        if isAdding {
+                        if draft.isSubmitting {
                             ProgressView()
                                 .controlSize(.small)
                                 .accessibilityHidden(true)
@@ -235,7 +234,7 @@ struct ReminderListView: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(!canAdd)
-                .accessibilityLabel(isAdding ? "Adding reminder" : "Add reminder")
+                .accessibilityLabel(draft.isSubmitting ? "Adding reminder" : "Add reminder")
                 .accessibilityHint("Saves the text as a new reminder")
             }
             .padding(.leading, 14)
@@ -283,9 +282,7 @@ struct ReminderListView: View {
     }
 
     private var canAdd: Bool {
-        !isAdding
-            && !atCapacity
-            && !draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !atCapacity && draft.canSubmit
     }
 
     private func animateBoard(_ updates: () -> Void) {
@@ -320,14 +317,12 @@ struct ReminderListView: View {
     }
 
     private func addReminder() async {
-        let value = draft.trimmingCharacters(in: .whitespacesAndNewlines)
         guard canAdd, let userID = auth.session?.user.id else { return }
         if atCapacity {
             presentError(ReminderBoardLimits.postItHint)
             return
         }
-        isAdding = true
-        draft = ""
+        guard let value = draft.beginSubmission() else { return }
         do {
             let updated = try await ReminderStore.shared.create(text: value, userID: userID)
             animateBoard { reminders = updated }
@@ -338,11 +333,11 @@ struct ReminderListView: View {
                 notification: .announcement,
                 argument: "Reminder added"
             )
+            draft.finishSubmission(succeeded: true)
         } catch {
-            draft = value
+            draft.finishSubmission(succeeded: false)
             presentError(error.localizedDescription)
         }
-        isAdding = false
     }
 
     private func markDone(_ reminder: Reminder) async {
