@@ -14,6 +14,7 @@ struct ContentView: View {
                 SignInView()
             } else {
                 ReminderListView()
+                    .id(auth.session?.user.id)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
