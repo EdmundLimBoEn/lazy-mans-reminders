@@ -3,6 +3,8 @@ import Foundation
 actor ReminderStore {
     private enum StoreError: LocalizedError {
         case invalidResponse
+        case reminderUnavailable
+        case mutationConflict
         case requestFailed(Int)
         case signedOut
         case atCapacity
@@ -13,6 +15,10 @@ actor ReminderStore {
             switch self {
             case .invalidResponse:
                 return "The reminders service returned an invalid response."
+            case .reminderUnavailable:
+                return "This reminder is no longer available. Refresh your board and try again."
+            case .mutationConflict:
+                return "The reminder change could not be confirmed. Refresh your board and try again."
             case .requestFailed(let statusCode):
                 return "The reminders service returned HTTP \(statusCode)."
             case .signedOut:
@@ -264,7 +270,8 @@ actor ReminderStore {
         guard let session = await loadFreshSession() else {
             throw StoreError.signedOut
         }
-        guard let userID = userID ?? session.userID ?? cached().first?.userID else {
+        guard let ownerID = session.userID,
+              userID == nil || userID == ownerID else {
             throw StoreError.signedOut
         }
 
@@ -288,7 +295,7 @@ actor ReminderStore {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("return=representation", forHTTPHeaderField: "Prefer")
         request.httpBody = try ReminderJSON.encoder.encode(
-            CreateBody(text: trimmed, userID: userID, sortOrder: nextOrder)
+            CreateBody(text: trimmed, userID: ownerID, sortOrder: nextOrder)
         )
         let (responseData, response) = try await requestData(request)
         guard let http = response as? HTTPURLResponse else {
@@ -299,9 +306,30 @@ actor ReminderStore {
         }
 
         try requireCurrentIdentity(session, revision: identityRevision)
-        let created = try ReminderJSON.decoder.decode([Reminder].self, from: responseData)
-        var reminders = cached()
-        reminders.append(contentsOf: created)
+        let created = try acknowledgedReminder(responseData, ownerID: ownerID, text: trimmed, isDone: false)
+        return try cacheAcknowledgedReminder(created)
+    }
+
+    private func acknowledgedReminder(
+        _ data: Data, ownerID: UUID, id: UUID? = nil, text: String? = nil, isDone: Bool? = nil
+    ) throws -> Reminder {
+        guard let rows = try? ReminderJSON.decoder.decode([Reminder].self, from: data) else {
+            throw StoreError.invalidResponse
+        }
+        guard !rows.isEmpty else { throw StoreError.reminderUnavailable }
+        guard rows.count == 1, let reminder = rows.first,
+              reminder.userID == ownerID,
+              id == nil || reminder.id == id,
+              text == nil || reminder.text == text,
+              isDone == nil || reminder.isDone == isDone else {
+            throw StoreError.mutationConflict
+        }
+        return reminder
+    }
+
+    private func cacheAcknowledgedReminder(_ reminder: Reminder) throws -> [Reminder] {
+        var reminders = cached().filter { $0.id != reminder.id && !$0.isDone }
+        if !reminder.isDone { reminders.append(reminder) }
         reminders.sort {
             if $0.sortOrder != $1.sortOrder { return $0.sortOrder < $1.sortOrder }
             return $0.createdAt < $1.createdAt
@@ -325,7 +353,7 @@ actor ReminderStore {
         guard trimmed != nil || isDone != nil else {
             return cached()
         }
-        guard let session = await loadFreshSession() else {
+        guard let session = await loadFreshSession(), let ownerID = session.userID else {
             throw StoreError.signedOut
         }
 
@@ -359,12 +387,12 @@ actor ReminderStore {
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("return=minimal", forHTTPHeaderField: "Prefer")
+        request.setValue("return=representation", forHTTPHeaderField: "Prefer")
         request.httpBody = try ReminderJSON.encoder.encode(
             UpdateBody(text: trimmed, isDone: isDone)
         )
 
-        let (_, response) = try await requestData(request)
+        let (responseData, response) = try await requestData(request)
         guard let http = response as? HTTPURLResponse else {
             throw StoreError.invalidResponse
         }
@@ -373,22 +401,7 @@ actor ReminderStore {
         }
 
         try requireCurrentIdentity(session, revision: identityRevision)
-        if isDone == true {
-            let reminders = cached().filter { $0.id != id }
-            defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
-            return reminders
-        }
-        if isDone == false {
-            return try await refresh()
-        }
-        if let trimmed {
-            var reminders = cached()
-            if let index = reminders.firstIndex(where: { $0.id == id }) {
-                reminders[index].text = trimmed
-                defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
-            }
-            return reminders
-        }
-        return cached()
+        let updated = try acknowledgedReminder(responseData, ownerID: ownerID, id: id, text: trimmed, isDone: isDone)
+        return try cacheAcknowledgedReminder(updated)
     }
 }
