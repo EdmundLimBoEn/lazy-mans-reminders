@@ -230,8 +230,9 @@ class Preflight:
             start, end = price_date(a, "startDate"), price_date(a, "endDate")
             if start is not None and end is not None and start >= end:
                 raise MissingEvidence("invalid price interval")
-            if start == self.today or end == self.today:
-                raise MissingEvidence("price changes on today's date; verify storefront timing in ASC")
+            # Apple's storefront start times can fall on an adjacent UTC date.
+            if any(boundary is not None and abs((boundary - self.today).days) <= 1 for boundary in (start, end)):
+                raise MissingEvidence("price transition within one day of UTC check date; verify storefront timing in ASC")
             if (start is None or start < self.today) and (end is None or self.today < end):
                 current.append(point_id)
         if len(current) != 1:

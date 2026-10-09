@@ -307,6 +307,40 @@ class PreflightTests(unittest.TestCase):
         self.assertEqual(self.report()["pricing evidence"], "PASS")
         self.assertEqual(self.report()["pricing coverage"], "UNKNOWN")
 
+    def test_adjacent_utc_date_price_boundaries_fail_closed(self):
+        for field in ("startDate", "endDate"):
+            for boundary in ("2026-10-08", "2026-10-09", "2026-10-10"):
+                with self.subTest(field=field, boundary=boundary):
+                    self.evidence = copy.deepcopy(FIXTURE)
+                    self.attrs(PRICES)[field] = boundary
+                    self.assertEqual(self.report()["pricing evidence"], "FAIL")
+
+    def test_singapore_next_date_free_to_paid_transition_cannot_pass(self):
+        self.evidence[SCHEDULE]["data"]["relationships"]["baseTerritory"]["data"]["id"] = "SGP"
+        sg_prices = PRICES.replace("=USA", "=SGP")
+        self.evidence[sg_prices] = self.evidence.pop(PRICES)
+        free = self.evidence[sg_prices]["data"][0]
+        free["relationships"]["territory"]["data"]["id"] = "SGP"
+        free["attributes"]["endDate"] = "2026-10-10"
+        paid = copy.deepcopy(free)
+        paid["id"] = "paid-price"
+        paid["attributes"].update(startDate="2026-10-10", endDate=None)
+        paid["relationships"]["appPricePoint"]["data"]["id"] = "paid-point"
+        self.evidence[sg_prices]["data"].append(paid)
+        self.evidence[POINT]["data"]["relationships"]["territory"]["data"]["id"] = "SGP"
+        paid_point = copy.deepcopy(self.evidence[POINT])
+        paid_point["data"]["id"] = "paid-point"
+        paid_point["data"]["attributes"]["customerPrice"] = "1.99"
+        self.evidence[POINT.replace("point-1", "paid-point")] = paid_point
+        # Oct 10 in Apple's Singapore pricing timezone starts Oct 9 at 14:00 UTC.
+        self.assertEqual(self.report()["pricing evidence"], "FAIL")
+
+    def test_stable_zero_price_outside_transition_window_passes(self):
+        self.attrs(PRICES).update(startDate="2026-10-07", endDate="2026-10-11")
+        self.assertEqual(self.report()["pricing evidence"], "PASS")
+        self.attrs(PRICES).update(startDate=None, endDate=None)
+        self.assertEqual(self.report()["pricing evidence"], "PASS")
+
     def test_price_pagination_cannot_leave_schedule_or_base_filter(self):
         for link in ("/v1/appPriceSchedules/other/manualPrices?filter%5Bterritory%5D=USA", "/v1/appPriceSchedules/schedule-1/manualPrices?filter%5Bterritory%5D=SGP", "/v1/appPriceSchedules/schedule-1/manualPrices?cursor=next"):
             self.evidence[PRICES]["links"]["next"] = m.BASE + link
