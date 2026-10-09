@@ -30,6 +30,7 @@ xcodebuild test \
   -destination "platform=iOS Simulator,id=${udid}" \
   -resultBundlePath "${result_bundle}" \
   -only-testing:LazyMansRemindersTests \
+  ENABLE_TESTABILITY=YES \
   CODE_SIGN_STYLE=Manual \
   CODE_SIGN_IDENTITY=- \
   DEVELOPMENT_TEAM= \
