@@ -97,9 +97,55 @@ final class AppleCredentialMonitorTests: XCTestCase {
             queried = subject
             return .authorized
         }
-        monitor.update(user: account)
+        monitor.update(user: account, loginProvider: "apple")
         _ = await monitor.verifiedRevocation()
         XCTAssertEqual(queried, "opaque-apple-sub")
+    }
+
+    func testLinkedGoogleEmailAndAmbiguousRestorationPreserveAlternateLogin() async {
+        var account = user()
+        account.identities?.append(contentsOf: user(id: account.id, provider: "google").identities!)
+        account.identities?.append(contentsOf: user(id: account.id, provider: "email").identities!)
+        // Original-signup metadata and identity timestamps deliberately still favor Apple.
+        account.appMetadata["provider"] = .string("apple")
+        var calls = 0
+        let monitor = AppleCredentialMonitor { _ in calls += 1; return .notFound }
+        for provider in ["google", "email", nil] as [String?] {
+            monitor.update(user: account, loginProvider: provider)
+            let result = await monitor.verifiedRevocation()
+            XCTAssertNil(result)
+        }
+        XCTAssertEqual(calls, 0)
+        monitor.update(user: account, loginProvider: "apple")
+        let appleResult = await monitor.verifiedRevocation()
+        XCTAssertNotNil(appleResult)
+    }
+
+    func testAppleResultInvalidatedByAlternateLoginOnSameLinkedAccount() async throws {
+        var account = user()
+        account.identities?.append(contentsOf: user(id: account.id, provider: "google").identities!)
+        let monitor = AppleCredentialMonitor { _ in .revoked }
+        monitor.update(user: account, loginProvider: "apple")
+        let result = await monitor.verifiedRevocation()
+        let check = try XCTUnwrap(result)
+        XCTAssertTrue(monitor.isCurrent(check, user: account, loginProvider: "apple"))
+        monitor.update(user: account, loginProvider: "google")
+        XCTAssertFalse(monitor.isCurrent(check, user: account, loginProvider: "google"))
+    }
+
+    func testKnownProviderContextSurvivesRotationButNotAnotherSession() throws {
+        func token(_ sessionID: UUID) throws -> String {
+            let data = try JSONSerialization.data(withJSONObject: ["session_id": sessionID.uuidString])
+            let payload = data.base64EncodedString().replacingOccurrences(of: "=", with: "")
+                .replacingOccurrences(of: "+", with: "-").replacingOccurrences(of: "/", with: "_")
+            return "header.\(payload).signature"
+        }
+        let id = UUID()
+        let context = try XCTUnwrap(AppleCredentialMonitor.LoginContext(accessToken: token(id), provider: "email"))
+        XCTAssertEqual(context.provider(accessToken: try token(id)), "email")
+        XCTAssertNil(context.provider(accessToken: try token(UUID())))
+        XCTAssertNil(AppleCredentialMonitor.LoginContext(accessToken: "invalid", provider: "apple"))
+        XCTAssertNil(AppleCredentialMonitor.sessionID(accessToken: "header.e30.signature"))
     }
 
     func testDelayedRevocationCannotClearSwitchedAccountOrReturningAccount() async {

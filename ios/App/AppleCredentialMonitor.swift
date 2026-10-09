@@ -4,14 +4,37 @@ import Supabase
 
 @MainActor
 final class AppleCredentialMonitor {
+    struct LoginContext {
+        let sessionID: UUID
+        let provider: String
+
+        init?(accessToken: String, provider: String) {
+            guard let id = AppleCredentialMonitor.sessionID(accessToken: accessToken) else { return nil }
+            sessionID = id
+            self.provider = provider
+        }
+
+        func provider(accessToken: String) -> String? {
+            AppleCredentialMonitor.sessionID(accessToken: accessToken) == sessionID ? provider : nil
+        }
+    }
+
     struct Identity: Equatable {
         let userID: UUID
         let identityID: UUID
         let subject: String
         let signedInAt: Date?
 
-        static func from(user: User?) -> Identity? {
+        static func from(user: User?, loginProvider: String? = nil) -> Identity? {
             guard let user else { return nil }
+            if let loginProvider {
+                guard loginProvider == "apple" else { return nil }
+            } else {
+                // Linked identity timestamps and app_metadata.provider do not identify
+                // the current login. Preserve ambiguous restored alternate-provider sessions.
+                guard !(user.identities ?? []).contains(where: { $0.provider.lowercased() != "apple" })
+                else { return nil }
+            }
             for identity in user.identities ?? [] {
                 guard identity.provider.lowercased() == "apple",
                       identity.userId == user.id,
@@ -49,8 +72,8 @@ final class AppleCredentialMonitor {
         self.query = query
     }
 
-    func update(user: User?) {
-        let next = Identity.from(user: user)
+    func update(user: User?, loginProvider: String? = nil) {
+        let next = Identity.from(user: user, loginProvider: loginProvider)
         guard next != identity else { return }
         identity = next
         // A -> B -> A must also invalidate an outstanding callback for A.
@@ -72,8 +95,20 @@ final class AppleCredentialMonitor {
         }
     }
 
-    func isCurrent(_ check: VerifiedRevocation, user: User?) -> Bool {
+    func isCurrent(_ check: VerifiedRevocation, user: User?, loginProvider: String? = nil) -> Bool {
         check.revision == revision && check.identity == identity
-            && check.identity == Identity.from(user: user)
+            && check.identity == Identity.from(user: user, loginProvider: loginProvider)
+    }
+
+    nonisolated static func sessionID(accessToken: String) -> UUID? {
+        let parts = accessToken.split(separator: ".")
+        guard parts.count == 3 else { return nil }
+        var payload = String(parts[1]).replacingOccurrences(of: "-", with: "+")
+            .replacingOccurrences(of: "_", with: "/")
+        payload += String(repeating: "=", count: (4 - payload.count % 4) % 4)
+        guard let data = Data(base64Encoded: payload),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let value = json["session_id"] as? String else { return nil }
+        return UUID(uuidString: value)
     }
 }

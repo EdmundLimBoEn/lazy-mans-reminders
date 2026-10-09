@@ -39,6 +39,11 @@ actor ReminderStore {
         return session.resolvingUserID()
     }
 
+    func containsSession(accessToken: String, refreshToken: String) -> Bool {
+        guard let stored = storedSession() else { return false }
+        return stored.accessToken == accessToken && stored.refreshToken == refreshToken
+    }
+
     private var defaults: UserDefaults {
         guard let defaults = UserDefaults(suiteName: AppConfig.appGroupID) else {
             fatalError("App Group \(AppConfig.appGroupID) is not configured")
