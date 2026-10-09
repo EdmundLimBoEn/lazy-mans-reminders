@@ -42,7 +42,7 @@ final class ReminderStoreIdentityTests: XCTestCase {
             let task = Task { try await mutation.perform(on: fixture.store, reminder: reminder) }
             await fulfillment(of: [fixture.started], timeout: 3)
             try await signIn(fixture.store, userID: userID, token: "renewed-token")
-            var created = sample(userID: userID)
+            var created = sample(userID: userID, text: "New reminder")
             created.sortOrder = 1
             var updated = reminder
             updated.text = mutation == .edit ? "Edited" : reminder.text
@@ -400,9 +400,11 @@ final class ReminderStoreIdentityTests: XCTestCase {
             expected = [sample(userID: userID, id: reminder.id, text: "Replacement cache")]
             fixture.seed(expected)
         }
-        await fixture.network.finish(
-            data: mutation == .create ? try ReminderJSON.encoder.encode([reminder]) : Data()
-        )
+        var acknowledged = reminder
+        if mutation == .create { acknowledged.text = "New reminder" }
+        if mutation == .edit { acknowledged.text = "Edited" }
+        acknowledged.isDone = mutation == .complete
+        await fixture.network.finish(data: try ReminderJSON.encoder.encode([acknowledged]))
         await assertSignedOut(task)
         let cache = await fixture.store.cached()
         XCTAssertEqual(cache, expected)
