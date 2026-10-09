@@ -1,0 +1,206 @@
+{
+  "/v1/apps/6799138197/appStoreVersions": {
+    "data": [
+      {
+        "type": "appStoreVersions",
+        "id": "version-1",
+        "attributes": {
+          "versionString": "1.0",
+          "platform": "IOS",
+          "copyright": "2026 Example"
+        }
+      }
+    ],
+    "links": {
+      "next": null,
+      "self": "https://api.appstoreconnect.apple.com/v1/apps/6799138197/appStoreVersions"
+    }
+  },
+  "/v1/appStoreVersions/version-1/build": {
+    "data": {
+      "type": "builds",
+      "id": "build-1",
+      "attributes": {
+        "version": "10",
+        "processingState": "VALID",
+        "buildAudienceType": "APP_STORE_ELIGIBLE",
+        "usesNonExemptEncryption": false,
+        "expired": true,
+        "minOsVersion": "26.0"
+      }
+    },
+    "links": {
+      "self": "https://api.appstoreconnect.apple.com/v1/appStoreVersions/version-1/build"
+    }
+  },
+  "/v1/builds/build-1/app": {
+    "data": {
+      "type": "apps",
+      "id": "6799138197",
+      "attributes": {
+        "primaryLocale": "en-US"
+      }
+    },
+    "links": {
+      "self": "https://api.appstoreconnect.apple.com/v1/builds/build-1/app"
+    }
+  },
+  "/v1/builds/build-1/preReleaseVersion": {
+    "data": {
+      "type": "preReleaseVersions",
+      "id": "pre-1",
+      "attributes": {
+        "version": "1.0",
+        "platform": "IOS"
+      }
+    },
+    "links": {
+      "self": "https://api.appstoreconnect.apple.com/v1/builds/build-1/preReleaseVersion"
+    }
+  },
+  "/v1/appStoreVersions/version-1/appStoreVersionLocalizations": {
+    "data": [
+      {
+        "type": "appStoreVersionLocalizations",
+        "id": "locale-1",
+        "attributes": {
+          "locale": "en-US",
+          "description": "Synthetic example listing.",
+          "keywords": "reminders",
+          "supportUrl": "https://example.invalid/support"
+        }
+      }
+    ],
+    "links": {
+      "next": null,
+      "self": "https://api.appstoreconnect.apple.com/v1/appStoreVersions/version-1/appStoreVersionLocalizations"
+    }
+  },
+  "/v1/appStoreVersionLocalizations/locale-1/appScreenshotSets": {
+    "data": [
+      {
+        "type": "appScreenshotSets",
+        "id": "set-1",
+        "attributes": {
+          "screenshotDisplayType": "APP_IPHONE_67"
+        }
+      }
+    ],
+    "links": {
+      "next": null,
+      "self": "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/locale-1/appScreenshotSets"
+    }
+  },
+  "/v1/appScreenshotSets/set-1/appScreenshots": {
+    "data": [
+      {
+        "type": "appScreenshots",
+        "id": "shot-1",
+        "attributes": {
+          "fileName": "synthetic.png",
+          "fileSize": 100,
+          "assetDeliveryState": {
+            "state": "COMPLETE"
+          },
+          "imageAsset": {
+            "width": 1290,
+            "height": 2796
+          }
+        }
+      }
+    ],
+    "links": {
+      "next": null,
+      "self": "https://api.appstoreconnect.apple.com/v1/appScreenshotSets/set-1/appScreenshots"
+    }
+  },
+  "/v1/appStoreVersions/version-1/appStoreReviewDetail": {
+    "data": {
+      "type": "appStoreReviewDetails",
+      "id": "review-1",
+      "attributes": {
+        "contactFirstName": "Synthetic",
+        "contactLastName": "Fixture",
+        "contactEmail": "fixture@example.invalid",
+        "contactPhone": "+10000000000",
+        "demoAccountRequired": true,
+        "demoAccountName": "SYNTHETIC-ACCOUNT-NOT-REAL",
+        "demoAccountPassword": "SYNTHETIC-PASSWORD-NOT-REAL",
+        "notes": "Synthetic instructions; test only."
+      }
+    },
+    "links": {
+      "self": "https://api.appstoreconnect.apple.com/v1/appStoreVersions/version-1/appStoreReviewDetail"
+    }
+  },
+  "/v1/apps/6799138197/appInfos": {
+    "data": [
+      {
+        "type": "appInfos",
+        "id": "info-1",
+        "attributes": {
+          "state": "PREPARE_FOR_SUBMISSION"
+        }
+      }
+    ],
+    "links": {
+      "next": null,
+      "self": "https://api.appstoreconnect.apple.com/v1/apps/6799138197/appInfos"
+    }
+  },
+  "/v1/appInfos/info-1/appInfoLocalizations": {
+    "data": [
+      {
+        "type": "appInfoLocalizations",
+        "id": "info-locale-1",
+        "attributes": {
+          "locale": "en-US",
+          "name": "Synthetic Fixture",
+          "privacyPolicyUrl": "https://example.invalid/privacy"
+        }
+      }
+    ],
+    "links": {
+      "next": null,
+      "self": "https://api.appstoreconnect.apple.com/v1/appInfos/info-1/appInfoLocalizations"
+    }
+  },
+  "/v1/appInfos/info-1/ageRatingDeclaration": {
+    "data": {
+      "type": "ageRatingDeclarations",
+      "id": "age-1",
+      "attributes": {
+        "advertising": false,
+        "alcoholTobaccoOrDrugUseOrReferences": "NONE",
+        "contests": "NONE",
+        "gambling": false,
+        "gamblingSimulated": "NONE",
+        "gunsOrOtherWeapons": "NONE",
+        "healthOrWellnessTopics": false,
+        "lootBox": false,
+        "medicalOrTreatmentInformation": "NONE",
+        "messagingAndChat": false,
+        "parentalControls": false,
+        "profanityOrCrudeHumor": "NONE",
+        "ageAssurance": false,
+        "sexualContentGraphicAndNudity": "NONE",
+        "sexualContentOrNudity": "NONE",
+        "socialMedia": false,
+        "socialMediaAgeRestricted": false,
+        "horrorOrFearThemes": "NONE",
+        "matureOrSuggestiveThemes": "NONE",
+        "unrestrictedWebAccess": false,
+        "userGeneratedContent": false,
+        "violenceCartoonOrFantasy": "NONE",
+        "violenceRealisticProlongedGraphicOrSadistic": "NONE",
+        "violenceRealistic": "NONE",
+        "ageRatingOverride": "NONE",
+        "ageRatingOverrideV2": "NONE",
+        "koreaAgeRatingOverride": "NONE"
+      }
+    },
+    "links": {
+      "self": "https://api.appstoreconnect.apple.com/v1/appInfos/info-1/ageRatingDeclaration"
+    }
+  }
+}
