@@ -82,4 +82,26 @@ At c131c41, `scripts/asc-preflight.sh` runs read-only ASC commands. A green repo
 
 The coordinator owns a separate preflight fix PR. Its revised design deliberately returns UNKNOWN/nonzero for evidence the API cannot verify; require actual evidence and a manual release decision rather than blind attestations or forcing green. Re-audit that implementation when integrated; keep manual gates even after parser fixes.
 
+
+## Release PR map and integration order
+
+Coordinator plan as of **9 October 2026**; these ten PRs are open, not shipped. Confirm current bases and checks in GitHub before integration. This map does not authorize merging, deployment or submission.
+
+Start with [#54 — release build and web/MCP CI gates](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/54). The coordinator identified an existing persistence simulator-selector failure and a Node types dependency failure in hosted MCP CI; fixes belong in this CI foundation. Those workflow failures alone do not establish a feature-code failure. Feature branches are planned to stack on that foundation so native and hosted checks run with the corrected setup.
+
+Then integrate/review in the coordinator's planned order:
+
+1. [#50 — reject reminder mutations after sign-out](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/50).
+2. [#51 — preserve reminder drafts when add fails](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/51).
+3. [#52 — existing-account password login and secure reviewer provisioning guide](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/52).
+4. [#53 — privacy manifest and data handling disclosures](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/53).
+5. [#55 — account deletion cancellation and Apple revocation failure recovery](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/55).
+6. [#57 — revoked Apple credential handling](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/57).
+7. [#59 — submission preflight evidence checks](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/59).
+8. [#56 — verify reminder writes before updating cache](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/56), based on #50.
+
+[#58 — this requirements/submission documentation](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/58) remains standalone against `main`. When combining it with #57, preserve the exact **Apple credential revocation release gate (9 Oct 2026)** once in HUMANS.md's device QA checklist and remove the duplicate appended copy. Keep the separate server-side deletion gate. The reviewer guide links resolve when #52 is integrated.
+
+Validate the combined reviewed commit after integration; earlier individual or local test results do not certify that final artifact. Signing/archive evidence, simulator CI results and physical-device tests remain distinct release gates. All operator prerequisites remain in [HUMANS.md](../HUMANS.md#app-store-submission).
+
 Written by gpt-6.1-sol in T3 Code on behalf of Edmund
