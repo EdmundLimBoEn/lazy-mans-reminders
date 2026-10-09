@@ -5,7 +5,9 @@ import json
 import os
 import re
 import sys
-from urllib.parse import urlsplit
+from datetime import date, datetime, timezone
+from decimal import Decimal
+from urllib.parse import quote, urlencode, urlsplit, parse_qs
 from urllib.error import HTTPError
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 
@@ -62,7 +64,7 @@ class Evidence:
             if parsed.scheme != "https" or parsed.netloc != "api.appstoreconnect.apple.com":
                 raise MissingEvidence("untrusted pagination URL")
             path = parsed.path + ("?" + parsed.query if parsed.query else "")
-        if not path.startswith("/v1/") or "#" in path:
+        if not (path.startswith("/v1/") or path.startswith("/v3/appPricePoints/")) or "#" in path:
             raise MissingEvidence("unsupported API path")
         try:
             if self.responses is not None:
@@ -85,16 +87,21 @@ class Evidence:
             # API payloads, errors and exception text may contain secrets.
             raise MissingEvidence("API evidence unavailable or malformed") from None
 
-    def one(self, path, kind):
+    def one(self, path, kind, attributes=True):
         item = self.get(path)["data"]
-        return resource(item, kind)
+        return resource(item, kind, attributes)
 
-    def many(self, path, kind):
+    def many(self, path, kind, pricing_scope=None):
         items, seen, total = [], set(), None
         while path:
             if path in seen or len(seen) >= 100:
                 raise MissingEvidence("pagination incomplete")
             seen.add(path)
+            if pricing_scope is not None:
+                parsed = urlsplit(path)
+                expected_path, territory = pricing_scope
+                if parsed.path != expected_path or parse_qs(parsed.query).get("filter[territory]") != [territory]:
+                    raise MissingEvidence("price pagination left selected schedule/base territory")
             obj = self.get(path)
             if not isinstance(obj["data"], list):
                 raise MissingEvidence("expected collection")
@@ -118,13 +125,38 @@ class Evidence:
         return items
 
 
-def resource(item, kind):
+def resource(item, kind, attributes=True):
+    opaque = kind in {"appPrices", "appPricePoints", "appPriceSchedules"}
     if (not isinstance(item, dict) or item.get("type") != kind
             or not isinstance(item.get("id"), str)
-            or not re.fullmatch(r"[A-Za-z0-9-]+", item["id"])
-            or not isinstance(item.get("attributes"), dict)):
+            or not item["id"] or len(item["id"]) > 4096
+            or (not opaque and not re.fullmatch(r"[A-Za-z0-9-]+", item["id"]))
+            or (opaque and any(ord(c) < 33 for c in item["id"]))
+            or (attributes and not isinstance(item.get("attributes"), dict))):
         raise MissingEvidence("missing typed resource attributes")
     return item
+
+
+def relationship(item, name, kind):
+    try:
+        data = item["relationships"][name]["data"]
+        return resource(data, kind, attributes=False)["id"]
+    except Exception:
+        raise MissingEvidence("missing or malformed typed pricing relationship") from None
+
+
+def price_date(attributes, name):
+    if name not in attributes:
+        raise MissingEvidence("price interval evidence missing")
+    value = attributes[name]
+    if value is None:
+        return None
+    if not isinstance(value, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+        raise MissingEvidence("price interval evidence malformed")
+    try:
+        return date.fromisoformat(value)
+    except ValueError:
+        raise MissingEvidence("price interval evidence malformed") from None
 
 
 def present(value):
@@ -139,9 +171,10 @@ def url(value):
 
 
 class Preflight:
-    def __init__(self, evidence, app, version, platform, info_id=None):
+    def __init__(self, evidence, app, version, platform, info_id=None, today=None):
         self.api, self.app, self.version, self.platform = evidence, app, version, platform
         self.info_id = info_id
+        self.today = today or datetime.now(timezone.utc).date()
         self.results = []
 
     def record(self, name, ok, detail):
@@ -165,17 +198,52 @@ class Preflight:
     def run(self):
         self.check("version scope", self.version_checks)
         self.check("app information", self.app_checks)
+        self.check("pricing evidence", self.pricing_checks)
         for name, detail in [
             ("toolchain and SDK", "verify attached archive used stable Xcode and iOS 26 SDK or later; API SDK build IDs/minOsVersion do not prove this"),
             ("screenshot completeness", "verify current required device sizes, supported device families, localization scaling and screenshot content in ASC; delivered assets alone are insufficient"),
             ("reviewer access", "exercise sign-in with the submitted build; confirm valid demo account or Apple-approved access alternative, backend availability and instructions"),
             ("privacy labels", "verify published App Privacy answers match app and third-party behavior; privacy URL and bundled manifest are insufficient"),
             ("age rating completion", "confirm current questionnaire and calculated regional ratings in ASC; answer presence alone does not prove completion"),
-            ("distribution prerequisites", "confirm pricing AND territory availability, agreements, content rights, category and applicable trader/compliance declarations in ASC"),
+            ("pricing coverage", "base-territory current-price evidence does not establish future/submission-date prices, per-territory overrides/equalization or territory availability; verify in ASC"),
+            ("distribution prerequisites", "confirm territory availability, agreements, content rights, category and applicable trader/compliance declarations in ASC"),
             ("device QA", "signed build, physical iPhone QA and Xcode validation remain human prerequisites"),
         ]:
             self.results.append(("UNKNOWN", name, detail))
         return self.results
+
+    def pricing_checks(self):
+        schedule = self.api.one(f"/v1/apps/{self.app}/appPriceSchedule?include=app,baseTerritory", "appPriceSchedules", attributes=False)
+        if relationship(schedule, "app", "apps") != self.app:
+            raise MissingEvidence("price schedule belongs to another app")
+        territory = relationship(schedule, "baseTerritory", "territories")
+        path = f"/v1/appPriceSchedules/{quote(schedule['id'], safe='')}/manualPrices"
+        prices = self.api.many(path + "?" + urlencode({"filter[territory]": territory}), "appPrices", pricing_scope=(path, territory))
+        if not prices:
+            raise MissingEvidence("no manual base-territory prices on selected schedule")
+        current = []
+        for price in prices:
+            a = price["attributes"]
+            if a.get("manual") is not True or relationship(price, "territory", "territories") != territory:
+                raise MissingEvidence("price row is not manual or outside selected base territory")
+            point_id = relationship(price, "appPricePoint", "appPricePoints")
+            start, end = price_date(a, "startDate"), price_date(a, "endDate")
+            if start is not None and end is not None and start >= end:
+                raise MissingEvidence("invalid price interval")
+            if start == self.today or end == self.today:
+                raise MissingEvidence("price changes on today's date; verify storefront timing in ASC")
+            if (start is None or start < self.today) and (end is None or self.today < end):
+                current.append(point_id)
+        if len(current) != 1:
+            raise MissingEvidence("need exactly one unambiguous currently applicable base-territory price")
+        point = self.api.one(f"/v3/appPricePoints/{quote(current[0], safe='')}?include=app,territory", "appPricePoints")
+        if (point["id"] != current[0] or relationship(point, "app", "apps") != self.app
+                or relationship(point, "territory", "territories") != territory):
+            raise MissingEvidence("price point does not match selected price/app/base territory")
+        amount = point["attributes"].get("customerPrice")
+        if not isinstance(amount, str) or not re.fullmatch(r"[0-9]+(?:\.[0-9]+)?", amount):
+            raise MissingEvidence("customerPrice must be a nonnegative decimal string; proceeds are insufficient")
+        self.record("pricing evidence", Decimal(amount) == 0, "scoped current base-territory customerPrice must equal decimal zero for this free app; paid price fails, availability/proceeds never imply free")
 
     def version_checks(self):
         versions = self.api.many(f"/v1/apps/{self.app}/appStoreVersions", "appStoreVersions")
@@ -280,7 +348,7 @@ class Preflight:
 
 def main():
     parser = argparse.ArgumentParser(description="Read-only ASC evidence checks. FAIL/UNKNOWN always exit 1. Never submits.")
-    parser.add_argument("--evidence", help="offline JSON object mapping documented /v1/... GET paths to unmodified response envelopes; never commit real review credentials")
+    parser.add_argument("--evidence", help="offline JSON object mapping documented /v1/... and /v3/appPricePoints/... GET paths to unmodified response envelopes; never commit real review credentials")
     args = parser.parse_args()
     app = os.getenv("ASC_APP_ID", "6799138197")
     version = os.getenv("ASC_VERSION", "1.0")

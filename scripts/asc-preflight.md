@@ -25,7 +25,8 @@ bash -n scripts/asc-preflight.sh
 The fixture contains synthetic contacts and unusable demo-account placeholders,
 not a real reviewer identity. Its URLs intentionally use `example.invalid`.
 It is not evidence about the production app. Offline files are a JSON object
-mapping exact `/v1/...` GET paths (including pagination queries) to original Apple
+mapping exact `/v1/...` and `/v3/appPricePoints/...` GET paths (including query
+parameters and pagination) to original Apple
 response envelopes. Use the fixture as a shape example. Keep real responses in
 private temporary storage: review-detail responses can contain credentials.
 Snapshots do not prove freshness, URL availability or current ASC state.
@@ -47,6 +48,29 @@ APPROVED declaration attached to the chosen build. An explicitly false
 usesNonExemptEncryption is evidence of the recorded answer, not a legal conclusion.
 TestFlight expiration concerns testing, so it is not used to reject a VALID App
 Store build. TestFlight approval never counts as App Store approval.
+
+Pricing evidence is fetched independently using the app-scoped
+`GET /v1/apps/{id}/appPriceSchedule?include=app,baseTerritory`, then the schedule's
+`manualPrices` GET collection filtered to its base territory. Pagination must
+stay on that schedule and preserve the territory filter. Each price needs typed
+manual/date/territory/price-point evidence; exactly one currently applicable
+base-territory row is required. Its linked
+`GET /v3/appPricePoints/{id}?include=app,territory` must match the selected point,
+app and territory and expose a nonnegative decimal-string `customerPrice`.
+Opaque point IDs are URL-encoded, never decoded to infer a price. The expected
+base price for this app is free: decimal zero passes; a nonzero price fails.
+Missing/null/404/malformed schedule, price or point responses fail. Zero
+`proceeds`, an object ID, availability or an unrelated included object never
+establishes a free customer price.
+
+Price intervals require explicit start/end fields: null represents an unbounded
+endpoint; non-null values must be ISO calendar dates. UTC date strictly inside
+the interval (or its unbounded endpoints) establishes current-date evidence;
+changes beginning/ending today fail conservatively for storefront-time review.
+Future-only, past-only or overlapping current prices cannot pass. This does not
+certify prices on the future submission/release date, manual territory overrides,
+automatic equalization or distribution availability: those remain UNKNOWN and
+require review in ASC. Offline snapshots do not prove live freshness.
 
 Screenshot set IDs never count as files. At least one delivered screenshot and
 no more than ten per returned set are required; dimensions and file sizes must be
@@ -97,6 +121,12 @@ physical iPhone QA; no macOS build host/device was discovered for this change.
 - [Age rating](https://developer.apple.com/help/app-store-connect/manage-app-information/set-an-app-age-rating/):
   answer the current questionnaire; don't assume the old 4+ label proves completion.
 - [Encryption](https://developer.apple.com/help/app-store-connect/manage-app-information/overview-of-export-compliance/).
+- [Set a price](https://developer.apple.com/help/app-store-connect/manage-app-pricing/set-a-price/)
+  and [AppPriceSchedule API](https://developer.apple.com/documentation/appstoreconnectapi/apppriceschedule):
+  pricing must be set before review; a base-territory price does not certify all
+  storefront overrides. Apple's OpenAPI defines AppPriceSchedule relationships,
+  AppPriceV2 interval/manual fields, AppPricePointV3 customerPrice and app/territory
+  linkage, and the exact GET endpoints/filter/include parameters used here.
 - [Apple OpenAPI specification](https://developer.apple.com/sample-code/app-store-connect/app-store-connect-openapi-specification.zip):
   fixture endpoint paths, resource types and attribute names verified against
   Apple's downloaded schema. Includes audience, processing, asset-delivery,

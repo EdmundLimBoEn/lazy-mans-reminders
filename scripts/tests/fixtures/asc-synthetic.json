@@ -202,5 +202,85 @@
     "links": {
       "self": "https://api.appstoreconnect.apple.com/v1/appInfos/info-1/ageRatingDeclaration"
     }
+  },
+  "/v1/apps/6799138197/appPriceSchedule?include=app,baseTerritory": {
+    "data": {
+      "type": "appPriceSchedules",
+      "id": "schedule-1",
+      "relationships": {
+        "app": {
+          "data": {
+            "type": "apps",
+            "id": "6799138197"
+          }
+        },
+        "baseTerritory": {
+          "data": {
+            "type": "territories",
+            "id": "USA"
+          }
+        }
+      }
+    },
+    "links": {
+      "self": "https://api.appstoreconnect.apple.com/v1/apps/6799138197/appPriceSchedule?include=app,baseTerritory"
+    }
+  },
+  "/v1/appPriceSchedules/schedule-1/manualPrices?filter%5Bterritory%5D=USA": {
+    "data": [
+      {
+        "type": "appPrices",
+        "id": "price-1",
+        "attributes": {
+          "manual": true,
+          "startDate": null,
+          "endDate": null
+        },
+        "relationships": {
+          "appPricePoint": {
+            "data": {
+              "type": "appPricePoints",
+              "id": "point-1"
+            }
+          },
+          "territory": {
+            "data": {
+              "type": "territories",
+              "id": "USA"
+            }
+          }
+        }
+      }
+    ],
+    "links": {
+      "self": "https://api.appstoreconnect.apple.com/v1/appPriceSchedules/schedule-1/manualPrices?filter%5Bterritory%5D=USA"
+    }
+  },
+  "/v3/appPricePoints/point-1?include=app,territory": {
+    "data": {
+      "type": "appPricePoints",
+      "id": "point-1",
+      "attributes": {
+        "customerPrice": "0.00",
+        "proceeds": "0.00"
+      },
+      "relationships": {
+        "app": {
+          "data": {
+            "type": "apps",
+            "id": "6799138197"
+          }
+        },
+        "territory": {
+          "data": {
+            "type": "territories",
+            "id": "USA"
+          }
+        }
+      }
+    },
+    "links": {
+      "self": "https://api.appstoreconnect.apple.com/v3/appPricePoints/point-1?include=app,territory"
+    }
   }
 }
