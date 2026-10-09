@@ -178,6 +178,49 @@ Deno.test("grant cleanup decodes JSON split across streamed chunks", async () =>
   assertEquals(response.body?.locked, false);
 });
 
+Deno.test("grant cleanup aborts continuously ready chunks even when the timer is starved", async () => {
+  let cancelled = false;
+  let completed = false;
+  let signal: AbortSignal | undefined;
+  const encoder = new TextEncoder();
+  const padding = encoder.encode("                ");
+  let finishAt = 0;
+  const response = new Response(
+    new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(encoder.encode('{"complete":true'));
+      },
+      pull(controller) {
+        if (performance.now() < finishAt) {
+          controller.enqueue(padding);
+        } else {
+          completed = true;
+          controller.enqueue(encoder.encode("}"));
+          controller.close();
+        }
+      },
+      cancel() {
+        cancelled = true;
+      },
+    }),
+  );
+  const result = await revokeUserOauthGrants({
+    ...input,
+    timeoutMs: 10,
+    fetchImpl: (_url, init) => {
+      signal = init?.signal ?? undefined;
+      // The finite producer stays ready beyond the deadline without yielding to timers.
+      finishAt = performance.now() + 30;
+      return Promise.resolve(response);
+    },
+  });
+  assertEquals(result, { ok: false, reason: "unreachable" });
+  assertEquals(signal?.aborted, true);
+  assertEquals(cancelled, true);
+  assertEquals(completed, false);
+  assertEquals(response.body?.locked, false);
+});
+
 Deno.test("grant cleanup rejects invalid deadlines without sending a request", async () => {
   for (const timeoutMs of [0, -1, NaN, Infinity]) {
     assertEquals(

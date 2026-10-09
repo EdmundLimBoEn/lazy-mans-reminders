@@ -26,11 +26,21 @@ export async function revokeUserOauthGrants(input: {
   if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) {
     return { ok: false, reason: "unreachable" };
   }
+  const expiresAt = performance.now() + timeoutMs;
+  const abortCleanup = () => {
+    if (!controller.signal.aborted) {
+      controller.abort();
+      void reader?.cancel().catch(() => {});
+    }
+  };
+  const expired = () => {
+    if (performance.now() >= expiresAt) abortCleanup();
+    return controller.signal.aborted;
+  };
   let timer: ReturnType<typeof setTimeout> | undefined;
   const deadline = new Promise<GrantCleanupResult>((resolve) => {
     timer = setTimeout(() => {
-      controller.abort();
-      void reader?.cancel().catch(() => {});
+      abortCleanup();
       resolve({ ok: false, reason: "unreachable" });
     }, timeoutMs);
   });
@@ -49,7 +59,7 @@ export async function revokeUserOauthGrants(input: {
     } catch {
       return { ok: false, reason: "unreachable" };
     }
-    if (controller.signal.aborted || !response.ok) {
+    if (expired() || !response.ok) {
       void response.body?.cancel().catch(() => {});
       return {
         ok: false,
@@ -61,22 +71,26 @@ export async function revokeUserOauthGrants(input: {
       const decoder = new TextDecoder();
       let text = "";
       while (reader) {
+        // Ready chunks can starve the timer by keeping execution in microtasks.
+        if (expired()) return { ok: false, reason: "unreachable" };
         const { done, value } = await reader.read();
-        if (controller.signal.aborted) {
+        if (expired()) {
           return { ok: false, reason: "unreachable" };
         }
         if (done) break;
         text += decoder.decode(value, { stream: true });
       }
       text += decoder.decode();
+      if (expired()) return { ok: false, reason: "unreachable" };
       const body = JSON.parse(text) as { complete?: unknown } | null;
+      if (expired()) return { ok: false, reason: "unreachable" };
       return body?.complete === true
         ? { ok: true }
         : { ok: false, reason: "incomplete" };
     } catch {
       return {
         ok: false,
-        reason: controller.signal.aborted ? "unreachable" : "incomplete",
+        reason: expired() ? "unreachable" : "incomplete",
       };
     } finally {
       reader?.releaseLock();
