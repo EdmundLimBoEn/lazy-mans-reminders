@@ -213,6 +213,111 @@ final class ReminderStoreIdentityTests: XCTestCase {
         XCTAssertEqual((response as? HTTPURLResponse)?.statusCode, 400)
     }
 
+    func testFailedAuthRefreshUsesFreshSameSessionAfterRefreshTokenRotation() async throws {
+        for mutation in [Mutation.create, .edit, .complete] {
+            try await checkConcurrentAuthRotation(mutation, authStatus: 400)
+        }
+        try await checkConcurrentAuthRotation(nil, authStatus: 400)
+    }
+
+    func testDelayedSuccessfulAuthRefreshCannotOverwriteFreshSameSessionRotation() async throws {
+        try await checkConcurrentAuthRotation(.edit, authStatus: 200)
+    }
+
+    func testFailedAuthRefreshDoesNotFallBackToOriginalAfterRotationToExpiredTokens() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let userID = UUID()
+        let sessionID = UUID()
+        try await signIn(
+            fixture.store, userID: userID, token: jwt(userID: userID, sessionID: sessionID),
+            expiresIn: 45, refreshToken: "R1"
+        )
+        let task = Task { await fixture.store.isSignedIn() }
+        await fulfillment(of: [fixture.started], timeout: 3)
+        try await signIn(
+            fixture.store, userID: userID, token: jwt(userID: userID, sessionID: sessionID, issuedAt: 2),
+            expiresIn: -1, refreshToken: "R2"
+        )
+        await fixture.network.finish(data: Data(), statusCode: 400)
+        let signedIn = await task.value
+        XCTAssertFalse(signedIn, "A rotated unusable session must not fall back to the original token")
+    }
+
+    func testFailedAuthRefreshRejectsFreshNewJWTSessionWithoutSignOut() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let userID = UUID()
+        try await signIn(
+            fixture.store, userID: userID, token: jwt(userID: userID, sessionID: UUID()),
+            expiresIn: 45, refreshToken: "R1"
+        )
+        let task = Task { await fixture.store.isSignedIn() }
+        await fulfillment(of: [fixture.started], timeout: 3)
+        let replacement = try jwt(userID: userID, sessionID: UUID(), issuedAt: 2)
+        try await signIn(fixture.store, userID: userID, token: replacement, refreshToken: "R2")
+        await fixture.network.finish(data: Data(), statusCode: 400)
+        let signedIn = await task.value
+        XCTAssertFalse(signedIn, "An old request cannot adopt a different auth session")
+        let savedData = try XCTUnwrap(fixture.defaults.data(forKey: "shared-session"))
+        let saved = try JSONDecoder().decode(SharedSession.self, from: savedData)
+        XCTAssertEqual(saved.accessToken, replacement)
+        XCTAssertEqual(saved.refreshToken, "R2")
+    }
+
+    private func checkConcurrentAuthRotation(_ mutation: Mutation?, authStatus: Int) async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let userID = UUID()
+        let sessionID = UUID()
+        let reminder = sample(userID: userID)
+        try await signIn(
+            fixture.store, userID: userID, token: jwt(userID: userID, sessionID: sessionID),
+            expiresIn: 45, refreshToken: "R1"
+        )
+        fixture.seed([reminder])
+        let task = Task {
+            if let mutation { return try await mutation.perform(on: fixture.store, reminder: reminder) }
+            return try await fixture.store.refresh(performMaintenance: false)
+        }
+        await fulfillment(of: [fixture.started], timeout: 3)
+        let rotated = try jwt(userID: userID, sessionID: sessionID, issuedAt: 2)
+        try await signIn(fixture.store, userID: userID, token: rotated, refreshToken: "R2")
+        var returned = reminder
+        if mutation == .edit { returned.text = "Edited" }
+        if mutation == .complete { returned.isDone = true }
+        if mutation == .create { returned = sample(userID: userID); returned.sortOrder = 1 }
+        let lateAuthData = try JSONSerialization.data(withJSONObject: [
+            "access_token": jwt(userID: userID, sessionID: sessionID, issuedAt: 3),
+            "refresh_token": "late-R1-response", "expires_in": 3600
+        ])
+        await fixture.network.finish(
+            data: authStatus == 200 ? lateAuthData : Data(), statusCode: authStatus,
+            reminderData: try ReminderJSON.encoder.encode([returned])
+        )
+        let result = try await task.value
+        switch mutation {
+        case .create: XCTAssertEqual(result, [reminder, returned])
+        case .edit: XCTAssertEqual(result, [returned])
+        case .complete: XCTAssertTrue(result.isEmpty)
+        case nil: XCTAssertEqual(result, [returned])
+        case .restore: XCTFail("Restore needs a separate maintenance response")
+        }
+        let requests = await fixture.network.requests
+        XCTAssertEqual(requests.count, 2)
+        XCTAssertEqual(requests.first?.url?.path, "/auth/v1/token")
+        let authBody = try XCTUnwrap(requests.first?.httpBody)
+        let authPayload = try JSONSerialization.jsonObject(with: authBody) as? [String: String]
+        XCTAssertEqual(authPayload?["refresh_token"], "R1")
+        XCTAssertEqual(requests.last?.value(forHTTPHeaderField: "Authorization"), "Bearer \(rotated)")
+        let savedData = try XCTUnwrap(fixture.defaults.data(forKey: "shared-session"))
+        let saved = try JSONDecoder().decode(SharedSession.self, from: savedData)
+        XCTAssertEqual(saved.accessToken, rotated)
+        XCTAssertEqual(saved.refreshToken, "R2")
+        let cache = await fixture.store.cached()
+        XCTAssertEqual(cache, result)
+    }
+
     private func checkFailedAuthRefresh(_ mutation: Mutation?) async throws {
         let fixture = Fixture()
         defer { fixture.cleanUp() }
@@ -312,10 +417,11 @@ final class ReminderStoreIdentityTests: XCTestCase {
     }
 
     private func signIn(
-        _ store: ReminderStore, userID: UUID, token: String = "test-token", expiresIn: TimeInterval = 3600
+        _ store: ReminderStore, userID: UUID, token: String = "test-token", expiresIn: TimeInterval = 3600,
+        refreshToken: String = "test-refresh"
     ) async throws {
         try await store.saveSession(
-            accessToken: token, refreshToken: "test-refresh",
+            accessToken: token, refreshToken: refreshToken,
             expiresAt: Date().addingTimeInterval(expiresIn), userID: userID
         )
     }
@@ -360,6 +466,8 @@ final class ReminderStoreIdentityTests: XCTestCase {
         let started: XCTestExpectation
         var requestCount = 0
         var requestURL: URL?
+        var requests: [URLRequest] = []
+        private var reminderData: Data?
         private var completion: (Data, URLResponse)?
         private var pending: CheckedContinuation<(Data, URLResponse), Error>?
 
@@ -368,7 +476,16 @@ final class ReminderStoreIdentityTests: XCTestCase {
         func send(_ request: URLRequest) async throws -> (Data, URLResponse) {
             requestCount += 1
             requestURL = request.url
-            guard requestCount == 1 else { throw URLError(.cancelled) }
+            requests.append(request)
+            if requestCount > 1 {
+                guard request.url?.path == "/rest/v1/reminders", let reminderData else {
+                    throw URLError(.cancelled)
+                }
+                return (
+                    reminderData,
+                    HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+                )
+            }
             if let completion {
                 started.fulfill()
                 return completion
@@ -379,8 +496,9 @@ final class ReminderStoreIdentityTests: XCTestCase {
             }
         }
 
-        func finish(data: Data, statusCode: Int = 200) {
+        func finish(data: Data, statusCode: Int = 200, reminderData: Data? = nil) {
             guard completion == nil else { return }
+            self.reminderData = reminderData
             let result: (Data, URLResponse) = (
                 data,
                 HTTPURLResponse(
