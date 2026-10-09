@@ -3,6 +3,7 @@ import Combine
 import CryptoKit
 import Foundation
 import Supabase
+import UIKit
 
 enum AuthNotice: Equatable {
     case checkInbox(email: String)
@@ -31,7 +32,9 @@ final class AuthManager: ObservableObject {
         }
     }
 
-    @Published private(set) var session: Session?
+    @Published private(set) var session: Session? {
+        didSet { appleCredentialMonitor.update(user: session?.user) }
+    }
     @Published private(set) var isRestoringSession = true
     @Published private(set) var isAuthenticating = false
     @Published private(set) var notice: AuthNotice?
@@ -41,6 +44,8 @@ final class AuthManager: ObservableObject {
         supabaseKey: AppConfig.supabaseAnonKey
     )
 
+    private let appleCredentialMonitor = AppleCredentialMonitor()
+    private var credentialObservers: Set<AnyCancellable> = []
     private var isEndingSession = false
     private var restorationTask: Task<Void, Never>?
     private var pendingAppleNonce: String?
@@ -49,6 +54,17 @@ final class AuthManager: ObservableObject {
     private let oauthRedirectURL = URL(string: "lazymansreminders://auth/callback")!
 
     init() {
+        for name in [ASAuthorizationAppleIDProvider.credentialRevokedNotification,
+                     UIApplication.didBecomeActiveNotification] {
+            NotificationCenter.default.publisher(for: name)
+                .sink { [weak self] _ in
+                    Task { @MainActor [weak self] in
+                        await self?.waitForRestoration()
+                        await self?.checkAppleCredential()
+                    }
+                }
+                .store(in: &credentialObservers)
+        }
         restorationTask = Task {
             do {
                 session = try await client.auth.session
@@ -58,16 +74,30 @@ final class AuthManager: ObservableObject {
             }
             await shareSession()
             isRestoringSession = false
+            Task { await checkAppleCredential() }
             await registerLiveActivityTokens()
         }
         Task {
             await waitForRestoration()
             for await (event, nextSession) in await client.auth.authStateChanges {
                 session = nextSession
+                if event == .initialSession || event == .signedIn || event == .userUpdated {
+                    // Keep consuming auth events while Apple's callback is outstanding.
+                    Task { await checkAppleCredential() }
+                }
                 await shareSession(clearWhenSignedOut: event == .signedOut)
             }
         }
         Task { await observeSharedSessionRefresh() }
+    }
+
+    private func checkAppleCredential() async {
+        guard !isRestoringSession, !isEndingSession, !isAuthenticating else { return }
+        guard let revocation = await appleCredentialMonitor.verifiedRevocation(),
+              !isEndingSession, !isAuthenticating,
+              appleCredentialMonitor.isCurrent(revocation, user: client.auth.currentSession?.user)
+        else { return }
+        await signOut()
     }
 
     func waitForRestoration() async {
@@ -136,7 +166,10 @@ final class AuthManager: ObservableObject {
             }
 
             isAuthenticating = true
-            defer { isAuthenticating = false }
+            defer {
+                isAuthenticating = false
+                Task { await checkAppleCredential() }
+            }
             do {
                 session = try await client.auth.signInWithIdToken(
                     credentials: .init(
