@@ -32,7 +32,7 @@ final class ReminderStoreIdentityTests: XCTestCase {
     }
 
     func testMutationsStillSucceedWhenOnlyTheAccessTokenChanges() async throws {
-        for mutation in [Mutation.create, .edit, .complete] {
+        for mutation in [Mutation.create, .edit, .complete, .restore] {
             let fixture = Fixture()
             defer { fixture.cleanUp() }
             let userID = UUID()
@@ -44,15 +44,18 @@ final class ReminderStoreIdentityTests: XCTestCase {
             try await signIn(fixture.store, userID: userID, token: "renewed-token")
             var created = sample(userID: userID)
             created.sortOrder = 1
+            var updated = reminder
+            updated.text = mutation == .edit ? "Edited" : reminder.text
+            updated.isDone = mutation == .complete
             await fixture.network.finish(
-                data: mutation == .create ? try ReminderJSON.encoder.encode([created]) : Data()
+                data: try ReminderJSON.encoder.encode([mutation == .create ? created : updated])
             )
             let result = try await task.value
             switch mutation {
             case .create: XCTAssertEqual(result, [reminder, created])
             case .edit: XCTAssertEqual(result.first?.text, "Edited")
             case .complete: XCTAssertTrue(result.isEmpty)
-            case .restore: XCTFail("Restore is tested separately")
+            case .restore: XCTAssertEqual(result, [reminder])
             }
             let cache = await fixture.store.cached()
             XCTAssertEqual(cache, result)
