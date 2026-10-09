@@ -227,10 +227,31 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
         XCTAssertEqual(cache, sameID ? [] : [editedSnapshot])
     }
 
+    func testOverlapFixtureBuffersResponsesBeforeRequestsStart() async throws {
+        let editStarted = XCTestExpectation(description: "Buffered edit started")
+        let completionStarted = XCTestExpectation(description: "Buffered completion started")
+        let network = OverlappingNetwork(editStarted: editStarted, completionStarted: completionStarted)
+        for completion in [false, true] {
+            let expected = Data((completion ? "completion" : "edit").utf8)
+            await network.finish(completion: completion, data: expected)
+            await network.finish(completion: completion, data: Data("duplicate".utf8))
+            var request = URLRequest(url: URL(string: "https://reminders.invalid/rest/v1/reminders")!)
+            request.httpMethod = "PATCH"
+            request.setValue("return=representation", forHTTPHeaderField: "Prefer")
+            let body: [String: Any] = completion ? ["is_done": true] : ["text": "Edited"]
+            request.httpBody = try JSONSerialization.data(withJSONObject: body)
+            let (data, response) = try await network.send(request)
+            XCTAssertEqual(data, expected, "First completion must be preserved for a late request")
+            XCTAssertEqual((response as? HTTPURLResponse)?.statusCode, 200)
+        }
+        await fulfillment(of: [editStarted, completionStarted], timeout: 3)
+    }
+
     private actor OverlappingNetwork {
         let editStarted: XCTestExpectation
         let completionStarted: XCTestExpectation
         private var pending: [Bool: CheckedContinuation<(Data, URLResponse), Error>] = [:]
+        private var completions: [Bool: (Data, URLResponse)] = [:]
 
         init(editStarted: XCTestExpectation, completionStarted: XCTestExpectation) {
             self.editStarted = editStarted
@@ -243,6 +264,10 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             let body = try XCTUnwrap(request.httpBody)
             let fields = try XCTUnwrap(JSONSerialization.jsonObject(with: body) as? [String: Any])
             let completion = fields["is_done"] as? Bool == true
+            if let result = completions[completion] {
+                (completion ? completionStarted : editStarted).fulfill()
+                return result
+            }
             return try await withCheckedThrowingContinuation { continuation in
                 pending[completion] = continuation
                 (completion ? completionStarted : editStarted).fulfill()
@@ -250,10 +275,13 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
         }
 
         func finish(completion: Bool, data: Data) {
-            pending.removeValue(forKey: completion)?.resume(returning: (
+            guard completions[completion] == nil else { return }
+            let result: (Data, URLResponse) = (
                 data, HTTPURLResponse(url: URL(string: "https://reminders.invalid/rest/v1/reminders")!,
                                       statusCode: 200, httpVersion: nil, headerFields: nil)!
-            ))
+            )
+            completions[completion] = result
+            pending.removeValue(forKey: completion)?.resume(returning: result)
         }
     }
 
