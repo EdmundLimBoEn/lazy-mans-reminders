@@ -38,6 +38,7 @@ actor ReminderStore {
     private let injectedDefaults: UserDefaults?
     private let serviceURL: URL?
     private let anonKey: String?
+    private var pendingUpdates: [UUID: UUID] = [:]
     private let requestData: (URLRequest) async throws -> (Data, URLResponse)
 
     init(
@@ -385,11 +386,17 @@ actor ReminderStore {
         guard trimmed != nil || isDone != nil else {
             return cached()
         }
+        let mutationID = UUID()
+        pendingUpdates[id] = mutationID
+        defer {
+            if pendingUpdates[id] == mutationID { pendingUpdates.removeValue(forKey: id) }
+        }
         let identityRevision = defaults.string(forKey: identityRevisionKey)
         guard let session = await loadFreshSession(), let ownerID = session.userID else {
             throw StoreError.signedOut
         }
         try requireCurrentIdentity(session, revision: identityRevision)
+        guard pendingUpdates[id] == mutationID else { throw StoreError.mutationConflict }
 
         struct UpdateBody: Encodable {
             var text: String?
@@ -433,6 +440,8 @@ actor ReminderStore {
         }
 
         try requireCurrentIdentity(session, revision: identityRevision)
+        // A returned row is a snapshot; a newer same-ID request makes it obsolete.
+        guard pendingUpdates[id] == mutationID else { throw StoreError.mutationConflict }
         let updated = try acknowledgedReminder(responseData, ownerID: ownerID, id: id, text: trimmed, isDone: isDone)
         return try cacheAcknowledgedReminder(updated)
     }
