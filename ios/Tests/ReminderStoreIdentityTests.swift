@@ -296,7 +296,7 @@ final class ReminderStoreIdentityTests: XCTestCase {
         var returned = reminder
         if mutation == .edit { returned.text = "Edited" }
         if mutation == .complete { returned.isDone = true }
-        if mutation == .create { returned = sample(userID: userID); returned.sortOrder = 1 }
+        if mutation == .create { returned = sample(userID: userID, text: "New reminder"); returned.sortOrder = 1 }
         let lateAuthData = try JSONSerialization.data(withJSONObject: [
             "access_token": jwt(userID: userID, sessionID: sessionID, issuedAt: 3),
             "refresh_token": "late-R1-response", "expires_in": 3600
