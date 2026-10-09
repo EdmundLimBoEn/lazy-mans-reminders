@@ -76,6 +76,189 @@ final class ReminderStoreIdentityTests: XCTestCase {
         XCTAssertTrue(cache.isEmpty)
     }
 
+    func testFailedNearExpiryRefreshRejectsCreateAfterSameAccountSignsInAgain() async throws {
+        try await checkFailedAuthRefresh(.create)
+    }
+
+    func testFailedNearExpiryRefreshRejectsUpdatesAfterSameAccountSignsInAgain() async throws {
+        for mutation in [Mutation.edit, .complete, .restore] {
+            try await checkFailedAuthRefresh(mutation)
+        }
+    }
+
+    func testFailedNearExpiryRefreshRejectsBoardRefreshAfterSameAccountSignsInAgain() async throws {
+        try await checkFailedAuthRefresh(nil)
+    }
+
+    func testSameUserNewJWTSessionRejectsOutstandingMutationsWithoutClearingData() async throws {
+        for mutation in [Mutation.create, .edit, .complete, .restore] {
+            let fixture = Fixture()
+            defer { fixture.cleanUp() }
+            let userID = UUID()
+            let reminder = sample(userID: userID)
+            try await signIn(fixture.store, userID: userID, token: jwt(userID: userID, sessionID: UUID()))
+            fixture.seed([reminder])
+            let task = Task { try await mutation.perform(on: fixture.store, reminder: reminder) }
+            await fulfillment(of: [fixture.started], timeout: 3)
+            try await signIn(fixture.store, userID: userID, token: jwt(userID: userID, sessionID: UUID()))
+            await fixture.network.finish(
+                data: mutation == .create ? try ReminderJSON.encoder.encode([reminder]) : Data()
+            )
+            await assertSignedOut(task)
+            let cache = await fixture.store.cached()
+            XCTAssertEqual(cache, [reminder])
+            let count = await fixture.network.requestCount
+            XCTAssertEqual(count, 1)
+        }
+    }
+
+    func testSameJWTSessionAllowsTokenRotationDuringMutation() async throws {
+        for mutation in [Mutation.create, .edit, .complete] {
+            let fixture = Fixture()
+            defer { fixture.cleanUp() }
+            let userID = UUID()
+            let sessionID = UUID()
+            let reminder = sample(userID: userID)
+            let token = try jwt(userID: userID, sessionID: sessionID)
+            try await signIn(fixture.store, userID: userID, token: token)
+            fixture.seed([reminder])
+            let task = Task { try await mutation.perform(on: fixture.store, reminder: reminder) }
+            await fulfillment(of: [fixture.started], timeout: 3)
+            let rotated = try jwt(userID: userID, sessionID: sessionID, issuedAt: 2)
+            XCTAssertNotEqual(rotated, token)
+            try await signIn(fixture.store, userID: userID, token: rotated)
+            let preserved = await fixture.store.cached()
+            XCTAssertEqual(preserved, [reminder], "Same-session rotation must preserve the board")
+            var created = sample(userID: userID)
+            created.sortOrder = 1
+            await fixture.network.finish(
+                data: mutation == .create ? try ReminderJSON.encoder.encode([created]) : Data()
+            )
+            let result = try await task.value
+            switch mutation {
+            case .create: XCTAssertEqual(result, [reminder, created])
+            case .edit: XCTAssertEqual(result.first?.text, "Edited")
+            case .complete: XCTAssertTrue(result.isEmpty)
+            case .restore: XCTFail("Restore requires another HTTP response")
+            }
+            let cache = await fixture.store.cached()
+            XCTAssertEqual(cache, result)
+        }
+    }
+
+    func testSameUserNewJWTSessionRejectsOutstandingBoardRefresh() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let userID = UUID()
+        try await signIn(fixture.store, userID: userID, token: jwt(userID: userID, sessionID: UUID()))
+        let task = Task { try await fixture.store.refresh(performMaintenance: false) }
+        await fulfillment(of: [fixture.started], timeout: 3)
+        try await signIn(fixture.store, userID: userID, token: jwt(userID: userID, sessionID: UUID()))
+        await fixture.network.finish(data: try ReminderJSON.encoder.encode([sample(userID: userID)]))
+        await assertSignedOut(task)
+        let cache = await fixture.store.cached()
+        XCTAssertTrue(cache.isEmpty)
+    }
+
+    func testLegacySessionWithoutSessionIDStillDecodesAndAllowsMutation() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let userID = UUID()
+        let token = try jwt(userID: userID, sessionID: nil)
+        let legacy: [String: Any] = [
+            "accessToken": token,
+            "expiresAt": Date().addingTimeInterval(3600).timeIntervalSinceReferenceDate
+        ]
+        fixture.defaults.set(try JSONSerialization.data(withJSONObject: legacy), forKey: "shared-session")
+        let reminder = sample(userID: userID)
+        let task = Task { try await fixture.store.create(text: reminder.text) }
+        await fulfillment(of: [fixture.started], timeout: 3)
+        await fixture.network.finish(data: try ReminderJSON.encoder.encode([reminder]))
+        let result = try await task.value
+        XCTAssertEqual(result, [reminder])
+    }
+
+    func testAccountSwitchClearsForeignCacheWithoutSignOutAndRejectsLateCreate() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let userA = UUID()
+        let userB = UUID()
+        let privateReminder = sample(userID: userA)
+        try await signIn(fixture.store, userID: userA, token: jwt(userID: userA, sessionID: UUID()))
+        fixture.seed([privateReminder])
+        let task = Task { try await fixture.store.create(text: "Pending A reminder") }
+        await fulfillment(of: [fixture.started], timeout: 3)
+        try await signIn(fixture.store, userID: userB, token: jwt(userID: userB, sessionID: UUID()))
+        let cacheAfterSwitch = await fixture.store.cached()
+        XCTAssertTrue(cacheAfterSwitch.isEmpty, "Widgets must not carry A's board into B's session")
+        await fixture.network.finish(data: try ReminderJSON.encoder.encode([privateReminder]))
+        await assertSignedOut(task)
+        let finalCache = await fixture.store.cached()
+        XCTAssertTrue(finalCache.isEmpty)
+    }
+
+    func testFixtureBuffersCompletionUntilLateRequestStarts() async throws {
+        let started = XCTestExpectation(description: "Late HTTP request")
+        let network = PausedNetwork(started: started)
+        let data = Data("buffered response".utf8)
+        await network.finish(data: data, statusCode: 400)
+        let completed = XCTestExpectation(description: "Buffered response returned")
+        let task = Task {
+            let result = try await network.send(URLRequest(url: URL(string: "https://reminders.invalid")!))
+            completed.fulfill()
+            return result
+        }
+        await fulfillment(of: [started, completed], timeout: 3)
+        // Release a suspended send after a failed assertion if buffering regresses.
+        await network.finish(data: data, statusCode: 400)
+        let (received, response) = try await task.value
+        XCTAssertEqual(received, data)
+        XCTAssertEqual((response as? HTTPURLResponse)?.statusCode, 400)
+    }
+
+    private func checkFailedAuthRefresh(_ mutation: Mutation?) async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let userID = UUID()
+        let reminder = sample(userID: userID)
+        try await signIn(
+            fixture.store, userID: userID,
+            token: jwt(userID: userID, sessionID: UUID()), expiresIn: 45
+        )
+        fixture.seed([reminder])
+        let task = Task {
+            if let mutation { return try await mutation.perform(on: fixture.store, reminder: reminder) }
+            return try await fixture.store.refresh(performMaintenance: false)
+        }
+        await fulfillment(of: [fixture.started], timeout: 3)
+        let requestURL = await fixture.network.requestURL
+        XCTAssertEqual(requestURL?.path, "/auth/v1/token")
+        await fixture.store.clearUserData()
+        let replacementToken = try jwt(userID: userID, sessionID: UUID())
+        try await signIn(fixture.store, userID: userID, token: replacementToken)
+        let replacement = sample(userID: userID, id: reminder.id, text: "New login's reminder")
+        fixture.seed([replacement])
+        await fixture.network.finish(data: Data(), statusCode: 400)
+        await assertSignedOut(task)
+        let cache = await fixture.store.cached()
+        XCTAssertEqual(cache, [replacement])
+        let count = await fixture.network.requestCount
+        XCTAssertEqual(count, 1, "Obsolete authentication must not send a reminders request")
+        let sessionData = try XCTUnwrap(fixture.defaults.data(forKey: "shared-session"))
+        let session = try JSONDecoder().decode(SharedSession.self, from: sessionData)
+        XCTAssertEqual(session.accessToken, replacementToken)
+    }
+
+    private func jwt(userID: UUID, sessionID: UUID?, issuedAt: Int = 1) throws -> String {
+        var claims: [String: Any] = ["sub": userID.uuidString, "iat": issuedAt]
+        if let sessionID { claims["session_id"] = sessionID.uuidString }
+        let encoded = try JSONSerialization.data(withJSONObject: claims).base64EncodedString()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
+        return "e30.\(encoded).test-signature"
+    }
+
     private enum Mutation: Equatable {
         case create, edit, complete, restore
 
@@ -133,10 +316,12 @@ final class ReminderStoreIdentityTests: XCTestCase {
         }
     }
 
-    private func signIn(_ store: ReminderStore, userID: UUID, token: String = "test-token") async throws {
+    private func signIn(
+        _ store: ReminderStore, userID: UUID, token: String = "test-token", expiresIn: TimeInterval = 3600
+    ) async throws {
         try await store.saveSession(
             accessToken: token, refreshToken: "test-refresh",
-            expiresAt: Date().addingTimeInterval(3600), userID: userID
+            expiresAt: Date().addingTimeInterval(expiresIn), userID: userID
         )
     }
 
@@ -179,27 +364,37 @@ final class ReminderStoreIdentityTests: XCTestCase {
     private actor PausedNetwork {
         let started: XCTestExpectation
         var requestCount = 0
+        var requestURL: URL?
+        private var completion: (Data, URLResponse)?
         private var pending: CheckedContinuation<(Data, URLResponse), Error>?
 
         init(started: XCTestExpectation) { self.started = started }
 
         func send(_ request: URLRequest) async throws -> (Data, URLResponse) {
             requestCount += 1
+            requestURL = request.url
             guard requestCount == 1 else { throw URLError(.cancelled) }
+            if let completion {
+                started.fulfill()
+                return completion
+            }
             return try await withCheckedThrowingContinuation { continuation in
                 pending = continuation
                 started.fulfill()
             }
         }
 
-        func finish(data: Data) {
-            pending?.resume(returning: (
+        func finish(data: Data, statusCode: Int = 200) {
+            guard completion == nil else { return }
+            let result: (Data, URLResponse) = (
                 data,
                 HTTPURLResponse(
                     url: URL(string: "https://reminders.invalid/rest/v1/reminders")!,
-                    statusCode: 200, httpVersion: nil, headerFields: nil
+                    statusCode: statusCode, httpVersion: nil, headerFields: nil
                 )!
-            ))
+            )
+            completion = result
+            pending?.resume(returning: result)
             pending = nil
         }
     }

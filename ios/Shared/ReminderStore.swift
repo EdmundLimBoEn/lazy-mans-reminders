@@ -87,7 +87,12 @@ actor ReminderStore {
             refreshToken: refreshToken,
             userID: userID ?? JWTUserID.uuid(fromAccessToken: accessToken)
         )
-        if storedSession()?.userID != session.userID {
+        let previous = storedSession()
+        if previous?.userID != session.userID {
+            defaults.removeObject(forKey: cacheKey)
+        }
+        if previous == nil || previous?.userID != session.userID
+            || authSessionID(previous?.accessToken) != authSessionID(session.accessToken) {
             defaults.set(UUID().uuidString, forKey: identityRevisionKey)
         }
         persist(session)
@@ -128,17 +133,19 @@ actor ReminderStore {
         performMaintenance: Bool = true,
         refreshAuthentication: Bool = true
     ) async throws -> [Reminder] {
+        let identityRevision = defaults.string(forKey: identityRevisionKey)
         // Extensions use a valid shared JWT but never rotate the host SDK's refresh token.
         let candidate = refreshAuthentication ? await loadFreshSession() : storedSession()
         guard let session = candidate, session.expiresAt > Date() else {
             throw StoreError.signedOut
         }
 
-        let identityRevision = defaults.string(forKey: identityRevisionKey)
+        try requireCurrentIdentity(session, revision: identityRevision)
 
         // Best-effort: drop this user's done reminders older than 7 days (DB trigger sets completed_at).
         if performMaintenance {
             await deleteOldCompletedReminders(accessToken: session.accessToken)
+            try requireCurrentIdentity(session, revision: identityRevision)
         }
 
         var components = URLComponents(
@@ -172,7 +179,21 @@ actor ReminderStore {
     private func requireCurrentIdentity(_ session: SharedSession, revision: String?) throws {
         guard defaults.string(forKey: identityRevisionKey) == revision,
               let current = storedSession(),
-              current.userID == session.userID else { throw StoreError.signedOut }
+              current.userID == session.userID,
+              authSessionID(current.accessToken) == authSessionID(session.accessToken)
+        else { throw StoreError.signedOut }
+    }
+
+    // Unverified JWT metadata is used only for local cache identity, never authorization.
+    // Supabase keeps session_id stable across token rotation; legacy tokens may omit it.
+    private func authSessionID(_ token: String?) -> UUID? {
+        guard let token else { return nil }
+        let segments = token.split(separator: ".", omittingEmptySubsequences: false)
+        guard segments.count == 3,
+              let data = JWTUserID.decodeBase64URL(String(segments[1])),
+              let claims = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let value = claims["session_id"] as? String else { return nil }
+        return UUID(uuidString: value)
     }
 
     /// Invokes `delete_old_completed_reminders` RPC. Failures are ignored so refresh still works.
@@ -207,9 +228,10 @@ actor ReminderStore {
         guard let refreshToken = resolved.refreshToken, !refreshToken.isEmpty else {
             return resolved.expiresAt > Date() ? resolved : nil
         }
-        if let refreshed = await refreshAccessToken(refreshToken, userID: resolved.userID) {
-            guard defaults.string(forKey: identityRevisionKey) == identityRevision,
-                  storedSession()?.refreshToken == refreshToken else { return nil }
+        let refreshed = await refreshAccessToken(refreshToken, userID: resolved.userID)
+        guard defaults.string(forKey: identityRevisionKey) == identityRevision,
+              storedSession()?.refreshToken == refreshToken else { return nil }
+        if let refreshed {
             persist(refreshed)
             NotificationCenter.default.post(
                 name: .didRefreshSharedSession,
@@ -267,15 +289,16 @@ actor ReminderStore {
         if ReminderBoardLimits.isAtCapacity(cached().filter { !$0.isDone }.count) {
             throw StoreError.atCapacity
         }
+        let identityRevision = defaults.string(forKey: identityRevisionKey)
         guard let session = await loadFreshSession() else {
             throw StoreError.signedOut
         }
+        try requireCurrentIdentity(session, revision: identityRevision)
         guard let ownerID = session.userID,
               userID == nil || userID == ownerID else {
             throw StoreError.signedOut
         }
 
-        let identityRevision = defaults.string(forKey: identityRevisionKey)
         let nextOrder = (cached().map(\.sortOrder).max() ?? -1) + 1
         struct CreateBody: Encodable {
             let text: String
@@ -353,11 +376,11 @@ actor ReminderStore {
         guard trimmed != nil || isDone != nil else {
             return cached()
         }
+        let identityRevision = defaults.string(forKey: identityRevisionKey)
         guard let session = await loadFreshSession(), let ownerID = session.userID else {
             throw StoreError.signedOut
         }
-
-        let identityRevision = defaults.string(forKey: identityRevisionKey)
+        try requireCurrentIdentity(session, revision: identityRevision)
 
         struct UpdateBody: Encodable {
             var text: String?
