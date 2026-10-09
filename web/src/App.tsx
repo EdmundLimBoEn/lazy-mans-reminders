@@ -265,7 +265,11 @@ function SignIn({
   )
 }
 
-function Board({ session, onNavigate }: { session: Session; onNavigate: (path: string) => void }) {
+function Board({ session, onNavigate, onAccountDeleted }: {
+  session: Session
+  onNavigate: (path: string) => void
+  onAccountDeleted: (manualAppleRevocation: boolean) => void
+}) {
   const [reminders, setReminders] = useState<Reminder[]>([])
   const [text, setText] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -503,7 +507,8 @@ function Board({ session, onNavigate }: { session: Session; onNavigate: (path: s
       setDeletingAccount(false)
       return
     }
-    await supabase.auth.signOut()
+    onAccountDeleted(data?.appleRevocation === 'manual_required')
+    await supabase.auth.signOut({ scope: 'local' })
     setConfirmDelete(false)
     setDeletingAccount(false)
   }
@@ -862,6 +867,7 @@ export default function App() {
   const [session, setSession] = useState<Session | null>(null)
   const [ready, setReady] = useState(false)
   const [authError, setAuthError] = useState('')
+  const [manualAppleRevocation, setManualAppleRevocation] = useState(false)
 
   useEffect(() => {
     const titles: Record<AppRoute, string> = {
@@ -922,7 +928,22 @@ export default function App() {
       : <SignIn onNavigate={navigate} connectingAgent />
   }
 
-  return session
-    ? <Board session={session} onNavigate={navigate} />
-    : <SignIn onNavigate={navigate} />
+  return (
+    <>
+      {manualAppleRevocation && (
+        <Alert role="status" className="mx-auto my-4 w-[calc(100%-2rem)] max-w-2xl">
+          <Info aria-hidden="true" />
+          <AlertDescription>
+            <p>Your account and reminder data were deleted. Apple access could not be revoked automatically.</p>
+            <a className="underline" href="https://support.apple.com/102571" target="_blank" rel="noreferrer">
+              Follow Apple’s instructions to stop using Sign in with Apple for Lazy Man’s Reminders.
+            </a>
+          </AlertDescription>
+        </Alert>
+      )}
+      {session
+        ? <Board session={session} onNavigate={navigate} onAccountDeleted={setManualAppleRevocation} />
+        : <SignIn onNavigate={navigate} />}
+    </>
+  )
 }

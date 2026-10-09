@@ -226,14 +226,17 @@ final class AuthManager: ObservableObject {
     func deleteAccount() async throws {
         isEndingSession = true
         defer { isEndingSession = false }
-        try await client.functions.invoke("delete-account", options: AppleRevocation.invokeOptions)
+        let result: AppleRevocation.DeletionResponse = try await client.functions.invoke(
+            "delete-account", options: AppleRevocation.invokeOptions
+        )
+        guard result.ok else { throw AppleRevocation.DeletionError.invalidResponse }
         pushRegistration.bind(userID: nil)
         // Auth user is already gone; local sign-out may fail — clear client state either way.
         try? await client.auth.signOut()
         session = nil
-        notice = nil
         await ReminderStore.shared.clearUserData()
         await ReminderBoardSync.clear()
+        notice = result.notice.map { .error($0) }
     }
 
     func registerDevice(token: String) async {

@@ -11,9 +11,9 @@ import {
   mintAppleClientSecret,
 } from "../_shared/apple_token_revoke.ts";
 import {
-  handleDeleteAccount,
   type DeleteAccountDeps,
   type DeleteAccountUser,
+  handleDeleteAccount,
 } from "./handler.ts";
 
 const TEST_P256_PKCS8 = `-----BEGIN PRIVATE KEY-----
@@ -60,7 +60,9 @@ function appleEnv(): Record<string, string> {
   };
 }
 
-function decodeJwt(jwt: string): { header: Record<string, unknown>; payload: Record<string, unknown> } {
+function decodeJwt(
+  jwt: string,
+): { header: Record<string, unknown>; payload: Record<string, unknown> } {
   const [headerPart, payloadPart] = jwt.split(".");
   const decode = (part: string) => {
     const padded = part.replaceAll("-", "+").replaceAll("_", "/");
@@ -80,6 +82,11 @@ async function runDelete(input: {
   env?: Record<string, string | undefined>;
   token?: Response | ((body: string) => Response);
   revoke?: Response | ((body: string) => Response);
+  grants?: { ok: false; reason: "incomplete" | "unreachable" };
+  failedTable?: string;
+  authError?: unknown;
+  throwToken?: boolean;
+  hangToken?: boolean;
 }): Promise<{
   response: Response;
   appleCalls: AppleCall[];
@@ -104,18 +111,34 @@ async function runDelete(input: {
         contentType: headers.get("content-type"),
       });
       if (url === APPLE_TOKEN_URL) {
+        if (input.hangToken) {
+          return new Promise((_resolve, reject) => {
+            init?.signal?.addEventListener(
+              "abort",
+              () => reject(new DOMException("Timed out", "AbortError")),
+              { once: true },
+            );
+          });
+        }
+        if (input.throwToken) return Promise.reject(new Error("network down"));
         const token = input.token ??
           Response.json({
             access_token: "access-token",
             refresh_token: "refresh-token",
           });
-        return Promise.resolve(typeof token === "function" ? token(body) : token);
+        return Promise.resolve(
+          typeof token === "function" ? token(body) : token,
+        );
       }
       if (url === APPLE_REVOKE_URL) {
         const revoke = input.revoke ?? new Response(null, { status: 200 });
-        return Promise.resolve(typeof revoke === "function" ? revoke(body) : revoke);
+        return Promise.resolve(
+          typeof revoke === "function" ? revoke(body) : revoke,
+        );
       }
-      return Promise.resolve(new Response("unexpected apple url", { status: 500 }));
+      return Promise.resolve(
+        new Response("unexpected apple url", { status: 500 }),
+      );
     }
     return Promise.resolve(new Response("unexpected url", { status: 500 }));
   };
@@ -126,14 +149,16 @@ async function runDelete(input: {
     nowSeconds: () => NOW_SECONDS,
     warn: (payload) => warnings.push(payload),
     getUser: () => Promise.resolve({ user: input.user }),
-    revokeGrants: () => Promise.resolve({ ok: true }),
+    revokeGrants: () => Promise.resolve(input.grants ?? { ok: true }),
     deleteRows: (table, _userId) => {
       deletedTables.push(table);
-      return Promise.resolve({ error: null });
+      return Promise.resolve({
+        error: table === input.failedTable ? "failed" : null,
+      });
     },
     deleteAuthUser: (userId) => {
-      deletedUserId = userId;
-      return Promise.resolve({ error: null });
+      if (!input.authError) deletedUserId = userId;
+      return Promise.resolve({ error: input.authError ?? null });
     },
   };
 
@@ -158,9 +183,21 @@ async function runDelete(input: {
   return { response, appleCalls, warnings, deletedTables, deletedUserId };
 }
 
-async function assertDeleted(result: Awaited<ReturnType<typeof runDelete>>, userId: string) {
+async function assertDeleted(
+  result: Awaited<ReturnType<typeof runDelete>>,
+  userId: string,
+) {
   assertEquals(result.response.status, 200);
-  assertEquals(await result.response.json(), { ok: true });
+  const body = await result.response.json();
+  assertEquals(body.ok, true);
+  if (userId === appleUser.id) {
+    assertEquals(
+      body.appleRevocation,
+      result.warnings.length ? "manual_required" : "revoked",
+    );
+  } else {
+    assertEquals(body.appleRevocation, undefined);
+  }
   assertEquals(result.deletedTables, [...USER_DATA_TABLES]);
   assertEquals(result.deletedUserId, userId);
 }
@@ -253,7 +290,9 @@ Deno.test("Apple HTTP 400 still deletes the account", async () => {
     endpoint: "token",
     appleError: "invalid_grant",
   });
-  assertEquals(tokenFailure.appleCalls.map((call) => call.url), [APPLE_TOKEN_URL]);
+  assertEquals(tokenFailure.appleCalls.map((call) => call.url), [
+    APPLE_TOKEN_URL,
+  ]);
 
   const revokeFailure = await runDelete({
     user: appleUser,
@@ -306,4 +345,108 @@ Deno.test("Apple users without an authorization code skip revocation and still d
     outcome: "skipped",
     reason: "no_authorization_code",
   });
+});
+
+Deno.test("transient revocation failures retry the same refresh token without reusing the code", async () => {
+  let attempts = 0;
+  const result = await runDelete({
+    user: appleUser,
+    body: { appleAuthorizationCode: "single-use-code" },
+    revoke: () =>
+      ++attempts < 3 ? new Response(null, { status: 503 }) : new Response(null),
+  });
+  await assertDeleted(result, appleUser.id);
+  assertEquals(result.appleCalls.map((call) => call.url), [
+    APPLE_TOKEN_URL,
+    APPLE_REVOKE_URL,
+    APPLE_REVOKE_URL,
+    APPLE_REVOKE_URL,
+  ]);
+  assertEquals(
+    result.appleCalls.slice(1).map((call) => form(call.body).token),
+    ["refresh-token", "refresh-token", "refresh-token"],
+  );
+});
+
+Deno.test("revocation network failure recovers with the exchanged token", async () => {
+  let attempts = 0;
+  const result = await runDelete({
+    user: appleUser,
+    body: { appleAuthorizationCode: "code" },
+    revoke: () => {
+      if (++attempts === 1) throw new Error("network down");
+      return new Response(null);
+    },
+  });
+  await assertDeleted(result, appleUser.id);
+  assertEquals(attempts, 2);
+});
+
+Deno.test("exhausted revocation retries and code exchange outages preserve deletion with manual guidance", async () => {
+  for (const throwToken of [false, true]) {
+    const result = await runDelete({
+      user: appleUser,
+      body: { appleAuthorizationCode: "code" },
+      throwToken,
+      revoke: () => new Response(null, { status: 503 }),
+    });
+    await assertDeleted(result, appleUser.id);
+    assertEquals(result.appleCalls.length, throwToken ? 1 : 4);
+    assertEquals(result.warnings.length, 1);
+    assertEquals(
+      JSON.stringify(result.warnings).includes("refresh-token"),
+      false,
+    );
+  }
+});
+
+Deno.test("OAuth cleanup failure stops before deleting app data or auth", async () => {
+  for (const reason of ["incomplete", "unreachable"] as const) {
+    const result = await runDelete({
+      user: googleUser,
+      grants: { ok: false, reason },
+    });
+    assertEquals(result.response.status, 503);
+    assertEquals(result.deletedTables, []);
+    assertEquals(result.deletedUserId, null);
+  }
+});
+
+Deno.test("data and auth deletion failures never report success", async () => {
+  const tableFailure = await runDelete({
+    user: googleUser,
+    failedTable: USER_DATA_TABLES[0],
+  });
+  assertEquals(tableFailure.response.status, 500);
+  assertEquals(tableFailure.deletedTables, [USER_DATA_TABLES[0]]);
+  assertEquals(tableFailure.deletedUserId, null);
+  const authFailure = await runDelete({
+    user: googleUser,
+    authError: "failed",
+  });
+  assertEquals(authFailure.response.status, 500);
+  assertEquals(authFailure.deletedTables, [...USER_DATA_TABLES]);
+  assertEquals(authFailure.deletedUserId, null);
+});
+
+Deno.test("an unresponsive Apple exchange times out without blocking deletion", async () => {
+  const result = await runDelete({
+    user: appleUser,
+    body: { appleAuthorizationCode: "code" },
+    hangToken: true,
+  });
+  await assertDeleted(result, appleUser.id);
+  assertEquals(result.appleCalls.length, 1);
+  assertEquals(result.warnings.length, 1);
+});
+
+Deno.test("unauthenticated requests cannot revoke Apple credentials or delete data", async () => {
+  const result = await runDelete({
+    user: null,
+    body: { appleAuthorizationCode: "code" },
+  });
+  assertEquals(result.response.status, 401);
+  assertEquals(result.appleCalls, []);
+  assertEquals(result.deletedTables, []);
+  assertEquals(result.deletedUserId, null);
 });
