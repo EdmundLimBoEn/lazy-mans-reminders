@@ -230,8 +230,17 @@ actor ReminderStore {
             return resolved.expiresAt > Date() ? resolved : nil
         }
         let refreshed = await refreshAccessToken(refreshToken, userID: resolved.userID)
-        guard defaults.string(forKey: identityRevisionKey) == identityRevision,
-              storedSession()?.refreshToken == refreshToken else { return nil }
+        do {
+            try requireCurrentIdentity(resolved, revision: identityRevision)
+        } catch {
+            return nil
+        }
+        guard let current = storedSession() else { return nil }
+        // The host SDK may have rotated this same session while our request awaited HTTP.
+        // Use its fresh credentials and never overwrite them with a delayed response.
+        if current.refreshToken != refreshToken || current.accessToken != resolved.accessToken {
+            return current.isFresh() ? current : nil
+        }
         if let refreshed {
             persist(refreshed)
             NotificationCenter.default.post(
