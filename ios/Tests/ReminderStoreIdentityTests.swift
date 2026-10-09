@@ -32,7 +32,7 @@ final class ReminderStoreIdentityTests: XCTestCase {
     }
 
     func testMutationsStillSucceedWhenOnlyTheAccessTokenChanges() async throws {
-        for mutation in [Mutation.create, .edit, .complete] {
+        for mutation in [Mutation.create, .edit, .complete, .restore] {
             let fixture = Fixture()
             defer { fixture.cleanUp() }
             let userID = UUID()
@@ -42,17 +42,20 @@ final class ReminderStoreIdentityTests: XCTestCase {
             let task = Task { try await mutation.perform(on: fixture.store, reminder: reminder) }
             await fulfillment(of: [fixture.started], timeout: 3)
             try await signIn(fixture.store, userID: userID, token: "renewed-token")
-            var created = sample(userID: userID)
+            var created = sample(userID: userID, text: "New reminder")
             created.sortOrder = 1
+            var updated = reminder
+            updated.text = mutation == .edit ? "Edited" : reminder.text
+            updated.isDone = mutation == .complete
             await fixture.network.finish(
-                data: mutation == .create ? try ReminderJSON.encoder.encode([created]) : Data()
+                data: try ReminderJSON.encoder.encode([mutation == .create ? created : updated])
             )
             let result = try await task.value
             switch mutation {
             case .create: XCTAssertEqual(result, [reminder, created])
             case .edit: XCTAssertEqual(result.first?.text, "Edited")
             case .complete: XCTAssertTrue(result.isEmpty)
-            case .restore: XCTFail("Restore is tested separately")
+            case .restore: XCTAssertEqual(result, [reminder])
             }
             let cache = await fixture.store.cached()
             XCTAssertEqual(cache, result)
@@ -98,9 +101,11 @@ final class ReminderStoreIdentityTests: XCTestCase {
             let task = Task { try await mutation.perform(on: fixture.store, reminder: reminder) }
             await fulfillment(of: [fixture.started], timeout: 3)
             try await signIn(fixture.store, userID: userID, token: jwt(userID: userID, sessionID: UUID()))
-            await fixture.network.finish(
-                data: mutation == .create ? try ReminderJSON.encoder.encode([reminder]) : Data()
-            )
+            var acknowledged = reminder
+            if mutation == .create { acknowledged.text = "New reminder" }
+            if mutation == .edit { acknowledged.text = "Edited" }
+            acknowledged.isDone = mutation == .complete
+            await fixture.network.finish(data: try ReminderJSON.encoder.encode([acknowledged]))
             await assertSignedOut(task)
             let cache = await fixture.store.cached()
             XCTAssertEqual(cache, [reminder])
@@ -110,7 +115,7 @@ final class ReminderStoreIdentityTests: XCTestCase {
     }
 
     func testSameJWTSessionAllowsTokenRotationDuringMutation() async throws {
-        for mutation in [Mutation.create, .edit, .complete] {
+        for mutation in [Mutation.create, .edit, .complete, .restore] {
             let fixture = Fixture()
             defer { fixture.cleanUp() }
             let userID = UUID()
@@ -126,17 +131,20 @@ final class ReminderStoreIdentityTests: XCTestCase {
             try await signIn(fixture.store, userID: userID, token: rotated)
             let preserved = await fixture.store.cached()
             XCTAssertEqual(preserved, [reminder], "Same-session rotation must preserve the board")
-            var created = sample(userID: userID)
+            var created = sample(userID: userID, text: "New reminder")
             created.sortOrder = 1
+            var updated = reminder
+            updated.text = mutation == .edit ? "Edited" : reminder.text
+            updated.isDone = mutation == .complete
             await fixture.network.finish(
-                data: mutation == .create ? try ReminderJSON.encoder.encode([created]) : Data()
+                data: try ReminderJSON.encoder.encode([mutation == .create ? created : updated])
             )
             let result = try await task.value
             switch mutation {
             case .create: XCTAssertEqual(result, [reminder, created])
             case .edit: XCTAssertEqual(result.first?.text, "Edited")
             case .complete: XCTAssertTrue(result.isEmpty)
-            case .restore: XCTFail("Restore requires another HTTP response")
+            case .restore: XCTAssertEqual(result, [reminder])
             }
             let cache = await fixture.store.cached()
             XCTAssertEqual(cache, result)
@@ -188,7 +196,9 @@ final class ReminderStoreIdentityTests: XCTestCase {
         try await signIn(fixture.store, userID: userB, token: jwt(userID: userB, sessionID: UUID()))
         let cacheAfterSwitch = await fixture.store.cached()
         XCTAssertTrue(cacheAfterSwitch.isEmpty, "Widgets must not carry A's board into B's session")
-        await fixture.network.finish(data: try ReminderJSON.encoder.encode([privateReminder]))
+        var acknowledged = privateReminder
+        acknowledged.text = "Pending A reminder"
+        await fixture.network.finish(data: try ReminderJSON.encoder.encode([acknowledged]))
         await assertSignedOut(task)
         let finalCache = await fixture.store.cached()
         XCTAssertTrue(finalCache.isEmpty)
@@ -286,7 +296,7 @@ final class ReminderStoreIdentityTests: XCTestCase {
         var returned = reminder
         if mutation == .edit { returned.text = "Edited" }
         if mutation == .complete { returned.isDone = true }
-        if mutation == .create { returned = sample(userID: userID); returned.sortOrder = 1 }
+        if mutation == .create { returned = sample(userID: userID, text: "New reminder"); returned.sortOrder = 1 }
         let lateAuthData = try JSONSerialization.data(withJSONObject: [
             "access_token": jwt(userID: userID, sessionID: sessionID, issuedAt: 3),
             "refresh_token": "late-R1-response", "expires_in": 3600
@@ -397,9 +407,11 @@ final class ReminderStoreIdentityTests: XCTestCase {
             expected = [sample(userID: userID, id: reminder.id, text: "Replacement cache")]
             fixture.seed(expected)
         }
-        await fixture.network.finish(
-            data: mutation == .create ? try ReminderJSON.encoder.encode([reminder]) : Data()
-        )
+        var acknowledged = reminder
+        if mutation == .create { acknowledged.text = "New reminder" }
+        if mutation == .edit { acknowledged.text = "Edited" }
+        acknowledged.isDone = mutation == .complete
+        await fixture.network.finish(data: try ReminderJSON.encoder.encode([acknowledged]))
         await assertSignedOut(task)
         let cache = await fixture.store.cached()
         XCTAssertEqual(cache, expected)
