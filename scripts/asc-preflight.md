@@ -50,7 +50,11 @@ Store build. TestFlight approval never counts as App Store approval.
 
 Screenshot set IDs never count as files. At least one delivered screenshot and
 no more than ten per returned set are required; dimensions and file sizes must be
-positive. This is asset-delivery evidence, not completeness for every supported
+positive. A separate size-evidence check requires a documented iPhone API enum
+and portrait/landscape dimensions from the current medium, large or 6.5-inch
+fallback groups: 1179×2556, 1206×2622, 1320×2868, 1290×2796, 1260×2736,
+1284×2778 or 1242×2688. It does not infer a group from the numeric suffix.
+This is asset-delivery/dimension evidence, not completeness for every supported
 device, approved content, opacity or localization scaling. Empty optional sets
 are conservatively flagged for inspection/removal. Required size/display-type
 coverage remains UNKNOWN because Apple's current Help display naming and the
@@ -83,6 +87,9 @@ physical iPhone QA; no macOS build host/device was discovered for this change.
 - [Screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications):
   current required iPhone Dynamic Island medium and iPad 13-inch if supported;
   review the documented scaling fallbacks rather than assuming a 6.9-inch ID.
+- [ScreenshotDisplayType API enum](https://developer.apple.com/documentation/appstoreconnectapi/screenshotdisplaytype):
+  documented iPhone types include 67, 65, 61, 58, 55, 47, 40 and 35;
+  no documented 69/63 or authoritative suffix-to-current-display-group mapping.
 - [Review Guidelines](https://developer.apple.com/app-store/review/guidelines/),
   particularly 2.1: provide working reviewer access or approved alternatives.
 - [App Privacy](https://developer.apple.com/help/app-store-connect/manage-app-information/manage-app-privacy/):
