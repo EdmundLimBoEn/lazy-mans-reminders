@@ -11,6 +11,9 @@ from urllib.request import Request, build_opener, HTTPRedirectHandler
 
 BASE = "https://api.appstoreconnect.apple.com"
 PUBLIC_HOSTS = {"lmr.sillyapps.co", "lmr.edmundlim.systems", "lazy-mans-reminders.pages.dev"}
+IPHONE_DISPLAY_TYPES = {"APP_IPHONE_67", "APP_IPHONE_65", "APP_IPHONE_61", "APP_IPHONE_58", "APP_IPHONE_55", "APP_IPHONE_47", "APP_IPHONE_40", "APP_IPHONE_35"}
+# Apple Help dimensions; API suffixes do not establish a display-group mapping.
+IPHONE_CURRENT_SIZES = {(1179, 2556), (1206, 2622), (1284, 2778), (1242, 2688), (1320, 2868), (1290, 2796), (1260, 2736)}
 
 
 def public_url(value):
@@ -221,6 +224,7 @@ class Preflight:
     def screenshots(self, lid, index):
         sets = self.api.many(f"/v1/appStoreVersionLocalizations/{lid}/appScreenshotSets", "appScreenshotSets")
         count = 0
+        size_evidence = False
         valid = bool(sets)
         for screenshot_set in sets:
             shots = self.api.many(f"/v1/appScreenshotSets/{screenshot_set['id']}/appScreenshots", "appScreenshots")
@@ -235,7 +239,13 @@ class Preflight:
                 valid = valid and delivery.get("state") == "COMPLETE" and not delivery.get("errors")
                 valid = valid and type(a.get("fileSize")) is int and a["fileSize"] > 0
                 valid = valid and present(a.get("fileName")) and all(type(image.get(k)) is int and image[k] > 0 for k in ("width", "height"))
+                dimensions = (image.get("width"), image.get("height"))
+                if (screenshot_set["attributes"].get("screenshotDisplayType") in IPHONE_DISPLAY_TYPES
+                        and delivery.get("state") == "COMPLETE" and not delivery.get("errors")
+                        and (dimensions in IPHONE_CURRENT_SIZES or dimensions[::-1] in IPHONE_CURRENT_SIZES)):
+                    size_evidence = True
         self.record(f"delivered screenshots {index}", valid and count > 0, "actual assets must be COMPLETE with positive file size/dimensions, 1–10 per set; empty set IDs never count as screenshots")
+        self.record(f"iPhone screenshot size evidence {index}", size_evidence, "documented iPhone API enum plus current medium/large/fallback pixel dimensions required; enum-to-group mapping and scaling remain UNKNOWN")
 
     def review_checks(self, vid):
         a = self.api.one(f"/v1/appStoreVersions/{vid}/appStoreReviewDetail", "appStoreReviewDetails")["attributes"]

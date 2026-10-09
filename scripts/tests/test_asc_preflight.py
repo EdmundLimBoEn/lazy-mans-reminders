@@ -105,6 +105,24 @@ class PreflightTests(unittest.TestCase):
         self.evidence[SHOTS]["data"] = []
         self.assertEqual(self.report()["delivered screenshots 1"], "FAIL")
 
+    def test_documented_iphone_dimensions_and_enum_without_suffix_inference(self):
+        self.assertEqual(self.report()["iPhone screenshot size evidence 1"], "PASS")
+        self.attrs(SHOTS)["imageAsset"] = {"width": 1179, "height": 2556}
+        self.assertEqual(self.report()["iPhone screenshot size evidence 1"], "PASS")
+        self.attrs("/v1/appStoreVersionLocalizations/locale-1/appScreenshotSets")["screenshotDisplayType"] = "APP_IPHONE_69"
+        self.assertEqual(self.report()["iPhone screenshot size evidence 1"], "FAIL")
+        self.assertEqual(self.report()["screenshot completeness"], "UNKNOWN")
+        self.evidence = copy.deepcopy(FIXTURE)
+        self.attrs(SHOTS)["imageAsset"] = {"width": 100, "height": 100}
+        self.assertEqual(self.report()["iPhone screenshot size evidence 1"], "FAIL")
+
+    def test_missing_collection_links_and_total_fail(self):
+        del self.evidence[VERSION]["links"]
+        self.assertEqual(self.report()["version scope"], "FAIL")
+        self.evidence = copy.deepcopy(FIXTURE)
+        self.evidence[VERSION]["meta"] = {"paging": {"total": 2, "limit": 20}}
+        self.assertEqual(self.report()["version scope"], "FAIL")
+
     def test_screenshot_delivery_and_dimensions(self):
         for field, value in (("assetDeliveryState", {"state": "UPLOAD_COMPLETE"}), ("assetDeliveryState", {"state": "COMPLETE", "errors": [{"code": "ERROR"}]}), ("imageAsset", {"width": 0, "height": 2868}), ("imageAsset", None), ("fileSize", 0)):
             with self.subTest(field=field):
