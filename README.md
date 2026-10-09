@@ -4,7 +4,7 @@ A Supabase-backed reminder board with a React/Vite web app and an iOS 17 app plu
 
 ## Current deployment status
 
-As of 26 August 2026. The iOS app ships as a **free** App Store download (no in-app purchases).
+Repository release audit as of 9 October 2026. The planned App Store release is **free** (no in-app purchases); submission and approval remain open. Deployment details below include historical operator reports, not a fresh production certification.
 
 - Web app: canonical domain <https://lmr.sillyapps.co>; <https://lazy-mans-reminders.pages.dev> is the Pages fallback. The old domain <https://lmr.edmundlim.systems> stays attached and redirects to `lmr.sillyapps.co` (currently a 302; a 301 is planned) (Cloudflare Redirect Rule on the `edmundlim.systems` zone) so shipped iOS builds and old links keep working.
 - Cloudflare Pages project: `lazy-mans-reminders`
@@ -29,7 +29,7 @@ See [HUMANS.md](HUMANS.md) for the live checklist. Remaining human work:
 - Node.js 20+ and npm
 - A Supabase account and Supabase CLI
 - A Cloudflare account and Wrangler CLI (included in `web`)
-- macOS with Xcode 16+, XcodeGen, and an Apple Developer Program membership
+- macOS with release Xcode 26+ and iOS 26 SDK+ for App Store uploads, XcodeGen, and an Apple Developer Program membership (the iOS 17 deployment target can remain; see [Apple requirements](docs/apple-release-requirements.md))
 
 ## Configuration and secrets
 
@@ -65,7 +65,7 @@ Store the custom function values in an ignored file such as `supabase/.env.funct
 supabase secrets set --env-file supabase/.env.functions
 ```
 
-The four `APPLE_*` secrets are used only by `delete-account` to revoke Sign in with Apple tokens. After setting them, redeploy that function (see below). Missing Apple secrets do not block account deletion.
+The four `APPLE_*` secrets are used only by `delete-account` to revoke Sign in with Apple tokens. After setting them, redeploy that function (see below). Baseline deletion continues when Apple revocation cannot complete; this is a release gap requiring successful revocation or the documented manual fallback, configuration checks and device QA.
 
 ## Supabase
 
@@ -128,7 +128,7 @@ Delivery behaviour:
 - Transient APNs failures (network, 429, 5xx, expired provider JWT) are retried inside the function. If any device is still retryable afterwards the function returns **503** so the webhook / `pg_net` trigger can try the whole job again. Permanent failures (including `410 Unregistered` and `400 BadDeviceToken`) prune that token and still return 200.
 - After changing this function, redeploy with `supabase functions deploy send-reminder-push --no-verify-jwt`. The database trigger itself (`send_reminder_push` → `notify_reminder_push`, on INSERT, UPDATE, and DELETE) is configured in the project, not this repo.
 
-`delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, agent tokens, and auth user (service role). For Sign in with Apple users, the iOS app first requests a fresh `authorizationCode` and the function exchanges it at `https://appleid.apple.com/auth/token`, then POSTs `https://appleid.apple.com/auth/revoke` with the refresh token (or the access token if Apple does not return a refresh token). If the Apple secrets are missing or Apple returns an error, deletion still succeeds and the function logs a structured warning. Non-Apple users never hit those endpoints.
+`delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, agent tokens, and auth user (service role). For Sign in with Apple users, the iOS app first requests a fresh `authorizationCode` and the function exchanges it at `https://appleid.apple.com/auth/token`, then POSTs `https://appleid.apple.com/auth/revoke` with the refresh token (or the access token if Apple does not return a refresh token). If the Apple secrets are missing or Apple returns an error, deletion still succeeds and the function logs a structured warning. Non-Apple users never hit those endpoints. Successful deletion alone does not prove Apple token revocation; verify cancellation, failure and manual fallback behavior before release.
 
 After creating the Sign in with Apple key and setting `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY`, and `APPLE_CLIENT_ID`:
 
@@ -283,7 +283,7 @@ The generated project can be recreated; make lasting project-setting changes in 
 
 ## TestFlight
 
-The default upload path is GitHub Actions: [`.github/workflows/ios-testflight.yml`](.github/workflows/ios-testflight.yml) on hosted `macos-latest` with latest-stable Xcode. It runs on `workflow_dispatch` and on pushes to `main` that touch `ios/` or the workflow file. `CURRENT_PROJECT_VERSION` in `ios/project.yml` is the build number (`CFBundleVersion`). Do not upload from Xcode 27 beta; App Store Connect rejects that SDK.
+The default upload path is GitHub Actions: [`.github/workflows/ios-testflight.yml`](.github/workflows/ios-testflight.yml) on hosted `macos-latest` with latest-stable Xcode. It runs on `workflow_dispatch` and on pushes to `main` that touch `ios/` or the workflow file. `CURRENT_PROJECT_VERSION` in `ios/project.yml` is the build number (`CFBundleVersion`). Retired builds 4/5 used Xcode 27 beta; use a supported release toolchain and verify the archive SDK. Stable Xcode 27 is promoted in current Apple guidance.
 
 Jeremy sets the secrets listed at the top of the workflow and in [HUMANS.md](HUMANS.md). The job fails immediately if any are missing.
 
@@ -299,14 +299,16 @@ Increment `CURRENT_PROJECT_VERSION` in `ios/project.yml` before each upload.
 
 ## Free App Store release
 
-The iOS app is a free download with no in-app purchases or subscriptions.
+The planned iOS release is a free download with no in-app purchases or subscriptions. It has not been certified release-ready by this audit.
 
 1. In App Store Connect, under **Pricing and Availability**, set the price to **Free** for the storefronts you ship.
 2. Complete app metadata, privacy details, age rating, screenshots, support URL (`https://lmr.sillyapps.co/support`), and privacy URL (`https://lmr.sillyapps.co/privacy`). Use [docs/app-store.md](docs/app-store.md) for nutrition labels and review notes.
 3. Attach a tested build, choose manual or automatic release, and submit for review.
 
-Before submission, confirm account deletion, privacy disclosures, support contact, and reviewer notes match the shipped app.
+Before submission, complete [the current Apple requirements checklist](docs/apple-release-requirements.md) and [all human gates](HUMANS.md#app-store-submission), including actual reviewer access, native QA, deletion/Apple revocation, privacy disclosures, screenshot coverage, age/encryption and DSA declarations. [MAC_HANDOFF.md](MAC_HANDOFF.md) describes the native verification route. Linux cannot run Xcode locally; repository hosted macOS CI does not establish physical-device behavior. Only submit after Edmund reviews the evidence and authorizes it.
 
 ## License
 
 This project is licensed under [CC BY-NC-4.0](https://creativecommons.org/licenses/by-nc/4.0/). See [LICENSE](./LICENSE).
+
+Written by gpt-6.1-sol in T3 Code on behalf of Edmund
