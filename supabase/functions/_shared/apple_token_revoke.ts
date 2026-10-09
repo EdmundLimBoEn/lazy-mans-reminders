@@ -89,7 +89,10 @@ function pemToPkcs8(pem: string): Uint8Array<ArrayBuffer> {
     "",
   );
   if (!body) throw new Error("APPLE_PRIVATE_KEY is not a valid PKCS#8 PEM key");
-  const bytes = Uint8Array.from(atob(body), (character) => character.charCodeAt(0));
+  const bytes = Uint8Array.from(
+    atob(body),
+    (character) => character.charCodeAt(0),
+  );
   return new Uint8Array(bytes);
 }
 
@@ -147,14 +150,29 @@ async function postAppleForm(input: {
   fields: Record<string, string>;
   fetchImpl: typeof fetch;
 }): Promise<Response> {
-  return await input.fetchImpl(input.url, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: formBody(input.fields),
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5_000);
+  try {
+    const response = await input.fetchImpl(input.url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formBody(input.fields),
+      signal: controller.signal,
+    });
+    // Keep the deadline active while reading Apple's response body too.
+    const body = await response.text();
+    return new Response(body || null, {
+      status: response.status,
+      headers: response.headers,
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
-async function appleErrorMessage(response: Response): Promise<string | undefined> {
+async function appleErrorMessage(
+  response: Response,
+): Promise<string | undefined> {
   try {
     const body = await response.json() as { error?: unknown };
     return typeof body.error === "string" ? body.error : undefined;
@@ -248,17 +266,40 @@ export async function revokeAppleTokensWithAuthorizationCode(input: {
     };
   }
 
-  const revokeResponse = await postAppleForm({
-    url: APPLE_REVOKE_URL,
-    fetchImpl: input.fetchImpl,
-    fields: {
-      client_id: input.config.clientId,
-      client_secret: clientSecret,
-      token,
-      token_type_hint: tokenType,
-    },
-  });
-  if (!revokeResponse.ok) {
+  // Revocation is idempotent; retry the same token, never the single-use code.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt > 0) {
+      await new Promise((resolve) => setTimeout(resolve, attempt * 250));
+    }
+    let revokeResponse: Response;
+    try {
+      revokeResponse = await postAppleForm({
+        url: APPLE_REVOKE_URL,
+        fetchImpl: input.fetchImpl,
+        fields: {
+          client_id: input.config.clientId,
+          client_secret: clientSecret,
+          token,
+          token_type_hint: tokenType,
+        },
+      });
+    } catch {
+      if (attempt < 2) continue;
+      return {
+        ok: false,
+        warning: {
+          event: "apple_token_revoke",
+          outcome: "failed",
+          reason: "apple_network_error",
+          endpoint: "revoke",
+        },
+      };
+    }
+    if (revokeResponse.ok) return { ok: true, tokenType };
+    if (
+      attempt < 2 &&
+      (revokeResponse.status === 429 || revokeResponse.status >= 500)
+    ) continue;
     return {
       ok: false,
       warning: {
@@ -282,8 +323,8 @@ export async function maybeRevokeAppleTokens(input: {
   fetchImpl: typeof fetch;
   nowSeconds: number;
   warn: (warning: AppleRevokeWarning) => void;
-}): Promise<void> {
-  if (!userHasAppleIdentity(input.user)) return;
+}): Promise<"not_applicable" | "revoked" | "manual_required"> {
+  if (!userHasAppleIdentity(input.user)) return "not_applicable";
 
   if (!input.authorizationCode) {
     input.warn({
@@ -291,7 +332,7 @@ export async function maybeRevokeAppleTokens(input: {
       outcome: "skipped",
       reason: "no_authorization_code",
     });
-    return;
+    return "manual_required";
   }
 
   const secrets = readAppleSecrets(input.env);
@@ -302,7 +343,7 @@ export async function maybeRevokeAppleTokens(input: {
       reason: "missing_secrets",
       missing: secrets.missing,
     });
-    return;
+    return "manual_required";
   }
 
   const result = await revokeAppleTokensWithAuthorizationCode({
@@ -312,4 +353,5 @@ export async function maybeRevokeAppleTokens(input: {
     nowSeconds: input.nowSeconds,
   });
   if (!result.ok) input.warn(result.warning);
+  return result.ok ? "revoked" : "manual_required";
 }
