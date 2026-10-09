@@ -24,9 +24,10 @@ final class AppleCredentialMonitor {
         let identityID: UUID
         let subject: String
         let signedInAt: Date?
+        let sessionID: UUID
 
-        static func from(user: User?, loginProvider: String? = nil) -> Identity? {
-            guard let user else { return nil }
+        static func from(user: User?, sessionID: UUID?, loginProvider: String? = nil) -> Identity? {
+            guard let user, let sessionID else { return nil }
             if let loginProvider {
                 guard loginProvider == "apple" else { return nil }
             } else {
@@ -42,7 +43,7 @@ final class AppleCredentialMonitor {
                       !subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                 else { continue }
                 return Identity(userID: user.id, identityID: identity.identityId,
-                                subject: subject, signedInAt: user.lastSignInAt)
+                                subject: subject, signedInAt: user.lastSignInAt, sessionID: sessionID)
             }
             return nil
         }
@@ -72,8 +73,8 @@ final class AppleCredentialMonitor {
         self.query = query
     }
 
-    func update(user: User?, loginProvider: String? = nil) {
-        let next = Identity.from(user: user, loginProvider: loginProvider)
+    func update(user: User?, sessionID: UUID?, loginProvider: String? = nil) {
+        let next = Identity.from(user: user, sessionID: sessionID, loginProvider: loginProvider)
         guard next != identity else { return }
         identity = next
         // A -> B -> A must also invalidate an outstanding callback for A.
@@ -95,9 +96,9 @@ final class AppleCredentialMonitor {
         }
     }
 
-    func isCurrent(_ check: VerifiedRevocation, user: User?, loginProvider: String? = nil) -> Bool {
+    func isCurrent(_ check: VerifiedRevocation, user: User?, sessionID: UUID?, loginProvider: String? = nil) -> Bool {
         check.revision == revision && check.identity == identity
-            && check.identity == Identity.from(user: user, loginProvider: loginProvider)
+            && check.identity == Identity.from(user: user, sessionID: sessionID, loginProvider: loginProvider)
     }
 
     nonisolated static func sessionID(accessToken: String) -> UUID? {

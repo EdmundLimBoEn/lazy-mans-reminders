@@ -34,7 +34,11 @@ final class AuthManager: ObservableObject {
 
     @Published private(set) var session: Session? {
         didSet {
-            appleCredentialMonitor.update(user: session?.user, loginProvider: loginProvider(for: session))
+            appleCredentialMonitor.update(
+                user: session?.user,
+                sessionID: session.flatMap { AppleCredentialMonitor.sessionID(accessToken: $0.accessToken) },
+                loginProvider: loginProvider(for: session)
+            )
         }
     }
     @Published private(set) var isRestoringSession = true
@@ -110,9 +114,13 @@ final class AuthManager: ObservableObject {
               let revocation = await appleCredentialMonitor.verifiedRevocation()
         else { return }
         await authSessionGate.cleanUp(if: {
-            !isEndingSession && !isAuthenticating
-                && appleCredentialMonitor.isCurrent(revocation, user: client.auth.currentSession?.user,
-                                                    loginProvider: loginProvider(for: client.auth.currentSession))
+            let current = client.auth.currentSession
+            return !isEndingSession && !isAuthenticating
+                && appleCredentialMonitor.isCurrent(
+                    revocation, user: current?.user,
+                    sessionID: current.flatMap { AppleCredentialMonitor.sessionID(accessToken: $0.accessToken) },
+                    loginProvider: loginProvider(for: current)
+                )
         }, operations: cleanupOperations)
     }
 
