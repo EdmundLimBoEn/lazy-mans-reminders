@@ -80,6 +80,6 @@ At c131c41, `scripts/asc-preflight.sh` runs read-only ASC commands. A green repo
 - Pricing can pass on availability alone; zero customer price is not enforced.
 - It does not certify SDK/signing, icon, native QA, privacy, age, export or DSA declarations.
 
-The coordinator owns a separate preflight fix PR. Re-audit that implementation when integrated; keep manual gates even after parser fixes.
+The coordinator owns a separate preflight fix PR. Its revised design deliberately returns UNKNOWN/nonzero for evidence the API cannot verify; require actual evidence and a manual release decision rather than blind attestations or forcing green. Re-audit that implementation when integrated; keep manual gates even after parser fixes.
 
 Written by gpt-6.1-sol in T3 Code on behalf of Edmund

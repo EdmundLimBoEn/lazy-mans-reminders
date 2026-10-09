@@ -82,7 +82,7 @@ Baseline declares no tracking or advertising; verify actual integrated services.
 
 ## Review notes
 
-**Submission blocker: provision and verify reviewer access first.** The separate reviewer-access change adds existing-account email/password login and a [secure provisioning guide](reviewer-access.md). That guide does not mean a real account exists or that the feature is integrated into the selected binary. A stable, confirmed synthetic reviewer account, private credentials and fresh-install QA remain human prerequisites. Keep actual credentials out of this repository; enter them in ASC's dedicated account fields. Sign in with Apple self-signup alone is not verified reviewer access. [Apple review information](https://developer.apple.com/help/app-review/before-submitting-for-review/complete-review).
+**Submission blocker: provision and verify reviewer access first.** The separate [reviewer-access PR #52](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/52) adds existing-account email/password login and a [secure provisioning guide](reviewer-access.md). That guide does not mean a real account exists or that the feature is integrated into the selected binary. A stable, confirmed synthetic reviewer account, private credentials and fresh-install QA remain human prerequisites. Keep actual credentials out of this repository; enter them in ASC's dedicated account fields. Sign in with Apple self-signup alone is not verified reviewer access. [Apple review information](https://developer.apple.com/help/app-review/before-submitting-for-review/complete-review).
 
 Set sign-in required to **yes** and provide verified access, contact first/last name, reachable phone/email and any additional authentication instructions. Do not paste `none yet`, blank credentials, or fabricated accounts into a submission. Confirm the credentials remain usable throughout review. TestFlight external beta review needs the same access preparation.
 
@@ -145,7 +145,7 @@ Suggested 5–6 shots: board with composer, completion action, Live Activity, Lo
 ./scripts/asc-preflight.sh
 ```
 
-The script is read-only and never submits. Its baseline version can falsely pass version, screenshot, review and pricing checks; see the [audit](apple-release-requirements.md#read-only-preflight-audit-script-unchanged). Another PR owns script changes. A green report does not certify privacy, age, DSA, encryption, SDK/signing, reviewer access or physical QA.
+The script is read-only and never submits. Its baseline version can falsely pass version, screenshot, review and pricing checks; see the [audit](apple-release-requirements.md#read-only-preflight-audit-script-unchanged). Another PR owns script changes. Its revised design deliberately reports UNKNOWN and exits nonzero for API-unverifiable evidence; resolve those items with actual evidence and a manual release decision, not a forced green report. Preflight does not certify privacy, age, DSA, encryption, SDK/signing, reviewer access or physical QA.
 
 All human prerequisites are tracked in [HUMANS.md](../HUMANS.md#app-store-submission). Native build handoff is in [MAC_HANDOFF.md](../MAC_HANDOFF.md). Hosted macOS CI exists, but this Linux docs work did not run Xcode, upload a binary, inspect authenticated ASC state, deploy changes or submit review. Edmund must review evidence and authorize release.
 
