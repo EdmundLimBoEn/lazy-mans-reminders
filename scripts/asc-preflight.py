@@ -34,6 +34,7 @@ def public_url(value):
                 return "FAIL", "public URL did not return nonempty HTML"
             return "PASS", "HTTP 200 HTML only; rendered page, policy text and support usability unverified"
     except HTTPError as exc:
+        exc.close()
         if exc.code in (401, 403, 429) or 300 <= exc.code < 400 or exc.code >= 500:
             return "UNKNOWN", "HTTP access/challenge/redirect/server failure; inspect in browser"
         return "FAIL", "public page HTTP error (response content withheld)"
@@ -77,6 +78,9 @@ class Evidence:
             return obj
         except MissingEvidence:
             raise
+        except HTTPError as exc:
+            exc.close()
+            raise MissingEvidence("API evidence unavailable or malformed") from None
         except Exception:
             # API payloads, errors and exception text may contain secrets.
             raise MissingEvidence("API evidence unavailable or malformed") from None
