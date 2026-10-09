@@ -94,15 +94,17 @@ Then integrate/review in the coordinator's planned order:
 
 1. [#50 — reject reminder mutations after sign-out](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/50).
 2. [#51 — preserve reminder drafts when add fails](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/51).
-3. [#52 — existing-account password login and secure reviewer provisioning guide](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/52).
-4. [#53 — privacy manifest and data handling disclosures](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/53).
-5. [#55 — account deletion cancellation and Apple revocation failure recovery](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/55).
-6. [#60 — bound OAuth grant cleanup during account deletion](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/60), based on `release/ios-ci-gates` (#54).
-7. [#57 — revoked Apple credential handling](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/57).
+3. [#53 — privacy manifest and data handling disclosures](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/53).
+4. [#55 — account deletion cancellation and Apple revocation failure recovery](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/55), remaining based on `release/ios-ci-gates` (#54).
+5. [#60 — bound OAuth grant cleanup during account deletion](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/60), based on `release/ios-ci-gates` (#54).
+6. [#57 — revoked Apple credential handling and FIFO authentication gate](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/57); final gate commit/review pending.
+7. [#52 — existing-account password login and secure reviewer provisioning guide](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/52), **planned base `release/apple-credential-revocation` (#57), pending GitHub retarget verification**. Rebase its two feature commits onto final #57, then gate password-session installation through the shared FIFO helper; do not treat it as directly based on CI #54 until checking the actual branch dependency.
 8. [#59 — submission preflight evidence checks](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/59).
 9. [#56 — verify reminder writes before updating cache](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/56), based on #50.
 
-Independent review also requested fixes within the existing PRs: #50 for auth refresh/session identity, #56 for out-of-order write acknowledgements, #57 for a credential-revocation cleanup callback racing with a different session, and #59 for actual price-schedule retrieval and failure on missing pricing. Those authors are updating the same PRs; recheck their final commits and combined validation. These are pending implementation fixes, not additional PRs or completed device evidence.
+Independent review requested fixes within existing PRs for #50 auth refresh/session identity, #56 out-of-order write acknowledgements, #57 cleanup racing with a different session, and #59 actual price-schedule retrieval/failure on missing pricing. The coordinator reports those original objections resolved, with fresh follow-ups for #50 same-session rotation and #60 continuous-chunk deadline handling still in progress; no additional PRs were created. Reported local integration includes #50 `8d94951` and #60 `ac90c94`; check subsequent heads and fresh reviews before relying on them.
+
+The coordinator reports a successful native Release unit-test job for #51 and persistence job for an earlier #60 head **before** the monotonic-deadline change. These are scoped historical check results, not final combined-artifact validation. Final #57/#52 integration review and native combined validation remain pending; physical-device and signing/archive evidence remain open.
 
 [#58 — this requirements/submission documentation](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/58) remains standalone against `main`. When combining it with #57, preserve the exact **Apple credential revocation release gate (9 Oct 2026)** once in HUMANS.md's device QA checklist and remove the duplicate appended copy. Keep the separate server-side deletion gate. The reviewer guide links resolve when #52 is integrated.
 
