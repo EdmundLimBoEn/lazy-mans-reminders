@@ -64,9 +64,18 @@ Missing/null/404/malformed schedule, price or point responses fail. Zero
 establishes a free customer price.
 
 Price intervals require explicit start/end fields: null represents an unbounded
-endpoint; non-null values must be ISO calendar dates. UTC date strictly inside
-the interval (or its unbounded endpoints) establishes current-date evidence;
-changes beginning/ending today fail conservatively for storefront-time review.
+endpoint; non-null values must be ISO calendar dates. Every returned start/end
+transition dated yesterday, today or tomorrow relative to the UTC check date
+fails conservatively before selecting a price. A calendar date alone cannot
+establish which price is live near a transition: Apple's country/region start
+times may fall on an adjacent UTC date and adjust for US daylight saving time.
+For example, a next-date Singapore free-to-paid transition can already be live
+while the UTC date still precedes the scheduled date. The ±1-day guard deliberately
+requires human verification instead of implementing a guessed storefront timezone
+table. A zero-price interval away from all returned transition dates, including
+an explicitly unbounded interval, can pass the narrow base-price evidence check.
+This guard is not a guarantee of live storefront propagation: Apple notes that
+changes can take up to 24 hours to display, and snapshots may be stale.
 Future-only, past-only or overlapping current prices cannot pass. This does not
 certify prices on the future submission/release date, manual territory overrides,
 automatic equalization or distribution availability: those remain UNKNOWN and
@@ -127,6 +136,10 @@ physical iPhone QA; no macOS build host/device was discovered for this change.
   storefront overrides. Apple's OpenAPI defines AppPriceSchedule relationships,
   AppPriceV2 interval/manual fields, AppPricePointV3 customerPrice and app/territory
   linkage, and the exact GET endpoints/filter/include parameters used here.
+- [Pricing and availability start times by country or region](https://developer.apple.com/help/app-store-connect/reference/pricing-and-availability/app-store-pricing-and-availability-start-times-by-country-or-region/):
+  effective times vary by storefront/date and US daylight saving observance;
+  late changes may take up to 24 hours to display. The interactive table's exact
+  times are not inferred or reproduced by this preflight.
 - [Apple OpenAPI specification](https://developer.apple.com/sample-code/app-store-connect/app-store-connect-openapi-specification.zip):
   fixture endpoint paths, resource types and attribute names verified against
   Apple's downloaded schema. Includes audience, processing, asset-delivery,
