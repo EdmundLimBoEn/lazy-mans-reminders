@@ -1,276 +1,43 @@
 # Mac handoff — Lazy Man's Reminders
 
-**Status:** Historical. Auth, MCP, and legal pages on `main` have moved on since 7 August 2026. Use [HUMANS.md](HUMANS.md) and [docs/app-store.md](docs/app-store.md) for what is still on you. Keep the lock-screen widget (clear glass + marquee). Do not follow the “Google not enabled” snapshot below. As of 8 Oct 2026: canonical web is `https://lmr.sillyapps.co` (old host 302s there), account deletion also revokes Sign in with Apple tokens (#38) and agent grants, and the push trigger fires on INSERT/UPDATE/DELETE.
+Updated **9 October 2026**, audited at `c131c41`. This replaces the stale 7 August snapshot and its already-completed OAuth setup instructions. Use the reviewed release commit, not an old hardcoded tip.
 
-**Date:** 7 August 2026  
-**From:** Linux agent session (launch-ready / free App Store release)  
-**Repo:** `git@github.com:EdmundLimBoEn/lazy-mans-reminders.git`  
-**Branch:** `main` @ `89c0abb` (pulled/pushed; includes launch work + prior lock-screen widget fix)  
-**Operator:** Edmund Lim · team `DUU8J39BA7` · contact `hello@edmundlim.systems`
+Repository: `EdmundLimBoEn/lazy-mans-reminders`. Historical project records identify bundle `systems.edmundlim.LazyMansReminders`, widget `systems.edmundlim.LazyMansReminders.Widget`, App Group `group.systems.edmundlim.LazyMansReminders`, team `DUU8J39BA7`, ASC app `6799138197`. Confirm these in the signing account; this docs audit did not authenticate to Apple.
 
-Use this on your **Mac + Zen browser** (authed sessions). Paste the “Agent prompt” section into a Mac Cursor agent if you want it to drive the remaining dashboard/Xcode work.
+Canonical web: <https://lmr.sillyapps.co>; MCP: <https://lmr-mcp.edmundlim.systems/mcp>. Privacy/support are `/privacy` and `/support` on the canonical web host. Old-domain redirects and hosted Auth allowlists require the checks in [HUMANS.md](HUMANS.md).
 
----
+## Build evidence
 
-## 1. What this product is
+Use a Mac with a supported **release Xcode 26+ and iOS 26 SDK+**, XcodeGen and authorized Apple Developer access. Apple requires those upload minimums since 28 April 2026. The current iOS 17 deployment target exceeds Apple's effective iOS 13 floor. Stable Xcode 27 is supported by current Apple submission guidance; old beta builds 4/5 remain retired. [Official requirements](https://developer.apple.com/news/upcoming-requirements/).
 
-Passwordless reminder board:
+The repository's [TestFlight workflow](.github/workflows/ios-testflight.yml) uses hosted macOS with latest-stable Xcode. It is a build route, not physical QA. Do not upload unreviewed PRs. Coordinate the reviewed commit, build number, signing configuration and upload authorization with Edmund.
 
-- **Web** (React/Vite) — create/edit/reorder/complete reminders  
-- **iOS 17 app** — magic link / Apple / Google sign-in, complete reminders, register for push  
-- **Lock Screen widget** — shows active reminders (marquee scroll for long lines; clear Liquid Glass layout from commit `13c6df5`)  
-- **Backend** — Supabase Auth + Postgres RLS + Realtime + Edge Functions (push + account delete)
+1. Fetch the reviewed release commit on the Mac and record it with the build number.
+2. Prepare ignored `ios/Config.xcconfig` from `ios/Config.example.xcconfig`; keep credentials, keys and certificates out of source, screenshots and logs.
+3. Run `xcodegen generate` from `ios`, then open the generated project. Confirm app/extension team, IDs, App Groups, Apple login and production APNs entitlements in the signed archive.
+4. Record `xcodebuild -version` and `xcodebuild -showsdks`; run the native simulator tests and archive the reviewed commit with release settings. Inspect actual archive SDK, minimum OS and embedded extension.
+5. Inspect bundled privacy manifests, resolved SDKs, aggregate Xcode privacy report and icon. CI latest-stable selection and a repository manifest are insufficient evidence on their own.
+6. Upload only after separate approval; wait for processing and install the exact resulting TestFlight artifact for QA. Keep beta external review distinct from App Store review.
 
-**Live URLs**
+## Physical-device release gates
 
-| What | URL |
-|------|-----|
-| Web (alias) | https://lmr.edmundlim.systems |
-| Web (Pages) | https://lazy-mans-reminders.pages.dev |
-| Privacy | https://lmr.edmundlim.systems/privacy |
-| Terms | https://lmr.edmundlim.systems/terms |
-| Support | https://lmr.edmundlim.systems/support |
-| Agent MCP | https://lmr-mcp.edmundlim.systems/mcp |
-| Supabase project | `biwmsxbqrevtjwgsvsmu` (Singapore / `ap-southeast-1`) |
-| Dashboard | https://supabase.com/dashboard/project/biwmsxbqrevtjwgsvsmu |
-| Auth providers | https://supabase.com/dashboard/project/biwmsxbqrevtjwgsvsmu/auth/providers |
-| Functions | https://supabase.com/dashboard/project/biwmsxbqrevtjwgsvsmu/functions |
+Record device model, OS, build/commit, date, result and any screenshots. Complete [HUMANS.md](HUMANS.md#app-store-submission); do not mark tasks done solely because APNs accepted a request or source tests pass.
 
-**Pricing:** free App Store download, no in-app purchases. Email magic link alone does **not** require Sign in with Apple; offering Google **does** (Guideline 4.8). Code already includes Apple + Google.
+- Apple, Google, email magic link and reviewer existing-account login from fresh install; expired-session, cold-launch and poor-network behavior.
+- Add/edit/complete/delete/reorder as supported by the selected build; web sync and capacity.
+- Denied and allowed notification paths, Settings recovery and separate Live Activities setting.
+- Lock Screen/Home Screen widgets, background activity updates/renewal/end, force-quit separately, and user dismissal. Follow [persistence QA](docs/live-activity-persistence.md).
+- No stale private board, widget or activity after sign-out, account switching and deletion.
+- Export and feedback routes; in-app deletion on disposable Apple/Google/email accounts with consent, including cancellation/failure/manual-revocation fallback and agent access cleanup.
+- VoiceOver, Larger Text, contrast and Reduce Motion common tasks. Publish accessibility support only after criteria pass.
+- Siri/Shortcuts only for features compiled into this artifact; test each phrase before advertising it.
 
----
+## Submission preparation
 
-## 2. Sync the Mac first
+[Apple requirements](docs/apple-release-requirements.md) maps sources to gaps; [submission notes](docs/app-store.md) provides draft metadata. Use the separate [reviewer provisioning guide](docs/reviewer-access.md) after its PR is integrated. Provision a stable confirmed synthetic account, enter credentials privately in ASC, verify access without the owner's inbox and keep it available throughout review. Apple self-signup alone is not a demonstrated review access solution.
 
-```sh
-cd /path/to/lazy-mans-reminders   # or clone fresh
-git fetch origin
-git checkout main
-git pull --ff-only origin main
-git log -3 --oneline
-# expect tip: 89c0abb Mark delete-account Edge Function as deployed.
-```
+Capture current required screenshot display groups and verify scaling in ASC, validate the archived icon, confirm actual Free pricing/availability, and complete age/privacy/encryption/DSA declarations. Edmund determines trader status; individual/free does not settle it. Check contact identity, phone/email, membership, agreements, roles and all public URLs. No identities, policy choices or credentials should be invented.
 
-Local config (do not commit):
+Use read-only preflight as one input; parser success does not certify native behavior or owner declarations. Human authorization is required before production deployment or App Review submission. This Linux work did not run Xcode or physical-device QA; no accessible interactive Mac build host was discovered or used.
 
-```sh
-cp web/.env.example web/.env.local
-# set VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY (same as production publishable key)
-
-cp ios/Config.example.xcconfig ios/Config.xcconfig
-# DEVELOPMENT_TEAM = DUU8J39BA7
-# PRODUCT_BUNDLE_IDENTIFIER = systems.edmundlim.LazyMansReminders
-# WIDGET_BUNDLE_IDENTIFIER = systems.edmundlim.LazyMansReminders.Widget
-# APP_GROUP_ID = group.systems.edmundlim.LazyMansReminders
-# SUPABASE_URL / SUPABASE_ANON_KEY from example / dashboard
-
-cd ios && xcodegen generate   # if needed
-open LazyMansReminders.xcodeproj
-```
-
----
-
-## 3. Already done (do not redo)
-
-### Product / code (on `main`)
-
-- Privacy, Terms, Support SPA routes + footer links (`web/src/LegalPages.tsx`, routed in `App.tsx`)
-- Web UI polish: tighter mobile spacing, smaller headlines, reliable complete tap targets
-- Web + iOS **account deletion** → `delete-account` Edge Function
-- iOS **complete reminder** (was broken: list had no PATCH) via `ReminderStore.markDone`
-- iOS Sign in with Apple (native `SignInWithAppleButton` + nonce + `signInWithIdToken`)
-- iOS Google via `signInWithOAuth` / ASWebAuthenticationSession (no GoogleSignIn SDK)
-- Web Continue with Apple / Google OAuth buttons + email magic link
-- Sign in with Apple entitlement in `LazyMansReminders.entitlements` + XcodeGen capability
-- Lock Screen widget rewrite kept from remote (`13c6df5`) — full-width clear glass + marquee; **do not** revert to the old “REMINDERS” header layout
-
-### Infra (mostly done on Linux / earlier Mac work)
-
-| Item | Status |
-|------|--------|
-| DNS `lmr` → Pages | Done (active) |
-| App / Widget IDs + App Groups + Push | Done (`9H8ZY6WGY6` / `PBM95Q8YTQ`) |
-| APNs secrets + reminder INSERT/UPDATE/DELETE → push path | Done (APNs key being replaced with a Sandbox & Production key, Oct 2026) |
-| Email auth | Enabled |
-| **Apple provider in Supabase** | **Enabled** via API — Client ID = `systems.edmundlim.LazyMansReminders`, **no web secret yet** |
-| Google provider | **Not enabled** (needs OAuth client from Zen/Google Cloud) |
-| `delete-account` function | **Deployed** |
-| Web app | **Deployed** to Pages (200 on `/`, `/privacy`) |
-
-### Auth config snapshot (as of deploy)
-
-- `site_url` = `https://lmr.edmundlim.systems`
-- Redirect allow list includes localhost, Pages, `lmr`, and `lazymansreminders://auth/callback`
-- `external_apple_enabled` = true  
-- `external_apple_client_id` = `systems.edmundlim.LazyMansReminders`  
-- `external_apple_secret` = none (web Apple OAuth will fail until Services ID + secret)  
-- `external_google_enabled` = false  
-
----
-
-## 4. What YOU must finish on Mac (Zen)
-
-Checklist also lives in `HUMANS.md`. Priority order for “friends want to try it”:
-
-### A. Google SSO (highest leverage for web testers)
-
-1. Zen → [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials)
-2. Create **OAuth client ID** → application type **Web application**
-3. Authorized JavaScript origins:
-   - `https://lmr.edmundlim.systems`
-   - `https://lazy-mans-reminders.pages.dev`
-   - `http://localhost:5173`
-4. Authorized redirect URI:
-   - `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`
-5. Optional: separate **iOS** OAuth client with bundle ID `systems.edmundlim.LazyMansReminders` (Supabase still uses the **Web** client ID/secret as the provider credentials)
-6. Zen → Supabase → Authentication → Providers → **Google** → enable → paste Web client ID + secret → Save
-7. Smoke test: https://lmr.edmundlim.systems → Continue with Google
-
-### B. Sign in with Apple capability (required for native + for Guideline 4.8 once Google is on)
-
-1. [Apple Developer → Identifiers](https://developer.apple.com/account/resources/identifiers/list) → App ID `systems.edmundlim.LazyMansReminders`
-2. Enable **Sign in with Apple** → Save
-3. Xcode: regenerate/signing profiles if needed; confirm entitlement `com.apple.developer.applesignin` is present
-4. Device test: native Apple button on sign-in screen
-
-### C. Web Apple (optional but buttons exist)
-
-Native Apple can work with App ID alone. **Web** Continue with Apple needs:
-
-1. Apple **Services ID** (e.g. `systems.edmundlim.LazyMansReminders.web`)
-2. Domains/return URL for Supabase callback:  
-   `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`
-3. Sign in with Apple **key** (`.p8`) → generate client secret (Supabase docs have a generator)
-4. Supabase Apple provider **Client IDs** order matters:
-   - **First:** Services ID (web OAuth)
-   - **Also:** `systems.edmundlim.LazyMansReminders` (native)
-5. Paste secret into Supabase Apple provider
-
-Docs: https://supabase.com/docs/guides/auth/social-login/auth-apple
-
-### D. iOS device / TestFlight
-
-```sh
-cd ios && xcodegen generate
-open LazyMansReminders.xcodeproj
-```
-
-Sign both targets with team `DUU8J39BA7`. On a **physical iPhone** test:
-
-1. Magic link (`lazymansreminders://auth/callback`)
-2. Sign in with Apple
-3. Google (after A)
-4. Tap circle to complete a reminder (leaves list; widget refreshes)
-5. Push: add reminder from web while app has registered device token
-6. Lock Screen widget (rectangular + inline)
-7. Delete account (More menu → Delete permanently)
-
-Then: App Store Connect metadata, privacy URL, support URL, screenshots, **Pricing and Availability → Free**.
-
-### E. Legal
-
-Templates are live; disclaimer says not legal advice. Confirm `hello@edmundlim.systems` inbox works. Optional counsel review before App Store submission.
-
----
-
-## 5. Architecture cheat sheet
-
-```
-Web (Pages) ──┐
-              ├── Supabase Auth (email OTP, Apple id_token / OAuth, Google OAuth)
-iOS app ──────┤
-              ├── Postgres: reminders, device_tokens (RLS per user)
-Widget ───────┘    App Group cache ← ReminderStore session + reminders
-
-INSERT/UPDATE/DELETE reminders → notify_reminder_push → send-reminder-push → APNs
-DELETE account  → delete-account (JWT) → revoke agent grants + Apple tokens → wipe reminders + tokens + auth.users
-```
-
-**Key files**
-
-| Area | Path |
-|------|------|
-| Web UI + OAuth + delete | `web/src/App.tsx`, `web/src/styles.css` |
-| Legal | `web/src/LegalPages.tsx` |
-| iOS auth | `ios/App/AuthManager.swift` |
-| iOS UI / complete / delete | `ios/App/ContentView.swift` |
-| Reminder API / markDone | `ios/Shared/ReminderStore.swift` |
-| Widget | `ios/Widget/ReminderWidget.swift` |
-| Delete account FN | `supabase/functions/delete-account/index.ts` |
-| Push FN | `supabase/functions/send-reminder-push/index.ts` |
-| Human checklist | `HUMANS.md` |
-
-**Deep links / redirects**
-
-- Web: `${origin}/` (OAuth + magic link)
-- iOS: `lazymansreminders://auth/callback`
-- Supabase OAuth callback: `https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback`
-
----
-
-## 6. Deploy commands (if you change more)
-
-```sh
-# Edge Function
-supabase link --project-ref biwmsxbqrevtjwgsvsmu
-supabase functions deploy delete-account
-supabase functions deploy send-reminder-push --no-verify-jwt   # only if push FN changes
-
-# Web
-cd web
-npm ci
-npm run deploy   # build + wrangler pages deploy dist --branch main -- project lazy-mans-reminders
-```
-
-Git: commit on Mac as usual; `main` is the deploy branch.
-
----
-
-## 7. Known gaps / pitfalls
-
-1. **Zen vs Cursor browser** — agent on Linux could not use Zen cookies; finish Google/Apple Dev in Zen yourself.
-2. **Web Apple button** will error until Services ID + secret exist; native Apple can work sooner.
-3. **Google on iOS** uses browser sheet, not native Google SDK — fine for v1.
-4. **Account linking** — same email via magic link vs Apple/Google may create separate users depending on Supabase settings; test and enable automatic linking if needed.
-5. **Tailscale MagicDNS** may fail to resolve `lmr.edmundlim.systems`; use public DNS / `dig @1.1.1.1`.
-6. First Xcode run may prompt to register App Group — accept if shown.
-7. Legal templates are not lawyer-reviewed.
-8. No TestFlight upload yet from this session.
-
----
-
-## 8. Paste this into a Mac Cursor agent
-
-```text
-You are continuing Lazy Man's Reminders on my Mac. Repo: EdmundLimBoEn/lazy-mans-reminders, branch main (pull latest; tip should include 89c0abb).
-
-Read MAC_HANDOFF.md and HUMANS.md first.
-
-Goal: finish launch-blocking auth + device validation using my already-logged-in Zen browser sessions (Google Cloud, Apple Developer, Supabase).
-
-Do in order:
-1. git pull --ff-only origin main; confirm Config.xcconfig / web .env.local exist locally (do not commit secrets).
-2. Using the browser (prefer my authed Zen/CDP if available, else ask me to Take Control):
-   a. Create Google Web OAuth client with redirect https://biwmsxbqrevtjwgsvsmu.supabase.co/auth/v1/callback and origins https://lmr.edmundlim.systems, https://lazy-mans-reminders.pages.dev, http://localhost:5173.
-   b. Enable Google in Supabase Auth providers with that client ID/secret.
-   c. Enable Sign in with Apple on App ID systems.edmundlim.LazyMansReminders.
-   d. Optionally configure web Apple Services ID + secret; Client IDs must list Services ID first, then the iOS App ID.
-3. xcodegen + open Xcode; help me run on a physical iPhone and smoke-test: Apple login, Google login, magic link, complete reminder, widget, push, delete account.
-4. Update HUMANS.md checkboxes when done. Do not force-push. Do not commit secrets (.env.functions, .p8, Config.xcconfig with secrets).
-
-Constraints: keep the current lock-screen widget (clear glass + marquee). Prefer minimal diffs. Report what you enabled and what still needs me.
-```
-
----
-
-## 9. Session outcomes (this Linux workstream)
-
-| Ask | Outcome |
-|-----|---------|
-| Legal docs | Shipped + deployed |
-| UI off-center / big type / can’t complete on iOS | Fixed in app; web polish deployed |
-| Launch extras | Account deletion FN + UI; App Store URL pages |
-| Sign in with Apple + Google | Code shipped; Apple provider enabled for native; Google + web Apple secrets still Mac/Zen |
-| Deploy/push | `main` pushed; Pages + `delete-account` deployed |
-
-When Mac work is done, friends can use **web Google** and/or **email** immediately; iOS once signed build is on device/TestFlight.
+Written by gpt-6.1-sol in T3 Code on behalf of Edmund

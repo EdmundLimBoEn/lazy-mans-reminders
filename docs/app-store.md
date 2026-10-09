@@ -1,34 +1,31 @@
 # App Store Connect notes
 
-Copy-paste source for the free **1.0** submission (target **27 Oct 2026**). App id `6799138197`. Do not paste secrets.
+Draft source for the **free 1.0** submission, app id `6799138197`. Updated **9 October 2026**. Not submitted or certified ready. Read [Apple requirements and evidence gaps](apple-release-requirements.md) and [HUMANS.md](../HUMANS.md) before applying fields. Earlier 27 October/30 November targets are internal plans, not Apple deadlines; release follows evidence and Edmund's approval.
 
-The iOS home-screen name is already **Lazy Man's Reminders** (`CFBundleDisplayName`). Do not change iOS code for this rename. App Store Connect still lists the app as **Lazy Mans Notepad**; that listing name (and any description that used it) must become **Lazy Man's Reminders** so they match (guideline 2.3.8).
+The native display name is **Lazy Man's Reminders**. Earlier records say ASC used **Lazy Mans Notepad**; confirm and update the actual listing. No current authenticated ASC state was verified for this docs change. There is no Fastlane metadata tree.
 
-Canonical listing copy is in this file. There are no Fastlane/`metadata/` trees in the repo.
+## Listing copy
 
-## Name and subtitle
-
-| Field | Value | Limit |
-|-------|--------|--------|
+| Field | Draft value | Limit |
+|---|---|---|
 | Name | `Lazy Man's Reminders` | 20 / 30 characters |
 | Subtitle | `Lock Screen reminder board` | 26 / 30 characters |
+| Locale | `en-US` | Primary locale |
+| Category | Productivity | Confirm in ASC |
+| Keywords | `reminders,lock screen,live activity,todo,board,siri,widget` | 100 bytes |
 
-Primary locale: `en-US`. Category: Productivity. Do not use “Notepad” on the product page.
+Description (4000-character limit):
 
-## Description
-
-Paste into the 1.0 version localization (`en-US`):
-
-```
+```text
 Lazy Man's Reminders is a small reminder board for your iPhone, the web, and the Lock Screen.
 
-Add a few lines. They show up on Your Board, on Lock Screen and Home Screen widgets, and on a Lock Screen Live Activity that stays up while anything is still on the board. Complete every line and the Live Activity goes away.
+Add a few lines and keep the same board on your iPhone and at https://lmr.sillyapps.co. Complete lines as you finish them.
 
-Sign in with Apple, Google, or email so the same board syncs with https://lmr.sillyapps.co and with any agent you allow through MCP (Grok, Claude, Cursor, Codex).
+Add Board widgets to your Home Screen or Lock Screen. A Live Activity can show active reminders on the Lock Screen while Live Activities are enabled. Its availability and updates depend on iOS settings, network access, and system limits.
 
-On iOS 27, ask Siri to list reminders, add one, or mark one done in Lazy Man's Reminders.
+Sign in with Apple, Google, or email. Connect an agent through MCP if you want to let it manage your reminders.
 
-Push banners are optional. If you turn notifications off, the in-app board still works.
+Push banners are optional. The in-app board works when notifications are off.
 
 Free. No in-app purchases. No subscriptions.
 
@@ -36,240 +33,120 @@ Privacy: https://lmr.sillyapps.co/privacy
 Support: https://lmr.sillyapps.co/support
 ```
 
-Keywords (100-character budget): `reminders,lock screen,live activity,todo,board,siri,widget`
+Promotional text: `A small reminder board for your iPhone, the web, and the Lock Screen.`
 
-Optional promotional text: `A reminder board that stays on the Lock Screen.`
+What's New (1.0): `First release of Lazy Man's Reminders.`
 
-What’s New (1.0): `First release of Lazy Man's Reminders.`
+Only add Siri/Apple Intelligence claims or exact phrases after testing them in the selected signed build. App Intents source/SDK guards are not runtime evidence. Do not promise uninterrupted or indefinite Live Activity persistence.
 
-## Rename the ASC app (deploy bot)
+Apply localization fields in App Store Connect → App Information and the iOS 1.0 version. If using `asc`, inspect the installed command help before applying; do not assume old command syntax still works. Confirm saved values before submission. This docs work does not authorize external writes or submission.
 
-`asc apps update` cannot change the listing name. It only patches bundle id, primary locale, and content rights.
+## URLs and support
 
-Rename the app-info localization and set the privacy URL:
+- Privacy: <https://lmr.sillyapps.co/privacy>
+- Support: <https://lmr.sillyapps.co/support>
+- Marketing: <https://lmr.sillyapps.co>
+- Terms: <https://lmr.sillyapps.co/terms> (optional metadata)
+- Contact: `hello@edmundlim.systems` (human must confirm monitored inbox)
 
-```sh
-asc app-setup info set \
-  --app 6799138197 \
-  --locale en-US \
-  --name "Lazy Man's Reminders" \
-  --subtitle "Lock Screen reminder board" \
-  --privacy-policy-url "https://lmr.sillyapps.co/privacy"
-```
+Historical checks report that `lmr.edmundlim.systems` redirects with 302; do not assume production redirect/auth settings match repository config. Check all URLs unauthenticated from outside the home network.
 
-Update the 1.0 description and store URLs (version localization; no version id required):
+## Pricing, availability, content rights and DSA
 
-```sh
-asc apps info edit \
-  --app 6799138197 \
-  --version 1.0 \
-  --platform IOS \
-  --locale en-US \
-  --description "Lazy Man's Reminders is a small reminder board for your iPhone, the web, and the Lock Screen.
+Intent: **Free**, no IAP/subscriptions, all eligible territories including new territories. Owner must confirm actual zero price and availability; decide compatible Mac/Apple Vision Pro distribution separately. Confirm copyright and rights to all bundled/marketing assets; private reminder text is user-authored.
 
-Add a few lines. They show up on Your Board, on Lock Screen and Home Screen widgets, and on a Lock Screen Live Activity that stays up while anything is still on the board. Complete every line and the Live Activity goes away.
+**Do not infer trader status from being an individual or from free pricing.** Edmund must assess whether the app is offered in connection with commercial activity and declare the result. If a trader distributing in the EU, provide and verify Apple's required public contact information and other declarations. Do not invent a company, address, phone, VAT or registration number. [Apple DSA guidance](https://developer.apple.com/help/app-store-connect/manage-compliance-information/manage-european-union-digital-services-act-trader-requirements).
 
-Sign in with Apple, Google, or email so the same board syncs with https://lmr.sillyapps.co and with any agent you allow through MCP (Grok, Claude, Cursor, Codex).
+## Age rating and encryption
 
-On iOS 27, ask Siri to list reminders, add one, or mark one done in Lazy Man's Reminders.
+Complete the current questionnaire and confirm the resulting global/regional ratings. **4+ is a hypothesis, not a completed submission fact.** This is not a Kids Category app and baseline has private reminders rather than a public social feed. Review all capabilities, including UGC, messaging, browsing, ads and controls. Social-media questions added 9 July 2026 became required in September 2026. [Apple age notice](https://developer.apple.com/news/?id=tlur8uvi).
 
-Push banners are optional. If you turn notifications off, the in-app board still works.
+`ITSAppUsesNonExemptEncryption=false` is configured. It means no encryption or only exempt encryption, including dependencies; it is not a blanket answer of No to every encryption question. The app uses HTTPS and CryptoKit hashing. Edmund must confirm classification in Apple's questionnaire for the final artifact and upload documentation if required. [Apple key semantics](https://developer.apple.com/documentation/bundleresources/information-property-list/itsappusesnonexemptencryption).
 
-Free. No in-app purchases. No subscriptions.
+## App Privacy
 
-Privacy: https://lmr.sillyapps.co/privacy
-Support: https://lmr.sillyapps.co/support" \
-  --keywords "reminders,lock screen,live activity,todo,board,siri,widget" \
-  --support-url "https://lmr.sillyapps.co/support" \
-  --marketing-url "https://lmr.sillyapps.co" \
-  --whats-new "First release of Lazy Man's Reminders."
-```
+The manifest and ASC privacy labels are separate declarations. Audit actual app, backend and integrated partner collection before saving labels. The policy discloses provider profile metadata and operational logs beyond the manifest's four current types; **do not automatically exclude Name or Diagnostics** without investigating retained fields and disclosure criteria. [Apple App Privacy Details](https://developer.apple.com/app-store/app-privacy-details/).
 
-If `app-setup info set --name` is rejected (locked localization, state, or API rights), rename it by hand in App Store Connect → App Information → Name to **Lazy Man's Reminders**, then paste subtitle and description from this file. `asc` cannot rename via `apps update`.
+Baseline manifest proposal, pending the audit:
 
-Confirm with `asc localizations list --app 6799138197 --type app-info --locale en-US` and `asc apps info view --app 6799138197 --version 1.0 --platform IOS --locale en-US` before submit. Do not submit from these commands.
+| Data | Proposed purpose/linkage | Evidence |
+|---|---|---|
+| Email Address | App Functionality; linked | Account sign-in |
+| User ID | App Functionality; linked | Supabase identity |
+| Other User Content (reminder text) | App Functionality; linked | Board sync |
+| Device ID | App Functionality; linked | APNs/Live Activity tokens; verify classification |
 
-## URLs
+Baseline declares no tracking or advertising; verify actual integrated services. Nutrition labels must cover actual collection and relevant purposes, not merely visible UI. Optional beta feedback has separate disclosure criteria.
 
-Canonical host is `https://lmr.sillyapps.co`. `https://lmr.edmundlim.systems` redirects to it (currently a 302; a 301 is planned).
-
-- Privacy: `https://lmr.sillyapps.co/privacy`
-- Support: `https://lmr.sillyapps.co/support`
-- Marketing: `https://lmr.sillyapps.co`
-- Terms (optional field): `https://lmr.sillyapps.co/terms`
-
-## Availability, pricing, EU DSA
-
-- Price: **Free**. No in-app purchases. No subscriptions.
-- Territories: **all**, including new territories as Apple adds them.
-- Content rights: does not use third-party content (`DOES_NOT_USE_THIRD_PARTY_CONTENT`). Reminder text is the signed-in user’s own.
-
-**Digital Services Act (EU).** Edmund is an **individual** (natural person / sole operator), not a company. In App Store Connect → Business → Digital Services Act, complete trader status as an individual. Use his legal name, `hello@edmundlim.systems`, and the address/phone Apple asks for. Do not invent a company name, trade register, or VAT number. That contact block appears on the EU product page.
-
-## Age rating
-
-Age 4+. The app stores user-written reminder text. It is not a kids app, has no unrestricted web browsing, no gambling, no violence, and no user-generated public feed.
-
-## Export compliance
-
-`ITSAppUsesNonExemptEncryption` is false. The app uses HTTPS only. Answer No to proprietary encryption questions unless Apple’s questionnaire changes.
-
-## App Privacy (nutrition labels)
-
-Answers must match `ios/Shared/PrivacyInfo.xcprivacy`.
-
-Tracking: **No**. `NSPrivacyTracking` is false. `NSPrivacyTrackingDomains` is empty. Data is not used to track you and is not used for third-party advertising.
-
-Declare as **collected**, **linked to the user**, **not used for tracking**, purpose **App Functionality** only:
-
-| Type | PrivacyInfo key | Why | Notes |
-|------|-----------------|-----|--------|
-| Email Address | `NSPrivacyCollectedDataTypeEmailAddress` | Account sign-in | Magic link, Sign in with Apple, or Google |
-| User ID | `NSPrivacyCollectedDataTypeUserID` | Account | Supabase user id |
-| User Content | `NSPrivacyCollectedDataTypeUserContent` | Reminders | Text on the board, widgets, and Live Activity |
-| Device ID | `NSPrivacyCollectedDataTypeDeviceID` | Push | APNs device / Live Activity tokens, iOS only |
-
-Do not declare Name, Phone Number, Product Interaction, Advertising Data, Precise Location, Purchases, Crash Data, or other diagnostic types. The app does not include a tracking SDK.
-
-The manifest also lists `NSPrivacyAccessedAPICategoryUserDefaults` reason `1C8F.1`. That is an accessed-API reason, not a nutrition-label data type. Do not add it as collected data.
+`NSPrivacyAccessedAPICategoryUserDefaults` reasons concern API access, not collected-data types. Current `1C8F.1` covers App Group sharing; app-only `.standard`/`@AppStorage` use needs an applicable reason audit. A separate PR owns fixes. Review the final archive's manifests, resolved SDKs and aggregate privacy report before uploading.
 
 ## Review notes
 
-Sign-in is **required**. There is no useful unsigned-in board: lines sync with the web board, Live Activity start/update/end and reminder push are server-driven (APNs device token, push-to-start, and activity tokens), and MCP agents act only as the signed-in user.
+**Submission blocker: provision and verify reviewer access first.** The separate [reviewer-access PR #52](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/52) adds existing-account email/password login and a [secure provisioning guide](reviewer-access.md). That guide does not mean a real account exists or that the feature is integrated into the selected binary. A stable, confirmed synthetic reviewer account, private credentials and fresh-install QA remain human prerequisites. Keep actual credentials out of this repository; enter them in ASC's dedicated account fields. Sign in with Apple self-signup alone is not verified reviewer access. [Apple review information](https://developer.apple.com/help/app-review/before-submitting-for-review/complete-review).
 
-Reviewers can tap **Sign in with Apple** on the Sign In screen to create an account. Sign in with Apple is also required because Google is offered (guideline 4.8). Both buttons are on that screen.
+Set sign-in required to **yes** and provide verified access, contact first/last name, reachable phone/email and any additional authentication instructions. Do not paste `none yet`, blank credentials, or fabricated accounts into a submission. Confirm the credentials remain usable throughout review. TestFlight external beta review needs the same access preparation.
 
-Paste into App Review Information (`demoAccountRequired` stays false until a demo account exists):
+Draft non-secret review notes, to edit after selected-build QA:
 
+```text
+This is a private reminder board. Sign-in enables synchronization with https://lmr.sillyapps.co, device registration for APNs, and optional agent access through MCP. Review account credentials are provided in the dedicated account fields.
+
+On Your Board, add a reminder, complete it with the circle or swipe action, and refresh to see changes from the web board on the same account.
+
+Add Board widgets from the Home Screen or Lock Screen widget picker. With Live Activities enabled, an active board can appear on the Lock Screen. The backend attempts periodic updates and renewal; availability is controlled by iOS, settings and connectivity. Complete or delete all reminders to end the active board. Removing a Live Activity and disabling Live Activities should be tested separately.
+
+Notification banners are optional. Deny notification permission and verify the board still works. Live Activities have a separate system setting.
+
+Account → Delete Account initiates account and associated-data deletion. Validate Apple-token revocation and any manual-revocation fallback before describing them as complete. Use a disposable account to test deletion; deleting the main review account will invalidate its access.
+
+Account → Download My Data opens the web board, where a signed-in user can export their data.
+
+Free. No IAP or subscriptions. Support: hello@edmundlim.systems.
 ```
-Sign-in is required. There is no guest board. The same reminders sync with the web board at https://lmr.sillyapps.co, the Lock Screen Live Activity is started and renewed from our server over APNs, and MCP agents (Grok, Claude, Cursor, Codex) can only use a signed-in account.
 
-Please create an account with Sign in with Apple on the Sign In screen. Google and magic-link email also work.
-
-Demo account: none yet.
-Username:
-Password:
-
-The Lock Screen Live Activity is the board, not a one-shot event. It stays on screen while any reminder is active. The server refreshes it about every 15 minutes and replaces it before Apple's eight-hour cap, so a non-empty board can remain visible with the app closed. That is intended.
-
-To end the Live Activity: complete or delete every reminder until Your Board shows All Clear. The banner dismisses immediately. Swiping it away is not the supported end path; an active board will be renewed.
-
-Push notification permission is optional. If you deny the prompt, the in-app board, widgets, Siri, and account still work. Account → Notifications shows Off and a Settings link. Live Activities are a separate Settings toggle.
-
-Siri (iOS 27, signed in):
-- “Hey Siri, list reminders in Lazy Man's Reminders”
-- “Hey Siri, add a reminder in Lazy Man's Reminders”
-- “Hey Siri, remind me to buy milk in Lazy Man's Reminders”
-- With the board on screen: “Hey Siri, mark this as done”
-- “Hey Siri, complete milk in Lazy Man's Reminders”
-Unsigned-in, Siri asks you to sign in on this iPhone.
-
-Account (person icon) → Delete Account removes reminders, device tokens, lock-screen prefs, agent access, and the sign-in. Data export is Download my data on the signed-in web board.
-
-No IAP. Contact hello@edmundlim.systems.
-```
+Replace the validation sentence with the actual tested deletion/revocation behavior before submission. Add Siri instructions only if verified in the selected build; document any hardware/setup/resources needed. [Account deletion guidance](https://developer.apple.com/support/offering-account-deletion-in-your-app/).
 
 ## TestFlight beta
 
-Paste into App Store Connect → TestFlight → **Test Information** (app `6799138197`, locale en-US) before inviting external testers. Free app, no IAP. Do not paste secrets. Limits: Beta App Description and What to Test are 4000 characters each.
+Populate Test Information before external invites:
 
-| Field | Value |
-|-------|-------|
-| Feedback Email | `hello@edmundlim.systems` |
+| Field | Draft value |
+|---|---|
+| Feedback email | `hello@edmundlim.systems` |
 | Marketing URL | `https://lmr.sillyapps.co` |
-| Privacy Policy URL | `https://lmr.sillyapps.co/privacy` |
+| Privacy URL | `https://lmr.sillyapps.co/privacy` |
+| Beta App Description | Use the tested capabilities from Listing copy; describe it as a beta |
+| Beta review access | Verified synthetic account, private credentials, contact and notes as above |
 
-### Beta App Description
+What to Test (edit to the selected build):
 
-```
-Lazy Man's Reminders is a small reminder board for your iPhone, the web, and the Lock Screen.
+1. Try Apple, Google and email authentication, including cold-launch and expired-session recovery. Test existing-account password login when its PR is integrated.
+2. Deny notification permission first; confirm board usability. On a second pass enable banners and add a line from the web board.
+3. Enable Live Activities separately. Open the signed-in app to register tokens; test active lines, background renewal and completing the final line. Record OS/build/device, not just APNs acceptance.
+4. Add Lock Screen and Home Screen Board widgets; compare active lines with the app.
+5. Check poor connectivity, sign-out, and sign-in to another account for stale private data.
+6. Test export, feedback and deletion using disposable accounts with consent. Cover Apple confirmation cancellation, revoke errors and manual fallback, plus email/Google deletion.
+7. Try VoiceOver, Larger Text, contrast and Reduce Motion on sign-in, board and account actions.
+8. Follow [persistence QA](live-activity-persistence.md) and record observations. Long persistence/soak targets are project gates, not Apple-prescribed durations.
 
-Add a few short lines. They show on Your Board, on Lock Screen and Home Screen widgets, and on a Lock Screen Live Activity that stays up while anything is still on the board. Complete every line and the Live Activity goes away.
+## Screenshots and icon
 
-Sign in with Apple, Google, or email. The same board syncs with https://lmr.sillyapps.co and with any AI agent you allow through MCP (Grok, Claude, Cursor, Codex).
+Use the **current named display groups** from [Apple's specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/). The page lists iPhone with Dynamic Island **medium display** as required (1179×2556 or 1206×2622 portrait) and describes scaling fallbacks. Capture/verify that coverage in ASC; the old `APP_IPHONE_69` flag alone does not establish it. A large Dynamic Island set may also use 1260×2736, 1290×2796 or 1320×2868. Preview accepted uploads/scaling rather than guessing ASC API display identifiers.
 
-This is a private beta. The app is free, with no in-app purchases or subscriptions.
-```
+Apple's [ScreenshotDisplayType API enum](https://developer.apple.com/documentation/appstoreconnectapi/screenshotdisplaytype) ([official DocC JSON](https://developer.apple.com/tutorials/data/documentation/appstoreconnectapi/screenshotdisplaytype.json)) lists `APP_IPHONE_67`, `APP_IPHONE_65`, `APP_IPHONE_61` and older sizes, **not `APP_IPHONE_69` or `APP_IPHONE_63`**. The enum descriptions do not map these legacy identifiers to current named groups or dimensions. The help page permits medium Dynamic Island scaling from Face ID large and large Dynamic Island scaling from Face ID large. Confirm actual set type, dimensions, delivery state and ASC preview/scaling; do not infer exact current-group mapping from the enum suffix alone. No authenticated upload/acceptance experiment was performed.
 
-### What to Test
+Baseline is iPhone-only (`TARGETED_DEVICE_FAMILY=1`); iPad screenshots apply if support changes. Use opaque JPEG/PNG, 1–10 per display size. Use actual app captures with fictional non-sensitive text. Repo convention: no frames and no login-only set. Those conventions are not a claim that Apple forbids every login screenshot or device frame.
 
-```
-Thanks for testing. Please try these and tell us what breaks or confuses you.
+Suggested 5–6 shots: board with composer, completion action, Live Activity, Lock Screen Board widget, Home Screen Board widget, Account with optional notifications. Verify each feature on the selected build before capture. Screenshots are not stored here. Check the universal 1024×1024 icon asset in the archive and product-page rendering; a source file alone is not acceptance evidence.
 
-1. Sign in. Try Sign in with Apple, Google, or an email magic link (open the link on this iPhone).
-
-2. Open the app once after installing and leave it open on Your Board for a few seconds. This registers the iPhone for push and Live Activities. Allow notifications when asked.
-
-3. Allow Live Activities: Settings → Lazy Man's Reminders → Live Activities on.
-
-4. Add the Lock Screen widget: touch and hold the Lock Screen → Customize → Lock Screen → Add Widgets → Lazy Man's Reminders → Board. A Home Screen Board widget is also available.
-
-5. Add a few reminders. Check they appear on the Live Activity and the widget. Complete or delete every line: the Live Activity should end.
-
-6. Push reminders: with the app in the background, add a reminder from https://lmr.sillyapps.co (same account) or from a connected agent. A notification should arrive and the Live Activity should update.
-
-7. Download My Data: Account (person icon) → Download My Data opens the web board. Sign in there and tap Download my data to get a JSON copy.
-
-8. Delete Account: Account → Delete Account. This permanently deletes your reminders, device registrations, agent access, and sign-in. If you used Sign in with Apple, you'll be asked to confirm with Apple so the app's Apple sign-in is revoked. Only do this with an account you don't need.
-
-Send feedback: Account → Send Feedback, or take a screenshot and share it to TestFlight. Crash reports reach us only if you choose to share them.
-```
-
-### Beta App Review Information
-
-Sign-in required: **yes**. Demo account: **none**. Leave username and password empty. Contact: Edmund Lim, `hello@edmundlim.systems`, plus the phone number Apple asks for (not stored in this repo).
-
-Review Notes (mirrors [Review notes](#review-notes) above):
-
-```
-Sign-in is required. There is no guest board. The same reminders sync with the web board at https://lmr.sillyapps.co, the Lock Screen Live Activity is started and renewed from our server over APNs, and MCP agents (Grok, Claude, Cursor, Codex) can only use a signed-in account.
-
-There is no demo account. Please create an account with Sign in with Apple on the Sign In screen. Google and magic-link email also work.
-
-The Lock Screen Live Activity is the board, not a one-shot event. It stays on screen while any reminder is active. The server refreshes it about every 15 minutes and replaces it before Apple's eight-hour cap, so a non-empty board can remain visible with the app closed. That is intended.
-
-To end the Live Activity: complete or delete every reminder until Your Board shows All Clear. Swiping it away is not the supported end path; an active board will be renewed.
-
-Push notification permission is optional. If you deny the prompt, the in-app board, widgets, Siri, and account still work. Live Activities are a separate Settings toggle.
-
-Account (person icon) → Delete Account removes reminders, device tokens, lock-screen prefs, agent access, and the sign-in, and revokes the Sign in with Apple token. Data export is Download My Data, which opens the signed-in web board.
-
-Free. No IAP. Contact hello@edmundlim.systems.
-```
-
-## Screenshots
-
-Required set: **6.9" iPhone** (`APP_IPHONE_69`). Capture on an iPhone 16 Pro Max, 17 Pro Max, or iPhone Air after TestFlight smoke. Portrait sizes Apple accepts include **1320 × 2868** and **1260 × 2736**.
-
-This is an **iPhone-only** app (`TARGETED_DEVICE_FAMILY` is `1`). Do **not** upload iPad screenshots.
-
-Guideline 2.3.3: the set must show the app **in use**. Do not submit a login-only set. Do not put the Sign In screen in the 6.9" set. Do not add device frames.
-
-This repo does not store screenshot PNGs.
-
-### Shot list (5–6)
-
-| # | Capture | Caption |
-|---|---------|---------|
-| 1 | **Your Board** with several live reminder lines and the bottom composer | Your board. That's it. |
-| 2 | Completing a line (filled circle or leading swipe Complete) | Tap or swipe to complete. |
-| 3 | Lock Screen **Live Activity** showing the same lines | The board stays on the Lock Screen. |
-| 4 | Lock Screen **Board** widget (accessory rectangular) | The same lines on the Lock Screen widget. |
-| 5 | Home Screen **Board** widget | Glance the board from Home Screen. |
-| 6 | **Account** sheet (Notifications On or Off is fine) | Push is optional. The board still works. |
-
-Skip Sign In. Use real reminder text, not lorem ipsum or “test”.
-
-## Preflight (read only)
+## Preflight and final human gates
 
 ```sh
 ./scripts/asc-preflight.sh
 ```
 
-Runs `asc validate --app 6799138197 --version 1.0` plus read-only checks (build attached, 6.9" screenshots present, review details set, pricing set). Prints a pass/fail list. **Never submits.**
+The script is read-only and never submits. Its baseline version can falsely pass version, screenshot, review and pricing checks; see the [audit](apple-release-requirements.md#read-only-preflight-audit-script-unchanged). Another PR owns script changes. Its revised design deliberately reports UNKNOWN and exits nonzero for API-unverifiable evidence; resolve those items with actual evidence and a manual release decision, not a forced green report. Preflight does not certify privacy, age, DSA, encryption, SDK/signing, reviewer access or physical QA.
 
-## Human steps still required
+All human prerequisites are tracked in [HUMANS.md](../HUMANS.md#app-store-submission). Native build handoff is in [MAC_HANDOFF.md](../MAC_HANDOFF.md). Hosted macOS CI exists, but this Linux docs work did not run Xcode, upload a binary, inspect authenticated ASC state, deploy changes or submit review. Edmund must review evidence and authorize release.
 
-See **App Store submission (target 27 Oct 2026)** in `HUMANS.md`. A reviewer still needs a signed TestFlight build, device smoke, screenshots, the ASC fields above, and the Submit button in App Store Connect.
-
-TestFlight binaries come from `.github/workflows/ios-testflight.yml` (stable Xcode). Jeremy owns the GitHub secrets named in that file and in HUMANS.md. Do not put those values in this repo.
+Written by gpt-6.1-sol in T3 Code on behalf of Edmund
