@@ -311,23 +311,26 @@ final class AuthManager: ObservableObject {
     }
 
     /// Deletes the signed-in user's data and auth account via the `delete-account` Edge Function.
-    func deleteAccount() async throws {
+    func deleteAccount(expected: AppleRevocation.DeletionIntent) async throws {
         await waitForRestoration()
-        await authSessionGate.acquire()
-        defer { authSessionGate.release() }
-        isEndingSession = true
-        defer { isEndingSession = false }
-        let result: AppleRevocation.DeletionResponse = try await client.functions.invoke(
-            "delete-account", options: AppleRevocation.invokeOptions
-        )
-        guard result.ok else { throw AppleRevocation.DeletionError.invalidResponse }
-        pushRegistration.bind(userID: nil)
-        // Auth user is already gone; local sign-out may fail — clear client state either way.
-        try? await client.auth.signOut()
-        session = nil
-        await ReminderStore.shared.clearUserData()
-        await ReminderBoardSync.clear()
-        notice = result.notice.map { .error($0) }
+        try await AppleRevocation.withValidatedDeletion(
+            expected: expected, gate: authSessionGate,
+            currentIdentity: { AppleRevocation.DeletionIntent(session: self.client.auth.currentSession) }
+        ) {
+            isEndingSession = true
+            defer { isEndingSession = false }
+            let result: AppleRevocation.DeletionResponse = try await client.functions.invoke(
+                "delete-account", options: AppleRevocation.invokeOptions
+            )
+            guard result.ok else { throw AppleRevocation.DeletionError.invalidResponse }
+            pushRegistration.bind(userID: nil)
+            // Auth user is already gone; local sign-out may fail — clear client state either way.
+            try? await client.auth.signOut()
+            session = nil
+            await ReminderStore.shared.clearUserData()
+            await ReminderBoardSync.clear()
+            notice = result.notice.map { .error($0) }
+        }
     }
 
     func registerDevice(token: String) async {

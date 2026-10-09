@@ -6,6 +6,30 @@ import UIKit
 enum AppleRevocation {
     @TaskLocal static var pendingAuthorizationCode: String?
 
+    struct DeletionIntent {
+        let userID: UUID
+        let accessToken: String
+        let sessionID: UUID?
+
+        init(userID: UUID, accessToken: String) {
+            self.userID = userID
+            self.accessToken = accessToken
+            sessionID = AppleCredentialMonitor.sessionID(accessToken: accessToken)
+        }
+
+        init?(session: Session?) {
+            guard let session else { return nil }
+            self.init(userID: session.user.id, accessToken: session.accessToken)
+        }
+
+        func matches(_ current: DeletionIntent?) -> Bool {
+            guard let current, userID == current.userID else { return false }
+            if let sessionID { return sessionID == current.sessionID }
+            // Legacy tokens cannot prove rotation belongs to the same login.
+            return accessToken == current.accessToken
+        }
+    }
+
     struct DeletionResponse: Decodable {
         let ok: Bool
         let appleRevocation: String?
@@ -19,11 +43,14 @@ enum AppleRevocation {
     enum DeletionError: LocalizedError {
         case cancelled
         case invalidResponse
+        case accountChanged
 
         var errorDescription: String? {
             switch self {
             case .cancelled:
                 "Account deletion was cancelled. Your account has not been deleted."
+            case .accountChanged:
+                "Your signed-in account changed. No account was deleted. Review the current account and confirm deletion again."
             case .invalidResponse:
                 "The server did not confirm account deletion. Please try again."
             }
@@ -47,19 +74,23 @@ enum AppleRevocation {
 
     @MainActor
     static func deleteAccount(using auth: AuthManager) async throws {
+        let visibleSession = auth.session
         try await performDeletion(
-            providers: auth.session?.user.identities?.map(\.provider) ?? [],
+            intendedIdentity: DeletionIntent(session: visibleSession),
+            providers: visibleSession?.user.identities?.map(\.provider) ?? [],
             authorize: { try await requestAuthorizationCode() },
-            delete: { try await auth.deleteAccount() }
+            delete: { try await auth.deleteAccount(expected: $0) }
         )
     }
 
     @MainActor
     static func performDeletion(
+        intendedIdentity: DeletionIntent?,
         providers: [String],
         authorize: () async throws -> String?,
-        delete: () async throws -> Void
+        delete: (DeletionIntent) async throws -> Void
     ) async throws {
+        guard let intendedIdentity else { throw DeletionError.accountChanged }
         let code: String?
         if hasAppleIdentity(providers: providers) {
             code = try await authorize()
@@ -67,11 +98,24 @@ enum AppleRevocation {
             code = nil
         }
         guard let code else {
-            try await delete()
+            try await delete(intendedIdentity)
             return
         }
         try await $pendingAuthorizationCode.withValue(code) {
-            try await delete()
+            try await delete(intendedIdentity)
+        }
+    }
+
+    @MainActor
+    static func withValidatedDeletion(
+        expected: DeletionIntent,
+        gate: AuthSessionGate,
+        currentIdentity: () -> DeletionIntent?,
+        operation: () async throws -> Void
+    ) async throws {
+        try await gate.withLock {
+            guard expected.matches(currentIdentity()) else { throw DeletionError.accountChanged }
+            try await operation()
         }
     }
 
