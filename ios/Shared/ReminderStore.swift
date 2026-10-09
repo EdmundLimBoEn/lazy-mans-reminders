@@ -68,6 +68,11 @@ actor ReminderStore {
         return session.resolvingUserID()
     }
 
+    func containsSession(accessToken: String, refreshToken: String) -> Bool {
+        guard let stored = storedSession() else { return false }
+        return stored.accessToken == accessToken && stored.refreshToken == refreshToken
+    }
+
     private var defaults: UserDefaults {
         if let injectedDefaults { return injectedDefaults }
         guard let defaults = UserDefaults(suiteName: AppConfig.appGroupID) else {

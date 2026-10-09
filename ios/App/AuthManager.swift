@@ -3,6 +3,7 @@ import Combine
 import CryptoKit
 import Foundation
 import Supabase
+import UIKit
 
 enum AuthNotice: Equatable {
     case checkInbox(email: String)
@@ -31,16 +32,26 @@ final class AuthManager: ObservableObject {
         }
     }
 
-    @Published private(set) var session: Session?
+    @Published private(set) var session: Session? {
+        didSet {
+            appleCredentialMonitor.update(
+                user: session?.user,
+                sessionID: session.flatMap { AppleCredentialMonitor.sessionID(accessToken: $0.accessToken) },
+                loginProvider: loginProvider(for: session)
+            )
+        }
+    }
     @Published private(set) var isRestoringSession = true
     @Published private(set) var isAuthenticating = false
     @Published private(set) var notice: AuthNotice?
 
-    let client = SupabaseClient(
-        supabaseURL: AppConfig.supabaseURL,
-        supabaseKey: AppConfig.supabaseAnonKey
-    )
+    private let client = AuthSessionClient()
 
+    private let appleCredentialMonitor = AppleCredentialMonitor()
+    private let authSessionGate = AuthSessionGate()
+    private var knownLogin: AppleCredentialMonitor.LoginContext?
+    private var authStateRegistration: (any AuthStateChangeListenerRegistration)?
+    private var credentialObservers: Set<AnyCancellable> = []
     private var isEndingSession = false
     private var restorationTask: Task<Void, Never>?
     private var pendingAppleNonce: String?
@@ -49,7 +60,26 @@ final class AuthManager: ObservableObject {
     private let oauthRedirectURL = URL(string: "lazymansreminders://auth/callback")!
 
     init() {
+        for name in [ASAuthorizationAppleIDProvider.credentialRevokedNotification,
+                     UIApplication.didBecomeActiveNotification] {
+            NotificationCenter.default.publisher(for: name)
+                .sink { [weak self] _ in
+                    Task { @MainActor [weak self] in
+                        await self?.waitForRestoration()
+                        await self?.checkAppleCredential()
+                    }
+                }
+                .store(in: &credentialObservers)
+        }
         restorationTask = Task {
+            await authSessionGate.acquire()
+            defer { authSessionGate.release() }
+            authStateRegistration = await client.auth.onAuthStateChange { [weak self] event, nextSession in
+                // Never wait on the gate from an SDK event callback.
+                Task { @MainActor [weak self] in
+                    await self?.applyAuthEvent(event, nextSession: nextSession)
+                }
+            }
             do {
                 session = try await client.auth.session
             } catch {
@@ -58,16 +88,40 @@ final class AuthManager: ObservableObject {
             }
             await shareSession()
             isRestoringSession = false
-            await registerLiveActivityTokens()
-        }
-        Task {
-            await waitForRestoration()
-            for await (event, nextSession) in await client.auth.authStateChanges {
-                session = nextSession
-                await shareSession(clearWhenSignedOut: event == .signedOut)
-            }
+            Task { await checkAppleCredential() }
         }
         Task { await observeSharedSessionRefresh() }
+    }
+
+    private func applyAuthEvent(_ event: AuthChangeEvent, nextSession: Session?) async {
+        await authSessionGate.withLock {
+            let current = client.auth.currentSession
+            // An event queued before cleanup must not clear a newer callback's board.
+            guard AuthSessionGate.matchesEvent(
+                eventUserID: nextSession?.user.id, eventAccessToken: nextSession?.accessToken,
+                currentUserID: current?.user.id, currentAccessToken: current?.accessToken
+            ) else { return }
+            session = current
+            if event == .initialSession || event == .signedIn || event == .userUpdated {
+                Task { await checkAppleCredential() }
+            }
+            await shareSession(clearWhenSignedOut: event == .signedOut)
+        }
+    }
+
+    private func checkAppleCredential() async {
+        guard !isRestoringSession, !isEndingSession, !isAuthenticating,
+              let revocation = await appleCredentialMonitor.verifiedRevocation()
+        else { return }
+        await authSessionGate.cleanUp(if: {
+            let current = client.auth.currentSession
+            return !isEndingSession && !isAuthenticating
+                && appleCredentialMonitor.isCurrent(
+                    revocation, user: current?.user,
+                    sessionID: current.flatMap { AppleCredentialMonitor.sessionID(accessToken: $0.accessToken) },
+                    loginProvider: loginProvider(for: current)
+                )
+        }, operations: cleanupOperations)
     }
 
     func waitForRestoration() async {
@@ -75,6 +129,9 @@ final class AuthManager: ObservableObject {
     }
 
     func sendMagicLink(to email: String) async {
+        await waitForRestoration()
+        await authSessionGate.acquire()
+        defer { authSessionGate.release() }
         isAuthenticating = true
         notice = nil
         defer { isAuthenticating = false }
@@ -97,6 +154,9 @@ final class AuthManager: ObservableObject {
     }
 
     func handleAppleSignIn(_ result: Result<ASAuthorization, Error>) async {
+        await waitForRestoration()
+        await authSessionGate.acquire()
+        defer { authSessionGate.release() }
         notice = nil
         switch result {
         case .failure(let error):
@@ -115,15 +175,19 @@ final class AuthManager: ObservableObject {
             }
 
             isAuthenticating = true
-            defer { isAuthenticating = false }
+            defer {
+                isAuthenticating = false
+                Task { await checkAppleCredential() }
+            }
             do {
-                session = try await client.auth.signInWithIdToken(
+                let nextSession = try await client.auth.signInWithIdToken(
                     credentials: .init(
                         provider: .apple,
                         idToken: idToken,
                         nonce: pendingAppleNonce
                     )
                 )
+                installSession(nextSession, loginProvider: "apple")
                 pendingAppleNonce = nil
                 await shareSession()
 
@@ -151,17 +215,21 @@ final class AuthManager: ObservableObject {
 
     /// Opens Google via the system browser (ASWebAuthenticationSession). No GoogleSignIn SDK required.
     func signInWithGoogle() async {
+        await waitForRestoration()
+        await authSessionGate.acquire()
+        defer { authSessionGate.release() }
         isAuthenticating = true
         notice = nil
         defer { isAuthenticating = false }
         do {
-            session = try await client.auth.signInWithOAuth(
+            let nextSession = try await client.auth.signInWithOAuth(
                 provider: .google,
                 redirectTo: oauthRedirectURL,
                 queryParams: [("prompt", "select_account")]
             ) { session in
                 session.prefersEphemeralWebBrowserSession = false
             }
+            installSession(nextSession, loginProvider: "google")
             await shareSession()
         } catch {
             notice = .error(error.localizedDescription)
@@ -170,6 +238,11 @@ final class AuthManager: ObservableObject {
 
     func handle(url: URL) async {
         guard url.host != "board" else { return }
+        await waitForRestoration()
+        await authSessionGate.acquire()
+        defer { authSessionGate.release() }
+        isAuthenticating = true
+        defer { isAuthenticating = false }
         do {
             session = try await client.auth.session(from: url)
             notice = nil
@@ -179,30 +252,51 @@ final class AuthManager: ObservableObject {
         }
     }
 
+    private func loginProvider(for session: Session?) -> String? {
+        guard let session else { return nil }
+        return knownLogin?.provider(accessToken: session.accessToken)
+    }
+
+    private func installSession(_ nextSession: Session, loginProvider: String) {
+        knownLogin = AppleCredentialMonitor.LoginContext(accessToken: nextSession.accessToken,
+                                                        provider: loginProvider)
+        session = nextSession
+    }
+
     func clearNotice() {
         notice = nil
     }
 
     func signOut() async {
-        isEndingSession = true
-        defer { isEndingSession = false }
-        await pushRegistration.unbind()
-        if let token = pushRegistration.deviceToken {
-            try? await client
-                .from("device_tokens")
-                .delete()
-                .eq("token", value: token)
-                .execute()
-        }
-        try? await client.auth.signOut()
-        session = nil
-        notice = nil
-        await ReminderStore.shared.clearUserData()
-        await ReminderBoardSync.clear()
+        await waitForRestoration()
+        await authSessionGate.cleanUp(operations: cleanupOperations)
+    }
+
+    private var cleanupOperations: AuthSessionGate.CleanupOperations {
+        .init(
+            setEndingSession: { self.isEndingSession = $0 },
+            unbind: { await self.pushRegistration.unbind() },
+            removeDeviceToken: {
+                if let token = self.pushRegistration.deviceToken {
+                    try? await self.client.from("device_tokens").delete().eq("token", value: token).execute()
+                }
+            },
+            signOutSDK: { try? await self.client.auth.signOut() },
+            clearPublishedSession: {
+                self.knownLogin = nil
+                self.session = nil
+                self.notice = nil
+            },
+            clearUserData: { await ReminderStore.shared.clearUserData() },
+            clearBoard: { await ReminderBoardSync.clear() }
+        )
     }
 
     /// Deletes the signed-in user's data and auth account via the `delete-account` Edge Function.
     func deleteAccount() async throws {
+        await waitForRestoration()
+        await authSessionGate.acquire()
+        defer { authSessionGate.release() }
         isEndingSession = true
         defer { isEndingSession = false }
         try await client.functions.invoke("delete-account", options: AppleRevocation.invokeOptions)
@@ -217,17 +311,28 @@ final class AuthManager: ObservableObject {
 
     func registerDevice(token: String) async {
         pushRegistration.recordDeviceToken(token)
-        guard !isRestoringSession, !isEndingSession, session != nil else { return }
-        await pushRegistration.flush()
+        await waitForRestoration()
+        await authSessionGate.withLock {
+            guard !isEndingSession, session != nil else { return }
+            await pushRegistration.flush()
+        }
     }
 
     func registerLiveActivityTokens() async {
-        guard !isRestoringSession, !isEndingSession, session != nil else { return }
-        await pushRegistration.flush()
+        await waitForRestoration()
+        await authSessionGate.withLock {
+            guard !isEndingSession, session != nil else { return }
+            await pushRegistration.flush()
+        }
     }
 
     /// Measures this phone’s Live Activity line budget and upserts `lock_screen_prefs`.
     func syncLockScreenPrefs() async {
+        await waitForRestoration()
+        await authSessionGate.withLock { await syncLockScreenPrefsWhileLocked() }
+    }
+
+    private func syncLockScreenPrefsWhileLocked() async {
         let maxLines = LockScreenLineBudget.refreshLocalCache()
         guard let userID = session?.user.id else { return }
         let prefs = LockScreenPrefs(
@@ -258,7 +363,7 @@ final class AuthManager: ObservableObject {
         )
         pushRegistration.bind(userID: session.user.id)
         await pushRegistration.flush()
-        await syncLockScreenPrefs()
+        await syncLockScreenPrefsWhileLocked()
     }
 
     /// Keep the Supabase Swift client in sync when ReminderStore rotates the
@@ -270,7 +375,16 @@ final class AuthManager: ObservableObject {
                 let refreshToken = notification.userInfo?["refreshToken"] as? String,
                 !refreshToken.isEmpty
             else { continue }
-            _ = try? await client.auth.setSession(accessToken: accessToken, refreshToken: refreshToken)
+            await waitForRestoration()
+            await authSessionGate.withLock {
+                // A refresh posted before cleanup must never resurrect its signed-out account.
+                guard let current = client.auth.currentSession,
+                      JWTUserID.uuid(fromAccessToken: accessToken) == current.user.id,
+                      await ReminderStore.shared.containsSession(accessToken: accessToken,
+                                                                  refreshToken: refreshToken)
+                else { return }
+                _ = try? await client.auth.setSession(accessToken: accessToken, refreshToken: refreshToken)
+            }
         }
     }
 
