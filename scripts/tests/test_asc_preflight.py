@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from datetime import date
 from unittest.mock import patch
 
 SCRIPT = Path(__file__).resolve().parents[1]
@@ -17,6 +18,9 @@ BUILD = "/v1/appStoreVersions/version-1/build"
 REVIEW = "/v1/appStoreVersions/version-1/appStoreReviewDetail"
 SHOTS = "/v1/appScreenshotSets/set-1/appScreenshots"
 AGE = "/v1/appInfos/info-1/ageRatingDeclaration"
+SCHEDULE = "/v1/apps/6799138197/appPriceSchedule?include=app,baseTerritory"
+PRICES = "/v1/appPriceSchedules/schedule-1/manualPrices?filter%5Bterritory%5D=USA"
+POINT = "/v3/appPricePoints/point-1?include=app,territory"
 
 
 class PreflightTests(unittest.TestCase):
@@ -24,7 +28,7 @@ class PreflightTests(unittest.TestCase):
         self.evidence = copy.deepcopy(FIXTURE)
 
     def report(self):
-        return {name: status for status, name, _ in m.Preflight(m.Evidence(self.evidence), "6799138197", "1.0", "IOS").run()}
+        return {name: status for status, name, _ in m.Preflight(m.Evidence(self.evidence), "6799138197", "1.0", "IOS", today=date(2026, 10, 9)).run()}
 
     def attrs(self, path):
         data = self.evidence[path]["data"]
@@ -228,6 +232,108 @@ class PreflightTests(unittest.TestCase):
             self.assertIn("Mozilla/5.0", req.headers["User-agent"])
             self.assertEqual(m.public_url("https://127.0.0.1/privacy")[0], "UNKNOWN")
             self.assertEqual(opener.return_value.open.call_count, 1)
+
+    def test_free_base_price_passes_with_coverage_still_unknown(self):
+        self.assertEqual(self.report()["pricing evidence"], "PASS")
+        self.assertEqual(self.report()["pricing coverage"], "UNKNOWN")
+        self.attrs(POINT)["customerPrice"] = "0"
+        self.assertEqual(self.report()["pricing evidence"], "PASS")
+
+    def test_missing_null_empty_and_malformed_pricing_fail(self):
+        for path in (SCHEDULE, PRICES, POINT):
+            for value in (None, {}, {"data": None}, {"data": []}, {"errors": [{"detail": "PRIVATE-PRICING-ERROR"}]}):
+                with self.subTest(path=path, value=value):
+                    self.evidence = copy.deepcopy(FIXTURE)
+                    if value is None:
+                        del self.evidence[path]
+                    else:
+                        self.evidence[path] = value
+                    self.assertEqual(self.report()["pricing evidence"], "FAIL")
+
+    def test_nonzero_customer_price_fails_even_with_zero_proceeds(self):
+        for amount in ("0.01", "1", "9.99"):
+            self.attrs(POINT)["customerPrice"] = amount
+            self.assertEqual(self.report()["pricing evidence"], "FAIL")
+
+    def test_customer_price_must_be_typed_finite_decimal_not_proceeds(self):
+        for amount in (None, False, 0, 0.0, "", "NaN", "Infinity", "0e0", "-1", "USD 0", "0,00", "PRIVATE-PRICE"):
+            with self.subTest(amount=amount):
+                self.attrs(POINT)["customerPrice"] = amount
+                self.assertEqual(self.report()["pricing evidence"], "FAIL")
+        del self.attrs(POINT)["customerPrice"]
+        self.assertEqual(self.report()["pricing evidence"], "FAIL")
+
+    def test_pricing_relationships_must_match_app_price_and_base_territory(self):
+        cases = ((SCHEDULE, "app", "123"), (SCHEDULE, "baseTerritory", "SGP"), (PRICES, "territory", "SGP"), (POINT, "app", "123"), (POINT, "territory", "SGP"))
+        for path, relationship, ident in cases:
+            with self.subTest(path=path, relationship=relationship):
+                self.evidence = copy.deepcopy(FIXTURE)
+                data = self.evidence[path]["data"]
+                data = data[0] if isinstance(data, list) else data
+                data["relationships"][relationship]["data"]["id"] = ident
+                self.assertEqual(self.report()["pricing evidence"], "FAIL")
+        self.evidence = copy.deepcopy(FIXTURE)
+        self.evidence[POINT]["data"]["id"] = "unrelated-point"
+        self.assertEqual(self.report()["pricing evidence"], "FAIL")
+
+    def test_missing_or_wrong_type_pricing_relationships_fail(self):
+        for path, key in ((SCHEDULE, "app"), (SCHEDULE, "baseTerritory"), (PRICES, "appPricePoint"), (POINT, "territory")):
+            for data in (None, {"type": "apps", "id": "wrong-type"}, {"type": "territories"}):
+                self.evidence = copy.deepcopy(FIXTURE)
+                item = self.evidence[path]["data"]
+                item = item[0] if isinstance(item, list) else item
+                item["relationships"][key]["data"] = data
+                self.assertEqual(self.report()["pricing evidence"], "FAIL")
+
+    def test_price_intervals_must_be_typed_and_current_unambiguous(self):
+        for fields in ({"startDate": "2027-01-01"}, {"endDate": "2025-01-01"}, {"startDate": "2026-10-09"}, {"endDate": "2026-10-09"}, {"startDate": "2026-13-01"}, {"startDate": False}, {"startDate": "2026-10-10", "endDate": "2026-10-01"}, {"manual": "true"}):
+            self.evidence = copy.deepcopy(FIXTURE)
+            self.attrs(PRICES).update(fields)
+            self.assertEqual(self.report()["pricing evidence"], "FAIL")
+        self.evidence = copy.deepcopy(FIXTURE)
+        del self.attrs(PRICES)["startDate"]
+        self.assertEqual(self.report()["pricing evidence"], "FAIL")
+        self.evidence = copy.deepcopy(FIXTURE)
+        duplicate = copy.deepcopy(self.evidence[PRICES]["data"][0])
+        duplicate["id"] = "price-2"
+        self.evidence[PRICES]["data"].append(duplicate)
+        self.assertEqual(self.report()["pricing evidence"], "FAIL")
+
+    def test_future_prices_never_replace_current_evidence(self):
+        future = copy.deepcopy(self.evidence[PRICES]["data"][0])
+        future["id"] = "future-price"
+        future["attributes"]["startDate"] = "2027-01-01"
+        self.evidence[PRICES]["data"].append(future)
+        self.assertEqual(self.report()["pricing evidence"], "PASS")
+        self.assertEqual(self.report()["pricing coverage"], "UNKNOWN")
+
+    def test_price_pagination_cannot_leave_schedule_or_base_filter(self):
+        for link in ("/v1/appPriceSchedules/other/manualPrices?filter%5Bterritory%5D=USA", "/v1/appPriceSchedules/schedule-1/manualPrices?filter%5Bterritory%5D=SGP", "/v1/appPriceSchedules/schedule-1/manualPrices?cursor=next"):
+            self.evidence[PRICES]["links"]["next"] = m.BASE + link
+            self.assertEqual(self.report()["pricing evidence"], "FAIL")
+
+    def test_opaque_price_point_ids_are_quoted_and_never_decoded(self):
+        ident = "opaque/point+id=="
+        self.evidence[PRICES]["data"][0]["relationships"]["appPricePoint"]["data"]["id"] = ident
+        self.evidence["/v3/appPricePoints/opaque%2Fpoint%2Bid%3D%3D?include=app,territory"] = self.evidence.pop(POINT)
+        self.evidence["/v3/appPricePoints/opaque%2Fpoint%2Bid%3D%3D?include=app,territory"]["data"]["id"] = ident
+        self.assertEqual(self.report()["pricing evidence"], "PASS")
+
+    def test_pricing_404_fails_without_exposing_error_or_credentials(self):
+        with patch.object(m, "build_opener") as opener:
+            opener.return_value.open.side_effect = m.HTTPError(m.BASE + SCHEDULE, 404, "PRIVATE-API-ERROR", {}, None)
+            checker = m.Preflight(m.Evidence(token="PRIVATE-TOKEN"), "6799138197", "1.0", "IOS")
+            checker.check("pricing evidence", checker.pricing_checks)
+            self.assertEqual(checker.results[0][0], "FAIL")
+            self.assertNotIn("PRIVATE", str(checker.results))
+        with tempfile.TemporaryDirectory() as directory:
+            self.attrs(POINT)["customerPrice"] = "PRIVATE-PRICE"
+            path = Path(directory) / "evidence.json"
+            path.write_text(json.dumps(self.evidence))
+            result = subprocess.run([str(SCRIPT / "asc-preflight.sh"), "--evidence", str(path)], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("FAIL    pricing evidence", result.stdout)
+            self.assertNotIn("PRIVATE-PRICE", result.stdout + result.stderr)
 
 
 if __name__ == "__main__":
