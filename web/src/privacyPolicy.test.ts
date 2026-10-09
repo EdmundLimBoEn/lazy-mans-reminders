@@ -30,6 +30,13 @@ describe('privacy policy disclosures', () => {
     expect(text).toMatch(/only if you choose to send them or opt in/)
   })
 
+  it('discloses optional password authentication without app password storage or credential logs', () => {
+    expect(text).toContain('Email/password sign-in (optional).')
+    expect(text).toContain('Your email and password are sent to Supabase Auth to authenticate an existing account.')
+    expect(text).toContain('We do not log sign-in credentials or persist your password in app storage.')
+    expect(text).toContain('Account email and session tokens are handled as described in this policy.')
+  })
+
   it('no longer points iOS users at a "More menu" that does not exist', () => {
     expect(text).not.toContain('More menu')
     expect(text).toContain('Account → Delete Account')

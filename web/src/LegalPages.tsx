@@ -86,6 +86,12 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           relay) as part of sign-in.
         </li>
         <li>
+          <strong>Email/password sign-in (optional).</strong> Your email and password are sent to
+          Supabase Auth to authenticate an existing account. We do not log sign-in credentials or
+          persist your password in app storage. Account email and session tokens are handled as
+          described in this policy.
+        </li>
+        <li>
           <strong>Authentication provider data.</strong> A stable account identifier and limited
           profile metadata from Apple or Google, stored by Supabase Auth so we can keep your
           account.
