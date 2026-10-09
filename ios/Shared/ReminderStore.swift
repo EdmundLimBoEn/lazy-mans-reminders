@@ -29,6 +29,28 @@ actor ReminderStore {
 
     static let shared = ReminderStore()
 
+    private let injectedDefaults: UserDefaults?
+    private let serviceURL: URL?
+    private let anonKey: String?
+    private let requestData: (URLRequest) async throws -> (Data, URLResponse)
+
+    init(
+        defaults: UserDefaults? = nil,
+        serviceURL: URL? = nil,
+        anonKey: String? = nil,
+        requestData: @escaping (URLRequest) async throws -> (Data, URLResponse) = {
+            try await URLSession.shared.data(for: $0)
+        }
+    ) {
+        self.injectedDefaults = defaults
+        self.serviceURL = serviceURL
+        self.anonKey = anonKey
+        self.requestData = requestData
+    }
+
+    private var supabaseURL: URL { serviceURL ?? AppConfig.supabaseURL }
+    private var supabaseAnonKey: String { anonKey ?? AppConfig.supabaseAnonKey }
+
     private let cacheKey = "cached-reminders"
     private let sessionKey = "shared-session"
     private let identityRevisionKey = "shared-session-identity-revision"
@@ -40,6 +62,7 @@ actor ReminderStore {
     }
 
     private var defaults: UserDefaults {
+        if let injectedDefaults { return injectedDefaults }
         guard let defaults = UserDefaults(suiteName: AppConfig.appGroupID) else {
             fatalError("App Group \(AppConfig.appGroupID) is not configured")
         }
@@ -113,7 +136,7 @@ actor ReminderStore {
         }
 
         var components = URLComponents(
-            url: AppConfig.supabaseURL.appending(path: "rest/v1/reminders"),
+            url: supabaseURL.appending(path: "rest/v1/reminders"),
             resolvingAgainstBaseURL: false
         )!
         components.queryItems = [
@@ -122,10 +145,10 @@ actor ReminderStore {
             URLQueryItem(name: "order", value: "sort_order.asc,created_at.asc")
         ]
         var request = URLRequest(url: components.url!, timeoutInterval: 15)
-        request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
+        request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
 
-        let (responseData, response) = try await URLSession.shared.data(for: request)
+        let (responseData, response) = try await requestData(request)
         guard let http = response as? HTTPURLResponse else {
             throw StoreError.invalidResponse
         }
@@ -134,23 +157,29 @@ actor ReminderStore {
         }
 
         let reminders = try ReminderJSON.decoder.decode([Reminder].self, from: responseData)
-        guard defaults.string(forKey: identityRevisionKey) == identityRevision,
-              storedSession()?.userID == session.userID else { throw StoreError.signedOut }
+        try requireCurrentIdentity(session, revision: identityRevision)
         defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
         return reminders
+    }
+
+    // Actor methods can resume after sign-out while an HTTP request is suspended.
+    private func requireCurrentIdentity(_ session: SharedSession, revision: String?) throws {
+        guard defaults.string(forKey: identityRevisionKey) == revision,
+              let current = storedSession(),
+              current.userID == session.userID else { throw StoreError.signedOut }
     }
 
     /// Invokes `delete_old_completed_reminders` RPC. Failures are ignored so refresh still works.
     private func deleteOldCompletedReminders(accessToken: String) async {
         var request = URLRequest(
-            url: AppConfig.supabaseURL.appending(path: "rest/v1/rpc/delete_old_completed_reminders")
+            url: supabaseURL.appending(path: "rest/v1/rpc/delete_old_completed_reminders")
         )
         request.httpMethod = "POST"
-        request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
+        request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = Data("{}".utf8)
-        _ = try? await URLSession.shared.data(for: request)
+        _ = try? await requestData(request)
     }
 
     /// Loads the App Group session, refreshing the JWT when it is near expiry so
@@ -197,7 +226,7 @@ actor ReminderStore {
 
     private func refreshAccessToken(_ refreshToken: String, userID: UUID?) async -> SharedSession? {
         var components = URLComponents(
-            url: AppConfig.supabaseURL.appending(path: "auth/v1/token"),
+            url: supabaseURL.appending(path: "auth/v1/token"),
             resolvingAgainstBaseURL: false
         )!
         components.queryItems = [URLQueryItem(name: "grant_type", value: "refresh_token")]
@@ -205,12 +234,12 @@ actor ReminderStore {
 
         var request = URLRequest(url: url, timeoutInterval: 10)
         request.httpMethod = "POST"
-        request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
+        request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try? JSONSerialization.data(withJSONObject: ["refresh_token": refreshToken])
 
         guard
-            let (data, response) = try? await URLSession.shared.data(for: request),
+            let (data, response) = try? await requestData(request),
             let http = response as? HTTPURLResponse,
             200..<300 ~= http.statusCode,
             let payload = try? JSONDecoder().decode(TokenRefreshResponse.self, from: data)
@@ -239,6 +268,7 @@ actor ReminderStore {
             throw StoreError.signedOut
         }
 
+        let identityRevision = defaults.string(forKey: identityRevisionKey)
         let nextOrder = (cached().map(\.sortOrder).max() ?? -1) + 1
         struct CreateBody: Encodable {
             let text: String
@@ -251,16 +281,16 @@ actor ReminderStore {
                 case sortOrder = "sort_order"
             }
         }
-        var request = URLRequest(url: AppConfig.supabaseURL.appending(path: "rest/v1/reminders"))
+        var request = URLRequest(url: supabaseURL.appending(path: "rest/v1/reminders"))
         request.httpMethod = "POST"
-        request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
+        request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("return=representation", forHTTPHeaderField: "Prefer")
         request.httpBody = try ReminderJSON.encoder.encode(
             CreateBody(text: trimmed, userID: userID, sortOrder: nextOrder)
         )
-        let (responseData, response) = try await URLSession.shared.data(for: request)
+        let (responseData, response) = try await requestData(request)
         guard let http = response as? HTTPURLResponse else {
             throw StoreError.invalidResponse
         }
@@ -268,6 +298,7 @@ actor ReminderStore {
             throw StoreError.requestFailed(http.statusCode)
         }
 
+        try requireCurrentIdentity(session, revision: identityRevision)
         let created = try ReminderJSON.decoder.decode([Reminder].self, from: responseData)
         var reminders = cached()
         reminders.append(contentsOf: created)
@@ -298,6 +329,8 @@ actor ReminderStore {
             throw StoreError.signedOut
         }
 
+        let identityRevision = defaults.string(forKey: identityRevisionKey)
+
         struct UpdateBody: Encodable {
             var text: String?
             var isDone: Bool?
@@ -315,7 +348,7 @@ actor ReminderStore {
         }
 
         var components = URLComponents(
-            url: AppConfig.supabaseURL.appending(path: "rest/v1/reminders"),
+            url: supabaseURL.appending(path: "rest/v1/reminders"),
             resolvingAgainstBaseURL: false
         )!
         components.queryItems = [
@@ -323,7 +356,7 @@ actor ReminderStore {
         ]
         var request = URLRequest(url: components.url!, timeoutInterval: 15)
         request.httpMethod = "PATCH"
-        request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
+        request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("return=minimal", forHTTPHeaderField: "Prefer")
@@ -331,7 +364,7 @@ actor ReminderStore {
             UpdateBody(text: trimmed, isDone: isDone)
         )
 
-        let (_, response) = try await URLSession.shared.data(for: request)
+        let (_, response) = try await requestData(request)
         guard let http = response as? HTTPURLResponse else {
             throw StoreError.invalidResponse
         }
@@ -339,6 +372,7 @@ actor ReminderStore {
             throw StoreError.requestFailed(http.statusCode)
         }
 
+        try requireCurrentIdentity(session, revision: identityRevision)
         if isDone == true {
             let reminders = cached().filter { $0.id != id }
             defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
