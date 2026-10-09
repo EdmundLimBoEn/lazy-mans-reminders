@@ -37,6 +37,7 @@ Apple requires in-app initiation of account/data deletion and token revocation f
 Evidence: `ios/App/AccountView.swift`, `AppleRevocation.swift`, `supabase/functions/delete-account/handler.ts`, `_shared/apple_token_revoke.ts`, `_shared/account_tables.ts` implement confirmation, fresh-code exchange, revocation, agent-grant cleanup, data cleanup and auth deletion. Tests exist. **Gap:** Apple cancellation/missing code/secrets/revoke failures can still yield successful deletion; warning logs do not prove revocation. Web Apple deletion also needs coverage.
 
 - [ ] Implement/verify successful revocation or TN3194-compatible fallback with clear manual revocation instructions and revoked-credential handling; test cancellation, network errors, missing configuration and web/native paths.
+- [ ] Integrate and validate [#60 — bounded OAuth grant cleanup](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/60): the baseline shared helper has no fetch/body deadline and can stall deletion. Confirm timeout/error paths return promptly and preserve the existing failure response before destructive cleanup; keep this separate from Apple-token revocation.
 - [ ] Confirm reviewed backend version/secrets are deployed through a separately authorized release; validate on a disposable account with consent, including all owned data/grants, session/cache cleanup and retention/backups disclosures. Existing deployment notes are historical evidence only.
 
 ### Privacy policy, labels, manifest, permissions, and SDKs
@@ -85,7 +86,7 @@ The coordinator owns a separate preflight fix PR. Its revised design deliberatel
 
 ## Release PR map and integration order
 
-Coordinator plan as of **9 October 2026**; these ten PRs are open, not shipped. Confirm current bases and checks in GitHub before integration. This map does not authorize merging, deployment or submission.
+Coordinator plan as of **9 October 2026**; these eleven PRs are open, not shipped. Confirm current bases and checks in GitHub before integration. This map does not authorize merging, deployment or submission.
 
 Start with [#54 — release build and web/MCP CI gates](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/54). The coordinator identified an existing persistence simulator-selector failure and a Node types dependency failure in hosted MCP CI; fixes belong in this CI foundation. Those workflow failures alone do not establish a feature-code failure. Feature branches are planned to stack on that foundation so native and hosted checks run with the corrected setup.
 
@@ -96,9 +97,12 @@ Then integrate/review in the coordinator's planned order:
 3. [#52 — existing-account password login and secure reviewer provisioning guide](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/52).
 4. [#53 — privacy manifest and data handling disclosures](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/53).
 5. [#55 — account deletion cancellation and Apple revocation failure recovery](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/55).
-6. [#57 — revoked Apple credential handling](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/57).
-7. [#59 — submission preflight evidence checks](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/59).
-8. [#56 — verify reminder writes before updating cache](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/56), based on #50.
+6. [#60 — bound OAuth grant cleanup during account deletion](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/60), based on `release/ios-ci-gates` (#54).
+7. [#57 — revoked Apple credential handling](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/57).
+8. [#59 — submission preflight evidence checks](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/59).
+9. [#56 — verify reminder writes before updating cache](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/56), based on #50.
+
+Independent review also requested fixes within the existing PRs: #50 for auth refresh/session identity, #56 for out-of-order write acknowledgements, #57 for a credential-revocation cleanup callback racing with a different session, and #59 for actual price-schedule retrieval and failure on missing pricing. Those authors are updating the same PRs; recheck their final commits and combined validation. These are pending implementation fixes, not additional PRs or completed device evidence.
 
 [#58 — this requirements/submission documentation](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/58) remains standalone against `main`. When combining it with #57, preserve the exact **Apple credential revocation release gate (9 Oct 2026)** once in HUMANS.md's device QA checklist and remove the duplicate appended copy. Keep the separate server-side deletion gate. The reviewer guide links resolve when #52 is integrated.
 
