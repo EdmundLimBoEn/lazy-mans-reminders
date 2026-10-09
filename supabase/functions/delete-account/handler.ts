@@ -1,5 +1,8 @@
 import { USER_DATA_TABLES } from "../_shared/account_tables.ts";
-import { maybeRevokeAppleTokens } from "../_shared/apple_token_revoke.ts";
+import {
+  maybeRevokeAppleTokens,
+  userHasAppleIdentity,
+} from "../_shared/apple_token_revoke.ts";
 import {
   type GrantCleanupResult,
   revokeUserOauthGrants,
@@ -75,7 +78,13 @@ export async function handleDeleteAccount(
     return new Response("Unauthorized", { status: 401, headers: corsHeaders });
   }
 
-  for (const name of ["SUPABASE_URL", "SUPABASE_ANON_KEY", "SUPABASE_SERVICE_ROLE_KEY"]) {
+  for (
+    const name of [
+      "SUPABASE_URL",
+      "SUPABASE_ANON_KEY",
+      "SUPABASE_SERVICE_ROLE_KEY",
+    ]
+  ) {
     if (!deps.env(name)?.trim()) {
       console.error("Edge Function configuration error", `Missing ${name}`);
       return new Response("Server configuration error", {
@@ -91,8 +100,11 @@ export async function handleDeleteAccount(
   }
 
   const appleAuthorizationCode = await readAppleAuthorizationCode(request);
+  let appleRevocation = userHasAppleIdentity(user)
+    ? "manual_required"
+    : "not_applicable";
   try {
-    await maybeRevokeAppleTokens({
+    appleRevocation = await maybeRevokeAppleTokens({
       user,
       authorizationCode: appleAuthorizationCode,
       env: deps.env,
@@ -100,13 +112,12 @@ export async function handleDeleteAccount(
       nowSeconds: deps.nowSeconds(),
       warn: deps.warn,
     });
-  } catch (error) {
+  } catch {
     deps.warn({
       event: "apple_token_revoke",
       outcome: "failed",
       reason: "unexpected_error",
     });
-    console.error("Apple token revoke threw", error);
   }
 
   const revokeGrants = deps.revokeGrants ?? revokeUserOauthGrants;
@@ -142,5 +153,8 @@ export async function handleDeleteAccount(
     });
   }
 
-  return Response.json({ ok: true }, { headers: jsonHeaders() });
+  return Response.json({
+    ok: true,
+    ...(appleRevocation !== "not_applicable" ? { appleRevocation } : {}),
+  }, { headers: jsonHeaders() });
 }
