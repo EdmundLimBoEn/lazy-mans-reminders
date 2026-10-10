@@ -2,8 +2,6 @@ import { describe, expect, it } from 'vitest'
 import {
   nextSortOrder,
   sortReminders,
-  swapSortOrders,
-  temporarySortOrder,
   isAtCapacity,
   isStaleCompletedReminder,
   COMPLETED_REMINDER_RETENTION_DAYS,
@@ -52,38 +50,6 @@ describe('nextSortOrder', () => {
       reminder({ id: 'b', sort_order: 4 }),
       reminder({ id: 'c', sort_order: 2 }),
     ])).toBe(5)
-  })
-})
-
-describe('swapSortOrders', () => {
-  it('swaps sort_order between two ids', () => {
-    const items = [
-      reminder({ id: 'a', sort_order: 1 }),
-      reminder({ id: 'b', sort_order: 3 }),
-      reminder({ id: 'c', sort_order: 5 }),
-    ]
-    const swapped = swapSortOrders(items, 'a', 'b')
-    expect(swapped.find((item) => item.id === 'a')?.sort_order).toBe(3)
-    expect(swapped.find((item) => item.id === 'b')?.sort_order).toBe(1)
-    expect(swapped.find((item) => item.id === 'c')?.sort_order).toBe(5)
-  })
-
-  it('returns the same array reference when an id is missing', () => {
-    const items = [reminder({ id: 'a', sort_order: 1 })]
-    expect(swapSortOrders(items, 'a', 'missing')).toBe(items)
-  })
-})
-
-describe('temporarySortOrder', () => {
-  it('is strictly below every existing order', () => {
-    expect(temporarySortOrder([
-      reminder({ id: 'a', sort_order: 0 }),
-      reminder({ id: 'b', sort_order: 2 }),
-    ])).toBe(-1)
-  })
-
-  it('handles empty lists', () => {
-    expect(temporarySortOrder([])).toBe(-1)
   })
 })
 
