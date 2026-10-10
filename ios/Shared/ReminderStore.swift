@@ -39,6 +39,8 @@ actor ReminderStore {
     private let serviceURL: URL?
     private let anonKey: String?
     private var pendingUpdates: [UUID: UUID] = [:]
+    private var isReordering = false
+    private var orderRevision = 0
     private let requestData: (URLRequest) async throws -> (Data, URLResponse)
 
     init(
@@ -139,6 +141,8 @@ actor ReminderStore {
         performMaintenance: Bool = true,
         refreshAuthentication: Bool = true
     ) async throws -> [Reminder] {
+        if isReordering { return cached() }
+        let revision = orderRevision
         let identityRevision = defaults.string(forKey: identityRevisionKey)
         // Extensions use a valid shared JWT but never rotate the host SDK's refresh token.
         let candidate = refreshAuthentication ? await loadFreshSession() : storedSession()
@@ -177,8 +181,54 @@ actor ReminderStore {
 
         let reminders = try ReminderJSON.decoder.decode([Reminder].self, from: responseData)
         try requireCurrentIdentity(session, revision: identityRevision)
+        if revision != orderRevision || isReordering { return cached() }
         defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
         return reminders
+    }
+
+    func reorder(ids: [UUID]) async throws -> [Reminder] {
+        guard !isReordering, pendingUpdates.isEmpty else { throw StoreError.mutationConflict }
+        let original = cached()
+        guard ids.count == original.count, Set(ids).count == ids.count,
+              Set(ids) == Set(original.map(\.id)), original.allSatisfy({ !$0.isDone }) else {
+            throw StoreError.mutationConflict
+        }
+        if ids == original.map(\.id) { return original }
+        isReordering = true
+        orderRevision += 1
+        defer {
+            isReordering = false
+            orderRevision += 1
+        }
+        let identityRevision = defaults.string(forKey: identityRevisionKey)
+        guard let session = await loadFreshSession(), let ownerID = session.userID else {
+            throw StoreError.signedOut
+        }
+        try requireCurrentIdentity(session, revision: identityRevision)
+        guard original.allSatisfy({ $0.userID == ownerID }) else { throw StoreError.mutationConflict }
+
+        struct ReorderBody: Encodable {
+            let p_ids: [UUID]
+        }
+        var request = URLRequest(url: supabaseURL.appending(path: "rest/v1/rpc/reorder_reminders"), timeoutInterval: 15)
+        request.httpMethod = "POST"
+        request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
+        request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try ReminderJSON.encoder.encode(ReorderBody(p_ids: ids))
+        let (data, response) = try await requestData(request)
+        guard let http = response as? HTTPURLResponse else { throw StoreError.invalidResponse }
+        guard 200..<300 ~= http.statusCode else { throw StoreError.requestFailed(http.statusCode) }
+        try requireCurrentIdentity(session, revision: identityRevision)
+        guard let reordered = try? ReminderJSON.decoder.decode([Reminder].self, from: data) else {
+            throw StoreError.invalidResponse
+        }
+        guard reordered.map(\.id) == ids,
+              reordered.enumerated().allSatisfy({ index, reminder in
+                  reminder.userID == ownerID && !reminder.isDone && reminder.sortOrder == index
+              }) else { throw StoreError.mutationConflict }
+        defaults.set(try ReminderJSON.encoder.encode(reordered), forKey: cacheKey)
+        return reordered
     }
 
     // Actor methods can resume after sign-out while an HTTP request is suspended.
@@ -294,6 +344,7 @@ actor ReminderStore {
 
     /// Creates a reminder via POST, updates the App Group cache, and returns the active reminders.
     func create(text: String, userID: UUID? = nil) async throws -> [Reminder] {
+        guard !isReordering else { throw StoreError.mutationConflict }
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
             throw StoreError.emptyText
@@ -383,6 +434,7 @@ actor ReminderStore {
 
     /// Patches text and/or completion. Returns the active (not done) cache afterwards.
     func update(id: UUID, text: String? = nil, isDone: Bool? = nil) async throws -> [Reminder] {
+        guard !isReordering else { throw StoreError.mutationConflict }
         let trimmed = text?.trimmingCharacters(in: .whitespacesAndNewlines)
         if let trimmed {
             guard !trimmed.isEmpty else { throw StoreError.emptyText }
