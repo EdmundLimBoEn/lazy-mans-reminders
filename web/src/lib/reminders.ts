@@ -56,28 +56,3 @@ export function sortReminders<T extends ReminderLike>(reminders: T[]): T[] {
 export function nextSortOrder(reminders: Pick<ReminderLike, 'sort_order'>[]): number {
   return Math.max(-1, ...reminders.map((item) => item.sort_order)) + 1
 }
-
-/**
- * Swap sort_order between two reminder ids (used by up/down reorder).
- * Returns a new array; unknown ids are left unchanged.
- */
-export function swapSortOrders<T extends ReminderLike>(
-  reminders: T[],
-  idA: string,
-  idB: string,
-): T[] {
-  const a = reminders.find((item) => item.id === idA)
-  const b = reminders.find((item) => item.id === idB)
-  if (!a || !b) return reminders
-  const orderA = a.sort_order
-  const orderB = b.sort_order
-  return reminders.map((item) =>
-    item.id === idA ? { ...item, sort_order: orderB } :
-    item.id === idB ? { ...item, sort_order: orderA } : item,
-  )
-}
-
-/** Temporary sort_order used during three-step reorder to avoid unique conflicts. */
-export function temporarySortOrder(reminders: Pick<ReminderLike, 'sort_order'>[]): number {
-  return Math.min(...reminders.map((item) => item.sort_order), 0) - 1
-}
