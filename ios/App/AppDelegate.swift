@@ -56,7 +56,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
             // Record on the notification's main queue before a later auth transition
             // can bind the deferred upload task to another account.
             MainActor.assumeIsolated {
-                AuthManager.shared.pushRegistration.recordActivityToken(token)
+                AuthManager.shared.pushRegistration.recordActivityToken(
+                    token, startedAt: notification.userInfo?["startedAt"] as? Date
+                )
             }
             Task { @MainActor in
                 await AuthManager.shared.registerLiveActivityTokens()
