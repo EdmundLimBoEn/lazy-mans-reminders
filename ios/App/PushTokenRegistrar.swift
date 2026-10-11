@@ -24,6 +24,7 @@ final class PushTokenRegistrar: ObservableObject {
         var userID: UUID?
         var pushToStartToken: String?
         var activityPushToken: String?
+        var acknowledgedActivityToken: String?
         var lastSuccess: Date?
         var signedOut: Bool?
     }
@@ -71,6 +72,7 @@ final class PushTokenRegistrar: ObservableObject {
         guard pending.userID != userID || userID == nil else { return }
         if userID == nil || pending.userID != nil {
             pending.activityPushToken = nil
+            pending.acknowledgedActivityToken = nil
             pending.lastSuccess = nil
             lastSuccess = nil
         }
@@ -97,6 +99,7 @@ final class PushTokenRegistrar: ObservableObject {
 
     func recordActivityToken(_ token: String) {
         guard pending.signedOut != true else { return }
+        guard token != pending.acknowledgedActivityToken else { return }
         pending.activityPushToken = token
         needsRetry = true
         save()
@@ -135,6 +138,9 @@ final class PushTokenRegistrar: ObservableObject {
             needsRetry = !succeeded
             if succeeded {
                 // Replaying an acknowledged old token could undo the server's renewal handoff.
+                if let token = registration.activityPushToken {
+                    pending.acknowledgedActivityToken = token
+                }
                 pending.activityPushToken = nil
                 pending.lastSuccess = Date()
                 lastSuccess = pending.lastSuccess

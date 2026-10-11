@@ -3,6 +3,91 @@ import XCTest
 @testable import LazyMansReminders
 
 final class ReminderPublicationCoordinatorTests: XCTestCase {
+    func testWarmForegroundRestoresExpiredActivityBeforeFetching() async throws {
+        let reminder = sample("Saved board")
+        let fixture = Fixture(reminders: [reminder], pause: nil)
+        try await fixture.coordinator.apply([reminder])
+        await fixture.surfaces.expireActivity()
+        let result = try await fixture.coordinator.refresh {
+            let beforeFetch = await fixture.surfaces.snapshot()
+            XCTAssertEqual(beforeFetch.activity, [reminder])
+            return [reminder]
+        }
+        XCTAssertEqual(result, [reminder])
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.activity, [reminder])
+        XCTAssertEqual(Array(snapshot.transactions.suffix(2)), [.board(notify: false), .board(notify: false)])
+    }
+
+    func testOfflineColdLaunchRestoresTheSavedBoard() async throws {
+        let reminder = sample("Offline board")
+        let fixture = Fixture(reminders: [reminder], pause: nil)
+        do {
+            _ = try await fixture.coordinator.refresh { throw URLError(.notConnectedToInternet) }
+            XCTFail("Network failure must remain visible to the caller")
+        } catch {
+            XCTAssertTrue(error is URLError)
+        }
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.activity, [reminder])
+        XCTAssertEqual(snapshot.published, [[reminder]])
+    }
+
+    func testFailedRefreshWithAnEmptyCacheDoesNotEndAnActivity() async throws {
+        let fixture = Fixture(reminders: [], pause: nil)
+        do {
+            _ = try await fixture.coordinator.refresh { throw FakeFailure() }
+            XCTFail("Expected refresh failure")
+        } catch {}
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertTrue(snapshot.transactions.isEmpty)
+    }
+
+    func testSuccessfulEmptyRefreshClearsTheSavedActivity() async throws {
+        let reminder = sample("Completed remotely")
+        let fixture = Fixture(reminders: [reminder], pause: nil)
+        _ = try await fixture.coordinator.refresh {
+            await fixture.surfaces.setCache([])
+            return []
+        }
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.published, [[reminder], []])
+        XCTAssertTrue(snapshot.activity.isEmpty)
+    }
+
+    func testForegroundRefreshCannotPublishOldResultAfterAccountCleanup() async throws {
+        let old = sample("Account A")
+        let replacement = sample("Account B")
+        let fixture = Fixture(reminders: [old], pause: nil)
+        let result = try await fixture.coordinator.refresh {
+            await fixture.surfaces.setCache([])
+            try await fixture.coordinator.clear()
+            await fixture.surfaces.setCache([replacement])
+            return [old]
+        }
+        XCTAssertEqual(result, [replacement])
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.published, [[old], [], [replacement]])
+        XCTAssertEqual(snapshot.activity, [replacement])
+    }
+
+    func testCancelledRefreshCannotRestoreAnActivity() async throws {
+        let reminder = sample("Saved board")
+        let fixture = Fixture(reminders: [reminder], pause: nil)
+        let task = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            return try await fixture.coordinator.refresh { [reminder] }
+        }
+        do {
+            _ = try await task.value
+            XCTFail("Expected cancellation")
+        } catch {
+            XCTAssertTrue(error is CancellationError)
+        }
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertTrue(snapshot.published.isEmpty)
+    }
+
     func testCleanupWaitsForOldPublicationPausedBeforeSpotlightIndex() async throws {
         try await checkCleanupWaits(pause: .beforeIndex)
     }
@@ -194,6 +279,7 @@ final class ReminderPublicationCoordinatorTests: XCTestCase {
             return cache
         }
         func setCache(_ reminders: [Reminder]) { cache = reminders }
+        func expireActivity() { activity = [] }
 
         func publish(_ reminders: [Reminder], _ publication: Publication) async throws {
             let isFirst = transactions.isEmpty

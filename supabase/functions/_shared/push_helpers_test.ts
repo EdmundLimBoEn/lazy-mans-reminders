@@ -4,21 +4,104 @@ import {
   assertMatch,
 } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import {
+  APNS_EXPIRATION_TTL_SECONDS,
   APNS_TOKEN_PATTERN,
   apnsCollapseId,
   apnsExpirationUnix,
   apnsHostForEnvironment,
-  APNS_EXPIRATION_TTL_SECONDS,
   base64url,
   buildApnsHeaders,
   buildApnsPayload,
   classifyApnsResponse,
   classifyWebhookPayload,
   delayMsForAttempt,
+  deliverWithRetries,
   parseApnsReason,
   UUID_PATTERN,
   webhookStatusForResults,
 } from "./push_helpers.ts";
+
+Deno.test("an expired provider JWT is replaced on the actual retry request", async () => {
+  const seen: string[] = [];
+  let invalidations = 0;
+  const result = await deliverWithRetries({
+    headers: { authorization: "bearer expired", "apns-topic": "board" },
+    send: (headers) => {
+      seen.push(headers.authorization);
+      assertEquals(headers["apns-topic"], "board");
+      return Promise.resolve(classifyApnsResponse(
+        headers.authorization === "bearer fresh" ? 200 : 403,
+        '{"reason":"ExpiredProviderToken"}',
+      ));
+    },
+    nextJwt: () => Promise.resolve("fresh"),
+    onExpiredJwt: () => {
+      invalidations++;
+    },
+    onPrune: () => {
+      throw new Error("Must not prune a valid destination");
+    },
+    sleep: () => Promise.resolve(),
+  });
+  assertEquals(result, "sent");
+  assertEquals(seen, ["bearer expired", "bearer fresh"]);
+  assertEquals(invalidations, 1);
+});
+
+Deno.test("invalid activity destinations remain distinguishable from configuration failures", async () => {
+  for (const status of [410, 400]) {
+    let pruned = 0;
+    const result = await deliverWithRetries({
+      headers: {},
+      send: () =>
+        Promise.resolve(classifyApnsResponse(
+          status,
+          status === 410
+            ? '{"reason":"Unregistered"}'
+            : '{"reason":"BadTopic"}',
+        )),
+      nextJwt: () => {
+        throw new Error("Must not refresh JWT");
+      },
+      onExpiredJwt: () => {},
+      onPrune: () => {
+        pruned++;
+        return Promise.resolve();
+      },
+      sleep: () => {
+        throw new Error("Must not retry permanent responses");
+      },
+    });
+    assertEquals(result, status === 410 ? "invalid" : "failed");
+    assertEquals(pruned, status === 410 ? 1 : 0);
+  }
+});
+
+Deno.test("transient push failures exhaust the bounded retry budget", async () => {
+  const waits: number[] = [];
+  let attempts = 0;
+  const result = await deliverWithRetries({
+    headers: {},
+    send: () => {
+      attempts++;
+      return Promise.resolve(classifyApnsResponse(503, ""));
+    },
+    nextJwt: () => {
+      throw new Error("Must not refresh JWT");
+    },
+    onExpiredJwt: () => {},
+    onPrune: () => {
+      throw new Error("Must not prune on an outage");
+    },
+    sleep: (ms) => {
+      waits.push(ms);
+      return Promise.resolve();
+    },
+  });
+  assertEquals(result, "retryable");
+  assertEquals(attempts, 3);
+  assertEquals(waits, [200, 400]);
+});
 
 Deno.test("base64url encodes without padding and uses URL-safe alphabet", () => {
   // "??>" base64 is "Pz4=" — should strip padding and keep URL-safe chars.
@@ -157,7 +240,10 @@ Deno.test("apnsHostForEnvironment picks sandbox vs production", () => {
 
 Deno.test("apnsExpirationUnix is a future UNIX timestamp 24h out", () => {
   const now = Date.parse("2026-08-27T01:00:00Z");
-  assertEquals(apnsExpirationUnix(now), now / 1000 + APNS_EXPIRATION_TTL_SECONDS);
+  assertEquals(
+    apnsExpirationUnix(now),
+    now / 1000 + APNS_EXPIRATION_TTL_SECONDS,
+  );
 });
 
 Deno.test("apnsCollapseId is the reminder id (fits APNs 64-byte limit)", () => {
@@ -173,7 +259,10 @@ Deno.test("delayMsForAttempt backs off then clamps", () => {
 });
 
 Deno.test("parseApnsReason reads JSON reason and ignores junk", () => {
-  assertEquals(parseApnsReason('{"reason":"BadDeviceToken"}'), "BadDeviceToken");
+  assertEquals(
+    parseApnsReason('{"reason":"BadDeviceToken"}'),
+    "BadDeviceToken",
+  );
   assertEquals(parseApnsReason("not-json"), "");
   assertEquals(parseApnsReason("{}"), "");
 });
@@ -190,11 +279,14 @@ Deno.test("classifyApnsResponse sent / prune / retry / jwt / permanent", () => {
     status: 400,
     reason: "BadDeviceToken",
   });
-  assertEquals(classifyApnsResponse(400, '{"reason":"DeviceTokenNotForTopic"}'), {
-    kind: "prune",
-    status: 400,
-    reason: "DeviceTokenNotForTopic",
-  });
+  assertEquals(
+    classifyApnsResponse(400, '{"reason":"DeviceTokenNotForTopic"}'),
+    {
+      kind: "prune",
+      status: 400,
+      reason: "DeviceTokenNotForTopic",
+    },
+  );
   assertEquals(classifyApnsResponse(403, '{"reason":"ExpiredProviderToken"}'), {
     kind: "expired_jwt",
     status: 403,

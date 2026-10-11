@@ -18,6 +18,10 @@ enum ReminderBoardSync {
         try? await coordinator.clear()
     }
 
+    static func refreshForeground() async throws -> [Reminder] {
+        try await coordinator.refresh { try await ReminderStore.shared.refresh() }
+    }
+
     static func reindex(identifiers: [UUID]) async throws {
         try await coordinator.reindex(identifiers: identifiers)
     }

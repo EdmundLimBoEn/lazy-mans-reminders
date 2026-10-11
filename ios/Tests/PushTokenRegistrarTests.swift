@@ -60,6 +60,45 @@ final class PushTokenRegistrarTests: XCTestCase {
         XCTAssertEqual(encoded["user_id"] as? String, user.uuidString)
     }
 
+    func testCurrentTokenSnapshotIsNotReplayedAfterForegroundOrRelaunch() async {
+        let storage = defaults()
+        let user = UUID()
+        var sent: [String?] = []
+        let first = PushTokenRegistrar(defaults: storage) { sent.append($0.activityPushToken) }
+        first.bind(userID: user)
+        first.recordDeviceToken("device")
+        first.recordActivityToken("old")
+        await first.flush()
+        first.recordActivityToken("old")
+        await first.flush()
+
+        let relaunched = PushTokenRegistrar(defaults: storage) { sent.append($0.activityPushToken) }
+        relaunched.bind(userID: user)
+        relaunched.recordActivityToken("old")
+        await relaunched.flush()
+        relaunched.recordActivityToken("replacement")
+        await relaunched.flush()
+        XCTAssertEqual(sent, ["old", nil, nil, "replacement"])
+    }
+
+    func testUnacknowledgedSnapshotRetriesWithoutANewTokenEvent() async {
+        let storage = defaults()
+        let user = UUID()
+        let first = PushTokenRegistrar(defaults: storage, retryDelay: {}) { _ in
+            throw URLError(.notConnectedToInternet)
+        }
+        first.bind(userID: user)
+        first.recordDeviceToken("device")
+        first.recordActivityToken("replacement")
+        await first.flush()
+        var sent: [String?] = []
+        let relaunched = PushTokenRegistrar(defaults: storage) { sent.append($0.activityPushToken) }
+        relaunched.bind(userID: user)
+        relaunched.recordActivityToken("replacement")
+        await relaunched.flush()
+        XCTAssertEqual(sent, ["replacement"])
+    }
+
     func testNewTokenArrivingDuringUploadIsNotAcknowledgedByOldResponse() async {
         var registrar: PushTokenRegistrar!
         var sent: [String?] = []

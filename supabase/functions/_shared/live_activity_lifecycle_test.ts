@@ -1,5 +1,6 @@
 import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import { reconcileLiveActivity } from "./live_activity_lifecycle.ts";
+import { classifyApnsResponse, deliverWithRetries } from "./push_helpers.ts";
 
 const hour = 60 * 60 * 1000;
 type Result = "sent" | "failed" | "retryable" | "invalid";
@@ -239,4 +240,56 @@ Deno.test("failed early recovery retries next refresh instead of waiting seven h
     "start:push-to-start",
     "start:push-to-start",
   ]);
+});
+
+Deno.test("an acknowledged overnight replacement is updated past the original eight-hour deadline", async () => {
+  const device = phone();
+  await device.run();
+  device.state.activityToken = "replacement";
+  device.advance(2 * hour);
+  await device.run();
+  device.advance(2 * hour);
+  await device.run();
+  assertEquals(device.sent, [
+    "start:push-to-start",
+    "end:retiring",
+    "update:activity",
+    "update:activity",
+  ]);
+  assertEquals(device.state.retiringToken, null);
+  assertEquals(device.state.activityToken, "replacement");
+});
+
+Deno.test("an expired APNs destination reaches replacement recovery through the transport", async () => {
+  const sent: string[] = [];
+  await reconcileLiveActivity({
+    lines: ["Saved board"],
+    activityToken: "expired",
+    startToken: "start",
+    retiringToken: null,
+    startedAt: new Date(0).toISOString(),
+    nowMs: 2 * hour,
+    quiet: true,
+    hasAlert: false,
+    send: (event, destination) => {
+      sent.push(`${event}:${destination}`);
+      return deliverWithRetries({
+        headers: {},
+        send: () =>
+          Promise.resolve(classifyApnsResponse(
+            destination === "activity" ? 410 : 200,
+            '{"reason":"Unregistered"}',
+          )),
+        nextJwt: () => Promise.resolve("jwt"),
+        onExpiredJwt: () => {},
+        onPrune: () => Promise.resolve(),
+        sleep: () => Promise.resolve(),
+      });
+    },
+    recordStart: () => Promise.resolve(),
+    recordEnd: () => Promise.resolve(),
+    recordAdoption: () => Promise.resolve(),
+    clearRetiring: () => Promise.resolve(),
+  });
+  assertEquals(sent, ["update:activity", "start:push-to-start"]);
 });

@@ -58,10 +58,19 @@ enum ReminderLiveActivityController {
                 await activity.end(ActivityContent(state: state, staleDate: nil), dismissalPolicy: .immediate)
             }
         case .update:
+            selectedActivityID = LiveActivityPolicy.selectedActivityID(
+                currentIDs: existing.map(\.id),
+                knownIDs: defaults.stringArray(forKey: knownIDsKey) ?? [],
+                previousSelection: selectedActivityID
+            )
+            persistSelection()
             // The server retires the old banner after acknowledging the new token.
             // Activity.activities has no ordering guarantee; ending all but .first
             // can destroy the replacement during this handoff.
-            for activity in existing { await activity.update(content) }
+            for activity in existing {
+                publishCurrentToken(activity)
+                await activity.update(content)
+            }
         case .start:
             guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
             do {
@@ -78,6 +87,9 @@ enum ReminderLiveActivityController {
 
     private static func observePushToStartTokens() async {
         guard #available(iOS 17.2, *) else { return }
+        if let token = Activity<ReminderAttributes>.pushToStartToken {
+            NotificationCenter.default.post(name: .didRegisterPushToStartToken, object: hex(token))
+        }
         for await token in Activity<ReminderAttributes>.pushToStartTokenUpdates {
             NotificationCenter.default.post(name: .didRegisterPushToStartToken, object: hex(token))
         }
@@ -104,6 +116,7 @@ enum ReminderLiveActivityController {
 
     private static func observe(_ activity: Activity<ReminderAttributes>) {
         guard observedActivityIDs.insert(activity.id).inserted else { return }
+        publishCurrentToken(activity)
         Task {
             for await token in activity.pushTokenUpdates {
                 guard selectedActivityID == activity.id,
@@ -122,6 +135,13 @@ enum ReminderLiveActivityController {
                 return
             }
         }
+    }
+
+    private static func publishCurrentToken(_ activity: Activity<ReminderAttributes>) {
+        guard selectedActivityID == activity.id,
+              activity.activityState == .active || activity.activityState == .stale,
+              let token = activity.pushToken else { return }
+        NotificationCenter.default.post(name: .didRegisterActivityPushToken, object: hex(token))
     }
 
     private static func hex(_ data: Data) -> String {

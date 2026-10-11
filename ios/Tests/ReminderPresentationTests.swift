@@ -2,6 +2,17 @@ import XCTest
 @testable import LazyMansReminders
 
 final class ReminderPresentationTests: XCTestCase {
+    func testSavedUnicodeBoardFitsLocallyRequestedActivityContent() throws {
+        for text in [String(repeating: "漢", count: 500), String(repeating: "😀", count: 500)] {
+            let reminders = (0..<6).map { reminder(text: text, sortOrder: $0) }
+            let lines = ReminderActivityPresentation.lines(from: reminders)
+            let data = try JSONEncoder().encode(ReminderAttributes.ContentState(lines: lines))
+            let attributes = try JSONEncoder().encode(ReminderAttributes())
+            XCTAssertLessThanOrEqual(data.count + attributes.count, 4096)
+            XCTAssertTrue(lines.contains { $0.contains("…") })
+        }
+    }
+
     private func reminder(text: String, sortOrder: Int = 0) -> Reminder {
         Reminder(
             id: UUID(),

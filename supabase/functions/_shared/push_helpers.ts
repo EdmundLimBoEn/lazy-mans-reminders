@@ -116,6 +116,48 @@ export function apnsCollapseId(reminderId: string): string {
   return reminderId;
 }
 
+export function headersWithAuthorization(
+  headers: Record<string, string>,
+  jwt: string,
+): Record<string, string> {
+  return { ...headers, authorization: `bearer ${jwt}` };
+}
+
+export async function deliverWithRetries(input: {
+  headers: Record<string, string>;
+  send: (
+    headers: Record<string, string>,
+  ) => Promise<ApnsOutcome>;
+  nextJwt: () => Promise<string>;
+  onExpiredJwt: () => void;
+  onPrune: () => Promise<void>;
+  sleep: (ms: number) => Promise<void>;
+}): Promise<"sent" | "failed" | "retryable" | "invalid"> {
+  let headers = input.headers;
+  let lastRetryable = false;
+
+  for (let attempt = 0; attempt < APNS_MAX_ATTEMPTS; attempt++) {
+    const outcome = await input.send(headers);
+    if (outcome.kind === "sent") return "sent";
+    if (outcome.kind === "prune") {
+      await input.onPrune();
+      return "invalid";
+    }
+    if (outcome.kind === "permanent") return "failed";
+
+    lastRetryable = true;
+    if (outcome.kind === "expired_jwt") {
+      input.onExpiredJwt();
+      headers = headersWithAuthorization(headers, await input.nextJwt());
+    }
+    if (attempt < APNS_MAX_ATTEMPTS - 1) {
+      await input.sleep(delayMsForAttempt(attempt));
+    }
+  }
+
+  return lastRetryable ? "retryable" : "failed";
+}
+
 export function delayMsForAttempt(attempt: number): number {
   return APNS_RETRY_DELAYS_MS[attempt] ??
     APNS_RETRY_DELAYS_MS[APNS_RETRY_DELAYS_MS.length - 1];
@@ -144,7 +186,10 @@ const PRUNE_REASONS = new Set([
   "DeviceTokenNotForTopic",
 ]);
 
-export function classifyApnsResponse(status: number, body: string): ApnsOutcome {
+export function classifyApnsResponse(
+  status: number,
+  body: string,
+): ApnsOutcome {
   if (status >= 200 && status < 300) return { kind: "sent" };
 
   const reason = parseApnsReason(body);
