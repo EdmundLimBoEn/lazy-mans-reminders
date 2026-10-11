@@ -17,7 +17,7 @@ struct ReminderListView: View {
     @State private var completingIDs: Set<UUID> = []
     @State private var isReordering = false
     @State private var boardRevision = 0
-    @State private var editMode = EditMode.inactive
+    @State private var isDragging = false
     @State private var showAccount = false
     @AppStorage(BoardSetupTip.storageKey) private var setupTipDismissed = false
     @FocusState private var composerFocused: Bool
@@ -54,18 +54,6 @@ struct ReminderListView: View {
                 }
             }
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    if reminders.count > 1 {
-                        Button(editMode.isEditing ? "Done" : "Reorder") {
-                            composerFocused = false
-                            withAnimation(reduceMotion ? nil : .default) {
-                                editMode = editMode.isEditing ? .inactive : .active
-                            }
-                        }
-                        .disabled(reorderDisabled)
-                        .accessibilityHint("Shows handles to drag reminders into a new order")
-                    }
-                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showAccount = true
@@ -73,10 +61,6 @@ struct ReminderListView: View {
                         Label("Account", systemImage: "person.crop.circle")
                     }
                     .accessibilityHint("Sign out, privacy, and delete account")
-                }
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button("Done") { composerFocused = false }
                 }
             }
             .refreshable { await refresh() }
@@ -86,7 +70,7 @@ struct ReminderListView: View {
             .onReceive(NotificationCenter.default.publisher(for: .didUpdateReminders)) { _ in
                 Task {
                     let cached = await ReminderStore.shared.cached()
-                    if !isReordering { reminders = cached }
+                    if !isReordering && !isDragging { reminders = cached }
                 }
             }
             .sheet(isPresented: $showAccount) {
@@ -97,7 +81,6 @@ struct ReminderListView: View {
                     .presentationContentInteraction(.scrolls)
             }
         }
-        .environment(\.editMode, $editMode)
     }
 
     private var boardSubtitle: String {
@@ -174,33 +157,43 @@ struct ReminderListView: View {
     }
 
     private var reminderList: some View {
-        List {
-            ForEach(reminders) { reminder in
-                ReminderRow(
-                    reminder: reminder,
-                    isCompleting: completingIDs.contains(reminder.id)
-                ) {
-                    Task { await markDone(reminder) }
+        ReorderableReminderList(
+            reminders: reminders,
+            completingIDs: completingIDs,
+            isEnabled: !reorderDisabled,
+            onMove: moveReminders,
+            onDragChanged: { dragging in
+                isDragging = dragging
+                if dragging {
+                    boardRevision += 1
+                    composerFocused = false
                 }
-                .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                    Button("Complete", systemImage: "checkmark.circle") {
-                        Task { await markDone(reminder) }
-                    }
-                    .tint(.accentColor)
-                    .disabled(isReordering || completingIDs.contains(reminder.id))
-                    .accessibilityHint("Marks this reminder complete")
-                }
-                .reminderOnscreenIdentity(reminder.id)
-                .moveDisabled(reorderDisabled)
+            },
+            onComplete: { reminder in Task { await markDone(reminder) } },
+            onRefresh: { await refresh() }
+        ) { reminder in
+            ReminderRow(
+                reminder: reminder,
+                isCompleting: completingIDs.contains(reminder.id)
+            ) {
+                Task { await markDone(reminder) }
             }
-            .onMove(perform: moveReminders)
+            .reminderOnscreenIdentity(reminder.id)
         }
-        .listStyle(.insetGrouped)
         .modifier(BoardScrollEdge())
     }
 
     private var composer: some View {
         VStack(alignment: .leading, spacing: 8) {
+            if composerFocused {
+                HStack {
+                    Spacer()
+                    Button("Done") { composerFocused = false }
+                        .font(.body.weight(.semibold))
+                        .frame(minWidth: 60, minHeight: 44)
+                        .accessibilityHint("Dismisses the keyboard")
+                }
+            }
             if atCapacity {
                 Text(ReminderBoardLimits.postItHint)
                     .font(.caption)
@@ -220,7 +213,7 @@ struct ReminderListView: View {
                 .lineLimit(1...4)
                 .textInputAutocapitalization(.sentences)
                 .focused($composerFocused)
-                .disabled(atCapacity || isReordering)
+                .disabled(atCapacity || isReordering || isDragging)
                 .submitLabel(.send)
                 .accessibilityLabel("New reminder")
                 .accessibilityHint(
@@ -260,7 +253,7 @@ struct ReminderListView: View {
             }
             .padding(.leading, 14)
             .padding(.trailing, 5)
-            .padding(.vertical, 5)
+            .padding(.vertical, 7)
             .background {
                 composerFieldBackground
             }
@@ -274,7 +267,7 @@ struct ReminderListView: View {
 
     @ViewBuilder
     private var composerFieldBackground: some View {
-        let shape = RoundedRectangle(cornerRadius: 20, style: .continuous)
+        let shape = RoundedRectangle(cornerRadius: 30, style: .continuous)
         if prefersSolidChrome {
             shape
                 .fill(Color(.secondarySystemGroupedBackground))
@@ -303,7 +296,7 @@ struct ReminderListView: View {
     }
 
     private var canAdd: Bool {
-        !atCapacity && !isReordering && draft.canSubmit
+        !atCapacity && !isReordering && !isDragging && draft.canSubmit
     }
 
     private var reorderDisabled: Bool {
@@ -349,7 +342,7 @@ struct ReminderListView: View {
     }
 
     private func refresh() async {
-        guard !isReordering else { return }
+        guard !isReordering && !isDragging else { return }
         let revision = boardRevision
         if !hasLoaded {
             isLoading = true
@@ -358,12 +351,12 @@ struct ReminderListView: View {
         }
         do {
             let refreshed = try await ReminderStore.shared.refresh()
-            guard revision == boardRevision, !isReordering else { return }
+            guard revision == boardRevision, !isReordering, !isDragging else { return }
             reminders = refreshed
             error = nil
             await ReminderBoardSync.apply(reminders, notify: false)
         } catch {
-            guard revision == boardRevision, !isReordering else { return }
+            guard revision == boardRevision, !isReordering, !isDragging else { return }
             reminders = await ReminderStore.shared.cached()
             presentError(error.localizedDescription)
         }
@@ -396,7 +389,7 @@ struct ReminderListView: View {
     }
 
     private func markDone(_ reminder: Reminder) async {
-        guard !isReordering, !completingIDs.contains(reminder.id) else { return }
+        guard !isReordering, !isDragging, !completingIDs.contains(reminder.id) else { return }
         completingIDs.insert(reminder.id)
         do {
             let updated = try await ReminderStore.shared.markDone(id: reminder.id)

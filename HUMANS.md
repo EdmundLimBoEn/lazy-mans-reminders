@@ -118,3 +118,5 @@ Updated 9 October 2026. See [official Apple requirements and baseline gaps](docs
 - [ ] Edmund: review all evidence, select release mode/date, and explicitly authorize App Review submission when ready. **Do not submit, merge these PRs or deploy unreviewed production changes as part of this task.**
 
 Written by gpt-6.1-sol in T3 Code on behalf of Edmund
+
+- [ ] **Mobile reorder and composer (build 9)** — Install the new TestFlight build. Drag the six-dot grip up and down without entering Reorder mode; drag to the screen edge on a long board; verify completion taps, leading swipe, pull-to-refresh, and order after reopening/on the web and widgets. With the keyboard open, confirm Done sits above the rounded input and dismisses the keyboard. Check large text and VoiceOver Move up/Move down actions.
