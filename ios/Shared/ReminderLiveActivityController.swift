@@ -69,6 +69,7 @@ enum ReminderLiveActivityController {
             // Activity.activities has no ordering guarantee; ending all but .first
             // can destroy the replacement during this handoff.
             for activity in existing {
+                observe(activity)
                 publishCurrentToken(activity)
                 await activity.update(content)
             }
