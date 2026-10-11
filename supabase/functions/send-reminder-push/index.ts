@@ -12,7 +12,6 @@ import {
   parseLiveActivityToken,
 } from "../_shared/live_activity.ts";
 import {
-  APNS_MAX_ATTEMPTS,
   APNS_REQUEST_TIMEOUT_MS,
   APNS_TOKEN_PATTERN,
   apnsCollapseId,
@@ -23,7 +22,7 @@ import {
   buildApnsPayload,
   classifyApnsResponse,
   classifyWebhookPayload,
-  delayMsForAttempt,
+  deliverWithRetries,
   type ReminderRecord,
   webhookStatusForResults,
 } from "../_shared/push_helpers.ts";
@@ -267,31 +266,14 @@ async function sendWithRetries(input: {
   body: string;
   onPrune: () => Promise<void>;
 }): Promise<DeviceSendResult> {
-  let lastRetryable = false;
-
-  for (let attempt = 0; attempt < APNS_MAX_ATTEMPTS; attempt++) {
-    const outcome = await sendOnce({
-      host: input.host,
-      token: input.token,
-      headers: input.headers,
-      body: input.body,
-    });
-
-    if (outcome.kind === "sent") return "sent";
-    if (outcome.kind === "prune") {
-      await input.onPrune();
-      return "invalid";
-    }
-    if (outcome.kind === "permanent") return "failed";
-
-    lastRetryable = true;
-    if (outcome.kind === "expired_jwt") invalidateAPNSJWT();
-    if (attempt < APNS_MAX_ATTEMPTS - 1) {
-      await sleep(delayMsForAttempt(attempt));
-    }
-  }
-
-  return lastRetryable ? "retryable" : "failed";
+  return await deliverWithRetries({
+    headers: input.headers,
+    send: (headers) => sendOnce({ ...input, headers }),
+    nextJwt: apnsJWT,
+    onExpiredJwt: invalidateAPNSJWT,
+    onPrune: input.onPrune,
+    sleep,
+  });
 }
 
 async function sendAlertToDevice(input: {

@@ -33,6 +33,17 @@ actor ReminderPublicationCoordinator {
         try await run(.clear)
     }
 
+    func refresh(_ fetch: () async throws -> [Reminder]) async throws -> [Reminder] {
+        try Task.checkCancellation()
+        // Restore a saved board before network/auth refresh, including when offline.
+        // An empty cache is not evidence that a remote board was cleared.
+        try await run(.board(notify: false), onlyIfNonempty: true)
+        _ = try await fetch()
+        try Task.checkCancellation()
+        try await run(.board(notify: false))
+        return await load()
+    }
+
     func reindex(identifiers: [UUID]) async throws {
         try await run(.index, identifiers: identifiers)
     }
@@ -41,10 +52,13 @@ actor ReminderPublicationCoordinator {
         try await run(.replaceIndex)
     }
 
-    private func run(_ publication: Publication, identifiers: [UUID]? = nil) async throws {
+    private func run(
+        _ publication: Publication, identifiers: [UUID]? = nil, onlyIfNonempty: Bool = false
+    ) async throws {
         await acquire()
         defer { release() }
         let current = await load()
+        if onlyIfNonempty && current.isEmpty { return }
         let reminders: [Reminder]
         if publication == .clear {
             reminders = []

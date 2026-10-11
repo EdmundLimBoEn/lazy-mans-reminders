@@ -14,6 +14,7 @@ enum ReminderLiveActivityController {
     private static var isEndingBoard = false
     private static let selectionKey = "live-activity-selection"
     private static let knownIDsKey = "live-activity-known-ids"
+    private static let startedAtPrefix = "live-activity-started-at-"
 
     private static var defaults: UserDefaults {
         UserDefaults(suiteName: AppConfig.appGroupID)!
@@ -58,16 +59,27 @@ enum ReminderLiveActivityController {
                 await activity.end(ActivityContent(state: state, staleDate: nil), dismissalPolicy: .immediate)
             }
         case .update:
+            selectedActivityID = LiveActivityPolicy.selectedActivityID(
+                currentIDs: existing.map(\.id),
+                knownIDs: defaults.stringArray(forKey: knownIDsKey) ?? [],
+                previousSelection: selectedActivityID
+            )
+            persistSelection()
             // The server retires the old banner after acknowledging the new token.
             // Activity.activities has no ordering guarantee; ending all but .first
             // can destroy the replacement during this handoff.
-            for activity in existing { await activity.update(content) }
+            for activity in existing {
+                observe(activity)
+                publishCurrentToken(activity)
+                await activity.update(content)
+            }
         case .start:
             guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
             do {
                 let activity = try Activity.request(
                     attributes: ReminderAttributes(), content: content, pushType: .token
                 )
+                defaults.set(Date(), forKey: startedAtPrefix + activity.id)
                 select(activity)
                 observe(activity)
             } catch {
@@ -78,6 +90,9 @@ enum ReminderLiveActivityController {
 
     private static func observePushToStartTokens() async {
         guard #available(iOS 17.2, *) else { return }
+        if let token = Activity<ReminderAttributes>.pushToStartToken {
+            NotificationCenter.default.post(name: .didRegisterPushToStartToken, object: hex(token))
+        }
         for await token in Activity<ReminderAttributes>.pushToStartTokenUpdates {
             NotificationCenter.default.post(name: .didRegisterPushToStartToken, object: hex(token))
         }
@@ -104,17 +119,19 @@ enum ReminderLiveActivityController {
 
     private static func observe(_ activity: Activity<ReminderAttributes>) {
         guard observedActivityIDs.insert(activity.id).inserted else { return }
+        publishCurrentToken(activity)
         Task {
             for await token in activity.pushTokenUpdates {
                 guard selectedActivityID == activity.id,
                       activity.activityState == .active || activity.activityState == .stale else { continue }
-                NotificationCenter.default.post(name: .didRegisterActivityPushToken, object: hex(token))
+                publish(token, for: activity)
             }
         }
         Task {
             for await state in activity.activityStateUpdates {
                 guard state == .ended || state == .dismissed else { continue }
                 observedActivityIDs.remove(activity.id)
+                defaults.removeObject(forKey: startedAtPrefix + activity.id)
                 // Reconcile on the next explicit board sync. Restarting here can
                 // resurrect a banner just ended by a remote clear or sign-out.
                 if selectedActivityID == activity.id { selectedActivityID = nil }
@@ -122,6 +139,23 @@ enum ReminderLiveActivityController {
                 return
             }
         }
+    }
+
+    private static func publishCurrentToken(_ activity: Activity<ReminderAttributes>) {
+        guard selectedActivityID == activity.id,
+              activity.activityState == .active || activity.activityState == .stale,
+              let token = activity.pushToken else { return }
+        publish(token, for: activity)
+    }
+
+    private static func publish(_ token: Data, for activity: Activity<ReminderAttributes>) {
+        var info: [AnyHashable: Any] = [:]
+        if let startedAt = defaults.object(forKey: startedAtPrefix + activity.id) as? Date {
+            info["startedAt"] = startedAt
+        }
+        NotificationCenter.default.post(
+            name: .didRegisterActivityPushToken, object: hex(token), userInfo: info
+        )
     }
 
     private static func hex(_ data: Data) -> String {

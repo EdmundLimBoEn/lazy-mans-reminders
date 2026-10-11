@@ -4,6 +4,7 @@ import UIKit
 
 struct ReminderListView: View {
     @EnvironmentObject private var auth: AuthManager
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
@@ -64,7 +65,10 @@ struct ReminderListView: View {
                 }
             }
             .refreshable { await refresh() }
-            .task { await refresh() }
+            .task(id: scenePhase) {
+                guard scenePhase == .active else { return }
+                await refresh()
+            }
             .sensoryFeedback(.success, trigger: hapticTick)
             .sensoryFeedback(.error, trigger: errorTick)
             .onReceive(NotificationCenter.default.publisher(for: .didUpdateReminders)) { _ in
@@ -350,12 +354,12 @@ struct ReminderListView: View {
             isLoading = true
         }
         do {
-            let refreshed = try await ReminderStore.shared.refresh()
+            let refreshed = try await ReminderBoardSync.refreshForeground()
             guard revision == boardRevision, !isReordering, !isDragging else { return }
             reminders = refreshed
             error = nil
-            await ReminderBoardSync.apply(reminders, notify: false)
         } catch {
+            guard !Task.isCancelled else { return }
             guard revision == boardRevision, !isReordering, !isDragging else { return }
             reminders = await ReminderStore.shared.cached()
             presentError(error.localizedDescription)

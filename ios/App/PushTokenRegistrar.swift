@@ -10,12 +10,14 @@ final class PushTokenRegistrar: ObservableObject {
         let environment: String
         let pushToStartToken: String?
         let activityPushToken: String?
+        let activityStartedAt: String?
 
         enum CodingKeys: String, CodingKey {
             case token, environment
             case userID = "user_id"
             case pushToStartToken = "push_to_start_token"
             case activityPushToken = "activity_push_token"
+            case activityStartedAt = "activity_started_at"
         }
     }
 
@@ -24,6 +26,8 @@ final class PushTokenRegistrar: ObservableObject {
         var userID: UUID?
         var pushToStartToken: String?
         var activityPushToken: String?
+        var activityStartedAt: String?
+        var acknowledgedActivityToken: String?
         var lastSuccess: Date?
         var signedOut: Bool?
     }
@@ -71,6 +75,8 @@ final class PushTokenRegistrar: ObservableObject {
         guard pending.userID != userID || userID == nil else { return }
         if userID == nil || pending.userID != nil {
             pending.activityPushToken = nil
+            pending.activityStartedAt = nil
+            pending.acknowledgedActivityToken = nil
             pending.lastSuccess = nil
             lastSuccess = nil
         }
@@ -95,9 +101,12 @@ final class PushTokenRegistrar: ObservableObject {
         save()
     }
 
-    func recordActivityToken(_ token: String) {
+    func recordActivityToken(_ token: String, startedAt: Date? = nil) {
         guard pending.signedOut != true else { return }
+        guard token != pending.acknowledgedActivityToken,
+              token != pending.activityPushToken else { return }
         pending.activityPushToken = token
+        pending.activityStartedAt = startedAt.map { ISO8601DateFormatter().string(from: $0) }
         needsRetry = true
         save()
     }
@@ -116,7 +125,8 @@ final class PushTokenRegistrar: ObservableObject {
             let registration = Registration(
                 token: deviceToken, userID: userID, environment: environment,
                 pushToStartToken: pending.pushToStartToken,
-                activityPushToken: pending.activityPushToken
+                activityPushToken: pending.activityPushToken,
+                activityStartedAt: pending.activityStartedAt
             )
             var succeeded = false
             for attempt in 0..<3 {
@@ -135,7 +145,11 @@ final class PushTokenRegistrar: ObservableObject {
             needsRetry = !succeeded
             if succeeded {
                 // Replaying an acknowledged old token could undo the server's renewal handoff.
+                if let token = registration.activityPushToken {
+                    pending.acknowledgedActivityToken = token
+                }
                 pending.activityPushToken = nil
+                pending.activityStartedAt = nil
                 pending.lastSuccess = Date()
                 lastSuccess = pending.lastSuccess
                 save()

@@ -287,3 +287,23 @@ Deno.test("scheduled updates use low priority without an alert or sound", () => 
     "10",
   );
 });
+
+Deno.test("overnight replacement payload fits valid maximum Unicode boards", () => {
+  for (const event of ["start", "update", "end"] as const) {
+    for (
+      const line of ["漢".repeat(500), "😀".repeat(500), '\\"'.repeat(500)]
+    ) {
+      const lines = Array.from({ length: 6 }, () => line);
+      const payload = buildLiveActivityPayload({
+        event,
+        lines,
+        alertBody: event === "start" ? line : undefined,
+        timestamp: 1_800_000_000,
+        staleDate: 1_800_028_800,
+      });
+      assertEquals(new TextEncoder().encode(payload).length <= 4096, true);
+      assertEquals(JSON.parse(payload).aps.event, event);
+      assertEquals(lines.length, 6);
+    }
+  }
+});

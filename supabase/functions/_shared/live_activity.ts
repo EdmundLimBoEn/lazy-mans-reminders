@@ -8,6 +8,9 @@ export const LIVE_ACTIVITY_RECYCLE_AFTER_MS = 7 * 60 * 60 * 1000;
 export const LIVE_ACTIVITY_START_GRACE_MS = 2 * 60 * 1000;
 export const LIVE_ACTIVITY_STALE_AFTER_SECONDS = 8 * 60 * 60;
 export const LIVE_ACTIVITY_TOKEN_PATTERN = /^[0-9a-f]{64,512}$/i;
+export const APNS_PAYLOAD_BYTE_LIMIT = 4096;
+const OVERFLOW_MARK = "…";
+const utf8 = new TextEncoder();
 
 export type LiveActivityDecision =
   | { kind: "noop" }
@@ -120,14 +123,16 @@ export function liveActivityStaleDateUnix(nowUnix: number): number {
   return nowUnix + LIVE_ACTIVITY_STALE_AFTER_SECONDS;
 }
 
-export function buildLiveActivityPayload(input: {
+type LiveActivityPayloadInput = {
   event: "start" | "update" | "end";
   lines: string[];
   timestamp: number;
   alertBody?: string;
   staleDate: number;
   dismissalDate?: number;
-}): string {
+};
+
+function assembleLiveActivityPayload(input: LiveActivityPayloadInput): string {
   const aps: Record<string, unknown> = {
     timestamp: input.timestamp,
     event: input.event,
@@ -152,4 +157,100 @@ export function buildLiveActivityPayload(input: {
   }
 
   return JSON.stringify({ aps });
+}
+
+export function buildLiveActivityPayload(
+  input: LiveActivityPayloadInput,
+): string {
+  if (
+    payloadBytes(assembleLiveActivityPayload(input)) <= APNS_PAYLOAD_BYTE_LIMIT
+  ) {
+    return assembleLiveActivityPayload(input);
+  }
+
+  const lines = input.lines.slice();
+  for (
+    let index = lines.length - 1;
+    index >= 0 &&
+    payloadBytes(assembleLiveActivityPayload({ ...input, lines })) >
+      APNS_PAYLOAD_BYTE_LIMIT;
+    index--
+  ) {
+    const next = lines.slice();
+    next[index] = longestFittingText(lines[index], (candidate) => {
+      next[index] = candidate;
+      return assembleLiveActivityPayload({ ...input, lines: next });
+    });
+    lines[index] = next[index];
+  }
+
+  let alertBody = input.alertBody;
+  if (
+    alertBody != null &&
+    payloadBytes(assembleLiveActivityPayload({ ...input, lines, alertBody })) >
+      APNS_PAYLOAD_BYTE_LIMIT
+  ) {
+    alertBody = longestFittingText(
+      alertBody,
+      (candidate) =>
+        assembleLiveActivityPayload({ ...input, lines, alertBody: candidate }),
+    );
+  }
+
+  const fitted = lines.filter((line) => line.length > 0);
+  const withMark = fitted.some((line) => line.includes(OVERFLOW_MARK))
+    ? fitted
+    : [...fitted, OVERFLOW_MARK];
+  const payload = assembleLiveActivityPayload({
+    ...input,
+    lines: payloadBytes(
+        assembleLiveActivityPayload({ ...input, lines: withMark, alertBody }),
+      ) <= APNS_PAYLOAD_BYTE_LIMIT
+      ? withMark
+      : fitted,
+    alertBody,
+  });
+  if (payloadBytes(payload) <= APNS_PAYLOAD_BYTE_LIMIT) return payload;
+  return assembleLiveActivityPayload({
+    ...input,
+    lines: [],
+    alertBody: input.event === "start" ? OVERFLOW_MARK : undefined,
+  });
+}
+
+function payloadBytes(payload: string): number {
+  return utf8.encode(payload).length;
+}
+
+function codePoints(value: string): string[] {
+  return Array.from(value);
+}
+
+/** Longest prefix of `text` whose rendered payload fits, with an ellipsis when cut. */
+function longestFittingText(
+  text: string,
+  render: (candidate: string) => string,
+): string {
+  if (payloadBytes(render(text)) <= APNS_PAYLOAD_BYTE_LIMIT) return text;
+  const points = codePoints(text);
+  let low = 0;
+  let high = points.length;
+  let best = "";
+  while (low <= high) {
+    const mid = (low + high) >> 1;
+    const candidate = mid >= points.length
+      ? text
+      : `${points.slice(0, mid).join("")}${OVERFLOW_MARK}`;
+    if (payloadBytes(render(candidate)) <= APNS_PAYLOAD_BYTE_LIMIT) {
+      best = candidate;
+      low = mid + 1;
+    } else {
+      high = mid - 1;
+    }
+  }
+  if (best.length > 0) return best;
+  if (payloadBytes(render(OVERFLOW_MARK)) <= APNS_PAYLOAD_BYTE_LIMIT) {
+    return OVERFLOW_MARK;
+  }
+  return "";
 }

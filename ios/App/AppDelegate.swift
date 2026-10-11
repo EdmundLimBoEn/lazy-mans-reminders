@@ -40,8 +40,10 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
             queue: .main
         ) { notification in
             guard let token = notification.object as? String else { return }
-            Task { @MainActor in
+            MainActor.assumeIsolated {
                 AuthManager.shared.pushRegistration.recordPushToStartToken(token)
+            }
+            Task { @MainActor in
                 await AuthManager.shared.registerLiveActivityTokens()
             }
         }
@@ -51,8 +53,14 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
             queue: .main
         ) { notification in
             guard let token = notification.object as? String else { return }
+            // Record on the notification's main queue before a later auth transition
+            // can bind the deferred upload task to another account.
+            MainActor.assumeIsolated {
+                AuthManager.shared.pushRegistration.recordActivityToken(
+                    token, startedAt: notification.userInfo?["startedAt"] as? Date
+                )
+            }
             Task { @MainActor in
-                AuthManager.shared.pushRegistration.recordActivityToken(token)
                 await AuthManager.shared.registerLiveActivityTokens()
             }
         }
