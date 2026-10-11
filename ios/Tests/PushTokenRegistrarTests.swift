@@ -99,6 +99,20 @@ final class PushTokenRegistrarTests: XCTestCase {
         XCTAssertEqual(sent, ["replacement"])
     }
 
+    func testRepeatedSnapshotDuringUploadDoesNotCauseAnotherTokenUpload() async {
+        var registrar: PushTokenRegistrar!
+        var sent: [String?] = []
+        registrar = PushTokenRegistrar(defaults: defaults()) { registration in
+            sent.append(registration.activityPushToken)
+            if sent.count == 1 { registrar.recordActivityToken("replacement") }
+        }
+        registrar.bind(userID: UUID())
+        registrar.recordDeviceToken("device")
+        registrar.recordActivityToken("replacement")
+        await registrar.flush()
+        XCTAssertEqual(sent, ["replacement"])
+    }
+
     func testNewTokenArrivingDuringUploadIsNotAcknowledgedByOldResponse() async {
         var registrar: PushTokenRegistrar!
         var sent: [String?] = []

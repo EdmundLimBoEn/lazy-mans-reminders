@@ -99,7 +99,8 @@ final class PushTokenRegistrar: ObservableObject {
 
     func recordActivityToken(_ token: String) {
         guard pending.signedOut != true else { return }
-        guard token != pending.acknowledgedActivityToken else { return }
+        guard token != pending.acknowledgedActivityToken,
+              token != pending.activityPushToken else { return }
         pending.activityPushToken = token
         needsRetry = true
         save()
