@@ -113,7 +113,7 @@ final class PushTokenRegistrarTests: XCTestCase {
         XCTAssertEqual(sent, ["replacement"])
     }
 
-    func testLocallyRestoredActivityRegistersItsOwnClockAndPreservesItOnTokenRotation() async throws {
+    func testLocallyRestoredActivityRegistersItsClockOnceAcrossTokenRotation() async throws {
         var sent: [PushTokenRegistrar.Registration] = []
         let registrar = PushTokenRegistrar(defaults: defaults()) { sent.append($0) }
         registrar.bind(userID: UUID())
@@ -124,12 +124,42 @@ final class PushTokenRegistrarTests: XCTestCase {
         registrar.recordActivityToken("rotated", startedAt: startedAt)
         await registrar.flush()
         await registrar.flush()
+        registrar.recordActivityToken("another-local", startedAt: startedAt.addingTimeInterval(3600))
+        await registrar.flush()
         let encoded = try sent.map {
             try JSONSerialization.jsonObject(with: JSONEncoder().encode($0)) as! [String: Any]
         }
         XCTAssertEqual(encoded[0]["activity_started_at"] as? String, "2027-01-15T08:00:00Z")
-        XCTAssertEqual(encoded[1]["activity_started_at"] as? String, encoded[0]["activity_started_at"] as? String)
+        XCTAssertNil(encoded[1]["activity_started_at"], "Rotation must preserve the server's current clock")
         XCTAssertNil(encoded[2]["activity_started_at"], "An acknowledged clock must not overwrite server handoff state")
+        XCTAssertEqual(encoded[3]["activity_started_at"] as? String, "2027-01-15T09:00:00Z")
+    }
+
+    func testFailedRotationAndRelaunchCannotResetAnInFlightRenewalClock() async throws {
+        let storage = defaults()
+        let user = UUID()
+        var renewing = false
+        var serverClock = "old"
+        let first = PushTokenRegistrar(defaults: storage, retryDelay: {}) { registration in
+            if renewing { throw URLError(.notConnectedToInternet) }
+            serverClock = registration.activityStartedAt ?? serverClock
+        }
+        first.bind(userID: user)
+        first.recordDeviceToken("device")
+        let startedAt = Date(timeIntervalSince1970: 1_800_000_000)
+        first.recordActivityToken("original", startedAt: startedAt)
+        await first.flush()
+        XCTAssertEqual(serverClock, "2027-01-15T08:00:00Z")
+        renewing = true
+        serverClock = "replacement-requested"
+        first.recordActivityToken("rotated-original", startedAt: startedAt)
+        await first.flush()
+        let relaunched = PushTokenRegistrar(defaults: storage) { registration in
+            serverClock = registration.activityStartedAt ?? serverClock
+        }
+        relaunched.bind(userID: user)
+        await relaunched.flush()
+        XCTAssertEqual(serverClock, "replacement-requested")
     }
 
     func testRemoteActivityAcknowledgementKeepsTheServersStartClock() async throws {
