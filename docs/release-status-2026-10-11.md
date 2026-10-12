@@ -2,6 +2,8 @@
 
 Public release remains blocked by the reported Live Activity disappearance and the remaining device and App Store Connect gates. This record supersedes older deployment/version assumptions; it does not certify release readiness.
 
+**12 October update:** [Authenticated App Store state](app-store-state-2026-10-12.md) records saved metadata/review access, published privacy labels, the non-trader declaration and processed build 22. The archive numbers below are not the exported TestFlight numbers: export renumbered archive 9 to uploaded build **21**, and the subsequent archive 10 to uploaded build **22**. Both mappings were verified against the upload IDs in CI and App Store Connect.
+
 ## Code and signed artifact
 
 The original local checkout was at `c131c41` with unfinished changes. Verification and deployment used the clean upstream commit `c65ef2a31be0fa403c1dfb53c544777e1a2f0e0c`. Existing changes in that original checkout were left intact.
