@@ -62,6 +62,8 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: "$(PRODUCT_BUNDLE_IDENTIFIER)"
+        # XcodeGen's iOS target preset overrides the project-level device family.
+        TARGETED_DEVICE_FAMILY: "1"
       configs:
         Debug:
           APNS_ENVIRONMENT: development
@@ -125,6 +127,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: "$(WIDGET_BUNDLE_IDENTIFIER)"
+        TARGETED_DEVICE_FAMILY: "1"
         SKIP_INSTALL: true
     info:
       path: Widget/Info.plist
