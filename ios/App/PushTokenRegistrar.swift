@@ -28,6 +28,7 @@ final class PushTokenRegistrar: ObservableObject {
         var activityPushToken: String?
         var activityStartedAt: String?
         var acknowledgedActivityToken: String?
+        var acknowledgedActivityStartedAt: String?
         var lastSuccess: Date?
         var signedOut: Bool?
     }
@@ -77,6 +78,7 @@ final class PushTokenRegistrar: ObservableObject {
             pending.activityPushToken = nil
             pending.activityStartedAt = nil
             pending.acknowledgedActivityToken = nil
+            pending.acknowledgedActivityStartedAt = nil
             pending.lastSuccess = nil
             lastSuccess = nil
         }
@@ -126,7 +128,9 @@ final class PushTokenRegistrar: ObservableObject {
                 token: deviceToken, userID: userID, environment: environment,
                 pushToStartToken: pending.pushToStartToken,
                 activityPushToken: pending.activityPushToken,
-                activityStartedAt: pending.activityStartedAt
+                // A registered clock must not overwrite a renewal already in flight.
+                activityStartedAt: pending.activityStartedAt != pending.acknowledgedActivityStartedAt
+                    ? pending.activityStartedAt : nil
             )
             var succeeded = false
             for attempt in 0..<3 {
@@ -147,6 +151,7 @@ final class PushTokenRegistrar: ObservableObject {
                 // Replaying an acknowledged old token could undo the server's renewal handoff.
                 if let token = registration.activityPushToken {
                     pending.acknowledgedActivityToken = token
+                    pending.acknowledgedActivityStartedAt = pending.activityStartedAt
                 }
                 pending.activityPushToken = nil
                 pending.activityStartedAt = nil
