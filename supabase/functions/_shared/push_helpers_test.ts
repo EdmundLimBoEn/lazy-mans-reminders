@@ -345,3 +345,18 @@ Deno.test("webhookStatusForResults is 503 only while APNs might still succeed", 
   assertEquals(webhookStatusForResults(0), 200);
   assertEquals(webhookStatusForResults(1), 503);
 });
+
+Deno.test("routine reactivation alerts once but completion and edits remain silent", () => {
+  const record = {
+    id: "11111111-1111-4111-8111-111111111111",
+    user_id: "22222222-2222-4222-8222-222222222222",
+    text: "Prepare uniform",
+    routine_id: "33333333-3333-4333-8333-333333333333",
+    routine_fired_at: "2026-10-12T11:00:00Z",
+  };
+  const payload = { type: "UPDATE", schema: "public", table: "reminders", record,
+    old_record: { ...record, routine_fired_at: "2026-10-05T11:00:00Z" } };
+  assertEquals(classifyWebhookPayload(payload), { ok: true, kind: "process", sendsAlert: true, userId: record.user_id });
+  assertEquals(classifyWebhookPayload({ ...payload, old_record: record }), { ok: true, kind: "process", sendsAlert: false, userId: record.user_id });
+  assertEquals(classifyWebhookPayload({ ...payload, record: { ...record, text: "" } }), { ok: true, kind: "process", sendsAlert: false, userId: record.user_id });
+});

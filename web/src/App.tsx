@@ -68,6 +68,7 @@ import {
 } from './mcp'
 import { normalizePath, type AppRoute } from './routing'
 import { supabase } from './supabase'
+import { RoutineReminders } from './RoutineReminders'
 import { ThemeToggle } from './ThemeToggle'
 
 function usePathname(): [AppRoute, (path: string) => void] {
@@ -464,7 +465,7 @@ function Board({ session, onNavigate, onAccountDeleted }: {
     if (exporting) return
     setExporting(true)
     setError('')
-    const [{ data: reminderRows, error: reminderError }, { data: prefs }, { data: keys, error: keyError }] =
+    const [{ data: reminderRows, error: reminderError }, { data: prefs }, { data: keys, error: keyError }, { data: routines, error: routineError }] =
       await Promise.all([
         supabase
           .from('reminders')
@@ -480,9 +481,10 @@ function Board({ session, onNavigate, onAccountDeleted }: {
           .select('id, name, created_at, last_used_at')
           .eq('user_id', session.user.id)
           .is('revoked_at', null),
+        supabase.from('routine_reminders').select('id,text,interval_days,start_date,local_time,timezone,enabled,next_run_at').eq('user_id', session.user.id),
       ])
-    if (reminderError || keyError) {
-      setError(reminderError?.message ?? keyError?.message ?? 'Could not export your data.')
+    if (reminderError || keyError || routineError) {
+      setError(reminderError?.message ?? keyError?.message ?? routineError?.message ?? 'Could not export your data.')
       setExporting(false)
       return
     }
@@ -491,6 +493,7 @@ function Board({ session, onNavigate, onAccountDeleted }: {
       userId: session.user.id,
       maxLines: typeof prefs?.max_lines === 'number' ? prefs.max_lines : maxLines,
       reminders: (reminderRows ?? []) as AccountExportReminder[],
+      routines: routines ?? [],
       agentKeys: (keys ?? []) as AccountExportAgentKey[],
     })
     const blob = new Blob([serializeAccountExport(payload)], { type: 'application/json' })
@@ -667,6 +670,8 @@ function Board({ session, onNavigate, onAccountDeleted }: {
             )}
           </div>
         </section>
+
+        <RoutineReminders userId={session.user.id} />
 
         <AgentAccess userId={session.user.id} accessToken={session.access_token} />
 

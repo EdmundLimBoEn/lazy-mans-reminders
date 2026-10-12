@@ -7,6 +7,7 @@ on:
     paths:
       - 'web/**'
       - 'mcp/**'
+      - 'supabase/**'
       - 'scripts/**'
       - '.github/workflows/web-mcp-checks.yml'
   workflow_dispatch:
@@ -72,3 +73,37 @@ jobs:
           python3 scripts/check_privacy_manifest.py --self-test
       - run: python3 -B -m unittest discover -s scripts/tests -v
       - run: bash -n scripts/check-ios-toolchain.sh scripts/ios-release-build.sh scripts/ios-simulator-unit-tests.sh
+
+  routines:
+    name: Routine database and push tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno test supabase/functions/_shared supabase/functions/delete-account
+      - name: Verify routines on a disposable Supabase database
+        run: |
+          docker run -d --name routine-tests -e POSTGRES_PASSWORD=test-only \
+            public.ecr.aws/supabase/postgres:17.6.1.143 \
+            postgres -c shared_preload_libraries=pg_cron -c cron.database_name=postgres
+          ready=false
+          for attempt in $(seq 1 60); do
+            if docker logs routine-tests 2>&1 | grep -q 'PostgreSQL init process complete'; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" != true ]; then docker logs routine-tests; exit 1; fi
+          for migration in \
+            supabase/migrations/202608060001_create_reminders.sql \
+            supabase/migrations/202608080001_completed_at_and_cleanup.sql \
+            supabase/migrations/202610120001_routine_reminders.sql \
+            supabase/tests/routine_reminders.sql; do
+            docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 < "$migration"
+          done
+      - if: always()
+        run: docker rm -f routine-tests || true
