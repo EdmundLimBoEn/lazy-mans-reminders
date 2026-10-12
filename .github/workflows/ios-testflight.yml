@@ -218,6 +218,36 @@ jobs:
           echo "IPA_PATH=${ipa_path}" >> "${GITHUB_ENV}"
           echo "Exported ${ipa_path}"
 
+      - name: Record exported app and widget metadata
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib, plistlib, zipfile
+
+          keys = (
+              "CFBundleIdentifier", "CFBundleShortVersionString", "CFBundleVersion",
+              "DTXcode", "DTXcodeBuild", "DTSDKName", "DTSDKBuild",
+              "MinimumOSVersion", "UIDeviceFamily",
+          )
+          metadata = {}
+          with zipfile.ZipFile(os.environ["IPA_PATH"]) as ipa:
+              for name, path in (
+                  ("app", "Payload/LazyMansReminders.app/Info.plist"),
+                  ("widget", "Payload/LazyMansReminders.app/PlugIns/ReminderWidgetExtension.appex/Info.plist"),
+              ):
+                  info = plistlib.loads(ipa.read(path))
+                  metadata[name] = {key: info.get(key) for key in keys}
+          output = json.dumps(metadata, indent=2) + "\n"
+          pathlib.Path(os.environ["RUNNER_TEMP"], "ios-export-metadata.json").write_text(output)
+          print(output, end="")
+          PY
+
+      - name: Save exported metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-export-metadata
+          path: ${{ runner.temp }}/ios-export-metadata.json
+          if-no-files-found: error
+
       - name: Upload build to App Store Connect
         run: |
           set -euo pipefail
