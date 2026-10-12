@@ -137,6 +137,16 @@ supabase secrets set --env-file supabase/.env.functions
 supabase functions deploy delete-account
 ```
 
+## Routine reminders
+
+Create routines on the web board under **Routine reminders**. Choose a weekday and time for a weekly reminder, or a start date and an interval of 1–365 calendar days. For a Tuesday uniform, choose **Monday at 19:00**. The chosen IANA timezone stays fixed when you travel, and the local time stays the same across daylight-saving changes. A nonexistent spring-forward time runs after the clock jumps forward; an ambiguous fall-back time uses standard time.
+
+The server checks schedules every minute, even with both apps closed. Each occurrence sends an iPhone push through the existing device registration and APNs delivery path, and reactivates one shared board row. Due routines move to the top of the board, including when it is full. Completing or deleting the board row keeps the routine running; pause or delete the routine to stop future occurrences. Deleting the routine preserves its current board row. After an outage, one overdue occurrence fires and missed intervals are skipped. Push delivery is subject to network and iOS notification settings; there are no web push notifications.
+
+Deploy migration `202610120001_routine_reminders.sql` and redeploy `send-reminder-push` and `delete-account` before deploying the web app. The migration enables `pg_cron` and installs the `fire-routine-reminders` job. Users cannot call its scheduler function or overwrite computed run times. Routine data is included in web account exports and account deletion. iOS receives and completes the generated board reminders; routine editing is currently on the web.
+
+Run `supabase/tests/routine_reminders.sql` against a disposable migrated database to verify scheduling, reactivation, pause/resume, and ownership checks. Its fixtures roll back.
+
 ## Agent MCP
 
 Remote agents talk to the board at `https://lmr-mcp.edmundlim.systems/mcp`.

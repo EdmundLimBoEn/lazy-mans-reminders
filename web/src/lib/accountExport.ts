@@ -1,3 +1,5 @@
+import type { Routine } from './routines'
+
 export type AccountExportReminder = {
   id: string
   text: string
@@ -24,6 +26,7 @@ export type AccountExport = {
     max_lines: number
   }
   reminders: AccountExportReminder[]
+  routine_reminders: Routine[]
   agent_keys: AccountExportAgentKey[]
 }
 
@@ -37,6 +40,7 @@ export function buildAccountExport(input: {
   userId: string
   maxLines: number
   reminders: AccountExportReminder[]
+  routines?: Routine[]
   agentKeys: AccountExportAgentKey[]
 }): AccountExport {
   return {
@@ -50,6 +54,7 @@ export function buildAccountExport(input: {
       max_lines: input.maxLines,
     },
     reminders: input.reminders,
+    routine_reminders: input.routines ?? [],
     agent_keys: input.agentKeys,
   }
 }

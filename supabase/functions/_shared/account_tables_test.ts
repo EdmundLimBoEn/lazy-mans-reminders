@@ -7,5 +7,6 @@ Deno.test("account deletion covers every user-owned table", () => {
     "device_tokens",
     "lock_screen_prefs",
     "reminders",
+    "routine_reminders",
   ]);
 });

@@ -23,6 +23,7 @@ export type WebhookPayload = {
   table: string;
   schema: string;
   record: ReminderRecord;
+  old_record?: unknown;
 };
 
 const encoder = new TextEncoder();
@@ -95,7 +96,17 @@ export function classifyWebhookPayload(payload: unknown): PayloadCheck {
     if (!userId) {
       return { ok: false, status: 400, message: "Invalid webhook payload" };
     }
-    return { ok: true, kind: "process", sendsAlert: false, userId };
+    const record = reminderBody.record;
+    const old = reminderBody.old_record;
+    const routineAlert = reminderBody.type === "UPDATE" && record &&
+      "routine_fired_at" in record && typeof record.routine_fired_at === "string" &&
+      Number.isFinite(Date.parse(record.routine_fired_at)) &&
+      "routine_id" in record && typeof record.routine_id === "string" && UUID_PATTERN.test(record.routine_id) &&
+      typeof record.id === "string" && UUID_PATTERN.test(record.id) &&
+      typeof record.text === "string" && record.text.length > 0 && record.text.length <= 500 &&
+      typeof old === "object" && old !== null && "routine_fired_at" in old &&
+      old.routine_fired_at !== record.routine_fired_at;
+    return { ok: true, kind: "process", sendsAlert: Boolean(routineAlert), userId };
   }
 
   return { ok: true, kind: "ignore" };

@@ -146,3 +146,5 @@ Updated 9 October 2026. See [official Apple requirements and baseline gaps](docs
 Written by gpt-6.1-sol in T3 Code on behalf of Edmund
 
 - [ ] **Mobile reorder and composer (build 9)** — Install the new TestFlight build. Drag the six-dot grip up and down without entering Reorder mode; drag to the screen edge on a long board; verify completion taps, leading swipe, pull-to-refresh, and order after reopening/on the web and widgets. With the keyboard open, confirm Done sits above the rounded input and dismisses the keyboard. Check large text and VoiceOver Move up/Move down actions.
+
+- [ ] **Routine reminders device smoke**: After the routine migration and push functions deploy, create a near-future routine on the web in your timezone. With the iPhone app closed, verify the push and board row, complete it, and confirm the next occurrence reactivates that row. Routine editing is currently on the web.
