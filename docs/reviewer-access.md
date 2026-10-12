@@ -1,12 +1,12 @@
 # App Review account access
 
-Checked against official documentation on 9 October 2026. This guide describes prerequisites; it does not contain credentials or claim that an account or selected build has been tested.
+Checked against official documentation on 9 October 2026, with provisioning evidence updated on 11 October. This guide contains no credentials. Backend password login and synthetic board access have been verified; selected-build iPhone testing remains open.
 
 Apple [guideline 2.1](https://developer.apple.com/app-store/review/guidelines/#app-completeness) requires a complete, working build, on-device testing, and demo account information for apps with login. Apple's [complete-review guidance](https://developer.apple.com/help/app-review/before-submitting-for-review/complete-review) asks for working username/password credentials in App Store Connect that remain valid throughout review. Asking reviewers to sign up or retrieve an expiring magic link leaves avoidable access dependencies.
 
-## Provision manually before submission
+## Provision before submission
 
-An authorized human with access to the correct Supabase project must perform these steps. Do not provision a live account, send email, or change authentication settings through an automated release task without that authorization.
+An authorized operator with access to the correct Supabase project must perform these steps. Do not provision a live account, send email, or change authentication settings through an automated release task without that authorization.
 
 1. Verify that the selected iOS build points to the intended live backend and supports **Use an Existing Password** on the ordinary sign-in screen. Verify that Supabase email/password authentication is enabled and that project security requirements do not block this flow (for example, a required CAPTCHA not supported by this screen). Do not weaken project-wide security to accommodate review.
 2. In the Supabase dashboard, manually create a dedicated ordinary email/password user using an address controlled by the developer. Explicitly mark the address confirmed during authorized provisioning, or complete confirmation yourself before review. Use a unique, strong password stored in a private password manager. No admin role, service-role token, privileged grants, or shared personal account is needed.
@@ -33,7 +33,7 @@ Do not bypass deletion, exempt reviewers from cleanup, automatically resurrect u
 
 ## Outstanding human prerequisites
 
-- [ ] Authorized manual account provisioning and synthetic seed data.
+- [x] Account provisioning and synthetic seed data completed on 11 October 2026 under the user's authorization. A dedicated ordinary confirmed account can sign in with its password and access two synthetic reminders through authenticated requests. Credentials are kept outside the repository in a private file with mode 0600. No authentication settings were changed and no email was sent. This is backend evidence; native sign-in on the selected build remains unchecked.
 - [ ] Working stable credentials entered in App Store Connect for the selected version.
 - [ ] macOS/Xcode simulator tests, archive validation, and all selected-build physical-device checks above.
 - [ ] Private operator available to restore access after account deletion and respond to App Review.
