@@ -34,7 +34,7 @@ Do not bypass deletion, exempt reviewers from cleanup, automatically resurrect u
 ## Outstanding human prerequisites
 
 - [x] Account provisioning and synthetic seed data completed on 11 October 2026 under the user's authorization. A dedicated ordinary confirmed account can sign in with its password and access two synthetic reminders through authenticated requests. Credentials are kept outside the repository in a private file with mode 0600. No authentication settings were changed and no email was sent. This is backend evidence; native sign-in on the selected build remains unchecked.
-- [ ] Working stable credentials entered in App Store Connect for the selected version.
+- [x] Working backend-verified credentials entered in the private App Store and TestFlight review fields on 12 October 2026. Fresh-install native sign-in and full-feature access on the final selected build remain open. See [authenticated App Store evidence](app-store-state-2026-10-12.md).
 - [ ] macOS/Xcode simulator tests, archive validation, and all selected-build physical-device checks above.
 - [ ] Private operator available to restore access after account deletion and respond to App Review.
 
