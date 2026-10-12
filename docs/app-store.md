@@ -65,20 +65,23 @@ Complete the current questionnaire and confirm the resulting global/regional rat
 
 ## App Privacy
 
-The manifest and ASC privacy labels are separate declarations. Audit actual app, backend and integrated partner collection before saving labels. The policy discloses provider profile metadata and operational logs beyond the manifest's four current types; **do not automatically exclude Name or Diagnostics** without investigating retained fields and disclosure criteria. [Apple App Privacy Details](https://developer.apple.com/app-store/app-privacy-details/).
+The manifest and ASC privacy labels are separate declarations. Merged PR #53 declares provider profile metadata, technical diagnostics and security/operational data as well as account and reminder data. On 12 October, the seven reviewed types below were entered and published in ASC. Keep the answers consistent with actual app, backend and partner behavior as it changes. [Apple App Privacy Details](https://developer.apple.com/app-store/app-privacy-details/).
 
-Baseline manifest proposal, pending the audit:
+Current manifest and published ASC labels: all used for **App Functionality**, **linked to the user**, and **not used for tracking**.
 
 | Data | Proposed purpose/linkage | Evidence |
 |---|---|---|
+| Name | App Functionality; linked | Provider-supplied profile metadata |
 | Email Address | App Functionality; linked | Account sign-in |
 | User ID | App Functionality; linked | Supabase identity |
 | Other User Content (reminder text) | App Functionality; linked | Board sync |
 | Device ID | App Functionality; linked | APNs/Live Activity tokens; verify classification |
+| Other Diagnostic Data | App Functionality; linked | Technical delivery/authentication diagnostics |
+| Other Data Types | App Functionality; linked | Retained security/operational data |
 
 Baseline declares no tracking or advertising; verify actual integrated services. Nutrition labels must cover actual collection and relevant purposes, not merely visible UI. Optional beta feedback has separate disclosure criteria.
 
-`NSPrivacyAccessedAPICategoryUserDefaults` reasons concern API access, not collected-data types. Current `1C8F.1` covers App Group sharing; app-only `.standard`/`@AppStorage` use needs an applicable reason audit. A separate PR owns fixes. Review the final archive's manifests, resolved SDKs and aggregate privacy report before uploading.
+`NSPrivacyAccessedAPICategoryUserDefaults` reasons concern API access, not collected-data types. The current manifest includes `1C8F.1` for App Group sharing and `CA92.1` for app-only preferences. Review the final archive's manifests, resolved SDKs and aggregate privacy report as a separate artifact gate.
 
 ## Review notes
 
