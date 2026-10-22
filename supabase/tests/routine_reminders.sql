@@ -92,4 +92,72 @@ do $$ begin
   assert public.fire_due_routines() = 0;
   assert (select count(*) = 1 from public.reminders where routine_id is null);
 end $$;
+-- Known UUIDs model an attacker who already knows the victim's routine ID.
+insert into public.routine_reminders(id, user_id, text, interval_days, start_date, local_time, timezone)
+values
+  ('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', '11111111-1111-4111-8111-111111111111', 'Victim private text', 1, current_date, '19:00', 'UTC'),
+  ('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', '22222222-2222-4222-8222-222222222222', 'Attacker routine', 1, current_date, '19:00', 'UTC');
+set local role authenticated;
+set local request.jwt.claim.sub = '22222222-2222-4222-8222-222222222222';
+do $$
+declare own_reminder uuid;
+begin
+  begin
+    insert into public.reminders(user_id, text, routine_id)
+    values ('22222222-2222-4222-8222-222222222222', 'Stolen link', 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa');
+    raise exception 'Cross-user routine insert succeeded';
+  exception when foreign_key_violation then null;
+  end;
+  insert into public.reminders(user_id, text, routine_id)
+  values ('22222222-2222-4222-8222-222222222222', 'Own link', 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb')
+  returning id into own_reminder;
+  begin
+    update public.reminders set routine_id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa' where id = own_reminder;
+    raise exception 'Cross-user routine update succeeded';
+  exception when foreign_key_violation then null;
+  end;
+  begin
+    update public.reminders set sort_order = '-2147483648'::integer where id = own_reminder;
+    raise exception 'Integer minimum sort order accepted';
+  exception when check_violation then null;
+  end;
+  update public.reminders set sort_order = -2147483647 where id = own_reminder;
+end $$;
+reset role;
+update public.routine_reminders set next_run_at = now() - interval '1 minute';
+do $$ begin
+  assert public.fire_due_routines() = 2, 'Boundary sort order must not block either user';
+  assert (select text = 'Attacker routine' and sort_order = -2147483647 from public.reminders
+    where routine_id = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb');
+  assert (select text = 'Victim private text' and user_id = '11111111-1111-4111-8111-111111111111' from public.reminders
+    where routine_id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa');
+end $$;
+
+-- Simulate a corrupt schedule: failure after the reminder write must roll back
+-- that write, preserve earlier successes, and allow later routines to run.
+insert into public.routine_reminders(id, user_id, text, interval_days, start_date, local_time, timezone)
+values ('cccccccc-cccc-4ccc-8ccc-cccccccccccc', '11111111-1111-4111-8111-111111111111', 'Bad schedule', 1, current_date, '19:00', 'UTC');
+alter table public.routine_reminders disable trigger prepare_routine_schedule;
+update public.routine_reminders set timezone = 'Invalid/Zone', next_run_at = now() - interval '2 minutes'
+  where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc';
+alter table public.routine_reminders enable trigger prepare_routine_schedule;
+update public.routine_reminders set next_run_at = now() - interval '3 minutes'
+  where id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+update public.routine_reminders set next_run_at = now() - interval '1 minute'
+  where id = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
+update public.reminders set is_done = true where routine_id is not null;
+do $$ begin
+  assert public.fire_due_routines() = 2, 'One bad routine must not abort other routines';
+  assert (select count(*) = 2 from public.reminders where routine_id is not null and not is_done);
+  assert (select count(*) = 2 from public.routine_reminders where next_run_at > now());
+  assert (select next_run_at <= now() from public.routine_reminders where id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc');
+  assert not exists (select 1 from public.reminders where routine_id = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc'),
+    'Failed routine must roll back its reminder write';
+end $$;
+delete from public.routine_reminders;
+do $$ begin
+  assert not exists (select 1 from public.reminders where routine_id is not null);
+  assert (select count(*) = 1 from public.reminders where user_id = '22222222-2222-4222-8222-222222222222'),
+    'Composite FK deletion must preserve the reminder and its owner';
+end $$;
 rollback;
