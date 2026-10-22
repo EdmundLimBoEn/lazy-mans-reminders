@@ -360,3 +360,52 @@ Deno.test("routine reactivation alerts once but completion and edits remain sile
   assertEquals(classifyWebhookPayload({ ...payload, old_record: record }), { ok: true, kind: "process", sendsAlert: false, userId: record.user_id });
   assertEquals(classifyWebhookPayload({ ...payload, record: { ...record, text: "" } }), { ok: true, kind: "process", sendsAlert: false, userId: record.user_id });
 });
+
+for (const type of ["INSERT", "UPDATE"]) {
+  Deno.test(`${type} text validation matches Postgres code points and space trimming`, () => {
+    for (const [text, valid] of [
+      ["😀".repeat(251), true],
+      ["😀".repeat(500), true],
+      ["😀".repeat(501), false],
+      [" ".repeat(250) + "😀".repeat(500) + " ".repeat(250), true],
+      [" ".repeat(501) + "😀".repeat(500), false],
+      ["   ", false],
+      ["\t\n\u00a0", true], // SQL trim removes ASCII spaces only.
+    ] as const) {
+      const record = {
+        id: "11111111-1111-4111-8111-111111111111",
+        user_id: "22222222-2222-4222-8222-222222222222",
+        routine_id: "33333333-3333-4333-8333-333333333333",
+        routine_fired_at: "2026-10-12T11:00:00Z",
+        text,
+      };
+      assertEquals(classifyWebhookPayload({
+        type, schema: "public", table: "reminders", record,
+        old_record: { routine_fired_at: null },
+      }), type === "INSERT" && !valid
+        ? { ok: false, status: 400, message: "Invalid webhook payload" }
+        : { ok: true, kind: "process", sendsAlert: valid, userId: record.user_id });
+    }
+  });
+}
+
+Deno.test("alert payload truncates by serialized UTF-8 bytes without splitting code points", () => {
+  const encoder = new TextEncoder();
+  for (const text of ["😀".repeat(251), "😀".repeat(2000), '\u0001"\\😀'.repeat(1000)]) {
+    const payload = buildApnsPayload({
+      id: "11111111-1111-4111-8111-111111111111",
+      user_id: "22222222-2222-4222-8222-222222222222",
+      text,
+    });
+    const parsed = JSON.parse(payload);
+    const body = parsed.aps.alert.body;
+    assertEquals(encoder.encode(payload).length <= 4096, true);
+    assertEquals(body, [...text].slice(0, [...body].length).join(""));
+    if (text.length === 502) assertEquals(body, text);
+    else {
+      assertEquals(body.length < text.length, true);
+      parsed.aps.alert.body += [...text][[...body].length];
+      assertEquals(encoder.encode(JSON.stringify(parsed)).length > 4096, true);
+    }
+  }
+});

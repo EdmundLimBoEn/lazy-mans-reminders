@@ -159,7 +159,7 @@ async function clearLiveActivityColumn(
     | "activity_push_token"
     | "activity_started_at"
     | "retiring_activity_push_token",
-  expectedToken?: string,
+  expectedToken?: string | null,
 ): Promise<void> {
   const patch = column === "activity_push_token"
     ? { activity_push_token: null, activity_started_at: null }
@@ -395,6 +395,7 @@ async function syncLiveActivity(input: {
         input.device.user_id,
         input.device.token,
         "retiring_activity_push_token",
+        input.device.retiring_activity_push_token,
       ),
   });
 }
