@@ -34,6 +34,7 @@ export type TokenDecision =
   | { kind: 'ok'; newProps: BoundProps }
   | { kind: 'unavailable' }
   | { kind: 'deleted' }
+  | { kind: 'invalid_scope' }
 
 /**
  * Decide a token issue or refresh. An outage is `unavailable` and does not
@@ -45,6 +46,8 @@ export async function decideTokenExchange(
   exchange: TokenExchangeCallbackOptions,
   revoke: (grantId: string, userId: string) => Promise<void>,
 ): Promise<TokenDecision> {
+  // requestedScope is the provider's effective scope after downscoping.
+  if (!exchange.requestedScope.includes('board')) return { kind: 'invalid_scope' }
   const status = await checkAccount(env, accountExists, exchange.userId)
   if (status === 'unavailable') return { kind: 'unavailable' }
   if (status === 'deleted') {

@@ -1,5 +1,5 @@
 import type { TokenExchangeCallbackOptions } from '@cloudflare/workers-oauth-provider'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { decideTokenExchange, publicGrantProps } from './accountGate'
 
 const exchange = {
@@ -19,6 +19,25 @@ const exchange = {
 } as TokenExchangeCallbackOptions
 
 describe('onTokenExchange', () => {
+  it.each(['authorization_code', 'refresh_token', 'urn:ietf:params:oauth:grant-type:token-exchange'] as TokenExchangeCallbackOptions['grantType'][])(
+    'requires board in the effective scope for %s',
+    async (grantType) => {
+      const accountExists = vi.fn(async () => true)
+      const revoke = vi.fn(async () => {})
+      for (const requestedScope of [[], ['openid'], ['board:read']]) {
+        await expect(decideTokenExchange(
+          {} as Env, accountExists, { ...exchange, grantType, requestedScope }, revoke,
+        )).resolves.toEqual({ kind: 'invalid_scope' })
+      }
+      expect(accountExists).not.toHaveBeenCalled()
+      expect(revoke).not.toHaveBeenCalled()
+
+      await expect(decideTokenExchange(
+        {} as Env, accountExists, { ...exchange, grantType, requestedScope: ['board'] }, revoke,
+      )).resolves.toMatchObject({ kind: 'ok' })
+    },
+  )
+
   it('strips stored identity and leaves a live grant in place', async () => {
     const revoked: string[] = []
     const result = await decideTokenExchange(

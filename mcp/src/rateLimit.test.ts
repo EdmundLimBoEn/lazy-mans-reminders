@@ -5,6 +5,14 @@ import { describe, expect, it } from 'vitest'
 import { enforceRateLimit, rateLimitBucket } from './rateLimit'
 
 describe('rateLimitBucket', () => {
+  it.each(['/mcp', '/mcp/', '/mcp/anything', '/mcp/nested/path/'])('covers the MCP prefix %s', (path) => {
+    expect(rateLimitBucket(path)).toBe('mcp')
+  })
+
+  it.each(['/mcpx', '/mcpx/anything'])('excludes %s', (path) => {
+    expect(rateLimitBucket(path)).toBeNull()
+  })
+
   it('covers registration, authorize, token, bind, consent, grants, and mcp', () => {
     expect(rateLimitBucket('/register')).toBe('auth')
     expect(rateLimitBucket('/authorize/')).toBe('auth')
@@ -18,6 +26,22 @@ describe('rateLimitBucket', () => {
 })
 
 describe('enforceRateLimit', () => {
+  it.each(['/mcp/anything', '/mcp/nested/path/'])('limits bogus tokens on %s', async (path) => {
+    const keys: string[] = []
+    const response = await enforceRateLimit(
+      new Request(`https://lmr-mcp.edmundlim.systems${path}`, {
+        headers: { Authorization: 'Bearer bogus', 'CF-Connecting-IP': '192.0.2.1' },
+      }),
+      { MCP_RATE_LIMIT: { limit: async ({ key }: { key: string }) => {
+        keys.push(key)
+        return { success: false }
+      } } } as unknown as Env,
+    )
+    expect(response?.status).toBe(429)
+    expect(response?.headers.get('Retry-After')).toBe('60')
+    expect(keys).toEqual(['mcp:192.0.2.1'])
+  })
+
   it('returns 429 when the limiter refuses and 503 when the binding is missing', async () => {
     const limited = await enforceRateLimit(
       new Request('https://lmr-mcp.edmundlim.systems/register', { method: 'POST' }),
