@@ -125,7 +125,9 @@ export async function handleWorkerFetch(
 ): Promise<Response> {
   const limited = await enforceRateLimit(request, env, corsHeaders(request, env))
   if (limited) return limited
-  return createProvider(env, deps).fetch(await prepareOauthRequest(request), env, ctx)
+  const prepared = await prepareOauthRequest(request)
+  if (prepared instanceof Response) return prepared
+  return createProvider(env, deps).fetch(prepared, env, ctx)
 }
 
 export default {
