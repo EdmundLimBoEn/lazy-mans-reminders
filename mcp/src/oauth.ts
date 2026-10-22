@@ -227,9 +227,13 @@ async function bindAuthorization(request: Request, env: Env, deps: IdentityDeps)
     return json({ error: summary ? 'board_not_requested' : 'untrusted_client' }, 400, cors)
   }
 
-  // Drop the pending record before creating the grant so a replayed Allow cannot
-  // approve it again. KV is not transactional: two overlapping requests can both
-  // still read it and create two grants for this same user.
+  // KV reads/deletes can overlap or be stale. Only the state object's winner
+  // may create a grant, even when multiple callers read the pending record.
+  const id = env.AUTHORIZATION_STATE.idFromName(state)
+  const result = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/consume', { method: 'POST' })
+  if (!result.ok) throw new Error('Authorization state unavailable')
+  const { consumed } = await result.json<{ consumed: boolean }>()
+  if (consumed !== true) return json({ error: 'expired_state' }, 400, cors)
   await env.OAUTH_KV.delete(`${PENDING_PREFIX}${state}`)
 
   try {

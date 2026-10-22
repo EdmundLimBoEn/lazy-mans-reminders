@@ -1,5 +1,7 @@
 import type { AuthRequest, ClientInfo, GrantSummary, OAuthHelpers } from '@cloudflare/workers-oauth-provider'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+import { AuthorizationState } from './authorizationState'
+import { PENDING_AUTH_TTL_SECONDS } from './constants'
 import { handlePublicRequest } from './oauth'
 import type { IdentityDeps } from './supabaseUser'
 
@@ -10,7 +12,7 @@ const STATE_CURSOR = '22222222-2222-4222-8222-222222222222'
 const STATE_HTTP = '33333333-3333-4333-8333-333333333333'
 const STATE_PLAIN = '44444444-4444-4444-8444-444444444444'
 
-function memoryKv(): KVNamespace {
+function memoryKv() {
   const store = new Map<string, string>()
   return {
     get: async (key: string, type?: string) => {
@@ -22,7 +24,36 @@ function memoryKv(): KVNamespace {
     put: async (key: string, value: string) => { store.set(key, value) },
     delete: async (key: string) => { store.delete(key) },
     list: async () => ({ keys: [], list_complete: true, cursor: '' }),
-  } as unknown as KVNamespace
+  }
+}
+
+function memoryState() {
+  const entries = new Map<string, unknown>()
+  let queue = Promise.resolve()
+  const storage = {
+    get: async (key: string) => entries.get(key),
+    put: async (key: string, value: unknown) => { entries.set(key, value) },
+    setAlarm: vi.fn(async (_time: number) => {}),
+    deleteAll: async () => { entries.clear() },
+    // Model the storage transaction boundary, while running the production DO.
+    transaction: <T>(callback: (txn: unknown) => Promise<T>): Promise<T> => {
+      const result = queue.then(() => callback(storage))
+      queue = result.then(() => {}, () => {})
+      return result
+    },
+  }
+  return { storage } as unknown as DurableObjectState
+}
+
+function memoryAuthorizationStates(): DurableObjectNamespace {
+  const objects = new Map<string, AuthorizationState>()
+  return {
+    idFromName: (name: string) => name,
+    get: (id: string) => {
+      if (!objects.has(id)) objects.set(id, new AuthorizationState(memoryState()))
+      return objects.get(id)
+    },
+  } as unknown as DurableObjectNamespace
 }
 
 function requestFor(clientId: string, redirectUri: string, scope: string[]): AuthRequest {
@@ -92,6 +123,7 @@ describe('consent and grants', () => {
       SUPABASE_SERVICE_ROLE_KEY: 'service',
       WEB_ORIGINS: 'https://lmr.sillyapps.co',
       OAUTH_KV: kv,
+      AUTHORIZATION_STATE: memoryAuthorizationStates(),
       OAUTH_PROVIDER: oauth,
     } as unknown as Env
 
@@ -182,5 +214,98 @@ describe('consent and grants', () => {
     const cleanup = await authed('/account/grants/cleanup', 'token-a', { method: 'POST', body: '{}' })
     expect(cleanup.status).toBe(200)
     expect(await cleanup.json()).toMatchObject({ complete: true, remaining: 0 })
+  })
+})
+
+describe('single-use authorization', () => {
+  async function setup() {
+    const pending = requestFor('grok', 'https://grok.example/callback', ['board'])
+    const oauth = {
+      parseAuthRequest: async () => pending,
+      lookupClient: async () => client({
+        clientId: 'grok', clientName: 'Grok', redirectUris: [pending.redirectUri],
+      }),
+      completeAuthorization: vi.fn(async () => ({ redirectTo: 'https://grok.example/callback?code=one' })),
+    }
+    const kv = memoryKv()
+    const env = {
+      WEB_ORIGINS: 'https://lmr.sillyapps.co',
+      OAUTH_KV: kv,
+      OAUTH_PROVIDER: oauth,
+      AUTHORIZATION_STATE: memoryAuthorizationStates(),
+    } as unknown as Env
+    const deps: IdentityDeps = {
+      verifyUser: async () => ({ id: USER_A, email: null, fullName: 'A' }),
+      accountExists: async () => true,
+    }
+    const authorized = await handlePublicRequest(new Request('https://lmr-mcp.edmundlim.systems/authorize'), env, deps)
+    expect(authorized.status).toBe(302)
+    const state = new URL(authorized.headers.get('Location')!).searchParams.get('state')!
+    const bind = () => handlePublicRequest(new Request('https://lmr-mcp.edmundlim.systems/bind', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer token-a', Origin: 'https://lmr.sillyapps.co', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ state }),
+    }), env, deps)
+    return { kv, oauth, pending, state, bind }
+  }
+
+  it('creates exactly one grant when both authenticated binds read the same pending state', async () => {
+    const { kv, oauth, bind } = await setup()
+    const get = kv.get.bind(kv)
+    let release!: () => void
+    const bothRead = new Promise<void>((resolve) => { release = resolve })
+    let reads = 0
+    vi.spyOn(kv, 'get').mockImplementation(async (key: string) => {
+      const pending = await get(key, 'json')
+      if (++reads === 2) release()
+      await bothRead
+      return pending
+    })
+
+    const responses = await Promise.all([bind(), bind()])
+    expect(responses.map((response) => response.status).sort()).toEqual([200, 400])
+    expect(oauth.completeAuthorization).toHaveBeenCalledTimes(1)
+    const loser = responses.find((response) => response.status === 400)!
+    expect(await loser.json()).toEqual({ error: 'expired_state' })
+    expect(loser.headers.get('Access-Control-Allow-Origin')).toBe('https://lmr.sillyapps.co')
+  })
+
+  it('rejects a later replay even if KV returns the deleted pending record', async () => {
+    const { kv, oauth, pending, bind } = await setup()
+    expect((await bind()).status).toBe(200)
+    vi.spyOn(kv, 'get').mockResolvedValue(pending)
+
+    const replay = await bind()
+    expect(replay.status).toBe(400)
+    expect(await replay.json()).toEqual({ error: 'expired_state' })
+    expect(oauth.completeAuthorization).toHaveBeenCalledTimes(1)
+  })
+
+  it('completes the normal authorize/bind flow and removes the pending record', async () => {
+    const { kv, oauth, state, bind } = await setup()
+    const response = await bind()
+    expect(response.status).toBe(200)
+    expect(await response.json()).toEqual({ redirectTo: 'https://grok.example/callback?code=one' })
+    expect(oauth.completeAuthorization).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({
+      userId: USER_A, scope: ['board'], props: { userId: USER_A, tokenId: 'oauth', agentName: 'Grok' },
+    }))
+    expect(await kv.get('pending-auth:' + state)).toBeNull()
+    expect(await (await bind()).json()).toEqual({ error: 'expired_state' })
+  })
+
+  it('persists consumption across object instances and schedules cleanup after ten minutes', async () => {
+    const state = memoryState()
+    const before = Date.now()
+    const object = new AuthorizationState(state)
+    expect(await (await object.fetch()).json()).toEqual({ consumed: true })
+    const expiry = vi.mocked(state.storage.setAlarm).mock.calls[0][0] as number
+    expect(expiry).toBeGreaterThanOrEqual(before + PENDING_AUTH_TTL_SECONDS * 1000)
+    expect(expiry).toBeLessThanOrEqual(Date.now() + PENDING_AUTH_TTL_SECONDS * 1000)
+
+    const restarted = new AuthorizationState(state)
+    expect(await (await restarted.fetch()).json()).toEqual({ consumed: false })
+    expect(state.storage.setAlarm).toHaveBeenCalledTimes(1)
+    await restarted.alarm()
+    expect(await state.storage.get('consumed')).toBeUndefined()
   })
 })
