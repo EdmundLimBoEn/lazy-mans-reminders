@@ -50,28 +50,38 @@ export function RoutineReminders({ userId }: { userId: string }) {
     }
     setBusy(true)
     setError('')
-    const values = {
-      text: text.trim(), interval_days: cadence === 'weekly' ? 7 : Number(days),
-      start_date: cadence === 'weekly' ? weeklyStartDate(weekday) : startDate,
-      local_time: time, timezone,
+    try {
+      const values = {
+        text: text.trim(), interval_days: cadence === 'weekly' ? 7 : Number(days),
+        start_date: cadence === 'weekly' ? weeklyStartDate(weekday) : startDate,
+        local_time: time, timezone,
+      }
+      const { error } = editingId
+        ? await supabase.from('routine_reminders').update(values).eq('id', editingId).eq('user_id', userId)
+        : await supabase.from('routine_reminders').insert({ ...values, user_id: userId })
+      if (error) setError(error.message)
+      else { reset(); await load() }
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Could not save routine')
+    } finally {
+      setBusy(false)
     }
-    const { error } = editingId
-      ? await supabase.from('routine_reminders').update(values).eq('id', editingId).eq('user_id', userId)
-      : await supabase.from('routine_reminders').insert({ ...values, user_id: userId })
-    if (error) setError(error.message)
-    else { reset(); await load() }
-    setBusy(false)
   }
 
   async function change(routine: Routine, remove: boolean) {
     setBusy(true)
     setError('')
-    const query = supabase.from('routine_reminders')
-    const { error } = await (remove ? query.delete() : query.update({ enabled: !routine.enabled }))
-      .eq('id', routine.id).eq('user_id', userId)
-    if (error) setError(error.message)
-    else { if (editingId === routine.id) reset(); await load() }
-    setBusy(false)
+    try {
+      const query = supabase.from('routine_reminders')
+      const { error } = await (remove ? query.delete() : query.update({ enabled: !routine.enabled }))
+        .eq('id', routine.id).eq('user_id', userId)
+      if (error) setError(error.message)
+      else { if (editingId === routine.id) reset(); await load() }
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Could not update routine')
+    } finally {
+      setBusy(false)
+    }
   }
 
   function edit(routine: Routine) {

@@ -31,25 +31,19 @@ describe('moveActiveReminder', () => {
 })
 
 describe('persistReminderOrder', () => {
-  it('persists the order that another board load will display', async () => {
-    let stored = items
-    const reordered = moveActiveReminder(items, 'a', 'c')
-    await persistReminderOrder(items, reordered, async (id, sort_order) => {
-      stored = stored.map((item) => item.id === id ? { ...item, sort_order } : item)
-    })
-    expect(sortReminders(stored).map((item) => item.id)).toEqual(['b', 'c', 'a', 'done'])
+  it('sends the complete active order in one call, including unchanged positions', async () => {
+    const before = items.map((item, index) => ({ ...item, sort_order: index }))
+    const rpc = vi.fn().mockResolvedValue({ error: null })
+    await persistReminderOrder(moveActiveReminder(before, 'a', 'b'), { rpc })
+    expect(rpc.mock.calls).toEqual([['reorder_reminders', { p_ids: ['b', 'a', 'c'] }]])
   })
 
-  it('restores successful writes when a later write fails', async () => {
-    const failure = new Error('Offline')
-    const update = vi.fn().mockResolvedValue(undefined).mockResolvedValueOnce(undefined).mockRejectedValueOnce(failure)
-    await expect(persistReminderOrder(items, moveActiveReminder(items, 'a', 'c'), update)).rejects.toBe(failure)
-    expect(update.mock.calls).toEqual([['b', 0], ['c', 1], ['b', 5]])
-  })
-
-  it('does not write unchanged notes', async () => {
-    const update = vi.fn()
-    await persistReminderOrder(items, items, update)
-    expect(update).not.toHaveBeenCalled()
+  it.each(['returned', 'thrown'])('propagates %s failure for UI rollback without compensating writes', async (kind) => {
+    const failure = new Error('The board changed')
+    const rpc = kind === 'returned'
+      ? vi.fn().mockResolvedValue({ error: failure })
+      : vi.fn().mockRejectedValue(failure)
+    await expect(persistReminderOrder(moveActiveReminder(items, 'a', 'c'), { rpc })).rejects.toBe(failure)
+    expect(rpc.mock.calls).toEqual([['reorder_reminders', { p_ids: ['b', 'c', 'a'] }]])
   })
 })
