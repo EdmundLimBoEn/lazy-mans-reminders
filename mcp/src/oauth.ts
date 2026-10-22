@@ -8,6 +8,7 @@ import {
   type ConsentSummary,
 } from './consent'
 import { cleanupUserGrants, describeGrants, listAllUserGrants, revokeUserGrant } from './grants'
+import { readJsonBody } from './jsonBody'
 import type { BoundProps } from './session'
 import { bearerToken, defaultIdentityDeps, type IdentityDeps } from './supabaseUser'
 
@@ -107,7 +108,8 @@ function asAuthRequest(value: unknown): AuthRequest | null {
 
 async function readJson(request: Request): Promise<Record<string, unknown> | Response> {
   try {
-    const body = await request.json()
+    const body = await readJsonBody(request)
+    if (body instanceof Response) return body
     if (!body || typeof body !== 'object' || Array.isArray(body)) return json({ error: 'invalid_body' }, 400)
     return body as Record<string, unknown>
   } catch {

@@ -71,6 +71,7 @@ describe('prepareOauthRequest', () => {
       body: 'grant_type=refresh_token&refresh_token=r1',
     })
     const prepared = await prepareOauthRequest(request)
+    if (prepared instanceof Response) throw new Error('Expected a prepared request')
     expect(new URL(prepared.url).pathname).toBe('/token')
     expect(prepared.headers.get('Content-Type')).toBe('application/x-www-form-urlencoded')
     expect(await prepared.text()).toBe('grant_type=refresh_token&refresh_token=r1')
