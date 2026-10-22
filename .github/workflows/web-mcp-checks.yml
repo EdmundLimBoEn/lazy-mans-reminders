@@ -98,13 +98,19 @@ jobs:
             sleep 1
           done
           if [ "$ready" != true ]; then docker logs routine-tests; exit 1; fi
+          docker cp supabase routine-tests:/tmp/supabase
           for migration in \
             supabase/migrations/202608060001_create_reminders.sql \
             supabase/migrations/202608080001_completed_at_and_cleanup.sql \
+            supabase/migrations/202608080002_lock_screen_prefs.sql \
+            supabase/migrations/202608260001_agent_tokens.sql \
+            supabase/migrations/20261008035839_revoke_anon_agent_token_rpcs.sql \
             supabase/migrations/202610120001_routine_reminders.sql \
             supabase/migrations/202610220001_routine_ownership_and_overflow.sql \
+            supabase/migrations/202610220002_reminder_text_and_token_lock.sql \
+            supabase/tests/reminder_text_and_token_lock.sql \
             supabase/tests/routine_reminders.sql; do
-            docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 < "$migration"
+            docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
       - if: always()
         run: docker rm -f routine-tests || true
