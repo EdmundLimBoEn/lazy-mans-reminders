@@ -86,8 +86,19 @@ jobs:
       - run: deno test supabase/functions/_shared supabase/functions/delete-account
       - name: Verify routines on a disposable Supabase database
         run: |
+          # ECR Public sometimes rate-limits anonymous pulls; retry, then fall back to Docker Hub.
+          image=public.ecr.aws/supabase/postgres:17.6.1.143
+          pulled=false
+          for attempt in 1 2 3; do
+            if docker pull -q "$image"; then pulled=true; break; fi
+            sleep $((attempt * 20))
+          done
+          if [ "$pulled" != true ]; then
+            image=supabase/postgres:17.6.1.143
+            docker pull -q "$image"
+          fi
           docker run -d --name routine-tests -e POSTGRES_PASSWORD=test-only \
-            public.ecr.aws/supabase/postgres:17.6.1.143 \
+            "$image" \
             postgres -c shared_preload_libraries=pg_cron -c cron.database_name=postgres
           ready=false
           for attempt in $(seq 1 60); do
