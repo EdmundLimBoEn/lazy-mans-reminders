@@ -27,6 +27,15 @@ export type WebhookPayload = {
 };
 
 const encoder = new TextEncoder();
+const APNS_MAX_PAYLOAD_BYTES = 4096;
+
+function validReminderText(text: unknown): boolean {
+  if (typeof text !== "string") return false;
+  // Match char_length(trim(text)) and the raw-length constraint in Postgres.
+  // SQL trim removes ASCII spaces, not tabs, newlines or other whitespace.
+  const trimmedLength = [...text.replace(/^ +| +$/g, "")].length;
+  return trimmedLength >= 1 && trimmedLength <= 500 && [...text].length <= 1000;
+}
 
 export function base64url(input: Uint8Array | string): string {
   const bytes = typeof input === "string" ? encoder.encode(input) : input;
@@ -77,9 +86,7 @@ export function classifyWebhookPayload(payload: unknown): PayloadCheck {
       typeof record !== "object" ||
       !UUID_PATTERN.test(record.id) ||
       !UUID_PATTERN.test(record.user_id) ||
-      typeof record.text !== "string" ||
-      record.text.length === 0 ||
-      record.text.length > 500
+      !validReminderText(record.text)
     ) {
       return { ok: false, status: 400, message: "Invalid webhook payload" };
     }
@@ -103,7 +110,7 @@ export function classifyWebhookPayload(payload: unknown): PayloadCheck {
       Number.isFinite(Date.parse(record.routine_fired_at)) &&
       "routine_id" in record && typeof record.routine_id === "string" && UUID_PATTERN.test(record.routine_id) &&
       typeof record.id === "string" && UUID_PATTERN.test(record.id) &&
-      typeof record.text === "string" && record.text.length > 0 && record.text.length <= 500 &&
+      validReminderText(record.text) &&
       typeof old === "object" && old !== null && "routine_fired_at" in old &&
       old.routine_fired_at !== record.routine_fired_at;
     return { ok: true, kind: "process", sendsAlert: Boolean(routineAlert), userId };
@@ -234,17 +241,27 @@ export function buildApnsHeaders(input: {
 }
 
 export function buildApnsPayload(record: ReminderRecord): string {
-  return JSON.stringify({
+  const payload = {
     aps: {
       // Body-only alert: no title/header. System draws the full-width
       // notification bar with the user's Liquid Glass (Clear) setting.
-      alert: { body: record.text },
+      alert: { body: "" },
       sound: "default",
       category: APNS_ALERT_CATEGORY,
       "content-available": 1,
     },
     reminder_id: record.id,
-  });
+  };
+  let remaining = APNS_MAX_PAYLOAD_BYTES -
+    encoder.encode(JSON.stringify(payload)).length;
+  // Include JSON escaping as well as UTF-8 encoding in the byte budget.
+  for (const character of record.text) {
+    const bytes = encoder.encode(JSON.stringify(character)).length - 2;
+    if (bytes > remaining) break;
+    payload.aps.alert.body += character;
+    remaining -= bytes;
+  }
+  return JSON.stringify(payload);
 }
 
 /** Webhook / pg_net should retry the whole job only when APNs might succeed later. */
