@@ -1,3 +1,4 @@
+import { markActivityEnded } from "../_shared/live_activity_store.ts";
 import { loadBoardLines } from "../_shared/board_loader.ts";
 import {
   reconcileLiveActivity,
@@ -210,24 +211,6 @@ async function markActivityStarted(
   if (error) throw new Error("Could not record Live Activity start");
 }
 
-async function markActivityEnded(
-  supabase: ServiceClient,
-  userId: string,
-  alertToken: string,
-): Promise<void> {
-  const { error } = await supabase
-    .from("device_tokens")
-    .update({
-      activity_push_token: null,
-      activity_started_at: null,
-    })
-    .eq("token", alertToken)
-    .eq("user_id", userId);
-  if (error) {
-    console.error("Could not record Live Activity end", error);
-  }
-}
-
 async function sendOnce(input: {
   host: string;
   token: string;
@@ -396,6 +379,8 @@ async function syncLiveActivity(input: {
         input.supabase,
         input.device.user_id,
         input.device.token,
+        input.device.activity_push_token,
+        input.device.activity_started_at,
       ),
     recordAdoption: () =>
       stampActivityStartedIfMissing(
