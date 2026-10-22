@@ -130,6 +130,14 @@ async function loadPending(env: Env, state: string): Promise<AuthRequest | null>
   return asAuthRequest(stored)
 }
 
+async function consumeAuthorizationState(env: Env, state: string): Promise<boolean> {
+  const id = env.AUTHORIZATION_STATE.idFromName(state)
+  const result = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/consume', { method: 'POST' })
+  if (!result.ok) throw new Error('Authorization state unavailable')
+  const { consumed } = await result.json<{ consumed: boolean }>()
+  return consumed === true
+}
+
 async function startAuthorize(request: Request, env: Env): Promise<Response> {
   const oauth = oauthHelpers(env)
   if (!oauth) return json({ error: 'server_misconfigured' }, 500)
@@ -200,6 +208,8 @@ async function denyConsent(request: Request, env: Env, deps: IdentityDeps): Prom
   const oauth = oauthHelpers(env)
   if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
   const oauthRequest = await loadPending(env, state)
+  // Consume even when KV misses the record: a later read may still be stale.
+  await consumeAuthorizationState(env, state)
   await env.OAUTH_KV.delete(`${PENDING_PREFIX}${state}`)
   if (!oauthRequest) return json({ redirectTo: null }, 200, cors)
   const client = await oauth.lookupClient(oauthRequest.clientId)
@@ -229,11 +239,7 @@ async function bindAuthorization(request: Request, env: Env, deps: IdentityDeps)
 
   // KV reads/deletes can overlap or be stale. Only the state object's winner
   // may create a grant, even when multiple callers read the pending record.
-  const id = env.AUTHORIZATION_STATE.idFromName(state)
-  const result = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/consume', { method: 'POST' })
-  if (!result.ok) throw new Error('Authorization state unavailable')
-  const { consumed } = await result.json<{ consumed: boolean }>()
-  if (consumed !== true) return json({ error: 'expired_state' }, 400, cors)
+  if (!await consumeAuthorizationState(env, state)) return json({ error: 'expired_state' }, 400, cors)
   await env.OAUTH_KV.delete(`${PENDING_PREFIX}${state}`)
 
   try {
