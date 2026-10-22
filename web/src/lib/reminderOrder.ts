@@ -12,22 +12,10 @@ export function moveActiveReminder<T extends ReminderLike>(items: T[], sourceId:
 }
 
 export async function persistReminderOrder<T extends ReminderLike>(
-  before: T[],
   after: T[],
-  update: (id: string, order: number) => Promise<void>,
+  client: { rpc: (name: 'reorder_reminders', args: { p_ids: string[] }) => PromiseLike<{ error: unknown }> },
 ): Promise<void> {
-  const previous = new Map(before.map((item) => [item.id, item]))
-  const saved: T[] = []
-  try {
-    for (const item of after) {
-      const original = previous.get(item.id)
-      if (!original || original.sort_order === item.sort_order) continue
-      await update(item.id, item.sort_order)
-      saved.push(original)
-    }
-  } catch (error) {
-    // Restore successful writes before the caller reloads the server's actual state.
-    await Promise.allSettled(saved.map((item) => update(item.id, item.sort_order)))
-    throw error
-  }
+  const ids = sortReminders(after).filter((item) => !item.is_done).map((item) => item.id)
+  const { error } = await client.rpc('reorder_reminders', { p_ids: ids })
+  if (error) throw error
 }

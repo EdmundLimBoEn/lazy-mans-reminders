@@ -419,14 +419,7 @@ function Board({ session, onNavigate, onAccountDeleted }: {
     setError('')
     setReminders(reordered)
     try {
-      await persistReminderOrder(reminders, reordered, async (id, order) => {
-        const { error: updateError } = await supabase
-          .from('reminders')
-          .update({ sort_order: order })
-          .eq('id', id)
-          .eq('user_id', session.user.id)
-        if (updateError) throw updateError
-      })
+      await persistReminderOrder(reordered, supabase)
     } catch (error) {
       setReminders(reminders)
       setError(error instanceof Error || (typeof error === 'object' && error && 'message' in error)
