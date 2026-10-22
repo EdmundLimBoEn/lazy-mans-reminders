@@ -10,6 +10,8 @@ import { createServer } from './server'
 import { sessionFromProps } from './session'
 import { defaultIdentityDeps, type IdentityDeps } from './supabaseUser'
 
+export { AuthorizationState } from './authorizationState'
+
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, DELETE',
