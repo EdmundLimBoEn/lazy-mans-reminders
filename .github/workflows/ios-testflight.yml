@@ -88,7 +88,7 @@ jobs:
           fi
 
       - name: Select stable Xcode
-        uses: maxim-lobanov/setup-xcode@v1
+        uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1
         with:
           xcode-version: "26.6"
 
@@ -99,7 +99,7 @@ jobs:
         run: HOMEBREW_NO_AUTO_UPDATE=1 brew install xcodegen
 
       - name: Install asc
-        uses: rudrankriyam/setup-asc@v1
+        uses: rudrankriyam/setup-asc@5358c70a27a3f0d1517604b0f1fdc43e70c1cc4d # v1
 
       - name: Write Config.xcconfig
         working-directory: ios
@@ -113,7 +113,7 @@ jobs:
         run: xcodegen generate --spec project.yml
 
       - name: Import Apple Distribution certificate
-        uses: apple-actions/import-codesign-certs@v7
+        uses: apple-actions/import-codesign-certs@77ba2a2a8f5cfc8c405ebf3159f767c323e238f9 # v7
         with:
           p12-file-base64: ${{ secrets.APPSTORE_CERTIFICATES_FILE_BASE64 }}
           p12-password: ${{ secrets.APPSTORE_CERTIFICATES_PASSWORD }}
