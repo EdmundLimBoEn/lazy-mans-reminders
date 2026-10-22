@@ -241,13 +241,32 @@ describe('single-use authorization', () => {
     const authorized = await handlePublicRequest(new Request('https://lmr-mcp.edmundlim.systems/authorize'), env, deps)
     expect(authorized.status).toBe(302)
     const state = new URL(authorized.headers.get('Location')!).searchParams.get('state')!
-    const bind = () => handlePublicRequest(new Request('https://lmr-mcp.edmundlim.systems/bind', {
+    const post = (path: string) => handlePublicRequest(new Request(`https://lmr-mcp.edmundlim.systems${path}`, {
       method: 'POST',
       headers: { Authorization: 'Bearer token-a', Origin: 'https://lmr.sillyapps.co', 'Content-Type': 'application/json' },
       body: JSON.stringify({ state }),
     }), env, deps)
-    return { kv, oauth, pending, state, bind }
+    return { kv, oauth, pending, state, bind: () => post('/bind'), deny: () => post('/consent/deny') }
   }
+
+  it.each([true, false])('denial prevents a grant from stale KV (pending at denial: %s)', async (hasPending) => {
+    const { kv, oauth, pending, state, bind, deny } = await setup()
+    if (!hasPending) await kv.delete('pending-auth:' + state)
+
+    const denied = await deny()
+    expect(denied.status).toBe(200)
+    expect(await denied.json()).toEqual({
+      redirectTo: hasPending ? expect.stringContaining('error=access_denied') : null,
+    })
+    expect(await kv.get('pending-auth:' + state)).toBeNull()
+    vi.spyOn(kv, 'get').mockResolvedValue(pending)
+
+    const replay = await bind()
+    expect(replay.status).toBe(400)
+    expect(await replay.json()).toEqual({ error: 'expired_state' })
+    expect(oauth.completeAuthorization).not.toHaveBeenCalled()
+    expect((await deny()).status).toBe(200)
+  })
 
   it('creates exactly one grant when both authenticated binds read the same pending state', async () => {
     const { kv, oauth, bind } = await setup()
