@@ -93,10 +93,12 @@ async function runDelete(input: {
   warnings: Record<string, unknown>[];
   deletedTables: string[];
   deletedUserId: string | null;
+  grantCleanupCalls: number;
 }> {
   const appleCalls: AppleCall[] = [];
   const warnings: Record<string, unknown>[] = [];
   const deletedTables: string[] = [];
+  let grantCleanupCalls = 0;
   let deletedUserId: string | null = null;
   const envMap = input.env ?? appleEnv();
 
@@ -149,7 +151,10 @@ async function runDelete(input: {
     nowSeconds: () => NOW_SECONDS,
     warn: (payload) => warnings.push(payload),
     getUser: () => Promise.resolve({ user: input.user }),
-    revokeGrants: () => Promise.resolve(input.grants ?? { ok: true }),
+    revokeGrants: () => {
+      grantCleanupCalls++;
+      return Promise.resolve(input.grants ?? { ok: true });
+    },
     deleteRows: (table, _userId) => {
       deletedTables.push(table);
       return Promise.resolve({
@@ -180,7 +185,14 @@ async function runDelete(input: {
     deps,
   );
 
-  return { response, appleCalls, warnings, deletedTables, deletedUserId };
+  return {
+    response,
+    appleCalls,
+    warnings,
+    deletedTables,
+    deletedUserId,
+    grantCleanupCalls,
+  };
 }
 
 async function assertDeleted(
@@ -449,4 +461,29 @@ Deno.test("unauthenticated requests cannot revoke Apple credentials or delete da
   assertEquals(result.appleCalls, []);
   assertEquals(result.deletedTables, []);
   assertEquals(result.deletedUserId, null);
+});
+
+Deno.test("mismatched expected identity stops before any account cleanup", async () => {
+  for (const expectedUserId of [googleUser.id, "", null, 123]) {
+    const result = await runDelete({
+      user: appleUser,
+      body: { expectedUserId, appleAuthorizationCode: "code" },
+    });
+    assertEquals(result.response.status, 409);
+    assertEquals(
+      await result.response.text(),
+      "Your signed-in account changed. Please reopen account deletion and try again.",
+    );
+    assertEquals(result.appleCalls, []);
+    assertEquals(result.grantCleanupCalls, 0);
+    assertEquals(result.deletedTables, []);
+    assertEquals(result.deletedUserId, null);
+  }
+});
+
+Deno.test("matching expected identity permits account deletion", async () => {
+  await assertDeleted(await runDelete({
+    user: googleUser,
+    body: { expectedUserId: googleUser.id },
+  }), googleUser.id);
 });

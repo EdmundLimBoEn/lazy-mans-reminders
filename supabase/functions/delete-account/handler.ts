@@ -43,18 +43,14 @@ function jsonHeaders(): Record<string, string> {
   return corsHeaders;
 }
 
-async function readAppleAuthorizationCode(
+async function readDeletionBody(
   request: Request,
-): Promise<string | undefined> {
+): Promise<{ appleAuthorizationCode?: unknown; expectedUserId?: unknown }> {
   try {
-    const text = await request.text();
-    if (!text.trim()) return undefined;
-    const body = JSON.parse(text) as { appleAuthorizationCode?: unknown };
-    if (typeof body.appleAuthorizationCode !== "string") return undefined;
-    const code = body.appleAuthorizationCode.trim();
-    return code.length > 0 ? code : undefined;
+    const body = await request.json();
+    return body && typeof body === "object" ? body : {};
   } catch {
-    return undefined;
+    return {};
   }
 }
 
@@ -99,7 +95,16 @@ export async function handleDeleteAccount(
     return new Response("Unauthorized", { status: 401, headers: corsHeaders });
   }
 
-  const appleAuthorizationCode = await readAppleAuthorizationCode(request);
+  const body = await readDeletionBody(request);
+  if (body.expectedUserId !== undefined && body.expectedUserId !== user.id) {
+    return new Response(
+      "Your signed-in account changed. Please reopen account deletion and try again.",
+      { status: 409, headers: corsHeaders },
+    );
+  }
+  const appleAuthorizationCode = typeof body.appleAuthorizationCode === "string"
+    ? body.appleAuthorizationCode.trim() || undefined
+    : undefined;
   let appleRevocation = userHasAppleIdentity(user)
     ? "manual_required"
     : "not_applicable";
