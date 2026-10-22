@@ -13,7 +13,10 @@ vi.mock('@cloudflare/workers-oauth-provider', () => ({
 vi.mock('agents/mcp/server', () => ({ createMcpHandler: vi.fn() }))
 vi.mock('./server', () => ({ createServer: vi.fn() }))
 
-afterEach(() => vi.unstubAllGlobals())
+afterEach(() => {
+  vi.unstubAllGlobals()
+  vi.clearAllMocks()
+})
 
 describe('JSON body limit', () => {
   it.each([undefined, '1'])('rejects streamed token bodies regardless of Content-Length (%s)', async (contentLength) => {
@@ -77,5 +80,51 @@ describe('JSON body limit', () => {
     expect(await response.json()).toEqual({ error: 'invalid_body' })
     expect(response.headers.get('Access-Control-Allow-Origin')).toBe('https://lmr.sillyapps.co')
     expect(get).not.toHaveBeenCalled()
+  })
+})
+
+describe('OAuth provider body limits', () => {
+  it.each([
+    ['/token', 'application/x-www-form-urlencoded', 16 * 1024],
+    ['/token/', 'multipart/form-data; boundary=test', 16 * 1024],
+    ['/token', 'text/plain', 16 * 1024],
+    ['/register', 'application/json', 1024 * 1024],
+    ['/register/', 'application/x-www-form-urlencoded', 1024 * 1024],
+    ['/register', 'application/octet-stream', 1024 * 1024],
+  ])('rejects oversized streamed %s (%s) before forwarding', async (path, contentType, limit) => {
+    let consumed = 0
+    const cancel = vi.fn()
+    const body = new ReadableStream<Uint8Array>({
+      pull(controller) {
+        if (consumed === 2 * 1024 * 1024) return controller.close()
+        controller.enqueue(new Uint8Array(4096).fill(97))
+        consumed += 4096
+      },
+      cancel,
+    }, { highWaterMark: 0 })
+    const response = await handleWorkerFetch(new Request(`https://example.com${path}`, {
+      method: 'POST', headers: { 'Content-Type': contentType }, body, duplex: 'half',
+    } as RequestInit), {
+      AUTH_RATE_LIMIT: { limit: async () => ({ success: true }) },
+    } as unknown as Env, {} as ExecutionContext)
+    expect(response.status).toBe(413)
+    expect(consumed).toBeLessThanOrEqual(Number(limit) + 4096)
+    expect(cancel).toHaveBeenCalledOnce()
+    expect(providerFetch).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    ['/token', 'application/x-www-form-urlencoded', 'grant_type=refresh_token&refresh_token=r1'],
+    ['/register/', 'application/json', JSON.stringify({ client_name: 'test', redirect_uris: ['https://example.com/callback'] })],
+  ])('forwards normal %s bodies intact', async (path, contentType, body) => {
+    await handleWorkerFetch(new Request(`https://example.com${path}`, {
+      method: 'POST', headers: { 'Content-Type': contentType }, body,
+    }), {
+      AUTH_RATE_LIMIT: { limit: async () => ({ success: true }) },
+    } as unknown as Env, {} as ExecutionContext)
+    expect(providerFetch).toHaveBeenCalledOnce()
+    const forwarded = (providerFetch.mock.calls[0] as unknown as [Request])[0]
+    expect(forwarded.headers.get('Content-Type')).toBe(contentType)
+    expect(await forwarded.text()).toBe(body)
   })
 })
