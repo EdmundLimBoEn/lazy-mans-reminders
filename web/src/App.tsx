@@ -283,7 +283,7 @@ function Board({ session, onNavigate, onAccountDeleted }: {
   const [error, setError] = useState('')
   const [adding, setAdding] = useState(false)
   const [reordering, setReordering] = useState(false)
-  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
   const deleteButtonRef = useRef<HTMLButtonElement>(null)
   const [deletingAccount, setDeletingAccount] = useState(false)
   const [exporting, setExporting] = useState(false)
@@ -298,7 +298,7 @@ function Board({ session, onNavigate, onAccountDeleted }: {
   useEffect(() => {
     if (!confirmDelete) return
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && !deletingAccount) setConfirmDelete(false)
+      if (event.key === 'Escape' && !deletingAccount) setConfirmDelete(null)
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
@@ -500,10 +500,20 @@ function Board({ session, onNavigate, onAccountDeleted }: {
   }
 
   async function deleteAccount() {
+    if (!confirmDelete) return
+    const expectedUserId = confirmDelete
     setDeletingAccount(true)
     setError('')
+    const { data: current, error: sessionError } = await supabase.auth.getSession()
+    if (sessionError || current.session?.user.id !== expectedUserId) {
+      setError('Your signed-in account changed. Please reopen account deletion and try again.')
+      setConfirmDelete(null)
+      setDeletingAccount(false)
+      return
+    }
     const { data, error: invokeError } = await supabase.functions.invoke('delete-account', {
       method: 'POST',
+      body: { expectedUserId },
     })
     if (invokeError || data?.ok !== true) {
       setError(
@@ -515,7 +525,7 @@ function Board({ session, onNavigate, onAccountDeleted }: {
     }
     onAccountDeleted(data?.appleRevocation === 'manual_required')
     await supabase.auth.signOut({ scope: 'local' })
-    setConfirmDelete(false)
+    setConfirmDelete(null)
     setDeletingAccount(false)
   }
 
@@ -691,7 +701,7 @@ function Board({ session, onNavigate, onAccountDeleted }: {
               className="text-destructive hover:text-destructive"
               ref={deleteButtonRef}
               disabled={deletingAccount}
-              onClick={() => setConfirmDelete(true)}
+              onClick={() => setConfirmDelete(session.user.id)}
             >
               <Trash2 aria-hidden="true" />
               Delete account
@@ -706,12 +716,12 @@ function Board({ session, onNavigate, onAccountDeleted }: {
       </footer>
 
       <AlertDialog
-        open={confirmDelete}
-        onOpenChange={(open) => { if (!open && !deletingAccount) setConfirmDelete(false) }}
+        open={confirmDelete !== null}
+        onOpenChange={(open) => { if (!open && !deletingAccount) setConfirmDelete(null) }}
       >
         <AlertDialogContent
           className="delete-dialog sm:max-w-md"
-          overlayProps={{ onClick: () => { if (!deletingAccount) setConfirmDelete(false) } }}
+          overlayProps={{ onClick: () => { if (!deletingAccount) setConfirmDelete(null) } }}
           onCloseAutoFocus={(event) => {
             // The dialog is opened from state, not a Radix Trigger, so return focus by hand.
             event.preventDefault()
@@ -949,7 +959,7 @@ export default function App() {
   }
   if (path === '/connect') {
     return session
-      ? <Connect session={session} onNavigate={navigate} />
+      ? <Connect key={session.user.id} session={session} onNavigate={navigate} />
       : <SignIn onNavigate={navigate} connectingAgent />
   }
 
@@ -967,7 +977,7 @@ export default function App() {
         </Alert>
       )}
       {session
-        ? <Board session={session} onNavigate={navigate} onAccountDeleted={setManualAppleRevocation} />
+        ? <Board key={session.user.id} session={session} onNavigate={navigate} onAccountDeleted={setManualAppleRevocation} />
         : <SignIn onNavigate={navigate} />}
     </>
   )
