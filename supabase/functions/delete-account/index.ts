@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.112.1";
 import { corsHeaders, handleDeleteAccount } from "./handler.ts";
 
 function requiredEnv(name: string): string {

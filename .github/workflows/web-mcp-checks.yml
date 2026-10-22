@@ -86,8 +86,19 @@ jobs:
       - run: deno test supabase/functions/_shared supabase/functions/delete-account
       - name: Verify routines on a disposable Supabase database
         run: |
+          # ECR Public sometimes rate-limits anonymous pulls; retry, then fall back to Docker Hub.
+          image=public.ecr.aws/supabase/postgres:17.6.1.143
+          pulled=false
+          for attempt in 1 2 3; do
+            if docker pull -q "$image"; then pulled=true; break; fi
+            sleep $((attempt * 20))
+          done
+          if [ "$pulled" != true ]; then
+            image=supabase/postgres:17.6.1.143
+            docker pull -q "$image"
+          fi
           docker run -d --name routine-tests -e POSTGRES_PASSWORD=test-only \
-            public.ecr.aws/supabase/postgres:17.6.1.143 \
+            "$image" \
             postgres -c shared_preload_libraries=pg_cron -c cron.database_name=postgres
           ready=false
           for attempt in $(seq 1 60); do
@@ -98,13 +109,19 @@ jobs:
             sleep 1
           done
           if [ "$ready" != true ]; then docker logs routine-tests; exit 1; fi
+          docker cp supabase routine-tests:/tmp/supabase
           for migration in \
             supabase/migrations/202608060001_create_reminders.sql \
             supabase/migrations/202608080001_completed_at_and_cleanup.sql \
+            supabase/migrations/202608080002_lock_screen_prefs.sql \
+            supabase/migrations/202608260001_agent_tokens.sql \
+            supabase/migrations/20261008035839_revoke_anon_agent_token_rpcs.sql \
             supabase/migrations/202610120001_routine_reminders.sql \
             supabase/migrations/202610220001_routine_ownership_and_overflow.sql \
+            supabase/migrations/202610220002_reminder_text_and_token_lock.sql \
+            supabase/tests/reminder_text_and_token_lock.sql \
             supabase/tests/routine_reminders.sql; do
-            docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 < "$migration"
+            docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
       - if: always()
         run: docker rm -f routine-tests || true

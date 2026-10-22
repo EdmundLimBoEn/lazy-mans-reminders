@@ -4,7 +4,7 @@ import {
   type SendResult,
 } from "../_shared/live_activity_lifecycle.ts";
 import { timingSafeEqual } from "node:crypto";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.112.1";
 import {
   buildLiveActivityHeaders,
   buildLiveActivityPayload,
