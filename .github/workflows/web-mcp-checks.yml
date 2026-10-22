@@ -102,6 +102,7 @@ jobs:
             supabase/migrations/202608060001_create_reminders.sql \
             supabase/migrations/202608080001_completed_at_and_cleanup.sql \
             supabase/migrations/202610120001_routine_reminders.sql \
+            supabase/migrations/202610220001_routine_ownership_and_overflow.sql \
             supabase/tests/routine_reminders.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 < "$migration"
           done
