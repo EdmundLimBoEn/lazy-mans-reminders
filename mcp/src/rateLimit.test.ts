@@ -5,11 +5,11 @@ import { describe, expect, it } from 'vitest'
 import { enforceRateLimit, rateLimitBucket } from './rateLimit'
 
 describe('rateLimitBucket', () => {
-  it.each(['/mcp', '/mcp/', '/mcp/anything', '/mcp/nested/path/'])('covers the MCP prefix %s', (path) => {
+  it.each(['/mcp', '/mcp/', '/mcp/anything', '/mcp/nested/path/', '/mcpx', '/mcpx/anything', '/mcp%2Fx'])('covers the MCP prefix %s', (path) => {
     expect(rateLimitBucket(path)).toBe('mcp')
   })
 
-  it.each(['/mcpx', '/mcpx/anything'])('excludes %s', (path) => {
+  it.each(['/other', '/MCP'])('excludes %s', (path) => {
     expect(rateLimitBucket(path)).toBeNull()
   })
 
@@ -26,7 +26,7 @@ describe('rateLimitBucket', () => {
 })
 
 describe('enforceRateLimit', () => {
-  it.each(['/mcp/anything', '/mcp/nested/path/'])('limits bogus tokens on %s', async (path) => {
+  it.each(['/mcp/anything', '/mcp/nested/path/', '/mcpx', '/mcpx/anything', '/mcp%2Fx'])('limits bogus tokens on %s', async (path) => {
     const keys: string[] = []
     const response = await enforceRateLimit(
       new Request(`https://lmr-mcp.edmundlim.systems${path}`, {

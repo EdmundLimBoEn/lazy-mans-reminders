@@ -1,4 +1,4 @@
-import { readJsonBody } from './jsonBody'
+import { readBodyBytes } from './jsonBody'
 
 const DISCOVERY_ALIASES: Record<string, string> = {
   '/.well-known/oauth-authorization-server/mcp': '/.well-known/oauth-authorization-server',
@@ -38,16 +38,20 @@ function withPath(request: Request, pathname: string): Request {
 
 /** Map Grok/MCP discovery aliases, trailing slashes, and JSON token posts onto the provider's routes. */
 export async function prepareOauthRequest(request: Request): Promise<Request | Response> {
-  const rewritten = withPath(request, rewriteOauthPath(new URL(request.url).pathname))
+  let rewritten = withPath(request, rewriteOauthPath(new URL(request.url).pathname))
   const path = new URL(rewritten.url).pathname
-  if (request.method !== 'POST' || path !== '/token' || !isJsonContentType(rewritten.headers.get('Content-Type'))) {
+  if (request.method !== 'POST' || (path !== '/token' && path !== '/register')) {
     return rewritten
   }
 
+  const bytes = await readBodyBytes(rewritten, path === '/token' ? 16 * 1024 : 1024 * 1024)
+  if (bytes instanceof Response) return bytes
+  rewritten = new Request(rewritten, { body: bytes })
+  if (path !== '/token' || !isJsonContentType(rewritten.headers.get('Content-Type'))) return rewritten
+
   let body: unknown
   try {
-    body = await readJsonBody(rewritten)
-    if (body instanceof Response) return body
+    body = JSON.parse(new TextDecoder().decode(bytes))
   } catch {
     return rewritten
   }

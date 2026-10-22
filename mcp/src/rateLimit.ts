@@ -12,7 +12,7 @@ const AUTH_PATHS = new Set([
 
 export function rateLimitBucket(pathname: string): 'auth' | 'mcp' | null {
   const path = pathname.replace(/\/+$/, '') || '/'
-  if (path === '/mcp' || path.startsWith('/mcp/')) return 'mcp'
+  if (path.startsWith('/mcp')) return 'mcp'
   if (AUTH_PATHS.has(path)) return 'auth'
   return null
 }
