@@ -90,6 +90,9 @@ function createProvider(env: Env, deps: IdentityDeps): OAuthProvider<Env> {
       const decision = await decideTokenExchange(env, deps.accountExists, exchange, (grantId, userId) => {
         return getOAuthApi(options, env).revokeGrant(grantId, userId)
       })
+      if (decision.kind === 'invalid_scope') {
+        throw new OAuthError('invalid_scope', { description: 'The board scope is required' })
+      }
       if (decision.kind === 'unavailable') {
         throw new OAuthError('temporarily_unavailable', {
           description: 'Account lookup is unavailable',
