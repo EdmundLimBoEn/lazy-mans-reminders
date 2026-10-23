@@ -16,6 +16,8 @@ export type ReminderRecord = {
   id: string;
   user_id: string;
   text: string;
+  routine_id?: string | null;
+  routine_fired_at?: string | null;
 };
 
 export type WebhookPayload = {

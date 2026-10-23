@@ -1,5 +1,5 @@
 import { markActivityEnded } from "../_shared/live_activity_store.ts";
-import { loadBoardLines } from "../_shared/board_loader.ts";
+import { loadBoardContent, loadBoardLines } from "../_shared/board_loader.ts";
 import {
   reconcileLiveActivity,
   type SendResult,
@@ -593,12 +593,12 @@ Deno.serve(async (request) => {
   }
 
   const record = (payload as { record?: ReminderRecord }).record;
-  let lines: string[];
+  let content: Awaited<ReturnType<typeof loadBoardContent>>;
   try {
-    lines = await loadBoardLines(
+    content = await loadBoardContent(
       supabase,
       check.userId,
-      check.sendsAlert ? record?.text : undefined,
+      check.sendsAlert ? record : undefined,
     );
   } catch {
     return new Response("Could not load reminder board", { status: 503 });
@@ -607,8 +607,7 @@ Deno.serve(async (request) => {
     supabase,
     devices,
     bundleId,
-    lines,
-    alertRecord: check.sendsAlert && record ? record : undefined,
+    ...content,
   });
   return summarize(results);
 });
