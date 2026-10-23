@@ -16,10 +16,13 @@ function phone() {
   let lines = ["Milk"];
   let outcome: Result = "sent";
   let uploadDuringStart = false;
+  let leaseExpiresAt = 0;
+  const released: string[] = [];
   let queuedOutcomes: Result[] = [];
   return {
     state,
     sent,
+    released,
     outcomes: (...values: Result[]) => {
       queuedOutcomes = values;
     },
@@ -59,9 +62,18 @@ function phone() {
           }
           return Promise.resolve(result);
         },
-        claimStart: () => Promise.resolve("lease"),
-        releaseStart: () => Promise.resolve(),
+        claimStart: () => {
+          if (nowMs < leaseExpiresAt) return Promise.resolve(null);
+          leaseExpiresAt = nowMs + 2 * 60 * 1000;
+          return Promise.resolve("lease");
+        },
+        releaseStart: (id) => {
+          released.push(id);
+          leaseExpiresAt = 0;
+          return Promise.resolve();
+        },
         recordStart: (replacing) => {
+          leaseExpiresAt = 0;
           state.startedAt = new Date(nowMs).toISOString();
           if (replacing) state.retiringToken = previous;
           if (state.activityToken === previous) state.activityToken = "";
@@ -346,35 +358,76 @@ for (const activityToken of [null, "old"]) {
   });
 }
 
-Deno.test("failed starts release only their own lease and can retry", async () => {
-  const released: string[] = [];
-  let claimed = 0;
-  const run = () =>
-    reconcileLiveActivity({
-      lines: ["Milk"],
-      activityToken: null,
-      startToken: "start",
-      retiringToken: null,
-      startedAt: null,
-      nowMs: 0,
-      hasAlert: false,
-      claimStart: () => Promise.resolve(`lease-${++claimed}`),
-      send: () => Promise.resolve("retryable"),
-      recordStart: () => {
-        throw new Error("Failed starts must not be recorded");
-      },
-      releaseStart: (id) => {
-        released.push(id);
-        return Promise.resolve();
-      },
-      recordEnd: () => Promise.resolve(),
-      recordAdoption: () => Promise.resolve(),
-      clearRetiring: () => Promise.resolve(),
-    });
-  await run();
-  await run();
-  assertEquals(released, ["lease-1", "lease-2"]);
+for (const activityToken of ["", "old"]) {
+  Deno.test(`uncertain ${activityToken ? "renewals" : "initial starts"} retain the lease until expiry`, async () => {
+    const device = phone();
+    device.state.activityToken = activityToken;
+    const startedAt = activityToken ? new Date(0).toISOString() : null;
+    device.state.startedAt = startedAt;
+    device.outcome("retryable");
+
+    const first = await device.run();
+    assertEquals(first.results, ["retryable"]);
+    assertEquals(first.deliveredAlert, false);
+    device.advance(2 * 60 * 1000 - 1);
+    const second = await device.run();
+    assertEquals(second.results, []);
+    assertEquals(device.sent, ["start:push-to-start"]);
+    assertEquals(device.released, []);
+    assertEquals(device.state.activityToken, activityToken);
+    assertEquals(device.state.startedAt, startedAt);
+    assertEquals(device.state.retiringToken, null);
+
+    device.advance(1);
+    await device.run();
+    assertEquals(device.sent, ["start:push-to-start", "start:push-to-start"]);
+  });
+}
+
+Deno.test("a token acknowledging an uncertain initial start permits updates during the lease", async () => {
+  const device = phone();
+  device.state.activityToken = "";
+  device.state.startedAt = null;
+  device.outcome("retryable");
+  await device.run();
+  device.state.activityToken = "acknowledged";
+  device.outcome("sent");
+  await device.run();
+  assertEquals(device.sent, ["start:push-to-start", "update:activity"]);
+  assertEquals(device.released, []);
 });
+
+for (const rejection of ["failed", "invalid"] as const) {
+  Deno.test(`${rejection} starts release only their own lease and can retry`, async () => {
+    const released: string[] = [];
+    let claimed = 0;
+    const run = () =>
+      reconcileLiveActivity({
+        lines: ["Milk"],
+        activityToken: null,
+        startToken: "start",
+        retiringToken: null,
+        startedAt: null,
+        nowMs: 0,
+        hasAlert: false,
+        claimStart: () => Promise.resolve(`lease-${++claimed}`),
+        send: () => Promise.resolve(rejection),
+        recordStart: () => {
+          throw new Error("Failed starts must not be recorded");
+        },
+        releaseStart: (id) => {
+          released.push(id);
+          return Promise.resolve();
+        },
+        recordEnd: () => Promise.resolve(),
+        recordAdoption: () => Promise.resolve(),
+        clearRetiring: () => Promise.resolve(),
+      });
+    await run();
+    await run();
+    assertEquals(released, ["lease-1", "lease-2"]);
+  });
+}
 
 Deno.test("a failed lease claim never sends to APNs", async () => {
   let sends = 0;
