@@ -95,6 +95,23 @@ final class PushTokenRegistrar: ObservableObject {
         await withCheckedContinuation { flushWaiters.append($0) }
     }
 
+    /// A confirmed deletion invalidates acknowledgements for this account. Persist
+    /// restoration work so cancellation or a failed upload can retry after relaunch.
+    /// bind(userID:) discards this work if authentication switches accounts.
+    func registrationWasRemoved() {
+        precondition(isPaused)
+        if pending.activityPushToken == nil {
+            pending.activityPushToken = pending.acknowledgedActivityToken
+            pending.activityStartedAt = pending.acknowledgedActivityStartedAt
+        }
+        pending.acknowledgedActivityToken = nil
+        pending.acknowledgedActivityStartedAt = nil
+        pending.lastSuccess = nil
+        lastSuccess = nil
+        needsRetry = true
+        save()
+    }
+
     func resume() {
         isPaused = false
     }
