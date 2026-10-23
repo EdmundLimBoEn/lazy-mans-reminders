@@ -32,6 +32,37 @@ final class AuthSessionGate {
         return try await operation()
     }
 
+    /// Caller holds the gate. Authenticate only after the old credential has removed
+    /// its registration; the SDK may persist a replacement before returning.
+    func authenticate<T>(pauseRegistration: () async -> Void,
+                         resumeRegistration: () -> Void,
+                         removeDeviceToken: () async throws -> Void,
+                         operation: () async throws -> T) async throws -> T {
+        precondition(isHeld)
+        await pauseRegistration()
+        defer { resumeRegistration() }
+        try await removeDeviceToken()
+        return try await operation()
+    }
+
+    struct DeviceTokenRow: Decodable {
+        let token: String
+    }
+
+    enum DeregistrationError: LocalizedError {
+        case unconfirmed
+
+        var errorDescription: String? {
+            "Couldn’t confirm device removal. Reconnect and try again before switching accounts or signing out."
+        }
+    }
+
+    static func verifyAbsence(_ rows: [DeviceTokenRow]) throws {
+        guard rows.isEmpty else {
+            throw DeregistrationError.unconfirmed
+        }
+    }
+
     struct CleanupOperations {
         let setEndingSession: (Bool) -> Void
         let pauseRegistration: () async -> Void

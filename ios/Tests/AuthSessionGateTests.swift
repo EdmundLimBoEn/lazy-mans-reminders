@@ -3,6 +3,214 @@ import XCTest
 
 @MainActor
 final class AuthSessionGateTests: XCTestCase {
+    func testAccountSwitchRequiresVerifiedRemovalWithPreviousCredentials() async throws {
+        let gate = AuthSessionGate()
+        let suite = "AccountSwitchTests-\(UUID().uuidString)"
+        let storage = UserDefaults(suiteName: suite)!
+        defer { storage.removePersistentDomain(forName: suite) }
+        let accountA = UUID()
+        let accountB = UUID()
+        var sdkAccount = accountA
+        var publishedAccount = accountA
+        var registeredOwner: UUID? = accountA
+        var uploads: [UUID] = []
+        let registrar = PushTokenRegistrar(defaults: storage) { registration in
+            uploads.append(registration.userID)
+            registeredOwner = registration.userID
+        }
+        registrar.bind(userID: accountA)
+        registrar.recordDeviceToken("device")
+        var rows: [AuthSessionGate.DeviceTokenRow] = [.init(token: "device")]
+        var networkFailure = true
+        var replacements = 0
+        let attempt = {
+            try await gate.withLock {
+                let next = try await gate.authenticate(
+                    pauseRegistration: { await registrar.pause() },
+                    resumeRegistration: { registrar.resume() },
+                    removeDeviceToken: {
+                        XCTAssertEqual(sdkAccount, accountA, "Use A's credentials before the SDK persists B")
+                        await registrar.flush()
+                        XCTAssertTrue(uploads.isEmpty, "Uploads must not recreate A's row during removal")
+                        if networkFailure { throw URLError(.notConnectedToInternet) }
+                        try AuthSessionGate.verifyAbsence(rows)
+                        registeredOwner = nil
+                    },
+                    operation: {
+                        XCTAssertNil(registeredOwner)
+                        replacements += 1
+                        sdkAccount = accountB
+                        return accountB
+                    }
+                )
+                publishedAccount = next
+                registrar.bind(userID: next)
+                await registrar.flush()
+            }
+        }
+
+        // Both a transport failure and a row remaining after deletion must
+        // leave A installed and prevent callback completion.
+        for offline in [true, false] {
+            networkFailure = offline
+            do {
+                try await attempt()
+                XCTFail("Unconfirmed removal must reject the switch")
+            } catch { }
+            XCTAssertEqual(sdkAccount, accountA)
+            XCTAssertEqual(publishedAccount, accountA)
+            XCTAssertEqual(registeredOwner, accountA)
+            XCTAssertEqual(replacements, 0)
+            XCTAssertEqual(registrar.deviceToken, "device")
+        }
+        rows = []
+        try await attempt()
+        XCTAssertEqual(replacements, 1)
+        XCTAssertEqual(sdkAccount, accountB)
+        XCTAssertEqual(publishedAccount, accountB)
+        XCTAssertEqual(registeredOwner, accountB)
+        XCTAssertEqual(uploads, [accountB])
+    }
+
+    func testFailedAuthenticationResumesOldRegistrationAndReleasesGate() async {
+        let gate = AuthSessionGate()
+        var paused = false
+        var removed = false
+        do {
+            try await gate.withLock {
+                try await gate.authenticate(
+                    pauseRegistration: { paused = true },
+                    resumeRegistration: { paused = false },
+                    removeDeviceToken: { removed = true },
+                    operation: { () async throws -> Void in
+                        XCTAssertTrue(paused)
+                        XCTAssertTrue(removed)
+                        throw URLError(.userAuthenticationRequired)
+                    }
+                )
+            }
+            XCTFail("Expected authentication failure")
+        } catch { }
+        XCTAssertFalse(paused)
+        await gate.withLock { XCTAssertTrue(removed) }
+    }
+
+    func testAuthenticationRestoresAcknowledgedActivityOnlyForOriginalAccount() async throws {
+        for outcome in ["failure", "cancel", "same", "switch"] {
+            for rotated in [false, true] {
+                let suite = "AuthRestorationTests-\(UUID().uuidString)"
+                let storage = UserDefaults(suiteName: suite)!
+                defer { storage.removePersistentDomain(forName: suite) }
+                let oldUser = UUID()
+                let nextUser = outcome == "switch" ? UUID() : oldUser
+                var sent: [PushTokenRegistrar.Registration] = []
+                let registrar = PushTokenRegistrar(defaults: storage) { sent.append($0) }
+                registrar.bind(userID: oldUser)
+                registrar.recordDeviceToken("device")
+                registrar.recordPushToStartToken("start")
+                registrar.recordActivityToken("acknowledged", startedAt: Date(timeIntervalSince1970: 1_800_000_000))
+                await registrar.flush()
+                XCTAssertEqual(sent.count, 1)
+                let gate = AuthSessionGate()
+                await gate.withLock {
+                    do {
+                        let user = try await gate.authenticate(
+                            pauseRegistration: { await registrar.pause() },
+                            resumeRegistration: { registrar.resume() },
+                            removeDeviceToken: {
+                                if rotated {
+                                    registrar.recordActivityToken("rotated", startedAt: Date(timeIntervalSince1970: 1_800_000_000))
+                                }
+                                registrar.registrationWasRemoved()
+                                await registrar.flush()
+                                XCTAssertEqual(sent.count, 1, "Restoration must wait for authentication")
+                            },
+                            operation: {
+                                if outcome == "failure" { throw URLError(.userAuthenticationRequired) }
+                                if outcome == "cancel" { throw CancellationError() }
+                                return nextUser
+                            }
+                        )
+                        registrar.bind(userID: user)
+                    } catch {
+                        XCTAssertTrue(outcome == "failure" || outcome == "cancel")
+                    }
+                    await registrar.flush()
+                }
+                XCTAssertEqual(sent.count, 2)
+                XCTAssertEqual(sent.last?.userID, nextUser)
+                XCTAssertEqual(sent.last?.pushToStartToken, "start")
+                XCTAssertEqual(sent.last?.activityPushToken,
+                               outcome == "switch" ? nil : (rotated ? "rotated" : "acknowledged"))
+                XCTAssertEqual(sent.last?.activityStartedAt,
+                               outcome == "switch" ? nil : "2027-01-15T08:00:00Z")
+                await registrar.flush()
+                XCTAssertNil(sent.last?.activityPushToken, "Restoration should only replay once")
+            }
+        }
+    }
+
+    func testRemovedRegistrationRestorationSurvivesRelaunch() async {
+        let suite = "AuthRestorationRetryTests-\(UUID().uuidString)"
+        let storage = UserDefaults(suiteName: suite)!
+        defer { storage.removePersistentDomain(forName: suite) }
+        let user = UUID()
+        let registrar = PushTokenRegistrar(defaults: storage) { _ in }
+        registrar.bind(userID: user)
+        registrar.recordDeviceToken("device")
+        registrar.recordActivityToken("acknowledged", startedAt: Date(timeIntervalSince1970: 1_800_000_000))
+        await registrar.flush()
+        await registrar.pause()
+        registrar.registrationWasRemoved()
+        // A cancelled authentication task may not be able to upload immediately.
+        let offline = PushTokenRegistrar(defaults: storage, retryDelay: {}) { _ in
+            throw URLError(.notConnectedToInternet)
+        }
+        await offline.flush()
+        XCTAssertTrue(offline.needsRetry)
+        var sent: [PushTokenRegistrar.Registration] = []
+        let relaunched = PushTokenRegistrar(defaults: storage) { sent.append($0) }
+        relaunched.bind(userID: user)
+        await relaunched.flush()
+        XCTAssertEqual(sent.first?.activityPushToken, "acknowledged")
+        XCTAssertEqual(sent.first?.activityStartedAt, "2027-01-15T08:00:00Z")
+        XCTAssertFalse(relaunched.needsRetry)
+    }
+
+    func testDeletionVerificationRequiresAbsence() throws {
+        try AuthSessionGate.verifyAbsence([])
+        XCTAssertThrowsError(try AuthSessionGate.verifyAbsence([.init(token: "device")]))
+    }
+
+    func testSignOutRetriesAfterLostDeletionResponseOrMissingRegistration() async {
+        for initiallyRegistered in [true, false] {
+            let gate = AuthSessionGate()
+            var registered = initiallyRegistered
+            var loseResponse = initiallyRegistered
+            var signedOut = false
+            let operations = AuthSessionGate.CleanupOperations(
+                setEndingSession: { _ in }, pauseRegistration: {}, resumeRegistration: {}, unbind: {},
+                removeDeviceToken: {
+                    registered = false
+                    if loseResponse { throw URLError(.networkConnectionLost) }
+                    try AuthSessionGate.verifyAbsence(registered ? [.init(token: "device")] : [])
+                },
+                signOutSDK: { signedOut = true },
+                clearPublishedSession: {}, clearUserData: {}, clearBoard: {}
+            )
+            if initiallyRegistered {
+                let result = await gate.cleanUp(operations: operations)
+                XCTAssertFalse(result)
+                XCTAssertFalse(signedOut)
+                XCTAssertFalse(registered)
+            }
+            loseResponse = false
+            let result = await gate.cleanUp(operations: operations)
+            XCTAssertTrue(result)
+            XCTAssertTrue(signedOut)
+        }
+    }
+
     func testAbortedSignOutPreservesPendingTokensAndAcceptsUpdatesDuringDeletion() async {
         for rotatesDuringDeletion in [false, true] {
             let suite = "SignOutRegistrationTests-\(UUID().uuidString)"

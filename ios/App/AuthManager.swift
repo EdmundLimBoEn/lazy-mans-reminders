@@ -159,10 +159,12 @@ final class AuthManager: ObservableObject {
         defer { isAuthenticating = false }
         do {
             try Task.checkCancellation()
-            let nextSession = try await client.auth.signIn(
-                email: credentials.email,
-                password: credentials.password
-            )
+            let nextSession = try await authenticate {
+                try await client.auth.signIn(
+                    email: credentials.email,
+                    password: credentials.password
+                )
+            }
             installSession(nextSession, loginProvider: "email")
             // The SDK has already persisted/emitted the session; finish sharing even if the view disappears.
             await shareSession()
@@ -206,13 +208,15 @@ final class AuthManager: ObservableObject {
                 Task { await checkAppleCredential() }
             }
             do {
-                let nextSession = try await client.auth.signInWithIdToken(
-                    credentials: .init(
-                        provider: .apple,
-                        idToken: idToken,
-                        nonce: pendingAppleNonce
+                let nextSession = try await authenticate {
+                    try await client.auth.signInWithIdToken(
+                        credentials: .init(
+                            provider: .apple,
+                            idToken: idToken,
+                            nonce: pendingAppleNonce
+                        )
                     )
-                )
+                }
                 installSession(nextSession, loginProvider: "apple")
                 pendingAppleNonce = nil
                 await shareSession()
@@ -248,12 +252,14 @@ final class AuthManager: ObservableObject {
         notice = nil
         defer { isAuthenticating = false }
         do {
-            let nextSession = try await client.auth.signInWithOAuth(
-                provider: .google,
-                redirectTo: oauthRedirectURL,
-                queryParams: [("prompt", "select_account")]
-            ) { session in
-                session.prefersEphemeralWebBrowserSession = false
+            let nextSession = try await authenticate {
+                try await client.auth.signInWithOAuth(
+                    provider: .google,
+                    redirectTo: oauthRedirectURL,
+                    queryParams: [("prompt", "select_account")]
+                ) { session in
+                    session.prefersEphemeralWebBrowserSession = false
+                }
             }
             installSession(nextSession, loginProvider: "google")
             await shareSession()
@@ -270,7 +276,7 @@ final class AuthManager: ObservableObject {
         isAuthenticating = true
         defer { isAuthenticating = false }
         do {
-            session = try await client.auth.session(from: url)
+            session = try await authenticate { try await client.auth.session(from: url) }
             notice = nil
             await shareSession()
         } catch {
@@ -298,17 +304,45 @@ final class AuthManager: ObservableObject {
         return await authSessionGate.cleanUp(operations: cleanupOperations)
     }
 
+    /// Preflight every sign-in: the new identity is unknown until the SDK has
+    /// already replaced its stored session. Keep the old context until deletion succeeds.
+    private func authenticate(_ operation: () async throws -> Session) async throws -> Session {
+        do {
+            return try await authSessionGate.authenticate(
+                pauseRegistration: { await self.pushRegistration.pause() },
+                resumeRegistration: { self.pushRegistration.resume() },
+                removeDeviceToken: { try await self.removeDeviceToken() },
+                operation: operation
+            )
+        } catch {
+            // Failed authentication leaves the old account active. Restore its
+            // registration if preflight removed it, using the still-current SDK session.
+            await pushRegistration.flush()
+            throw error
+        }
+    }
+
+    private func removeDeviceToken() async throws {
+        guard let userID = session?.user.id,
+              let token = pushRegistration.deviceToken else { return }
+        try await client.from("device_tokens")
+            .delete().eq("token", value: token).eq("user_id", value: userID).execute()
+        // DELETE may already have committed on an earlier attempt whose response
+        // was lost, or registration may never have succeeded.
+        let rows: [AuthSessionGate.DeviceTokenRow] = try await client.from("device_tokens")
+            .select("token").eq("token", value: token).eq("user_id", value: userID)
+            .execute().value
+        try AuthSessionGate.verifyAbsence(rows)
+        pushRegistration.registrationWasRemoved()
+    }
+
     private var cleanupOperations: AuthSessionGate.CleanupOperations {
         .init(
             setEndingSession: { self.isEndingSession = $0 },
             pauseRegistration: { await self.pushRegistration.pause() },
             resumeRegistration: { self.pushRegistration.resume() },
             unbind: { await self.pushRegistration.unbind() },
-            removeDeviceToken: {
-                if let token = self.pushRegistration.deviceToken {
-                    try await self.client.from("device_tokens").delete().eq("token", value: token).execute()
-                }
-            },
+            removeDeviceToken: { try await self.removeDeviceToken() },
             signOutSDK: { try? await self.client.auth.signOut() },
             clearPublishedSession: {
                 self.knownLogin = nil
