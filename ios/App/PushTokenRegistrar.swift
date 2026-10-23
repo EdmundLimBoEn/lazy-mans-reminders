@@ -43,6 +43,7 @@ final class PushTokenRegistrar: ObservableObject {
     private var pending: Pending
     private var revision = 0
     private var isUploading = false
+    private var isPaused = false
     private var flushWaiters: [CheckedContinuation<Void, Never>] = []
 
     init(
@@ -87,6 +88,17 @@ final class PushTokenRegistrar: ObservableObject {
         save()
     }
 
+    /// Drain any upload before deletion without discarding tokens arriving meanwhile.
+    func pause() async {
+        isPaused = true
+        guard isUploading else { return }
+        await withCheckedContinuation { flushWaiters.append($0) }
+    }
+
+    func resume() {
+        isPaused = false
+    }
+
     func unbind() async {
         bind(userID: nil)
         guard isUploading else { return }
@@ -114,7 +126,7 @@ final class PushTokenRegistrar: ObservableObject {
     }
 
     func flush() async {
-        guard !isUploading else { return }
+        guard !isPaused, !isUploading else { return }
         isUploading = true
         defer {
             isUploading = false
@@ -122,7 +134,7 @@ final class PushTokenRegistrar: ObservableObject {
             flushWaiters.removeAll()
             for waiter in waiters { waiter.resume() }
         }
-        while let deviceToken = pending.deviceToken, let userID = pending.userID {
+        while !isPaused, let deviceToken = pending.deviceToken, let userID = pending.userID {
             let sentRevision = revision
             let registration = Registration(
                 token: deviceToken, userID: userID, environment: environment,
@@ -141,7 +153,7 @@ final class PushTokenRegistrar: ObservableObject {
                     break
                 } catch {
                     guard !Task.isCancelled else { return }
-                    if revision != sentRevision { break }
+                    if isPaused || revision != sentRevision { break }
                     if attempt < 2 { try? await retryDelay() }
                 }
             }

@@ -34,23 +34,38 @@ final class AuthSessionGate {
 
     struct CleanupOperations {
         let setEndingSession: (Bool) -> Void
+        let pauseRegistration: () async -> Void
+        let resumeRegistration: () -> Void
         let unbind: () async -> Void
-        let removeDeviceToken: () async -> Void
+        let removeDeviceToken: () async throws -> Void
         let signOutSDK: () async -> Void
         let clearPublishedSession: () -> Void
         let clearUserData: () async -> Void
         let clearBoard: () async -> Void
     }
 
+    enum CleanupReason {
+        case voluntarySignOut
+        case verifiedRevocation
+    }
+
     @discardableResult
-    func cleanUp(if shouldProceed: () -> Bool = { true },
+    func cleanUp(reason: CleanupReason = .voluntarySignOut, if shouldProceed: () -> Bool = { true },
                  operations: CleanupOperations) async -> Bool {
         await withLock {
             guard shouldProceed() else { return false }
             operations.setEndingSession(true)
             defer { operations.setEndingSession(false) }
+            await operations.pauseRegistration()
+            defer { operations.resumeRegistration() }
+            do {
+                try await operations.removeDeviceToken()
+            } catch {
+                // Voluntary sign-out can retry with the intact session and registrar.
+                // Verified revocation must clear local account data even when offline.
+                if reason == .voluntarySignOut { return false }
+            }
             await operations.unbind()
-            await operations.removeDeviceToken()
             await operations.signOutSDK()
             operations.clearPublishedSession()
             await operations.clearUserData()

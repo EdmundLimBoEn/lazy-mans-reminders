@@ -137,11 +137,16 @@ struct AccountView: View {
                 titleVisibility: .visible
             ) {
                 Button("Sign Out") {
-                    Task { await auth.signOut() }
+                    Task {
+                        error = nil
+                        if !(await auth.signOut()) {
+                            error = "Couldn’t disconnect notifications. You’re still signed in. Reconnect and try signing out again before giving this iPhone to someone else."
+                        }
+                    }
                 }
                 Button("Cancel", role: .cancel) {}
             } message: {
-                Text("You can sign back in with Apple, Google, or email.")
+                Text("An internet connection is required to disconnect notifications before signing out. You can sign back in with Apple, Google, or email.")
             }
             .alert("Delete Account?", isPresented: $showDeleteAccount) {
                 Button("Delete Account", role: .destructive) {
