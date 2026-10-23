@@ -40,7 +40,8 @@ actor ReminderStore {
     private let anonKey: String?
     private var pendingUpdates: [UUID: UUID] = [:]
     private var isReordering = false
-    private var orderRevision = 0
+    private var contentRevision = 0
+    private var refreshSequence = 0
     private let requestData: (URLRequest) async throws -> (Data, URLResponse)
 
     init(
@@ -142,7 +143,9 @@ actor ReminderStore {
         refreshAuthentication: Bool = true
     ) async throws -> [Reminder] {
         if isReordering { return cached() }
-        let revision = orderRevision
+        let revision = contentRevision
+        refreshSequence += 1
+        let sequence = refreshSequence
         let identityRevision = defaults.string(forKey: identityRevisionKey)
         // Extensions use a valid shared JWT but never rotate the host SDK's refresh token.
         let candidate = refreshAuthentication ? await loadFreshSession() : storedSession()
@@ -181,7 +184,8 @@ actor ReminderStore {
 
         let reminders = try ReminderJSON.decoder.decode([Reminder].self, from: responseData)
         try requireCurrentIdentity(session, revision: identityRevision)
-        if revision != orderRevision || isReordering { return cached() }
+        // An acknowledged mutation or a newer refresh makes this snapshot obsolete.
+        if revision != contentRevision || sequence != refreshSequence || isReordering { return cached() }
         defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
         return reminders
     }
@@ -195,10 +199,10 @@ actor ReminderStore {
         }
         if ids == original.map(\.id) { return original }
         isReordering = true
-        orderRevision += 1
+        contentRevision += 1
         defer {
             isReordering = false
-            orderRevision += 1
+            contentRevision += 1
         }
         let identityRevision = defaults.string(forKey: identityRevisionKey)
         guard let session = await loadFreshSession(), let ownerID = session.userID else {
@@ -417,6 +421,7 @@ actor ReminderStore {
     }
 
     private func cacheAcknowledgedReminder(_ reminder: Reminder) throws -> [Reminder] {
+        contentRevision += 1
         var reminders = cached().filter { $0.id != reminder.id && !$0.isDone }
         if !reminder.isDone { reminders.append(reminder) }
         reminders.sort {
