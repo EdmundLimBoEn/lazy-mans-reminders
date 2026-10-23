@@ -80,13 +80,13 @@ export async function reconcileLiveActivity(input: {
 
   const leaseId = await input.claimStart(decision.kind === "update");
   if (leaseId === null) return { results, deliveredAlert: false };
-  // On exceptions (including uncertain delivery or recording), let the lease
-  // expire rather than immediately permitting another start.
+  // On retryable results or exceptions (including uncertain delivery or
+  // recording), let the lease expire rather than permitting another start.
   const result = await input.send("start", "push-to-start");
   results.push(result);
   if (result === "sent") {
     await input.recordStart(decision.kind === "recycle", leaseId);
-  } else {
+  } else if (result === "failed" || result === "invalid") {
     await input.releaseStart(leaseId);
   }
   return { results, deliveredAlert: result === "sent" && input.hasAlert };
