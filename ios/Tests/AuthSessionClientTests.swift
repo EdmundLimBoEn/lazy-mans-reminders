@@ -135,7 +135,10 @@ final class AuthSessionClientTests: XCTestCase {
         var cacheAccount: UUID? = accountA
         let cleanupQueued = expectation(description: "Cleanup queued")
         let operations = AuthSessionGate.CleanupOperations(
-            setEndingSession: { _ in }, unbind: {}, removeDeviceToken: {},
+            setEndingSession: { _ in },
+            pauseRegistration: { order.append("pause") },
+            resumeRegistration: { order.append("resume") },
+            unbind: {}, removeDeviceToken: {},
             signOutSDK: { try? await client.auth.signOut() }, clearPublishedSession: {},
             clearUserData: { cacheAccount = nil }, clearBoard: {}
         )
@@ -163,6 +166,6 @@ final class AuthSessionClientTests: XCTestCase {
         XCTAssertEqual(completedB.user.id, accountB)
         XCTAssertEqual(client.auth.currentSession?.user.id, accountB)
         XCTAssertEqual(cacheAccount, accountB)
-        XCTAssertEqual(order, ["refresh-A", "sign-out-A", "install-B"])
+        XCTAssertEqual(order, ["refresh-A", "pause", "sign-out-A", "resume", "install-B"])
     }
 }

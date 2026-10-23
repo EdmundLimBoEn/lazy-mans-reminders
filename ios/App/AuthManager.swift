@@ -113,7 +113,7 @@ final class AuthManager: ObservableObject {
         guard !isRestoringSession, !isEndingSession, !isAuthenticating,
               let revocation = await appleCredentialMonitor.verifiedRevocation()
         else { return }
-        await authSessionGate.cleanUp(if: {
+        await authSessionGate.cleanUp(reason: .verifiedRevocation, if: {
             let current = client.auth.currentSession
             return !isEndingSession && !isAuthenticating
                 && appleCredentialMonitor.isCurrent(
@@ -293,18 +293,20 @@ final class AuthManager: ObservableObject {
         notice = nil
     }
 
-    func signOut() async {
+    func signOut() async -> Bool {
         await waitForRestoration()
-        await authSessionGate.cleanUp(operations: cleanupOperations)
+        return await authSessionGate.cleanUp(operations: cleanupOperations)
     }
 
     private var cleanupOperations: AuthSessionGate.CleanupOperations {
         .init(
             setEndingSession: { self.isEndingSession = $0 },
+            pauseRegistration: { await self.pushRegistration.pause() },
+            resumeRegistration: { self.pushRegistration.resume() },
             unbind: { await self.pushRegistration.unbind() },
             removeDeviceToken: {
                 if let token = self.pushRegistration.deviceToken {
-                    try? await self.client.from("device_tokens").delete().eq("token", value: token).execute()
+                    try await self.client.from("device_tokens").delete().eq("token", value: token).execute()
                 }
             },
             signOutSDK: { try? await self.client.auth.signOut() },
