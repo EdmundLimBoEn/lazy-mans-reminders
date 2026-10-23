@@ -118,7 +118,7 @@ type ServiceClient = {
   rpc: (
     name: string,
     args: Record<string, unknown>,
-  ) => PromiseLike<{ error: unknown }>;
+  ) => PromiseLike<{ data: unknown; error: unknown }>;
 };
 type DeviceSendResult = SendResult;
 
@@ -198,10 +198,12 @@ async function markActivityStarted(
   device: DeviceRow,
   startedAt: string,
   replacing: boolean,
+  leaseId: string,
 ): Promise<void> {
   // The phone may upload the new token before APNs returns. Clear only the
   // token we read, never an acknowledgement that arrived during delivery.
-  const { error } = await supabase.rpc("record_live_activity_start", {
+  const { error } = await supabase.rpc("complete_live_activity_start", {
+    p_lease_id: leaseId,
     p_device_token: device.token,
     p_user_id: device.user_id,
     p_previous_token: device.activity_push_token,
@@ -367,12 +369,43 @@ async function syncLiveActivity(input: {
         destination,
         alertBody: destination === "retiring" ? undefined : input.alertBody,
       }),
-    recordStart: (replacing) =>
+    claimStart: async (invalidActivity) => {
+      const leaseId = crypto.randomUUID();
+      const { data, error } = await input.supabase.rpc(
+        "claim_live_activity_start",
+        {
+          p_device_token: input.device.token,
+          p_user_id: input.device.user_id,
+          p_lease_id: leaseId,
+          p_expected_token: invalidActivity
+            ? null
+            : input.device.activity_push_token,
+          p_expected_started_at: invalidActivity
+            ? null
+            : input.device.activity_started_at,
+        },
+      );
+      if (error) throw new Error("Could not claim Live Activity start");
+      return data === true ? leaseId : null;
+    },
+    releaseStart: async (leaseId) => {
+      const { error } = await input.supabase.rpc(
+        "release_live_activity_start",
+        {
+          p_device_token: input.device.token,
+          p_user_id: input.device.user_id,
+          p_lease_id: leaseId,
+        },
+      );
+      if (error) throw new Error("Could not release Live Activity start");
+    },
+    recordStart: (replacing, leaseId) =>
       markActivityStarted(
         input.supabase,
         input.device,
         new Date().toISOString(),
         replacing,
+        leaseId,
       ),
     recordEnd: () =>
       markActivityEnded(

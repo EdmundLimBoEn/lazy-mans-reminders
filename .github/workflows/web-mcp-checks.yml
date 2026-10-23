@@ -113,6 +113,11 @@ jobs:
           for migration in \
             supabase/migrations/202608060001_create_reminders.sql \
             supabase/migrations/202608080001_completed_at_and_cleanup.sql \
+            supabase/migrations/202608060002_create_device_tokens.sql \
+            supabase/migrations/202608280001_live_activity_tokens.sql \
+            supabase/migrations/202609260001_live_activity_handoff.sql \
+            supabase/migrations/202610230001_live_activity_start_lease.sql \
+            supabase/tests/live_activity_start_lease.sql \
             supabase/migrations/202608080002_lock_screen_prefs.sql \
             supabase/migrations/202608260001_agent_tokens.sql \
             supabase/migrations/20261008035839_revoke_anon_agent_token_rpcs.sql \
