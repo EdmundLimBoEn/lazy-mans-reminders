@@ -15,7 +15,9 @@ export async function reconcileLiveActivity(input: {
     event: "start" | "update" | "end",
     destination: "push-to-start" | "activity" | "retiring",
   ) => Promise<SendResult>;
-  recordStart: (replacing: boolean) => Promise<void>;
+  claimStart: (invalidActivity: boolean) => Promise<string | null>;
+  releaseStart: (leaseId: string) => Promise<void>;
+  recordStart: (replacing: boolean, leaseId: string) => Promise<void>;
   recordEnd: () => Promise<void>;
   recordAdoption: () => Promise<void>;
   clearRetiring: () => Promise<void>;
@@ -76,10 +78,16 @@ export async function reconcileLiveActivity(input: {
     }
   }
 
+  const leaseId = await input.claimStart(decision.kind === "update");
+  if (leaseId === null) return { results, deliveredAlert: false };
+  // On exceptions (including uncertain delivery or recording), let the lease
+  // expire rather than immediately permitting another start.
   const result = await input.send("start", "push-to-start");
   results.push(result);
   if (result === "sent") {
-    await input.recordStart(decision.kind === "recycle");
+    await input.recordStart(decision.kind === "recycle", leaseId);
+  } else {
+    await input.releaseStart(leaseId);
   }
   return { results, deliveredAlert: result === "sent" && input.hasAlert };
 }

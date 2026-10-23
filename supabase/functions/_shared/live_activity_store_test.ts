@@ -78,6 +78,8 @@ for (const token of ["old-token", null]) {
             db, observed.user_id, observed.token,
             observed.activity_push_token, observed.activity_started_at,
           ),
+          claimStart: () => { throw new Error("unexpected claim"); },
+          releaseStart: () => { throw new Error("unexpected release"); },
           recordStart: () => { throw new Error("unexpected start"); },
           recordAdoption: () => { throw new Error("unexpected adoption"); },
           clearRetiring: () => Promise.resolve(),

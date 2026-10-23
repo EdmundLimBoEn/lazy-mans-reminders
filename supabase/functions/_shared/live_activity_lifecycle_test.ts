@@ -59,6 +59,8 @@ function phone() {
           }
           return Promise.resolve(result);
         },
+        claimStart: () => Promise.resolve("lease"),
+        releaseStart: () => Promise.resolve(),
         recordStart: (replacing) => {
           state.startedAt = new Date(nowMs).toISOString();
           if (replacing) state.retiringToken = previous;
@@ -286,10 +288,120 @@ Deno.test("an expired APNs destination reaches replacement recovery through the 
         sleep: () => Promise.resolve(),
       });
     },
+    claimStart: () => Promise.resolve("lease"),
+    releaseStart: () => Promise.resolve(),
     recordStart: () => Promise.resolve(),
     recordEnd: () => Promise.resolve(),
     recordAdoption: () => Promise.resolve(),
     clearRetiring: () => Promise.resolve(),
   });
   assertEquals(sent, ["update:activity", "start:push-to-start"]);
+});
+
+for (const activityToken of [null, "old"]) {
+  Deno.test(`overlapping ${activityToken ? "renewals" : "initial starts"} send only once`, async () => {
+    let held: string | null = null;
+    let starts = 0;
+    let recordings = 0;
+    let unblock!: () => void;
+    const pending = new Promise<void>((resolve) => unblock = resolve);
+    const run = () =>
+      reconcileLiveActivity({
+        lines: ["Milk"],
+        activityToken,
+        startToken: "start",
+        retiringToken: null,
+        startedAt: activityToken ? new Date(0).toISOString() : null,
+        nowMs: 7 * hour,
+        hasAlert: true,
+        claimStart: () => {
+          if (held) return Promise.resolve(null);
+          held = "winner";
+          return Promise.resolve(held);
+        },
+        send: async () => {
+          starts++;
+          await pending;
+          return "sent";
+        },
+        recordStart: (_replacing, leaseId) => {
+          assertEquals(leaseId, held);
+          recordings++;
+          return Promise.resolve();
+        },
+        releaseStart: () => {
+          throw new Error("Successful starts must complete the lease");
+        },
+        recordEnd: () => Promise.resolve(),
+        recordAdoption: () => Promise.resolve(),
+        clearRetiring: () => Promise.resolve(),
+      });
+    const first = run();
+    const second = run();
+    unblock();
+    const results = await Promise.all([first, second]);
+    assertEquals(starts, 1);
+    assertEquals(recordings, 1);
+    assertEquals(results.map((r) => r.deliveredAlert), [true, false]);
+  });
+}
+
+Deno.test("failed starts release only their own lease and can retry", async () => {
+  const released: string[] = [];
+  let claimed = 0;
+  const run = () =>
+    reconcileLiveActivity({
+      lines: ["Milk"],
+      activityToken: null,
+      startToken: "start",
+      retiringToken: null,
+      startedAt: null,
+      nowMs: 0,
+      hasAlert: false,
+      claimStart: () => Promise.resolve(`lease-${++claimed}`),
+      send: () => Promise.resolve("retryable"),
+      recordStart: () => {
+        throw new Error("Failed starts must not be recorded");
+      },
+      releaseStart: (id) => {
+        released.push(id);
+        return Promise.resolve();
+      },
+      recordEnd: () => Promise.resolve(),
+      recordAdoption: () => Promise.resolve(),
+      clearRetiring: () => Promise.resolve(),
+    });
+  await run();
+  await run();
+  assertEquals(released, ["lease-1", "lease-2"]);
+});
+
+Deno.test("a failed lease claim never sends to APNs", async () => {
+  let sends = 0;
+  let rejected = false;
+  try {
+    await reconcileLiveActivity({
+      lines: ["Milk"],
+      activityToken: null,
+      startToken: "start",
+      retiringToken: null,
+      startedAt: null,
+      nowMs: 0,
+      hasAlert: false,
+      claimStart: () => Promise.reject(new Error("database unavailable")),
+      send: () => {
+        sends++;
+        return Promise.resolve("sent");
+      },
+      recordStart: () => Promise.resolve(),
+      releaseStart: () => Promise.resolve(),
+      recordEnd: () => Promise.resolve(),
+      recordAdoption: () => Promise.resolve(),
+      clearRetiring: () => Promise.resolve(),
+    });
+  } catch {
+    rejected = true;
+  }
+  assertEquals(rejected, true);
+  assertEquals(sends, 0);
 });
