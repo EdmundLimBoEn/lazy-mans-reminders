@@ -40,7 +40,7 @@ struct ReminderListView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.systemGroupedBackground))
+            .background(Color(.systemBackground))
             .navigationTitle("Your Board")
             .navigationBarTitleDisplayMode(.large)
             .modifier(BoardNavigationSubtitle(text: boardSubtitle))
@@ -193,7 +193,8 @@ struct ReminderListView: View {
                 HStack {
                     Spacer()
                     Button("Done") { composerFocused = false }
-                        .font(.body.weight(.semibold))
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.secondary)
                         .frame(minWidth: 60, minHeight: 44)
                         .accessibilityHint("Dismisses the keyboard")
                 }
@@ -237,15 +238,15 @@ struct ReminderListView: View {
                                 .accessibilityHidden(true)
                         } else {
                             Image(systemName: "arrow.up")
-                                .font(.body.weight(.bold))
-                                .foregroundStyle(canAdd ? Color.white : Color.secondary)
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(canAdd ? Color(.systemBackground) : Color(.tertiaryLabel))
                                 .accessibilityHidden(true)
                         }
                     }
                     .frame(width: addVisualSize, height: addVisualSize)
                     .background {
                         Circle()
-                            .fill(canAdd ? Color.accentColor : Color(.tertiarySystemFill))
+                            .fill(canAdd ? Color.primary : Color(.quaternarySystemFill))
                     }
                     .frame(width: addHitSize, height: addHitSize)
                     .contentShape(Rectangle())
@@ -271,24 +272,18 @@ struct ReminderListView: View {
 
     @ViewBuilder
     private var composerFieldBackground: some View {
-        let shape = RoundedRectangle(cornerRadius: 30, style: .continuous)
-        if prefersSolidChrome {
-            shape
-                .fill(Color(.secondarySystemGroupedBackground))
-                .overlay {
-                    shape.strokeBorder(Color(.separator), lineWidth: colorSchemeContrast == .increased ? 1 : 0.5)
-                }
-        } else if #available(iOS 26.0, *) {
-            shape
-                .fill(.clear)
-                .glassEffect(.regular.interactive(), in: shape)
-        } else {
-            shape
-                .fill(.ultraThinMaterial)
-                .overlay {
-                    shape.strokeBorder(Color(.separator), lineWidth: 0.5)
-                }
-        }
+        // Quiet, solid field with a hairline edge: reads the same in light
+        // and dark and does not depend on what scrolls underneath it.
+        let shape = RoundedRectangle(cornerRadius: 22, style: .continuous)
+        shape
+            .fill(Color(.secondarySystemBackground))
+            .overlay {
+                shape.strokeBorder(
+                    composerFocused ? Color(.tertiaryLabel) : Color(.separator),
+                    lineWidth: colorSchemeContrast == .increased || prefersSolidChrome ? 1 : 0.5
+                )
+            }
+            .shadow(color: .black.opacity(composerFocused ? 0.06 : 0), radius: 12, y: 4)
     }
 
     private var addHitSize: CGFloat {
@@ -478,14 +473,15 @@ private struct ReminderRow: View {
             Label {
                 Text(reminder.text)
                     .font(.body)
+                    .kerning(-0.1)
                     .foregroundStyle(isCompleting ? .secondary : .primary)
                     .strikethrough(isCompleting)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
             } icon: {
                 Image(systemName: isCompleting ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(isCompleting ? Color.accentColor : .secondary)
-                    .imageScale(.large)
+                    .font(.title3.weight(.light))
+                    .foregroundStyle(isCompleting ? Color.accentColor : Color(.tertiaryLabel))
                     .frame(minWidth: 44, minHeight: 44, alignment: .center)
                     .contentShape(Rectangle())
             }

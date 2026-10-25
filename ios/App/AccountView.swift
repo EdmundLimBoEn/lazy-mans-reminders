@@ -40,10 +40,11 @@ struct AccountView: View {
                             }
                         }
                     } icon: {
-                        Image(systemName: "person.crop.circle.fill")
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(.tint)
-                            .imageScale(.large)
+                        Text(accountInitial)
+                            .font(.headline)
+                            .foregroundStyle(Color(.systemBackground))
+                            .frame(width: 40, height: 40)
+                            .background(Circle().fill(Color.primary))
                     }
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel(accountAccessibilityLabel)
@@ -111,6 +112,7 @@ struct AccountView: View {
                 }
             }
             .listStyle(.insetGrouped)
+            .listSectionSpacing(.compact)
             .navigationTitle("Account")
             .navigationBarTitleDisplayMode(.inline)
             .interactiveDismissDisabled(isDeletingAccount)
@@ -166,7 +168,14 @@ struct AccountView: View {
     }
 
     private var accountTitle: String {
-        accountEmail ?? "Signed In"
+        guard let accountEmail else { return "Signed In" }
+        // Store-screenshot harness only: launched with this environment key so
+        // captures never show the review account's address. Real users always
+        // see their own email.
+        if ProcessInfo.processInfo.environment["LMR_SCREENSHOT_MASK_EMAIL"] == "1" {
+            return "you@example.com"
+        }
+        return accountEmail
     }
 
     private var accountSubtitle: String? {
@@ -179,6 +188,10 @@ struct AccountView: View {
             return "Signed in on this iPhone"
         }
         return nil
+    }
+
+    private var accountInitial: String {
+        accountTitle.first.map { String($0).uppercased() } ?? "•"
     }
 
     private var accountAccessibilityLabel: String {

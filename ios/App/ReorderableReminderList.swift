@@ -15,7 +15,16 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
 
     func makeUIView(context: Context) -> UICollectionView {
         let coordinator = context.coordinator
-        var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+        var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
+        configuration.backgroundColor = .clear
+        configuration.showsSeparators = true
+        configuration.separatorConfiguration.color = .separator
+        configuration.itemSeparatorHandler = { _, separator in
+            var separator = separator
+            separator.topSeparatorVisibility = .hidden
+            separator.bottomSeparatorInsets = NSDirectionalEdgeInsets(top: 0, leading: 56, bottom: 0, trailing: 16)
+            return separator
+        }
         configuration.leadingSwipeActionsConfigurationProvider = { [weak coordinator] indexPath in
             guard let coordinator, coordinator.parent.isEnabled, !coordinator.isDragging,
                   coordinator.items.indices.contains(indexPath.item) else { return nil }
@@ -25,14 +34,14 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
                 finish(true)
             }
             action.image = UIImage(systemName: "checkmark.circle")
-            action.backgroundColor = .systemBlue
+            action.backgroundColor = .systemGreen
             return UISwipeActionsConfiguration(actions: [action])
         }
         let list = UICollectionView(
             frame: .zero,
             collectionViewLayout: UICollectionViewCompositionalLayout.list(using: configuration)
         )
-        list.backgroundColor = .systemGroupedBackground
+        list.backgroundColor = .systemBackground
         list.alwaysBounceVertical = true
         list.keyboardDismissMode = .interactive
         list.dataSource = coordinator
@@ -101,10 +110,12 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
                             self?.moveAccessible(id: reminder.id, direction: 1)
                         }
                 }
-                .padding(.leading, 8)
-                .padding(.vertical, 8)
+                .padding(.leading, 16)
+                .padding(.trailing, 8)
+                .padding(.vertical, 4)
             }
             .margins(.all, 0)
+            cell.backgroundConfiguration = .clear()
             return cell
         }
 
@@ -197,7 +208,7 @@ private struct ReminderDragGrip: View {
             dots
             dots
         }
-        .foregroundStyle(.secondary)
+        .foregroundStyle(.tertiary)
         .opacity(isEnabled ? 1 : 0.3)
         .frame(width: 44, height: 44)
         .contentShape(Rectangle())
