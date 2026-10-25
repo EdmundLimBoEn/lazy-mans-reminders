@@ -40,10 +40,11 @@ struct AccountView: View {
                             }
                         }
                     } icon: {
-                        Image(systemName: "person.crop.circle.fill")
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(.tint)
-                            .imageScale(.large)
+                        Text(accountInitial)
+                            .font(.headline)
+                            .foregroundStyle(Color(.systemBackground))
+                            .frame(width: 40, height: 40)
+                            .background(Circle().fill(Color.primary))
                     }
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel(accountAccessibilityLabel)
@@ -61,7 +62,7 @@ struct AccountView: View {
                     Button {
                         showSignOut = true
                     } label: {
-                        Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
+                        AccountRow("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
                     }
                     .disabled(isDeletingAccount)
                     .accessibilityHint("Signs you out on this iPhone")
@@ -69,23 +70,23 @@ struct AccountView: View {
 
                 Section {
                     Link(destination: LMRWeb.privacy) {
-                        Label("Privacy", systemImage: "hand.raised")
+                        AccountRow("Privacy", systemImage: "hand.raised", external: true)
                     }
                     Link(destination: LMRWeb.terms) {
-                        Label("Terms", systemImage: "doc.plaintext")
+                        AccountRow("Terms", systemImage: "doc.plaintext", external: true)
                     }
                     Link(destination: LMRWeb.support) {
-                        Label("Support", systemImage: "questionmark.circle")
+                        AccountRow("Support", systemImage: "questionmark.circle", external: true)
                     }
                     Link(destination: LMRWeb.dataExport) {
-                        Label("Download My Data", systemImage: "square.and.arrow.down")
+                        AccountRow("Download My Data", systemImage: "square.and.arrow.down", external: true)
                     }
                 }
 
                 Section {
                     if let feedbackURL = FeedbackMail.url(appInfo) {
                         Link(destination: feedbackURL) {
-                            Label("Send Feedback", systemImage: "envelope")
+                            AccountRow("Send Feedback", systemImage: "envelope", external: true)
                         }
                         .accessibilityHint("Opens Mail with your app and iOS version filled in")
                     }
@@ -111,6 +112,9 @@ struct AccountView: View {
                 }
             }
             .listStyle(.insetGrouped)
+            // Neutral rows; colour is reserved for state and destructive actions.
+            .tint(.primary)
+            .listSectionSpacing(.compact)
             .navigationTitle("Account")
             .navigationBarTitleDisplayMode(.inline)
             .interactiveDismissDisabled(isDeletingAccount)
@@ -166,7 +170,14 @@ struct AccountView: View {
     }
 
     private var accountTitle: String {
-        accountEmail ?? "Signed In"
+        guard let accountEmail else { return "Signed In" }
+        // Store-screenshot harness only: launched with this environment key so
+        // captures never show the review account's address. Real users always
+        // see their own email.
+        if ProcessInfo.processInfo.environment["LMR_SCREENSHOT_MASK_EMAIL"] == "1" {
+            return "you@example.com"
+        }
+        return accountEmail
     }
 
     private var accountSubtitle: String? {
@@ -179,6 +190,10 @@ struct AccountView: View {
             return "Signed in on this iPhone"
         }
         return nil
+    }
+
+    private var accountInitial: String {
+        accountTitle.first.map { String($0).uppercased() } ?? "•"
     }
 
     private var accountAccessibilityLabel: String {
@@ -230,5 +245,41 @@ struct AccountView: View {
             self.error = error.localizedDescription
             isDeletingAccount = false
         }
+    }
+}
+
+/// Neutral settings row: primary text, grey glyph, optional quiet
+/// external-link arrow. Keeps the sheet from reading as a wall of links.
+private struct AccountRow: View {
+    let title: String
+    let systemImage: String
+    var external = false
+
+    init(_ title: String, systemImage: String, external: Bool = false) {
+        self.title = title
+        self.systemImage = systemImage
+        self.external = external
+    }
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Image(systemName: systemImage)
+                .font(.body)
+                .foregroundStyle(.secondary)
+                .frame(width: 24)
+                .accessibilityHidden(true)
+            Text(title)
+                .foregroundStyle(.primary)
+            Spacer(minLength: 8)
+            if external {
+                Image(systemName: "arrow.up.right")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+                    .accessibilityHidden(true)
+            }
+        }
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(title)
     }
 }

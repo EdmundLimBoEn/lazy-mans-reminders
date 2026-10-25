@@ -40,7 +40,7 @@ struct ReminderListView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.systemGroupedBackground))
+            .background(Color(.systemBackground))
             .navigationTitle("Your Board")
             .navigationBarTitleDisplayMode(.large)
             .modifier(BoardNavigationSubtitle(text: boardSubtitle))
@@ -189,15 +189,6 @@ struct ReminderListView: View {
 
     private var composer: some View {
         VStack(alignment: .leading, spacing: 8) {
-            if composerFocused {
-                HStack {
-                    Spacer()
-                    Button("Done") { composerFocused = false }
-                        .font(.body.weight(.semibold))
-                        .frame(minWidth: 60, minHeight: 44)
-                        .accessibilityHint("Dismisses the keyboard")
-                }
-            }
             if atCapacity {
                 Text(ReminderBoardLimits.postItHint)
                     .font(.caption)
@@ -214,11 +205,12 @@ struct ReminderListView: View {
                     axis: .vertical
                 )
                 .font(.body)
+                .tint(.primary)
                 .lineLimit(1...4)
                 .textInputAutocapitalization(.sentences)
                 .focused($composerFocused)
                 .disabled(atCapacity || isReordering || isDragging)
-                .submitLabel(.send)
+                .submitLabel(.return)
                 .accessibilityLabel("New reminder")
                 .accessibilityHint(
                     atCapacity
@@ -226,6 +218,20 @@ struct ReminderListView: View {
                         : "Adds a reminder to your board and Lock Screen"
                 )
                 .onSubmit { Task { await addReminder() } }
+
+                if composerFocused && draft.text.isEmpty {
+                    Button { composerFocused = false } label: {
+                        Image(systemName: "keyboard.chevron.compact.down")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .frame(width: 32, height: 44)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Done")
+                    .accessibilityHint("Dismisses the keyboard")
+                    .transition(.opacity)
+                }
 
                 Button {
                     Task { await addReminder() }
@@ -237,15 +243,15 @@ struct ReminderListView: View {
                                 .accessibilityHidden(true)
                         } else {
                             Image(systemName: "arrow.up")
-                                .font(.body.weight(.bold))
-                                .foregroundStyle(canAdd ? Color.white : Color.secondary)
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(canAdd ? Color(.systemBackground) : Color(.tertiaryLabel))
                                 .accessibilityHidden(true)
                         }
                     }
                     .frame(width: addVisualSize, height: addVisualSize)
                     .background {
                         Circle()
-                            .fill(canAdd ? Color.accentColor : Color(.tertiarySystemFill))
+                            .fill(canAdd ? Color.primary : Color(.quaternarySystemFill))
                     }
                     .frame(width: addHitSize, height: addHitSize)
                     .contentShape(Rectangle())
@@ -265,30 +271,36 @@ struct ReminderListView: View {
         }
         .padding(.horizontal, 16)
         .padding(.top, 6)
-        .padding(.bottom, 6)
+        .padding(.bottom, 8)
+        .background(alignment: .top) {
+            LinearGradient(
+                colors: [Color(.systemBackground).opacity(0), Color(.systemBackground)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 36)
+            .offset(y: -36)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+        }
+        .background(Color(.systemBackground).allowsHitTesting(false))
         .accessibilityElement(children: .contain)
     }
 
     @ViewBuilder
     private var composerFieldBackground: some View {
-        let shape = RoundedRectangle(cornerRadius: 30, style: .continuous)
-        if prefersSolidChrome {
-            shape
-                .fill(Color(.secondarySystemGroupedBackground))
-                .overlay {
-                    shape.strokeBorder(Color(.separator), lineWidth: colorSchemeContrast == .increased ? 1 : 0.5)
-                }
-        } else if #available(iOS 26.0, *) {
-            shape
-                .fill(.clear)
-                .glassEffect(.regular.interactive(), in: shape)
-        } else {
-            shape
-                .fill(.ultraThinMaterial)
-                .overlay {
-                    shape.strokeBorder(Color(.separator), lineWidth: 0.5)
-                }
-        }
+        // Quiet, solid field with a hairline edge: reads the same in light
+        // and dark and does not depend on what scrolls underneath it.
+        let shape = RoundedRectangle(cornerRadius: 22, style: .continuous)
+        shape
+            .fill(Color(.secondarySystemBackground))
+            .overlay {
+                shape.strokeBorder(
+                    composerFocused ? Color(.tertiaryLabel) : Color(.separator),
+                    lineWidth: colorSchemeContrast == .increased || prefersSolidChrome ? 1 : 0.5
+                )
+            }
+            .shadow(color: .black.opacity(composerFocused ? 0.06 : 0), radius: 12, y: 4)
     }
 
     private var addHitSize: CGFloat {
@@ -478,14 +490,15 @@ private struct ReminderRow: View {
             Label {
                 Text(reminder.text)
                     .font(.body)
+                    .kerning(-0.1)
                     .foregroundStyle(isCompleting ? .secondary : .primary)
                     .strikethrough(isCompleting)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
             } icon: {
                 Image(systemName: isCompleting ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(isCompleting ? Color.accentColor : .secondary)
-                    .imageScale(.large)
+                    .font(.title3.weight(.light))
+                    .foregroundStyle(isCompleting ? Color.accentColor : Color(.tertiaryLabel))
                     .frame(minWidth: 44, minHeight: 44, alignment: .center)
                     .contentShape(Rectangle())
             }
