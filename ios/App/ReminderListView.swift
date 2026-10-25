@@ -189,16 +189,6 @@ struct ReminderListView: View {
 
     private var composer: some View {
         VStack(alignment: .leading, spacing: 8) {
-            if composerFocused {
-                HStack {
-                    Spacer()
-                    Button("Done") { composerFocused = false }
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                        .frame(minWidth: 60, minHeight: 44)
-                        .accessibilityHint("Dismisses the keyboard")
-                }
-            }
             if atCapacity {
                 Text(ReminderBoardLimits.postItHint)
                     .font(.caption)
@@ -215,11 +205,12 @@ struct ReminderListView: View {
                     axis: .vertical
                 )
                 .font(.body)
+                .tint(.primary)
                 .lineLimit(1...4)
                 .textInputAutocapitalization(.sentences)
                 .focused($composerFocused)
                 .disabled(atCapacity || isReordering || isDragging)
-                .submitLabel(.send)
+                .submitLabel(.return)
                 .accessibilityLabel("New reminder")
                 .accessibilityHint(
                     atCapacity
@@ -227,6 +218,20 @@ struct ReminderListView: View {
                         : "Adds a reminder to your board and Lock Screen"
                 )
                 .onSubmit { Task { await addReminder() } }
+
+                if composerFocused && draft.text.isEmpty {
+                    Button { composerFocused = false } label: {
+                        Image(systemName: "keyboard.chevron.compact.down")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .frame(width: 32, height: 44)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Done")
+                    .accessibilityHint("Dismisses the keyboard")
+                    .transition(.opacity)
+                }
 
                 Button {
                     Task { await addReminder() }
@@ -266,7 +271,19 @@ struct ReminderListView: View {
         }
         .padding(.horizontal, 16)
         .padding(.top, 6)
-        .padding(.bottom, 6)
+        .padding(.bottom, 8)
+        .background(alignment: .top) {
+            LinearGradient(
+                colors: [Color(.systemBackground).opacity(0), Color(.systemBackground)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 36)
+            .offset(y: -36)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+        }
+        .background(Color(.systemBackground).allowsHitTesting(false))
         .accessibilityElement(children: .contain)
     }
 
