@@ -1,5 +1,6 @@
 import importlib.util
 import plistlib
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -56,6 +57,8 @@ class ReleaseArtifactTests(unittest.TestCase):
                 'CFBundleShortVersionString': '1.0', 'CFBundleVersion': '7',
                 'DTXcode': '2660', 'DTSDKName': 'iphoneos26.5',
                 'DTXcodeBuild': '17F113', 'DTSDKBuild': 'test-sdk-build',
+                'SUPABASE_URL': 'https://example.supabase.co',
+                'SUPABASE_ANON_KEY': 'test-public-key',
                 'CFBundleIcons': {'CFBundlePrimaryIcon': {'CFBundleIconName': 'AppIcon'}},
             })
             self.write_plist(bundle / 'PrivacyInfo.xcprivacy', {'NSPrivacyTracking': False})
@@ -75,6 +78,39 @@ class ReleaseArtifactTests(unittest.TestCase):
         metadata = release.validate(self.app)
         self.assertEqual(metadata['app']['DTSDKName'], 'iphoneos26.5')
         self.assertEqual(metadata['widget']['DTXcodeBuild'], '17F113')
+        for bundle in metadata.values():
+            self.assertNotIn('SUPABASE_URL', bundle)
+            self.assertNotIn('SUPABASE_ANON_KEY', bundle)
+
+    def test_requires_resolved_widget_supabase_configuration(self):
+        path = self.widget / 'Info.plist'
+        original = plistlib.loads(path.read_bytes())
+        for key in ('SUPABASE_URL', 'SUPABASE_ANON_KEY'):
+            for value in (None, '', '  ', 123, f'$({key})', f'${{{key}}}'):
+                with self.subTest(key=key, value=value):
+                    info = original.copy()
+                    if value is None:
+                        del info[key]
+                    else:
+                        info[key] = value
+                    self.write_plist(path, info)
+                    with self.assertRaisesRegex(ValueError, key) as raised:
+                        release.validate(self.app)
+                    self.assertNotIn('test-public-key', str(raised.exception))
+        self.write_plist(path, original)
+        release.validate(self.app)
+
+    def test_widget_plist_sources_substitute_supabase_settings(self):
+        ios = Path(__file__).resolve().parents[2] / 'ios'
+        info = plistlib.loads((ios / 'Widget/Info.plist').read_bytes())
+        project = (ios / 'project.yml').read_text()
+        widget = project.split('  ReminderWidgetExtension:\n', 1)[1]
+        properties = widget.split('      properties:\n', 1)[1].split('    entitlements:', 1)[0]
+        for key in ('SUPABASE_URL', 'SUPABASE_ANON_KEY'):
+            with self.subTest(key=key):
+                self.assertEqual(info.get(key), f'$({key})')
+                self.assertRegex(properties, re.compile(
+                    rf'^        {key}: "\$\({key}\)"$', re.MULTILINE))
 
     def test_rejects_old_sdk_and_simulator_artifacts(self):
         for sdk in ('iphoneos18.5', 'iphonesimulator26.5', ''):
