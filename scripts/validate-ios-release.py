@@ -8,9 +8,15 @@ import re
 from pathlib import Path
 
 
-def validate_bundle(bundle):
+def validate_bundle(bundle, require_supabase=False):
     with (bundle / 'Info.plist').open('rb') as source:
         info = plistlib.load(source)
+    if require_supabase:
+        for key in ('SUPABASE_URL', 'SUPABASE_ANON_KEY'):
+            value = info.get(key)
+            if (not isinstance(value, str) or not value.strip()
+                    or '$(' in value or '${' in value):
+                raise ValueError(f'{bundle.name}: {key} must be a nonempty, resolved string')
     sdk = info.get('DTSDKName', '')
     if not re.fullmatch(r'iphoneos(?:2[6-9]|[3-9]\d)\.\d+(?:\.\d+)?', sdk):
         raise ValueError(f'{bundle.name}: expected device iOS SDK >=26, got {sdk!r}')
@@ -36,7 +42,7 @@ def validate(app):
     if not icons.get('CFBundlePrimaryIcon'):
         raise ValueError('App primary icon metadata is missing')
     widget = app / 'PlugIns' / 'ReminderWidgetExtension.appex'
-    widget_metadata = validate_bundle(widget)
+    widget_metadata = validate_bundle(widget, require_supabase=True)
     for key in ('CFBundleShortVersionString', 'CFBundleVersion', 'DTSDKName', 'DTXcode'):
         if not app_metadata.get(key) or app_metadata[key] != widget_metadata.get(key):
             raise ValueError(f'App and widget {key} must be present and match')

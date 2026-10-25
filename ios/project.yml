@@ -135,6 +135,8 @@ targets:
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         CFBundleDisplayName: Reminders
+        SUPABASE_URL: "$(SUPABASE_URL)"
+        SUPABASE_ANON_KEY: "$(SUPABASE_ANON_KEY)"
         APP_GROUP_ID: "$(APP_GROUP_ID)"
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
