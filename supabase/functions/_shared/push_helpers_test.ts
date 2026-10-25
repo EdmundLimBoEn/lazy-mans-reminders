@@ -409,3 +409,43 @@ Deno.test("alert payload truncates by serialized UTF-8 bytes without splitting c
     }
   }
 });
+
+Deno.test("explicit retryable rejections still allow start retries", async () => {
+  for (const status of [429, 503, 403]) {
+    let attempts = 0;
+    const result = await deliverWithRetries({
+      headers: {},
+      stopOnUncertainDelivery: true,
+      send: () =>
+        Promise.resolve(classifyApnsResponse(
+          ++attempts === 1 ? status : 200,
+          '{"reason":"ExpiredProviderToken"}',
+        )),
+      nextJwt: () => Promise.resolve("fresh"),
+      onExpiredJwt: () => {},
+      onPrune: () => Promise.resolve(),
+      sleep: () => Promise.resolve(),
+    });
+    assertEquals(result, "sent");
+    assertEquals(attempts, 2);
+  }
+});
+
+Deno.test("ordinary pushes retain retries after network uncertainty", async () => {
+  let attempts = 0;
+  const result = await deliverWithRetries({
+    headers: {},
+    send: () =>
+      Promise.resolve(
+        ++attempts === 1
+          ? { kind: "uncertain" as const, status: 0, reason: "network" }
+          : { kind: "sent" as const },
+      ),
+    nextJwt: () => Promise.resolve("jwt"),
+    onExpiredJwt: () => {},
+    onPrune: () => Promise.resolve(),
+    sleep: () => Promise.resolve(),
+  });
+  assertEquals(result, "sent");
+  assertEquals(attempts, 2);
+});

@@ -1,6 +1,10 @@
 import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import { reconcileLiveActivity } from "./live_activity_lifecycle.ts";
-import { classifyApnsResponse, deliverWithRetries } from "./push_helpers.ts";
+import {
+  type ApnsOutcome,
+  classifyApnsResponse,
+  deliverWithRetries,
+} from "./push_helpers.ts";
 
 const hour = 60 * 60 * 1000;
 type Result = "sent" | "failed" | "retryable" | "invalid";
@@ -458,3 +462,77 @@ Deno.test("a failed lease claim never sends to APNs", async () => {
   assertEquals(rejected, true);
   assertEquals(sends, 0);
 });
+
+for (const laterStatus of [200, 400, 410, 503]) {
+  for (const activityToken of [null, "old"]) {
+    Deno.test(`uncertain start stops before ${laterStatus} and retains ${activityToken ? "renewal" : "initial"} lease`, async () => {
+      let held = false;
+      let attempts = 0;
+      let releases = 0;
+      let recordings = 0;
+      let prunes = 0;
+      let sleeps = 0;
+      const run = () =>
+        reconcileLiveActivity({
+          lines: ["Milk"],
+          activityToken,
+          startToken: "start",
+          retiringToken: null,
+          startedAt: activityToken ? new Date(0).toISOString() : null,
+          nowMs: 7 * hour,
+          hasAlert: true,
+          claimStart: () => {
+            if (held) return Promise.resolve(null);
+            held = true;
+            return Promise.resolve("lease");
+          },
+          send: (event) =>
+            deliverWithRetries({
+              headers: {},
+              stopOnUncertainDelivery: event === "start",
+              send: (): Promise<ApnsOutcome> =>
+                Promise.resolve(
+                  ++attempts === 1
+                    ? { kind: "uncertain", status: 0, reason: "network" }
+                    : classifyApnsResponse(laterStatus, "{}"),
+                ),
+              nextJwt: () => Promise.resolve("jwt"),
+              onExpiredJwt: () => {},
+              onPrune: () => {
+                prunes++;
+                return Promise.resolve();
+              },
+              sleep: () => {
+                sleeps++;
+                return Promise.resolve();
+              },
+            }),
+          releaseStart: () => {
+            releases++;
+            held = false;
+            return Promise.resolve();
+          },
+          recordStart: () => {
+            recordings++;
+            return Promise.resolve();
+          },
+          recordEnd: () => Promise.resolve(),
+          recordAdoption: () => Promise.resolve(),
+          clearRetiring: () => Promise.resolve(),
+        });
+      assertEquals(await run(), {
+        results: ["retryable"],
+        deliveredAlert: false,
+      });
+      assertEquals(await run(), { results: [], deliveredAlert: false });
+      assertEquals({ attempts, releases, recordings, prunes, sleeps, held }, {
+        attempts: 1,
+        releases: 0,
+        recordings: 0,
+        prunes: 0,
+        sleeps: 0,
+        held: true,
+      });
+    });
+  }
+}

@@ -145,6 +145,7 @@ export function headersWithAuthorization(
 
 export async function deliverWithRetries(input: {
   headers: Record<string, string>;
+  stopOnUncertainDelivery?: boolean;
   send: (
     headers: Record<string, string>,
   ) => Promise<ApnsOutcome>;
@@ -158,6 +159,11 @@ export async function deliverWithRetries(input: {
 
   for (let attempt = 0; attempt < APNS_MAX_ATTEMPTS; attempt++) {
     const outcome = await input.send(headers);
+    // Starts are not idempotent: APNs may have accepted the request even
+    // though its response was lost. Preserve that uncertainty and the lease.
+    if (outcome.kind === "uncertain" && input.stopOnUncertainDelivery) {
+      return "retryable";
+    }
     if (outcome.kind === "sent") return "sent";
     if (outcome.kind === "prune") {
       await input.onPrune();
@@ -194,6 +200,7 @@ export function parseApnsReason(body: string): string {
 
 export type ApnsOutcome =
   | { kind: "sent" }
+  | { kind: "uncertain"; status: number; reason: string }
   | { kind: "retryable"; status: number; reason: string }
   | { kind: "prune"; status: number; reason: string }
   | { kind: "expired_jwt"; status: number; reason: string }
