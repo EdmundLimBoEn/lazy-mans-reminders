@@ -45,12 +45,24 @@ function jsonHeaders(): Record<string, string> {
 
 async function readDeletionBody(
   request: Request,
-): Promise<{ appleAuthorizationCode?: unknown; expectedUserId?: unknown }> {
+): Promise<
+  { appleAuthorizationCode?: string; expectedUserId?: string } | null
+> {
   try {
-    const body = await request.json();
-    return body && typeof body === "object" ? body : {};
+    const text = await request.text();
+    // Native clients intentionally send no body when no Apple code is needed.
+    if (text === "") return {};
+    const body = JSON.parse(text);
+    if (
+      !body || typeof body !== "object" || Array.isArray(body) ||
+      (body.expectedUserId !== undefined &&
+        typeof body.expectedUserId !== "string") ||
+      (body.appleAuthorizationCode !== undefined &&
+        typeof body.appleAuthorizationCode !== "string")
+    ) return null;
+    return body;
   } catch {
-    return {};
+    return null;
   }
 }
 
@@ -96,6 +108,12 @@ export async function handleDeleteAccount(
   }
 
   const body = await readDeletionBody(request);
+  if (body === null) {
+    return new Response("Invalid deletion request body", {
+      status: 400,
+      headers: corsHeaders,
+    });
+  }
   if (body.expectedUserId !== undefined && body.expectedUserId !== user.id) {
     return new Response(
       "Your signed-in account changed. Please reopen account deletion and try again.",
