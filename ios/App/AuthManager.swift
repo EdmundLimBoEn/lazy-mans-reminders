@@ -269,7 +269,11 @@ final class AuthManager: ObservableObject {
     }
 
     func handle(url: URL) async {
-        guard url.host != "board" else { return }
+        guard let callback = NativeAuthCallback(url: url) else { return }
+        if callback == .error {
+            notice = .error("Couldn’t sign in. Please request a new sign-in link or try again.")
+            return
+        }
         await waitForRestoration()
         await authSessionGate.acquire()
         defer { authSessionGate.release() }
