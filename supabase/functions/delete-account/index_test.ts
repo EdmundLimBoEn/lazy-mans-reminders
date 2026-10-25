@@ -79,6 +79,7 @@ function form(body: string): Record<string, string> {
 async function runDelete(input: {
   user: DeleteAccountUser | null;
   body?: unknown;
+  rawBody?: string;
   env?: Record<string, string | undefined>;
   token?: Response | ((body: string) => Response);
   revoke?: Response | ((body: string) => Response);
@@ -170,7 +171,7 @@ async function runDelete(input: {
   const headers: Record<string, string> = {
     Authorization: "Bearer user-jwt",
   };
-  let requestBody: string | undefined;
+  let requestBody = input.rawBody;
   if (input.body !== undefined) {
     headers["Content-Type"] = "application/json";
     requestBody = JSON.stringify(input.body);
@@ -464,7 +465,7 @@ Deno.test("unauthenticated requests cannot revoke Apple credentials or delete da
 });
 
 Deno.test("mismatched expected identity stops before any account cleanup", async () => {
-  for (const expectedUserId of [googleUser.id, "", null, 123]) {
+  for (const expectedUserId of [googleUser.id, ""]) {
     const result = await runDelete({
       user: appleUser,
       body: { expectedUserId, appleAuthorizationCode: "code" },
@@ -482,8 +483,53 @@ Deno.test("mismatched expected identity stops before any account cleanup", async
 });
 
 Deno.test("matching expected identity permits account deletion", async () => {
-  await assertDeleted(await runDelete({
-    user: googleUser,
-    body: { expectedUserId: googleUser.id },
-  }), googleUser.id);
+  await assertDeleted(
+    await runDelete({
+      user: googleUser,
+      body: { expectedUserId: googleUser.id },
+    }),
+    googleUser.id,
+  );
+});
+
+for (
+  const rawBody of [
+    '{"expectedUserId":',
+    '{"appleAuthorizationCode":"code",',
+    "{} trailing",
+    " \n\t",
+    "null",
+    "[]",
+    '[{"expectedUserId":"other-user"}]',
+    '"text"',
+    "42",
+    "true",
+    '{"expectedUserId":null}',
+    '{"expectedUserId":123}',
+    '{"expectedUserId":[]}',
+    '{"appleAuthorizationCode":null}',
+    '{"appleAuthorizationCode":123}',
+    '{"appleAuthorizationCode":{}}',
+  ]
+) {
+  Deno.test(`invalid deletion body is rejected: ${JSON.stringify(rawBody)}`, async () => {
+    const result = await runDelete({ user: appleUser, rawBody });
+    assertEquals(result.response.status, 400);
+    assertEquals(
+      result.response.headers.get("Access-Control-Allow-Origin"),
+      "*",
+    );
+    assertEquals(result.appleCalls, []);
+    assertEquals(result.grantCleanupCalls, 0);
+    assertEquals(result.deletedTables, []);
+    assertEquals(result.deletedUserId, null);
+  });
+}
+
+Deno.test("intentionally empty native deletion requests remain supported", async () => {
+  for (const rawBody of [undefined, "", "{}"]) {
+    const result = await runDelete({ user: googleUser, rawBody });
+    await assertDeleted(result, googleUser.id);
+    assertEquals(result.grantCleanupCalls, 1);
+  }
 });
