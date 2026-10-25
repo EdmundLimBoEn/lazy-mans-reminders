@@ -220,7 +220,7 @@ async function sendOnce(input: {
   body: string;
 }): Promise<
   ReturnType<typeof classifyApnsResponse> | {
-    kind: "retryable";
+    kind: "uncertain";
     status: number;
     reason: string;
   }
@@ -240,11 +240,12 @@ async function sendOnce(input: {
     return outcome;
   } catch (error) {
     console.error("APNs request failed", error);
-    return { kind: "retryable", status: 0, reason: "network" };
+    return { kind: "uncertain", status: 0, reason: "network" };
   }
 }
 
 async function sendWithRetries(input: {
+  stopOnUncertainDelivery?: boolean;
   host: string;
   token: string;
   headers: Record<string, string>;
@@ -252,6 +253,7 @@ async function sendWithRetries(input: {
   onPrune: () => Promise<void>;
 }): Promise<DeviceSendResult> {
   return await deliverWithRetries({
+    stopOnUncertainDelivery: input.stopOnUncertainDelivery,
     headers: input.headers,
     send: (headers) => sendOnce({ ...input, headers }),
     nextJwt: apnsJWT,
@@ -318,6 +320,7 @@ async function sendLiveActivityEvent(input: {
 
   return await sendWithRetries({
     host: apnsHostForEnvironment(input.device.environment),
+    stopOnUncertainDelivery: input.event === "start",
     token,
     headers: buildLiveActivityHeaders({
       jwt,
