@@ -49,6 +49,20 @@ final class AuthSessionGate {
         let token: String
     }
 
+    /// Caller holds the gate. Invalidate old reads and finish publication cleanup
+    /// before making a different account available to board publishers.
+    func shareIdentity(previousUserID: UUID?, nextUserID: UUID,
+                       clearUserData: () async -> Void,
+                       clearBoard: () async -> Void,
+                       share: () async -> Void) async {
+        precondition(isHeld)
+        if previousUserID != nextUserID {
+            await clearUserData()
+            await clearBoard()
+        }
+        await share()
+    }
+
     enum DeregistrationError: LocalizedError {
         case unconfirmed
 
