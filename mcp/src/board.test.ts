@@ -18,6 +18,29 @@ describe('prefixAgentText', () => {
     })
   })
 
+  it.each([
+    ['A', '😀'.repeat(251)],
+    ['A', '😀'.repeat(496)],
+    ['😀', 'x'.repeat(496)],
+    ['', '😀'.repeat(500)],
+    ['A', 'e\u0301'.repeat(248)],
+  ])('accepts valid code-point lengths with agent %j', (agentName, text) => {
+    expect(prefixAgentText({ text: `  ${text}  `, agentName })).toEqual({
+      kind: 'ok',
+      text: agentName ? `[${agentName}] ${text}` : text,
+    })
+  })
+
+  it.each([
+    ['A', '😀'.repeat(497)],
+    ['😀', 'x'.repeat(497)],
+    ['', '😀'.repeat(501)],
+    ['A', 'e\u0301'.repeat(248) + 'x'],
+    ['e\u0301', 'x'.repeat(496)],
+  ])('rejects more than 500 code points including agent %j', (agentName, text) => {
+    expect(prefixAgentText({ text, agentName })).toEqual({ kind: 'invalid_text' })
+  })
+
   it('rejects blank text', () => {
     expect(prefixAgentText({ text: '   ', agentName: 'Codex' })).toEqual({ kind: 'invalid_text' })
   })

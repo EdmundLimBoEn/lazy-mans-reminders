@@ -3,6 +3,51 @@ import XCTest
 @testable import LazyMansReminders
 
 final class ReminderStoreAcknowledgementTests: XCTestCase {
+    func testCreateAndEditAccept500UnicodeCodePoints() async throws {
+        for text in [String(repeating: "😀", count: 500),
+                     String(repeating: "e\u{0301}", count: 250)] {
+            for creating in [true, false] {
+                let original = sample()
+                var returned = creating ? sample(userID: original.userID) : original
+                returned.text = text
+                let fixture = Fixture(data: try ReminderJSON.encoder.encode([returned]),
+                                      method: creating ? "POST" : "PATCH")
+                defer { fixture.cleanUp() }
+                try await fixture.signInAndSeed(original)
+                let input = "  \(text)  "
+                let result = try await (creating
+                    ? fixture.store.create(text: input)
+                    : fixture.store.update(id: original.id, text: input))
+                XCTAssertTrue(result.contains(returned))
+            }
+        }
+    }
+
+    func testCreateAndEditReject501CodePointsBeforeRequest() async throws {
+        for text in [String(repeating: "😀", count: 501),
+                     String(repeating: "e\u{0301}", count: 250) + "x",
+                     String(repeating: "👩‍💻", count: 167)] {
+            for creating in [true, false] {
+                let original = sample()
+                let fixture = Fixture(data: Data("[]".utf8), method: "NO REQUEST")
+                defer { fixture.cleanUp() }
+                try await fixture.signInAndSeed(original)
+                do {
+                    if creating {
+                        _ = try await fixture.store.create(text: text)
+                    } else {
+                        _ = try await fixture.store.update(id: original.id, text: text)
+                    }
+                    XCTFail("More than 500 code points must be rejected")
+                } catch {
+                    XCTAssertEqual(error.localizedDescription, "Keep each reminder to 500 characters.")
+                }
+                let cache = await fixture.store.cached()
+                XCTAssertEqual(cache, [original])
+            }
+        }
+    }
+
     func testZeroRowsRejectCompletionEditAndReopenWithoutChangingCache() async throws {
         for mutation in Mutation.allCases {
             try await assertRejected(Data("[]".utf8), mutation: mutation,
