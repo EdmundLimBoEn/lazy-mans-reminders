@@ -53,6 +53,12 @@ Deno.test("successful retiring push clears only the token read before sending", 
       return Promise.resolve(new Response(null, { status: 200 }));
     }
     assertEquals(url.hostname, "test.invalid");
+    if (url.pathname === "/rest/v1/rpc/claim_device_delivery") {
+      return Promise.resolve(Response.json(true));
+    }
+    if (url.pathname === "/rest/v1/rpc/release_device_delivery") {
+      return Promise.resolve(Response.json(null));
+    }
     if (url.pathname === "/rest/v1/device_tokens" && init?.method === "PATCH") {
       const patch = JSON.parse(String(init.body));
       if ("retiring_activity_push_token" in patch) {

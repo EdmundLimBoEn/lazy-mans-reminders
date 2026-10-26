@@ -1,5 +1,10 @@
 import { markActivityEnded } from "../_shared/live_activity_store.ts";
-import { loadBoardContent, loadBoardLines } from "../_shared/board_loader.ts";
+import {
+  deliverDevices,
+  DEVICE_SELECT,
+  type DeviceRow,
+  type ServiceClient,
+} from "../_shared/device_delivery.ts";
 import {
   reconcileLiveActivity,
   type SendResult,
@@ -111,29 +116,7 @@ async function secretsMatch(
   return actual !== null && timingSafeEqual(expectedBytes, actualBytes);
 }
 
-// Service-role client is untyped here — Edge Function env has no generated DB types.
-type ServiceClient = {
-  // deno-lint-ignore no-explicit-any
-  from: (table: string) => any;
-  rpc: (
-    name: string,
-    args: Record<string, unknown>,
-  ) => PromiseLike<{ data: unknown; error: unknown }>;
-};
 type DeviceSendResult = SendResult;
-
-type DeviceRow = {
-  token: string;
-  user_id: string;
-  environment: string;
-  push_to_start_token: string | null;
-  activity_push_token: string | null;
-  activity_started_at: string | null;
-  retiring_activity_push_token: string | null;
-};
-
-const DEVICE_SELECT =
-  "token, user_id, environment, push_to_start_token, activity_push_token, activity_started_at, retiring_activity_push_token";
 
 async function pruneAlertToken(
   supabase: ServiceClient,
@@ -214,6 +197,7 @@ async function markActivityStarted(
 }
 
 async function sendOnce(input: {
+  assertCurrent: () => void;
   host: string;
   token: string;
   headers: Record<string, string>;
@@ -225,6 +209,7 @@ async function sendOnce(input: {
     reason: string;
   }
 > {
+  input.assertCurrent();
   try {
     const response = await fetch(`${input.host}/3/device/${input.token}`, {
       method: "POST",
@@ -245,6 +230,7 @@ async function sendOnce(input: {
 }
 
 async function sendWithRetries(input: {
+  assertCurrent: () => void;
   stopOnUncertainDelivery?: boolean;
   host: string;
   token: string;
@@ -264,6 +250,7 @@ async function sendWithRetries(input: {
 }
 
 async function sendAlertToDevice(input: {
+  assertCurrent: () => void;
   supabase: ServiceClient;
   userId: string;
   token: string;
@@ -278,6 +265,7 @@ async function sendAlertToDevice(input: {
 
   const jwt = await apnsJWT();
   return await sendWithRetries({
+    assertCurrent: input.assertCurrent,
     host: apnsHostForEnvironment(input.environment),
     token: input.token,
     headers: buildApnsHeaders({
@@ -292,6 +280,7 @@ async function sendAlertToDevice(input: {
 }
 
 async function sendLiveActivityEvent(input: {
+  assertCurrent: () => void;
   supabase: ServiceClient;
   device: DeviceRow;
   bundleId: string;
@@ -319,6 +308,7 @@ async function sendLiveActivityEvent(input: {
     : "activity_push_token" as const;
 
   return await sendWithRetries({
+    assertCurrent: input.assertCurrent,
     host: apnsHostForEnvironment(input.device.environment),
     stopOnUncertainDelivery: input.event === "start",
     token,
@@ -347,6 +337,7 @@ async function sendLiveActivityEvent(input: {
 }
 
 async function syncLiveActivity(input: {
+  assertCurrent: () => void;
   supabase: ServiceClient;
   device: DeviceRow;
   bundleId: string;
@@ -474,35 +465,37 @@ async function syncDevices(input: {
   supabase: ServiceClient;
   devices: DeviceRow[];
   bundleId: string;
-  lines: string[];
-  alertRecord?: ReminderRecord;
+  alertCandidate?: ReminderRecord;
   quiet?: boolean;
 }): Promise<DeviceSendResult[]> {
-  const results: DeviceSendResult[] = [];
-  for (const device of input.devices) {
-    const live = await syncLiveActivity({
-      supabase: input.supabase,
-      device,
-      bundleId: input.bundleId,
-      lines: input.lines,
-      alertBody: input.alertRecord?.text,
-      quiet: input.quiet,
-    });
-    results.push(...live.results);
-    if (input.alertRecord && !live.deliveredAlert) {
-      results.push(
-        await sendAlertToDevice({
-          supabase: input.supabase,
-          userId: device.user_id,
-          token: device.token,
-          environment: device.environment,
-          topic: input.bundleId,
-          record: input.alertRecord,
-        }),
-      );
-    }
-  }
-  return results;
+  return await deliverDevices({
+    ...input,
+    deliver: async (device, content, assertCurrent) => {
+      const live = await syncLiveActivity({
+        supabase: input.supabase,
+        device,
+        bundleId: input.bundleId,
+        lines: content.lines,
+        alertBody: content.alertRecord?.text,
+        quiet: input.quiet,
+        assertCurrent,
+      });
+      if (content.alertRecord && !live.deliveredAlert) {
+        live.results.push(
+          await sendAlertToDevice({
+            supabase: input.supabase,
+            userId: device.user_id,
+            token: device.token,
+            environment: device.environment,
+            topic: input.bundleId,
+            record: content.alertRecord,
+            assertCurrent,
+          }),
+        );
+      }
+      return live.results;
+    },
+  });
 }
 
 Deno.serve(async (request) => {
@@ -564,15 +557,13 @@ Deno.serve(async (request) => {
       byUser.set(device.user_id, list);
     }
     const results: DeviceSendResult[] = [];
-    for (const [userId, userDevices] of byUser) {
+    for (const userDevices of byUser.values()) {
       try {
-        const lines = await loadBoardLines(supabase, userId);
         results.push(
           ...await syncDevices({
             supabase,
             devices: userDevices,
             bundleId,
-            lines,
             quiet: true,
           }),
         );
@@ -596,21 +587,11 @@ Deno.serve(async (request) => {
   }
 
   const record = (payload as { record?: ReminderRecord }).record;
-  let content: Awaited<ReturnType<typeof loadBoardContent>>;
-  try {
-    content = await loadBoardContent(
-      supabase,
-      check.userId,
-      check.sendsAlert ? record : undefined,
-    );
-  } catch {
-    return new Response("Could not load reminder board", { status: 503 });
-  }
   const results = await syncDevices({
     supabase,
     devices,
     bundleId,
-    ...content,
+    alertCandidate: check.sendsAlert ? record : undefined,
   });
   return summarize(results);
 });
