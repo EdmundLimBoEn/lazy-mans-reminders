@@ -5,6 +5,8 @@ import WidgetKit
 /// Reloads the widget, Live Activity, Spotlight index, and in-app board after
 /// a mutation from the UI, a push, or a Siri / Shortcuts intent.
 enum ReminderBoardSync {
+    private static let spotlightSnapshot = ReminderSpotlightSnapshot()
+
     private static let coordinator = ReminderPublicationCoordinator(
         load: { await ReminderStore.shared.cached() },
         publish: publish
@@ -35,6 +37,8 @@ enum ReminderBoardSync {
     ) async throws {
         switch publication {
         case .index, .replaceIndex:
+            // System-requested reindexing must always run and may partially change the index.
+            await spotlightSnapshot.invalidate()
 #if LMR_REMINDERS_SCHEMA
             if #available(iOS 27.0, *) {
                 if publication == .index {
@@ -62,11 +66,15 @@ enum ReminderBoardSync {
         do {
 #if LMR_REMINDERS_SCHEMA
             if #available(iOS 27.0, *) {
-                try await ReminderSpotlightIndex.replaceAll(reminders)
+                try await spotlightSnapshot.replace(reminders, force: publication == .clear) {
+                    try await ReminderSpotlightIndex.replaceAll($0)
+                }
             }
 #else
             if #available(iOS 18.0, *) {
-                try await ReminderSpotlightIndex.replaceAll(reminders)
+                try await spotlightSnapshot.replace(reminders, force: publication == .clear) {
+                    try await ReminderSpotlightIndex.replaceAll($0)
+                }
             }
 #endif
         } catch {

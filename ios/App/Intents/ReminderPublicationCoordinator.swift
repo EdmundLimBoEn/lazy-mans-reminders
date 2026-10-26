@@ -88,3 +88,24 @@ actor ReminderPublicationCoordinator {
         }
     }
 }
+
+/// Used only inside the publication gate, so replacement and invalidation cannot overlap.
+/// Keep the exact snapshot (including owner IDs) to avoid digest collisions.
+actor ReminderSpotlightSnapshot {
+    private var indexed: [Reminder]?
+
+    func invalidate() {
+        indexed = nil
+    }
+
+    func replace(
+        _ reminders: [Reminder], force: Bool = false,
+        using replace: ([Reminder]) async throws -> Void
+    ) async throws {
+        guard force || indexed != reminders else { return }
+        // A failed replacement may already have deleted the previous index.
+        indexed = nil
+        try await replace(reminders)
+        indexed = reminders
+    }
+}

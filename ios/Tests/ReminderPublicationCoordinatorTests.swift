@@ -16,7 +16,86 @@ final class ReminderPublicationCoordinatorTests: XCTestCase {
         XCTAssertEqual(result, [reminder])
         let snapshot = await fixture.surfaces.snapshot()
         XCTAssertEqual(snapshot.activity, [reminder])
+        XCTAssertEqual(snapshot.replacements, 1, "Unchanged warm refresh must still restore activity without reindexing")
         XCTAssertEqual(Array(snapshot.transactions.suffix(2)), [.board(notify: false), .board(notify: false)])
+    }
+
+    func testColdForegroundIndexesIdenticalCachedAndFetchedBoardOnce() async throws {
+        let reminder = sample("Saved board")
+        let fixture = Fixture(reminders: [reminder], pause: nil)
+        _ = try await fixture.coordinator.refresh { [reminder] }
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.replacements, 1)
+        XCTAssertEqual(snapshot.published.count, 2)
+    }
+
+    func testChangedContentAndOwnerReplaceSpotlight() async throws {
+        let original = sample("Original")
+        var edited = original
+        edited.text = "Edited"
+        let otherOwner = Reminder(
+            id: edited.id, userID: UUID(), text: edited.text,
+            sortOrder: edited.sortOrder, isDone: edited.isDone, createdAt: edited.createdAt
+        )
+        let fixture = Fixture(reminders: [original], pause: nil)
+        for reminder in [original, edited, otherOwner] {
+            await fixture.surfaces.setCache([reminder])
+            try await fixture.coordinator.apply([reminder])
+        }
+        await fixture.surfaces.setCache([])
+        try await fixture.coordinator.apply([])
+        try await fixture.coordinator.apply([])
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.replacements, 4)
+        XCTAssertTrue(snapshot.indexed.isEmpty)
+    }
+
+    func testExplicitCleanupAndReindexBypassSnapshot() async throws {
+        let reminder = sample("Saved board")
+        let fixture = Fixture(reminders: [reminder], pause: nil)
+        try await fixture.coordinator.apply([reminder])
+        try await fixture.coordinator.reindexAll()
+        try await fixture.coordinator.apply([reminder])
+        try await fixture.coordinator.reindex(identifiers: [reminder.id])
+        try await fixture.coordinator.apply([reminder])
+        try await fixture.coordinator.clear()
+        try await fixture.coordinator.clear()
+        try await fixture.coordinator.apply([reminder])
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.replacements, 7)
+        XCTAssertEqual(snapshot.indexed, [reminder])
+    }
+
+    func testFailedReplacementRetriesEvenWhenReturningToPreviousSnapshot() async throws {
+        let state = ReminderSpotlightSnapshot()
+        let calls = ReplacementCalls()
+        let original = sample("Original")
+        var edited = original
+        edited.text = "Edited"
+        try await state.replace([original]) { _ in await calls.record() }
+        do {
+            try await state.replace([edited]) { _ in
+                await calls.record()
+                throw FakeFailure()
+            }
+            XCTFail("Expected indexing failure")
+        } catch {}
+        try await state.replace([original]) { _ in await calls.record() }
+        await state.invalidate()
+        do {
+            try await state.replace([original]) { _ in
+                await calls.record()
+                throw FakeFailure()
+            }
+        } catch {}
+        try await state.replace([original]) { _ in await calls.record() }
+        let count = await calls.count
+        XCTAssertEqual(count, 5)
+    }
+
+    private actor ReplacementCalls {
+        var count = 0
+        func record() { count += 1 }
     }
 
     func testOfflineColdLaunchRestoresTheSavedBoard() async throws {
@@ -249,6 +328,7 @@ final class ReminderPublicationCoordinatorTests: XCTestCase {
     private actor FakeSurfaces {
         typealias Publication = ReminderPublicationCoordinator.Publication
         struct Snapshot {
+            let replacements: Int
             let loads: Int
             let transactions: [Publication]
             let published: [[Reminder]]
@@ -261,6 +341,8 @@ final class ReminderPublicationCoordinatorTests: XCTestCase {
         private let pause: Pause?
         private let failFirst: Bool
         private var pending: CheckedContinuation<Void, Never>?
+        private let spotlightSnapshot = ReminderSpotlightSnapshot()
+        private var replacements = 0
         private var loads = 0
         private var transactions: [Publication] = []
         private var published: [[Reminder]] = []
@@ -290,7 +372,22 @@ final class ReminderPublicationCoordinatorTests: XCTestCase {
             case .board, .clear: activity = reminders
             case .index, .replaceIndex: break
             }
-            if publication != .index { indexed = [] }
+            switch publication {
+            case .board, .clear:
+                try await spotlightSnapshot.replace(reminders, force: publication == .clear) {
+                    try await self.replaceIndex($0, isFirst: isFirst)
+                }
+            case .index, .replaceIndex:
+                await spotlightSnapshot.invalidate()
+                try await replaceIndex(reminders, isFirst: isFirst, partial: publication == .index)
+            }
+        }
+
+        private func replaceIndex(_ reminders: [Reminder], isFirst: Bool, partial: Bool = false) async throws {
+            if !partial {
+                replacements += 1
+                indexed = []
+            }
             if isFirst && pause == .beforeIndex { await suspend() }
             if isFirst && failFirst { throw FakeFailure() }
             indexed.removeAll { item in reminders.contains { $0.id == item.id } }
@@ -310,7 +407,7 @@ final class ReminderPublicationCoordinatorTests: XCTestCase {
         }
 
         func snapshot() -> Snapshot {
-            Snapshot(loads: loads, transactions: transactions, published: published, activity: activity, indexed: indexed)
+            Snapshot(replacements: replacements, loads: loads, transactions: transactions, published: published, activity: activity, indexed: indexed)
         }
     }
 }
