@@ -3,6 +3,42 @@ import XCTest
 @testable import LazyMansReminders
 
 final class ReminderPublicationCoordinatorTests: XCTestCase {
+    @MainActor
+    func testAccountReplacementClearsBothSurfacesBeforeFailedOrCancelledFetch() async throws {
+        for cancelled in [false, true] {
+            let old = sample("Account A")
+            let fixture = Fixture(reminders: [old], pause: nil)
+            try await fixture.coordinator.apply([old])
+            let gate = AuthSessionGate()
+            await gate.withLock {
+                await gate.shareIdentity(
+                    previousUserID: old.userID, nextUserID: UUID(),
+                    clearUserData: { await fixture.surfaces.setCache([]) },
+                    clearBoard: { try! await fixture.coordinator.clear() },
+                    share: {
+                        let snapshot = await fixture.surfaces.snapshot()
+                        XCTAssertTrue(snapshot.activity.isEmpty)
+                        XCTAssertTrue(snapshot.indexed.isEmpty)
+                        let cache = await fixture.surfaces.load()
+                        XCTAssertTrue(cache.isEmpty)
+                    }
+                )
+            }
+            let refresh = Task {
+                if cancelled { withUnsafeCurrentTask { $0?.cancel() } }
+                return try await fixture.coordinator.refresh { throw URLError(.notConnectedToInternet) }
+            }
+            do {
+                _ = try await refresh.value
+                XCTFail("Expected failed or cancelled replacement-account fetch")
+            } catch {}
+            let snapshot = await fixture.surfaces.snapshot()
+            XCTAssertTrue(snapshot.activity.isEmpty)
+            XCTAssertTrue(snapshot.indexed.isEmpty)
+            XCTAssertEqual(snapshot.transactions, [.board(notify: true), .clear])
+        }
+    }
+
     func testWarmForegroundRestoresExpiredActivityBeforeFetching() async throws {
         let reminder = sample("Saved board")
         let fixture = Fixture(reminders: [reminder], pause: nil)

@@ -3,6 +3,49 @@ import XCTest
 
 @MainActor
 final class AuthSessionGateTests: XCTestCase {
+    func testIdentityReplacementWaitsForCleanupBeforeSharing() async {
+        let gate = AuthSessionGate()
+        let clearing = Signal()
+        let finishClear = Signal()
+        var steps: [String] = []
+        let replacement = Task {
+            await gate.withLock {
+                await gate.shareIdentity(
+                    previousUserID: UUID(), nextUserID: UUID(),
+                    clearUserData: { steps.append("invalidate") },
+                    clearBoard: {
+                        clearing.send()
+                        await finishClear.wait()
+                        steps.append("clear")
+                    },
+                    share: { steps.append("share") }
+                )
+            }
+        }
+        await clearing.wait()
+        XCTAssertEqual(steps, ["invalidate"])
+        // SDK replacement already succeeded: cancellation must not skip cleanup.
+        replacement.cancel()
+        finishClear.send()
+        await replacement.value
+        XCTAssertEqual(steps, ["invalidate", "clear", "share"])
+    }
+
+    func testSharingSameIdentityPreservesOfflineBoard() async {
+        let gate = AuthSessionGate()
+        let account = UUID()
+        var shared = false
+        await gate.withLock {
+            await gate.shareIdentity(
+                previousUserID: account, nextUserID: account,
+                clearUserData: { XCTFail("Same-account refresh must retain its cache") },
+                clearBoard: { XCTFail("Same-account refresh must retain published reminders") },
+                share: { shared = true }
+            )
+        }
+        XCTAssertTrue(shared)
+    }
+
     func testAccountSwitchRequiresVerifiedRemovalWithPreviousCredentials() async throws {
         let gate = AuthSessionGate()
         let suite = "AccountSwitchTests-\(UUID().uuidString)"

@@ -107,6 +107,11 @@ actor ReminderStore {
         persist(session)
     }
 
+    /// Identity comparison during authentication must not refresh credentials or fetch.
+    func storedUserID() -> UUID? {
+        storedSession()?.userID ?? cached().first?.userID
+    }
+
     func currentUserID() async -> UUID? {
         if let session = await loadFreshSession(), let userID = session.userID {
             return userID
