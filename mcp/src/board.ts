@@ -28,7 +28,8 @@ export function prefixAgentText(input: {
   if (trimmed.length < 1) return { kind: 'invalid_text' }
   const name = input.agentName.trim()
   const stored = name === '' ? trimmed : `[${name}] ${trimmed}`
-  if (stored.length > 500) return { kind: 'invalid_text' }
+  // Match PostgreSQL char_length, including the agent prefix.
+  if ([...stored].length > 500) return { kind: 'invalid_text' }
   return { kind: 'ok', text: stored }
 }
 

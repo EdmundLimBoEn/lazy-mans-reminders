@@ -358,7 +358,7 @@ actor ReminderStore {
         guard !trimmed.isEmpty else {
             throw StoreError.emptyText
         }
-        guard trimmed.count <= 500 else {
+        guard trimmed.unicodeScalars.count <= 500 else {
             throw StoreError.tooLong
         }
         if ReminderBoardLimits.isAtCapacity(cached().filter { !$0.isDone }.count) {
@@ -448,7 +448,7 @@ actor ReminderStore {
         let trimmed = text?.trimmingCharacters(in: .whitespacesAndNewlines)
         if let trimmed {
             guard !trimmed.isEmpty else { throw StoreError.emptyText }
-            guard trimmed.count <= 500 else { throw StoreError.tooLong }
+            guard trimmed.unicodeScalars.count <= 500 else { throw StoreError.tooLong }
         }
         guard trimmed != nil || isDone != nil else {
             return cached()
