@@ -118,6 +118,8 @@ jobs:
             supabase/migrations/202609260001_live_activity_handoff.sql \
             supabase/migrations/202610230001_live_activity_start_lease.sql \
             supabase/tests/live_activity_start_lease.sql \
+            supabase/migrations/202610260001_device_delivery_slots.sql \
+            supabase/tests/device_delivery_slots.sql \
             supabase/migrations/202608080002_lock_screen_prefs.sql \
             supabase/migrations/202608260001_agent_tokens.sql \
             supabase/migrations/20261008035839_revoke_anon_agent_token_rpcs.sql \
