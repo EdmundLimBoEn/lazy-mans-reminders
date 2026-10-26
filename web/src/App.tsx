@@ -365,6 +365,7 @@ function Board({ session, onNavigate, onAccountDeleted }: {
       setError(POST_IT_HINT)
       return
     }
+    ++loadSequence.current
     setAdding(true)
     setText('')
     setError('')
@@ -375,13 +376,13 @@ function Board({ session, onNavigate, onAccountDeleted }: {
     if (insertError) {
       setText(value)
       setError(insertError.message)
-    } else {
-      await load()
     }
+    await load()
     setAdding(false)
   }
 
   async function patch(id: string, changes: Partial<ReminderChanges>) {
+    ++loadSequence.current
     setError('')
     setReminders((items) => items.map((item) => item.id === id ? { ...item, ...changes } : item))
     const { error: updateError } = await supabase
@@ -391,11 +392,13 @@ function Board({ session, onNavigate, onAccountDeleted }: {
       .eq('user_id', session.user.id)
     if (updateError) {
       setError(updateError.message)
-      await load()
     }
+    // Invalidate reads started during the write and reconcile acknowledged state.
+    await load()
   }
 
   async function remove(id: string) {
+    ++loadSequence.current
     setError('')
     setReminders((items) => items.filter((item) => item.id !== id))
     const { error: deleteError } = await supabase
@@ -405,8 +408,8 @@ function Board({ session, onNavigate, onAccountDeleted }: {
       .eq('user_id', session.user.id)
     if (deleteError) {
       setError(deleteError.message)
-      await load()
     }
+    await load()
   }
 
   async function reorder(sourceId: string, targetId: string) {
