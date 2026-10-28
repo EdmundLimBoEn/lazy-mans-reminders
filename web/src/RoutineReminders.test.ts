@@ -15,6 +15,11 @@ vi.mock('react', async (importOriginal) => ({
     return [hooks.states[index], (value: unknown) => { hooks.states[index] = value }]
   },
   useCallback: (callback: () => Promise<void>) => { hooks.load = callback; return callback },
+  useRef: (initial: unknown) => {
+    const index = hooks.cursor++
+    if (!(index in hooks.states)) hooks.states[index] = { current: initial }
+    return hooks.states[index]
+  },
   useEffect: () => {},
 }))
 
@@ -41,6 +46,12 @@ function render() {
   return {
     form: tree.find(node => node.type === 'form')!.props,
     text: tree.find(node => node.props.id === 'routine-text')!.props,
+    change: (id: string, value: string) => {
+      const event = { target: { value } }
+      tree.find(node => node.props.id === id)!.props.onChange(event)
+      // React change events bubble from the input/select to the form.
+      tree.find(node => node.type === 'form')!.props.onChange?.(event)
+    },
     button: (label: string) => tree.find(node => node.props.children === label && node.props.onClick)!.props,
     submit: tree.find(node => node.props.type === 'submit')!.props,
     alert: tree.find(node => node.props.role === 'alert')?.props.children,
@@ -104,6 +115,54 @@ it('clears the draft after a successful save and refresh', async () => {
   expect(render().submit.disabled).toBe(false)
   expect(render().text.value).toBe('')
   expect(render().submit.children).toBe('Add routine')
+})
+
+it.each(['insert', 'update'] as const)('preserves edits made during a pending %s', async (operation) => {
+  if (operation === 'insert') {
+    render().button('Cancel edit').onClick()
+    render().change('routine-text', 'Submitted draft')
+  }
+  let resolve!: (result: { error: null }) => void
+  const pending = new Promise<{ error: null }>(done => { resolve = done })
+  const query = { eq: vi.fn() }
+  query.eq.mockReturnValueOnce(query).mockReturnValueOnce(pending)
+  const write = vi.fn(() => operation === 'insert' ? pending : query)
+  db.from.mockReturnValueOnce({ [operation]: write })
+  const saving = render().form.onSubmit({ preventDefault() {} })
+  expect(render().submit.disabled).toBe(true)
+  render().change('routine-text', 'New draft while saving')
+  render().change('routine-time', '20:30')
+  expect(write.mock.calls[0]).toEqual([expect.objectContaining({
+    text: operation === 'insert' ? 'Submitted draft' : 'Keep my draft', local_time: '19:00',
+  })])
+  resolve({ error: null })
+  await saving
+  expect(render().text.value).toBe('New draft while saving')
+  expect(render().submit.disabled).toBe(false)
+  expect(render().submit.children).toBe(operation === 'insert' ? 'Add routine' : 'Save routine')
+
+  // The preserved draft remains saveable, including its schedule changes.
+  const nextQuery = { eq: vi.fn() }
+  nextQuery.eq.mockReturnValueOnce(nextQuery).mockResolvedValueOnce({ error: null })
+  const nextWrite = vi.fn(() => operation === 'insert' ? Promise.resolve({ error: null }) : nextQuery)
+  db.from.mockReturnValueOnce({ [operation]: nextWrite })
+  await render().form.onSubmit({ preventDefault() {} })
+  expect(nextWrite).toHaveBeenCalledWith(expect.objectContaining({ text: 'New draft while saving', local_time: '20:30' }))
+  expect(render().text.value).toBe('')
+})
+
+it('preserves the draft when only its schedule changes during a save', async () => {
+  let resolve!: (result: { error: null }) => void
+  const pending = new Promise<{ error: null }>(done => { resolve = done })
+  const query = { eq: vi.fn() }
+  query.eq.mockReturnValueOnce(query).mockReturnValueOnce(pending)
+  db.from.mockReturnValueOnce({ update: () => query })
+  const saving = render().form.onSubmit({ preventDefault() {} })
+  render().change('routine-weekday', '3')
+  resolve({ error: null })
+  await saving
+  expect(render().text.value).toBe('Keep my draft')
+  expect(render().submit.children).toBe('Save routine')
 })
 
 it.each(['save'])('keeps the draft when %s returns a database error', async (stage) => {

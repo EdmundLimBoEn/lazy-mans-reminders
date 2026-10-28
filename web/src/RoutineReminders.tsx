@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -18,6 +18,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
+  const draftRevision = useRef(0)
 
   const load = useCallback(async () => {
     const { data, error } = await supabase.from('routine_reminders')
@@ -50,6 +51,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
     }
     setBusy(true)
     setError('')
+    const submittedRevision = draftRevision.current
     try {
       const values = {
         text: text.trim(), interval_days: cadence === 'weekly' ? 7 : Number(days),
@@ -60,7 +62,10 @@ export function RoutineReminders({ userId }: { userId: string }) {
         ? await supabase.from('routine_reminders').update(values).eq('id', editingId).eq('user_id', userId)
         : await supabase.from('routine_reminders').insert({ ...values, user_id: userId })
       if (error) setError(error.message)
-      else { reset(); await load() }
+      else {
+        if (draftRevision.current === submittedRevision) reset()
+        await load()
+      }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Could not save routine')
     } finally {
@@ -102,7 +107,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
       <p className="text-sm text-muted-foreground">Repeat at the same local time. For Tuesday's uniform, choose Monday at 7 pm.</p>
       <p className="text-sm text-muted-foreground">When due, the reminder returns to your board and sends a push to your registered iPhone. Completing it keeps the routine running.</p>
     </div>
-    <form onSubmit={save} className="grid gap-3 rounded-lg border p-4">
+    <form onSubmit={save} onChange={() => { draftRevision.current += 1 }} className="grid gap-3 rounded-lg border p-4">
       <div className="grid gap-2"><Label htmlFor="routine-text">Reminder</Label>
         <Input id="routine-text" value={text} onChange={e => setText(e.target.value)} placeholder="Prepare Tuesday's uniform" maxLength={500} required /></div>
       <div className="grid gap-3 sm:grid-cols-2">
