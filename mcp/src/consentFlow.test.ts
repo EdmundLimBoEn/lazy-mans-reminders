@@ -34,6 +34,7 @@ function memoryState() {
     get: async (key: string) => entries.get(key),
     put: async (key: string, value: unknown) => { entries.set(key, value) },
     setAlarm: vi.fn(async (_time: number) => {}),
+    delete: async (key: string) => entries.delete(key),
     deleteAll: async () => { entries.clear() },
     // Model the storage transaction boundary, while running the production DO.
     transaction: <T>(callback: (txn: unknown) => Promise<T>): Promise<T> => {
@@ -51,7 +52,7 @@ function memoryAuthorizationStates(): DurableObjectNamespace {
     idFromName: (name: string) => name,
     get: (id: string) => {
       if (!objects.has(id)) objects.set(id, new AuthorizationState(memoryState()))
-      return objects.get(id)
+      return { fetch: (input: string, init?: RequestInit) => objects.get(id)!.fetch(new Request(input, init)) }
     },
   } as unknown as DurableObjectNamespace
 }
@@ -74,15 +75,19 @@ function client(partial: Pick<ClientInfo, 'clientId' | 'clientName' | 'redirectU
 describe('consent and grants', () => {
   it('shows each client before Allow, denies without an unregistered redirect, and keeps grants owner-scoped', async () => {
     const kv = memoryKv()
+    const states = memoryAuthorizationStates()
+    const seed = (state: string, request: AuthRequest) => states.get(states.idFromName(state)).fetch(
+      'https://authorization-state/pending', { method: 'PUT', body: JSON.stringify(request) },
+    )
     const clients = new Map<string, ClientInfo>([
       ['grok', client({ clientId: 'grok', clientName: 'Grok', redirectUris: ['https://grok.example/callback'] })],
       ['cursor', client({ clientId: 'cursor', clientName: 'Cursor', redirectUris: ['cursor://anysphere.cursor-mcp/oauth/callback'] })],
       ['web', client({ clientId: 'web', clientName: 'Web', redirectUris: ['https://app.example/callback'] })],
     ])
-    await kv.put('pending-auth:' + STATE_GROK, JSON.stringify(requestFor('grok', 'https://grok.example/callback', ['board'])))
-    await kv.put('pending-auth:' + STATE_CURSOR, JSON.stringify(requestFor('cursor', 'cursor://anysphere.cursor-mcp/oauth/callback', ['board'])))
-    await kv.put('pending-auth:' + STATE_HTTP, JSON.stringify(requestFor('web', 'http://evil.example/callback', ['board'])))
-    await kv.put('pending-auth:' + STATE_PLAIN, JSON.stringify(requestFor('grok', 'https://grok.example/callback', ['openid'])))
+    await seed(STATE_GROK, requestFor('grok', 'https://grok.example/callback', ['board']))
+    await seed(STATE_CURSOR, requestFor('cursor', 'cursor://anysphere.cursor-mcp/oauth/callback', ['board']))
+    await seed(STATE_HTTP, requestFor('web', 'http://evil.example/callback', ['board']))
+    await seed(STATE_PLAIN, requestFor('grok', 'https://grok.example/callback', ['openid']))
 
     const completed: Array<{ metadata: unknown; props: unknown; scope: string[] }> = []
     const grants: GrantSummary[] = [{
@@ -123,7 +128,7 @@ describe('consent and grants', () => {
       SUPABASE_SERVICE_ROLE_KEY: 'service',
       WEB_ORIGINS: 'https://lmr.sillyapps.co',
       OAUTH_KV: kv,
-      AUTHORIZATION_STATE: memoryAuthorizationStates(),
+      AUTHORIZATION_STATE: states,
       OAUTH_PROVIDER: oauth,
     } as unknown as Env
 
@@ -162,7 +167,7 @@ describe('consent and grants', () => {
     const denial = await denied.json() as { redirectTo: string }
     expect(denial.redirectTo).toContain('https://grok.example/callback')
     expect(denial.redirectTo).toContain('error=access_denied')
-    expect(await kv.get('pending-auth:' + STATE_GROK)).toBeNull()
+    expect((await authed(`/consent?state=${STATE_GROK}`, 'token-a')).status).toBe(400)
     expect((await authed('/bind', 'token-a', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -218,7 +223,7 @@ describe('consent and grants', () => {
 })
 
 describe('single-use authorization', () => {
-  async function setup() {
+  async function setup(delayedKv = false) {
     const pending = requestFor('grok', 'https://grok.example/callback', ['board'])
     const oauth = {
       parseAuthRequest: async () => pending,
@@ -228,6 +233,7 @@ describe('single-use authorization', () => {
       completeAuthorization: vi.fn(async () => ({ redirectTo: 'https://grok.example/callback?code=one' })),
     }
     const kv = memoryKv()
+    if (delayedKv) vi.spyOn(kv, 'get').mockResolvedValue(null)
     const env = {
       WEB_ORIGINS: 'https://lmr.sillyapps.co',
       OAUTH_KV: kv,
@@ -246,36 +252,39 @@ describe('single-use authorization', () => {
       headers: { Authorization: 'Bearer token-a', Origin: 'https://lmr.sillyapps.co', 'Content-Type': 'application/json' },
       body: JSON.stringify({ state }),
     }), env, deps)
-    return { kv, oauth, pending, state, bind: () => post('/bind'), deny: () => post('/consent/deny') }
+    const consent = () => handlePublicRequest(new Request(`https://lmr-mcp.edmundlim.systems/consent?state=${state}`, {
+      headers: { Authorization: 'Bearer token-a' },
+    }), env, deps)
+    return { kv, oauth, pending, state, consent, bind: () => post('/bind'), deny: () => post('/consent/deny') }
   }
 
-  it.each([true, false])('denial prevents a grant from stale KV (pending at denial: %s)', async (hasPending) => {
-    const { kv, oauth, pending, state, bind, deny } = await setup()
-    if (!hasPending) await kv.delete('pending-auth:' + state)
+  it('reads fresh consent and binds despite delayed KV visibility after authorization succeeds', async () => {
+    const { consent, bind, oauth } = await setup(true)
+    const response = await consent()
+    expect(response.status).toBe(200)
+    expect(await response.json()).toMatchObject({ summary: { client: { name: 'Grok' } } })
+    expect((await bind()).status).toBe(200)
+    expect(oauth.completeAuthorization).toHaveBeenCalledTimes(1)
+  })
 
-    const denied = await deny()
-    expect(denied.status).toBe(200)
-    expect(await denied.json()).toEqual({
-      redirectTo: hasPending ? expect.stringContaining('error=access_denied') : null,
-    })
-    expect(await kv.get('pending-auth:' + state)).toBeNull()
+  it('denial removes pending consent and prevents a grant even with stale KV', async () => {
+    const { kv, oauth, pending, consent, bind, deny } = await setup()
+    expect(await (await deny()).json()).toEqual({ redirectTo: expect.stringContaining('error=access_denied') })
     vi.spyOn(kv, 'get').mockResolvedValue(pending)
-
-    const replay = await bind()
-    expect(replay.status).toBe(400)
-    expect(await replay.json()).toEqual({ error: 'expired_state' })
+    expect((await consent()).status).toBe(400)
+    expect(await (await bind()).json()).toEqual({ error: 'expired_state' })
     expect(oauth.completeAuthorization).not.toHaveBeenCalled()
     expect((await deny()).status).toBe(200)
   })
 
   it('creates exactly one grant when both authenticated binds read the same pending state', async () => {
-    const { kv, oauth, bind } = await setup()
-    const get = kv.get.bind(kv)
+    const { oauth, bind } = await setup()
+    const lookup = oauth.lookupClient
     let release!: () => void
     const bothRead = new Promise<void>((resolve) => { release = resolve })
     let reads = 0
-    vi.spyOn(kv, 'get').mockImplementation(async (key: string) => {
-      const pending = await get(key, 'json')
+    vi.spyOn(oauth, 'lookupClient').mockImplementation(async () => {
+      const pending = await lookup()
       if (++reads === 2) release()
       await bothRead
       return pending
@@ -301,29 +310,62 @@ describe('single-use authorization', () => {
   })
 
   it('completes the normal authorize/bind flow and removes the pending record', async () => {
-    const { kv, oauth, state, bind } = await setup()
+    const { consent, oauth, bind } = await setup()
     const response = await bind()
     expect(response.status).toBe(200)
     expect(await response.json()).toEqual({ redirectTo: 'https://grok.example/callback?code=one' })
     expect(oauth.completeAuthorization).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({
       userId: USER_A, scope: ['board'], props: { userId: USER_A, tokenId: 'oauth', agentName: 'Grok' },
     }))
-    expect(await kv.get('pending-auth:' + state)).toBeNull()
+    expect((await consent()).status).toBe(400)
     expect(await (await bind()).json()).toEqual({ error: 'expired_state' })
+  })
+
+  it('expires pending reads and consumption at ten minutes even before alarm cleanup', async () => {
+    const now = Date.now()
+    const clock = vi.spyOn(Date, 'now').mockReturnValue(now)
+    try {
+      const { consent, bind, oauth } = await setup()
+      clock.mockReturnValue(now + PENDING_AUTH_TTL_SECONDS * 1000 - 1)
+      expect((await consent()).status).toBe(200)
+      clock.mockReturnValue(now + PENDING_AUTH_TTL_SECONDS * 1000)
+      expect(await (await consent()).json()).toEqual({ error: 'expired_state' })
+      expect(await (await bind()).json()).toEqual({ error: 'expired_state' })
+      expect(oauth.completeAuthorization).not.toHaveBeenCalled()
+
+      const storage = memoryState()
+      clock.mockReturnValue(now)
+      const object = new AuthorizationState(storage)
+      await object.fetch(new Request('https://authorization-state/pending', {
+        method: 'PUT', body: JSON.stringify(requestFor('grok', 'https://grok.example/callback', ['board'])),
+      }))
+      clock.mockReturnValue(now + PENDING_AUTH_TTL_SECONDS * 1000)
+      expect(await (await object.fetch(new Request('https://authorization-state/consume', { method: 'POST' }))).json())
+        .toEqual({ consumed: false })
+      await object.alarm()
+      expect(await storage.storage.get('pending')).toBeUndefined()
+    } finally {
+      clock.mockRestore()
+    }
   })
 
   it('persists consumption across object instances and schedules cleanup after ten minutes', async () => {
     const state = memoryState()
     const before = Date.now()
     const object = new AuthorizationState(state)
-    expect(await (await object.fetch()).json()).toEqual({ consumed: true })
+    const pending = requestFor('grok', 'https://grok.example/callback', ['board'])
+    await object.fetch(new Request('https://authorization-state/pending', { method: 'PUT', body: JSON.stringify(pending) }))
+    const consume = () => new Request('https://authorization-state/consume', { method: 'POST' })
+    expect(await (await new AuthorizationState(state).fetch(new Request('https://authorization-state/pending'))).json()).toEqual(pending)
+    expect(await (await object.fetch(consume())).json()).toEqual({ consumed: true })
     const expiry = vi.mocked(state.storage.setAlarm).mock.calls[0][0] as number
     expect(expiry).toBeGreaterThanOrEqual(before + PENDING_AUTH_TTL_SECONDS * 1000)
     expect(expiry).toBeLessThanOrEqual(Date.now() + PENDING_AUTH_TTL_SECONDS * 1000)
 
     const restarted = new AuthorizationState(state)
-    expect(await (await restarted.fetch()).json()).toEqual({ consumed: false })
+    expect(await (await restarted.fetch(consume())).json()).toEqual({ consumed: false })
     expect(state.storage.setAlarm).toHaveBeenCalledTimes(1)
+    expect(await (await restarted.fetch(new Request('https://authorization-state/pending'))).json()).toBeNull()
     await restarted.alarm()
     expect(await state.storage.get('consumed')).toBeUndefined()
   })
