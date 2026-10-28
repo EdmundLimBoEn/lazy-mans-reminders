@@ -60,7 +60,7 @@ function deferred<T>() {
 }
 const original = { id: 'note', user_id: 'user', text: 'Original', sort_order: 0, is_done: false, created_at: '2026-01-01' }
 type Row = typeof original
-type Result = { data: Row[]; error: null }
+type Result = { data: Row[]; error: null } | { data: null; error: { message: string } }
 let stored: Row[]
 let reads: ReturnType<typeof deferred<Result>>[]
 let write: ReturnType<typeof deferred<{ error: { message: string } | null }>>
@@ -152,6 +152,61 @@ it('reloads persisted state when an optimistic deletion fails', async () => {
   expect(displayed()).toEqual([])
   write.resolve({ error: { message: 'Write failed' } })
   await vi.waitFor(() => expect(displayed()).toEqual(['Original']))
+})
+
+it.each(['edit', 'complete', 'delete'])('rolls back a failed %s before an unavailable recovery read', async operation => {
+  const recovery = deferred<Result>()
+  reads.push(recovery)
+  mutate(operation)
+  write.resolve({ error: { message: 'Offline write' } })
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  // Rollback must not wait for reconciliation to finish (or succeed).
+  expect(displayed()).toEqual(['Original'])
+  expect(control('Complete "Original"')).toBeDefined()
+  recovery.resolve({ data: null, error: { message: 'Offline read' } })
+  await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
+  expect(displayed()).toEqual(['Original'])
+  if (operation === 'edit') expect(control('Edit reminder: Original').value).toBe('Updated')
+
+  // A subsequent mutation still works after the failed attempt releases its guard.
+  write = deferred()
+  control('Complete "Original"').onClick!()
+  stored = [{ ...original, is_done: true }]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Mark "Original" active').disabled).toBe(false))
+})
+
+it.each(['complete', 'delete'])('failed %s rollback preserves another row’s later mutation', async operation => {
+  stored.push({ ...original, id: 'other', text: 'Other', sort_order: 1 })
+  await hooks.load!()
+  const firstWrite = write
+  mutate(operation)
+  write = deferred()
+  control('Complete "Other"').onClick!()
+  const recovery = deferred<Result>()
+  reads.push(recovery)
+  firstWrite.resolve({ error: { message: 'Offline write' } })
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  expect(control('Complete "Original"')).toBeDefined()
+  expect(control('Mark "Other" active')).toBeDefined()
+  recovery.resolve({ data: null, error: { message: 'Offline read' } })
+  await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
+  stored[1].is_done = true
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Mark "Other" active').disabled).toBe(false))
+})
+
+it.each(['complete', 'delete'])('failed %s rollback preserves a newer fetched row', async operation => {
+  mutate(operation)
+  stored = [{ ...original, text: 'Newer' }]
+  await hooks.load!()
+  const recovery = deferred<Result>()
+  reads.push(recovery)
+  write.resolve({ error: { message: 'Write failed' } })
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  recovery.resolve({ data: null, error: { message: 'Offline read' } })
+  await vi.waitFor(() => expect(control('Complete "Newer"').disabled).toBe(false))
+  expect(displayed()).toEqual(['Newer'])
 })
 
 function editForm() {

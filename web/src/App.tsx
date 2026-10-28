@@ -385,18 +385,23 @@ function Board({ session, onNavigate, onAccountDeleted }: {
 
   async function patch(id: string, changes: Partial<ReminderChanges>) {
     if (reorderingRef.current || pendingMutationsRef.current.has(id)) return false
+    const previous = reminders.find((item) => item.id === id)
+    if (!previous) return false
+    const optimistic = { ...previous, ...changes }
     pendingMutationsRef.current.add(id)
     setPendingMutations(new Set(pendingMutationsRef.current))
     try {
       ++loadSequence.current
       setError('')
-      setReminders((items) => items.map((item) => item.id === id ? { ...item, ...changes } : item))
+      setReminders((items) => items.map((item) => item.id === id ? optimistic : item))
       const { error: updateError } = await supabase
         .from('reminders')
         .update(changes)
         .eq('id', id)
         .eq('user_id', session.user.id)
       if (updateError) {
+        // Restore only our optimistic row; preserve any newer state from a read.
+        setReminders((items) => items.map((item) => item === optimistic ? previous : item))
         setError(updateError.message)
       }
       // Invalidate reads started during the write and reconcile acknowledged state.
@@ -410,6 +415,8 @@ function Board({ session, onNavigate, onAccountDeleted }: {
 
   async function remove(id: string) {
     if (reorderingRef.current || pendingMutationsRef.current.has(id)) return false
+    const previous = reminders.find((item) => item.id === id)
+    if (!previous) return false
     pendingMutationsRef.current.add(id)
     setPendingMutations(new Set(pendingMutationsRef.current))
     try {
@@ -422,6 +429,8 @@ function Board({ session, onNavigate, onAccountDeleted }: {
         .eq('id', id)
         .eq('user_id', session.user.id)
       if (deleteError) {
+        // The per-row guard remains held through rollback and reconciliation.
+        setReminders((items) => items.some((item) => item.id === id) ? items : [...items, previous])
         setError(deleteError.message)
       }
       await load()
