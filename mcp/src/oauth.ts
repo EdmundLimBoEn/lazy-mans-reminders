@@ -240,7 +240,12 @@ async function bindAuthorization(request: Request, env: Env, deps: IdentityDeps)
   // KV reads/deletes can overlap or be stale. Only the state object's winner
   // may create a grant, even when multiple callers read the pending record.
   if (!await consumeAuthorizationState(env, state)) return json({ error: 'expired_state' }, 400, cors)
-  await env.OAUTH_KV.delete(`${PENDING_PREFIX}${state}`)
+  try {
+    await env.OAUTH_KV.delete(`${PENDING_PREFIX}${state}`)
+  } catch {
+    // The state object prevents reuse; pending KV expires on its own.
+    // Cleanup failure must not burn an already-consumed approval.
+  }
 
   try {
     const { redirectTo } = await oauth.completeAuthorization({
