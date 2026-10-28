@@ -22,6 +22,7 @@ function fixture() {
     token,
     user_id: "owner",
     environment: "production",
+    updated_at: new Date(0).toISOString(),
     push_to_start_token: "start",
     activity_push_token: "activity",
     activity_started_at: new Date(0).toISOString(),
