@@ -270,10 +270,6 @@ Deno.test("cleanup timeouts prevent both account data and auth user deletion", a
             cleanupUrl: input.cleanupUrl,
             timeoutMs: 10,
           }),
-        deleteRows: () => {
-          deletions++;
-          return Promise.resolve({ error: null });
-        },
         deleteAuthUser: () => {
           deletions++;
           return Promise.resolve({ error: null });

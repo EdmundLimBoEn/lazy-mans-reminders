@@ -26,15 +26,6 @@ Deno.serve((request) =>
       if (error || !user) return { user: null };
       return { user };
     },
-    deleteRows: async (table, userId) => {
-      const admin = createClient(
-        requiredEnv("SUPABASE_URL"),
-        requiredEnv("SUPABASE_SERVICE_ROLE_KEY"),
-        { auth: { persistSession: false, autoRefreshToken: false } },
-      );
-      const { error } = await admin.from(table).delete().eq("user_id", userId);
-      return { error };
-    },
     deleteAuthUser: async (userId) => {
       const admin = createClient(
         requiredEnv("SUPABASE_URL"),
