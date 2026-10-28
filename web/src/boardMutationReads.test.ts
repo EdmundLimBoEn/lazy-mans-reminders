@@ -5,7 +5,7 @@ import App from './App'
 
 // Run the real Board handlers with retained hooks and controllable database reads.
 const hooks = vi.hoisted(() => ({ states: [] as unknown[], cursor: 0, load: undefined as undefined | (() => Promise<void>) }))
-const db = vi.hoisted(() => ({ from: vi.fn(), rpc: vi.fn() }))
+const db = vi.hoisted(() => ({ from: vi.fn(), rpc: vi.fn(), update: vi.fn(), delete: vi.fn() }))
 vi.mock('./supabase', () => ({ supabase: db }))
 vi.mock('@dnd-kit/core', async (original) => ({
   ...await original<typeof import('@dnd-kit/core')>(),
@@ -31,7 +31,7 @@ vi.mock('react', async (original) => ({
 }))
 
 type Props = {
-  children?: ReactNode; session?: Session; 'aria-label'?: string; text?: string; id?: string
+  disabled?: boolean; value?: string; children?: ReactNode; session?: Session; 'aria-label'?: string; text?: string; id?: string
   onClick?: () => void
   onChange?: (event: { target: { value: string } }) => void
   onSubmit?: (event: { preventDefault(): void }) => void
@@ -84,7 +84,8 @@ beforeEach(async () => {
         const pending = reads.shift()
         return (pending ? pending.promise : Promise.resolve({ data: stored.map(row => ({ ...row })), error: null })).then(resolve)
       },
-      update: () => mutation, delete: () => mutation, insert: () => write.promise,
+      update: (changes: unknown) => { db.update(changes); return mutation },
+      delete: () => { db.delete(); return mutation }, insert: () => write.promise,
     }
     const mutation = { eq: () => mutation, then: write.promise.then.bind(write.promise) }
     expect(['reminders', 'lock_screen_prefs']).toContain(table)
@@ -151,4 +152,55 @@ it('reloads persisted state when an optimistic deletion fails', async () => {
   expect(displayed()).toEqual([])
   write.resolve({ error: { message: 'Write failed' } })
   await vi.waitFor(() => expect(displayed()).toEqual(['Original']))
+})
+
+function editForm() {
+  return render().find(node => node.type === 'form' && nodes(node).some(child => child.props['aria-label'] === 'Save reminder'))!.props
+}
+
+it('blocks overlapping saves synchronously and allows a newer edit only after acknowledgment', async () => {
+  const complete = control('Complete "Original"').onClick!
+  const remove = control('Delete "Original"').onClick!
+  control('Edit "Original"').onClick!()
+  control('Edit reminder: Original').onChange!({ target: { value: 'A' } })
+  const submit = editForm().onSubmit!
+  submit({ preventDefault() {} })
+  // Reuse the pre-render handler: disabled state alone cannot guard this race.
+  submit({ preventDefault() {} })
+  complete()
+  remove()
+  expect(db.update).toHaveBeenCalledTimes(1)
+  expect(db.delete).not.toHaveBeenCalled()
+  expect(control('Edit reminder: A').disabled).toBe(true)
+  expect(control('Edit reminder: A').value).toBe('A')
+  expect(control('Save reminder').disabled).toBe(true)
+  expect(control('Cancel editing').disabled).toBe(true)
+  expect(control('Complete "A"').disabled).toBe(true)
+
+  stored = [{ ...original, text: 'A' }]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Edit "A"')).toBeDefined())
+  expect(control('Edit "A"').disabled).toBe(false)
+  write = deferred()
+  control('Edit "A"').onClick!()
+  control('Edit reminder: A').onChange!({ target: { value: 'B' } })
+  editForm().onSubmit!({ preventDefault() {} })
+  expect(db.update.mock.calls).toEqual([[{ text: 'A' }], [{ text: 'B' }]])
+  stored = [{ ...original, text: 'B' }]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Edit "B"')).toBeDefined())
+  expect(displayed()).toEqual(['B'])
+})
+
+it('retains a failed edit draft and releases the guard for retry', async () => {
+  mutate('edit')
+  write.resolve({ error: { message: 'Write failed' } })
+  await vi.waitFor(() => expect(control('Save reminder').disabled).toBe(false))
+  expect(control('Edit reminder: Original').value).toBe('Updated')
+  write = deferred()
+  editForm().onSubmit!({ preventDefault() {} })
+  expect(db.update).toHaveBeenCalledTimes(2)
+  stored = [{ ...original, text: 'Updated' }]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Edit "Updated"')).toBeDefined())
 })
