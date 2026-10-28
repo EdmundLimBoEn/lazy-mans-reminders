@@ -289,6 +289,7 @@ function Board({ session, onNavigate, onAccountDeleted }: {
   const [deletingAccount, setDeletingAccount] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [maxLines, setMaxLines] = useState(DEFAULT_LOCK_SCREEN_MAX_LINES)
+  const prefsRevision = useRef(0)
   const loadSequence = useRef(0)
   const reorderingRef = useRef(false)
   const pendingMutationsRef = useRef(new Set<string>())
@@ -315,6 +316,7 @@ function Board({ session, onNavigate, onAccountDeleted }: {
     await supabase.rpc('delete_old_completed_reminders')
     if (sequence !== loadSequence.current) return
 
+    const revision = prefsRevision.current
     const [{ data, error: fetchError }, prefsResult] = await Promise.all([
       supabase
         .from('reminders')
@@ -333,7 +335,9 @@ function Board({ session, onNavigate, onAccountDeleted }: {
     if (fetchError) setError(fetchError.message)
     else setReminders(data ?? [])
     const synced = prefsResult.data?.max_lines
-    if (typeof synced === 'number' && synced >= 1) setMaxLines(effectiveMaximum(synced))
+    if (revision === prefsRevision.current && typeof synced === 'number' && synced >= 1) {
+      setMaxLines(effectiveMaximum(synced))
+    }
     setLoading(false)
   }, [session.user.id])
 
@@ -353,6 +357,16 @@ function Board({ session, onNavigate, onAccountDeleted }: {
           reloadTimer = window.setTimeout(() => {
             if (!reorderingRef.current) recovery.refresh()
           }, 100)
+        },
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'lock_screen_prefs', filter: `user_id=eq.${session.user.id}` },
+        ({ new: prefs }) => {
+          if (!('user_id' in prefs) || !('max_lines' in prefs)) return
+          if (prefs.user_id !== session.user.id || typeof prefs.max_lines !== 'number' || prefs.max_lines < 1) return
+          ++prefsRevision.current
+          setMaxLines(effectiveMaximum(prefs.max_lines))
         },
       )
       .subscribe(recovery.onStatus)

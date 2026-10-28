@@ -4,8 +4,8 @@ import type { Session } from '@supabase/supabase-js'
 import App from './App'
 
 // Run the real Board handlers with retained hooks and controllable database reads.
-const hooks = vi.hoisted(() => ({ states: [] as unknown[], cursor: 0, effects: [] as Array<() => void | (() => void)>, load: undefined as undefined | (() => Promise<void>) }))
-const db = vi.hoisted(() => ({ channel: vi.fn(), removeChannel: vi.fn(), from: vi.fn(), rpc: vi.fn(), update: vi.fn(), delete: vi.fn() }))
+const hooks = vi.hoisted(() => ({ effects: [] as (() => void | (() => void))[], states: [] as unknown[], cursor: 0, load: undefined as undefined | (() => Promise<void>) }))
+const db = vi.hoisted(() => ({ from: vi.fn(), rpc: vi.fn(), update: vi.fn(), delete: vi.fn(), channel: vi.fn(), removeChannel: vi.fn() }))
 vi.mock('./supabase', () => ({ supabase: db }))
 vi.mock('@dnd-kit/core', async (original) => ({
   ...await original<typeof import('@dnd-kit/core')>(),
@@ -68,7 +68,7 @@ let write: ReturnType<typeof deferred<{ error: { message: string } | null }>>
 
 beforeEach(async () => {
   vi.clearAllMocks()
-  vi.stubGlobal('window', { location: { pathname: '/' } })
+  vi.stubGlobal('window', Object.assign(new EventTarget(), { location: { pathname: '/' }, clearTimeout, setTimeout }))
   hooks.states = ['/', { user: { id: 'user' } }, true, '', false]
   hooks.cursor = 0
   board = nodes(App()).find(node => node.props.session)!
@@ -80,7 +80,7 @@ beforeEach(async () => {
   db.from.mockImplementation((table: string) => {
     const query = {
       select: () => query, eq: () => query, order: () => query,
-      maybeSingle: async () => ({ data: null, error: null }),
+      maybeSingle: async () => ({ data: { max_lines: 6 }, error: null }),
       then: (resolve: (result: Result) => void) => {
         const pending = reads.shift()
         return (pending ? pending.promise : Promise.resolve({ data: stored.map(row => ({ ...row })), error: null })).then(resolve)
@@ -261,6 +261,60 @@ it('retains a failed edit draft and releases the guard for retry', async () => {
   await vi.waitFor(() => expect(control('Edit "Updated"')).toBeDefined())
 })
 
+function subscribeToCapacity() {
+  const subscriptions: { filter: { table: string; filter: string }; callback: (payload: { new: Record<string, unknown> }) => void }[] = []
+  let status: ((value: string) => void) | undefined
+  const channel = {
+    on: (_event: string, filter: typeof subscriptions[number]['filter'], callback: typeof subscriptions[number]['callback']) => {
+      subscriptions.push({ filter, callback })
+      return channel
+    },
+    subscribe: (callback: (value: string) => void) => { status = callback; return channel },
+  }
+  db.channel.mockReturnValue(channel)
+  render()
+  const cleanups = hooks.effects.map(effect => effect())
+  const prefs = subscriptions.find(item => item.filter.table === 'lock_screen_prefs')
+  expect(prefs?.filter.filter).toBe('user_id=eq.user')
+  return { emit: (max_lines: number, user_id = 'user') => prefs!.callback({ new: { user_id, max_lines } }),
+    recover: () => status?.('SUBSCRIBED'),
+    cleanup: () => cleanups.forEach(cleanup => cleanup?.()), channel }
+}
+
+it('updates input and Add capacity after phone preference inserts/updates without a reminder change', async () => {
+  stored = Array.from({ length: 6 }, (_, index) => ({ ...original, id: String(index) }))
+  await hooks.load!()
+  expect(control('New reminder').disabled).toBe(true)
+  const subscription = subscribeToCapacity()
+  await vi.waitFor(() => expect(db.rpc).toHaveBeenCalledTimes(3))
+  const readsBefore = db.from.mock.calls.length
+  subscription.emit(8)
+  expect(control('New reminder').disabled).toBe(false)
+  control('New reminder').onChange!({ target: { value: 'Next' } })
+  expect(render().find(node => node.type !== 'form' && node.props.children === 'Add')!.props.disabled).toBe(false)
+  subscription.emit(5)
+  expect(control('New reminder').disabled).toBe(true)
+  subscription.emit(8, 'another-user')
+  expect(control('New reminder').disabled).toBe(true)
+  expect(db.from).toHaveBeenCalledTimes(readsBefore)
+  subscription.cleanup()
+  expect(db.removeChannel).toHaveBeenCalledWith(subscription.channel)
+})
+
+it('does not let a pending board read overwrite newer phone capacity', async () => {
+  stored = Array.from({ length: 6 }, (_, index) => ({ ...original, id: String(index) }))
+  await hooks.load!()
+  const stale = deferred<Result>()
+  reads.push(stale)
+  const subscription = subscribeToCapacity()
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  subscription.emit(8)
+  stale.resolve({ data: stored, error: null })
+  await new Promise(resolve => setTimeout(resolve, 0))
+  expect(control('New reminder').disabled).toBe(false)
+  subscription.cleanup()
+})
+
 // Start the real subscription effect and drive recovery without row notifications.
 afterEach(() => { vi.unstubAllGlobals() })
 it.each(['SUBSCRIBED', 'online'])('recovers a failed read on %s and removes recovery listeners on cleanup', async trigger => {
@@ -310,4 +364,28 @@ it.each(['SUBSCRIBED', 'online'])('recovers a failed read on %s and removes reco
   await new Promise(resolve => setTimeout(resolve, 0))
   expect(db.from.mock.calls.length).toBe(finalCalls)
   expect(db.removeChannel).toHaveBeenCalledWith(channel)
+})
+
+it('refreshes capacity after reconnection and keeps newer phone preferences over an in-flight recovery read', async () => {
+  stored = Array.from({ length: 6 }, (_, index) => ({ ...original, id: String(index) }))
+  await hooks.load!()
+  const subscription = subscribeToCapacity()
+  await vi.waitFor(() => expect(db.rpc).toHaveBeenCalledTimes(3))
+  await new Promise(resolve => setTimeout(resolve, 0))
+  subscription.emit(8)
+  expect(control('New reminder').disabled).toBe(false)
+
+  // Reconnection reads the persisted capacity even if its notification was missed.
+  subscription.recover()
+  await vi.waitFor(() => expect(control('New reminder').disabled).toBe(true))
+
+  const stale = deferred<Result>()
+  reads.push(stale)
+  subscription.recover()
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  subscription.emit(8)
+  stale.resolve({ data: stored, error: null })
+  await new Promise(resolve => setTimeout(resolve, 0))
+  expect(control('New reminder').disabled).toBe(false)
+  subscription.cleanup()
 })
