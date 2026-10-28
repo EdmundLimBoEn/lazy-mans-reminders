@@ -1,4 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
+import type { SupabaseClient } from '@supabase/supabase-js'
+import type { AgentSession } from './domain'
 import {
   boardErrorFromStorage,
   CLIENT_STORAGE_ERROR,
@@ -8,7 +10,64 @@ import {
   MCP_MAX_LINES_CAP,
   POST_IT_HINT,
   prefixAgentText,
+  runBoardCommand,
 } from './board'
+
+describe('board snapshot preferences', () => {
+  const session = { userId: 'owner', tokenId: 'token', agentName: 'Codex' } as AgentSession
+  const reminder = {
+    id: 'reminder', text: 'Book dentist', is_done: false, sort_order: 0,
+    created_at: '2026-08-26T00:00:00Z', completed_at: null,
+  }
+
+  function clientWithPreferences(prefs: {
+    data: { max_lines: number } | null
+    error: { message: string; details: string } | null
+  }): SupabaseClient {
+    return {
+      from(table: string) {
+        const result = table === 'reminders' ? { data: [reminder], error: null, count: 1 } : prefs
+        return {
+          select() { return this },
+          eq() { return this },
+          order() { return this },
+          range() { return this },
+          maybeSingle() { return Promise.resolve(result) },
+          then(resolve: (value: typeof result) => unknown) {
+            return Promise.resolve(result).then(resolve)
+          },
+        }
+      },
+    } as unknown as SupabaseClient
+  }
+
+  it.each(['active', 'completed', 'all'] as const)(
+    'rejects a %s snapshot when reminders load but preferences fail', async (status) => {
+      const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
+      try {
+        const result = await runBoardCommand(clientWithPreferences({
+          data: null, error: { message: 'Preference read failed', details: 'Storage unavailable' },
+        }), session, { kind: 'list', status })
+        expect(result).toEqual({ kind: 'storage', message: CLIENT_STORAGE_ERROR })
+      } finally {
+        spy.mockRestore()
+      }
+    },
+  )
+
+  it.each([
+    { data: null, maximum: 6, remaining: 5 },
+    { data: { max_lines: 1 }, maximum: 1, remaining: 0 },
+  ])('uses capacity $maximum after a successful preference read', async ({ data, maximum, remaining }) => {
+    const result = await runBoardCommand(clientWithPreferences({ data, error: null }), session, {
+      kind: 'list', status: 'active',
+    })
+    expect(result).toEqual({
+      kind: 'snapshot',
+      snapshot: { reminders: [reminder], capacity: { used: 1, maximum, remaining } },
+    })
+  })
+})
 
 describe('prefixAgentText', () => {
   it('prefixes with [agentName] ', () => {

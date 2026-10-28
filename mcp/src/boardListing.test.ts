@@ -9,13 +9,16 @@ const makeRow = (id: number, isDone: boolean, userId = 'owner') => ({
   sort_order: 0, created_at: '2026-01-01T00:00:00Z', completed_at: null, user_id: userId,
 })
 
-function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'page' | 'count' | 'empty' | 'missing-count') {
+function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'page' | 'count' | 'empty' | 'missing-count' | 'preferences') {
   const requests: { url: URL; method: string }[] = []
   const fetch = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = new URL(String(input))
     const method = init?.method ?? 'GET'
     requests.push({ url, method })
     if (url.pathname.endsWith('/lock_screen_prefs')) {
+      if (failure === 'preferences') {
+        return Response.json({ message: 'Synthetic preference failure' }, { status: 400 })
+      }
       return Response.json({ max_lines: 6 })
     }
     const params = url.searchParams
@@ -90,7 +93,7 @@ describe('MCP reminder listing pagination', () => {
     })
   })
 
-  it.each(['page', 'count', 'empty', 'missing-count'] as const)('does not report a complete snapshot after %s failure', async failure => {
+  it.each(['page', 'count', 'empty', 'missing-count', 'preferences'] as const)('does not report a complete snapshot after %s failure', async failure => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
     try {
       const { client } = database([makeRow(0, false), makeRow(1, true), makeRow(2, true)], 1, failure)

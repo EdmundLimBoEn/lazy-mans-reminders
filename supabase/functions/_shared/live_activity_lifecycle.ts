@@ -23,71 +23,82 @@ export async function reconcileLiveActivity(input: {
   clearRetiring: () => Promise<void>;
 }): Promise<{ results: SendResult[]; deliveredAlert: boolean }> {
   const results: SendResult[] = [];
-  const empty = input.lines.length === 0;
-  const acknowledgedToken = input.activityToken !== input.retiringToken
-    ? input.activityToken
-    : null;
-  // APNs acceptance is not delivery. A different update token acknowledges
-  // the replacement; until then the old banner must remain visible.
-  if (input.retiringToken) {
-    if (empty || acknowledgedToken) {
-      const result = await input.send("end", "retiring");
+  let deliveredAlert = false;
+  try {
+    const empty = input.lines.length === 0;
+    const acknowledgedToken = input.activityToken !== input.retiringToken
+      ? input.activityToken
+      : null;
+    // APNs acceptance is not delivery. A different update token acknowledges
+    // the replacement; until then the old banner must remain visible.
+    if (input.retiringToken) {
+      if (empty || acknowledgedToken) {
+        const result = await input.send("end", "retiring");
+        results.push(result);
+        if (result === "sent") {
+          await input.clearRetiring();
+        } else if (result !== "invalid") {
+          // An invalid token is cleared by the transport. Other failures leave
+          // it for the next pass, without losing another banner to retirement.
+          return { results, deliveredAlert: false };
+        }
+      }
+    }
+
+    if (empty && !acknowledgedToken) {
+      await input.recordEnd();
+      return { results, deliveredAlert: false };
+    }
+
+    const startedAtMs = parseStartedAtMs(input.startedAt);
+    const decision = decideLiveActivity({
+      lines: input.lines,
+      hasPushToStartToken: input.startToken !== null,
+      hasActivityToken: acknowledgedToken !== null,
+      startedAtMs,
+      nowMs: input.nowMs,
+      quiet: input.quiet,
+    });
+
+    if (decision.kind === "noop") return { results, deliveredAlert: false };
+    if (decision.kind === "end") {
+      const result = await input.send("end", "activity");
+      results.push(result);
+      if (result === "sent" || result === "invalid") await input.recordEnd();
+      return { results, deliveredAlert: false };
+    }
+    if (decision.kind === "update") {
+      const result = await input.send("update", "activity");
       results.push(result);
       if (result === "sent") {
-        await input.clearRetiring();
-      } else if (result !== "invalid") {
-        // An invalid token is cleared by the transport. Other failures leave
-        // it for the next pass, without losing another banner to retirement.
+        deliveredAlert = input.hasAlert;
+        if (startedAtMs === null) await input.recordAdoption();
+        return { results, deliveredAlert: input.hasAlert };
+      }
+      // Only an invalid activity token confirms that this destination is gone.
+      if (result !== "invalid" || !input.startToken) {
         return { results, deliveredAlert: false };
       }
     }
-  }
 
-  if (empty && !acknowledgedToken) {
-    await input.recordEnd();
-    return { results, deliveredAlert: false };
-  }
-
-  const startedAtMs = parseStartedAtMs(input.startedAt);
-  const decision = decideLiveActivity({
-    lines: input.lines,
-    hasPushToStartToken: input.startToken !== null,
-    hasActivityToken: acknowledgedToken !== null,
-    startedAtMs,
-    nowMs: input.nowMs,
-    quiet: input.quiet,
-  });
-
-  if (decision.kind === "noop") return { results, deliveredAlert: false };
-  if (decision.kind === "end") {
-    const result = await input.send("end", "activity");
-    results.push(result);
-    if (result === "sent" || result === "invalid") await input.recordEnd();
-    return { results, deliveredAlert: false };
-  }
-  if (decision.kind === "update") {
-    const result = await input.send("update", "activity");
+    const leaseId = await input.claimStart(decision.kind === "update");
+    if (leaseId === null) return { results, deliveredAlert: false };
+    // On retryable results or exceptions (including uncertain delivery or
+    // recording), let the lease expire rather than permitting another start.
+    const result = await input.send("start", "push-to-start");
     results.push(result);
     if (result === "sent") {
-      if (startedAtMs === null) await input.recordAdoption();
-      return { results, deliveredAlert: input.hasAlert };
+      deliveredAlert = input.hasAlert;
+      await input.recordStart(decision.kind === "recycle", leaseId);
+    } else if (result === "failed" || result === "invalid") {
+      await input.releaseStart(leaseId);
     }
-    // Only an invalid activity token confirms that this destination is gone.
-    if (result !== "invalid" || !input.startToken) {
-      return { results, deliveredAlert: false };
-    }
+    return { results, deliveredAlert: result === "sent" && input.hasAlert };
+  } catch {
+    // Keep APNs acceptance separate from bookkeeping failures so callers can
+    // fall back to an ordinary alert only when no Live Activity alert was sent.
+    // The fallback transport must still enforce its delivery-slot deadline.
+    results.push("retryable");
+    return { results, deliveredAlert };
   }
-
-  const leaseId = await input.claimStart(decision.kind === "update");
-  if (leaseId === null) return { results, deliveredAlert: false };
-  // On retryable results or exceptions (including uncertain delivery or
-  // recording), let the lease expire rather than permitting another start.
-  const result = await input.send("start", "push-to-start");
-  results.push(result);
-  if (result === "sent") {
-    await input.recordStart(decision.kind === "recycle", leaseId);
-  } else if (result === "failed" || result === "invalid") {
-    await input.releaseStart(leaseId);
-  }
-  return { results, deliveredAlert: result === "sent" && input.hasAlert };
 }

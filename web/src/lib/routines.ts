@@ -15,10 +15,15 @@ export function localDate(date = new Date()): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 }
 
-export function weeklyStartDate(weekday: number, now = new Date()): string {
-  const date = new Date(now)
-  date.setDate(date.getDate() + (weekday - date.getDay() + 7) % 7)
-  return localDate(date)
+export function weeklyStartDate(weekday: number, timezone: string, now = new Date()): string {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit',
+  }).formatToParts(now)
+  const part = (type: string) => parts.find(value => value.type === type)!.value
+  // Use UTC only for calendar arithmetic, avoiding browser timezone and DST shifts.
+  const date = new Date(`${part('year')}-${part('month')}-${part('day')}T00:00:00Z`)
+  date.setUTCDate(date.getUTCDate() + (weekday - date.getUTCDay() + 7) % 7)
+  return date.toISOString().slice(0, 10)
 }
 
 export function routineSummary(routine: Routine): string {

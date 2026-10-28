@@ -106,6 +106,7 @@ async function listBoard(
   ])
   if (active.error) return boardErrorFromStorage(active.error.message, active.error.details)
   if (active.count === null) return boardErrorFromStorage('Active count missing')
+  if (prefs.error) return boardErrorFromStorage(prefs.error.message, prefs.error.details)
 
   const reminders: ReminderSelect[] = []
   const pageSize = 1000
