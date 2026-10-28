@@ -19,6 +19,7 @@ struct ReminderListView: View {
     @State private var isReordering = false
     @State private var boardRevision = 0
     @State private var isDragging = false
+    @State private var hasDeferredBoardUpdate = false
     @State private var showAccount = false
     @AppStorage(BoardSetupTip.storageKey) private var setupTipDismissed = false
     @FocusState private var composerFocused: Bool
@@ -72,10 +73,11 @@ struct ReminderListView: View {
             .sensoryFeedback(.success, trigger: hapticTick)
             .sensoryFeedback(.error, trigger: errorTick)
             .onReceive(NotificationCenter.default.publisher(for: .didUpdateReminders)) { _ in
-                Task {
-                    let cached = await ReminderStore.shared.cached()
-                    if !isReordering && !isDragging { reminders = cached }
-                }
+                hasDeferredBoardUpdate = true
+                Task { await replayDeferredBoardUpdate() }
+            }
+            .task(id: isDragging || isReordering) {
+                await replayDeferredBoardUpdate()
             }
             .sheet(isPresented: $showAccount) {
                 AccountView()
@@ -341,6 +343,18 @@ struct ReminderListView: View {
                 await ReminderBoardSync.apply(reminders, notify: false)
                 presentError(error.localizedDescription)
             }
+        }
+    }
+
+    private func replayDeferredBoardUpdate() async {
+        while hasDeferredBoardUpdate && !isDragging && !isReordering {
+            let revision = boardRevision
+            let cached = await ReminderStore.shared.cached()
+            // A new drag/save may have started while reading the actor's cache.
+            guard !isDragging && !isReordering else { return }
+            guard revision == boardRevision else { continue }
+            reminders = cached
+            hasDeferredBoardUpdate = false
         }
     }
 
