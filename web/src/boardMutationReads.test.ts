@@ -2,6 +2,7 @@ import { beforeEach, expect, it, vi } from 'vitest'
 import type { ReactElement, ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import App from './App'
+import Board from './Board'
 
 // Run the real Board handlers with retained hooks and controllable database reads.
 const hooks = vi.hoisted(() => ({ states: [] as unknown[], cursor: 0, load: undefined as undefined | (() => Promise<void>) }))
@@ -45,7 +46,7 @@ function nodes(node: ReactNode): ReactElement<Props>[] {
 let board: ReactElement<Props>
 function render() {
   hooks.cursor = 0
-  return nodes((board.type as (props: Props) => ReactNode)(board.props))
+  return nodes(Board(board.props as Parameters<typeof Board>[0]))
 }
 function control(label: string) {
   return render().find(node => node.props['aria-label'] === label)!.props
