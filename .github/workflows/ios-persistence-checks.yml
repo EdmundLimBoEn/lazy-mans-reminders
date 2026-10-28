@@ -29,6 +29,15 @@ jobs:
           PGUSER: postgres
           PGPASSWORD: test-password
         run: psql -v ON_ERROR_STOP=1 -f scripts/tests/reorder-reminders.sql
+  reopen-database:
+    name: Reminder reopening lock order
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify concurrent scheduling, reopening, ownership and quota
+        run: |
+          export PATH="$(pg_config --bindir):$PATH"
+          python3 scripts/tests/test_reopen_lock_order.py
   ios:
     name: iOS simulator tests
     runs-on: macos-26

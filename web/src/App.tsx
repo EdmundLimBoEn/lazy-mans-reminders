@@ -398,11 +398,11 @@ function Board({ session, onNavigate, onAccountDeleted }: {
       ++loadSequence.current
       setError('')
       setReminders((items) => items.map((item) => item.id === id ? optimistic : item))
-      const { error: updateError } = await supabase
-        .from('reminders')
-        .update(changes)
-        .eq('id', id)
-        .eq('user_id', session.user.id)
+      const { error: updateError } = await (changes.is_done === false
+        ? supabase.rpc('reopen_reminder', {
+          p_user_id: session.user.id, p_reminder_id: id, p_text: changes.text ?? null,
+        })
+        : supabase.from('reminders').update(changes).eq('id', id).eq('user_id', session.user.id))
       if (updateError) {
         // Restore only our optimistic row; preserve any newer state from a read.
         setReminders((items) => items.map((item) => item === optimistic ? previous : item))

@@ -261,6 +261,23 @@ it('retains a failed edit draft and releases the guard for retry', async () => {
   await vi.waitFor(() => expect(control('Edit "Updated"')).toBeDefined())
 })
 
+it('reopens through the owner-locked RPC and reconciles the board', async () => {
+  stored = [{ ...original, is_done: true }]
+  await hooks.load!()
+  db.rpc.mockImplementation((name: string) => {
+    if (name === 'reopen_reminder') return write.promise
+    return Promise.resolve({ error: null })
+  })
+  control('Mark "Original" active').onClick!()
+  expect(db.rpc).toHaveBeenCalledWith('reopen_reminder', {
+    p_user_id: 'user', p_reminder_id: 'note', p_text: null,
+  })
+  expect(db.update).not.toHaveBeenCalled()
+  stored = [original]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
+})
+
 // Start the real subscription effect and drive recovery without row notifications.
 afterEach(() => { vi.unstubAllGlobals() })
 it.each(['SUBSCRIBED', 'online'])('recovers a failed read on %s and removes recovery listeners on cleanup', async trigger => {
@@ -310,4 +327,29 @@ it.each(['SUBSCRIBED', 'online'])('recovers a failed read on %s and removes reco
   await new Promise(resolve => setTimeout(resolve, 0))
   expect(db.from.mock.calls.length).toBe(finalCalls)
   expect(db.removeChannel).toHaveBeenCalledWith(channel)
+})
+
+it('rolls back a failed reopen RPC before an unavailable recovery read', async () => {
+  stored = [{ ...original, is_done: true }]
+  await hooks.load!()
+  db.rpc.mockImplementation((name: string) => {
+    if (name === 'reopen_reminder') return write.promise
+    return Promise.resolve({ error: null })
+  })
+  const recovery = deferred<Result>()
+  reads.push(recovery)
+  control('Mark "Original" active').onClick!()
+  expect(control('Complete "Original"').disabled).toBe(true)
+  expect(db.update).not.toHaveBeenCalled()
+  write.resolve({ error: { message: 'Reopen failed' } })
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  expect(control('Mark "Original" active').disabled).toBe(true)
+  recovery.resolve({ data: null, error: { message: 'Offline read' } })
+  await vi.waitFor(() => expect(control('Mark "Original" active').disabled).toBe(false))
+
+  write = deferred()
+  control('Mark "Original" active').onClick!()
+  stored = [original]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
 })

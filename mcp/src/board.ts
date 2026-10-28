@@ -170,11 +170,10 @@ async function setCompletion(
 ): Promise<BoardResult> {
   if (!UUID.test(reminderId)) return { kind: 'not_found' }
 
-  const { data, error } = await supabase
-    .from('reminders')
-    .update({ is_done: isDone })
-    .eq('id', reminderId)
-    .eq('user_id', session.userId)
+  const query = isDone
+    ? supabase.from('reminders').update({ is_done: true }).eq('id', reminderId).eq('user_id', session.userId)
+    : supabase.rpc('reopen_reminder', { p_user_id: session.userId, p_reminder_id: reminderId })
+  const { data, error } = await query
     .select('id, text, is_done, sort_order, created_at, completed_at')
     .maybeSingle()
   if (error) return boardErrorFromStorage(error.message, error.details)

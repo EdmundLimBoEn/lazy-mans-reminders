@@ -158,3 +158,21 @@ describe('capacity mapping', () => {
     expect(effectiveMaximum(1)).toBe(1)
   })
 })
+
+it('reopens through the owner-locked RPC and returns its acknowledged row', async () => {
+  const { runBoardCommand } = await import('./board')
+  const { sessionFromProps } = await import('./session')
+  const session = sessionFromProps({ userId: '00000000-0000-0000-0000-000000000001', agentName: 'Test' })!
+  const row = { id: '00000000-0000-0000-0000-000000000011', text: 'Test', is_done: false,
+    sort_order: 0, created_at: '2026-01-01', completed_at: null }
+  const query = { select: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: row, error: null }) }
+  const db = { rpc: vi.fn().mockReturnValue(query), from: vi.fn() }
+  const result = await runBoardCommand(db as unknown as import('@supabase/supabase-js').SupabaseClient,
+    session, { kind: 'reopen', reminderId: row.id })
+  expect(db.rpc).toHaveBeenCalledWith('reopen_reminder', { p_user_id: session.userId, p_reminder_id: row.id })
+  expect(db.from).not.toHaveBeenCalled()
+  expect(result).toEqual({ kind: 'changed', reminder: row })
+  query.maybeSingle.mockResolvedValueOnce({ data: null, error: null })
+  expect(await runBoardCommand(db as unknown as import('@supabase/supabase-js').SupabaseClient,
+    session, { kind: 'reopen', reminderId: row.id })).toEqual({ kind: 'not_found' })
+})
