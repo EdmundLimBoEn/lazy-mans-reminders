@@ -209,7 +209,7 @@ struct ReminderListView: View {
                 .lineLimit(1...4)
                 .textInputAutocapitalization(.sentences)
                 .focused($composerFocused)
-                .disabled(atCapacity || isReordering || isDragging)
+                .disabled(atCapacity || isReordering || isDragging || draft.isSubmitting)
                 .submitLabel(.return)
                 .accessibilityLabel("New reminder")
                 .accessibilityHint(
