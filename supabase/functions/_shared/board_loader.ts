@@ -22,18 +22,24 @@ export async function loadBoardContent(
   userId: string,
   alertCandidate?: ReminderRecord,
 ): Promise<{ lines: string[]; alertRecord?: ReminderRecord }> {
-  const [{ data: reminders, error }, { data: prefs }] = await Promise.all([
-    supabase.from("reminders").select(
-      "id, user_id, text, routine_id, routine_fired_at",
-    ).eq("user_id", userId)
-      .eq("is_done", false).order("sort_order", { ascending: true })
-      .order("created_at", { ascending: true }),
-    supabase.from("lock_screen_prefs").select("max_lines")
-      .eq("user_id", userId).maybeSingle(),
-  ]);
+  const [{ data: reminders, error }, { data: prefs, error: prefsError }] =
+    await Promise.all([
+      supabase.from("reminders").select(
+        "id, user_id, text, routine_id, routine_fired_at",
+      ).eq("user_id", userId)
+        .eq("is_done", false).order("sort_order", { ascending: true })
+        .order("created_at", { ascending: true }),
+      supabase.from("lock_screen_prefs").select("max_lines")
+        .eq("user_id", userId).maybeSingle(),
+    ]);
   // A failed read is not an empty board: ending banners here loses valid reminders.
   if (error || !Array.isArray(reminders)) {
     throw new Error("Could not load reminder board");
+  }
+  // Only a missing preference row may use defaults; failed reads must preserve
+  // existing activity content through the caller's retryable delivery path.
+  if (prefsError) {
+    throw new Error("Could not load lock-screen preferences");
   }
   const texts = reminders.map((row: { text: string }) => row.text);
   const current = alertCandidate &&
