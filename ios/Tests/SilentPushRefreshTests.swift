@@ -5,6 +5,22 @@ import XCTest
 
 @MainActor
 final class SilentPushRefreshTests: XCTestCase {
+    func testFixtureKeepsCredentialsInMemoryAndIsolatedBetweenStores() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let store = fixture.store(Network(rows: []))
+        try await fixture.signIn(store)
+
+        let signedIn = await store.containsSession(accessToken: "test-token", refreshToken: "test-refresh")
+        XCTAssertTrue(signedIn)
+
+        // Even with the same defaults, a new fixture store must not inherit credentials
+        // from a shared Keychain (which is unavailable in unsigned simulator tests).
+        let otherStore = fixture.store(Network(rows: []))
+        let inheritedSession = await otherStore.containsSession(accessToken: "test-token", refreshToken: "test-refresh")
+        XCTAssertFalse(inheritedSession)
+    }
+
     func testRefreshSkipsCleanupAndReportsChangedAndUnchangedBoards() async throws {
         for changed in [false, true] {
             let fixture = Fixture()
