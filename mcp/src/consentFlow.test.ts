@@ -300,6 +300,26 @@ describe('single-use authorization', () => {
     expect(oauth.completeAuthorization).toHaveBeenCalledTimes(1)
   })
 
+  it('completes approval when pending cleanup fails and rejects replay of the retained record', async () => {
+    const { kv, oauth, pending, state, bind } = await setup()
+    const cleanup = vi.spyOn(kv, 'delete').mockRejectedValue(new Error('KV unavailable'))
+
+    const response = await bind()
+    expect(response.status).toBe(200)
+    expect(await response.json()).toEqual({ redirectTo: 'https://grok.example/callback?code=one' })
+    expect(cleanup).toHaveBeenCalledExactlyOnceWith('pending-auth:' + state)
+    expect(await kv.get('pending-auth:' + state, 'json')).toEqual(pending)
+    expect(oauth.completeAuthorization).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({
+      request: pending,
+      userId: USER_A, scope: ['board'], props: { userId: USER_A, tokenId: 'oauth', agentName: 'Grok' },
+    }))
+
+    const replay = await bind()
+    expect(replay.status).toBe(400)
+    expect(await replay.json()).toEqual({ error: 'expired_state' })
+    expect(oauth.completeAuthorization).toHaveBeenCalledTimes(1)
+  })
+
   it('completes the normal authorize/bind flow and removes the pending record', async () => {
     const { kv, oauth, state, bind } = await setup()
     const response = await bind()
