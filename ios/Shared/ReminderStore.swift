@@ -356,6 +356,11 @@ actor ReminderStore {
 
     /// Creates a reminder via POST, updates the App Group cache, and returns the active reminders.
     func create(text: String, userID: UUID? = nil) async throws -> [Reminder] {
+        try await createAcknowledged(text: text, userID: userID).board
+    }
+
+    /// Keeps the exact server acknowledgement separate from other rows on the board.
+    func createAcknowledged(text: String, userID: UUID? = nil) async throws -> (created: Reminder, board: [Reminder]) {
         guard !isReordering else { throw StoreError.mutationConflict }
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
@@ -408,7 +413,7 @@ actor ReminderStore {
 
         try requireCurrentIdentity(session, revision: identityRevision)
         let created = try acknowledgedReminder(responseData, ownerID: ownerID, text: trimmed, isDone: false)
-        return try cacheAcknowledgedReminder(created)
+        return (created: created, board: try cacheAcknowledgedReminder(created))
     }
 
     private func acknowledgedReminder(
