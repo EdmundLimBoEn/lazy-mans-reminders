@@ -133,7 +133,7 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             let defaults = UserDefaults(suiteName: suite)!
             defer { defaults.removePersistentDomain(forName: suite) }
             let store = ReminderStore(
-                defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+                defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key", requestData: { request in
                     XCTAssertEqual(request.httpMethod, "POST")
                     XCTAssertEqual(request.url?.path, "/rest/v1/rpc/reopen_reminder")
@@ -254,7 +254,7 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             let started = XCTestExpectation(description: "First write held before commit")
             let network = HeldWriteNetwork(original: original, started: started, failsFirst: failsFirst)
             let store = ReminderStore(
-                defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+                defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key", requestData: { try await network.send($0) }
             )
             try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
