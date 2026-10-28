@@ -28,8 +28,8 @@ enum ReminderIntentError: Error, CustomLocalizedStringResourceConvertible {
 }
 
 enum ReminderIntentActions {
-    static func requireSession() async throws {
-        guard await ReminderStore.shared.isSignedIn() else {
+    static func requireSession(store: ReminderStore = .shared) async throws {
+        guard await store.isSignedIn() else {
             throw ReminderIntentError.signedOut
         }
     }
@@ -42,21 +42,22 @@ enum ReminderIntentActions {
         return await ReminderStore.shared.cached()
     }
 
-    static func create(title: String) async throws -> Reminder {
-        try await requireSession()
+    static func create(
+        title: String,
+        store: ReminderStore = .shared,
+        publish: ([Reminder]) async -> Void = { await ReminderBoardSync.apply($0) }
+    ) async throws -> Reminder {
+        try await requireSession(store: store)
         let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { throw ReminderIntentError.emptyText }
-        let current = await ReminderStore.shared.refreshOrCached()
+        let current = await store.refreshOrCached()
         if ReminderBoardLimits.isAtCapacity(current.filter { !$0.isDone }.count) {
             throw ReminderIntentError.atCapacity
         }
         do {
-            let updated = try await ReminderStore.shared.create(text: trimmed)
-            await ReminderBoardSync.apply(updated)
-            guard let created = updated.last(where: { $0.text == trimmed }) ?? updated.last else {
-                throw ReminderIntentError.service("The reminder was not returned after saving.")
-            }
-            return created
+            let result = try await store.createAcknowledged(text: trimmed)
+            await publish(result.board)
+            return result.created
         } catch {
             throw map(error)
         }
@@ -77,40 +78,23 @@ enum ReminderIntentActions {
         }
     }
 
-    static func update(id: UUID, title: String?, isCompleted: Bool?) async throws -> Reminder {
-        try await requireSession()
+    static func update(
+        id: UUID, title: String?, isCompleted: Bool?,
+        store: ReminderStore = .shared,
+        publish: ([Reminder]) async -> Void = { await ReminderBoardSync.apply($0) }
+    ) async throws -> Reminder {
+        guard await store.isSignedIn() else { throw ReminderIntentError.signedOut }
         if title == nil, isCompleted == nil {
             throw ReminderIntentError.nothingToUpdate
         }
-        if isCompleted == true {
-            let text = try await complete(id: id)
-            return Reminder(
-                id: id,
-                userID: await ReminderStore.shared.currentUserID() ?? UUID(),
-                text: text,
-                sortOrder: 0,
-                isDone: true,
-                createdAt: .now
-            )
-        }
         do {
-            let updated = try await ReminderStore.shared.update(
+            let updated = try await store.updateAcknowledged(
                 id: id,
                 text: title,
                 isDone: isCompleted
             )
-            await ReminderBoardSync.apply(updated)
-            if let reminder = updated.first(where: { $0.id == id }) {
-                return reminder
-            }
-            return Reminder(
-                id: id,
-                userID: await ReminderStore.shared.currentUserID() ?? UUID(),
-                text: title ?? "",
-                sortOrder: 0,
-                isDone: isCompleted ?? false,
-                createdAt: .now
-            )
+            await publish(updated.activeReminders)
+            return updated.reminder
         } catch {
             throw map(error)
         }

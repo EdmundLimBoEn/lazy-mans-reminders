@@ -184,6 +184,94 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
         XCTAssertEqual(cache, result)
     }
 
+    func testCreateIntentReturnsItsAcknowledgedRowWhenDuplicateCreationFinishesFirst() async throws {
+        let suiteName = "ReminderCreateIntentTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        var first = sample()
+        first.text = "Same title"
+        var second = sample(userID: first.userID)
+        second.text = first.text
+        second.sortOrder = first.sortOrder + 1
+        let started = XCTestExpectation(description: "First creation committed; response held")
+        let network = DuplicateCreateNetwork(first: first, second: second, started: started)
+        let store = ReminderStore(
+            defaults: defaults, credentials: MemorySessionCredentials(),
+            serviceURL: URL(string: "https://reminders.invalid")!, anonKey: "test-anon-key",
+            requestData: { try await network.send($0) }
+        )
+        try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
+                                    expiresAt: Date().addingTimeInterval(3600), userID: first.userID)
+
+        let firstTask = Task {
+            try await ReminderIntentActions.create(title: "  Same title  ", store: store,
+                                                   publish: { await network.publish($0) })
+        }
+        await fulfillment(of: [started], timeout: 3)
+        let secondResult: Reminder
+        do {
+            secondResult = try await ReminderIntentActions.create(
+                title: "Same title", store: store, publish: { await network.publish($0) }
+            )
+        } catch {
+            await network.releaseFirst()
+            _ = try? await firstTask.value
+            throw error
+        }
+        await network.releaseFirst()
+        let firstResult = try await firstTask.value
+
+        XCTAssertEqual(secondResult, second)
+        XCTAssertEqual(firstResult, first, "The intent must return its own acknowledgement, not the last title match")
+        let cache = await store.cached()
+        let publications = await network.publications
+        XCTAssertEqual(cache, [first, second])
+        XCTAssertEqual(publications, [[second], [first, second]])
+    }
+
+    private actor DuplicateCreateNetwork {
+        let first: Reminder
+        let second: Reminder
+        let started: XCTestExpectation
+        private var createCount = 0
+        private var continuation: CheckedContinuation<Void, Never>?
+        var publications: [[Reminder]] = []
+
+        init(first: Reminder, second: Reminder, started: XCTestExpectation) {
+            self.first = first
+            self.second = second
+            self.started = started
+        }
+
+        func send(_ request: URLRequest) async throws -> (Data, URLResponse) {
+            let rows: [Reminder]
+            if request.httpMethod == "GET" {
+                rows = []
+            } else {
+                XCTAssertEqual(request.httpMethod, "POST")
+                XCTAssertEqual(request.value(forHTTPHeaderField: "Prefer"), "return=representation")
+                createCount += 1
+                let created = createCount == 1 ? first : second
+                if createCount == 1 {
+                    await withCheckedContinuation { continuation in
+                        self.continuation = continuation
+                        started.fulfill()
+                    }
+                }
+                rows = [created]
+            }
+            return (try ReminderJSON.encoder.encode(rows),
+                    HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!)
+        }
+
+        func publish(_ board: [Reminder]) { publications.append(board) }
+
+        func releaseFirst() {
+            continuation?.resume()
+            continuation = nil
+        }
+    }
+
     func testCreateRejectsMalformedResponseWithoutChangingCache() async throws {
         let original = sample()
         for data in [Data(), Data("{}".utf8)] {
@@ -225,7 +313,7 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             let started = XCTestExpectation(description: "First write held before commit")
             let network = HeldWriteNetwork(original: original, started: started, failsFirst: failsFirst)
             let store = ReminderStore(
-                defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+                defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key", requestData: { try await network.send($0) }
             )
             try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
@@ -242,6 +330,13 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
                     XCTAssertEqual(error.localizedDescription,
                                    "The reminder change could not be confirmed. Refresh your board and try again.")
                 }
+            }
+            do {
+                _ = try await store.updateAcknowledged(id: original.id, text: "Shortcut title", isDone: true)
+                XCTFail("An overlapping combined Shortcuts update must not reach the server")
+            } catch {
+                XCTAssertEqual(error.localizedDescription,
+                               "The reminder change could not be confirmed. Refresh your board and try again.")
             }
             let requests = await network.requestCount
             XCTAssertEqual(requests, 1)
@@ -263,6 +358,17 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             XCTAssertEqual(stored.text, "Retried edit")
             XCTAssertEqual(result, [stored])
             XCTAssertEqual(cache, result)
+
+            let completed = try await store.updateAcknowledged(
+                id: original.id, text: "Shortcut title", isDone: true
+            )
+            let completedStored = await network.stored
+            XCTAssertEqual(completed.reminder, completedStored)
+            XCTAssertEqual(completed.reminder.text, "Shortcut title")
+            XCTAssertTrue(completed.reminder.isDone)
+            XCTAssertEqual(completed.activeReminders, [])
+            let completedCache = await store.cached()
+            XCTAssertEqual(completedCache, [])
         }
     }
 

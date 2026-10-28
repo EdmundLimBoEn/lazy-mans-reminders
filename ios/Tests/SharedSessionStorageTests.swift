@@ -101,13 +101,46 @@ final class SharedSessionStorageTests: XCTestCase {
             storage.clear()
             XCTAssertNil(defaults.object(forKey: "shared-session"))
             let restarted = SharedSessionStorage(defaults: defaults, credentials: credentials)
-            XCTAssertThrowsError(try restarted.read())
+            XCTAssertNil(try restarted.read())
             credentials.unavailable = false
             XCTAssertNil(try restarted.read())
-            XCTAssertNil(credentials.data)
+            // Reads leave failed cleanup masked; only an explicit save replaces it.
+            XCTAssertEqual(credentials.data, Data("session".utf8))
             try restarted.write(Data("new-session".utf8))
             XCTAssertEqual(try restarted.read(), Data("new-session".utf8))
         }
+    }
+
+    func testWidgetReadCannotDeleteSessionSavedAfterObservingSignOut() throws {
+        final class InterleavingDefaults: UserDefaults {
+            var afterSignOutRead: (() throws -> Void)?
+
+            override func bool(forKey defaultName: String) -> Bool {
+                let observed = super.bool(forKey: defaultName)
+                if defaultName == "shared-session-signed-out", let action = afterSignOutRead {
+                    afterSignOutRead = nil
+                    // Resume the widget with its old observation after the app saves.
+                    XCTAssertNoThrow(try action())
+                }
+                return observed
+            }
+        }
+
+        let suite = "SharedSessionStorageTests.\(UUID())"
+        let defaults = InterleavingDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let credentials = MemorySessionCredentials()
+        let app = SharedSessionStorage(defaults: defaults, credentials: credentials)
+        let widget = SharedSessionStorage(defaults: defaults, credentials: credentials)
+        try app.write(Data("old-session".utf8))
+        app.clear()
+
+        let newSession = Data("new-session".utf8)
+        defaults.afterSignOutRead = { try app.write(newSession) }
+        XCTAssertNil(try widget.read())
+        XCTAssertEqual(credentials.data, newSession)
+        XCTAssertEqual(try widget.read(), newSession)
+        XCTAssertEqual(try app.read(), newSession)
     }
 
     func testStoreSavesRotatesAndClearsWithoutPreferencesCredentials() async throws {
