@@ -55,7 +55,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
     try {
       const values = {
         text: text.trim(), interval_days: cadence === 'weekly' ? 7 : Number(days),
-        start_date: cadence === 'weekly' ? weeklyStartDate(weekday) : startDate,
+        start_date: cadence === 'weekly' ? weeklyStartDate(weekday, timezone) : startDate,
         local_time: time, timezone,
       }
       const { error } = editingId
