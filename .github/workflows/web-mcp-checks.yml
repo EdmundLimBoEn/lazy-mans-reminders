@@ -131,7 +131,9 @@ jobs:
             supabase/tests/routine_owner_index.sql \
             supabase/tests/reminder_text_and_token_lock.sql \
             supabase/tests/routine_reminders.sql \
-            supabase/tests/reminder_quotas.sql; do
+            supabase/tests/reminder_quotas.sql \
+            supabase/migrations/202610280001_reminder_push_replay.sql \
+            supabase/tests/reminder_push_replay.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
       - if: always()
