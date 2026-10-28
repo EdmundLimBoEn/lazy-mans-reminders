@@ -1,5 +1,5 @@
 import { ExternalTokenError, type AuthRequest, type OAuthHelpers } from '@cloudflare/workers-oauth-provider'
-import { MCP_RESOURCE, PENDING_AUTH_TTL_SECONDS, TOOLS } from './constants'
+import { MCP_RESOURCE, TOOLS } from './constants'
 import { resolveSession } from './auth'
 import {
   consentCanApprove,
@@ -12,7 +12,6 @@ import { readJsonBody } from './jsonBody'
 import type { BoundProps } from './session'
 import { bearerToken, defaultIdentityDeps, type IdentityDeps } from './supabaseUser'
 
-const PENDING_PREFIX = 'pending-auth:'
 const STATE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const GRANT_ID = /^[A-Za-z0-9_-]{8,128}$/
 
@@ -138,8 +137,10 @@ async function requireUser(request: Request, env: Env, deps: IdentityDeps, cors:
 }
 
 async function loadPending(env: Env, state: string): Promise<AuthRequest | null> {
-  const stored = await env.OAUTH_KV.get(`${PENDING_PREFIX}${state}`, 'json')
-  return asAuthRequest(stored)
+  const id = env.AUTHORIZATION_STATE.idFromName(state)
+  const result = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/pending')
+  if (!result.ok) throw new Error('Authorization state unavailable')
+  return asAuthRequest(await result.json())
 }
 
 async function consumeAuthorizationState(env: Env, state: string): Promise<boolean> {
@@ -172,11 +173,12 @@ async function startAuthorize(request: Request, env: Env): Promise<Response> {
   }
 
   const state = crypto.randomUUID()
-  await env.OAUTH_KV.put(
-    `${PENDING_PREFIX}${state}`,
-    JSON.stringify(oauthRequest),
-    { expirationTtl: PENDING_AUTH_TTL_SECONDS },
-  )
+  const id = env.AUTHORIZATION_STATE.idFromName(state)
+  const result = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/pending', {
+    method: 'PUT',
+    body: JSON.stringify(oauthRequest),
+  })
+  if (!result.ok) throw new Error('Authorization state unavailable')
 
   const webOrigin = allowedWebOrigins(env)[0]
   if (!webOrigin) return json({ error: 'server_misconfigured' }, 500)
@@ -220,9 +222,7 @@ async function denyConsent(request: Request, env: Env, deps: IdentityDeps): Prom
   const oauth = oauthHelpers(env)
   if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
   const oauthRequest = await loadPending(env, state)
-  // Consume even when KV misses the record: a later read may still be stale.
   await consumeAuthorizationState(env, state)
-  await env.OAUTH_KV.delete(`${PENDING_PREFIX}${state}`)
   if (!oauthRequest) return json({ redirectTo: null }, 200, cors)
   const client = await oauth.lookupClient(oauthRequest.clientId)
   return json({ redirectTo: denialRedirect(oauthRequest, client) }, 200, cors)
@@ -249,15 +249,9 @@ async function bindAuthorization(request: Request, env: Env, deps: IdentityDeps)
     return json({ error: summary ? 'board_not_requested' : 'untrusted_client' }, 400, cors)
   }
 
-  // KV reads/deletes can overlap or be stale. Only the state object's winner
+  // Reads can overlap. Only the state object's winner
   // may create a grant, even when multiple callers read the pending record.
   if (!await consumeAuthorizationState(env, state)) return json({ error: 'expired_state' }, 400, cors)
-  try {
-    await env.OAUTH_KV.delete(`${PENDING_PREFIX}${state}`)
-  } catch {
-    // The state object prevents reuse; pending KV expires on its own.
-    // Cleanup failure must not burn an already-consumed approval.
-  }
 
   try {
     const { redirectTo } = await oauth.completeAuthorization({
