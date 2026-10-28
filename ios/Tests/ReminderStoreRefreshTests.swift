@@ -16,6 +16,9 @@ final class ReminderStoreRefreshTests: XCTestCase {
             let app = fixture.makeStore(network)
             let widget = fixture.makeStore(network)
             try await fixture.seed(app, rows: [fixture.original])
+            // Each store may have its own injected credential storage. Sign both in
+            // before starting the race; only the board cache is shared by this fixture.
+            try await fixture.seed(widget, rows: [fixture.original])
 
             let refresh = Task {
                 await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
@@ -56,16 +59,16 @@ final class ReminderStoreRefreshTests: XCTestCase {
     func testFailedWidgetRefreshFallsBackToAppCache() async throws {
         let fixture = Fixture()
         defer { fixture.cleanUp() }
-        let widget = ReminderStore(
-            defaults: fixture.defaults, serviceURL: URL(string: "https://reminders.invalid")!,
-            anonKey: "test-key", requestData: { _ in throw URLError(.notConnectedToInternet) }
-        )
+        let network = Network(started: [], mutation: fixture.original, failsRequests: true)
+        let widget = fixture.makeStore(network)
         try await fixture.seed(widget, rows: [fixture.original])
 
         let timeline = await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
         let cache = await widget.cached()
         XCTAssertEqual(timeline, [fixture.original])
         XCTAssertEqual(cache, [fixture.original])
+        let requests = await network.requestCount
+        XCTAssertEqual(requests, 1, "Fallback must follow a failed fetch, not a missing session")
     }
 
     func testDelayedRefreshCannotOverwriteAcknowledgedMutations() async throws {
@@ -137,15 +140,20 @@ final class ReminderStoreRefreshTests: XCTestCase {
     private actor Network {
         let started: [XCTestExpectation]
         let mutation: Reminder
+        let failsRequests: Bool
+        private(set) var requestCount = 0
         private var pending: [Int: CheckedContinuation<(Data, URLResponse), Error>] = [:]
         private var next = 0
 
-        init(started: [XCTestExpectation], mutation: Reminder) {
+        init(started: [XCTestExpectation], mutation: Reminder, failsRequests: Bool = false) {
             self.started = started
             self.mutation = mutation
+            self.failsRequests = failsRequests
         }
 
         func send(_ request: URLRequest) async throws -> (Data, URLResponse) {
+            requestCount += 1
+            if failsRequests { throw URLError(.notConnectedToInternet) }
             if request.httpMethod == "POST" || request.httpMethod == "PATCH" {
                 return try response([mutation])
             }
