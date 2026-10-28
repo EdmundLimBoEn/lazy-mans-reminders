@@ -290,6 +290,7 @@ function Board({ session, onNavigate, onAccountDeleted }: {
   const [exporting, setExporting] = useState(false)
   const [maxLines, setMaxLines] = useState(DEFAULT_LOCK_SCREEN_MAX_LINES)
   const loadSequence = useRef(0)
+  const cleanupRef = useRef({ pending: false, nextAttemptAt: 0 })
   const reorderingRef = useRef(false)
   const pendingMutationsRef = useRef(new Set<string>())
   const [pendingMutations, setPendingMutations] = useState(new Set<string>())
@@ -312,8 +313,21 @@ function Board({ session, onNavigate, onAccountDeleted }: {
 
   const load = useCallback(async () => {
     const sequence = ++loadSequence.current
-    await supabase.rpc('delete_old_completed_reminders')
-    if (sequence !== loadSequence.current) return
+    const cleanup = cleanupRef.current
+    if (!cleanup.pending && Date.now() >= cleanup.nextAttemptAt) {
+      cleanup.pending = true
+      cleanup.nextAttemptAt = Date.now() + 5 * 60 * 1000
+      // Maintenance must not delay reads or mutation reconciliation.
+      void (async () => {
+        try {
+          await supabase.rpc('delete_old_completed_reminders')
+        } catch {
+          // Best effort; retry on a later load after the throttle expires.
+        } finally {
+          cleanup.pending = false
+        }
+      })()
+    }
 
     const [{ data, error: fetchError }, prefsResult] = await Promise.all([
       supabase
