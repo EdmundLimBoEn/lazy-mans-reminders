@@ -209,7 +209,7 @@ async function denyConsent(request: Request, env: Env, deps: IdentityDeps): Prom
   if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
   const oauthRequest = await loadPending(env, state)
   // Consume even when KV misses the record: a later read may still be stale.
-  await consumeAuthorizationState(env, state)
+  if (!await consumeAuthorizationState(env, state)) return json({ error: 'expired_state' }, 400, cors)
   await env.OAUTH_KV.delete(`${PENDING_PREFIX}${state}`)
   if (!oauthRequest) return json({ redirectTo: null }, 200, cors)
   const client = await oauth.lookupClient(oauthRequest.clientId)
