@@ -103,11 +103,17 @@ it('queues notifications received before the initial read settles', async () => 
 })
 
 it.each(['SUBSCRIBED', 'online'])('queues %s recovery before the initial read settles', async trigger => {
+  cleanup()
+  let resolve!: (value: unknown) => void
+  order.mockClear().mockReturnValueOnce(new Promise(done => { resolve = done }))
+  channel.subscribe.mockClear()
+  cleanup = hooks.effect!()
   for (let i = 0; i < 50; i++) {
     if (trigger === 'online') window.dispatchEvent(new Event('online'))
     else channel.subscribe.mock.calls[0][0]('SUBSCRIBED')
   }
   expect(order).toHaveBeenCalledTimes(1)
+  resolve({ data: [], error: null })
   await vi.advanceTimersByTimeAsync(100)
   expect(order).toHaveBeenCalledTimes(2)
   await vi.advanceTimersByTimeAsync(1000)
