@@ -1,3 +1,8 @@
+import {
+  type PushJob,
+  type PushReplay,
+  pushReplay,
+} from "../_shared/push_replay.ts";
 import { pruneAlertToken } from "../_shared/alert_token_store.ts";
 import { markActivityEnded } from "../_shared/live_activity_store.ts";
 import {
@@ -31,6 +36,7 @@ import {
   classifyWebhookPayload,
   deliverWithRetries,
   type ReminderRecord,
+  UUID_PATTERN,
   webhookStatusForResults,
 } from "../_shared/push_helpers.ts";
 
@@ -259,7 +265,8 @@ async function sendAlertToDevice(input: {
       expirationUnix: apnsExpirationUnix(),
     }),
     body: buildApnsPayload(input.record),
-    onPrune: (outcome) => pruneAlertToken(input.supabase, input.device, outcome),
+    onPrune: (outcome) =>
+      pruneAlertToken(input.supabase, input.device, outcome),
   });
 }
 
@@ -321,6 +328,7 @@ async function sendLiveActivityEvent(input: {
 }
 
 async function syncLiveActivity(input: {
+  replay?: PushReplay;
   assertCurrent: () => void;
   supabase: ServiceClient;
   device: DeviceRow;
@@ -340,13 +348,24 @@ async function syncLiveActivity(input: {
     nowMs: Date.now(),
     quiet: input.quiet,
     hasAlert: Boolean(input.alertBody),
-    send: (event, destination) =>
-      sendLiveActivityEvent({
-        ...input,
-        event,
-        destination,
-        alertBody: destination === "retiring" ? undefined : input.alertBody,
-      }),
+    send: (event, destination) => {
+      const send = () =>
+        sendLiveActivityEvent({
+          ...input,
+          event,
+          destination,
+          alertBody: destination === "retiring" || input.replay?.alertSent
+            ? undefined
+            : input.alertBody,
+        });
+      return input.replay
+        ? input.replay.send(
+          `live:${destination}:${event}`,
+          destination !== "retiring" && Boolean(input.alertBody),
+          send,
+        )
+        : send();
+    },
     claimStart: async (invalidActivity) => {
       const leaseId = crypto.randomUUID();
       const { data, error } = await input.supabase.rpc(
@@ -446,6 +465,7 @@ function summarize(results: DeviceSendResult[]): Response {
 }
 
 async function syncDevices(input: {
+  jobId?: string;
   supabase: ServiceClient;
   devices: DeviceRow[];
   bundleId: string;
@@ -455,26 +475,43 @@ async function syncDevices(input: {
   return await deliverDevices({
     ...input,
     deliver: async (device, content, assertCurrent) => {
+      let replay: PushReplay | undefined;
+      if (input.jobId) {
+        // Reload under the device slot so duplicate HTTP requests see completion.
+        const { data: job, error } = await input.supabase.from(
+          "reminder_push_jobs",
+        )
+          .select("*").eq("id", input.jobId).eq("user_id", device.user_id)
+          .eq("device_token", device.token).maybeSingle();
+        if (error) throw new Error("Could not load push job");
+        if (!job || job.status !== "pending") return [];
+        replay = pushReplay(input.supabase, job, assertCurrent);
+      }
       const live = await syncLiveActivity({
+        replay,
         supabase: input.supabase,
         device,
         bundleId: input.bundleId,
         lines: content.lines,
-        alertBody: content.alertRecord?.text,
+        alertBody: replay?.alertSent ? undefined : content.alertRecord?.text,
         quiet: input.quiet,
         assertCurrent,
       });
-      if (content.alertRecord && !live.deliveredAlert) {
-        live.results.push(
-          await sendAlertToDevice({
+      if (content.alertRecord && !live.deliveredAlert && !replay?.alertSent) {
+        const record = content.alertRecord;
+        const send = () =>
+          sendAlertToDevice({
             supabase: input.supabase,
             device,
             topic: input.bundleId,
-            record: content.alertRecord,
+            record,
             assertCurrent,
-          }),
+          });
+        live.results.push(
+          replay ? await replay.send("alert", true, send) : await send(),
         );
       }
+      await replay?.finish(live.results);
       return live.results;
     },
   });
@@ -503,14 +540,6 @@ Deno.serve(async (request) => {
     return new Response("Invalid JSON", { status: 400 });
   }
 
-  const check = classifyWebhookPayload(payload);
-  if (!check.ok) {
-    return new Response(check.message, { status: check.status });
-  }
-  if (check.kind === "ignore") {
-    return new Response("Ignored", { status: 202 });
-  }
-
   let supabase;
   let bundleId: string;
   try {
@@ -523,6 +552,50 @@ Deno.serve(async (request) => {
   } catch (error) {
     console.error("Edge Function configuration error", error);
     return new Response("Server configuration error", { status: 500 });
+  }
+
+  let job: PushJob | undefined;
+  if (typeof payload === "object" && payload !== null && "job_id" in payload) {
+    if (
+      typeof payload.job_id !== "string" || !UUID_PATTERN.test(payload.job_id)
+    ) {
+      return new Response("Invalid webhook payload", { status: 400 });
+    }
+    const { data, error } = await supabase.from("reminder_push_jobs")
+      .select("*").eq("id", payload.job_id).maybeSingle();
+    if (error) return summarize(["retryable"]);
+    if (!data || data.status !== "pending") return summarize([]);
+    job = data as PushJob;
+    payload = job.payload;
+  }
+
+  const check = classifyWebhookPayload(payload);
+  if (!check.ok) {
+    return new Response(check.message, { status: check.status });
+  }
+  if (check.kind === "ignore") {
+    return new Response("Ignored", { status: 202 });
+  }
+
+  if (job) {
+    const { data: device, error } = await supabase.from("device_tokens")
+      .select(DEVICE_SELECT).eq("token", job.device_token)
+      .eq("user_id", job.user_id).maybeSingle();
+    if (error) return summarize(["retryable"]);
+    if (!device) return summarize([]);
+    const record = (payload as { record?: ReminderRecord }).record;
+    return summarize(
+      await syncDevices({
+        supabase,
+        devices: [device],
+        bundleId,
+        jobId: job.id,
+        quiet: check.kind === "refresh",
+        alertCandidate: check.kind === "process" && check.sendsAlert
+          ? record
+          : undefined,
+      }),
+    );
   }
 
   if (check.kind === "refresh") {
