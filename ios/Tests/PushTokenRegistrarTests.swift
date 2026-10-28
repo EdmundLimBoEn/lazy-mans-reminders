@@ -99,6 +99,111 @@ final class PushTokenRegistrarTests: XCTestCase {
         XCTAssertEqual(sent, ["replacement"])
     }
 
+    func testDeviceTokenChangeReregistersAcknowledgedActivityAndClock() async {
+        var sent: [PushTokenRegistrar.Registration] = []
+        let registrar = PushTokenRegistrar(defaults: defaults()) { sent.append($0) }
+        let user = UUID()
+        let startedAt = Date(timeIntervalSince1970: 1_800_000_000)
+        registrar.bind(userID: user)
+        registrar.recordDeviceToken("device")
+        registrar.recordActivityToken("activity", startedAt: startedAt)
+        await registrar.flush()
+
+        registrar.recordDeviceToken("changed-device")
+        XCTAssertTrue(registrar.needsRetry)
+        XCTAssertNil(registrar.lastSuccess)
+        await registrar.flush()
+        XCTAssertEqual(sent.count, 2)
+        XCTAssertEqual(sent.last?.token, "changed-device")
+        XCTAssertEqual(sent.last?.userID, user)
+        XCTAssertEqual(sent.last?.activityPushToken, "activity")
+        XCTAssertEqual(sent.last?.activityStartedAt, "2027-01-15T08:00:00Z")
+        XCTAssertFalse(registrar.needsRetry)
+
+        registrar.recordDeviceToken("changed-device")
+        registrar.recordActivityToken("activity", startedAt: startedAt)
+        await registrar.flush()
+        XCTAssertNil(sent.last?.activityPushToken)
+        XCTAssertNil(sent.last?.activityStartedAt)
+    }
+
+    func testDeviceTokenChangePreservesNewerPendingActivityClock() async {
+        var sent: [PushTokenRegistrar.Registration] = []
+        let registrar = PushTokenRegistrar(defaults: defaults()) { sent.append($0) }
+        let startedAt = Date(timeIntervalSince1970: 1_800_000_000)
+        registrar.bind(userID: UUID())
+        registrar.recordDeviceToken("device")
+        registrar.recordActivityToken("old", startedAt: startedAt)
+        await registrar.flush()
+
+        // Even a token rotation for the same activity needs its clock on a new row.
+        registrar.recordActivityToken("new", startedAt: startedAt)
+        registrar.recordDeviceToken("changed-device")
+        await registrar.flush()
+        XCTAssertEqual(sent.last?.token, "changed-device")
+        XCTAssertEqual(sent.last?.activityPushToken, "new")
+        XCTAssertEqual(sent.last?.activityStartedAt, "2027-01-15T08:00:00Z")
+    }
+
+    func testDeviceTokenChangeSurvivesFailedUploadAndRelaunch() async {
+        let storage = defaults()
+        let user = UUID()
+        let first = PushTokenRegistrar(defaults: storage, retryDelay: {}) {
+            if $0.token == "changed-device" { throw URLError(.notConnectedToInternet) }
+        }
+        first.bind(userID: user)
+        first.recordDeviceToken("device")
+        first.recordActivityToken("activity", startedAt: Date(timeIntervalSince1970: 1_800_000_000))
+        await first.flush()
+        first.recordDeviceToken("changed-device")
+        await first.flush()
+        XCTAssertTrue(first.needsRetry)
+
+        var sent: [PushTokenRegistrar.Registration] = []
+        let relaunched = PushTokenRegistrar(defaults: storage) { sent.append($0) }
+        relaunched.bind(userID: user)
+        XCTAssertTrue(relaunched.needsRetry)
+        await relaunched.flush()
+        XCTAssertEqual(sent.count, 1)
+        XCTAssertEqual(sent.first?.token, "changed-device")
+        XCTAssertEqual(sent.first?.activityPushToken, "activity")
+        XCTAssertEqual(sent.first?.activityStartedAt, "2027-01-15T08:00:00Z")
+    }
+
+    func testDeviceTokenChangeDuringUploadCannotAcknowledgeTheNewDevice() async {
+        var registrar: PushTokenRegistrar!
+        var sent: [PushTokenRegistrar.Registration] = []
+        registrar = PushTokenRegistrar(defaults: defaults()) { registration in
+            sent.append(registration)
+            if sent.count == 2 { registrar.recordDeviceToken("changed-device") }
+        }
+        registrar.bind(userID: UUID())
+        registrar.recordDeviceToken("device")
+        registrar.recordActivityToken("activity", startedAt: Date(timeIntervalSince1970: 1_800_000_000))
+        await registrar.flush()
+        await registrar.flush()
+        XCTAssertEqual(sent.count, 3)
+        XCTAssertEqual(sent.last?.token, "changed-device")
+        XCTAssertEqual(sent.last?.activityPushToken, "activity")
+        XCTAssertEqual(sent.last?.activityStartedAt, "2027-01-15T08:00:00Z")
+    }
+
+    func testAccountSwitchDiscardsActivityRequeuedByDeviceTokenChange() async {
+        var sent: [PushTokenRegistrar.Registration] = []
+        let registrar = PushTokenRegistrar(defaults: defaults()) { sent.append($0) }
+        registrar.bind(userID: UUID())
+        registrar.recordDeviceToken("device")
+        registrar.recordActivityToken("previous-account")
+        await registrar.flush()
+        registrar.recordDeviceToken("changed-device")
+        let nextUser = UUID()
+        registrar.bind(userID: nextUser)
+        await registrar.flush()
+        XCTAssertEqual(sent.last?.userID, nextUser)
+        XCTAssertNil(sent.last?.activityPushToken)
+        XCTAssertNil(sent.last?.activityStartedAt)
+    }
+
     func testRepeatedSnapshotDuringUploadDoesNotCauseAnotherTokenUpload() async {
         var registrar: PushTokenRegistrar!
         var sent: [String?] = []

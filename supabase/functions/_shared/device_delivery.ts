@@ -15,6 +15,7 @@ export type DeviceRow = {
   token: string;
   user_id: string;
   environment: string;
+  updated_at: string;
   push_to_start_token: string | null;
   activity_push_token: string | null;
   activity_started_at: string | null;
@@ -22,7 +23,7 @@ export type DeviceRow = {
 };
 
 export const DEVICE_SELECT =
-  "token, user_id, environment, push_to_start_token, activity_push_token, activity_started_at, retiring_activity_push_token";
+  "token, user_id, environment, updated_at, push_to_start_token, activity_push_token, activity_started_at, retiring_activity_push_token";
 
 // The database slot lasts 120 seconds. Stop starting requests after 90 seconds,
 // leaving room for the transport's 10-second timeout before another claim.
