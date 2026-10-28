@@ -72,6 +72,45 @@ function client(partial: Pick<ClientInfo, 'clientId' | 'clientName' | 'redirectU
 }
 
 describe('consent and grants', () => {
+  it.each(['listing', 'deletion'])('returns a CORS-enabled 503 when grant %s fails during revocation', async (failure) => {
+    const grantId = 'grant-a-aaaaaaaa'
+    const listUserGrants = vi.fn(async () => {
+      if (failure === 'listing') throw new Error('Storage unavailable')
+      return { items: [{ id: grantId, userId: USER_A }] }
+    })
+    const revokeGrant = vi.fn(async () => { throw new Error('Storage unavailable') })
+    const env = {
+      WEB_ORIGINS: 'https://lmr.sillyapps.co',
+      OAUTH_PROVIDER: { listUserGrants, revokeGrant },
+    } as unknown as Env
+    const deps: IdentityDeps = {
+      verifyUser: async () => ({ id: USER_A, email: null, fullName: 'A' }),
+      accountExists: async () => true,
+    }
+
+    const response = await handlePublicRequest(new Request('https://lmr-mcp.edmundlim.systems/grants/revoke', {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer token-a',
+        Origin: 'https://lmr.sillyapps.co',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ grantId }),
+    }), env, deps)
+
+    expect(response.status).toBe(503)
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('https://lmr.sillyapps.co')
+    expect(response.headers.get('Content-Type')).toBe('application/json')
+    expect(response.headers.get('Cache-Control')).toBe('no-store')
+    expect(await response.json()).toEqual({ error: 'grant_revoke_failed' })
+    expect(listUserGrants).toHaveBeenCalledExactlyOnceWith(USER_A, { limit: 100 })
+    if (failure === 'listing') {
+      expect(revokeGrant).not.toHaveBeenCalled()
+    } else {
+      expect(revokeGrant).toHaveBeenCalledExactlyOnceWith(grantId, USER_A)
+    }
+  })
+
   it('shows each client before Allow, denies without an unregistered redirect, and keeps grants owner-scoped', async () => {
     const kv = memoryKv()
     const clients = new Map<string, ClientInfo>([

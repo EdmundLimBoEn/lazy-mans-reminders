@@ -303,9 +303,13 @@ async function revokeGrant(request: Request, env: Env, deps: IdentityDeps): Prom
   if (!GRANT_ID.test(grantId)) return json({ error: 'invalid_grant' }, 400, cors)
   const oauth = oauthHelpers(env)
   if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
-  const outcome = await revokeUserGrant(oauth, user.id, grantId)
-  if (outcome === 'not_found') return json({ error: 'not_found' }, 404, cors)
-  return json({ revoked: true }, 200, cors)
+  try {
+    const outcome = await revokeUserGrant(oauth, user.id, grantId)
+    if (outcome === 'not_found') return json({ error: 'not_found' }, 404, cors)
+    return json({ revoked: true }, 200, cors)
+  } catch {
+    return json({ error: 'grant_revoke_failed' }, 503, cors)
+  }
 }
 
 async function cleanupGrants(request: Request, env: Env, deps: IdentityDeps): Promise<Response> {
