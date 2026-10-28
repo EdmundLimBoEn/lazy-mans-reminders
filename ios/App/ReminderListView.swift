@@ -403,6 +403,7 @@ struct ReminderListView: View {
         guard let value = draft.beginSubmission() else { return }
         do {
             let updated = try await ReminderStore.shared.create(text: value, userID: userID)
+            error = nil
             animateBoard { reminders = updated }
             await ReminderBoardSync.apply(reminders, notify: false)
             composerFocused = true
@@ -424,6 +425,7 @@ struct ReminderListView: View {
         defer { completingIDs.remove(reminder.id) }
         do {
             let updated = try await ReminderStore.shared.markDone(id: reminder.id)
+            error = nil
             animateBoard { reminders = updated }
             await ReminderBoardSync.apply(reminders, notify: false)
             hapticTick += 1
