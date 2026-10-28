@@ -92,31 +92,45 @@ async function listBoard(
   session: AgentSession,
   status: 'active' | 'completed' | 'all',
 ): Promise<BoardResult> {
-  const [{ data, error }, prefs] = await Promise.all([
+  const [active, prefs] = await Promise.all([
     supabase
       .from('reminders')
-      .select('id, text, is_done, sort_order, created_at, completed_at')
+      .select('id', { count: 'exact', head: true })
       .eq('user_id', session.userId)
-      .order('is_done')
-      .order('sort_order')
-      .order('created_at'),
+      .eq('is_done', false),
     supabase
       .from('lock_screen_prefs')
       .select('max_lines')
       .eq('user_id', session.userId)
       .maybeSingle(),
   ])
-  if (error) return boardErrorFromStorage(error.message, error.details)
+  if (active.error) return boardErrorFromStorage(active.error.message, active.error.details)
+  if (active.count === null) return boardErrorFromStorage('Active count missing')
   if (prefs.error) return boardErrorFromStorage(prefs.error.message, prefs.error.details)
 
-  const rows = (data ?? []) as ReminderSelect[]
-  const used = rows.filter((row) => !row.is_done).length
-  const capacity = capacityFromUsed(used, effectiveMaximum(prefs.data?.max_lines))
-  const reminders = rows.filter((row) => {
-    if (status === 'all') return true
-    if (status === 'completed') return row.is_done
-    return !row.is_done
-  })
+  const reminders: ReminderSelect[] = []
+  const pageSize = 1000
+  while (true) {
+    let query = supabase
+      .from('reminders')
+      .select('id, text, is_done, sort_order, created_at, completed_at', { count: 'exact' })
+      .eq('user_id', session.userId)
+    if (status !== 'all') query = query.eq('is_done', status === 'completed')
+    const { data, error, count } = await query
+      .order('is_done')
+      .order('sort_order')
+      .order('created_at')
+      .order('id')
+      .range(reminders.length, reminders.length + pageSize - 1)
+    if (error) return boardErrorFromStorage(error.message, error.details)
+    if (count === null) return boardErrorFromStorage('Reminder count missing')
+    const page = (data ?? []) as ReminderSelect[]
+    reminders.push(...page)
+    if (reminders.length >= count) break
+    if (page.length === 0) return boardErrorFromStorage('Reminder page incomplete')
+    // Advance by actual rows received, even when the server cap is below pageSize.
+  }
+  const capacity = capacityFromUsed(active.count, effectiveMaximum(prefs.data?.max_lines))
   return { kind: 'snapshot', snapshot: { reminders, capacity } }
 }
 
