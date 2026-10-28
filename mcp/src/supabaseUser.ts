@@ -6,7 +6,7 @@ export type VerifiedUser = {
   fullName: string
 }
 
-/** Resolve a browser-issued Supabase access token to its account, or null when it is not valid. */
+/** Resolve a token, return null for rejected credentials, or throw when verification is unavailable. */
 export type VerifyUser = (env: Env, accessToken: string) => Promise<VerifiedUser | null>
 
 /**
@@ -31,7 +31,11 @@ export function verifySupabaseUserWith(fetchImpl?: FetchLike): VerifyUser {
       ...(fetchImpl ? { global: { fetch: fetchImpl } } : {}),
     })
     const { data, error } = await supabase.auth.getUser(accessToken)
-    if (error || !data.user) return null
+    if (error) {
+      if (error.status === 401 || error.status === 403) return null
+      throw error
+    }
+    if (!data.user) return null
     const metadata = data.user.user_metadata as Record<string, unknown> | undefined
     return {
       id: data.user.id,

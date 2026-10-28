@@ -3,6 +3,7 @@ import { DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, us
 import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { SortableReminder } from './components/SortableReminder'
 import { moveActiveReminder, persistReminderOrder } from './lib/reminderOrder'
+import { connectionRefresh } from './lib/connectionRefresh'
 import type { Session } from '@supabase/supabase-js'
 import { ArrowDown, ArrowUp, Check, ChevronRight, Circle, CircleAlert, CircleCheck, Download, KeyRound, LogOut, Pencil, Plus, Smartphone, Trash2, X } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -99,7 +100,9 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
   }, [session.user.id])
 
   useEffect(() => {
-    void load()
+    const recovery = connectionRefresh(async () => {
+      if (!reorderingRef.current) await load()
+    }, error => { if (error instanceof Error) setError(error.message) })
     let reloadTimer: number | undefined
     const channel = supabase
       .channel(`reminders:${session.user.id}`)
@@ -110,12 +113,13 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
           if (reorderingRef.current) return
           window.clearTimeout(reloadTimer)
           reloadTimer = window.setTimeout(() => {
-            if (!reorderingRef.current) void load()
+            if (!reorderingRef.current) recovery.refresh()
           }, 100)
         },
       )
-      .subscribe()
+      .subscribe(recovery.onStatus)
     return () => {
+      recovery.dispose()
       window.clearTimeout(reloadTimer)
       void supabase.removeChannel(channel)
     }
@@ -147,18 +151,23 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
 
   async function patch(id: string, changes: Partial<ReminderChanges>) {
     if (reorderingRef.current || pendingMutationsRef.current.has(id)) return false
+    const previous = reminders.find((item) => item.id === id)
+    if (!previous) return false
+    const optimistic = { ...previous, ...changes }
     pendingMutationsRef.current.add(id)
     setPendingMutations(new Set(pendingMutationsRef.current))
     try {
       ++loadSequence.current
       setError('')
-      setReminders((items) => items.map((item) => item.id === id ? { ...item, ...changes } : item))
+      setReminders((items) => items.map((item) => item.id === id ? optimistic : item))
       const { error: updateError } = await supabase
         .from('reminders')
         .update(changes)
         .eq('id', id)
         .eq('user_id', session.user.id)
       if (updateError) {
+        // Restore only our optimistic row; preserve any newer state from a read.
+        setReminders((items) => items.map((item) => item === optimistic ? previous : item))
         setError(updateError.message)
       }
       // Invalidate reads started during the write and reconcile acknowledged state.
@@ -172,6 +181,8 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
 
   async function remove(id: string) {
     if (reorderingRef.current || pendingMutationsRef.current.has(id)) return false
+    const previous = reminders.find((item) => item.id === id)
+    if (!previous) return false
     pendingMutationsRef.current.add(id)
     setPendingMutations(new Set(pendingMutationsRef.current))
     try {
@@ -184,6 +195,8 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
         .eq('id', id)
         .eq('user_id', session.user.id)
       if (deleteError) {
+        // The per-row guard remains held through rollback and reconciliation.
+        setReminders((items) => items.some((item) => item.id === id) ? items : [...items, previous])
         setError(deleteError.message)
       }
       await load()
