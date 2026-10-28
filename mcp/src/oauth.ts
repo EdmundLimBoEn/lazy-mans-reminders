@@ -63,8 +63,8 @@ export async function resolveExternalPat(input: {
   token: string
   request: Request
   env: Env
-}): Promise<{ props: BoundProps; audience: string } | null> {
-  const session = await resolveSession(input.env, `Bearer ${input.token}`)
+}, waitUntil?: (promise: Promise<unknown>) => void): Promise<{ props: BoundProps; audience: string } | null> {
+  const session = await resolveSession(input.env, `Bearer ${input.token}`, waitUntil)
   if (!session) return null
   return {
     props: {
