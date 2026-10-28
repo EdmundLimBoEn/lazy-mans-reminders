@@ -32,6 +32,7 @@ function fixture() {
     text: "Old",
     empty: false,
     readError: false,
+    prefsError: false,
     reads: 0,
     now: 0,
   };
@@ -61,7 +62,10 @@ function fixture() {
           };
         }
         if (table === "lock_screen_prefs") {
-          return { data: { max_lines: 6 }, error: null };
+          return {
+            data: state.prefsError ? null : { max_lines: 6 },
+            error: state.prefsError ? "unavailable" : null,
+          };
         }
         state.reads++;
         return {
@@ -233,6 +237,28 @@ Deno.test("board read and delivery failures release the slot and remain retryabl
     assertEquals(result, ["retryable"]);
     assertEquals(f.slots.size, 0);
   }
+});
+
+Deno.test("preference read failures preserve activity content and release the slot for retry", async () => {
+  const f = fixture();
+  f.state.prefsError = true;
+  let deliveries = 0;
+  const input = {
+    ...f,
+    devices: [f.devices[0]],
+    deliver: () => {
+      deliveries++;
+      return Promise.resolve(["sent" as const]);
+    },
+  };
+  assertEquals(await deliverDevices(input), ["retryable"]);
+  assertEquals(deliveries, 0);
+  assertEquals(f.slots.size, 0);
+
+  f.state.prefsError = false;
+  assertEquals(await deliverDevices(input), ["sent"]);
+  assertEquals(deliveries, 1);
+  assertEquals(f.slots.size, 0);
 });
 
 Deno.test("expired workers cannot begin another send or retry with an old snapshot", async () => {

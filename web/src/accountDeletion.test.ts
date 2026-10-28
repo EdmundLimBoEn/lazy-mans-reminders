@@ -2,6 +2,7 @@ import { beforeEach, expect, it, vi } from 'vitest'
 import type { ReactElement, ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import App from './App'
+import Board from './Board'
 
 // Follow the component-handler harness used by RoutineReminders.test.ts.
 // Keep separate hook state for App and its account subtree, respecting React keys.
@@ -47,7 +48,7 @@ function render(userId: string) {
   previousKey = board.key
   hooks.states = boardStates
   hooks.cursor = 0
-  const tree = nodes((board.type as (props: Props) => ReactNode)(board.props))
+  const tree = nodes(Board(board.props as Parameters<typeof Board>[0]))
   return {
     open: tree.find(node => typeof node.props.open === 'boolean')!.props.open,
     click: (label: string) => tree.find(node => node.props.onClick && nodes(node).some(child =>

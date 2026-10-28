@@ -123,12 +123,14 @@ jobs:
             supabase/migrations/202608080002_lock_screen_prefs.sql \
             supabase/migrations/202608260001_agent_tokens.sql \
             supabase/migrations/20261008035839_revoke_anon_agent_token_rpcs.sql \
+            supabase/migrations/20261010040000_reorder_reminders.sql \
             supabase/migrations/202610120001_routine_reminders.sql \
             supabase/migrations/202610220001_routine_ownership_and_overflow.sql \
             supabase/migrations/202610220002_reminder_text_and_token_lock.sql \
             supabase/migrations/202610220003_reminder_quotas.sql \
             supabase/migrations/202610250001_routine_owner_index.sql \
             supabase/migrations/202610280001_write_budgets.sql \
+            supabase/migrations/202610280002_reminder_quota_capacity.sql \
             supabase/migrations/202610280002_preserve_pending_routine_firings.sql \
             supabase/tests/routine_owner_index.sql \
             supabase/tests/reminder_text_and_token_lock.sql \
@@ -136,7 +138,9 @@ jobs:
             supabase/tests/reminder_quotas.sql \
             supabase/tests/write_budgets.sql \
             supabase/migrations/202610280001_reminder_push_replay.sql \
-            supabase/tests/reminder_push_replay.sql; do
+            supabase/tests/reminder_push_replay.sql \
+            supabase/migrations/202610280002_normalize_legacy_reminder_text.sql \
+            supabase/tests/normalize_legacy_reminder_text.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
       - if: always()
