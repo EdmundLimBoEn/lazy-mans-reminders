@@ -5,12 +5,17 @@ import {
 import { loadBoardContent, loadBoardLines } from "./board_loader.ts";
 import { classifyWebhookPayload } from "./push_helpers.ts";
 
-function client(data: unknown, error: unknown = null) {
+function client(
+  data: unknown,
+  error: unknown = null,
+  prefs: unknown = { max_lines: 6 },
+  prefsError: unknown = null,
+) {
   return {
     from(table: string) {
       const result = table === "reminders"
         ? { data, error }
-        : { data: { max_lines: 6 }, error: null };
+        : { data: prefs, error: prefsError };
       const query = {
         select: () => query,
         eq: () => query,
@@ -38,6 +43,31 @@ Deno.test("confirmed empty board can end the activity", async () => {
 Deno.test("nonempty board keeps its content", async () => {
   assertEquals(await loadBoardLines(client([{ text: "Buy milk" }]), "user"), [
     "Buy milk",
+  ]);
+});
+
+Deno.test("failed preferences read cannot truncate an eight-reminder board to the default", async () => {
+  const rows = Array.from(
+    { length: 8 },
+    (_, i) => ({ text: `Reminder ${i + 1}` }),
+  );
+  assertEquals(
+    await loadBoardLines(client(rows, null, { max_lines: 16 }), "user"),
+    rows.map((row) => row.text),
+  );
+  await assertRejects(() =>
+    loadBoardLines(client(rows, null, null, { message: "unavailable" }), "user")
+  );
+});
+
+Deno.test("missing preferences row still uses the six-line default", async () => {
+  const rows = Array.from(
+    { length: 8 },
+    (_, i) => ({ text: `Reminder ${i + 1}` }),
+  );
+  assertEquals(await loadBoardLines(client(rows, null, null), "user"), [
+    ...rows.slice(0, 5).map((row) => row.text),
+    "+3 more",
   ]);
 });
 
