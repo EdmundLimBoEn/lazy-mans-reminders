@@ -282,6 +282,7 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
         func send(_ request: URLRequest) async throws -> (Data, URLResponse) {
             requestCount += 1
             XCTAssertEqual(request.httpMethod, "PATCH")
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "Bearer test-token")
             let body = try XCTUnwrap(request.httpBody)
             let fields = try XCTUnwrap(JSONSerialization.jsonObject(with: body) as? [String: Any])
             if requestCount == 1 {
