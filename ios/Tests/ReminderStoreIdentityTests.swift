@@ -269,7 +269,7 @@ final class ReminderStoreIdentityTests: XCTestCase {
         await fixture.network.finish(data: Data(), statusCode: 400)
         let signedIn = await task.value
         XCTAssertFalse(signedIn, "An old request cannot adopt a different auth session")
-        let savedData = try XCTUnwrap(fixture.defaults.data(forKey: "shared-session"))
+        let savedData = try XCTUnwrap(fixture.credentials.data)
         let saved = try JSONDecoder().decode(SharedSession.self, from: savedData)
         XCTAssertEqual(saved.accessToken, replacement)
         XCTAssertEqual(saved.refreshToken, "R2")
@@ -320,7 +320,7 @@ final class ReminderStoreIdentityTests: XCTestCase {
         let authPayload = try JSONSerialization.jsonObject(with: authBody) as? [String: String]
         XCTAssertEqual(authPayload?["refresh_token"], "R1")
         XCTAssertEqual(requests.last?.value(forHTTPHeaderField: "Authorization"), "Bearer \(rotated)")
-        let savedData = try XCTUnwrap(fixture.defaults.data(forKey: "shared-session"))
+        let savedData = try XCTUnwrap(fixture.credentials.data)
         let saved = try JSONDecoder().decode(SharedSession.self, from: savedData)
         XCTAssertEqual(saved.accessToken, rotated)
         XCTAssertEqual(saved.refreshToken, "R2")
@@ -356,7 +356,7 @@ final class ReminderStoreIdentityTests: XCTestCase {
         XCTAssertEqual(cache, [replacement])
         let count = await fixture.network.requestCount
         XCTAssertEqual(count, 1, "Obsolete authentication must not send a reminders request")
-        let sessionData = try XCTUnwrap(fixture.defaults.data(forKey: "shared-session"))
+        let sessionData = try XCTUnwrap(fixture.credentials.data)
         let session = try JSONDecoder().decode(SharedSession.self, from: sessionData)
         XCTAssertEqual(session.accessToken, replacementToken)
     }
@@ -448,6 +448,7 @@ final class ReminderStoreIdentityTests: XCTestCase {
     private struct Fixture {
         let suiteName = "ReminderStoreIdentityTests.\(UUID().uuidString)"
         let defaults: UserDefaults
+        let credentials = MemorySessionCredentials()
         let store: ReminderStore
         let network: PausedNetwork
         let started: XCTestExpectation
@@ -458,7 +459,7 @@ final class ReminderStoreIdentityTests: XCTestCase {
             network = PausedNetwork(started: started)
             let pausedNetwork = network
             store = ReminderStore(
-                defaults: defaults,
+                defaults: defaults, credentials: credentials,
                 serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key",
                 requestData: { try await pausedNetwork.send($0) }

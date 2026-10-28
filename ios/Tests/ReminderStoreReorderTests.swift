@@ -167,7 +167,7 @@ final class ReminderStoreReorderTests: XCTestCase {
             }
         }
         func makeStore(_ send: @escaping (URLRequest) async throws -> (Data, URLResponse)) -> ReminderStore {
-            ReminderStore(defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+            ReminderStore(defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
                           anonKey: "test-key", requestData: send)
         }
         func seed(_ store: ReminderStore) async throws {
