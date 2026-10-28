@@ -1,11 +1,11 @@
-import { beforeEach, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import type { ReactElement, ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import App from './App'
 
 // Run the real Board handlers with retained hooks and controllable database reads.
-const hooks = vi.hoisted(() => ({ states: [] as unknown[], cursor: 0, load: undefined as undefined | (() => Promise<void>) }))
-const db = vi.hoisted(() => ({ from: vi.fn(), rpc: vi.fn(), update: vi.fn(), delete: vi.fn() }))
+const hooks = vi.hoisted(() => ({ states: [] as unknown[], cursor: 0, effects: [] as Array<() => void | (() => void)>, load: undefined as undefined | (() => Promise<void>) }))
+const db = vi.hoisted(() => ({ channel: vi.fn(), removeChannel: vi.fn(), from: vi.fn(), rpc: vi.fn(), update: vi.fn(), delete: vi.fn() }))
 vi.mock('./supabase', () => ({ supabase: db }))
 vi.mock('@dnd-kit/core', async (original) => ({
   ...await original<typeof import('@dnd-kit/core')>(),
@@ -27,7 +27,7 @@ vi.mock('react', async (original) => ({
   },
   useMemo: (compute: () => unknown) => compute(),
   useCallback: (callback: () => Promise<void>) => { hooks.load = callback; return callback },
-  useEffect: () => {},
+  useEffect: (effect: () => void | (() => void)) => { hooks.effects.push(effect) },
 }))
 
 type Props = {
@@ -45,6 +45,7 @@ function nodes(node: ReactNode): ReactElement<Props>[] {
 let board: ReactElement<Props>
 function render() {
   hooks.cursor = 0
+  hooks.effects = []
   return nodes((board.type as (props: Props) => ReactNode)(board.props))
 }
 function control(label: string) {
@@ -60,7 +61,7 @@ function deferred<T>() {
 }
 const original = { id: 'note', user_id: 'user', text: 'Original', sort_order: 0, is_done: false, created_at: '2026-01-01' }
 type Row = typeof original
-type Result = { data: Row[]; error: null }
+type Result = { data: Row[]; error: null } | { data: null; error: { message: string } }
 let stored: Row[]
 let reads: ReturnType<typeof deferred<Result>>[]
 let write: ReturnType<typeof deferred<{ error: { message: string } | null }>>
@@ -154,6 +155,61 @@ it('reloads persisted state when an optimistic deletion fails', async () => {
   await vi.waitFor(() => expect(displayed()).toEqual(['Original']))
 })
 
+it.each(['edit', 'complete', 'delete'])('rolls back a failed %s before an unavailable recovery read', async operation => {
+  const recovery = deferred<Result>()
+  reads.push(recovery)
+  mutate(operation)
+  write.resolve({ error: { message: 'Offline write' } })
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  // Rollback must not wait for reconciliation to finish (or succeed).
+  expect(displayed()).toEqual(['Original'])
+  expect(control('Complete "Original"')).toBeDefined()
+  recovery.resolve({ data: null, error: { message: 'Offline read' } })
+  await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
+  expect(displayed()).toEqual(['Original'])
+  if (operation === 'edit') expect(control('Edit reminder: Original').value).toBe('Updated')
+
+  // A subsequent mutation still works after the failed attempt releases its guard.
+  write = deferred()
+  control('Complete "Original"').onClick!()
+  stored = [{ ...original, is_done: true }]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Mark "Original" active').disabled).toBe(false))
+})
+
+it.each(['complete', 'delete'])('failed %s rollback preserves another row’s later mutation', async operation => {
+  stored.push({ ...original, id: 'other', text: 'Other', sort_order: 1 })
+  await hooks.load!()
+  const firstWrite = write
+  mutate(operation)
+  write = deferred()
+  control('Complete "Other"').onClick!()
+  const recovery = deferred<Result>()
+  reads.push(recovery)
+  firstWrite.resolve({ error: { message: 'Offline write' } })
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  expect(control('Complete "Original"')).toBeDefined()
+  expect(control('Mark "Other" active')).toBeDefined()
+  recovery.resolve({ data: null, error: { message: 'Offline read' } })
+  await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
+  stored[1].is_done = true
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Mark "Other" active').disabled).toBe(false))
+})
+
+it.each(['complete', 'delete'])('failed %s rollback preserves a newer fetched row', async operation => {
+  mutate(operation)
+  stored = [{ ...original, text: 'Newer' }]
+  await hooks.load!()
+  const recovery = deferred<Result>()
+  reads.push(recovery)
+  write.resolve({ error: { message: 'Write failed' } })
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  recovery.resolve({ data: null, error: { message: 'Offline read' } })
+  await vi.waitFor(() => expect(control('Complete "Newer"').disabled).toBe(false))
+  expect(displayed()).toEqual(['Newer'])
+})
+
 function editForm() {
   return render().find(node => node.type === 'form' && nodes(node).some(child => child.props['aria-label'] === 'Save reminder'))!.props
 }
@@ -217,6 +273,82 @@ it('reopens through the owner-locked RPC and reconciles the board', async () => 
     p_user_id: 'user', p_reminder_id: 'note', p_text: null,
   })
   expect(db.update).not.toHaveBeenCalled()
+  stored = [original]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
+})
+
+// Start the real subscription effect and drive recovery without row notifications.
+afterEach(() => { vi.unstubAllGlobals() })
+it.each(['SUBSCRIBED', 'online'])('recovers a failed read on %s and removes recovery listeners on cleanup', async trigger => {
+  const browser = Object.assign(new EventTarget(), { clearTimeout, setTimeout })
+  vi.stubGlobal('window', browser)
+  let status: ((value: string) => void) | undefined
+  const channel = {
+    on: vi.fn().mockReturnThis(),
+    subscribe: vi.fn((callback?: (value: string) => void) => { status = callback; return channel }),
+  }
+  db.channel.mockReturnValue(channel)
+  db.removeChannel.mockResolvedValue(undefined)
+  const success = db.from.getMockImplementation()!
+  db.from.mockImplementation(() => {
+    const query = {
+      select: () => query, eq: () => query, order: () => query,
+      maybeSingle: async () => ({ data: null, error: null }),
+      then: (resolve: (value: unknown) => void) => Promise.resolve({ data: null, error: { message: 'Offline' } }).then(resolve),
+    }
+    return query
+  })
+  render()
+  const cleanup = hooks.effects.at(-1)!()
+  await vi.waitFor(() => expect(db.channel).toHaveBeenCalled())
+  // Let the failed initial query settle before signalling recovery.
+  await new Promise(resolve => setTimeout(resolve, 0))
+  const failedCalls = db.from.mock.calls.length
+  stored = [{ ...original, text: 'Recovered board' }]
+  db.from.mockImplementation(success)
+  if (trigger === 'online') browser.dispatchEvent(new Event('online'))
+  else status?.('SUBSCRIBED')
+  await vi.waitFor(() => expect(db.from.mock.calls.length).toBeGreaterThan(failedCalls))
+  await new Promise(resolve => setTimeout(resolve, 0))
+  expect(displayed()).toEqual(['Recovered board'])
+  const recoveredCalls = db.from.mock.calls.length
+  status?.('CHANNEL_ERROR')
+  status?.('TIMED_OUT')
+  expect(db.from.mock.calls.length).toBe(recoveredCalls)
+  // A later re-subscription also reloads an otherwise idle account.
+  status?.('SUBSCRIBED')
+  await vi.waitFor(() => expect(db.from.mock.calls.length).toBeGreaterThan(recoveredCalls))
+  await new Promise(resolve => setTimeout(resolve, 0))
+  if (typeof cleanup === 'function') cleanup()
+  const finalCalls = db.from.mock.calls.length
+  browser.dispatchEvent(new Event('online'))
+  status?.('SUBSCRIBED')
+  await new Promise(resolve => setTimeout(resolve, 0))
+  expect(db.from.mock.calls.length).toBe(finalCalls)
+  expect(db.removeChannel).toHaveBeenCalledWith(channel)
+})
+
+it('rolls back a failed reopen RPC before an unavailable recovery read', async () => {
+  stored = [{ ...original, is_done: true }]
+  await hooks.load!()
+  db.rpc.mockImplementation((name: string) => {
+    if (name === 'reopen_reminder') return write.promise
+    return Promise.resolve({ error: null })
+  })
+  const recovery = deferred<Result>()
+  reads.push(recovery)
+  control('Mark "Original" active').onClick!()
+  expect(control('Complete "Original"').disabled).toBe(true)
+  expect(db.update).not.toHaveBeenCalled()
+  write.resolve({ error: { message: 'Reopen failed' } })
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  expect(control('Mark "Original" active').disabled).toBe(true)
+  recovery.resolve({ data: null, error: { message: 'Offline read' } })
+  await vi.waitFor(() => expect(control('Mark "Original" active').disabled).toBe(false))
+
+  write = deferred()
+  control('Mark "Original" active').onClick!()
   stored = [original]
   write.resolve({ error: null })
   await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))

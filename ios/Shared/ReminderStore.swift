@@ -35,6 +35,7 @@ actor ReminderStore {
 
     static let shared = ReminderStore()
 
+    private let credentials: SessionCredentialStorage
     private let injectedDefaults: UserDefaults?
     private let serviceURL: URL?
     private let anonKey: String?
@@ -46,12 +47,14 @@ actor ReminderStore {
 
     init(
         defaults: UserDefaults? = nil,
+        credentials: SessionCredentialStorage = KeychainSessionStorage(),
         serviceURL: URL? = nil,
         anonKey: String? = nil,
         requestData: @escaping (URLRequest) async throws -> (Data, URLResponse) = {
             try await URLSession.shared.data(for: $0)
         }
     ) {
+        self.credentials = credentials
         self.injectedDefaults = defaults
         self.serviceURL = serviceURL
         self.anonKey = anonKey
@@ -62,11 +65,13 @@ actor ReminderStore {
     private var supabaseAnonKey: String { anonKey ?? AppConfig.supabaseAnonKey }
 
     private let cacheKey = "cached-reminders"
-    private let sessionKey = "shared-session"
+    private var sessionStorage: SharedSessionStorage {
+        SharedSessionStorage(defaults: defaults, credentials: credentials)
+    }
     private let identityRevisionKey = "shared-session-identity-revision"
 
     private func storedSession() -> SharedSession? {
-        guard let data = defaults.data(forKey: sessionKey),
+        guard let data = try? sessionStorage.read(),
               let session = try? JSONDecoder().decode(SharedSession.self, from: data) else { return nil }
         return session.resolvingUserID()
     }
@@ -104,7 +109,7 @@ actor ReminderStore {
             || authSessionID(previous?.accessToken) != authSessionID(session.accessToken) {
             defaults.set(UUID().uuidString, forKey: identityRevisionKey)
         }
-        persist(session)
+        try persist(session)
     }
 
     /// Identity comparison during authentication must not refresh credentials or fetch.
@@ -125,7 +130,7 @@ actor ReminderStore {
 
     func clearUserData() {
         defaults.set(UUID().uuidString, forKey: identityRevisionKey)
-        defaults.removeObject(forKey: sessionKey)
+        sessionStorage.clear()
         defaults.removeObject(forKey: cacheKey)
     }
 
@@ -274,12 +279,12 @@ actor ReminderStore {
         _ = try? await requestData(request)
     }
 
-    /// Loads the App Group session, refreshing the JWT when it is near expiry so
+    /// Loads the shared Keychain session, refreshing the JWT when it is near expiry so
     /// background push handling and the lock-screen widget stay in sync after
     /// the access token's ~1h lifetime. Widget timelines only read `cached()`.
     private func loadFreshSession() async -> SharedSession? {
         guard
-            let data = defaults.data(forKey: sessionKey),
+            let data = try? sessionStorage.read(),
             let session = try? JSONDecoder().decode(SharedSession.self, from: data)
         else {
             return nil
@@ -287,7 +292,7 @@ actor ReminderStore {
         let identityRevision = defaults.string(forKey: identityRevisionKey)
         let resolved = session.resolvingUserID()
         if resolved.userID != session.userID {
-            persist(resolved)
+            do { try persist(resolved) } catch { return nil }
         }
         if resolved.isFresh() { return resolved }
         guard let refreshToken = resolved.refreshToken, !refreshToken.isEmpty else {
@@ -306,7 +311,7 @@ actor ReminderStore {
             return current.isFresh() ? current : nil
         }
         if let refreshed {
-            persist(refreshed)
+            do { try persist(refreshed) } catch { return nil }
             NotificationCenter.default.post(
                 name: .didRefreshSharedSession,
                 object: nil,
@@ -320,10 +325,8 @@ actor ReminderStore {
         return resolved.expiresAt > Date() ? resolved : nil
     }
 
-    private func persist(_ session: SharedSession) {
-        if let encoded = try? JSONEncoder().encode(session) {
-            defaults.set(encoded, forKey: sessionKey)
-        }
+    private func persist(_ session: SharedSession) throws {
+        try sessionStorage.write(JSONEncoder().encode(session))
     }
 
     private func refreshAccessToken(_ refreshToken: String, userID: UUID?) async -> SharedSession? {
@@ -453,6 +456,8 @@ actor ReminderStore {
         guard trimmed != nil || isDone != nil else {
             return cached()
         }
+        // Reserve this reminder before authentication or transport can suspend the actor.
+        guard pendingUpdates[id] == nil else { throw StoreError.mutationConflict }
         let mutationID = UUID()
         pendingUpdates[id] = mutationID
         defer {

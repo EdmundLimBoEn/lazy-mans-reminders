@@ -131,6 +131,7 @@ jobs:
             supabase/migrations/202610220003_reminder_quotas.sql \
             supabase/migrations/202610250001_routine_owner_index.sql \
             supabase/migrations/202610280001_write_budgets.sql \
+            supabase/migrations/202610280002_preserve_pending_routine_firings.sql \
             supabase/tests/routine_owner_index.sql \
             supabase/tests/reminder_text_and_token_lock.sql \
             supabase/tests/routine_reminders.sql \

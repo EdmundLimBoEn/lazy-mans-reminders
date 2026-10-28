@@ -117,7 +117,7 @@ final class ReminderStoreRefreshTests: XCTestCase {
         init() { defaults = UserDefaults(suiteName: suite)! }
 
         func makeStore(_ network: Network) -> ReminderStore {
-            ReminderStore(defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+            ReminderStore(defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
                           anonKey: "test-key", requestData: { try await network.send($0) })
         }
 

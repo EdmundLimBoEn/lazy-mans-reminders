@@ -107,6 +107,7 @@ async function listBoard(
       .maybeSingle(),
   ])
   if (error) return boardErrorFromStorage(error.message, error.details)
+  if (prefs.error) return boardErrorFromStorage(prefs.error.message, prefs.error.details)
 
   const rows = (data ?? []) as ReminderSelect[]
   const used = rows.filter((row) => !row.is_done).length
