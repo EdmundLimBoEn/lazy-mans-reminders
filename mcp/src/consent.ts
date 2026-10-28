@@ -32,7 +32,11 @@ export function displayName(raw: string | undefined | null): string | null {
   }
   out = out.replace(/\s+/g, ' ').trim()
   if (!out) return null
-  return out.length > MAX_CLIENT_NAME ? `${out.slice(0, MAX_CLIENT_NAME - 1)}…` : out
+  if (out.length <= MAX_CLIENT_NAME) return out
+  let end = MAX_CLIENT_NAME - 1
+  // Keep the existing length cap without cutting a surrogate pair in half.
+  if ((out.codePointAt(end - 1) ?? 0) > 0xffff) end -= 1
+  return `${out.slice(0, end)}…`
 }
 
 function httpsOnly(value: string | undefined): string | null {
