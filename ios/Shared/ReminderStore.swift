@@ -141,9 +141,13 @@ actor ReminderStore {
     }
 
     /// Fallback helper. `??` uses a sync autoclosure, so `?? await cached()` does not compile.
-    func refreshOrCached(refreshAuthentication: Bool = true) async -> [Reminder] {
+    func refreshOrCached(refreshAuthentication: Bool = true, updateCache: Bool = true) async -> [Reminder] {
         do {
-            return try await refresh(performMaintenance: false, refreshAuthentication: refreshAuthentication)
+            return try await refresh(
+                performMaintenance: false,
+                refreshAuthentication: refreshAuthentication,
+                updateCache: updateCache
+            )
         } catch {
             return cached()
         }
@@ -151,7 +155,8 @@ actor ReminderStore {
 
     func refresh(
         performMaintenance: Bool = true,
-        refreshAuthentication: Bool = true
+        refreshAuthentication: Bool = true,
+        updateCache: Bool = true
     ) async throws -> [Reminder] {
         if isReordering { return cached() }
         let revision = contentRevision
@@ -197,7 +202,10 @@ actor ReminderStore {
         try requireCurrentIdentity(session, revision: identityRevision)
         // An acknowledged mutation or a newer refresh makes this snapshot obsolete.
         if revision != contentRevision || sequence != refreshSequence || isReordering { return cached() }
-        defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
+        // Widget fetches cannot use process-local revisions to guard the app's cache.
+        if updateCache {
+            defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
+        }
         return reminders
     }
 

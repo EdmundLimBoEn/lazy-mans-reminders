@@ -3,6 +3,71 @@ import XCTest
 @testable import LazyMansReminders
 
 final class ReminderStoreRefreshTests: XCTestCase {
+    func testDelayedWidgetRefreshCannotOverwriteAnotherStoresAcknowledgedMutation() async throws {
+        for isDone in [true, false] {
+            let fixture = Fixture()
+            defer { fixture.cleanUp() }
+            let started = expectation(description: "Widget refresh suspended")
+            var acknowledged = fixture.original
+            acknowledged.text = "Acknowledged edit"
+            acknowledged.isDone = isDone
+            let network = Network(started: [started], mutation: acknowledged)
+            // Separate actors model the independent revision counters in the app and widget.
+            let app = fixture.makeStore(network)
+            let widget = fixture.makeStore(network)
+            try await fixture.seed(app, rows: [fixture.original])
+
+            let refresh = Task {
+                await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
+            }
+            await fulfillment(of: [started], timeout: 3)
+            let expected = try await app.update(
+                id: acknowledged.id, text: acknowledged.text, isDone: isDone
+            )
+            XCTAssertEqual(expected, isDone ? [] : [acknowledged])
+            await network.finish(0, rows: [fixture.original])
+
+            let timeline = await refresh.value
+            XCTAssertEqual(timeline, [fixture.original])
+            let cache = await app.cached()
+            XCTAssertEqual(cache, expected)
+        }
+    }
+
+    func testWidgetRefreshReturnsFetchedTimelineWithoutUpdatingCache() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let started = expectation(description: "Widget refresh suspended")
+        let network = Network(started: [started], mutation: fixture.original)
+        let widget = fixture.makeStore(network)
+        try await fixture.seed(widget, rows: [])
+        let refresh = Task {
+            await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
+        }
+        await fulfillment(of: [started], timeout: 3)
+        await network.finish(0, rows: [fixture.original])
+
+        let timeline = await refresh.value
+        let cache = await widget.cached()
+        XCTAssertEqual(timeline, [fixture.original])
+        XCTAssertEqual(cache, [])
+    }
+
+    func testFailedWidgetRefreshFallsBackToAppCache() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let widget = ReminderStore(
+            defaults: fixture.defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+            anonKey: "test-key", requestData: { _ in throw URLError(.notConnectedToInternet) }
+        )
+        try await fixture.seed(widget, rows: [fixture.original])
+
+        let timeline = await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
+        let cache = await widget.cached()
+        XCTAssertEqual(timeline, [fixture.original])
+        XCTAssertEqual(cache, [fixture.original])
+    }
+
     func testDelayedRefreshCannotOverwriteAcknowledgedMutations() async throws {
         for mutation in ["create", "complete", "edit", "reopen"] {
             let fixture = Fixture()
