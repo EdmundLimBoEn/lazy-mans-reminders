@@ -2,7 +2,6 @@ import {
   assertEquals,
   assertExists,
 } from "https://deno.land/std@0.224.0/assert/mod.ts";
-import { USER_DATA_TABLES } from "../_shared/account_tables.ts";
 import {
   APPLE_AUDIENCE,
   APPLE_CLIENT_SECRET_MAX_TTL_SECONDS,
@@ -84,7 +83,6 @@ async function runDelete(input: {
   token?: Response | ((body: string) => Response);
   revoke?: Response | ((body: string) => Response);
   grants?: { ok: false; reason: "incomplete" | "unreachable" };
-  failedTable?: string;
   authError?: unknown;
   throwToken?: boolean;
   hangToken?: boolean;
@@ -146,7 +144,10 @@ async function runDelete(input: {
     return Promise.resolve(new Response("unexpected url", { status: 500 }));
   };
 
-  const deps: DeleteAccountDeps = {
+  // Trap the old pre-cascade DELETE path: an exhausted budget must not block auth deletion.
+  const deps: DeleteAccountDeps & {
+    deleteRows: (table: string, userId: string) => Promise<{ error: unknown }>;
+  } = {
     env: (name) => envMap[name],
     fetchImpl,
     nowSeconds: () => NOW_SECONDS,
@@ -159,10 +160,11 @@ async function runDelete(input: {
     deleteRows: (table, _userId) => {
       deletedTables.push(table);
       return Promise.resolve({
-        error: table === input.failedTable ? "failed" : null,
+        error: "rate_limited",
       });
     },
     deleteAuthUser: (userId) => {
+      assertEquals(grantCleanupCalls, 1);
       if (!input.authError) deletedUserId = userId;
       return Promise.resolve({ error: input.authError ?? null });
     },
@@ -211,7 +213,7 @@ async function assertDeleted(
   } else {
     assertEquals(body.appleRevocation, undefined);
   }
-  assertEquals(result.deletedTables, [...USER_DATA_TABLES]);
+  assertEquals(result.deletedTables, []);
   assertEquals(result.deletedUserId, userId);
 }
 
@@ -425,20 +427,17 @@ Deno.test("OAuth cleanup failure stops before deleting app data or auth", async 
   }
 });
 
-Deno.test("data and auth deletion failures never report success", async () => {
-  const tableFailure = await runDelete({
-    user: googleUser,
-    failedTable: USER_DATA_TABLES[0],
-  });
-  assertEquals(tableFailure.response.status, 500);
-  assertEquals(tableFailure.deletedTables, [USER_DATA_TABLES[0]]);
-  assertEquals(tableFailure.deletedUserId, null);
+Deno.test("account deletion relies on auth cascades when direct row deletion is rate limited", async () => {
+  await assertDeleted(await runDelete({ user: googleUser }), googleUser.id);
+});
+
+Deno.test("auth deletion failures never report success", async () => {
   const authFailure = await runDelete({
     user: googleUser,
     authError: "failed",
   });
   assertEquals(authFailure.response.status, 500);
-  assertEquals(authFailure.deletedTables, [...USER_DATA_TABLES]);
+  assertEquals(authFailure.deletedTables, []);
   assertEquals(authFailure.deletedUserId, null);
 });
 

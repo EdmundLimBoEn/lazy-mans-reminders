@@ -312,8 +312,10 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             let original = sample()
             let started = XCTestExpectation(description: "First write held before commit")
             let network = HeldWriteNetwork(original: original, started: started, failsFirst: failsFirst)
+            // This transport test must not require the simulator's Keychain entitlements.
             let store = ReminderStore(
-                defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
+                defaults: defaults, credentials: MemorySessionCredentials(),
+                serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key", requestData: { try await network.send($0) }
             )
             try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
