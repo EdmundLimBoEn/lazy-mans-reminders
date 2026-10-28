@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { supabase } from './supabase'
+import { connectionRefresh } from './lib/connectionRefresh'
 import { localDate, routineSummary, weeklyStartDate, WEEKDAYS, type Routine } from './lib/routines'
 
 export function RoutineReminders({ userId }: { userId: string }) {
@@ -30,11 +31,11 @@ export function RoutineReminders({ userId }: { userId: string }) {
   }, [userId])
 
   useEffect(() => {
-    void load()
+    const recovery = connectionRefresh(load, error => { if (error instanceof Error) setError(error.message) })
     const channel = supabase.channel(`routines:${userId}`).on('postgres_changes',
       { event: '*', schema: 'public', table: 'routine_reminders', filter: `user_id=eq.${userId}` },
-      () => void load()).subscribe()
-    return () => { void supabase.removeChannel(channel) }
+      recovery.refresh).subscribe(recovery.onStatus)
+    return () => { recovery.dispose(); void supabase.removeChannel(channel) }
   }, [load, userId])
 
   function reset() {
