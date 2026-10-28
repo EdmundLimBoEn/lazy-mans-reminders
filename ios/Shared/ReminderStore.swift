@@ -445,14 +445,21 @@ actor ReminderStore {
     /// Patches text and/or completion. Returns the active (not done) cache afterwards.
     func update(id: UUID, text: String? = nil, isDone: Bool? = nil) async throws -> [Reminder] {
         guard !isReordering else { throw StoreError.mutationConflict }
+        guard text != nil || isDone != nil else { return cached() }
+        return try await updateAcknowledged(id: id, text: text, isDone: isDone).activeReminders
+    }
+
+    /// Returns the acknowledged row even when completion removes it from the active cache.
+    func updateAcknowledged(
+        id: UUID, text: String? = nil, isDone: Bool? = nil
+    ) async throws -> (reminder: Reminder, activeReminders: [Reminder]) {
+        guard !isReordering else { throw StoreError.mutationConflict }
         let trimmed = text?.trimmingCharacters(in: .whitespacesAndNewlines)
         if let trimmed {
             guard !trimmed.isEmpty else { throw StoreError.emptyText }
             guard trimmed.unicodeScalars.count <= 500 else { throw StoreError.tooLong }
         }
-        guard trimmed != nil || isDone != nil else {
-            return cached()
-        }
+        guard trimmed != nil || isDone != nil else { throw StoreError.mutationConflict }
         let mutationID = UUID()
         pendingUpdates[id] = mutationID
         defer {
@@ -510,6 +517,6 @@ actor ReminderStore {
         // A returned row is a snapshot; a newer same-ID request makes it obsolete.
         guard pendingUpdates[id] == mutationID else { throw StoreError.mutationConflict }
         let updated = try acknowledgedReminder(responseData, ownerID: ownerID, id: id, text: trimmed, isDone: isDone)
-        return try cacheAcknowledgedReminder(updated)
+        return (updated, try cacheAcknowledgedReminder(updated))
     }
 }
