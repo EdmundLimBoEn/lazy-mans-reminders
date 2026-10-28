@@ -113,13 +113,42 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             returned.text = mutation == .edit ? "Client text" : "Server text"
             returned.sortOrder = -1
             returned.isDone = mutation == .complete
-            let fixture = Fixture(data: try ReminderJSON.encoder.encode([returned]))
+            let fixture = Fixture(data: try ReminderJSON.encoder.encode([returned]),
+                                  method: mutation == .reopen ? "POST" : "PATCH")
             defer { fixture.cleanUp() }
             try await fixture.signInAndSeed(original)
             let result = try await mutation.perform(fixture.store, id: original.id)
             XCTAssertEqual(result, returned.isDone ? [] : [returned])
             let cache = await fixture.store.cached()
             XCTAssertEqual(cache, result)
+        }
+    }
+
+    func testReopenUsesOwnerLockedRPCWithOptionalText() async throws {
+        for text in [nil, "Edited"] as [String?] {
+            var returned = sample()
+            returned.text = text ?? returned.text
+            let expected = returned
+            let suite = "ReopenRPC.\(UUID().uuidString)"
+            let defaults = UserDefaults(suiteName: suite)!
+            defer { defaults.removePersistentDomain(forName: suite) }
+            let store = ReminderStore(
+                defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+                anonKey: "test-anon-key", requestData: { request in
+                    XCTAssertEqual(request.httpMethod, "POST")
+                    XCTAssertEqual(request.url?.path, "/rest/v1/rpc/reopen_reminder")
+                    XCTAssertNil(request.url?.query)
+                    let body = try JSONSerialization.jsonObject(with: request.httpBody!) as! [String: String]
+                    XCTAssertEqual(body["p_user_id"]?.lowercased(), expected.userID.uuidString.lowercased())
+                    XCTAssertEqual(body["p_reminder_id"]?.lowercased(), expected.id.uuidString.lowercased())
+                    XCTAssertEqual(body["p_text"], text)
+                    return (try ReminderJSON.encoder.encode([expected]),
+                            HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!)
+                })
+            try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
+                                        expiresAt: Date().addingTimeInterval(3600), userID: returned.userID)
+            let result = try await store.update(id: returned.id, text: text, isDone: false)
+            XCTAssertEqual(result, [returned])
         }
     }
 
@@ -335,7 +364,7 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
         status: Int = 200, message: String
     ) async throws {
         let reminder = original ?? sample()
-        let fixture = Fixture(data: data, status: status)
+        let fixture = Fixture(data: data, status: status, method: mutation == .reopen ? "POST" : "PATCH")
         defer { fixture.cleanUp() }
         try await fixture.signInAndSeed(reminder)
         let cachedBytes = fixture.defaults.data(forKey: "cached-reminders")
@@ -376,7 +405,7 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
                 defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key",
                 requestData: { request in
-                    XCTAssertEqual(request.httpMethod, method, "Reopen must not issue a followup GET/RPC")
+                    XCTAssertEqual(request.httpMethod, method, "Mutation must not issue a followup GET")
                     XCTAssertEqual(request.value(forHTTPHeaderField: "Prefer"), "return=representation")
                     XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "Bearer test-token")
                     if transportFailure { throw URLError(.timedOut) }

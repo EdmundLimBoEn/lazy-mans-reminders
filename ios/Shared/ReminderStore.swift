@@ -498,6 +498,19 @@ actor ReminderStore {
             UpdateBody(text: trimmed, isDone: isDone)
         )
 
+        if isDone == false {
+            struct ReopenBody: Encodable {
+                let p_user_id: UUID
+                let p_reminder_id: UUID
+                let p_text: String?
+            }
+            request.url = supabaseURL.appending(path: "rest/v1/rpc/reopen_reminder")
+            request.httpMethod = "POST"
+            request.httpBody = try ReminderJSON.encoder.encode(
+                ReopenBody(p_user_id: ownerID, p_reminder_id: id, p_text: trimmed)
+            )
+        }
+
         let (responseData, response) = try await requestData(request)
         guard let http = response as? HTTPURLResponse else {
             throw StoreError.invalidResponse

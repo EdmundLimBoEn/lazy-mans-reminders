@@ -204,3 +204,20 @@ it('retains a failed edit draft and releases the guard for retry', async () => {
   write.resolve({ error: null })
   await vi.waitFor(() => expect(control('Edit "Updated"')).toBeDefined())
 })
+
+it('reopens through the owner-locked RPC and reconciles the board', async () => {
+  stored = [{ ...original, is_done: true }]
+  await hooks.load!()
+  db.rpc.mockImplementation((name: string) => {
+    if (name === 'reopen_reminder') return write.promise
+    return Promise.resolve({ error: null })
+  })
+  control('Mark "Original" active').onClick!()
+  expect(db.rpc).toHaveBeenCalledWith('reopen_reminder', {
+    p_user_id: 'user', p_reminder_id: 'note', p_text: null,
+  })
+  expect(db.update).not.toHaveBeenCalled()
+  stored = [original]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
+})
