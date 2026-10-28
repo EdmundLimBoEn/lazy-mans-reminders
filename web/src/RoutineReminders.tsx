@@ -45,6 +45,11 @@ export function RoutineReminders({ userId }: { userId: string }) {
 
     async function refresh() {
       if (stopped) return
+      clearTimeout(timer)
+      if (inFlight) {
+        pending = true
+        return
+      }
       pending = false
       inFlight = true
       try {
@@ -58,12 +63,16 @@ export function RoutineReminders({ userId }: { userId: string }) {
       }
     }
 
+    window.addEventListener('online', refresh)
     void refresh()
     const channel = supabase.channel(`routines:${userId}`).on('postgres_changes',
       { event: '*', schema: 'public', table: 'routine_reminders', filter: `user_id=eq.${userId}` },
-      schedule).subscribe()
+      schedule).subscribe(status => {
+        if (status === 'SUBSCRIBED') void refresh()
+      })
     return () => {
       stopped = true
+      window.removeEventListener('online', refresh)
       clearTimeout(timer)
       void supabase.removeChannel(channel)
     }
@@ -87,7 +96,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
     try {
       const values = {
         text: text.trim(), interval_days: cadence === 'weekly' ? 7 : Number(days),
-        start_date: cadence === 'weekly' ? weeklyStartDate(weekday) : startDate,
+        start_date: cadence === 'weekly' ? weeklyStartDate(weekday, timezone) : startDate,
         local_time: time, timezone,
       }
       const { error } = editingId

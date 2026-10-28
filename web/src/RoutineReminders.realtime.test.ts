@@ -18,6 +18,7 @@ let order: ReturnType<typeof vi.fn>
 let channel: { on: ReturnType<typeof vi.fn>; subscribe: ReturnType<typeof vi.fn> }
 
 beforeEach(() => {
+  vi.stubGlobal('window', new EventTarget())
   vi.useFakeTimers()
   vi.clearAllMocks()
   order = vi.fn().mockResolvedValue({ data: [], error: null })
@@ -33,6 +34,7 @@ beforeEach(() => {
 afterEach(() => {
   cleanup()
   vi.useRealTimers()
+  vi.unstubAllGlobals()
 })
 
 it('debounces a 50-event burst into one full-list read after the last event', async () => {
@@ -98,4 +100,42 @@ it('queues notifications received before the initial read settles', async () => 
   expect(order).toHaveBeenCalledTimes(1)
   await vi.advanceTimersByTimeAsync(100)
   expect(order).toHaveBeenCalledTimes(2)
+})
+
+it.each(['SUBSCRIBED', 'online'])('queues %s recovery before the initial read settles', async trigger => {
+  for (let i = 0; i < 50; i++) {
+    if (trigger === 'online') window.dispatchEvent(new Event('online'))
+    else channel.subscribe.mock.calls[0][0]('SUBSCRIBED')
+  }
+  expect(order).toHaveBeenCalledTimes(1)
+  await vi.advanceTimersByTimeAsync(100)
+  expect(order).toHaveBeenCalledTimes(2)
+  await vi.advanceTimersByTimeAsync(1000)
+  expect(order).toHaveBeenCalledTimes(2)
+})
+
+it.each(['SUBSCRIBED', 'online'])('coalesces %s recovery with row events during an in-flight read', async trigger => {
+  await vi.advanceTimersByTimeAsync(0)
+  const recover = () => {
+    if (trigger === 'online') window.dispatchEvent(new Event('online'))
+    else channel.subscribe.mock.calls[0][0]('SUBSCRIBED')
+  }
+  let resolve!: (value: unknown) => void
+  order.mockReturnValueOnce(new Promise(done => { resolve = done }))
+  notify()
+  recover()
+  // Recovery immediately consumes the scheduled read.
+  expect(order).toHaveBeenCalledTimes(2)
+  for (let i = 0; i < 50; i++) { notify(); recover() }
+  await vi.advanceTimersByTimeAsync(1000)
+  expect(order).toHaveBeenCalledTimes(2)
+  resolve({ data: [], error: null })
+  await vi.advanceTimersByTimeAsync(100)
+  expect(order).toHaveBeenCalledTimes(3)
+  await vi.advanceTimersByTimeAsync(1000)
+  expect(order).toHaveBeenCalledTimes(3)
+  cleanup()
+  recover()
+  await vi.advanceTimersByTimeAsync(1000)
+  expect(order).toHaveBeenCalledTimes(3)
 })
