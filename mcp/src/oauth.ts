@@ -1,4 +1,4 @@
-import type { AuthRequest, OAuthHelpers } from '@cloudflare/workers-oauth-provider'
+import { ExternalTokenError, type AuthRequest, type OAuthHelpers } from '@cloudflare/workers-oauth-provider'
 import { MCP_RESOURCE, TOOLS } from './constants'
 import { resolveSession } from './auth'
 import {
@@ -63,7 +63,15 @@ export async function resolveExternalPat(input: {
   request: Request
   env: Env
 }): Promise<{ props: BoundProps; audience: string } | null> {
-  const session = await resolveSession(input.env, `Bearer ${input.token}`)
+  let session
+  try {
+    session = await resolveSession(input.env, `Bearer ${input.token}`)
+  } catch {
+    throw new ExternalTokenError('temporarily_unavailable', {
+      description: 'Account lookup is unavailable',
+      statusCode: 503,
+    })
+  }
   if (!session) return null
   return {
     props: {
@@ -119,9 +127,13 @@ async function readJson(request: Request): Promise<Record<string, unknown> | Res
 async function requireUser(request: Request, env: Env, deps: IdentityDeps, cors: Record<string, string>) {
   const token = bearerToken(request)
   if (!token) return json({ error: 'unauthorized' }, 401, cors)
-  const user = await deps.verifyUser(env, token)
-  if (!user) return json({ error: 'unauthorized' }, 401, cors)
-  return user
+  try {
+    const user = await deps.verifyUser(env, token)
+    if (!user) return json({ error: 'unauthorized' }, 401, cors)
+    return user
+  } catch {
+    return json({ error: 'account_lookup_unavailable' }, 503, cors)
+  }
 }
 
 async function loadPending(env: Env, state: string): Promise<AuthRequest | null> {
