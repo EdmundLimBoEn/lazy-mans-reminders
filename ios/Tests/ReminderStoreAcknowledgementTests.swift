@@ -225,7 +225,7 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             let started = XCTestExpectation(description: "First write held before commit")
             let network = HeldWriteNetwork(original: original, started: started, failsFirst: failsFirst)
             let store = ReminderStore(
-                defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+                defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key", requestData: { try await network.send($0) }
             )
             try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
@@ -242,6 +242,13 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
                     XCTAssertEqual(error.localizedDescription,
                                    "The reminder change could not be confirmed. Refresh your board and try again.")
                 }
+            }
+            do {
+                _ = try await store.updateAcknowledged(id: original.id, text: "Shortcut title", isDone: true)
+                XCTFail("An overlapping combined Shortcuts update must not reach the server")
+            } catch {
+                XCTAssertEqual(error.localizedDescription,
+                               "The reminder change could not be confirmed. Refresh your board and try again.")
             }
             let requests = await network.requestCount
             XCTAssertEqual(requests, 1)
@@ -263,6 +270,17 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             XCTAssertEqual(stored.text, "Retried edit")
             XCTAssertEqual(result, [stored])
             XCTAssertEqual(cache, result)
+
+            let completed = try await store.updateAcknowledged(
+                id: original.id, text: "Shortcut title", isDone: true
+            )
+            let completedStored = await network.stored
+            XCTAssertEqual(completed.reminder, completedStored)
+            XCTAssertEqual(completed.reminder.text, "Shortcut title")
+            XCTAssertTrue(completed.reminder.isDone)
+            XCTAssertEqual(completed.activeReminders, [])
+            let completedCache = await store.cached()
+            XCTAssertEqual(completedCache, [])
         }
     }
 

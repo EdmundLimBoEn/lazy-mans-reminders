@@ -77,40 +77,23 @@ enum ReminderIntentActions {
         }
     }
 
-    static func update(id: UUID, title: String?, isCompleted: Bool?) async throws -> Reminder {
-        try await requireSession()
+    static func update(
+        id: UUID, title: String?, isCompleted: Bool?,
+        store: ReminderStore = .shared,
+        publish: ([Reminder]) async -> Void = { await ReminderBoardSync.apply($0) }
+    ) async throws -> Reminder {
+        guard await store.isSignedIn() else { throw ReminderIntentError.signedOut }
         if title == nil, isCompleted == nil {
             throw ReminderIntentError.nothingToUpdate
         }
-        if isCompleted == true {
-            let text = try await complete(id: id)
-            return Reminder(
-                id: id,
-                userID: await ReminderStore.shared.currentUserID() ?? UUID(),
-                text: text,
-                sortOrder: 0,
-                isDone: true,
-                createdAt: .now
-            )
-        }
         do {
-            let updated = try await ReminderStore.shared.update(
+            let updated = try await store.updateAcknowledged(
                 id: id,
                 text: title,
                 isDone: isCompleted
             )
-            await ReminderBoardSync.apply(updated)
-            if let reminder = updated.first(where: { $0.id == id }) {
-                return reminder
-            }
-            return Reminder(
-                id: id,
-                userID: await ReminderStore.shared.currentUserID() ?? UUID(),
-                text: title ?? "",
-                sortOrder: 0,
-                isDone: isCompleted ?? false,
-                createdAt: .now
-            )
+            await publish(updated.activeReminders)
+            return updated.reminder
         } catch {
             throw map(error)
         }
