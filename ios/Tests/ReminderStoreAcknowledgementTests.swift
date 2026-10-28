@@ -232,7 +232,7 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
         let completionStarted = XCTestExpectation(description: "Completion committed; response held")
         let network = OverlappingNetwork(editStarted: editStarted, completionStarted: completionStarted)
         let store = ReminderStore(
-            defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+            defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
             anonKey: "test-anon-key", requestData: { try await network.send($0) }
         )
         let original = sample()
@@ -373,7 +373,7 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
         init(data: Data, status: Int = 200, method: String = "PATCH", transportFailure: Bool = false) {
             defaults = UserDefaults(suiteName: suiteName)!
             store = ReminderStore(
-                defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+                defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key",
                 requestData: { request in
                     XCTAssertEqual(request.httpMethod, method, "Reopen must not issue a followup GET/RPC")
