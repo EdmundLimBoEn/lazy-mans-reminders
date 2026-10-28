@@ -155,6 +155,37 @@ Deno.test("classifyWebhookPayload accepts a valid INSERT", () => {
   );
 });
 
+for (const field of ["id", "user_id"]) {
+  for (const [label, value] of [
+    ["object with null toString", { toString: null }],
+    ["UUID array", ["11111111-1111-4111-8111-111111111111"]],
+    ["null", null],
+    ["number", 123],
+    ["boolean", true],
+    ["missing", undefined],
+    ["invalid UUID string", "not-a-uuid"],
+  ] as const) {
+    Deno.test(`classifyWebhookPayload rejects INSERT ${field}: ${label}`, () => {
+      const payload = JSON.parse(JSON.stringify({
+        type: "INSERT",
+        table: "reminders",
+        schema: "public",
+        record: {
+          id: "11111111-1111-4111-8111-111111111111",
+          user_id: "22222222-2222-4222-8222-222222222222",
+          text: "Book dentist",
+          [field]: value,
+        },
+      }));
+      assertEquals(classifyWebhookPayload(payload), {
+        ok: false,
+        status: 400,
+        message: "Invalid webhook payload",
+      });
+    });
+  }
+}
+
 Deno.test("classifyWebhookPayload processes reminder UPDATE/DELETE without an alert", () => {
   const record = {
     id: "11111111-1111-4111-8111-111111111111",
