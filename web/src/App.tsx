@@ -290,6 +290,8 @@ function Board({ session, onNavigate, onAccountDeleted }: {
   const [maxLines, setMaxLines] = useState(DEFAULT_LOCK_SCREEN_MAX_LINES)
   const loadSequence = useRef(0)
   const reorderingRef = useRef(false)
+  const pendingMutationsRef = useRef(new Set<string>())
+  const [pendingMutations, setPendingMutations] = useState(new Set<string>())
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
@@ -382,38 +384,56 @@ function Board({ session, onNavigate, onAccountDeleted }: {
   }
 
   async function patch(id: string, changes: Partial<ReminderChanges>) {
-    ++loadSequence.current
-    setError('')
-    setReminders((items) => items.map((item) => item.id === id ? { ...item, ...changes } : item))
-    const { error: updateError } = await supabase
-      .from('reminders')
-      .update(changes)
-      .eq('id', id)
-      .eq('user_id', session.user.id)
-    if (updateError) {
-      setError(updateError.message)
+    if (reorderingRef.current || pendingMutationsRef.current.has(id)) return false
+    pendingMutationsRef.current.add(id)
+    setPendingMutations(new Set(pendingMutationsRef.current))
+    try {
+      ++loadSequence.current
+      setError('')
+      setReminders((items) => items.map((item) => item.id === id ? { ...item, ...changes } : item))
+      const { error: updateError } = await supabase
+        .from('reminders')
+        .update(changes)
+        .eq('id', id)
+        .eq('user_id', session.user.id)
+      if (updateError) {
+        setError(updateError.message)
+      }
+      // Invalidate reads started during the write and reconcile acknowledged state.
+      await load()
+      return !updateError
+    } finally {
+      pendingMutationsRef.current.delete(id)
+      setPendingMutations(new Set(pendingMutationsRef.current))
     }
-    // Invalidate reads started during the write and reconcile acknowledged state.
-    await load()
   }
 
   async function remove(id: string) {
-    ++loadSequence.current
-    setError('')
-    setReminders((items) => items.filter((item) => item.id !== id))
-    const { error: deleteError } = await supabase
-      .from('reminders')
-      .delete()
-      .eq('id', id)
-      .eq('user_id', session.user.id)
-    if (deleteError) {
-      setError(deleteError.message)
+    if (reorderingRef.current || pendingMutationsRef.current.has(id)) return false
+    pendingMutationsRef.current.add(id)
+    setPendingMutations(new Set(pendingMutationsRef.current))
+    try {
+      ++loadSequence.current
+      setError('')
+      setReminders((items) => items.filter((item) => item.id !== id))
+      const { error: deleteError } = await supabase
+        .from('reminders')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', session.user.id)
+      if (deleteError) {
+        setError(deleteError.message)
+      }
+      await load()
+      return !deleteError
+    } finally {
+      pendingMutationsRef.current.delete(id)
+      setPendingMutations(new Set(pendingMutationsRef.current))
     }
-    await load()
   }
 
   async function reorder(sourceId: string, targetId: string) {
-    if (reorderingRef.current || editingId || adding) return
+    if (reorderingRef.current || pendingMutationsRef.current.size > 0 || editingId || adding) return
     const reordered = moveActiveReminder(reminders, sourceId, targetId)
     if (reordered === reminders) return
     ++loadSequence.current
@@ -444,8 +464,9 @@ function Board({ session, onNavigate, onAccountDeleted }: {
 
   async function saveEdit(id: string) {
     const value = editText.trim()
-    if (value) await patch(id, { text: value })
-    setEditingId(null)
+    if (value && await patch(id, { text: value })) {
+      setEditingId((current) => current === id ? null : current)
+    }
   }
 
   const activeCount = reminders.filter((item) => !item.is_done).length
@@ -611,13 +632,14 @@ function Board({ session, onNavigate, onAccountDeleted }: {
                 <SortableContext items={active.map((item) => item.id)} strategy={verticalListSortingStrategy}>
                   <ul className="reminder-list divide-y" aria-label="Reminders" aria-busy={reordering}>
                     {sorted.map((reminder) => {
+                      const pending = pendingMutations.has(reminder.id)
                       const activeIndex = active.findIndex((item) => item.id === reminder.id)
                       return (
                         <SortableReminder
                           key={reminder.id}
                           id={reminder.id}
                           text={reminder.text}
-                          disabled={reordering || adding || reminder.is_done || editingId !== null || active.length < 2}
+                          disabled={reordering || pendingMutations.size > 0 || adding || reminder.is_done || editingId !== null || active.length < 2}
                           showHandle={!reminder.is_done}
                         >
                           <Button
@@ -628,7 +650,7 @@ function Board({ session, onNavigate, onAccountDeleted }: {
                             aria-label={reminder.is_done ? `Mark "${reminder.text}" active` : `Complete "${reminder.text}"`}
                             aria-pressed={reminder.is_done}
                             title={reminder.is_done ? 'Mark active' : 'Complete'}
-                            disabled={reordering}
+                            disabled={reordering || pending}
                             onClick={() => void patch(reminder.id, { is_done: !reminder.is_done })}
                           >
                             {reminder.is_done ? <CircleCheck aria-hidden="true" /> : <Circle aria-hidden="true" />}
@@ -638,14 +660,15 @@ function Board({ session, onNavigate, onAccountDeleted }: {
                               <Input
                                 className="h-8"
                                 value={editText}
+                                disabled={pending}
                                 onChange={(event) => setEditText(event.target.value)}
                                 onKeyDown={(event) => { if (event.key === 'Escape') setEditingId(null) }}
                                 maxLength={500}
                                 aria-label={`Edit reminder: ${reminder.text}`}
                                 autoFocus
                               />
-                              <Button variant="ghost" size="icon" type="submit" aria-label="Save reminder" title="Save"><Check aria-hidden="true" /></Button>
-                              <Button variant="ghost" size="icon" type="button" aria-label="Cancel editing" title="Cancel" onClick={() => setEditingId(null)}><X aria-hidden="true" /></Button>
+                              <Button variant="ghost" size="icon" type="submit" disabled={pending} aria-label="Save reminder" title="Save"><Check aria-hidden="true" /></Button>
+                              <Button variant="ghost" size="icon" type="button" disabled={pending} aria-label="Cancel editing" title="Cancel" onClick={() => setEditingId(null)}><X aria-hidden="true" /></Button>
                             </form>
                           ) : (
                             <span
@@ -660,11 +683,11 @@ function Board({ session, onNavigate, onAccountDeleted }: {
                           {editingId !== reminder.id && (
                             <div className="flex shrink-0 items-center text-muted-foreground">
                               {!reminder.is_done && <>
-                                <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Move "${reminder.text}" up`} title="Move up" disabled={reordering || activeIndex === 0} onClick={() => void move(activeIndex, -1)}><ArrowUp aria-hidden="true" /></Button>
-                                <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Move "${reminder.text}" down`} title="Move down" disabled={reordering || activeIndex === activeCount - 1} onClick={() => void move(activeIndex, 1)}><ArrowDown aria-hidden="true" /></Button>
+                                <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Move "${reminder.text}" up`} title="Move up" disabled={reordering || pendingMutations.size > 0 || activeIndex === 0} onClick={() => void move(activeIndex, -1)}><ArrowUp aria-hidden="true" /></Button>
+                                <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Move "${reminder.text}" down`} title="Move down" disabled={reordering || pendingMutations.size > 0 || activeIndex === activeCount - 1} onClick={() => void move(activeIndex, 1)}><ArrowDown aria-hidden="true" /></Button>
                               </>}
-                              <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Edit "${reminder.text}"`} title="Edit" disabled={reordering} onClick={() => { setEditingId(reminder.id); setEditText(reminder.text) }}><Pencil aria-hidden="true" /></Button>
-                              <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Delete "${reminder.text}"`} title="Delete" disabled={reordering} onClick={() => void remove(reminder.id)}><Trash2 aria-hidden="true" /></Button>
+                              <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Edit "${reminder.text}"`} title="Edit" disabled={reordering || pending} onClick={() => { setEditingId(reminder.id); setEditText(reminder.text) }}><Pencil aria-hidden="true" /></Button>
+                              <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Delete "${reminder.text}"`} title="Delete" disabled={reordering || pending} onClick={() => void remove(reminder.id)}><Trash2 aria-hidden="true" /></Button>
                             </div>
                           )}
                         </SortableReminder>

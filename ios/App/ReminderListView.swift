@@ -407,6 +407,7 @@ struct ReminderListView: View {
     private func markDone(_ reminder: Reminder) async {
         guard !isReordering, !isDragging, !completingIDs.contains(reminder.id) else { return }
         completingIDs.insert(reminder.id)
+        defer { completingIDs.remove(reminder.id) }
         do {
             let updated = try await ReminderStore.shared.markDone(id: reminder.id)
             animateBoard { reminders = updated }
@@ -417,7 +418,6 @@ struct ReminderListView: View {
                 argument: "Completed \(reminder.text)"
             )
         } catch {
-            completingIDs.remove(reminder.id)
             presentError(error.localizedDescription)
         }
     }
