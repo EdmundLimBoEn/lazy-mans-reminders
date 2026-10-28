@@ -453,6 +453,8 @@ actor ReminderStore {
         guard trimmed != nil || isDone != nil else {
             return cached()
         }
+        // Reserve this reminder before authentication or transport can suspend the actor.
+        guard pendingUpdates[id] == nil else { throw StoreError.mutationConflict }
         let mutationID = UUID()
         pendingUpdates[id] = mutationID
         defer {
