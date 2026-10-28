@@ -40,6 +40,7 @@ actor ReminderStore {
     private let serviceURL: URL?
     private let anonKey: String?
     private var pendingUpdates: [UUID: UUID] = [:]
+    private var pendingCreates = 0
     private var isReordering = false
     private var contentRevision = 0
     private var refreshSequence = 0
@@ -201,7 +202,7 @@ actor ReminderStore {
     }
 
     func reorder(ids: [UUID]) async throws -> [Reminder] {
-        guard !isReordering, pendingUpdates.isEmpty else { throw StoreError.mutationConflict }
+        guard !isReordering, pendingUpdates.isEmpty, pendingCreates == 0 else { throw StoreError.mutationConflict }
         let original = cached()
         guard ids.count == original.count, Set(ids).count == ids.count,
               Set(ids) == Set(original.map(\.id)), original.allSatisfy({ !$0.isDone }) else {
@@ -372,6 +373,9 @@ actor ReminderStore {
         if ReminderBoardLimits.isAtCapacity(cached().filter { !$0.isDone }.count) {
             throw StoreError.atCapacity
         }
+        // Exclude reorder before authentication or transport can suspend the actor.
+        pendingCreates += 1
+        defer { pendingCreates -= 1 }
         let identityRevision = defaults.string(forKey: identityRevisionKey)
         guard let session = await loadFreshSession() else {
             throw StoreError.signedOut
