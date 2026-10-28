@@ -1,11 +1,11 @@
-import { beforeEach, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import type { ReactElement, ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import App from './App'
 
 // Run the real Board handlers with retained hooks and controllable database reads.
-const hooks = vi.hoisted(() => ({ states: [] as unknown[], cursor: 0, load: undefined as undefined | (() => Promise<void>) }))
-const db = vi.hoisted(() => ({ from: vi.fn(), rpc: vi.fn(), update: vi.fn(), delete: vi.fn() }))
+const hooks = vi.hoisted(() => ({ states: [] as unknown[], cursor: 0, effects: [] as Array<() => void | (() => void)>, load: undefined as undefined | (() => Promise<void>) }))
+const db = vi.hoisted(() => ({ channel: vi.fn(), removeChannel: vi.fn(), from: vi.fn(), rpc: vi.fn(), update: vi.fn(), delete: vi.fn() }))
 vi.mock('./supabase', () => ({ supabase: db }))
 vi.mock('@dnd-kit/core', async (original) => ({
   ...await original<typeof import('@dnd-kit/core')>(),
@@ -27,7 +27,7 @@ vi.mock('react', async (original) => ({
   },
   useMemo: (compute: () => unknown) => compute(),
   useCallback: (callback: () => Promise<void>) => { hooks.load = callback; return callback },
-  useEffect: () => {},
+  useEffect: (effect: () => void | (() => void)) => { hooks.effects.push(effect) },
 }))
 
 type Props = {
@@ -45,6 +45,7 @@ function nodes(node: ReactNode): ReactElement<Props>[] {
 let board: ReactElement<Props>
 function render() {
   hooks.cursor = 0
+  hooks.effects = []
   return nodes((board.type as (props: Props) => ReactNode)(board.props))
 }
 function control(label: string) {
@@ -203,4 +204,55 @@ it('retains a failed edit draft and releases the guard for retry', async () => {
   stored = [{ ...original, text: 'Updated' }]
   write.resolve({ error: null })
   await vi.waitFor(() => expect(control('Edit "Updated"')).toBeDefined())
+})
+
+// Start the real subscription effect and drive recovery without row notifications.
+afterEach(() => { vi.unstubAllGlobals() })
+it.each(['SUBSCRIBED', 'online'])('recovers a failed read on %s and removes recovery listeners on cleanup', async trigger => {
+  const browser = Object.assign(new EventTarget(), { clearTimeout, setTimeout })
+  vi.stubGlobal('window', browser)
+  let status: ((value: string) => void) | undefined
+  const channel = {
+    on: vi.fn().mockReturnThis(),
+    subscribe: vi.fn((callback?: (value: string) => void) => { status = callback; return channel }),
+  }
+  db.channel.mockReturnValue(channel)
+  db.removeChannel.mockResolvedValue(undefined)
+  const success = db.from.getMockImplementation()!
+  db.from.mockImplementation(() => {
+    const query = {
+      select: () => query, eq: () => query, order: () => query,
+      maybeSingle: async () => ({ data: null, error: null }),
+      then: (resolve: (value: unknown) => void) => Promise.resolve({ data: null, error: { message: 'Offline' } }).then(resolve),
+    }
+    return query
+  })
+  render()
+  const cleanup = hooks.effects.at(-1)!()
+  await vi.waitFor(() => expect(db.channel).toHaveBeenCalled())
+  // Let the failed initial query settle before signalling recovery.
+  await new Promise(resolve => setTimeout(resolve, 0))
+  const failedCalls = db.from.mock.calls.length
+  stored = [{ ...original, text: 'Recovered board' }]
+  db.from.mockImplementation(success)
+  if (trigger === 'online') browser.dispatchEvent(new Event('online'))
+  else status?.('SUBSCRIBED')
+  await vi.waitFor(() => expect(db.from.mock.calls.length).toBeGreaterThan(failedCalls))
+  await new Promise(resolve => setTimeout(resolve, 0))
+  expect(displayed()).toEqual(['Recovered board'])
+  const recoveredCalls = db.from.mock.calls.length
+  status?.('CHANNEL_ERROR')
+  status?.('TIMED_OUT')
+  expect(db.from.mock.calls.length).toBe(recoveredCalls)
+  // A later re-subscription also reloads an otherwise idle account.
+  status?.('SUBSCRIBED')
+  await vi.waitFor(() => expect(db.from.mock.calls.length).toBeGreaterThan(recoveredCalls))
+  await new Promise(resolve => setTimeout(resolve, 0))
+  if (typeof cleanup === 'function') cleanup()
+  const finalCalls = db.from.mock.calls.length
+  browser.dispatchEvent(new Event('online'))
+  status?.('SUBSCRIBED')
+  await new Promise(resolve => setTimeout(resolve, 0))
+  expect(db.from.mock.calls.length).toBe(finalCalls)
+  expect(db.removeChannel).toHaveBeenCalledWith(channel)
 })

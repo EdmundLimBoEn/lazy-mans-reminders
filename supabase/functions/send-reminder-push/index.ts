@@ -3,6 +3,7 @@ import {
   type PushReplay,
   pushReplay,
 } from "../_shared/push_replay.ts";
+import { pruneAlertToken } from "../_shared/alert_token_store.ts";
 import { markActivityEnded } from "../_shared/live_activity_store.ts";
 import {
   deliverDevices,
@@ -124,21 +125,6 @@ async function secretsMatch(
 
 type DeviceSendResult = SendResult;
 
-async function pruneAlertToken(
-  supabase: ServiceClient,
-  userId: string,
-  token: string,
-): Promise<void> {
-  const { error: deleteError } = await supabase
-    .from("device_tokens")
-    .delete()
-    .eq("token", token)
-    .eq("user_id", userId);
-  if (deleteError) {
-    console.error("Could not remove expired APNs token", deleteError);
-  }
-}
-
 async function clearLiveActivityColumn(
   supabase: ServiceClient,
   userId: string,
@@ -242,7 +228,7 @@ async function sendWithRetries(input: {
   token: string;
   headers: Record<string, string>;
   body: string;
-  onPrune: () => Promise<void>;
+  onPrune: Parameters<typeof deliverWithRetries>[0]["onPrune"];
 }): Promise<DeviceSendResult> {
   return await deliverWithRetries({
     stopOnUncertainDelivery: input.stopOnUncertainDelivery,
@@ -258,13 +244,11 @@ async function sendWithRetries(input: {
 async function sendAlertToDevice(input: {
   assertCurrent: () => void;
   supabase: ServiceClient;
-  userId: string;
-  token: string;
-  environment: string;
+  device: DeviceRow;
   topic: string;
   record: ReminderRecord;
 }): Promise<DeviceSendResult> {
-  if (!APNS_TOKEN_PATTERN.test(input.token)) {
+  if (!APNS_TOKEN_PATTERN.test(input.device.token)) {
     console.error("Skipping malformed APNs token");
     return "failed";
   }
@@ -272,8 +256,8 @@ async function sendAlertToDevice(input: {
   const jwt = await apnsJWT();
   return await sendWithRetries({
     assertCurrent: input.assertCurrent,
-    host: apnsHostForEnvironment(input.environment),
-    token: input.token,
+    host: apnsHostForEnvironment(input.device.environment),
+    token: input.device.token,
     headers: buildApnsHeaders({
       jwt,
       topic: input.topic,
@@ -281,7 +265,8 @@ async function sendAlertToDevice(input: {
       expirationUnix: apnsExpirationUnix(),
     }),
     body: buildApnsPayload(input.record),
-    onPrune: () => pruneAlertToken(input.supabase, input.userId, input.token),
+    onPrune: (outcome) =>
+      pruneAlertToken(input.supabase, input.device, outcome),
   });
 }
 
@@ -517,9 +502,7 @@ async function syncDevices(input: {
         const send = () =>
           sendAlertToDevice({
             supabase: input.supabase,
-            userId: device.user_id,
-            token: device.token,
-            environment: device.environment,
+            device,
             topic: input.bundleId,
             record,
             assertCurrent,

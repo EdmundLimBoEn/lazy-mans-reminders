@@ -3,6 +3,7 @@ import { DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, us
 import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { SortableReminder } from './components/SortableReminder'
 import { moveActiveReminder, persistReminderOrder } from './lib/reminderOrder'
+import { connectionRefresh } from './lib/connectionRefresh'
 import type { Session } from '@supabase/supabase-js'
 import {
   ArrowDown,
@@ -337,7 +338,9 @@ function Board({ session, onNavigate, onAccountDeleted }: {
   }, [session.user.id])
 
   useEffect(() => {
-    void load()
+    const recovery = connectionRefresh(async () => {
+      if (!reorderingRef.current) await load()
+    }, error => { if (error instanceof Error) setError(error.message) })
     let reloadTimer: number | undefined
     const channel = supabase
       .channel(`reminders:${session.user.id}`)
@@ -348,12 +351,13 @@ function Board({ session, onNavigate, onAccountDeleted }: {
           if (reorderingRef.current) return
           window.clearTimeout(reloadTimer)
           reloadTimer = window.setTimeout(() => {
-            if (!reorderingRef.current) void load()
+            if (!reorderingRef.current) recovery.refresh()
           }, 100)
         },
       )
-      .subscribe()
+      .subscribe(recovery.onStatus)
     return () => {
+      recovery.dispose()
       window.clearTimeout(reloadTimer)
       void supabase.removeChannel(channel)
     }
