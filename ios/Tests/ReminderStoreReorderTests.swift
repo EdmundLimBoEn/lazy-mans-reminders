@@ -143,7 +143,8 @@ final class ReminderStoreReorderTests: XCTestCase {
             await assertReorderBlocked(store)
 
             let created = Reminder(id: UUID(), userID: fixture.reminders[0].userID,
-                                   text: "First", sortOrder: 7, isDone: false, createdAt: Date())
+                                   text: "First", sortOrder: 7, isDone: false,
+                                   createdAt: fixture.reminders[0].createdAt)
             await network.finish(index: 0, data: try ReminderJSON.encoder.encode([created]))
             _ = try await first.value
             await assertReorderBlocked(store)
