@@ -63,10 +63,10 @@ export async function resolveExternalPat(input: {
   token: string
   request: Request
   env: Env
-}): Promise<{ props: BoundProps; audience: string } | null> {
+}, waitUntil?: (promise: Promise<unknown>) => void): Promise<{ props: BoundProps; audience: string } | null> {
   let session
   try {
-    session = await resolveSession(input.env, `Bearer ${input.token}`)
+    session = await resolveSession(input.env, `Bearer ${input.token}`, waitUntil)
   } catch {
     throw new ExternalTokenError('temporarily_unavailable', {
       description: 'Account lookup is unavailable',

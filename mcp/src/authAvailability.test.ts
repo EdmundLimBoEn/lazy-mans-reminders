@@ -57,15 +57,41 @@ describe('browser authentication availability', () => {
 
 describe('personal token authentication through the OAuth provider', () => {
   const accepted = vi.fn(async () => new Response('accepted'))
-  const provider = new OAuthProvider({
+  const background: Promise<unknown>[] = []
+  const provider = new OAuthProvider<Env>({
     apiRoute: '/mcp', apiHandler: { fetch: accepted },
     defaultHandler: { fetch: async () => new Response(null, { status: 404 }) },
     authorizeEndpoint: '/authorize', tokenEndpoint: '/token',
-    resolveExternalToken: resolveExternalPat,
+    resolveExternalToken: (input) => resolveExternalPat(input, (promise) => { background.push(promise) }),
   })
   const request = () => provider.fetch(new Request('https://lmr-mcp.edmundlim.systems/mcp', {
     headers: { Authorization: `Bearer lmr_${tokenId}_test-secret` },
   }), env, { waitUntil: vi.fn() } as unknown as ExecutionContext)
+
+  afterEach(async () => {
+    await Promise.all(background.splice(0))
+  })
+
+  it.each([204, 503])('authenticates before bookkeeping completes with status %s', async (status) => {
+    const token_hash = await hashSecret('test-secret' as TokenSecret)
+    let finish!: (response: Response) => void
+    const pendingWrite = new Promise<Response>((resolve) => { finish = resolve })
+    const fetch = vi.fn(async (_input: unknown, init?: RequestInit) => init?.method === 'PATCH'
+      ? pendingWrite
+      : json(200, { id: tokenId, user_id: tokenId, name: 'Test', token_hash, revoked_at: null }))
+    vi.stubGlobal('fetch', fetch)
+    let response: Response | undefined
+    const pending = request().then((result) => { response = result })
+    try {
+      await vi.waitFor(() => expect(response?.status).toBe(200))
+      expect(background).toHaveLength(1)
+      expect(fetch.mock.calls.some(([, init]) => init?.method === 'PATCH')).toBe(true)
+    } finally {
+      finish(status === 204 ? new Response(null, { status }) : json(status, { message: 'test storage failure' }))
+      await pending
+      await Promise.all(background)
+    }
+  })
 
   it.each([503, 500, 429, 'network'])('returns 503 for lookup failure %s, then permits retry', async (failure) => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
