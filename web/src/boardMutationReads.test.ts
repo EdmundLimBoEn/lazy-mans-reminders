@@ -1,4 +1,4 @@
-import { beforeEach, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import type { ReactElement, ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import App from './App'
@@ -61,14 +61,14 @@ function deferred<T>() {
 }
 const original = { id: 'note', user_id: 'user', text: 'Original', sort_order: 0, is_done: false, created_at: '2026-01-01' }
 type Row = typeof original
-type Result = { data: Row[]; error: null }
+type Result = { data: Row[]; error: null } | { data: null; error: { message: string } }
 let stored: Row[]
 let reads: ReturnType<typeof deferred<Result>>[]
 let write: ReturnType<typeof deferred<{ error: { message: string } | null }>>
 
 beforeEach(async () => {
   vi.clearAllMocks()
-  vi.stubGlobal('window', { location: { pathname: '/' }, clearTimeout })
+  vi.stubGlobal('window', Object.assign(new EventTarget(), { location: { pathname: '/' }, clearTimeout, setTimeout }))
   hooks.states = ['/', { user: { id: 'user' } }, true, '', false]
   hooks.cursor = 0
   board = nodes(App()).find(node => node.props.session)!
@@ -155,6 +155,61 @@ it('reloads persisted state when an optimistic deletion fails', async () => {
   await vi.waitFor(() => expect(displayed()).toEqual(['Original']))
 })
 
+it.each(['edit', 'complete', 'delete'])('rolls back a failed %s before an unavailable recovery read', async operation => {
+  const recovery = deferred<Result>()
+  reads.push(recovery)
+  mutate(operation)
+  write.resolve({ error: { message: 'Offline write' } })
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  // Rollback must not wait for reconciliation to finish (or succeed).
+  expect(displayed()).toEqual(['Original'])
+  expect(control('Complete "Original"')).toBeDefined()
+  recovery.resolve({ data: null, error: { message: 'Offline read' } })
+  await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
+  expect(displayed()).toEqual(['Original'])
+  if (operation === 'edit') expect(control('Edit reminder: Original').value).toBe('Updated')
+
+  // A subsequent mutation still works after the failed attempt releases its guard.
+  write = deferred()
+  control('Complete "Original"').onClick!()
+  stored = [{ ...original, is_done: true }]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Mark "Original" active').disabled).toBe(false))
+})
+
+it.each(['complete', 'delete'])('failed %s rollback preserves another row’s later mutation', async operation => {
+  stored.push({ ...original, id: 'other', text: 'Other', sort_order: 1 })
+  await hooks.load!()
+  const firstWrite = write
+  mutate(operation)
+  write = deferred()
+  control('Complete "Other"').onClick!()
+  const recovery = deferred<Result>()
+  reads.push(recovery)
+  firstWrite.resolve({ error: { message: 'Offline write' } })
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  expect(control('Complete "Original"')).toBeDefined()
+  expect(control('Mark "Other" active')).toBeDefined()
+  recovery.resolve({ data: null, error: { message: 'Offline read' } })
+  await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
+  stored[1].is_done = true
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Mark "Other" active').disabled).toBe(false))
+})
+
+it.each(['complete', 'delete'])('failed %s rollback preserves a newer fetched row', async operation => {
+  mutate(operation)
+  stored = [{ ...original, text: 'Newer' }]
+  await hooks.load!()
+  const recovery = deferred<Result>()
+  reads.push(recovery)
+  write.resolve({ error: { message: 'Write failed' } })
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  recovery.resolve({ data: null, error: { message: 'Offline read' } })
+  await vi.waitFor(() => expect(control('Complete "Newer"').disabled).toBe(false))
+  expect(displayed()).toEqual(['Newer'])
+})
+
 function editForm() {
   return render().find(node => node.type === 'form' && nodes(node).some(child => child.props['aria-label'] === 'Save reminder'))!.props
 }
@@ -208,12 +263,13 @@ it('retains a failed edit draft and releases the guard for retry', async () => {
 
 function subscribeToCapacity() {
   const subscriptions: { filter: { table: string; filter: string }; callback: (payload: { new: Record<string, unknown> }) => void }[] = []
+  let status: ((value: string) => void) | undefined
   const channel = {
     on: (_event: string, filter: typeof subscriptions[number]['filter'], callback: typeof subscriptions[number]['callback']) => {
       subscriptions.push({ filter, callback })
       return channel
     },
-    subscribe: () => channel,
+    subscribe: (callback: (value: string) => void) => { status = callback; return channel },
   }
   db.channel.mockReturnValue(channel)
   render()
@@ -221,6 +277,7 @@ function subscribeToCapacity() {
   const prefs = subscriptions.find(item => item.filter.table === 'lock_screen_prefs')
   expect(prefs?.filter.filter).toBe('user_id=eq.user')
   return { emit: (max_lines: number, user_id = 'user') => prefs!.callback({ new: { user_id, max_lines } }),
+    recover: () => status?.('SUBSCRIBED'),
     cleanup: () => cleanups.forEach(cleanup => cleanup?.()), channel }
 }
 
@@ -250,6 +307,81 @@ it('does not let a pending board read overwrite newer phone capacity', async () 
   const stale = deferred<Result>()
   reads.push(stale)
   const subscription = subscribeToCapacity()
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  subscription.emit(8)
+  stale.resolve({ data: stored, error: null })
+  await new Promise(resolve => setTimeout(resolve, 0))
+  expect(control('New reminder').disabled).toBe(false)
+  subscription.cleanup()
+})
+
+// Start the real subscription effect and drive recovery without row notifications.
+afterEach(() => { vi.unstubAllGlobals() })
+it.each(['SUBSCRIBED', 'online'])('recovers a failed read on %s and removes recovery listeners on cleanup', async trigger => {
+  const browser = Object.assign(new EventTarget(), { clearTimeout, setTimeout })
+  vi.stubGlobal('window', browser)
+  let status: ((value: string) => void) | undefined
+  const channel = {
+    on: vi.fn().mockReturnThis(),
+    subscribe: vi.fn((callback?: (value: string) => void) => { status = callback; return channel }),
+  }
+  db.channel.mockReturnValue(channel)
+  db.removeChannel.mockResolvedValue(undefined)
+  const success = db.from.getMockImplementation()!
+  db.from.mockImplementation(() => {
+    const query = {
+      select: () => query, eq: () => query, order: () => query,
+      maybeSingle: async () => ({ data: null, error: null }),
+      then: (resolve: (value: unknown) => void) => Promise.resolve({ data: null, error: { message: 'Offline' } }).then(resolve),
+    }
+    return query
+  })
+  render()
+  const cleanup = hooks.effects.at(-1)!()
+  await vi.waitFor(() => expect(db.channel).toHaveBeenCalled())
+  // Let the failed initial query settle before signalling recovery.
+  await new Promise(resolve => setTimeout(resolve, 0))
+  const failedCalls = db.from.mock.calls.length
+  stored = [{ ...original, text: 'Recovered board' }]
+  db.from.mockImplementation(success)
+  if (trigger === 'online') browser.dispatchEvent(new Event('online'))
+  else status?.('SUBSCRIBED')
+  await vi.waitFor(() => expect(db.from.mock.calls.length).toBeGreaterThan(failedCalls))
+  await new Promise(resolve => setTimeout(resolve, 0))
+  expect(displayed()).toEqual(['Recovered board'])
+  const recoveredCalls = db.from.mock.calls.length
+  status?.('CHANNEL_ERROR')
+  status?.('TIMED_OUT')
+  expect(db.from.mock.calls.length).toBe(recoveredCalls)
+  // A later re-subscription also reloads an otherwise idle account.
+  status?.('SUBSCRIBED')
+  await vi.waitFor(() => expect(db.from.mock.calls.length).toBeGreaterThan(recoveredCalls))
+  await new Promise(resolve => setTimeout(resolve, 0))
+  if (typeof cleanup === 'function') cleanup()
+  const finalCalls = db.from.mock.calls.length
+  browser.dispatchEvent(new Event('online'))
+  status?.('SUBSCRIBED')
+  await new Promise(resolve => setTimeout(resolve, 0))
+  expect(db.from.mock.calls.length).toBe(finalCalls)
+  expect(db.removeChannel).toHaveBeenCalledWith(channel)
+})
+
+it('refreshes capacity after reconnection and keeps newer phone preferences over an in-flight recovery read', async () => {
+  stored = Array.from({ length: 6 }, (_, index) => ({ ...original, id: String(index) }))
+  await hooks.load!()
+  const subscription = subscribeToCapacity()
+  await vi.waitFor(() => expect(db.rpc).toHaveBeenCalledTimes(3))
+  await new Promise(resolve => setTimeout(resolve, 0))
+  subscription.emit(8)
+  expect(control('New reminder').disabled).toBe(false)
+
+  // Reconnection reads the persisted capacity even if its notification was missed.
+  subscription.recover()
+  await vi.waitFor(() => expect(control('New reminder').disabled).toBe(true))
+
+  const stale = deferred<Result>()
+  reads.push(stale)
+  subscription.recover()
   await vi.waitFor(() => expect(reads).toHaveLength(0))
   subscription.emit(8)
   stale.resolve({ data: stored, error: null })

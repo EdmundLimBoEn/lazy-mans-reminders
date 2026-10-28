@@ -2,6 +2,7 @@ import SwiftUI
 
 @main
 struct LazyMansRemindersApp: App {
+    @Environment(\.scenePhase) private var scenePhase
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var auth = AuthManager.shared
 
@@ -12,6 +13,11 @@ struct LazyMansRemindersApp: App {
                 .onOpenURL { url in
                     Task { await auth.handle(url: url) }
                 }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .background {
+                BackgroundBoardRefresh.schedule()
+            }
         }
     }
 }
