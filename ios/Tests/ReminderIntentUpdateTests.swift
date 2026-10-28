@@ -21,7 +21,7 @@ final class ReminderIntentUpdateTests: XCTestCase {
             let requestCount = Counter()
             let publicationCount = Counter()
             let store = ReminderStore(
-                defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+                defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key",
                 requestData: { request in
                     await requestCount.increment()
@@ -65,7 +65,7 @@ final class ReminderIntentUpdateTests: XCTestCase {
             let defaults = UserDefaults(suiteName: suite)!
             defer { defaults.removePersistentDomain(forName: suite) }
             let store = ReminderStore(
-                defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+                defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key",
                 requestData: { request in
                     return (try ReminderJSON.encoder.encode([returned]),
@@ -88,6 +88,32 @@ final class ReminderIntentUpdateTests: XCTestCase {
             let cache = await store.cached()
             XCTAssertEqual(cache, [original])
         }
+    }
+
+    func testEmptyUpdateReturnsCacheButCannotProduceAnAcknowledgedRow() async throws {
+        let original = sample()
+        let suite = "ReminderIntentUpdateTests.\(UUID())"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let store = ReminderStore(
+            defaults: defaults, credentials: MemorySessionCredentials(),
+            requestData: { _ in
+                XCTFail("An empty update must not make a request")
+                throw URLError(.badURL)
+            }
+        )
+        try await seed(store, defaults: defaults, reminder: original)
+        let unchanged = try await store.update(id: original.id)
+        XCTAssertEqual(unchanged, [original])
+        do {
+            _ = try await store.updateAcknowledged(id: original.id)
+            XCTFail("An empty update cannot return an acknowledged row")
+        } catch {
+            XCTAssertEqual(error.localizedDescription,
+                           "The reminder change could not be confirmed. Refresh your board and try again.")
+        }
+        let cache = await store.cached()
+        XCTAssertEqual(cache, [original])
     }
 
     private actor Counter {

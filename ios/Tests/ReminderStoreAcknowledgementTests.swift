@@ -216,15 +216,113 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
         XCTAssertEqual(cache, [original])
     }
 
-    func testDelayedEditCannotResurrectRowAfterCompletionResponseArrivesFirst() async throws {
-        try await checkOverlappingMutations(sameID: true)
+    func testSameIDUpdatesAreRejectedBeforeTransportAndCanRetryAfterSuccessOrFailure() async throws {
+        for failsFirst in [false, true] {
+            let suiteName = "ReminderStoreExclusionTests.\(UUID().uuidString)"
+            let defaults = UserDefaults(suiteName: suiteName)!
+            defer { defaults.removePersistentDomain(forName: suiteName) }
+            let original = sample()
+            let started = XCTestExpectation(description: "First write held before commit")
+            let network = HeldWriteNetwork(original: original, started: started, failsFirst: failsFirst)
+            let store = ReminderStore(
+                defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
+                anonKey: "test-anon-key", requestData: { try await network.send($0) }
+            )
+            try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
+                                        expiresAt: Date().addingTimeInterval(3600), userID: original.userID)
+            defaults.set(try ReminderJSON.encoder.encode([original]), forKey: "cached-reminders")
+            let first = Task { try await store.update(id: original.id, text: "First edit") }
+            await fulfillment(of: [started], timeout: 3)
+
+            for mutation in Mutation.allCases {
+                do {
+                    _ = try await mutation.perform(store, id: original.id)
+                    XCTFail("An overlapping same-ID mutation must not reach the server")
+                } catch {
+                    XCTAssertEqual(error.localizedDescription,
+                                   "The reminder change could not be confirmed. Refresh your board and try again.")
+                }
+            }
+            do {
+                _ = try await store.updateAcknowledged(id: original.id, text: "Shortcut title", isDone: true)
+                XCTFail("An overlapping combined Shortcuts update must not reach the server")
+            } catch {
+                XCTAssertEqual(error.localizedDescription,
+                               "The reminder change could not be confirmed. Refresh your board and try again.")
+            }
+            let requests = await network.requestCount
+            XCTAssertEqual(requests, 1)
+            let pendingCache = await store.cached()
+            XCTAssertEqual(pendingCache, [original])
+
+            await network.release()
+            do {
+                let result = try await first.value
+                XCTAssertFalse(failsFirst)
+                XCTAssertEqual(result.first?.text, "First edit")
+            } catch {
+                XCTAssertTrue(failsFirst)
+                XCTAssertEqual((error as? URLError)?.code, .timedOut)
+            }
+            let result = try await store.update(id: original.id, text: "Retried edit")
+            let stored = await network.stored
+            let cache = await store.cached()
+            XCTAssertEqual(stored.text, "Retried edit")
+            XCTAssertEqual(result, [stored])
+            XCTAssertEqual(cache, result)
+
+            let completed = try await store.updateAcknowledged(
+                id: original.id, text: "Shortcut title", isDone: true
+            )
+            let completedStored = await network.stored
+            XCTAssertEqual(completed.reminder, completedStored)
+            XCTAssertEqual(completed.reminder.text, "Shortcut title")
+            XCTAssertTrue(completed.reminder.isDone)
+            XCTAssertEqual(completed.activeReminders, [])
+            let completedCache = await store.cached()
+            XCTAssertEqual(completedCache, [])
+        }
+    }
+
+    private actor HeldWriteNetwork {
+        var stored: Reminder
+        var requestCount = 0
+        let started: XCTestExpectation
+        let failsFirst: Bool
+        private var continuation: CheckedContinuation<Void, Never>?
+
+        init(original: Reminder, started: XCTestExpectation, failsFirst: Bool) {
+            stored = original
+            self.started = started
+            self.failsFirst = failsFirst
+        }
+
+        func send(_ request: URLRequest) async throws -> (Data, URLResponse) {
+            requestCount += 1
+            XCTAssertEqual(request.httpMethod, "PATCH")
+            let body = try XCTUnwrap(request.httpBody)
+            let fields = try XCTUnwrap(JSONSerialization.jsonObject(with: body) as? [String: Any])
+            if requestCount == 1 {
+                await withCheckedContinuation { continuation in
+                    self.continuation = continuation
+                    started.fulfill()
+                }
+                if failsFirst { throw URLError(.timedOut) }
+            }
+            // Apply the write at commit time, after any deliberate transport delay.
+            if let text = fields["text"] as? String { stored.text = text }
+            if let isDone = fields["is_done"] as? Bool { stored.isDone = isDone }
+            return (try ReminderJSON.encoder.encode([stored]),
+                    HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!)
+        }
+
+        func release() {
+            continuation?.resume()
+            continuation = nil
+        }
     }
 
     func testOverlappingUpdatesForDifferentIDsBothSucceed() async throws {
-        try await checkOverlappingMutations(sameID: false)
-    }
-
-    private func checkOverlappingMutations(sameID: Bool) async throws {
         let suiteName = "ReminderStoreOverlapTests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!
         defer { defaults.removePersistentDomain(forName: suiteName) }
@@ -232,15 +330,14 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
         let completionStarted = XCTestExpectation(description: "Completion committed; response held")
         let network = OverlappingNetwork(editStarted: editStarted, completionStarted: completionStarted)
         let store = ReminderStore(
-            defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+            defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
             anonKey: "test-anon-key", requestData: { try await network.send($0) }
         )
         let original = sample()
-        let toComplete = sameID ? original : sample(userID: original.userID)
+        let toComplete = sample(userID: original.userID)
         try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
                                     expiresAt: Date().addingTimeInterval(3600), userID: original.userID)
-        defaults.set(try ReminderJSON.encoder.encode(sameID ? [original] : [original, toComplete]),
-                     forKey: "cached-reminders")
+        defaults.set(try ReminderJSON.encoder.encode([original, toComplete]), forKey: "cached-reminders")
 
         let editTask = Task { try await store.update(id: original.id, text: "Edited") }
         await fulfillment(of: [editStarted], timeout: 3)
@@ -251,25 +348,15 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
         completed.isDone = true
         await network.finish(completion: true, data: try ReminderJSON.encoder.encode([completed]))
         let completionResult = try await completionTask.value
-        XCTAssertEqual(completionResult, sameID ? [] : [original])
+        XCTAssertEqual(completionResult, [original])
 
         var editedSnapshot = original
         editedSnapshot.text = "Edited"
         await network.finish(completion: false, data: try ReminderJSON.encoder.encode([editedSnapshot]))
-        if sameID {
-            do {
-                _ = try await editTask.value
-                XCTFail("Superseded edit must throw instead of resurrecting the completed row")
-            } catch {
-                XCTAssertEqual(error.localizedDescription,
-                               "The reminder change could not be confirmed. Refresh your board and try again.")
-            }
-        } else {
-            let result = try await editTask.value
-            XCTAssertEqual(result, [editedSnapshot])
-        }
+        let result = try await editTask.value
+        XCTAssertEqual(result, [editedSnapshot])
         let cache = await store.cached()
-        XCTAssertEqual(cache, sameID ? [] : [editedSnapshot])
+        XCTAssertEqual(cache, [editedSnapshot])
     }
 
     func testOverlapFixtureBuffersResponsesBeforeRequestsStart() async throws {
@@ -373,7 +460,7 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
         init(data: Data, status: Int = 200, method: String = "PATCH", transportFailure: Bool = false) {
             defaults = UserDefaults(suiteName: suiteName)!
             store = ReminderStore(
-                defaults: defaults, serviceURL: URL(string: "https://reminders.invalid")!,
+                defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key",
                 requestData: { request in
                     XCTAssertEqual(request.httpMethod, method, "Reopen must not issue a followup GET/RPC")

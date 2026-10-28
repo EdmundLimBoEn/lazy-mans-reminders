@@ -68,6 +68,30 @@ beforeEach(async () => {
   render().text.onChange({ target: { value: 'Keep my draft' } })
 })
 
+it.each(['insert', 'update'] as const)('uses the selected timezone for weekly %s start dates', async (operation) => {
+  vi.useFakeTimers()
+  vi.setSystemTime(new Date('2026-10-26T01:00:00Z'))
+  try {
+    if (operation === 'insert') {
+      render().button('Cancel edit').onClick()
+      render().change('routine-text', 'Sunday reminder')
+    }
+    render().change('routine-weekday', '0')
+    render().change('routine-time', '22:00')
+    render().change('routine-zone', 'America/New_York')
+    const query = { eq: vi.fn() }
+    query.eq.mockReturnValueOnce(query).mockResolvedValueOnce({ error: null })
+    const write = vi.fn(() => operation === 'insert' ? Promise.resolve({ error: null }) : query)
+    db.from.mockReturnValueOnce({ [operation]: write })
+    await render().form.onSubmit({ preventDefault() {} })
+    expect(write).toHaveBeenCalledWith(expect.objectContaining({
+      start_date: '2026-10-25', local_time: '22:00', timezone: 'America/New_York',
+    }))
+  } finally {
+    vi.useRealTimers()
+  }
+})
+
 it.each(['insert', 'update', 'pause', 'delete'] as const)('releases busy controls and preserves the draft when %s throws', async (operation) => {
   if (operation === 'insert') {
     render().button('Cancel edit').onClick()
