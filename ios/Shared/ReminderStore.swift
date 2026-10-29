@@ -165,6 +165,7 @@ actor ReminderStore {
         let identityRevision = defaults.string(forKey: identityRevisionKey)
         // Extensions use a valid shared JWT but never rotate the host SDK's refresh token.
         let candidate = refreshAuthentication ? await loadFreshSession() : storedSession()
+        try Task.checkCancellation()
         guard let session = candidate, session.expiresAt > Date() else {
             throw StoreError.signedOut
         }
@@ -191,6 +192,7 @@ actor ReminderStore {
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
 
         let (responseData, response) = try await requestData(request)
+        try Task.checkCancellation()
         guard let http = response as? HTTPURLResponse else {
             throw StoreError.invalidResponse
         }
