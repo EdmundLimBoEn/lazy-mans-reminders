@@ -2,6 +2,7 @@ import { assertEquals, assertExists } from "jsr:@std/assert";
 import { handleDeleteAccount } from "../delete-account/handler.ts";
 import {
   DEFAULT_GRANT_CLEANUP_TIMEOUT_MS,
+  DEFAULT_GRANT_CLEANUP_URL,
   revokeUserOauthGrants,
 } from "./oauth_grant_cleanup.ts";
 
@@ -36,6 +37,13 @@ Deno.test("grant cleanup sends authenticated POST and accepts a complete report"
   assertExists(signal);
   assertEquals(signal.aborted, false);
   assertEquals(DEFAULT_GRANT_CLEANUP_TIMEOUT_MS, 5_000);
+});
+
+Deno.test("grant cleanup defaults to the canonical MCP host", () => {
+  assertEquals(
+    DEFAULT_GRANT_CLEANUP_URL,
+    "https://np-mcp.sillyapps.co/account/grants/cleanup",
+  );
 });
 
 Deno.test("grant cleanup fails closed for malformed or incomplete reports", async () => {

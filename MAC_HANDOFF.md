@@ -4,7 +4,7 @@ Updated **9 October 2026**, audited at `c131c41`. This replaces the stale 7 Augu
 
 Repository: `EdmundLimBoEn/lazy-mans-reminders`. Historical project records identify bundle `systems.edmundlim.LazyMansReminders`, widget `systems.edmundlim.LazyMansReminders.Widget`, App Group `group.systems.edmundlim.LazyMansReminders`, team `DUU8J39BA7`, ASC app `6799138197`. Confirm these in the signing account; this docs audit did not authenticate to Apple.
 
-Canonical web: <https://lmr.sillyapps.co>; MCP: <https://lmr-mcp.edmundlim.systems/mcp>. Privacy/support are `/privacy` and `/support` on the canonical web host. Old-domain redirects and hosted Auth allowlists require the checks in [HUMANS.md](HUMANS.md).
+Canonical web: <https://np.sillyapps.co> (lmr.sillyapps.co stays live; no 301). MCP: <https://np-mcp.sillyapps.co/mcp> (lmr-mcp.edmundlim.systems stays live; no 301). Privacy/support are `/privacy` and `/support` on the canonical web host. Dual-serve hosts and hosted Auth allowlists require the checks in [HUMANS.md](HUMANS.md).
 
 ## Build evidence
 

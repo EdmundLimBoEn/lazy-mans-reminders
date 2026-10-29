@@ -12,7 +12,7 @@ from urllib.error import HTTPError
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 
 BASE = "https://api.appstoreconnect.apple.com"
-PUBLIC_HOSTS = {"lmr.sillyapps.co", "lmr.edmundlim.systems", "lazy-mans-reminders.pages.dev"}
+PUBLIC_HOSTS = {"np.sillyapps.co", "lmr.sillyapps.co", "lmr.edmundlim.systems", "lazy-mans-reminders.pages.dev"}
 IPHONE_DISPLAY_TYPES = {"APP_IPHONE_67", "APP_IPHONE_65", "APP_IPHONE_61", "APP_IPHONE_58", "APP_IPHONE_55", "APP_IPHONE_47", "APP_IPHONE_40", "APP_IPHONE_35"}
 # Apple Help dimensions; API suffixes do not establish a display-group mapping.
 IPHONE_CURRENT_SIZES = {(1179, 2556), (1206, 2622), (1284, 2778), (1242, 2688), (1320, 2868), (1290, 2796), (1260, 2736)}

@@ -2,10 +2,11 @@ import { describe, expect, it } from 'vitest'
 import { IOS_APP_CALLBACK, iosHandoffFromLocation } from './iosHandoff'
 
 describe('iosHandoffFromLocation', () => {
-  it('forwards a PKCE code onto the app callback', () => {
-    const result = iosHandoffFromLocation(
-      'https://lmr.sillyapps.co/auth/ios?code=abc123',
-    )
+  it.each([
+    'https://np.sillyapps.co/auth/ios?code=abc123',
+    'https://lmr.sillyapps.co/auth/ios?code=abc123',
+  ])('forwards a PKCE code from %s onto the app callback', (href) => {
+    const result = iosHandoffFromLocation(href)
     expect(result).toEqual({
       status: 'open',
       href: `${IOS_APP_CALLBACK}?code=abc123`,

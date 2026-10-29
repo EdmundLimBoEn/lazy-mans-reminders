@@ -1,7 +1,7 @@
 import { getOAuthApi, OAuthError, OAuthProvider, type OAuthProviderOptions } from '@cloudflare/workers-oauth-provider'
 import { createMcpHandler } from 'agents/mcp/server'
 import { checkAccount, decideTokenExchange } from './accountGate'
-import { MCP_HOST, MCP_RESOURCE, MCP_WWW_AUTHENTICATE } from './constants'
+import { MCP_HOSTS, MCP_RESOURCE, MCP_WWW_AUTHENTICATE } from './constants'
 import { corsHeaders, handlePublicRequest, resolveExternalPat } from './oauth'
 import { prepareOauthRequest } from './oauthCompat'
 import { registrationRedirectError } from './redirects'
@@ -60,7 +60,7 @@ async function handleMcp(
 
   const handler = createMcpHandler(() => createServer(session, env), {
     route: '/mcp',
-    allowedHostnames: [MCP_HOST],
+    allowedHostnames: [...MCP_HOSTS],
     allowedOriginHostnames: '*',
     corsOptions: { origin: '*' },
   })
@@ -108,7 +108,7 @@ function createProvider(env: Env, deps: IdentityDeps): OAuthProvider<Env> {
     },
     resourceMetadata: {
       resource: MCP_RESOURCE,
-      authorization_servers: [`https://${MCP_HOST}`],
+      authorization_servers: MCP_HOSTS.map((host) => `https://${host}`),
       scopes_supported: ['board'],
       resource_name: "Lazy Man's Reminders",
     },

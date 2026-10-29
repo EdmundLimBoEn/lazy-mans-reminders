@@ -30,11 +30,11 @@ const env = {
 } as Env
 
 describe('mcp worker routes', () => {
-  it('serves an unauthenticated server card', async () => {
-    const response = await handlePublicRequest(
-      new Request('https://lmr-mcp.edmundlim.systems/'),
-      env,
-    )
+  it.each([
+    'https://np-mcp.sillyapps.co/',
+    'https://lmr-mcp.edmundlim.systems/',
+  ])('serves an unauthenticated server card on %s', async (url) => {
+    const response = await handlePublicRequest(new Request(url), env)
     expect(response.status).toBe(200)
     const body = await response.json() as { url: string; auth: { type: string }; tools: string[] }
     expect(body.url).toBe('/mcp')

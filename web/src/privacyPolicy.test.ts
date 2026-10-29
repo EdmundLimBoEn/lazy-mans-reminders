@@ -16,7 +16,7 @@ describe('privacy policy disclosures', () => {
   })
 
   it('names the canonical domain and the retired one', () => {
-    expect(text).toContain('https://lmr.sillyapps.co')
+    expect(text).toContain('https://np.sillyapps.co')
     expect(text).toMatch(/lmr\.edmundlim\.systems, redirects here/)
   })
 

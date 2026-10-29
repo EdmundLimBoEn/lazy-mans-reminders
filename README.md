@@ -6,16 +6,16 @@ A Supabase-backed reminder board with a React/Vite web app and an iOS 17 app plu
 
 Repository release audit as of 9 October 2026. The planned App Store release is **free** (no in-app purchases); submission and approval remain open. Deployment details below include historical operator reports, not a fresh production certification.
 
-- Web app: canonical domain <https://lmr.sillyapps.co>; <https://lazy-mans-reminders.pages.dev> is the Pages fallback. The old domain <https://lmr.edmundlim.systems> stays attached and redirects to `lmr.sillyapps.co` (currently a 302; a 301 is planned) (Cloudflare Redirect Rule on the `edmundlim.systems` zone) so shipped iOS builds and old links keep working.
+- Web app: canonical domain <https://np.sillyapps.co>; <https://lmr.sillyapps.co> stays live on the same Pages project (dual-serve, no 301). <https://lazy-mans-reminders.pages.dev> is the Pages fallback. The older domain <https://lmr.edmundlim.systems> stays attached and currently 302s to `lmr.sillyapps.co` (Cloudflare Redirect Rule on the `edmundlim.systems` zone) so shipped iOS builds and old links keep working.
 - Cloudflare Pages project: `lazy-mans-reminders`
 - Supabase project: `lazy-mans-reminders` (`biwmsxbqrevtjwgsvsmu`, Singapore)
 - Database migrations: **deployed** (including agent tokens)
 - Supabase Auth: site URL and redirects **deployed**; Apple web + native configured; Google provider enabled; Resend SMTP for magic-link email
 - `send-reminder-push` and `delete-account` Edge Functions: **deployed**
-- Agent MCP Worker: **live** at <https://lmr-mcp.edmundlim.systems/mcp> (OAuth plugin path)
+- Agent MCP Worker: canonical <https://np-mcp.sillyapps.co/mcp>; <https://lmr-mcp.edmundlim.systems/mcp> stays live (dual-serve, no 301).
 - iOS app and widget: **implemented**; TestFlight build uploaded; physical-device smoke and App Store submission still open. Submission fields live in [docs/app-store.md](docs/app-store.md).
 - Lock Screen: Live Activity plus accessory widgets; push alerts are body-only (no title)
-- Custom domain DNS: `lmr.sillyapps.co` (web, proxied CNAME → `lazy-mans-reminders.pages.dev`) and `lmr-mcp.edmundlim.systems` (MCP Worker). The MCP host has not moved.
+- Custom domain DNS: `np.sillyapps.co` and `lmr.sillyapps.co` (web, proxied CNAME → `lazy-mans-reminders.pages.dev`) and `np-mcp.sillyapps.co` plus `lmr-mcp.edmundlim.systems` (MCP Worker, both custom domains). Jeremy attaches the `np` / `np-mcp` DNS and Worker route; do not deploy from this change.
 
 ### Deferred launch checklist
 
@@ -95,14 +95,14 @@ supabase db reset
 
 In Supabase **Authentication → URL Configuration**:
 
-- Set the Site URL to `https://lmr.sillyapps.co`.
+- Set the Site URL to `https://np.sillyapps.co`.
 - Add `http://localhost:5173/auth/callback`.
-- Add `https://lmr.sillyapps.co/auth/callback`.
+- Add `https://np.sillyapps.co/auth/callback` and `https://lmr.sillyapps.co/auth/callback`.
 - Add `https://lazy-mans-reminders.pages.dev/auth/callback` as a fallback.
 - Add `lazymansreminders://auth/callback` for iOS Google OAuth.
-- Add `https://lmr.sillyapps.co/auth/ios` and `https://lazy-mans-reminders.pages.dev/auth/ios` for iOS magic-link handoff.
-- Also allow the bare origins used by OAuth returns: `http://localhost:5173`, `https://lmr.sillyapps.co`, and `https://lazy-mans-reminders.pages.dev`.
-- Keep the old-domain entries (`https://lmr.edmundlim.systems`, `/auth/callback`, `/auth/ios`) until every TestFlight/App Store build in use sends `lmr.sillyapps.co`. Shipped iOS builds still request `https://lmr.edmundlim.systems/auth/ios` for magic links.
+- Add `https://np.sillyapps.co/auth/ios`, `https://lmr.sillyapps.co/auth/ios`, and `https://lazy-mans-reminders.pages.dev/auth/ios` for iOS magic-link handoff.
+- Also allow the bare origins used by OAuth returns: `http://localhost:5173`, `https://np.sillyapps.co`, `https://lmr.sillyapps.co`, and `https://lazy-mans-reminders.pages.dev`.
+- Keep the older-domain entries (`https://lmr.edmundlim.systems`, `/auth/callback`, `/auth/ios`) so shipped iOS builds that still send that host keep working. Keep `https://lmr.sillyapps.co` (and its `/auth/callback` and `/auth/ios` paths) as a live dual-serve host; do not 301 it.
 
 Keep `supabase/config.toml` aligned for local development. In **Authentication → Providers**:
 
@@ -149,14 +149,14 @@ Run `supabase/tests/routine_reminders.sql` against a disposable migrated databas
 
 ## Agent MCP
 
-Remote agents talk to the board at `https://lmr-mcp.edmundlim.systems/mcp`.
+Remote agents talk to the board at `https://np-mcp.sillyapps.co/mcp`. `https://lmr-mcp.edmundlim.systems/mcp` stays live.
 
 ### Grok Bot
 
 Add a custom connector and use OAuth:
 
 1. Settings → Plugins → custom connector
-2. URL: `https://lmr-mcp.edmundlim.systems/mcp`
+2. URL: `https://np-mcp.sillyapps.co/mcp`
 3. Sign in with Google or Apple in the browser that opens, then tap **Allow**.
 
 Personal agent keys remain available under **Agent access → Advanced** for hosts that cannot use OAuth. Plugin installs can set `LMR_AGENT_TOKEN`.
@@ -171,7 +171,7 @@ Cursor / Claude Code / Codex can load `plugins/lazy-mans-reminders/` or the same
 {
   "mcpServers": {
     "lazy-mans-reminders": {
-      "url": "https://lmr-mcp.edmundlim.systems/mcp"
+      "url": "https://np-mcp.sillyapps.co/mcp"
     }
   }
 }
@@ -246,7 +246,7 @@ npm run build
 npx wrangler pages deploy dist --project-name lazy-mans-reminders --branch main
 ```
 
-Custom domain: `lmr.sillyapps.co` is the canonical domain on the Pages project, with a proxied CNAME `lmr` → `lazy-mans-reminders.pages.dev` on the `sillyapps.co` zone. The old `lmr.edmundlim.systems` custom domain stays on the project; a Cloudflare Single Redirect rule on the `edmundlim.systems` zone sends it to `https://lmr.sillyapps.co`, keeping the path and query. It currently answers 302 (temporary); switch it to 301 when the move is final. Keep Supabase Auth redirects in sync (see above). The MCP Worker's `WEB_ORIGINS` (in `mcp/wrangler.jsonc`) lists the canonical origin first, because `/authorize` sends the browser to that origin's `/connect`.
+Custom domain: `np.sillyapps.co` is the canonical domain on the Pages project. `lmr.sillyapps.co` stays attached and live (dual-serve, no 301). Both use a proxied CNAME → `lazy-mans-reminders.pages.dev` on the `sillyapps.co` zone. The older `lmr.edmundlim.systems` custom domain stays on the project; a Cloudflare Single Redirect rule on the `edmundlim.systems` zone currently 302s it to `https://lmr.sillyapps.co`, keeping the path and query. Keep Supabase Auth redirects in sync (see above). The MCP Worker's `WEB_ORIGINS` (in `mcp/wrangler.jsonc`) lists the canonical origin first, because `/authorize` sends the browser to that origin's `/connect`. MCP custom domains are `np-mcp.sillyapps.co` and `lmr-mcp.edmundlim.systems` (both attached, no 301).
 
 ## iOS
 
@@ -312,7 +312,7 @@ Increment `CURRENT_PROJECT_VERSION` in `ios/project.yml` before each upload.
 The planned iOS release is a free download with no in-app purchases or subscriptions. It has not been certified release-ready by this audit.
 
 1. In App Store Connect, under **Pricing and Availability**, set the price to **Free** for the storefronts you ship.
-2. Complete app metadata, privacy details, age rating, screenshots, support URL (`https://lmr.sillyapps.co/support`), and privacy URL (`https://lmr.sillyapps.co/privacy`). Use [docs/app-store.md](docs/app-store.md) for nutrition labels and review notes.
+2. Complete app metadata, privacy details, age rating, screenshots, support URL (`https://np.sillyapps.co/support`), and privacy URL (`https://np.sillyapps.co/privacy`). Use [docs/app-store.md](docs/app-store.md) for nutrition labels and review notes.
 3. Attach a tested build, choose manual or automatic release, and submit for review.
 
 Before submission, complete [the current Apple requirements checklist](docs/apple-release-requirements.md) and [all human gates](HUMANS.md#app-store-submission), including actual reviewer access, native QA, deletion/Apple revocation, privacy disclosures, screenshot coverage, age/encryption and DSA declarations. [MAC_HANDOFF.md](MAC_HANDOFF.md) describes the native verification route. Linux cannot run Xcode locally; repository hosted macOS CI does not establish physical-device behavior. Only submit after Edmund reviews the evidence and authorizes it.
