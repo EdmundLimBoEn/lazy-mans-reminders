@@ -1,27 +1,41 @@
 import { describe, expect, it } from 'vitest'
+import { MCP_HOSTS, MCP_RESOURCE, mcpResourceForRequest } from './constants'
 import { corsHeaders, handlePublicRequest, resolveExternalPat, serverCard } from './oauth'
 
 const env = {
   WEB_ORIGINS: 'https://lmr.sillyapps.co,http://localhost:5173',
 } as Env
 
-describe('bind CORS', () => {
-  it('allows the web origin', () => {
-    const headers = corsHeaders(
-      new Request('https://lmr-mcp.edmundlim.systems/bind', {
-        headers: { Origin: 'https://lmr.sillyapps.co' },
-      }),
-      env,
-    )
-    expect(headers['Access-Control-Allow-Origin']).toBe('https://lmr.sillyapps.co')
+describe('mcpResourceForRequest', () => {
+  it.each([...MCP_HOSTS])('uses the request host %s as the PAT audience', (host) => {
+    expect(mcpResourceForRequest(new Request(`https://${host}/mcp`))).toBe(`https://${host}/mcp`)
   })
 
-  it('still allows the old lmr.edmundlim.systems alias while it redirects', () => {
+  it('falls back to the canonical resource for an unknown host', () => {
+    expect(mcpResourceForRequest(new Request('https://evil.example/mcp'))).toBe(MCP_RESOURCE)
+  })
+})
+
+describe('bind CORS', () => {
+  it.each([
+    'https://np.sillyapps.co',
+    'https://lmr.sillyapps.co',
+  ])('allows the live web origin %s', (origin) => {
+    const headers = corsHeaders(
+      new Request('https://np-mcp.sillyapps.co/bind', {
+        headers: { Origin: origin },
+      }),
+      { WEB_ORIGINS: 'https://np.sillyapps.co,https://lmr.sillyapps.co,http://localhost:5173' } as Env,
+    )
+    expect(headers['Access-Control-Allow-Origin']).toBe(origin)
+  })
+
+  it('still allows the older lmr.edmundlim.systems alias', () => {
     const headers = corsHeaders(
       new Request('https://lmr-mcp.edmundlim.systems/bind', {
         headers: { Origin: 'https://lmr.edmundlim.systems' },
       }),
-      { WEB_ORIGINS: 'https://lmr.sillyapps.co,https://lmr.edmundlim.systems' } as Env,
+      { WEB_ORIGINS: 'https://np.sillyapps.co,https://lmr.sillyapps.co,https://lmr.edmundlim.systems' } as Env,
     )
     expect(headers['Access-Control-Allow-Origin']).toBe('https://lmr.edmundlim.systems')
   })

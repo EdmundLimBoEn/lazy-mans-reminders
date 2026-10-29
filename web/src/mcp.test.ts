@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import {
   AGENT_TOKEN_PLACEHOLDER,
@@ -12,16 +15,30 @@ import {
 } from './mcp'
 
 describe('agent MCP snippets', () => {
+  it('keeps plugin manifests on the same canonical MCP URL the board advertises', () => {
+    expect(MCP_URL).toBe('https://np-mcp.sillyapps.co/mcp')
+    const root = join(dirname(fileURLToPath(import.meta.url)), '../..')
+    for (const relative of [
+      'plugins/lazy-mans-reminders/mcp.json',
+      'plugins/lazy-mans-reminders/.cursor-plugin/mcp.json',
+    ]) {
+      const manifest = JSON.parse(readFileSync(join(root, relative), 'utf8')) as {
+        mcpServers: { 'lazy-mans-reminders': { url: string } }
+      }
+      expect(manifest.mcpServers['lazy-mans-reminders'].url).toBe(MCP_URL)
+    }
+  })
+
   it('shows Grok the OAuth URL without a bearer header', () => {
     const snippet = grokConnectorConfig(MCP_URL)
-    expect(snippet).toContain(`URL: ${MCP_URL}`)
+    expect(snippet).toContain('URL: https://np-mcp.sillyapps.co/mcp')
     expect(snippet).not.toMatch(/Authorization/)
     expect(snippet).not.toMatch(/lmr__/)
     expect(AGENT_TOKEN_PLACEHOLDER).toBe('TOKEN')
   })
 
   it('keeps Cursor and Claude snippets on the OAuth URL path', () => {
-    expect(cursorMcpConfig(MCP_URL)).toContain(`"url": "${MCP_URL}"`)
+    expect(cursorMcpConfig(MCP_URL)).toContain('"url": "https://np-mcp.sillyapps.co/mcp"')
     expect(cursorMcpConfig(MCP_URL)).not.toMatch(/Authorization/)
     expect(claudeMcpConfig(MCP_URL)).toContain('"type": "http"')
     expect(claudeMcpConfig(MCP_URL)).not.toMatch(/Authorization/)
@@ -44,17 +61,18 @@ describe('connectReturnTo', () => {
 })
 
 describe('authCallbackUrlFrom', () => {
-  it('puts return_to on the callback URL so a new tab can still finish Allow', () => {
-    expect(
-      authCallbackUrlFrom('https://lmr.sillyapps.co', '/connect', '?state=abc'),
-    ).toBe(
-      'https://lmr.sillyapps.co/auth/callback?return_to=%2Fconnect%3Fstate%3Dabc',
+  it.each([
+    'https://np.sillyapps.co',
+    'https://lmr.sillyapps.co',
+  ])('puts return_to on the callback URL for %s so a new tab can still finish Allow', (origin) => {
+    expect(authCallbackUrlFrom(origin, '/connect', '?state=abc')).toBe(
+      `${origin}/auth/callback?return_to=%2Fconnect%3Fstate%3Dabc`,
     )
   })
 
   it('leaves homepage sign-in callbacks clean', () => {
-    expect(authCallbackUrlFrom('https://lmr.sillyapps.co', '/')).toBe(
-      'https://lmr.sillyapps.co/auth/callback',
+    expect(authCallbackUrlFrom('https://np.sillyapps.co', '/')).toBe(
+      'https://np.sillyapps.co/auth/callback',
     )
   })
 })

@@ -1,5 +1,5 @@
 export const DEFAULT_GRANT_CLEANUP_URL =
-  "https://lmr-mcp.edmundlim.systems/account/grants/cleanup";
+  "https://np-mcp.sillyapps.co/account/grants/cleanup";
 export const DEFAULT_GRANT_CLEANUP_TIMEOUT_MS = 5_000;
 
 export type GrantCleanupResult =

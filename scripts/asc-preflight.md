@@ -94,8 +94,8 @@ coverage remains UNKNOWN because Apple's current Help display naming and the
 published API enum are not a verified one-to-one mapping. No undocumented
 APP_IPHONE_69 constant is treated as proof of required coverage.
 
-Live privacy/support URLs on this app's known hosts (`lmr.sillyapps.co`,
-`lmr.edmundlim.systems`, `lazy-mans-reminders.pages.dev`) receive unauthenticated
+Live privacy/support URLs on this app's known hosts (`np.sillyapps.co`,
+`lmr.sillyapps.co`, `lmr.edmundlim.systems`, `lazy-mans-reminders.pages.dev`) receive unauthenticated
 HTTPS GET probes with a Mozilla user agent. HTTP 200 nonempty HTML is only HTTP
 availability evidence, not a rendered policy/content review. Access challenges,
 rate limits, redirects, server/network/TLS failures and other hosts remain UNKNOWN;
