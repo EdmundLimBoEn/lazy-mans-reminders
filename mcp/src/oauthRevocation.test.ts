@@ -50,10 +50,31 @@ async function authorize() {
     headers: { Authorization: `Bearer ${token}` },
   })
   expect((await access()).status).toBe(200)
-  return { ...worker, tokens, grantId, refresh, access }
+  return { ...worker, tokens, client_id, grantId, refresh, access }
 }
 
 describe('revocation during refresh', () => {
+  it('denies an individually revoked access token despite stale KV while preserving its grant and sibling tokens', async () => {
+    const { post, kv, tokens, client_id, refresh, access } = await authorize()
+    const rotated = await refresh()
+    expect(rotated.status).toBe(200)
+    const sibling = await rotated.json() as { access_token: string; refresh_token: string }
+    expect((await access()).status).toBe(200)
+    expect((await access(sibling.access_token)).status).toBe(200)
+    const oldRecords = new Map(kv)
+    const revoke = () => post(HOST, '/token', {
+      client_id, token: tokens.access_token, token_type_hint: 'access_token',
+    })
+    expect((await revoke()).status).toBe(200)
+    // Simulate a KV location continuing to serve records cached before deletion.
+    for (const [key, value] of oldRecords) kv.set(key, value)
+    expect((await access()).status).toBe(401)
+    expect((await revoke()).status).toBe(200)
+    expect((await access(sibling.access_token)).status).toBe(200)
+    expect((await refresh(sibling.refresh_token)).status).toBe(200)
+    expect((await access()).status).toBe(401)
+  })
+
   it.each(['/grants/revoke', '/account/grants/cleanup'])(
     '%s prevents a refresh paused during account verification from restoring access', async (path) => {
       const { post, deps, kv, grantId, refresh, access } = await authorize()
