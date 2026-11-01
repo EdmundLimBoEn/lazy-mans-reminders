@@ -107,6 +107,25 @@ function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: Ex
       if (decision.kind === 'deleted') {
         throw new OAuthError('invalid_grant', { description: 'Account no longer exists' })
       }
+      if (exchange.grantType === 'authorization_code') {
+        // The provider has validated the client, code and PKCE before this
+        // callback. It creates one code per grant, but consumes it in KV later.
+        let consumed: boolean
+        try {
+          const id = env.AUTHORIZATION_STATE.idFromName(`code:${exchange.userId}:${exchange.grantId}`)
+          const response = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/redeem', { method: 'POST' })
+          if (!response.ok) throw new Error()
+          consumed = (await response.json<{ consumed: boolean }>()).consumed === true
+        } catch {
+          throw new OAuthError('temporarily_unavailable', {
+            description: 'Token issuance is temporarily unavailable; retry shortly',
+            statusCode: 503,
+          })
+        }
+        if (!consumed) {
+          throw new OAuthError('invalid_grant', { description: 'Authorization code already used' })
+        }
+      }
       return { newProps: decision.newProps }
     },
     resourceMetadata: {
