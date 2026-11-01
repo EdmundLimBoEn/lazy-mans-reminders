@@ -42,6 +42,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
   const [text, setText] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editText, setEditText] = useState('')
+  const editFocusId = useRef<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [adding, setAdding] = useState(false)
@@ -489,7 +490,13 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
                                 <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Move "${reminder.text}" up`} title="Move up" disabled={reordering || pendingMutations.size > 0 || activeIndex === 0} onClick={() => void move(activeIndex, -1)}><ArrowUp aria-hidden="true" /></Button>
                                 <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Move "${reminder.text}" down`} title="Move down" disabled={reordering || pendingMutations.size > 0 || activeIndex === activeCount - 1} onClick={() => void move(activeIndex, 1)}><ArrowDown aria-hidden="true" /></Button>
                               </>}
-                              <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Edit "${reminder.text}"`} title="Edit" disabled={reordering || pending} onClick={() => { setEditingId(reminder.id); setEditText(reminder.text) }}><Pencil aria-hidden="true" /></Button>
+                              <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Edit "${reminder.text}"`} title="Edit" disabled={reordering || pending} ref={(button) => {
+                                // The originating button is recreated when the editor closes.
+                                if (button && editingId === null && editFocusId.current === reminder.id) {
+                                  editFocusId.current = null
+                                  button.focus()
+                                }
+                              }} onClick={() => { editFocusId.current = reminder.id; setEditingId(reminder.id); setEditText(reminder.text) }}><Pencil aria-hidden="true" /></Button>
                               <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Delete "${reminder.text}"`} title="Delete" disabled={reordering || pending} onClick={() => void remove(reminder.id)}><Trash2 aria-hidden="true" /></Button>
                             </div>
                           )}
