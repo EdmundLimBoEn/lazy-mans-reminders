@@ -21,6 +21,8 @@ function environment(outcome: 'allowed' | 'limited' | 'missing' | 'error'): Env 
     },
   }
   return {
+    // Even unauthenticated requests initialize the provider's grant-storage wrapper.
+    OAUTH_KV: { get: vi.fn(async () => null) },
     WEB_ORIGINS: webOrigin, AUTH_RATE_LIMIT: limiter, MCP_RATE_LIMIT: limiter,
   } as unknown as Env
 }
