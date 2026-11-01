@@ -22,6 +22,8 @@ function environment(outcome: 'allowed' | 'limited' | 'missing' | 'error'): Env 
   }
   return {
     WEB_ORIGINS: webOrigin, AUTH_RATE_LIMIT: limiter, MCP_RATE_LIMIT: limiter,
+    // These unauthenticated requests need the binding but never access storage.
+    OAUTH_KV: {},
   } as unknown as Env
 }
 
