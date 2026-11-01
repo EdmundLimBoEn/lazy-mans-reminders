@@ -17,6 +17,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
   const [busy, setBusy] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [weeklyStartChanged, setWeeklyStartChanged] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const draftRevision = useRef(0)
   const readGeneration = useRef(0)
@@ -114,7 +115,8 @@ export function RoutineReminders({ userId }: { userId: string }) {
     try {
       const values = {
         text: text.trim(), interval_days: cadence === 'weekly' ? 7 : Number(days),
-        start_date: cadence === 'weekly' ? weeklyStartDate(weekday, timezone) : startDate,
+        // Editing a seven-day routine must retain its chosen first firing.
+        start_date: cadence === 'weekly' && (!editingId || weeklyStartChanged) ? weeklyStartDate(weekday, timezone) : startDate,
         local_time: time, timezone,
       }
       const { error } = editingId
@@ -154,6 +156,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
 
   function edit(routine: Routine) {
     setEditingId(routine.id)
+    setWeeklyStartChanged(false)
     setText(routine.text)
     setCadence(routine.interval_days === 7 ? 'weekly' : 'days')
     setWeekday(new Date(`${routine.start_date}T12:00:00`).getDay())
@@ -175,11 +178,11 @@ export function RoutineReminders({ userId }: { userId: string }) {
         <Input id="routine-text" value={text} onChange={e => setText(e.target.value)} placeholder="Prepare Tuesday's uniform" maxLength={500} required /></div>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="grid gap-2"><Label htmlFor="routine-repeat">Repeat</Label>
-          <select id="routine-repeat" className={selectClass} value={cadence} onChange={e => setCadence(e.target.value === 'weekly' ? 'weekly' : 'days')}>
+          <select id="routine-repeat" className={selectClass} value={cadence} onChange={e => { setCadence(e.target.value === 'weekly' ? 'weekly' : 'days'); setWeeklyStartChanged(true) }}>
             <option value="weekly">Every week</option><option value="days">Every N days</option>
           </select></div>
         {cadence === 'weekly' ? <div className="grid gap-2"><Label htmlFor="routine-weekday">Reminder day</Label>
-          <select id="routine-weekday" className={selectClass} value={weekday} onChange={e => setWeekday(Number(e.target.value))}>
+          <select id="routine-weekday" className={selectClass} value={weekday} onChange={e => { setWeekday(Number(e.target.value)); setWeeklyStartChanged(true) }}>
             {WEEKDAYS.map((day, index) => <option key={day} value={index}>{day}</option>)}
           </select></div> : <>
           <div className="grid gap-2"><Label htmlFor="routine-days">Number of days</Label>
