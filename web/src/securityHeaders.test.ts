@@ -12,6 +12,8 @@ describe('pages security headers', () => {
     expect(headers).not.toContain('preload')
     expect(headers).toContain('https://biwmsxbqrevtjwgsvsmu.supabase.co')
     expect(headers).toContain('wss://biwmsxbqrevtjwgsvsmu.supabase.co')
+    expect(headers).toContain('https://np-mcp.sillyapps.co')
+    expect(headers).toContain('https://lmr-mcp.edmundlim.systems')
     expect(headers).not.toContain('https://*.supabase.co')
   })
 
@@ -25,7 +27,7 @@ describe('pages security headers', () => {
   it('detaches the Pages default Access-Control-Allow-Origin: * for every path', () => {
     // Cloudflare Pages adds `Access-Control-Allow-Origin: *` to static assets by default.
     // Nothing on this origin is read cross-origin (MCP/OAuth discovery lives on the
-    // lmr-mcp Worker), so the `/*` block must remove it and no rule may add it back.
+    // MCP Worker), so the `/*` block must remove it and no rule may add it back.
     const blocks = headers.split(/\n(?=\S)/)
     const all = blocks.find((block) => block.startsWith('/*\n'))
     expect(all).toBeDefined()

@@ -2,13 +2,13 @@
 
 Draft source for the **free 1.0** submission, app id `6799138197`. Updated **9 October 2026**. Not submitted or certified ready. Read [Apple requirements and evidence gaps](apple-release-requirements.md) and [HUMANS.md](../HUMANS.md) before applying fields. Earlier 27 October/30 November targets are internal plans, not Apple deadlines; release follows evidence and Edmund's approval.
 
-The native display name is **Lazy Man's Reminders**. Earlier records say ASC used **Lazy Mans Notepad**; confirm and update the actual listing. No current authenticated ASC state was verified for this docs change. There is no Fastlane metadata tree.
+The App Store name is **Notepad**. The native `CFBundleDisplayName` remains **Lazy Man's Reminders** until a separate copy change. No current authenticated ASC state was verified for this docs change. There is no Fastlane metadata tree.
 
 ## Listing copy
 
 | Field | Draft value | Limit |
 |---|---|---|
-| Name | `Lazy Man's Reminders` | 20 / 30 characters |
+| Name | `Notepad` | 20 / 30 characters |
 | Subtitle | `Lock Screen reminder board` | 26 / 30 characters |
 | Locale | `en-US` | Primary locale |
 | Category | Productivity | Confirm in ASC |
@@ -17,9 +17,9 @@ The native display name is **Lazy Man's Reminders**. Earlier records say ASC use
 Description (4000-character limit):
 
 ```text
-Lazy Man's Reminders is a small reminder board for your iPhone, the web, and the Lock Screen.
+Notepad is a small reminder board for your iPhone, the web, and the Lock Screen.
 
-Add a few lines and keep the same board on your iPhone and at https://lmr.sillyapps.co. Complete lines as you finish them.
+Add a few lines and keep the same board on your iPhone and at https://np.sillyapps.co. Complete lines as you finish them.
 
 Add Board widgets to your Home Screen or Lock Screen. A Live Activity can show active reminders on the Lock Screen while Live Activities are enabled. Its availability and updates depend on iOS settings, network access, and system limits.
 
@@ -29,13 +29,13 @@ Push banners are optional. The in-app board works when notifications are off.
 
 Free. No in-app purchases. No subscriptions.
 
-Privacy: https://lmr.sillyapps.co/privacy
-Support: https://lmr.sillyapps.co/support
+Privacy: https://np.sillyapps.co/privacy
+Support: https://np.sillyapps.co/support
 ```
 
-Promotional text: `A small reminder board for your iPhone, the web, and the Lock Screen.`
+Promotional text: `A place for notes on your Lock Screen, your iPhone, and on the web.`
 
-What's New (1.0): `First release of Lazy Man's Reminders.`
+What's New (1.0): (empty)
 
 Only add Siri/Apple Intelligence claims or exact phrases after testing them in the selected signed build. App Intents source/SDK guards are not runtime evidence. Do not promise uninterrupted or indefinite Live Activity persistence.
 
@@ -43,10 +43,10 @@ Apply localization fields in App Store Connect → App Information and the iOS 1
 
 ## URLs and support
 
-- Privacy: <https://lmr.sillyapps.co/privacy>
-- Support: <https://lmr.sillyapps.co/support>
-- Marketing: <https://lmr.sillyapps.co>
-- Terms: <https://lmr.sillyapps.co/terms> (optional metadata)
+- Privacy: <https://np.sillyapps.co/privacy>
+- Support: <https://np.sillyapps.co/support>
+- Marketing: none
+- Terms: <https://np.sillyapps.co/terms> (optional metadata)
 - Contact: `hello@edmundlim.systems` (human must confirm monitored inbox)
 
 Historical checks report that `lmr.edmundlim.systems` redirects with 302; do not assume production redirect/auth settings match repository config. Check all URLs unauthenticated from outside the home network.
@@ -92,7 +92,7 @@ Set sign-in required to **yes** and provide verified access, contact first/last 
 Draft non-secret review notes, to edit after selected-build QA:
 
 ```text
-This is a private reminder board. Sign-in enables synchronization with https://lmr.sillyapps.co, device registration for APNs, and optional agent access through MCP. Review account credentials are provided in the dedicated account fields.
+This is a private reminder board. Sign-in enables synchronization with https://np.sillyapps.co, device registration for APNs, and optional agent access through MCP. Review account credentials are provided in the dedicated account fields.
 
 On Your Board, add a reminder, complete it with the circle or swipe action, and refresh to see changes from the web board on the same account.
 
@@ -104,7 +104,7 @@ Account → Delete Account initiates account and associated-data deletion. Valid
 
 Account → Download My Data opens the web board, where a signed-in user can export their data.
 
-Free. No IAP or subscriptions. Support: hello@edmundlim.systems.
+Free. No IAP or subscriptions. Support: edmund@sillyapps.co.
 ```
 
 Replace the validation sentence with the actual tested deletion/revocation behavior before submission. Add Siri instructions only if verified in the selected build; document any hardware/setup/resources needed. [Account deletion guidance](https://developer.apple.com/support/offering-account-deletion-in-your-app/).
@@ -116,8 +116,8 @@ Populate Test Information before external invites:
 | Field | Draft value |
 |---|---|
 | Feedback email | `hello@edmundlim.systems` |
-| Marketing URL | `https://lmr.sillyapps.co` |
-| Privacy URL | `https://lmr.sillyapps.co/privacy` |
+| Marketing URL | none |
+| Privacy URL | `https://np.sillyapps.co/privacy` |
 | Beta App Description | Use the tested capabilities from Listing copy; describe it as a beta |
 | Beta review access | Verified synthetic account, private credentials, contact and notes as above |
 
