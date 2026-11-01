@@ -119,9 +119,16 @@ export function RoutineReminders({ userId }: { userId: string }) {
         start_date: cadence === 'weekly' && (!editingId || weeklyStartChanged) ? weeklyStartDate(weekday, timezone) : startDate,
         local_time: time, timezone,
       }
-      const { error } = editingId
-        ? await supabase.from('routine_reminders').update(values).eq('id', editingId).eq('user_id', userId)
-        : await supabase.from('routine_reminders').insert({ ...values, user_id: userId })
+      let result
+      try {
+        result = editingId
+          ? await supabase.from('routine_reminders').update(values).eq('id', editingId).eq('user_id', userId)
+          : await supabase.from('routine_reminders').insert({ ...values, user_id: userId })
+      } finally {
+        // Invalidate reads started during the write, before reconciliation begins.
+        readGeneration.current += 1
+      }
+      const { error } = result
       if (error) setError(error.message)
       else {
         if (draftRevision.current === submittedRevision) reset()
@@ -130,7 +137,6 @@ export function RoutineReminders({ userId }: { userId: string }) {
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Could not save routine')
     } finally {
-      readGeneration.current += 1
       setBusy(false)
     }
   }
@@ -142,14 +148,20 @@ export function RoutineReminders({ userId }: { userId: string }) {
     setError('')
     try {
       const query = supabase.from('routine_reminders')
-      const { error } = await (remove ? query.delete() : query.update({ enabled: !routine.enabled }))
-        .eq('id', routine.id).eq('user_id', userId)
+      let result
+      try {
+        result = await (remove ? query.delete() : query.update({ enabled: !routine.enabled }))
+          .eq('id', routine.id).eq('user_id', userId)
+      } finally {
+        // Invalidate reads started during the write, before reconciliation begins.
+        readGeneration.current += 1
+      }
+      const { error } = result
       if (error) setError(error.message)
       else { if (editingId === routine.id) reset(); await load() }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Could not update routine')
     } finally {
-      readGeneration.current += 1
       setBusy(false)
     }
   }

@@ -423,3 +423,61 @@ it('keeps the newest snapshot when routine reads finish out of order', async () 
   await loading
   expect(render().button('Resume')).toBeDefined()
 })
+
+it.each(['insert', 'update', 'pause', 'resume', 'delete'].flatMap(operation =>
+  ['reconciliation first', 'realtime first'].map(order => ({ operation, order })),
+))('$operation preserves overlapping successful reads ($order)', async ({ operation, order }) => {
+  vi.useFakeTimers()
+  vi.stubGlobal('window', new EventTarget())
+  let notify!: () => void
+  const channel = {
+    on: vi.fn((_event, _filter, callback: () => void) => { notify = callback; return channel }),
+    subscribe: vi.fn(() => channel),
+  }
+  db.channel.mockReturnValue(channel)
+  render()
+  const cleanup = hooks.effects.at(-1)!()
+  try {
+    await vi.advanceTimersByTimeAsync(0)
+    if (operation === 'insert') {
+      render().button('Cancel edit').onClick()
+      render().change('routine-text', 'New routine')
+    }
+    if (operation === 'resume') {
+      mockRead(Promise.resolve({ data: [{ ...routine, enabled: false }], error: null }))
+      await hooks.load!()
+    }
+    const query = { eq: vi.fn() }
+    query.eq.mockReturnValueOnce(query).mockResolvedValueOnce({ error: null })
+    db.from.mockReturnValueOnce({ insert: () => Promise.resolve({ error: null }), update: () => query, delete: () => query })
+    const reconciliation = deferred<ReadResult>()
+    mockRead(reconciliation.promise)
+    const saving = operation === 'insert' || operation === 'update'
+      ? render().form.onSubmit({ preventDefault() {} })
+      : render().button(operation === 'delete' ? 'Delete routine' : operation === 'pause' ? 'Pause' : 'Resume').onClick()
+    await vi.advanceTimersByTimeAsync(0)
+    const realtime = deferred<ReadResult>()
+    mockRead(realtime.promise)
+    notify()
+    await vi.advanceTimersByTimeAsync(100)
+    const saved = operation === 'delete' ? [] : [{ ...routine, text: 'Saved routine', enabled: operation !== 'pause' }]
+    const result = { data: saved, error: null }
+    const [first, second] = order === 'reconciliation first' ? [reconciliation, realtime] : [realtime, reconciliation]
+    first.resolve(result)
+    await vi.advanceTimersByTimeAsync(0)
+    second.resolve(result)
+    await vi.advanceTimersByTimeAsync(0)
+    await saving
+    const view = render()
+    expect(view.submit.disabled).toBe(false)
+    expect(view.alert).toBeUndefined()
+    expect(view.tree.filter(node => node.type === 'li')).toHaveLength(saved.length)
+    if (saved.length) {
+      expect(view.tree.some(node => node.props.children === 'Saved routine')).toBe(true)
+      expect(view.button(operation === 'pause' ? 'Resume' : 'Pause').disabled).toBe(false)
+    }
+  } finally {
+    if (typeof cleanup === 'function') cleanup()
+    vi.useRealTimers()
+  }
+})
