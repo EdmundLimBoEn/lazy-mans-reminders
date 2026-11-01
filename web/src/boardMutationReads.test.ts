@@ -280,6 +280,29 @@ it('reopens through the owner-locked RPC and reconciles the board', async () => 
   await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
 })
 
+it('rejects a zero-row reopen acknowledgement and restores the completed row', async () => {
+  stored = [{ ...original, is_done: true }]
+  await hooks.load!()
+  const missingRow = 'Cannot coerce the result to a single JSON object'
+  const fetch = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
+    const singular = new Headers(init?.headers).get('Accept') === 'application/vnd.pgrst.object+json'
+    return singular
+      ? new Response(JSON.stringify({ code: 'PGRST116', message: missingRow, details: 'The result contains 0 rows', hint: null }), { status: 406 })
+      : new Response('[]', { status: 200 })
+  })
+  const client = new PostgrestClient('https://example.invalid/rest/v1', { fetch })
+  db.rpc.mockImplementation((name: string, args: object) => client.rpc(name, args))
+  control('Mark "Original" active').onClick!()
+  await vi.waitFor(() => expect(fetch).toHaveBeenCalledOnce())
+  await vi.waitFor(() => expect(control('Mark "Original" active').disabled).toBe(false))
+  expect(render().some(node => node.props.children === missingRow)).toBe(true)
+  expect(db.update).not.toHaveBeenCalled()
+  const [url, init] = fetch.mock.calls[0]
+  expect(new URL(String(url)).pathname).toBe('/rest/v1/rpc/reopen_reminder')
+  expect(new URL(String(url)).searchParams.get('select')).toBe('id')
+  expect(new Headers(init?.headers).get('Accept')).toBe('application/vnd.pgrst.object+json')
+})
+
 it.each(['empty', 'failed'])('retains a zero-row edit draft when the recovery read is %s', async recovery => {
   const missingRow = 'Cannot coerce the result to a single JSON object'
   const fetch = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
