@@ -9,7 +9,7 @@ const makeRow = (id: number, isDone: boolean, userId = 'owner') => ({
   sort_order: 0, created_at: '2026-01-01T00:00:00Z', completed_at: null, user_id: userId,
 })
 
-function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'page' | 'count' | 'empty' | 'missing-count' | 'preferences') {
+function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'page' | 'count' | 'empty' | 'missing-count' | 'missing-page-count' | 'preferences') {
   const requests: { url: URL; method: string }[] = []
   const fetch = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = new URL(String(input))
@@ -41,7 +41,7 @@ function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'pa
     })
     const page = failure === 'empty' && offset > 0 ? [] :
       filtered.slice(offset, offset + Math.min(cap, Number(params.get('limit') ?? cap)))
-    const headers: Record<string, string> = failure === 'missing-count' ? {} : {
+    const headers: Record<string, string> = failure === 'missing-count' || (failure === 'missing-page-count' && offset > 0) ? {} : {
       'content-range': `${offset}-${offset + page.length - 1}/${filtered.length}`,
     }
     return new Response(method === 'HEAD' ? null : JSON.stringify(page.map(({ user_id: _owner, ...row }) => row)), {
@@ -56,8 +56,9 @@ function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'pa
 
 describe('MCP reminder listing pagination', () => {
   it.each(['active', 'completed', 'all'] as const)('returns every owned %s row across a 1,000-row cap', async status => {
-    const rows = [makeRow(0, false), ...Array.from({ length: 1001 }, (_, i) => makeRow(i + 1, true)),
-      makeRow(2000, false, 'other'), makeRow(2001, true, 'other')]
+    const rows = [...Array.from({ length: 1001 }, (_, i) => makeRow(i, false)),
+      ...Array.from({ length: 1001 }, (_, i) => makeRow(i + 1001, true)),
+      makeRow(3000, false, 'other'), makeRow(3001, true, 'other')]
     // Equal sort keys and reversed IDs exercise the final deterministic tie-breaker.
     const { client, requests } = database([...rows].reverse(), 1000)
     const result = await runBoardCommand(client, session, { kind: 'list', status })
@@ -65,10 +66,10 @@ describe('MCP reminder listing pagination', () => {
       (status === 'all' || row.is_done === (status === 'completed')))
       .map(({ user_id: _owner, ...row }) => row)
     expect(result).toEqual({ kind: 'snapshot', snapshot: {
-      reminders: expected, capacity: { used: 1, maximum: 6, remaining: 5 },
+      reminders: expected, capacity: { used: 1001, maximum: 6, remaining: 0 },
     } })
     const pages = requests.filter(request => request.method === 'GET' && request.url.pathname.endsWith('/reminders'))
-    expect(pages.length).toBe(status === 'active' ? 1 : 2)
+    expect(pages.length).toBe(status === 'all' ? 3 : 2)
     for (const { url } of pages) {
       expect(url.searchParams.get('is_done')).toBe(status === 'all' ? null : `eq.${status === 'completed'}`)
       expect(url.searchParams.get('order')).toBe('is_done.asc,sort_order.asc,created_at.asc,id.asc')
@@ -93,7 +94,7 @@ describe('MCP reminder listing pagination', () => {
     })
   })
 
-  it.each(['page', 'count', 'empty', 'missing-count', 'preferences'] as const)('does not report a complete snapshot after %s failure', async failure => {
+  it.each(['page', 'count', 'empty', 'missing-count', 'missing-page-count', 'preferences'] as const)('does not report a complete snapshot after %s failure', async failure => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
     try {
       const { client } = database([makeRow(0, false), makeRow(1, true), makeRow(2, true)], 1, failure)

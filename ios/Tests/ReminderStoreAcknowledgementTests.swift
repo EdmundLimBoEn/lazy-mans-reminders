@@ -315,7 +315,11 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             // Isolated preferences do not isolate the shared system Keychain.
             let credentials = MemorySessionCredentials()
             let store = ReminderStore(
+<<<<<<< HEAD
                 defaults: defaults, credentials: credentials, serviceURL: URL(string: "https://reminders.invalid")!,
+=======
+                defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
+>>>>>>> origin/r5/paginate-mcp-reminder-listings-before-re
                 anonKey: "test-anon-key", requestData: { try await network.send($0) }
             )
             try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
