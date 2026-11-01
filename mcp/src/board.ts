@@ -110,26 +110,31 @@ async function listBoard(
 
   const reminders: ReminderSelect[] = []
   const pageSize = 1000
+  let afterId: string | undefined
   while (true) {
     let query = supabase
       .from('reminders')
       .select('id, text, is_done, sort_order, created_at, completed_at', { count: 'exact' })
       .eq('user_id', session.userId)
     if (status !== 'all') query = query.eq('is_done', status === 'completed')
+    if (afterId !== undefined) query = query.gt('id', afterId)
     const { data, error, count } = await query
-      .order('is_done')
-      .order('sort_order')
-      .order('created_at')
       .order('id')
-      .range(reminders.length, reminders.length + pageSize - 1)
+      .range(0, pageSize - 1)
     if (error) return boardErrorFromStorage(error.message, error.details)
     if (count === null) return boardErrorFromStorage('Reminder count missing')
     const page = (data ?? []) as ReminderSelect[]
     reminders.push(...page)
-    if (reminders.length >= count) break
+    if (page.length >= count) break
     if (page.length === 0) return boardErrorFromStorage('Reminder page incomplete')
-    // Advance by actual rows received, even when the server cap is below pageSize.
+    // An ID cursor survives deletion of earlier rows and smaller server page caps.
+    afterId = page[page.length - 1].id
   }
+  reminders.sort((a, b) =>
+    Number(a.is_done) - Number(b.is_done) ||
+    a.sort_order - b.sort_order ||
+    a.created_at.localeCompare(b.created_at) ||
+    a.id.localeCompare(b.id))
   const capacity = capacityFromUsed(active.count, effectiveMaximum(prefs.data?.max_lines))
   return { kind: 'snapshot', snapshot: { reminders, capacity } }
 }
@@ -184,11 +189,10 @@ async function setCompletion(
 ): Promise<BoardResult> {
   if (!UUID.test(reminderId)) return { kind: 'not_found' }
 
-  const { data, error } = await supabase
-    .from('reminders')
-    .update({ is_done: isDone })
-    .eq('id', reminderId)
-    .eq('user_id', session.userId)
+  const query = isDone
+    ? supabase.from('reminders').update({ is_done: true }).eq('id', reminderId).eq('user_id', session.userId)
+    : supabase.rpc('reopen_reminder', { p_user_id: session.userId, p_reminder_id: reminderId })
+  const { data, error } = await query
     .select('id, text, is_done, sort_order, created_at, completed_at')
     .maybeSingle()
   if (error) {

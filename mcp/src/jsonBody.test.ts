@@ -120,6 +120,7 @@ describe('OAuth provider body limits', () => {
     await handleWorkerFetch(new Request(`https://example.com${path}`, {
       method: 'POST', headers: { 'Content-Type': contentType }, body,
     }), {
+      OAUTH_KV: {},
       AUTH_RATE_LIMIT: { limit: async () => ({ success: true }) },
     } as unknown as Env, {} as ExecutionContext)
     expect(providerFetch).toHaveBeenCalledOnce()

@@ -58,7 +58,7 @@ final class ReminderDecodingTests: XCTestCase {
             text: "Round trip",
             sortOrder: 7,
             isDone: false,
-            createdAt: Date(timeIntervalSince1970: 1_775_000_000)
+            createdAt: Date(timeIntervalSinceReferenceDate: 800_000_000.1234567)
         )
 
         let data = try ReminderJSON.encoder.encode(original)

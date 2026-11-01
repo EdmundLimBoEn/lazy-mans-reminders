@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { parseGrantList, type GrantView } from './grantList'
 import { MCP_ORIGIN } from './mcp'
@@ -7,12 +7,15 @@ export function ConnectedAgents({ accessToken }: { accessToken: string }) {
   const [grants, setGrants] = useState<GrantView[]>([])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const readGeneration = useRef(0)
 
   const load = useCallback(async () => {
+    const generation = ++readGeneration.current
     const response = await fetch(`${MCP_ORIGIN}/grants`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     })
     const body = await response.json().catch(() => null)
+    if (generation !== readGeneration.current) return
     const parsed = parseGrantList(body)
     if (!response.ok || !parsed) {
       setError('Could not load connected agents.')
@@ -22,10 +25,19 @@ export function ConnectedAgents({ accessToken }: { accessToken: string }) {
     setGrants(parsed)
   }, [accessToken])
 
-  useEffect(() => { void load().catch(() => setError('Could not load connected agents.')) }, [load])
+  useEffect(() => {
+    const requests = readGeneration
+    const loading = load()
+    const generation = requests.current
+    void loading.catch(() => {
+      if (generation === requests.current) setError('Could not load connected agents.')
+    })
+    return () => { ++requests.current }
+  }, [load])
 
   async function revoke(id: string) {
     if (busy) return
+    ++readGeneration.current
     setBusy(true)
     setError('')
     try {
@@ -37,12 +49,14 @@ export function ConnectedAgents({ accessToken }: { accessToken: string }) {
         },
         body: JSON.stringify({ grantId: id }),
       })
+      ++readGeneration.current
       if (!response.ok) {
         setError('Could not revoke that agent.')
         return
       }
       await load()
     } catch {
+      ++readGeneration.current
       setError('Could not reach the agent connector.')
     } finally {
       setBusy(false)

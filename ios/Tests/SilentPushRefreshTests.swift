@@ -48,6 +48,35 @@ final class SilentPushRefreshTests: XCTestCase {
         }
     }
 
+    func testRepeatedFractionalTimestampRefreshReportsNoDataAfterFirstFetch() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        // Use server JSON independently of the cache encoder so truncation cannot
+        // be hidden by encoding the mock response with the same strategy.
+        let data = Data("""
+        [{"id":"\(fixture.reminder.id)","user_id":"\(fixture.reminder.userID)",
+          "text":"Test","sort_order":0,"is_done":false,
+          "created_at":"2026-08-07T12:34:56.789123Z"}]
+        """.utf8)
+        let rows = try ReminderJSON.decoder.decode([Reminder].self, from: data)
+        let store = fixture.store(Network(rows: rows, data: data))
+        try await fixture.signIn(store)
+        var results: [UIBackgroundFetchResult] = []
+        var published: [[Reminder]] = []
+        for _ in 0..<3 {
+            let work = SilentPushRefresh.start(
+                store: store,
+                publish: { published.append($0) },
+                completion: { results.append($0) }
+            )
+            await work.value
+            let cached = await store.cached()
+            XCTAssertEqual(cached, rows)
+        }
+        XCTAssertEqual(results, [.newData, .noData, .noData])
+        XCTAssertEqual(published, [rows, rows, rows])
+    }
+
     func testNetworkFailureCompletesOnceWithoutPublishing() async throws {
         let fixture = Fixture()
         defer { fixture.cleanUp() }
@@ -137,12 +166,14 @@ final class SilentPushRefreshTests: XCTestCase {
         let rows: [Reminder]
         let gate: Gate?
         let fails: Bool
+        let data: Data?
         private(set) var paths: [String] = []
 
-        init(rows: [Reminder], gate: Gate? = nil, fails: Bool = false) {
+        init(rows: [Reminder], gate: Gate? = nil, fails: Bool = false, data: Data? = nil) {
             self.rows = rows
             self.gate = gate
             self.fails = fails
+            self.data = data
         }
 
         func send(_ request: URLRequest) async throws -> (Data, URLResponse) {
@@ -150,7 +181,7 @@ final class SilentPushRefreshTests: XCTestCase {
             if let gate { await gate.wait() }
             if fails { throw URLError(.notConnectedToInternet) }
             return (
-                try ReminderJSON.encoder.encode(rows),
+                try data ?? ReminderJSON.encoder.encode(rows),
                 HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
             )
         }

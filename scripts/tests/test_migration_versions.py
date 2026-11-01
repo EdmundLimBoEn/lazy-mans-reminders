@@ -31,6 +31,15 @@ class MigrationVersionTests(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertTrue((ROOT / path).is_file(), f"Missing SQL file: {path}")
 
+    def test_database_regression_migration_paths_exist(self):
+        source = (ROOT / "scripts/tests/test_reopen_lock_order.py").read_text()
+        names = re.findall(r"[0-9]+_[\w]+\.sql", source)
+        self.assertTrue(names)
+        for name in names:
+            with self.subTest(name=name):
+                self.assertTrue((ROOT / "supabase/migrations" / name).is_file(),
+                                f"Missing regression migration: {name}")
+
     def test_rejects_duplicate_versions_with_different_descriptions(self):
         for version in ("202610280001", "202610280002", "20261101000100"):
             with self.subTest(version=version):
