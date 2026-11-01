@@ -141,6 +141,8 @@ jobs:
             supabase/tests/routine_reminders.sql \
             supabase/tests/reminder_quotas.sql \
             supabase/tests/write_budgets.sql \
+            supabase/migrations/202610280002_budgeted_retention_cleanup.sql \
+            supabase/tests/budgeted_retention_cleanup.sql \
             supabase/migrations/202610280001_reminder_push_replay.sql \
             supabase/tests/reminder_push_replay.sql \
             supabase/migrations/202610280002_normalize_legacy_reminder_text.sql \
