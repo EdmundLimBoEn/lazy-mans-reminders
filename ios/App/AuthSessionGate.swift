@@ -54,13 +54,15 @@ final class AuthSessionGate {
     func shareIdentity(previousUserID: UUID?, nextUserID: UUID,
                        clearUserData: () async -> Void,
                        clearBoard: () async -> Void,
-                       share: () async -> Void) async {
+                       share: () async -> Void,
+                       didShare: () -> Void = {}) async {
         precondition(isHeld)
         if previousUserID != nextUserID {
             await clearUserData()
             await clearBoard()
         }
         await share()
+        didShare()
     }
 
     enum DeregistrationError: LocalizedError {
