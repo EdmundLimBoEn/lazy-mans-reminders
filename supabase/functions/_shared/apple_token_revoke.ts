@@ -1,5 +1,7 @@
+import { createRemoteJWKSet, customFetch, jwtVerify } from "npm:jose@6.2.10";
 import { base64url } from "./push_helpers.ts";
 
+export const APPLE_KEYS_URL = "https://appleid.apple.com/auth/keys";
 export const APPLE_TOKEN_URL = "https://appleid.apple.com/auth/token";
 export const APPLE_REVOKE_URL = "https://appleid.apple.com/auth/revoke";
 export const APPLE_AUDIENCE = "https://appleid.apple.com";
@@ -44,7 +46,12 @@ function nonempty(value: string | undefined): string | undefined {
 }
 
 export function userHasAppleIdentity(user: {
-  identities?: Array<{ provider?: string | null }> | null;
+  identities?:
+    | Array<{
+      provider?: string | null;
+      identity_data?: { sub?: unknown } | null;
+    }>
+    | null;
   app_metadata?: { providers?: unknown } | null;
 }): boolean {
   const fromIdentities = (user.identities ?? []).some(
@@ -183,6 +190,7 @@ async function appleErrorMessage(
 
 export async function revokeAppleTokensWithAuthorizationCode(input: {
   authorizationCode: string;
+  expectedSubject: string;
   config: AppleSecretConfig;
   fetchImpl: typeof fetch;
   nowSeconds: number;
@@ -228,11 +236,16 @@ export async function revokeAppleTokensWithAuthorizationCode(input: {
     };
   }
 
-  let tokens: { refresh_token?: unknown; access_token?: unknown };
+  let tokens: {
+    refresh_token?: unknown;
+    access_token?: unknown;
+    id_token?: unknown;
+  };
   try {
     tokens = await tokenResponse.json() as {
       refresh_token?: unknown;
       access_token?: unknown;
+      id_token?: unknown;
     };
   } catch {
     return {
@@ -261,6 +274,39 @@ export async function revokeAppleTokensWithAuthorizationCode(input: {
         event: "apple_token_revoke",
         outcome: "failed",
         reason: "apple_tokens_missing",
+        endpoint: "token",
+      },
+    };
+  }
+
+  // A valid code can belong to a different Apple account. Bind the exchanged
+  // identity to the authenticated user's linked identity before revoking it.
+  try {
+    if (typeof tokens.id_token !== "string" || !input.expectedSubject) {
+      throw new Error("Missing Apple identity");
+    }
+    await jwtVerify(
+      tokens.id_token,
+      createRemoteJWKSet(new URL(APPLE_KEYS_URL), {
+        [customFetch]: input.fetchImpl,
+        timeoutDuration: 5_000,
+      }),
+      {
+        algorithms: ["RS256"],
+        issuer: APPLE_AUDIENCE,
+        audience: input.config.clientId,
+        subject: input.expectedSubject,
+        requiredClaims: ["exp"],
+        currentDate: new Date(input.nowSeconds * 1000),
+      },
+    );
+  } catch {
+    return {
+      ok: false,
+      warning: {
+        event: "apple_token_revoke",
+        outcome: "skipped",
+        reason: "apple_identity_invalid",
         endpoint: "token",
       },
     };
@@ -346,8 +392,21 @@ export async function maybeRevokeAppleTokens(input: {
     return "manual_required";
   }
 
+  const expectedSubject = input.user.identities?.find(
+    (identity) => identity.provider?.toLowerCase() === "apple",
+  )?.identity_data?.sub;
+  if (typeof expectedSubject !== "string" || !expectedSubject.trim()) {
+    input.warn({
+      event: "apple_token_revoke",
+      outcome: "skipped",
+      reason: "apple_identity_missing",
+    });
+    return "manual_required";
+  }
+
   const result = await revokeAppleTokensWithAuthorizationCode({
     authorizationCode: input.authorizationCode,
+    expectedSubject,
     config: secrets.config,
     fetchImpl: input.fetchImpl,
     nowSeconds: input.nowSeconds,
