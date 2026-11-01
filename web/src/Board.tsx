@@ -273,10 +273,22 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
     setError('')
     const [{ data: reminderRows, error: reminderError }, { data: prefs, error: prefsError }, { data: keys, error: keyError }, { data: routines, error: routineError }] =
       await Promise.all([
-        supabase
-          .from('reminders')
-          .select('id, text, sort_order, is_done, created_at')
-          .eq('user_id', session.user.id),
+        (async () => {
+          const rows: AccountExportReminder[] = []
+          const pageSize = 1000
+          while (true) {
+            const { data, error } = await supabase
+              .from('reminders')
+              .select('id, text, sort_order, is_done, created_at')
+              .eq('user_id', session.user.id)
+              .order('id', { ascending: true })
+              .range(rows.length, rows.length + pageSize - 1)
+            if (error) return { data: null, error }
+            if (!data?.length) return { data: rows, error: null }
+            rows.push(...data)
+            // Continue until empty: the API may cap pages below pageSize.
+          }
+        })(),
         supabase
           .from('lock_screen_prefs')
           .select('max_lines')
