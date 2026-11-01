@@ -7,6 +7,7 @@ interface Env {
   WEB_ORIGINS: string
   OAUTH_KV: KVNamespace
   AUTHORIZATION_STATE: DurableObjectNamespace
+  GRANT_STATE: DurableObjectNamespace
   AUTH_RATE_LIMIT: RateLimit
   MCP_RATE_LIMIT: RateLimit
 }

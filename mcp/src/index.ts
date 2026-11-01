@@ -1,9 +1,10 @@
 import { getOAuthApi, OAuthError, OAuthProvider, type OAuthProviderOptions } from '@cloudflare/workers-oauth-provider'
 import { createMcpHandler } from 'agents/mcp/server'
 import { checkAccount, decideTokenExchange } from './accountGate'
+import { grantStorage } from './grantState'
 import { MCP_HOSTS, mcpResourceForRequest, MCP_WWW_AUTHENTICATE } from './constants'
 import { corsHeaders, handlePublicRequest, resolveExternalPat } from './oauth'
-import { prepareOauthRequest } from './oauthCompat'
+import { prepareOauthRequest, rewriteOauthPath } from './oauthCompat'
 import { registrationRedirectError } from './redirects'
 import { enforceRateLimit } from './rateLimit'
 import { createServer } from './server'
@@ -11,6 +12,7 @@ import { sessionFromProps } from './session'
 import { defaultIdentityDeps, type IdentityDeps } from './supabaseUser'
 
 export { AuthorizationState } from './authorizationState'
+export { GrantState } from './grantState'
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -107,6 +109,25 @@ function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: Ex
       if (decision.kind === 'deleted') {
         throw new OAuthError('invalid_grant', { description: 'Account no longer exists' })
       }
+      if (exchange.grantType === 'authorization_code') {
+        // The provider has validated the client, code and PKCE before this
+        // callback. It creates one code per grant, but consumes it in KV later.
+        let consumed: boolean
+        try {
+          const id = env.AUTHORIZATION_STATE.idFromName(`code:${exchange.userId}:${exchange.grantId}`)
+          const response = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/redeem', { method: 'POST' })
+          if (!response.ok) throw new Error()
+          consumed = (await response.json<{ consumed: boolean }>()).consumed === true
+        } catch {
+          throw new OAuthError('temporarily_unavailable', {
+            description: 'Token issuance is temporarily unavailable; retry shortly',
+            statusCode: 503,
+          })
+        }
+        if (!consumed) {
+          throw new OAuthError('invalid_grant', { description: 'Authorization code already used' })
+        }
+      }
       return { newProps: decision.newProps }
     },
     resourceMetadata: {
@@ -128,10 +149,21 @@ export async function handleWorkerFetch(
   ctx: ExecutionContext,
   deps: IdentityDeps = defaultIdentityDeps,
 ): Promise<Response> {
-  const limited = await enforceRateLimit(request, env, corsHeaders(request, env))
+  const path = rewriteOauthPath(new URL(request.url).pathname)
+  // Match the provider's public routes; consent and account routes keep their allowlist.
+  const publicCors = path.startsWith('/mcp') || path === '/token' || path === '/register'
+  const origin = request.headers.get('Origin')
+  const limitCors = publicCors ? (origin ? {
+    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Methods': '*',
+    'Access-Control-Allow-Headers': 'Authorization, *',
+    'Access-Control-Expose-Headers': 'WWW-Authenticate, Retry-After',
+  } : {}) : corsHeaders(request, env)
+  const limited = await enforceRateLimit(request, env, limitCors)
   if (limited) return limited
   const prepared = await prepareOauthRequest(request)
   if (prepared instanceof Response) return prepared
+  env = { ...env, OAUTH_KV: grantStorage(env) }
   return new OAuthProvider(providerOptions(env, deps, mcpResourceForRequest(prepared), ctx)).fetch(prepared, env, ctx)
 }
 

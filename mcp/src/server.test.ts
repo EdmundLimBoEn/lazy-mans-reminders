@@ -35,17 +35,18 @@ function setup(error: typeof quotaError | null = quotaError, listFails = false) 
     error: listFails ? { message: 'read failed' } : null,
   }) }
   const prefs = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: { max_lines: 6 }, error: null }) }
-  const from = vi.fn().mockReturnValueOnce(update).mockReturnValueOnce(count).mockReturnValueOnce(prefs).mockReturnValueOnce(list)
-  vi.mocked(createServiceRoleClient).mockReturnValue({ from } as unknown as SupabaseClient)
+  const rpc = vi.fn().mockReturnValue(update)
+  const from = vi.fn().mockReturnValueOnce(count).mockReturnValueOnce(prefs).mockReturnValueOnce(list)
+  vi.mocked(createServiceRoleClient).mockReturnValue({ from, rpc } as unknown as SupabaseClient)
   createServer(session, {} as Env)
-  return { update, count, list, from }
+  return { update, count, list, from, rpc }
 }
 
 afterEach(() => vi.restoreAllMocks())
 
 describe('reopen_reminder', () => {
   it('returns the hard quota and owner active snapshot even when the display limit is lower', async () => {
-    const { update, count, list } = setup()
+    const { update, count, list, rpc } = setup()
     const result = await handlers.get('reopen_reminder')!({ id })
     expect(result.isError).toBe(true)
     expect(JSON.parse(result.content[0].text)).toEqual({
@@ -53,8 +54,9 @@ describe('reopen_reminder', () => {
       capacity: { used: 16, maximum: 16, remaining: 0 },
       reminders: active.map(({ id, text }) => ({ id, text })),
     })
-    expect(update.update).toHaveBeenCalledWith({ is_done: false })
-    expect(update.eq.mock.calls).toEqual([['id', id], ['user_id', session.userId]])
+    expect(rpc).toHaveBeenCalledWith('reopen_reminder', { p_user_id: session.userId, p_reminder_id: id })
+    expect(update.update).not.toHaveBeenCalled()
+    expect(update.eq).not.toHaveBeenCalled()
     expect(list.eq).toHaveBeenCalledWith('user_id', session.userId)
     expect(list.eq).toHaveBeenCalledWith('is_done', false)
     expect(list.range).toHaveBeenCalledWith(0, 999)
@@ -77,7 +79,7 @@ describe('reopen_reminder', () => {
     const { from } = setup({ message: 'write failed', details: '' })
     const result = await handlers.get('reopen_reminder')!({ id })
     expect(result).toEqual({ isError: true, content: [{ type: 'text', text: CLIENT_STORAGE_ERROR }] })
-    expect(from).toHaveBeenCalledTimes(1)
+    expect(from).not.toHaveBeenCalled()
   })
 
   it('still returns the changed reminder after successful reopening', async () => {

@@ -173,3 +173,81 @@ for (const result of ["sent", "retryable", "failed", "invalid"] as const) {
     assertEquals(replay.alertSent, false);
   });
 }
+
+for (const destination of ["activity", "retiring"] as const) {
+  Deno.test(`replayed end must send to replacement ${destination} before clearing it`, async () => {
+    const f = fixture();
+    const sends: string[] = [];
+    const cleared: string[] = [];
+    let token = "activity-A";
+    let endResult: "sent" | "retryable" = "sent";
+    const run = async () => {
+      const replay = f.restart();
+      return await reconcileLiveActivity({
+        lines: [],
+        activityToken: token,
+        retiringToken: destination === "retiring" ? token : null,
+        startToken: null,
+        startedAt: new Date(0).toISOString(),
+        nowMs: 1000,
+        hasAlert: false,
+        send: (event, target) =>
+          replay.send(`live:${target}:${event}`, false, () => {
+            sends.push(token);
+            return Promise.resolve(endResult);
+          }, token),
+        claimStart: () => Promise.resolve(null),
+        releaseStart: () => Promise.resolve(),
+        recordStart: () => Promise.resolve(),
+        recordAdoption: () => Promise.resolve(),
+        recordEnd: () => {
+          if (destination === "activity") cleared.push(token);
+          return Promise.resolve();
+        },
+        clearRetiring: () => {
+          cleared.push(token);
+          return Promise.resolve();
+        },
+      });
+    };
+    await run(); // APNs success persisted, job completion was interrupted.
+    assertEquals(f.read().status, "pending");
+    await run(); // Same identity can safely reuse its persisted end.
+    assertEquals(sends, ["activity-A"]);
+    cleared.length = 0;
+    token = "activity-B";
+    endResult = "retryable";
+    assertEquals((await run()).results, ["retryable"]);
+    assertEquals(cleared, []);
+    endResult = "sent";
+    const result = await run();
+    await f.restart().finish(result.results);
+    assertEquals(sends, ["activity-A", "activity-B", "activity-B"]);
+    assertEquals(cleared, ["activity-B"]);
+    assertEquals(f.read().status, "complete");
+  });
+}
+
+Deno.test("unscoped live outcomes cannot clear a new destination and alerts stay deduplicated", async () => {
+  const f = fixture();
+  await f.restart().send(
+    "live:activity:end",
+    false,
+    () => Promise.resolve("sent"),
+  );
+  await f.restart().send("alert", true, () => Promise.resolve("sent"));
+  const next = f.restart();
+  let sends = 0;
+  assertEquals(
+    await next.send("live:activity:end", false, () => {
+      sends++;
+      return Promise.resolve("retryable");
+    }, "replacement"),
+    "retryable",
+  );
+  assertEquals(sends, 1);
+  assertEquals(next.alertSent, true);
+  await next.send("alert", true, () => {
+    throw new Error("duplicate alert");
+  });
+});

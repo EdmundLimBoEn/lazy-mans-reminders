@@ -90,15 +90,19 @@ extension Notification.Name {
 enum ReminderJSON {
     static let encoder: JSONEncoder = {
         let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
+        // Preserve Date's exact reference-time value in the cache.
+        encoder.dateEncodingStrategy = .deferredToDate
         return encoder
     }()
 
-    /// Decodes Supabase timestamps with or without fractional seconds.
+    /// Decodes lossless cached dates and legacy/Supabase ISO-8601 timestamps.
     static let decoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .custom { decoder in
             let container = try decoder.singleValueContainer()
+            if let value = try? container.decode(Double.self) {
+                return Date(timeIntervalSinceReferenceDate: value)
+            }
             let value = try container.decode(String.self)
             let fractional = ISO8601DateFormatter()
             fractional.formatOptions = [.withInternetDateTime, .withFractionalSeconds]

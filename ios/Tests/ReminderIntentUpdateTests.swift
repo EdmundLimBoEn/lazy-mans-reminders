@@ -6,7 +6,7 @@ final class ReminderIntentUpdateTests: XCTestCase {
     func testUpdatesReturnAcknowledgedRowAndPublishOnlyActiveReminders() async throws {
         let updates: [(String?, Bool?)] = [
             ("  Edited title  ", true), (nil, true),
-            ("  Edited title  ", nil), ("  Edited title  ", false)
+            ("  Edited title  ", nil), ("  Edited title  ", false), (nil, false)
         ]
         for (title, completion) in updates {
             var original = sample()
@@ -25,12 +25,23 @@ final class ReminderIntentUpdateTests: XCTestCase {
                 anonKey: "test-anon-key",
                 requestData: { request in
                     await requestCount.increment()
-                    XCTAssertEqual(request.httpMethod, "PATCH")
                     XCTAssertEqual(request.value(forHTTPHeaderField: "Prefer"), "return=representation")
                     let data = try XCTUnwrap(request.httpBody)
                     let body = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
-                    XCTAssertEqual(body["text"] as? String, title == nil ? nil : "Edited title")
-                    XCTAssertEqual(body["is_done"] as? Bool, completion)
+                    if completion == false {
+                        XCTAssertEqual(request.httpMethod, "POST")
+                        XCTAssertEqual(request.url?.path, "/rest/v1/rpc/reopen_reminder")
+                        XCTAssertNil(request.url?.query)
+                        XCTAssertEqual((body["p_user_id"] as? String).flatMap(UUID.init(uuidString:)), original.userID)
+                        XCTAssertEqual((body["p_reminder_id"] as? String).flatMap(UUID.init(uuidString:)), original.id)
+                        XCTAssertEqual(body["p_text"] as? String, title == nil ? nil : "Edited title")
+                        XCTAssertNil(body["is_done"])
+                    } else {
+                        XCTAssertEqual(request.httpMethod, "PATCH")
+                        XCTAssertEqual(request.url?.path, "/rest/v1/reminders")
+                        XCTAssertEqual(body["text"] as? String, title == nil ? nil : "Edited title")
+                        XCTAssertEqual(body["is_done"] as? Bool, completion)
+                    }
                     return (try ReminderJSON.encoder.encode([acknowledged]),
                             HTTPURLResponse(url: request.url!, statusCode: 200,
                                             httpVersion: nil, headerFields: nil)!)
