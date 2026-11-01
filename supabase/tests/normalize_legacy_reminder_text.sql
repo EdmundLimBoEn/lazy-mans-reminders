@@ -16,7 +16,7 @@ alter table public.reminders add constraint reminders_text_raw_length
   check (char_length(text) <= 1000) not valid;
 commit;
 
-\ir ../migrations/202610280002_normalize_legacy_reminder_text.sql
+\ir ../migrations/202610280004_normalize_legacy_reminder_text.sql
 
 begin;
 do $$
