@@ -1,6 +1,7 @@
 import { getOAuthApi, OAuthError, OAuthProvider, type OAuthProviderOptions } from '@cloudflare/workers-oauth-provider'
 import { createMcpHandler } from 'agents/mcp/server'
 import { checkAccount, decideTokenExchange } from './accountGate'
+import { grantStorage } from './grantState'
 import { MCP_HOSTS, mcpResourceForRequest, MCP_WWW_AUTHENTICATE } from './constants'
 import { corsHeaders, handlePublicRequest, resolveExternalPat } from './oauth'
 import { prepareOauthRequest } from './oauthCompat'
@@ -11,6 +12,7 @@ import { sessionFromProps } from './session'
 import { defaultIdentityDeps, type IdentityDeps } from './supabaseUser'
 
 export { AuthorizationState } from './authorizationState'
+export { GrantState } from './grantState'
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -132,6 +134,7 @@ export async function handleWorkerFetch(
   if (limited) return limited
   const prepared = await prepareOauthRequest(request)
   if (prepared instanceof Response) return prepared
+  env = { ...env, OAUTH_KV: grantStorage(env) }
   return new OAuthProvider(providerOptions(env, deps, mcpResourceForRequest(prepared), ctx)).fetch(prepared, env, ctx)
 }
 
