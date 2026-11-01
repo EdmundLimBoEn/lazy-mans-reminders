@@ -16,6 +16,15 @@ class SharedSessionReadinessTests(unittest.TestCase):
         sharing = member(source, "private func shareSession(")
         self.assertIn("didShare: { self.isSharedSessionReady = true }", sharing)
 
+    def test_storage_errors_reach_the_publication_retry(self):
+        source = (ROOT / "ios/App/AuthManager.swift").read_text()
+        sharing = member(source, "private func shareSession(")
+        self.assertIn("try await authSessionGate.shareIdentity(", sharing)
+        save = member(sharing, "share:")
+        self.assertIn("try await ReminderStore.shared.saveSession(", save)
+        self.assertNotIn("try?", save)
+        self.assertNotIn("catch", save)
+
     def test_active_board_task_restarts_when_shared_session_becomes_ready(self):
         source = (ROOT / "ios/App/ReminderListView.swift").read_text()
         task = member(source, ".task(id: scenePhase == .active && auth.isSharedSessionReady)")

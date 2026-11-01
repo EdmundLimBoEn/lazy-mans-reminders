@@ -3,6 +3,79 @@ import XCTest
 
 @MainActor
 final class AuthSessionGateTests: XCTestCase {
+    func testFailedPersistenceRetriesBeforePublishingReadiness() async throws {
+        let account = UUID()
+        for previousAccount in [nil, UUID(), account] as [UUID?] {
+            let gate = AuthSessionGate()
+            var attempts = 0
+            var delays = 0
+            var clears = 0
+            var publications = 0
+            try await gate.withLock {
+                try await gate.shareIdentity(
+                    previousUserID: previousAccount, nextUserID: account,
+                    clearUserData: { clears += 1 },
+                    clearBoard: { clears += 1 },
+                    share: {
+                        XCTAssertEqual(publications, 0)
+                        attempts += 1
+                        if attempts < 3 { throw URLError(.cannotWriteToFile) }
+                    },
+                    retryDelay: {
+                        XCTAssertEqual(publications, 0)
+                        delays += 1
+                    },
+                    didShare: {
+                        XCTAssertEqual(attempts, 3)
+                        publications += 1
+                    }
+                )
+            }
+            XCTAssertEqual(attempts, 3)
+            XCTAssertEqual(delays, 2)
+            XCTAssertEqual(publications, 1)
+            XCTAssertEqual(clears, previousAccount == account ? 0 : 2)
+        }
+    }
+
+    func testPersistentStorageFailureIsBoundedAndNeverPublishesReadiness() async {
+        let gate = AuthSessionGate()
+        let account = UUID()
+        var attempts = 0
+        var delays = 0
+        var ready = false
+        do {
+            try await gate.withLock {
+                try await gate.shareIdentity(
+                    previousUserID: account, nextUserID: account,
+                    clearUserData: { XCTFail("Must retain same-account data") },
+                    clearBoard: { XCTFail("Must retain same-account board") },
+                    share: {
+                        attempts += 1
+                        throw URLError(.cannotWriteToFile)
+                    },
+                    retryDelay: { delays += 1 },
+                    didShare: { ready = true }
+                )
+            }
+            XCTFail("Persistence failure must reach the caller")
+        } catch {
+            XCTAssertEqual((error as? URLError)?.code, .cannotWriteToFile)
+        }
+        XCTAssertEqual(attempts, 3)
+        XCTAssertEqual(delays, 2)
+        XCTAssertFalse(ready)
+        // Exhausting retries must release the gate for sign-out or later publication.
+        await gate.withLock {
+            await gate.shareIdentity(
+                previousUserID: account, nextUserID: account,
+                clearUserData: {}, clearBoard: {}, share: {},
+                didShare: { ready = true }
+            )
+        }
+        XCTAssertTrue(ready)
+    }
+
     func testBoardReadinessWaitsForEverySharedSessionSetupStage() async {
         // Cover first sign-in, account replacement, and a same-account refresh.
         let account = UUID()
