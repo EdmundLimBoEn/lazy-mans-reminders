@@ -100,6 +100,10 @@ final class PushTokenRegistrar: ObservableObject {
     /// bind(userID:) discards this work if authentication switches accounts.
     func registrationWasRemoved() {
         precondition(isPaused)
+        invalidateRegistration()
+    }
+
+    private func invalidateRegistration() {
         if pending.activityPushToken == nil {
             pending.activityPushToken = pending.acknowledgedActivityToken
             pending.activityStartedAt = pending.acknowledgedActivityStartedAt
@@ -123,8 +127,11 @@ final class PushTokenRegistrar: ObservableObject {
     }
 
     func recordDeviceToken(_ token: String) {
+        guard pending.deviceToken != token else { return }
         pending.deviceToken = token
-        save()
+        // Acknowledgements belong to the account/device pair. Keep a newer
+        // pending activity, or requeue the selected activity and its clock.
+        invalidateRegistration()
     }
 
     func recordPushToStartToken(_ token: String) {

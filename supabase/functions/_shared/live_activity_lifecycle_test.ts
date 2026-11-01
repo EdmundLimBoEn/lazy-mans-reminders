@@ -435,31 +435,26 @@ for (const rejection of ["failed", "invalid"] as const) {
 
 Deno.test("a failed lease claim never sends to APNs", async () => {
   let sends = 0;
-  let rejected = false;
-  try {
-    await reconcileLiveActivity({
-      lines: ["Milk"],
-      activityToken: null,
-      startToken: "start",
-      retiringToken: null,
-      startedAt: null,
-      nowMs: 0,
-      hasAlert: false,
-      claimStart: () => Promise.reject(new Error("database unavailable")),
-      send: () => {
-        sends++;
-        return Promise.resolve("sent");
-      },
-      recordStart: () => Promise.resolve(),
-      releaseStart: () => Promise.resolve(),
-      recordEnd: () => Promise.resolve(),
-      recordAdoption: () => Promise.resolve(),
-      clearRetiring: () => Promise.resolve(),
-    });
-  } catch {
-    rejected = true;
-  }
-  assertEquals(rejected, true);
+  const result = await reconcileLiveActivity({
+    lines: ["Milk"],
+    activityToken: null,
+    startToken: "start",
+    retiringToken: null,
+    startedAt: null,
+    nowMs: 0,
+    hasAlert: false,
+    claimStart: () => Promise.reject(new Error("database unavailable")),
+    send: () => {
+      sends++;
+      return Promise.resolve("sent");
+    },
+    recordStart: () => Promise.resolve(),
+    releaseStart: () => Promise.resolve(),
+    recordEnd: () => Promise.resolve(),
+    recordAdoption: () => Promise.resolve(),
+    clearRetiring: () => Promise.resolve(),
+  });
+  assertEquals(result, { results: ["retryable"], deliveredAlert: false });
   assertEquals(sends, 0);
 });
 
