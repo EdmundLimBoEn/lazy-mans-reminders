@@ -58,6 +58,7 @@ describe('personal-token MCP requests', () => {
     })
     let response: Response | undefined
     const fetching = handleWorkerFetch(request, {
+      OAUTH_KV: {},
       WEB_ORIGINS: 'https://example.com',
       SUPABASE_URL: 'https://example.supabase.co',
       SUPABASE_SERVICE_ROLE_KEY: 'test-service-role',

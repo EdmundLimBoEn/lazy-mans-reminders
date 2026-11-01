@@ -8,6 +8,16 @@ export class AuthorizationState implements DurableObject {
 
   async fetch(request: Request): Promise<Response> {
     const path = new URL(request.url).pathname
+    if (path === '/redeem' && request.method === 'POST') {
+      const consumed = await this.state.storage.transaction(async (storage) => {
+        if (await storage.get('redeemed')) return false
+        await storage.put('redeemed', true)
+        return true
+      })
+      // Code claims use separate object IDs and retain their tombstone: a stale
+      // KV read or an already validated, delayed exchange must never reopen one.
+      return Response.json({ consumed })
+    }
     if (path === '/pending' && request.method === 'PUT') {
       const pending = {
         request: await request.json<AuthRequest>(),
