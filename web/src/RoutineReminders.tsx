@@ -19,6 +19,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
   const [error, setError] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
   const draftRevision = useRef(0)
+  const readGeneration = useRef(0)
   const routineRows = useMemo(() => routines.map(routine => ({
     routine,
     content: <>
@@ -29,12 +30,18 @@ export function RoutineReminders({ userId }: { userId: string }) {
   })), [routines])
 
   const load = useCallback(async () => {
-    const { data, error } = await supabase.from('routine_reminders')
-      .select('id,text,interval_days,start_date,local_time,timezone,enabled,next_run_at')
-      .eq('user_id', userId).order('created_at')
-    if (error) setError(error.message)
-    else setRoutines(data ?? [])
-    setLoading(false)
+    const generation = ++readGeneration.current
+    try {
+      const { data, error } = await supabase.from('routine_reminders')
+        .select('id,text,interval_days,start_date,local_time,timezone,enabled,next_run_at')
+        .eq('user_id', userId).order('created_at')
+      if (generation !== readGeneration.current) return
+      if (error) setError(error.message)
+      else setRoutines(data ?? [])
+      setLoading(false)
+    } catch (error) {
+      if (generation === readGeneration.current) throw error
+    }
   }, [userId])
 
   useEffect(() => {
@@ -80,6 +87,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
       })
     return () => {
       stopped = true
+      readGeneration.current += 1
       window.removeEventListener('online', refresh)
       clearTimeout(timer)
       void supabase.removeChannel(channel)
@@ -98,6 +106,8 @@ export function RoutineReminders({ userId }: { userId: string }) {
       setError('Enter a valid timezone, such as Asia/Singapore.')
       return
     }
+    // Reads started before this write must not restore an older snapshot.
+    readGeneration.current += 1
     setBusy(true)
     setError('')
     const submittedRevision = draftRevision.current
@@ -118,11 +128,14 @@ export function RoutineReminders({ userId }: { userId: string }) {
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Could not save routine')
     } finally {
+      readGeneration.current += 1
       setBusy(false)
     }
   }
 
   async function change(routine: Routine, remove: boolean) {
+    // Reads started before this write must not restore an older snapshot.
+    readGeneration.current += 1
     setBusy(true)
     setError('')
     try {
@@ -134,6 +147,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Could not update routine')
     } finally {
+      readGeneration.current += 1
       setBusy(false)
     }
   }
