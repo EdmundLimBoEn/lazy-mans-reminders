@@ -154,5 +154,25 @@ jobs:
             supabase/tests/write_budgets.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
+          # Negative control, last because it deliberately breaks this disposable DB.
+          # The race test must reject a mint function without its advisory lock,
+          # even while write-budget triggers are installed.
+          docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 <<'SQL'
+          do $$
+          declare
+            definition text := pg_get_functiondef('public.mint_agent_token(text)'::regprocedure);
+            lock_statement text := 'perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(uid::text, 0));';
+          begin
+            assert strpos(definition, lock_statement) > 0, 'Mint lock mutation did not match';
+            execute replace(definition, lock_statement, 'null;');
+          end $$;
+          SQL
+          if sed -n '/^-- Two real sessions/,$p' supabase/tests/reminder_text_and_token_lock.sql | \
+            docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 \
+            > /tmp/token-lock-negative.log 2>&1; then
+            echo 'Token race test accepted a missing advisory lock'
+            exit 1
+          fi
+          grep -q 'Concurrent mint bypassed the per-user lock' /tmp/token-lock-negative.log
       - if: always()
         run: docker rm -f routine-tests || true
