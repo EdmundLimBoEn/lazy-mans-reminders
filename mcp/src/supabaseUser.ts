@@ -23,14 +23,30 @@ export type IdentityDeps = {
 
 type FetchLike = typeof fetch
 
+async function withAuthDeadline<T>(fetchImpl: FetchLike | undefined, request: (fetch: FetchLike) => Promise<T>): Promise<T> {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), 10_000)
+  try {
+    // Keep the deadline active until the SDK has consumed the response body.
+    return await request((input, init) => (fetchImpl ?? fetch)(input, {
+      ...init,
+      signal: controller.signal,
+    }))
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
 export function verifySupabaseUserWith(fetchImpl?: FetchLike): VerifyUser {
   return async (env, accessToken) => {
     if (!env.SUPABASE_URL || !env.SUPABASE_ANON_KEY || !accessToken) return null
-    const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY, {
-      auth: { persistSession: false, autoRefreshToken: false },
-      ...(fetchImpl ? { global: { fetch: fetchImpl } } : {}),
+    const { data, error } = await withAuthDeadline(fetchImpl, async (fetch) => {
+      const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY, {
+        auth: { persistSession: false, autoRefreshToken: false },
+        global: { fetch },
+      })
+      return await supabase.auth.getUser(accessToken)
     })
-    const { data, error } = await supabase.auth.getUser(accessToken)
     if (error) {
       if (error.status === 401 || error.status === 403) return null
       throw error
@@ -50,11 +66,13 @@ export function supabaseAccountExistsWith(fetchImpl?: FetchLike): AccountExists 
     if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
       throw new Error('Supabase service role is not configured')
     }
-    const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
-      auth: { persistSession: false, autoRefreshToken: false },
-      ...(fetchImpl ? { global: { fetch: fetchImpl } } : {}),
+    const { data, error } = await withAuthDeadline(fetchImpl, async (fetch) => {
+      const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+        auth: { persistSession: false, autoRefreshToken: false },
+        global: { fetch },
+      })
+      return await supabase.auth.admin.getUserById(userId)
     })
-    const { data, error } = await supabase.auth.admin.getUserById(userId)
     if (error) {
       if (error.status === 404) return false
       throw error
