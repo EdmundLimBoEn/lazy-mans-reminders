@@ -257,7 +257,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
     if (exporting) return
     setExporting(true)
     setError('')
-    const [{ data: reminderRows, error: reminderError }, { data: prefs }, { data: keys, error: keyError }, { data: routines, error: routineError }] =
+    const [{ data: reminderRows, error: reminderError }, { data: prefs, error: prefsError }, { data: keys, error: keyError }, { data: routines, error: routineError }] =
       await Promise.all([
         supabase
           .from('reminders')
@@ -275,8 +275,8 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
           .is('revoked_at', null),
         supabase.from('routine_reminders').select('id,text,interval_days,start_date,local_time,timezone,enabled,next_run_at').eq('user_id', session.user.id),
       ])
-    if (reminderError || keyError || routineError) {
-      setError(reminderError?.message ?? keyError?.message ?? routineError?.message ?? 'Could not export your data.')
+    if (reminderError || prefsError || keyError || routineError) {
+      setError(reminderError?.message ?? prefsError?.message ?? keyError?.message ?? routineError?.message ?? 'Could not export your data.')
       setExporting(false)
       return
     }

@@ -312,14 +312,17 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             let original = sample()
             let started = XCTestExpectation(description: "First write held before commit")
             let network = HeldWriteNetwork(original: original, started: started, failsFirst: failsFirst)
-            // This transport test must not require the simulator's Keychain entitlements.
+            // Isolate the shared Keychain and avoid requiring simulator Keychain entitlements.
+            let credentials = MemorySessionCredentials()
             let store = ReminderStore(
-                defaults: defaults, credentials: MemorySessionCredentials(),
+                defaults: defaults, credentials: credentials,
                 serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key", requestData: { try await network.send($0) }
             )
             try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
                                         expiresAt: Date().addingTimeInterval(3600), userID: original.userID)
+            let savedSession = try JSONDecoder().decode(SharedSession.self, from: XCTUnwrap(credentials.data))
+            XCTAssertEqual(savedSession.userID, original.userID)
             defaults.set(try ReminderJSON.encoder.encode([original]), forKey: "cached-reminders")
             let first = Task { try await store.update(id: original.id, text: "First edit") }
             await fulfillment(of: [started], timeout: 3)
