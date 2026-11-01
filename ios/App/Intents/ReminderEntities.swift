@@ -197,14 +197,8 @@ struct ReminderEntity: IndexedEntity {
 @available(iOS 27.0, *)
 struct ReminderEntityQuery: IndexedEntityQuery, EnumerableEntityQuery, EntityStringQuery {
     func entities(for identifiers: [ReminderEntity.ID]) async throws -> [ReminderEntity] {
-        var reminders = await ReminderStore.shared.cached()
-        let missing = identifiers.filter { id in !reminders.contains { $0.id == id } }
-        if !missing.isEmpty {
-            reminders = await ReminderStore.shared.refreshOrCached()
-        }
-        return identifiers.compactMap { id in
-            reminders.first { $0.id == id }.map(ReminderEntity.init)
-        }
+        let reminders = try await ReminderStore.shared.resolve(identifiers: identifiers)
+        return reminders.map(ReminderEntity.init)
     }
 
     func allEntities() async throws -> [ReminderEntity] {
@@ -265,14 +259,8 @@ struct ReminderEntity: AppEntity {
 
 struct ReminderEntityQuery: EntityQuery, EnumerableEntityQuery, EntityStringQuery {
     func entities(for identifiers: [ReminderEntity.ID]) async throws -> [ReminderEntity] {
-        var reminders = await ReminderStore.shared.cached()
-        let missing = identifiers.filter { id in !reminders.contains { $0.id == id } }
-        if !missing.isEmpty {
-            reminders = await ReminderStore.shared.refreshOrCached()
-        }
-        return identifiers.compactMap { id in
-            reminders.first { $0.id == id }.map(ReminderEntity.init)
-        }
+        let reminders = try await ReminderStore.shared.resolve(identifiers: identifiers)
+        return reminders.map(ReminderEntity.init)
     }
 
     func allEntities() async throws -> [ReminderEntity] {
