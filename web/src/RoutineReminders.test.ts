@@ -148,6 +148,39 @@ it.each(['insert', 'update'] as const)('uses the selected timezone for weekly %s
   }
 })
 
+it.each([
+  ['text', 'routine-text', 'Updated text', '2026-12-07', 7],
+  ['time', 'routine-time', '20:30', '2026-12-07', 7],
+  ['timezone', 'routine-zone', 'America/New_York', '2026-12-07', 7],
+  ['weekday', 'routine-weekday', '2', '2026-11-03', 7],
+  ['cadence to days', 'routine-repeat', 'days', '2026-12-07', 7],
+  ['cadence back to weekly', 'routine-repeat', 'weekly', '2026-11-02', 7],
+] as const)('preserves a future seven-day start unless rescheduled via %s', async (_field, id, value, start, interval) => {
+  vi.useFakeTimers()
+  vi.setSystemTime(new Date('2026-11-01T12:00:00Z'))
+  try {
+    const future = { ...routine, start_date: '2026-12-07', timezone: 'UTC', next_run_at: '2026-12-07T19:00:00Z' }
+    db.from.mockReturnValue({ select: () => ({ eq: () => ({ order: async () => ({ data: [future], error: null }) }) }) })
+    await hooks.load!()
+    render().button('Edit').onClick()
+    if (id === 'routine-repeat' && value === 'weekly') render().change('routine-repeat', 'days')
+    render().change(id, value)
+    const query = { eq: vi.fn() }
+    query.eq.mockReturnValueOnce(query).mockResolvedValueOnce({ error: null })
+    const update = vi.fn(() => query)
+    db.from.mockReturnValueOnce({ update })
+    await render().form.onSubmit({ preventDefault() {} })
+    expect(update).toHaveBeenCalledWith({
+      text: id === 'routine-text' ? value : future.text,
+      interval_days: interval, start_date: start,
+      local_time: id === 'routine-time' ? value : future.local_time,
+      timezone: id === 'routine-zone' ? value : future.timezone,
+    })
+  } finally {
+    vi.useRealTimers()
+  }
+})
+
 it.each(['insert', 'update', 'pause', 'delete'] as const)('releases busy controls and preserves the draft when %s throws', async (operation) => {
   if (operation === 'insert') {
     render().button('Cancel edit').onClick()
