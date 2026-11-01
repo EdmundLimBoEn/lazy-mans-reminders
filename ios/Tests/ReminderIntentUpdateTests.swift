@@ -127,13 +127,85 @@ final class ReminderIntentUpdateTests: XCTestCase {
         XCTAssertEqual(cache, [original])
     }
 
+    func testSavedTargetResolvesCompletedReminderThenReopensWithoutCachingCompletedRows() async throws {
+        let active = sample()
+        var completed = sample(userID: active.userID)
+        completed.isDone = true
+        var reopened = completed
+        reopened.isDone = false
+        let deletedID = UUID()
+        let suite = "ReminderIntentResolutionTests.\(UUID())"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let requests = Counter()
+        let store = ReminderStore(
+            defaults: defaults, credentials: MemorySessionCredentials(),
+            serviceURL: URL(string: "https://reminders.invalid")!, anonKey: "test-anon-key",
+            requestData: { request in
+                await requests.increment()
+                XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "Bearer test-token")
+                if request.httpMethod == "GET" {
+                    XCTAssertEqual(request.url?.path, "/rest/v1/reminders")
+                    let query = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!.queryItems!
+                    XCTAssertNil(query.first { $0.name == "is_done" })
+                    XCTAssertEqual(query.first { $0.name == "user_id" }?.value, "eq.\(active.userID.uuidString)")
+                    XCTAssertEqual(query.first { $0.name == "id" }?.value,
+                                   "in.(\(completed.id.uuidString),\(deletedID.uuidString))")
+                    return (try ReminderJSON.encoder.encode([completed]),
+                            HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!)
+                }
+                XCTAssertEqual(request.httpMethod, "POST")
+                XCTAssertEqual(request.url?.path, "/rest/v1/rpc/reopen_reminder")
+                let body = try XCTUnwrap(JSONSerialization.jsonObject(with: request.httpBody!) as? [String: Any])
+                XCTAssertEqual((body["p_reminder_id"] as? String).flatMap(UUID.init(uuidString:)), completed.id)
+                return (try ReminderJSON.encoder.encode([reopened]),
+                        HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!)
+            }
+        )
+        try await seed(store, defaults: defaults, reminder: active)
+        let resolved = try await store.resolve(identifiers: [completed.id, active.id, deletedID])
+        XCTAssertEqual(resolved, [completed, active])
+        let cacheAfterLookup = await store.cached()
+        XCTAssertEqual(cacheAfterLookup, [active])
+        let target = try XCTUnwrap(resolved.first)
+        let result = try await ReminderIntentActions.update(
+            id: target.id, title: nil, isCompleted: false, store: store,
+            publish: { board in
+                XCTAssertEqual(Set(board.map(\.id)), Set([active.id, completed.id]))
+                XCTAssertTrue(board.allSatisfy { !$0.isDone })
+            }
+        )
+        XCTAssertEqual(result, reopened)
+        let count = await requests.value
+        XCTAssertEqual(count, 2)
+    }
+
+    func testResolvingCachedOrEmptyTargetsDoesNotFetch() async throws {
+        let active = sample()
+        let suite = "ReminderIntentResolutionTests.\(UUID())"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let store = ReminderStore(
+            defaults: defaults, credentials: MemorySessionCredentials(),
+            requestData: { _ in
+                XCTFail("Cached and empty targets require no lookup")
+                throw URLError(.badURL)
+            }
+        )
+        try await seed(store, defaults: defaults, reminder: active)
+        let empty = try await store.resolve(identifiers: [])
+        let cached = try await store.resolve(identifiers: [active.id])
+        XCTAssertEqual(empty, [])
+        XCTAssertEqual(cached, [active])
+    }
+
     private actor Counter {
         var value = 0
         func increment() { value += 1 }
     }
 
-    private func sample() -> Reminder {
-        Reminder(id: UUID(), userID: UUID(), text: "Original", sortOrder: 3,
+    private func sample(userID: UUID = UUID()) -> Reminder {
+        Reminder(id: UUID(), userID: userID, text: "Original", sortOrder: 3,
                  isDone: false, createdAt: Date(timeIntervalSince1970: 1_775_000_000))
     }
 

@@ -54,14 +54,30 @@ final class AuthSessionGate {
     func shareIdentity(previousUserID: UUID?, nextUserID: UUID,
                        clearUserData: () async -> Void,
                        clearBoard: () async -> Void,
-                       share: () async -> Void,
-                       didShare: () -> Void = {}) async {
+                       share: () async throws -> Void,
+                       retryDelay: () async -> Void = {
+                           try? await Task.sleep(nanoseconds: 1_000_000_000)
+                       },
+                       didShare: () -> Void = {}) async rethrows {
         precondition(isHeld)
         if previousUserID != nextUserID {
             await clearUserData()
             await clearBoard()
         }
-        await share()
+        // Retain this publication under the gate so a retry cannot restore an old
+        // identity after sign-out or account replacement. Retry only persistence;
+        // clearing the board again would discard work from the first attempt.
+        var retriesRemaining = 2
+        while true {
+            do {
+                try await share()
+                break
+            } catch {
+                guard retriesRemaining > 0 else { throw error }
+                retriesRemaining -= 1
+                await retryDelay()
+            }
+        }
         didShare()
     }
 

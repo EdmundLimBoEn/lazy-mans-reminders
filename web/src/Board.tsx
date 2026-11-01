@@ -42,6 +42,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
   const [text, setText] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editText, setEditText] = useState('')
+  const editFocusId = useRef<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [adding, setAdding] = useState(false)
@@ -51,9 +52,11 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
   const [deletingAccount, setDeletingAccount] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [maxLines, setMaxLines] = useState(DEFAULT_LOCK_SCREEN_MAX_LINES)
+  const prefsRevision = useRef(0)
   const loadSequence = useRef(0)
   const cleanupRef = useRef({ pending: false, nextAttemptAt: 0 })
   const reorderingRef = useRef(false)
+  const deferredRefreshRef = useRef<(() => void) | null>(null)
   const pendingMutationsRef = useRef(new Set<string>())
   const [pendingMutations, setPendingMutations] = useState(new Set<string>())
   const sensors = useSensors(
@@ -91,6 +94,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
       })()
     }
 
+    const revision = prefsRevision.current
     const [{ data, error: fetchError }, prefsResult] = await Promise.all([
       supabase
         .from('reminders')
@@ -109,13 +113,16 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
     if (fetchError) setError(fetchError.message)
     else setReminders(data ?? [])
     const synced = prefsResult.data?.max_lines
-    if (typeof synced === 'number' && synced >= 1) setMaxLines(effectiveMaximum(synced))
+    if (revision === prefsRevision.current && typeof synced === 'number' && synced >= 1) {
+      setMaxLines(effectiveMaximum(synced))
+    }
     setLoading(false)
   }, [session.user.id])
 
   useEffect(() => {
     const recovery = connectionRefresh(async () => {
-      if (!reorderingRef.current) await load()
+      if (reorderingRef.current) deferredRefreshRef.current = () => recovery.refresh()
+      else await load()
     }, error => { if (error instanceof Error) setError(error.message) })
     let reloadTimer: number | undefined
     const channel = supabase
@@ -124,16 +131,30 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'reminders', filter: `user_id=eq.${session.user.id}` },
         () => {
-          if (reorderingRef.current) return
+          if (reorderingRef.current) {
+            deferredRefreshRef.current = recovery.refresh
+            return
+          }
           window.clearTimeout(reloadTimer)
           reloadTimer = window.setTimeout(() => {
-            if (!reorderingRef.current) recovery.refresh()
+            recovery.refresh()
           }, 100)
+        },
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'lock_screen_prefs', filter: `user_id=eq.${session.user.id}` },
+        ({ new: prefs }) => {
+          if (!('user_id' in prefs) || !('max_lines' in prefs)) return
+          if (prefs.user_id !== session.user.id || typeof prefs.max_lines !== 'number' || prefs.max_lines < 1) return
+          ++prefsRevision.current
+          setMaxLines(effectiveMaximum(prefs.max_lines))
         },
       )
       .subscribe(recovery.onStatus)
     return () => {
       recovery.dispose()
+      deferredRefreshRef.current = null
       window.clearTimeout(reloadTimer)
       void supabase.removeChannel(channel)
     }
@@ -244,6 +265,10 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
       } finally {
         reorderingRef.current = false
         setReordering(false)
+        // Replay notifications received during the write or reconciliation read.
+        const refresh = deferredRefreshRef.current
+        deferredRefreshRef.current = null
+        refresh?.()
       }
     }
   }
@@ -278,16 +303,21 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
         (async () => {
           const rows: AccountExportReminder[] = []
           const pageSize = 1000
+          let lastId: string | undefined
           while (true) {
-            const { data, error } = await supabase
+            let query = supabase
               .from('reminders')
               .select('id, text, sort_order, is_done, created_at')
               .eq('user_id', session.user.id)
               .order('id', { ascending: true })
-              .range(rows.length, rows.length + pageSize - 1)
+              .limit(pageSize)
+            // A deletion in an earlier page must not shift the next page past an unread row.
+            if (lastId !== undefined) query = query.gt('id', lastId)
+            const { data, error } = await query
             if (error) return { data: null, error }
             if (!data?.length) return { data: rows, error: null }
             rows.push(...data)
+            lastId = data[data.length - 1].id
             // Continue until empty: the API may cap pages below pageSize.
           }
         })(),
@@ -489,7 +519,13 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
                                 <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Move "${reminder.text}" up`} title="Move up" disabled={reordering || pendingMutations.size > 0 || activeIndex === 0} onClick={() => void move(activeIndex, -1)}><ArrowUp aria-hidden="true" /></Button>
                                 <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Move "${reminder.text}" down`} title="Move down" disabled={reordering || pendingMutations.size > 0 || activeIndex === activeCount - 1} onClick={() => void move(activeIndex, 1)}><ArrowDown aria-hidden="true" /></Button>
                               </>}
-                              <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Edit "${reminder.text}"`} title="Edit" disabled={reordering || pending} onClick={() => { setEditingId(reminder.id); setEditText(reminder.text) }}><Pencil aria-hidden="true" /></Button>
+                              <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Edit "${reminder.text}"`} title="Edit" disabled={reordering || pending} ref={(button) => {
+                                // The originating button is recreated when the editor closes.
+                                if (button && editingId === null && editFocusId.current === reminder.id) {
+                                  editFocusId.current = null
+                                  button.focus()
+                                }
+                              }} onClick={() => { editFocusId.current = reminder.id; setEditingId(reminder.id); setEditText(reminder.text) }}><Pencil aria-hidden="true" /></Button>
                               <Button variant="ghost" size="icon" type="button" className="hover:text-foreground" aria-label={`Delete "${reminder.text}"`} title="Delete" disabled={reordering || pending} onClick={() => void remove(reminder.id)}><Trash2 aria-hidden="true" /></Button>
                             </div>
                           )}

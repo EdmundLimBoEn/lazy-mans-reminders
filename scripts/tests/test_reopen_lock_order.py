@@ -43,7 +43,7 @@ class ReopenLockOrderTests(unittest.TestCase):
                      '202610220003_reminder_quotas.sql', '202610280002_reminder_quota_capacity.sql',
                      '202610280002_preserve_pending_routine_firings.sql',
                      '202610280002_reopen_reminder_lock_order.sql',
-                     '20261101000200_reopen_reminder_noop.sql'):
+                     '20261101000300_reopen_reminder_noop.sql'):
             source = (ROOT / 'supabase/migrations' / name).read_text()
             # This isolated vanilla PostgreSQL cluster has no Supabase cron or crypto extensions.
             source = '\n'.join(line for line in source.splitlines()

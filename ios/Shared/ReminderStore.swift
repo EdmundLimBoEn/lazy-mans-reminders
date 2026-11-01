@@ -136,12 +136,23 @@ actor ReminderStore {
     }
 
     func cached() -> [Reminder] {
-        guard let data = defaults.data(forKey: cacheKey) else { return [] }
-        return (try? ReminderJSON.decoder.decode([Reminder].self, from: data)) ?? []
+        cachedSnapshot() ?? []
+    }
+
+    private func cachedSnapshot() -> [Reminder]? {
+        guard let data = defaults.data(forKey: cacheKey) else { return nil }
+        return try? ReminderJSON.decoder.decode([Reminder].self, from: data)
     }
 
     /// Fallback helper. `??` uses a sync autoclosure, so `?? await cached()` does not compile.
     func refreshOrCached(refreshAuthentication: Bool = true, updateCache: Bool = true) async -> [Reminder] {
+        await refreshOrCachedSnapshot(
+            refreshAuthentication: refreshAuthentication, updateCache: updateCache
+        ) ?? []
+    }
+
+    /// Nil means loading failed without a decodable cache; an empty snapshot is a loaded board.
+    func refreshOrCachedSnapshot(refreshAuthentication: Bool = true, updateCache: Bool = true) async -> [Reminder]? {
         do {
             return try await refresh(
                 performMaintenance: false,
@@ -149,7 +160,7 @@ actor ReminderStore {
                 updateCache: updateCache
             )
         } catch {
-            return cached()
+            return cachedSnapshot()
         }
     }
 
@@ -209,6 +220,40 @@ actor ReminderStore {
             defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
         }
         return reminders
+    }
+
+    /// Explicit saved Shortcut targets can include completed rows, unlike the board.
+    /// Lookup results must never be written into the active-board cache.
+    func resolve(identifiers: [UUID]) async throws -> [Reminder] {
+        var reminders = cached()
+        let missing = identifiers.filter { id in !reminders.contains { $0.id == id } }
+        if !missing.isEmpty {
+            let identityRevision = defaults.string(forKey: identityRevisionKey)
+            guard let session = await loadFreshSession(), let ownerID = session.userID else {
+                throw StoreError.signedOut
+            }
+            try requireCurrentIdentity(session, revision: identityRevision)
+            var components = URLComponents(
+                url: supabaseURL.appending(path: "rest/v1/reminders"),
+                resolvingAgainstBaseURL: false
+            )!
+            components.queryItems = [
+                URLQueryItem(name: "select", value: "*"),
+                URLQueryItem(name: "user_id", value: "eq.\(ownerID.uuidString)"),
+                URLQueryItem(name: "id", value: "in.(\(missing.map(\.uuidString).joined(separator: ",")))")
+            ]
+            var request = URLRequest(url: components.url!, timeoutInterval: 15)
+            request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
+            request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
+            let (data, response) = try await requestData(request)
+            try Task.checkCancellation()
+            try requireCurrentIdentity(session, revision: identityRevision)
+            guard let http = response as? HTTPURLResponse else { throw StoreError.invalidResponse }
+            guard 200..<300 ~= http.statusCode else { throw StoreError.requestFailed(http.statusCode) }
+            let resolved = try ReminderJSON.decoder.decode([Reminder].self, from: data)
+            reminders.append(contentsOf: resolved.filter { $0.userID == ownerID && missing.contains($0.id) })
+        }
+        return identifiers.compactMap { id in reminders.first { $0.id == id } }
     }
 
     func reorder(ids: [UUID]) async throws -> [Reminder] {

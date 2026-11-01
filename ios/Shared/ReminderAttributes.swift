@@ -26,9 +26,10 @@ enum ReminderActivityPresentation {
 
     /// Widget-facing lines including the empty-state placeholder.
     static func displayLines(
-        from reminders: [Reminder],
+        from reminders: [Reminder]?,
         limit: Int = ReminderBoardLimits.lockScreenMaxLines
     ) -> [String] {
+        guard let reminders else { return ["Couldn’t Load Board"] }
         let active = reminders.filter { !$0.isDone }
         if active.isEmpty { return ["Nothing to remember"] }
         return capped(flattened(from: active), limit: limit)

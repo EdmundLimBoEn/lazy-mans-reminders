@@ -59,6 +59,9 @@ rollback;
 -- Two real sessions: the second mint must wait while the twentieth token is
 -- uncommitted. Without the lock it sees 19, inserts another token, and fails here.
 -- Fixtures must be committed to be visible to dblink; explicitly removed below.
+-- The budget counter upsert also locks per user and would mask a missing mint
+-- advisory lock. Disable it before either session writes, then restore below.
+alter table public.agent_tokens disable trigger aaa_enforce_write_budget;
 create extension if not exists dblink with schema extensions;
 select extensions.dblink_connect('token_race', format('dbname=%L user=%L host=%L port=%L',
   current_database(), current_user, split_part(current_setting('unix_socket_directories'), ',', 1),
@@ -94,4 +97,5 @@ do $$ begin
     where user_id = '44444444-4444-4444-8444-444444444444' and revoked_at is null);
 end $$;
 select extensions.dblink_disconnect('token_race');
+alter table public.agent_tokens enable trigger aaa_enforce_write_budget;
 delete from auth.users where id = '44444444-4444-4444-8444-444444444444';
