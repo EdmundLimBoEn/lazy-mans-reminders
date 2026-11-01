@@ -34,6 +34,9 @@ final class ReminderStoreRefreshTests: XCTestCase {
             XCTAssertEqual(timeline, [fixture.original])
             let cache = await app.cached()
             XCTAssertEqual(cache, expected)
+            await network.failRequests()
+            let fallback = await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
+            XCTAssertEqual(fallback, expected, "A mutation during the fetch must supersede its snapshot")
         }
     }
 
@@ -69,6 +72,95 @@ final class ReminderStoreRefreshTests: XCTestCase {
         XCTAssertEqual(cache, [fixture.original])
         let requests = await network.requestCount
         XCTAssertEqual(requests, 1, "Fallback must follow a failed fetch, not a missing session")
+    }
+
+    func testSuccessfulWidgetSnapshotSurvivesFailureAndProcessRestart() async throws {
+        for empty in [true, false] {
+            let fixture = Fixture()
+            defer { fixture.cleanUp() }
+            let started = expectation(description: "Widget refresh suspended")
+            let network = Network(started: [started], mutation: fixture.original)
+            let credentials = MemorySessionCredentials()
+            let widget = fixture.makeStore(network, credentials: credentials)
+            try await fixture.seed(widget, rows: [fixture.original])
+            var edited = fixture.original
+            edited.text = "Remote edit"
+            let expected = empty ? [] : [edited]
+            let refresh = Task {
+                await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
+            }
+            await fulfillment(of: [started], timeout: 3)
+            await network.finish(0, rows: expected)
+            let fetched = await refresh.value
+            XCTAssertEqual(fetched, expected)
+            await network.failRequests()
+
+            // Widget processes are short lived; the last result must survive a new store.
+            let restarted = fixture.makeStore(network, credentials: credentials)
+            let fallback = await restarted.refreshOrCached(refreshAuthentication: false, updateCache: false)
+            XCTAssertEqual(fallback, expected)
+            let snapshot = await restarted.widgetCached()
+            XCTAssertEqual(snapshot, expected)
+            let appCache = await restarted.cached()
+            XCTAssertEqual(appCache, [fixture.original])
+
+            try await restarted.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
+                                            expiresAt: .distantPast, userID: fixture.original.userID)
+            let expired = await restarted.refreshOrCached(refreshAuthentication: false, updateCache: false)
+            XCTAssertEqual(expired, expected)
+            let requests = await network.requestCount
+            XCTAssertEqual(requests, 2, "Expired shared credentials must use the saved snapshot without a request")
+
+            await restarted.clearUserData()
+            try await fixture.seed(restarted, rows: [fixture.original])
+            let signedInAgain = await restarted.refreshOrCached(refreshAuthentication: false, updateCache: false)
+            XCTAssertEqual(signedInAgain, [fixture.original], "A new session must not reuse the previous snapshot")
+        }
+    }
+
+    func testNewerAppMutationSupersedesWidgetSnapshot() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let started = expectation(description: "Widget refresh suspended")
+        var edited = fixture.original
+        edited.text = "App edit"
+        let network = Network(started: [started], mutation: edited)
+        let credentials = MemorySessionCredentials()
+        let widget = fixture.makeStore(network, credentials: credentials)
+        let app = fixture.makeStore(network, credentials: credentials)
+        try await fixture.seed(app, rows: [fixture.original])
+        let refresh = Task {
+            await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
+        }
+        await fulfillment(of: [started], timeout: 3)
+        await network.finish(0, rows: [])
+        let fetched = await refresh.value
+        XCTAssertEqual(fetched, [])
+        _ = try await app.update(id: edited.id, text: edited.text)
+        await network.failRequests()
+        let fallback = await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
+        XCTAssertEqual(fallback, [edited])
+    }
+
+    func testAccountSwitchInvalidatesSuccessfulWidgetSnapshot() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let started = expectation(description: "Widget refresh suspended")
+        let network = Network(started: [started], mutation: fixture.original)
+        let widget = fixture.makeStore(network)
+        try await fixture.seed(widget, rows: [])
+        let refresh = Task {
+            await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
+        }
+        await fulfillment(of: [started], timeout: 3)
+        await network.finish(0, rows: [fixture.original])
+        let fetched = await refresh.value
+        XCTAssertEqual(fetched, [fixture.original])
+        try await widget.saveSession(accessToken: "other-token", refreshToken: "other-refresh",
+                                     expiresAt: .distantFuture, userID: UUID())
+        await network.failRequests()
+        let fallback = await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
+        XCTAssertEqual(fallback, [])
     }
 
     func testDelayedRefreshCannotOverwriteAcknowledgedMutations() async throws {
@@ -140,7 +232,7 @@ final class ReminderStoreRefreshTests: XCTestCase {
     private actor Network {
         let started: [XCTestExpectation]
         let mutation: Reminder
-        let failsRequests: Bool
+        var failsRequests: Bool
         private(set) var requestCount = 0
         private var pending: [Int: CheckedContinuation<(Data, URLResponse), Error>] = [:]
         private var next = 0
@@ -166,6 +258,8 @@ final class ReminderStoreRefreshTests: XCTestCase {
             }
         }
 
+        func failRequests() { failsRequests = true }
+
         func finish(_ index: Int, rows: [Reminder]) {
             guard let continuation = pending.removeValue(forKey: index) else {
                 XCTFail("Expected suspended refresh")
@@ -189,8 +283,8 @@ final class ReminderStoreRefreshTests: XCTestCase {
 
         init() { defaults = UserDefaults(suiteName: suite)! }
 
-        func makeStore(_ network: Network) -> ReminderStore {
-            ReminderStore(defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
+        func makeStore(_ network: Network, credentials: MemorySessionCredentials = MemorySessionCredentials()) -> ReminderStore {
+            ReminderStore(defaults: defaults, credentials: credentials, serviceURL: URL(string: "https://reminders.invalid")!,
                           anonKey: "test-key", requestData: { try await network.send($0) })
         }
 
