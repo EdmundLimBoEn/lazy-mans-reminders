@@ -1,7 +1,7 @@
 import { getOAuthApi, OAuthError, OAuthProvider, type OAuthProviderOptions } from '@cloudflare/workers-oauth-provider'
 import { createMcpHandler } from 'agents/mcp/server'
 import { checkAccount, decideTokenExchange } from './accountGate'
-import { MCP_HOSTS, MCP_RESOURCE, MCP_WWW_AUTHENTICATE } from './constants'
+import { MCP_HOSTS, mcpResourceForRequest, MCP_WWW_AUTHENTICATE } from './constants'
 import { corsHeaders, handlePublicRequest, resolveExternalPat } from './oauth'
 import { prepareOauthRequest } from './oauthCompat'
 import { registrationRedirectError } from './redirects'
@@ -75,11 +75,14 @@ async function handleMcp(
   })
 }
 
-function createProvider(env: Env, deps: IdentityDeps): OAuthProvider<Env> {
-  const options = {
+function providerOptions(env: Env, deps: IdentityDeps, resource: string): OAuthProviderOptions<Env> {
+  const options: OAuthProviderOptions<Env> = {
     apiRoute: '/mcp',
     apiHandler: { fetch: (request, nextEnv, ctx) => handleMcp(request, nextEnv, ctx, deps) },
-    defaultHandler: { fetch: (request, nextEnv) => handlePublicRequest(request, nextEnv, deps) },
+    defaultHandler: {
+      fetch: (request, nextEnv) => handlePublicRequest(request, nextEnv, deps,
+        (pendingResource) => getOAuthApi(providerOptions(nextEnv, deps, pendingResource), nextEnv)),
+    },
     authorizeEndpoint: '/authorize',
     tokenEndpoint: '/token',
     clientRegistrationEndpoint: '/register',
@@ -107,7 +110,7 @@ function createProvider(env: Env, deps: IdentityDeps): OAuthProvider<Env> {
       return { newProps: decision.newProps }
     },
     resourceMetadata: {
-      resource: MCP_RESOURCE,
+      resource,
       authorization_servers: MCP_HOSTS.map((host) => `https://${host}`),
       scopes_supported: ['board'],
       resource_name: "Lazy Man's Reminders",
@@ -115,8 +118,8 @@ function createProvider(env: Env, deps: IdentityDeps): OAuthProvider<Env> {
     async resolveExternalToken(input) {
       return resolveExternalPat(input)
     },
-  } satisfies OAuthProviderOptions<Env>
-  return new OAuthProvider(options)
+  }
+  return options
 }
 
 export async function handleWorkerFetch(
@@ -129,7 +132,7 @@ export async function handleWorkerFetch(
   if (limited) return limited
   const prepared = await prepareOauthRequest(request)
   if (prepared instanceof Response) return prepared
-  return createProvider(env, deps).fetch(prepared, env, ctx)
+  return new OAuthProvider(providerOptions(env, deps, mcpResourceForRequest(prepared))).fetch(prepared, env, ctx)
 }
 
 export default {

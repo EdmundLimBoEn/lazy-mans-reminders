@@ -1,5 +1,5 @@
 import { ExternalTokenError, type AuthRequest, type OAuthHelpers } from '@cloudflare/workers-oauth-provider'
-import { mcpResourceForRequest, TOOLS } from './constants'
+import { MCP_HOSTS, mcpResourceForRequest, TOOLS } from './constants'
 import { resolveSession } from './auth'
 import {
   consentCanApprove,
@@ -173,6 +173,8 @@ async function startAuthorize(request: Request, env: Env): Promise<Response> {
   }
 
   const state = crypto.randomUUID()
+  // Keep the initiating audience when consent finishes on the other supported host.
+  oauthRequest.resource ??= mcpResourceForRequest(request)
   const id = env.AUTHORIZATION_STATE.idFromName(state)
   const result = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/pending', {
     method: 'PUT',
@@ -228,7 +230,12 @@ async function denyConsent(request: Request, env: Env, deps: IdentityDeps): Prom
   return json({ redirectTo: denialRedirect(oauthRequest, client) }, 200, cors)
 }
 
-async function bindAuthorization(request: Request, env: Env, deps: IdentityDeps): Promise<Response> {
+async function bindAuthorization(
+  request: Request,
+  env: Env,
+  deps: IdentityDeps,
+  oauthForResource?: (resource: string) => OAuthHelpers,
+): Promise<Response> {
   const cors = corsHeaders(request, env)
   const user = await requireUser(request, env, deps, cors)
   if (user instanceof Response) return user
@@ -243,6 +250,11 @@ async function bindAuthorization(request: Request, env: Env, deps: IdentityDeps)
 
   const oauthRequest = await loadPending(env, state)
   if (!oauthRequest) return json({ error: 'expired_state' }, 400, cors)
+  const resource = oauthRequest.resource
+  if (resource !== undefined && !MCP_HOSTS.some((host) => resource === `https://${host}/mcp`)) {
+    return json({ error: 'authorization_failed' }, 400, cors)
+  }
+  const completingOauth = typeof resource === 'string' && oauthForResource ? oauthForResource(resource) : oauth
   const client = await oauth.lookupClient(oauthRequest.clientId)
   const summary = consentSummary(oauthRequest, client)
   if (!consentCanApprove(summary)) {
@@ -254,7 +266,7 @@ async function bindAuthorization(request: Request, env: Env, deps: IdentityDeps)
   if (!await consumeAuthorizationState(env, state)) return json({ error: 'expired_state' }, 400, cors)
 
   try {
-    const { redirectTo } = await oauth.completeAuthorization({
+    const { redirectTo } = await completingOauth.completeAuthorization({
       request: oauthRequest,
       userId: user.id,
       metadata: {},
@@ -325,6 +337,7 @@ export async function handlePublicRequest(
   request: Request,
   env: Env,
   deps: IdentityDeps = defaultIdentityDeps,
+  oauthForResource?: (resource: string) => OAuthHelpers,
 ): Promise<Response> {
   if (request.method === 'OPTIONS') {
     const cors = corsHeaders(request, env)
@@ -345,7 +358,7 @@ export async function handlePublicRequest(
     return denyConsent(request, env, deps)
   }
   if (request.method === 'POST' && path === '/bind') {
-    return bindAuthorization(request, env, deps)
+    return bindAuthorization(request, env, deps, oauthForResource)
   }
   if (request.method === 'GET' && path === '/grants') {
     return listGrants(request, env, deps)
