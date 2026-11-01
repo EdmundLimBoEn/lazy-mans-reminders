@@ -28,16 +28,16 @@ export class GrantState implements DurableObject {
     // check and the write in the same gate so a paused write cannot restore a grant.
     return this.state.blockConcurrencyWhile(async () => {
       const { method, key, value, options } = operation
+      const revocationKey = key === grantKey(key) ? 'revoked' : `revoked:${key}`
       if (method === 'delete') {
-        if (key === grantKey(key)) {
-          // Never expire this marker: legacy grants can have unlimited lifetimes,
-          // and KV can still return records cached before deletion.
-          await this.state.storage.put('revoked', true)
-        }
+        // Retain markers to reject stale KV records and late writes. Legacy grants
+        // can live indefinitely; token keys identify individual credentials.
+        await this.state.storage.put(revocationKey, true)
         await this.env.OAUTH_KV.delete(key)
         return new Response(null, { status: 204 })
       }
-      if (await this.state.storage.get('revoked')) {
+      if (await this.state.storage.get('revoked') ||
+          (revocationKey !== 'revoked' && await this.state.storage.get(revocationKey))) {
         return method === 'get' ? Response.json(null) : new Response(null, { status: 409 })
       }
       if (method === 'get') return Response.json(await this.env.OAUTH_KV.get(key))

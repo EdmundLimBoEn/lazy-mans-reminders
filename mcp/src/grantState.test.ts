@@ -22,6 +22,23 @@ function setup() {
 }
 
 describe('authoritative grant revocation', () => {
+  it('persists individual token revocation across restarts without revoking its grant or sibling tokens', async () => {
+    const { call, restart, records, kv } = setup()
+    expect((await call('delete', TOKEN)).status).toBe(204)
+    restart()
+    records.set(TOKEN, 'stale KV token')
+    expect(await (await call('get', TOKEN)).json()).toBeNull()
+    expect((await call('put', TOKEN, 'late write')).status).toBe(409)
+    expect(kv.get).not.toHaveBeenCalled()
+    expect(kv.put).not.toHaveBeenCalled()
+
+    expect(await (await call('get', GRANT)).json()).toBe('grant data')
+    expect((await call('put', GRANT, 'refreshed grant')).status).toBe(204)
+    const sibling = 'token:user:grant:sibling'
+    expect((await call('put', sibling, 'sibling token')).status).toBe(204)
+    expect(await (await call('get', sibling)).json()).toBe('sibling token')
+  })
+
   it('persists revocation across object restarts and rejects stale grant and token writes', async () => {
     const { call, restart, records, kv } = setup()
     expect((await call('delete')).status).toBe(204)
@@ -35,7 +52,7 @@ describe('authoritative grant revocation', () => {
     expect(kv.get).not.toHaveBeenCalled()
   })
 
-  it('serializes revocation behind an in-progress KV write so the write cannot restore the grant', async () => {
+  it.each([GRANT, TOKEN])('serializes revocation behind an in-progress KV write for %s', async (key) => {
     const { call, kv, records } = setup()
     let entered!: () => void
     const writing = new Promise<void>((resolve) => { entered = resolve })
@@ -46,9 +63,9 @@ describe('authoritative grant revocation', () => {
       await paused
       records.set(key, value)
     })
-    const write = call('put', GRANT, 'refreshed grant')
+    const write = call('put', key, 'refreshed data')
     await writing
-    const revoke = call('delete')
+    const revoke = call('delete', key)
     try {
       await new Promise<void>((resolve) => setImmediate(resolve))
       expect(kv.delete).not.toHaveBeenCalled()
@@ -57,26 +74,26 @@ describe('authoritative grant revocation', () => {
     }
     expect((await write).status).toBe(204)
     expect((await revoke).status).toBe(204)
-    expect(records.has(GRANT)).toBe(false)
+    expect(records.has(key)).toBe(false)
     expect((await call('put', TOKEN, 'late access token')).status).toBe(409)
   })
 
-  it('retains revocation even if physical KV deletion fails', async () => {
+  it.each([GRANT, TOKEN])('retains revocation of %s even if physical KV deletion fails', async (key) => {
     const { call, restart, kv } = setup()
     kv.delete.mockRejectedValueOnce(new Error('KV unavailable'))
-    await expect(call('delete')).rejects.toThrow('KV unavailable')
+    await expect(call('delete', key)).rejects.toThrow('KV unavailable')
     restart()
     expect(await (await call('get', TOKEN)).json()).toBeNull()
-    expect((await call('put', GRANT, 'late write')).status).toBe(409)
-    expect((await call('delete')).status).toBe(204)
+    expect((await call('put', key, 'late write')).status).toBe(409)
+    expect((await call('delete', key)).status).toBe(204)
   })
 
-  it('does not acknowledge revocation when its durable marker cannot be persisted', async () => {
+  it.each([GRANT, TOKEN])('does not acknowledge revocation of %s when its durable marker cannot be persisted', async (key) => {
     const { call, state, kv } = setup()
     vi.spyOn(state.storage, 'put').mockRejectedValueOnce(new Error('Storage unavailable'))
-    await expect(call('delete')).rejects.toThrow('Storage unavailable')
+    await expect(call('delete', key)).rejects.toThrow('Storage unavailable')
     expect(kv.delete).not.toHaveBeenCalled()
-    expect((await call('delete')).status).toBe(204)
+    expect((await call('delete', key)).status).toBe(204)
   })
 
   it('propagates authoritative-state read failures instead of falling back to KV', async () => {
