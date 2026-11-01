@@ -28,24 +28,36 @@ const quotaError = { message: 'You can have at most 16 active reminders. Complet
 function setup(error: typeof quotaError | null = quotaError, listFails = false) {
   const changed = { ...active[0], id, is_done: false }
   const update = { update: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), select: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: error ? null : changed, error }) }
-  const list = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), order: vi.fn() }
-  list.order.mockReturnValueOnce(list).mockReturnValueOnce(list).mockResolvedValue({
-    data: [...active, { ...changed, is_done: true }],
+  const count = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), then: (resolve: (value: unknown) => unknown) => Promise.resolve({ count: active.length, error: null }).then(resolve) }
+  const list = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), order: vi.fn().mockReturnThis(), range: vi.fn().mockResolvedValue({
+    data: active,
+    count: active.length,
     error: listFails ? { message: 'read failed' } : null,
-  })
+  }) }
   const prefs = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: { max_lines: 6 }, error: null }) }
+<<<<<<< HEAD
   const rpc = vi.fn().mockReturnValue(update)
   const from = vi.fn().mockReturnValueOnce(list).mockReturnValueOnce(prefs)
   vi.mocked(createServiceRoleClient).mockReturnValue({ from, rpc } as unknown as SupabaseClient)
   createServer(session, {} as Env)
   return { update, list, from, rpc }
+=======
+  const from = vi.fn().mockReturnValueOnce(update).mockReturnValueOnce(count).mockReturnValueOnce(prefs).mockReturnValueOnce(list)
+  vi.mocked(createServiceRoleClient).mockReturnValue({ from } as unknown as SupabaseClient)
+  createServer(session, {} as Env)
+  return { update, count, list, from }
+>>>>>>> origin/main
 }
 
 afterEach(() => vi.restoreAllMocks())
 
 describe('reopen_reminder', () => {
   it('returns the hard quota and owner active snapshot even when the display limit is lower', async () => {
+<<<<<<< HEAD
     const { update, list, rpc } = setup()
+=======
+    const { update, count, list } = setup()
+>>>>>>> origin/main
     const result = await handlers.get('reopen_reminder')!({ id })
     expect(result.isError).toBe(true)
     expect(JSON.parse(result.content[0].text)).toEqual({
@@ -57,6 +69,10 @@ describe('reopen_reminder', () => {
     expect(update.update).not.toHaveBeenCalled()
     expect(update.eq).not.toHaveBeenCalled()
     expect(list.eq).toHaveBeenCalledWith('user_id', session.userId)
+    expect(list.eq).toHaveBeenCalledWith('is_done', false)
+    expect(list.range).toHaveBeenCalledWith(0, 999)
+    expect(count.select).toHaveBeenCalledWith('id', { count: 'exact', head: true })
+    expect(count.eq.mock.calls).toEqual([['user_id', session.userId], ['is_done', false]])
   })
 
   it('retains capacity information if the snapshot cannot be read', async () => {
