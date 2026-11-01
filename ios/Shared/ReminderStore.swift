@@ -40,6 +40,7 @@ actor ReminderStore {
     private let serviceURL: URL?
     private let anonKey: String?
     private var pendingUpdates: [UUID: UUID] = [:]
+    private var pendingCreates = 0
     private var isReordering = false
     private var contentRevision = 0
     private var refreshSequence = 0
@@ -140,9 +141,13 @@ actor ReminderStore {
     }
 
     /// Fallback helper. `??` uses a sync autoclosure, so `?? await cached()` does not compile.
-    func refreshOrCached(refreshAuthentication: Bool = true) async -> [Reminder] {
+    func refreshOrCached(refreshAuthentication: Bool = true, updateCache: Bool = true) async -> [Reminder] {
         do {
-            return try await refresh(performMaintenance: false, refreshAuthentication: refreshAuthentication)
+            return try await refresh(
+                performMaintenance: false,
+                refreshAuthentication: refreshAuthentication,
+                updateCache: updateCache
+            )
         } catch {
             return cached()
         }
@@ -150,7 +155,8 @@ actor ReminderStore {
 
     func refresh(
         performMaintenance: Bool = true,
-        refreshAuthentication: Bool = true
+        refreshAuthentication: Bool = true,
+        updateCache: Bool = true
     ) async throws -> [Reminder] {
         if isReordering { return cached() }
         let revision = contentRevision
@@ -159,6 +165,7 @@ actor ReminderStore {
         let identityRevision = defaults.string(forKey: identityRevisionKey)
         // Extensions use a valid shared JWT but never rotate the host SDK's refresh token.
         let candidate = refreshAuthentication ? await loadFreshSession() : storedSession()
+        try Task.checkCancellation()
         guard let session = candidate, session.expiresAt > Date() else {
             throw StoreError.signedOut
         }
@@ -185,6 +192,7 @@ actor ReminderStore {
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
 
         let (responseData, response) = try await requestData(request)
+        try Task.checkCancellation()
         guard let http = response as? HTTPURLResponse else {
             throw StoreError.invalidResponse
         }
@@ -196,12 +204,15 @@ actor ReminderStore {
         try requireCurrentIdentity(session, revision: identityRevision)
         // An acknowledged mutation or a newer refresh makes this snapshot obsolete.
         if revision != contentRevision || sequence != refreshSequence || isReordering { return cached() }
-        defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
+        // Widget fetches cannot use process-local revisions to guard the app's cache.
+        if updateCache {
+            defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
+        }
         return reminders
     }
 
     func reorder(ids: [UUID]) async throws -> [Reminder] {
-        guard !isReordering, pendingUpdates.isEmpty else { throw StoreError.mutationConflict }
+        guard !isReordering, pendingUpdates.isEmpty, pendingCreates == 0 else { throw StoreError.mutationConflict }
         let original = cached()
         guard ids.count == original.count, Set(ids).count == ids.count,
               Set(ids) == Set(original.map(\.id)), original.allSatisfy({ !$0.isDone }) else {
@@ -356,6 +367,11 @@ actor ReminderStore {
 
     /// Creates a reminder via POST, updates the App Group cache, and returns the active reminders.
     func create(text: String, userID: UUID? = nil) async throws -> [Reminder] {
+        try await createAcknowledged(text: text, userID: userID).board
+    }
+
+    /// Keeps the exact server acknowledgement separate from other rows on the board.
+    func createAcknowledged(text: String, userID: UUID? = nil) async throws -> (created: Reminder, board: [Reminder]) {
         guard !isReordering else { throw StoreError.mutationConflict }
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
@@ -367,6 +383,9 @@ actor ReminderStore {
         if ReminderBoardLimits.isAtCapacity(cached().filter { !$0.isDone }.count) {
             throw StoreError.atCapacity
         }
+        // Exclude reorder before authentication or transport can suspend the actor.
+        pendingCreates += 1
+        defer { pendingCreates -= 1 }
         let identityRevision = defaults.string(forKey: identityRevisionKey)
         guard let session = await loadFreshSession() else {
             throw StoreError.signedOut
@@ -408,7 +427,7 @@ actor ReminderStore {
 
         try requireCurrentIdentity(session, revision: identityRevision)
         let created = try acknowledgedReminder(responseData, ownerID: ownerID, text: trimmed, isDone: false)
-        return try cacheAcknowledgedReminder(created)
+        return (created: created, board: try cacheAcknowledgedReminder(created))
     }
 
     private func acknowledgedReminder(
@@ -448,14 +467,21 @@ actor ReminderStore {
     /// Patches text and/or completion. Returns the active (not done) cache afterwards.
     func update(id: UUID, text: String? = nil, isDone: Bool? = nil) async throws -> [Reminder] {
         guard !isReordering else { throw StoreError.mutationConflict }
+        guard text != nil || isDone != nil else { return cached() }
+        return try await updateAcknowledged(id: id, text: text, isDone: isDone).activeReminders
+    }
+
+    /// Returns the acknowledged row even when completion removes it from the active cache.
+    func updateAcknowledged(
+        id: UUID, text: String? = nil, isDone: Bool? = nil
+    ) async throws -> (reminder: Reminder, activeReminders: [Reminder]) {
+        guard !isReordering else { throw StoreError.mutationConflict }
         let trimmed = text?.trimmingCharacters(in: .whitespacesAndNewlines)
         if let trimmed {
             guard !trimmed.isEmpty else { throw StoreError.emptyText }
             guard trimmed.unicodeScalars.count <= 500 else { throw StoreError.tooLong }
         }
-        guard trimmed != nil || isDone != nil else {
-            return cached()
-        }
+        guard trimmed != nil || isDone != nil else { throw StoreError.mutationConflict }
         // Reserve this reminder before authentication or transport can suspend the actor.
         guard pendingUpdates[id] == nil else { throw StoreError.mutationConflict }
         let mutationID = UUID()
@@ -515,6 +541,6 @@ actor ReminderStore {
         // A returned row is a snapshot; a newer same-ID request makes it obsolete.
         guard pendingUpdates[id] == mutationID else { throw StoreError.mutationConflict }
         let updated = try acknowledgedReminder(responseData, ownerID: ownerID, id: id, text: trimmed, isDone: isDone)
-        return try cacheAcknowledgedReminder(updated)
+        return (updated, try cacheAcknowledgedReminder(updated))
     }
 }
