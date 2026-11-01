@@ -33,6 +33,7 @@ final class AuthManager: ObservableObject {
     }
 
     @Published private(set) var session: Session? {
+        willSet { isSharedSessionReady = false }
         didSet {
             appleCredentialMonitor.update(
                 user: session?.user,
@@ -42,6 +43,7 @@ final class AuthManager: ObservableObject {
         }
     }
     @Published private(set) var isRestoringSession = true
+    @Published private(set) var isSharedSessionReady = false
     @Published private(set) var isAuthenticating = false
     @Published private(set) var notice: AuthNotice?
 
@@ -439,7 +441,8 @@ final class AuthManager: ObservableObject {
                     expiresAt: Date(timeIntervalSince1970: session.expiresAt),
                     userID: session.user.id
                 )
-            }
+            },
+            didShare: { self.isSharedSessionReady = true }
         )
         pushRegistration.bind(userID: session.user.id)
         await pushRegistration.flush()

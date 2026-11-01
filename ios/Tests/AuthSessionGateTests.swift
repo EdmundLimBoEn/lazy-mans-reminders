@@ -3,6 +3,56 @@ import XCTest
 
 @MainActor
 final class AuthSessionGateTests: XCTestCase {
+    func testBoardReadinessWaitsForEverySharedSessionSetupStage() async {
+        // Cover first sign-in, account replacement, and a same-account refresh.
+        let account = UUID()
+        for previousAccount in [nil, UUID(), account] as [UUID?] {
+            let stages = previousAccount == account ? ["save"] : ["cache", "board", "save"]
+            for suspendedStage in stages {
+                let gate = AuthSessionGate()
+                let suspended = Signal()
+                let resume = Signal()
+                var ready = false
+                var saved = false
+                var publications = 0
+                let step: (String) async -> Void = { stage in
+                    XCTAssertFalse(ready)
+                    if stage == suspendedStage {
+                        suspended.send()
+                        await resume.wait()
+                    }
+                }
+                let setup = Task {
+                    await gate.withLock {
+                        await gate.shareIdentity(
+                            previousUserID: previousAccount, nextUserID: account,
+                            clearUserData: { await step("cache") },
+                            clearBoard: { await step("board") },
+                            share: {
+                                await step("save")
+                                saved = true
+                            },
+                            didShare: {
+                                XCTAssertTrue(saved)
+                                ready = true
+                                publications += 1
+                            }
+                        )
+                    }
+                }
+                await suspended.wait()
+                XCTAssertFalse(ready, suspendedStage)
+                XCTAssertEqual(publications, 0)
+                // A disappearing sign-in view must not cancel SDK session sharing.
+                setup.cancel()
+                resume.send()
+                await setup.value
+                XCTAssertTrue(ready)
+                XCTAssertEqual(publications, 1)
+            }
+        }
+    }
+
     func testIdentityReplacementWaitsForCleanupBeforeSharing() async {
         let gate = AuthSessionGate()
         let clearing = Signal()
