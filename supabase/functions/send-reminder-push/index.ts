@@ -11,7 +11,7 @@ import {
   type SendResult,
 } from "../_shared/live_activity_lifecycle.ts";
 import { timingSafeEqual } from "node:crypto";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.112.1";
+import { createDeliveryClient } from "../_shared/delivery_client.ts";
 import {
   buildLiveActivityHeaders,
   buildLiveActivityPayload,
@@ -514,10 +514,9 @@ Deno.serve(async (request) => {
   let supabase;
   let bundleId: string;
   try {
-    supabase = createClient(
+    supabase = createDeliveryClient(
       requiredEnv("SUPABASE_URL"),
       requiredEnv("SUPABASE_SERVICE_ROLE_KEY"),
-      { auth: { persistSession: false, autoRefreshToken: false } },
     );
     await apnsJWT();
     bundleId = requiredEnv("APNS_TOPIC");

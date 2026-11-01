@@ -30,11 +30,52 @@ export function RoutineReminders({ userId }: { userId: string }) {
   }, [userId])
 
   useEffect(() => {
-    void load()
+    let timer: ReturnType<typeof setTimeout> | undefined
+    let inFlight = false
+    let pending = false
+    let stopped = false
+
+    function schedule() {
+      if (stopped) return
+      pending = true
+      if (inFlight) return
+      clearTimeout(timer)
+      timer = setTimeout(() => void refresh(), 100)
+    }
+
+    async function refresh() {
+      if (stopped) return
+      clearTimeout(timer)
+      if (inFlight) {
+        pending = true
+        return
+      }
+      pending = false
+      inFlight = true
+      try {
+        await load()
+      } catch (error) {
+        if (!stopped) setError(error instanceof Error ? error.message : String(error))
+      } finally {
+        inFlight = false
+        // Events received during this read need one fresh snapshot afterward.
+        if (pending) schedule()
+      }
+    }
+
+    window.addEventListener('online', refresh)
+    void refresh()
     const channel = supabase.channel(`routines:${userId}`).on('postgres_changes',
       { event: '*', schema: 'public', table: 'routine_reminders', filter: `user_id=eq.${userId}` },
-      () => void load()).subscribe()
-    return () => { void supabase.removeChannel(channel) }
+      schedule).subscribe(status => {
+        if (status === 'SUBSCRIBED') void refresh()
+      })
+    return () => {
+      stopped = true
+      window.removeEventListener('online', refresh)
+      clearTimeout(timer)
+      void supabase.removeChannel(channel)
+    }
   }, [load, userId])
 
   function reset() {
