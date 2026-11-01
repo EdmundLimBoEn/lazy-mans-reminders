@@ -1,5 +1,5 @@
 import { ExternalTokenError, type AuthRequest, type OAuthHelpers } from '@cloudflare/workers-oauth-provider'
-import { MCP_RESOURCE, PENDING_AUTH_TTL_SECONDS, TOOLS } from './constants'
+import { mcpResourceForRequest, PENDING_AUTH_TTL_SECONDS, TOOLS } from './constants'
 import { resolveSession } from './auth'
 import {
   consentCanApprove,
@@ -80,7 +80,7 @@ export async function resolveExternalPat(input: {
       tokenId: session.tokenId,
       agentName: session.agentName,
     },
-    audience: MCP_RESOURCE,
+    audience: mcpResourceForRequest(input.request),
   }
 }
 
