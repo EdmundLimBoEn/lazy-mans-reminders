@@ -136,12 +136,23 @@ actor ReminderStore {
     }
 
     func cached() -> [Reminder] {
-        guard let data = defaults.data(forKey: cacheKey) else { return [] }
-        return (try? ReminderJSON.decoder.decode([Reminder].self, from: data)) ?? []
+        cachedSnapshot() ?? []
+    }
+
+    private func cachedSnapshot() -> [Reminder]? {
+        guard let data = defaults.data(forKey: cacheKey) else { return nil }
+        return try? ReminderJSON.decoder.decode([Reminder].self, from: data)
     }
 
     /// Fallback helper. `??` uses a sync autoclosure, so `?? await cached()` does not compile.
     func refreshOrCached(refreshAuthentication: Bool = true, updateCache: Bool = true) async -> [Reminder] {
+        await refreshOrCachedSnapshot(
+            refreshAuthentication: refreshAuthentication, updateCache: updateCache
+        ) ?? []
+    }
+
+    /// Nil means loading failed without a decodable cache; an empty snapshot is a loaded board.
+    func refreshOrCachedSnapshot(refreshAuthentication: Bool = true, updateCache: Bool = true) async -> [Reminder]? {
         do {
             return try await refresh(
                 performMaintenance: false,
@@ -149,7 +160,7 @@ actor ReminderStore {
                 updateCache: updateCache
             )
         } catch {
-            return cached()
+            return cachedSnapshot()
         }
     }
 
