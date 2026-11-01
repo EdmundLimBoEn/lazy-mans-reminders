@@ -1,5 +1,5 @@
 import { ExternalTokenError, type AuthRequest, type OAuthHelpers } from '@cloudflare/workers-oauth-provider'
-import { MCP_RESOURCE, TOOLS } from './constants'
+import { mcpResourceForRequest, TOOLS } from './constants'
 import { resolveSession } from './auth'
 import {
   consentCanApprove,
@@ -79,7 +79,7 @@ export async function resolveExternalPat(input: {
       tokenId: session.tokenId,
       agentName: session.agentName,
     },
-    audience: MCP_RESOURCE,
+    audience: mcpResourceForRequest(input.request),
   }
 }
 
@@ -222,7 +222,7 @@ async function denyConsent(request: Request, env: Env, deps: IdentityDeps): Prom
   const oauth = oauthHelpers(env)
   if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
   const oauthRequest = await loadPending(env, state)
-  await consumeAuthorizationState(env, state)
+  if (!await consumeAuthorizationState(env, state)) return json({ error: 'expired_state' }, 400, cors)
   if (!oauthRequest) return json({ redirectTo: null }, 200, cors)
   const client = await oauth.lookupClient(oauthRequest.clientId)
   return json({ redirectTo: denialRedirect(oauthRequest, client) }, 200, cors)
