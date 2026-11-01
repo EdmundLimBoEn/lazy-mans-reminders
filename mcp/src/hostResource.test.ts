@@ -1,8 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { AuthorizationState } from './authorizationState'
+import { setup } from '../test/oauthWorker'
 import { MCP_HOSTS, MCP_RESOURCE } from './constants'
 import type { TokenSecret } from './domain'
-import { handleWorkerFetch } from './index'
 import { hashSecret } from './token'
 
 // Keep the real worker/provider authentication and OAuth flow; stub only MCP transport.
@@ -13,64 +12,8 @@ vi.mock('agents/mcp/server', () => ({
 const USER = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
 const REDIRECT = 'https://client.example/callback'
 const VERIFIER = 'a'.repeat(43)
-const deps = {
-  verifyUser: async () => ({ id: USER, email: null, fullName: 'Test' }),
-  accountExists: async () => true,
-}
 
 afterEach(() => vi.unstubAllGlobals())
-
-function setup() {
-  const kv = new Map<string, string>()
-  const objects = new Map<string, AuthorizationState>()
-  const env = {
-    SUPABASE_URL: 'https://example.supabase.co',
-    SUPABASE_SERVICE_ROLE_KEY: 'test-service',
-    WEB_ORIGINS: 'https://np.sillyapps.co',
-    AUTH_RATE_LIMIT: { limit: async () => ({ success: true }) },
-    MCP_RATE_LIMIT: { limit: async () => ({ success: true }) },
-    OAUTH_KV: {
-      get: async (key: string, options?: string | { type: string }) => {
-        const value = kv.get(key)
-        const type = typeof options === 'string' ? options : options?.type
-        return value === undefined ? null : type === 'json' ? JSON.parse(value) : value
-      },
-      put: async (key: string, value: string) => { kv.set(key, value) },
-      delete: async (key: string) => { kv.delete(key) },
-      list: async ({ prefix = '' }: { prefix?: string }) => ({
-        keys: [...kv.keys()].filter((key) => key.startsWith(prefix)).map((name) => ({ name })),
-        list_complete: true,
-      }),
-    },
-    AUTHORIZATION_STATE: {
-      idFromName: (name: string) => name,
-      get: (id: string) => {
-        if (!objects.has(id)) {
-          const entries = new Map<string, unknown>()
-          const storage = {
-            get: async (key: string) => entries.get(key),
-            put: async (key: string, value: unknown) => { entries.set(key, value) },
-            delete: async (key: string) => entries.delete(key),
-            setAlarm: async () => {},
-            transaction: async <T>(fn: (store: unknown) => Promise<T>) => fn(storage),
-          }
-          objects.set(id, new AuthorizationState({ storage } as unknown as DurableObjectState))
-        }
-        return { fetch: (input: string, init?: RequestInit) => objects.get(id)!.fetch(new Request(input, init)) }
-      },
-    },
-  } as unknown as Env
-  const request = (host: string, path: string, init?: RequestInit) => handleWorkerFetch(
-    new Request(`https://${host}${path}`, init), env,
-    { waitUntil: vi.fn() } as unknown as ExecutionContext, deps,
-  )
-  const post = (host: string, path: string, body: unknown) => request(host, path, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer test-session' },
-    body: JSON.stringify(body),
-  })
-  return { env, request, post }
-}
 
 describe('worker resource binding across supported hosts', () => {
   it.each(MCP_HOSTS)('advertises and accepts a valid personal token on %s', async (host) => {
