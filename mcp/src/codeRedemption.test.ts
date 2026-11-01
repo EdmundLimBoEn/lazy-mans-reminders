@@ -45,6 +45,7 @@ async function setup() {
             const storage = {
               get: async (key: string) => entries.get(key),
               put: async (key: string, value: unknown) => { entries.set(key, value) },
+              delete: async (key: string) => entries.delete(key),
               // Serialize transactions as Durable Object storage does, not whole requests.
               transaction: <T>(fn: (store: unknown) => Promise<T>): Promise<T> => {
                 const result = queue.then(() => fn(storage))
@@ -119,6 +120,70 @@ describe('authorization code redemption', () => {
     const tokens = await responses.find((response) => response.status === 200)!.json() as { access_token: string; refresh_token: string }
     expect((await request('/mcp', { headers: { Authorization: `Bearer ${tokens.access_token}` } })).status).toBe(200)
     expect((await token({ grant_type: 'refresh_token', client_id: client.clientId, refresh_token: tokens.refresh_token })).status).toBe(200)
+  })
+
+  it('retries a rejected first grant write after the claiming object restarts', async () => {
+    const { exchange, env, kv, objects } = await setup()
+    vi.mocked(env.OAUTH_KV.put).mockRejectedValueOnce(new Error('KV PUT failed: 429 Too Many Requests'))
+    const rejected = await exchange()
+    expect(rejected.status).toBe(429)
+    expect(rejected.headers.get('Retry-After')).toBe('30')
+    expect(await rejected.json()).toMatchObject({ error: 'temporarily_unavailable' })
+    expect([...kv.keys()].filter((key) => key.startsWith('token:'))).toHaveLength(0)
+    objects.clear()
+    expect((await exchange()).status).toBe(200)
+    expect((await exchange()).status).toBe(400)
+    expect([...kv.keys()].filter((key) => key.startsWith('token:'))).toHaveLength(1)
+  })
+
+  it('does not let a delayed release reopen a later successful claim', async () => {
+    const { exchange, env } = await setup()
+    const get = env.AUTHORIZATION_STATE.get.bind(env.AUTHORIZATION_STATE)
+    let releaseRequest: Request | undefined
+    vi.spyOn(env.AUTHORIZATION_STATE, 'get').mockImplementation((id) => {
+      const stub = get(id)
+      return { fetch: async (input: string, init?: RequestInit) => {
+        if (input.endsWith('/release')) releaseRequest = new Request(input, init)
+        return stub.fetch(input, init)
+      } } as DurableObjectStub
+    })
+    vi.mocked(env.OAUTH_KV.put).mockRejectedValueOnce(new Error('KV PUT failed: 429 Too Many Requests'))
+    expect((await exchange()).status).toBe(429)
+    expect(releaseRequest).toBeDefined()
+    expect((await exchange()).status).toBe(200)
+    const attempt = await releaseRequest!.json() as { attempt: string }
+    // Retry a delayed release against the same object after successful issuance.
+    const id = vi.mocked(env.AUTHORIZATION_STATE.get).mock.calls[0][0]
+    await get(id).fetch('https://authorization-state/release', {
+      method: 'POST', body: JSON.stringify(attempt),
+    })
+    const claim = await get(id).fetch('https://authorization-state/redeem', {
+      method: 'POST', body: JSON.stringify({ attempt: 'replay' }),
+    })
+    expect(await claim.json()).toEqual({ consumed: false })
+  })
+
+  it.each(['uncertain', 'token'])('keeps the code consumed after a %s write failure', async (failure) => {
+    const { exchange, env, kv, objects } = await setup()
+    const [grantKey, unusedGrant] = [...kv.entries()].find(([key]) => key.startsWith('grant:'))!
+    vi.mocked(env.OAUTH_KV.put).mockImplementationOnce(async (key, value) => {
+      if (failure === 'uncertain') throw new Error('Connection lost')
+      kv.set(key, value as string)
+    })
+    if (failure === 'token') {
+      vi.mocked(env.OAUTH_KV.put).mockRejectedValueOnce(new Error('KV PUT failed: 429 Too Many Requests'))
+      expect((await exchange()).status).toBe(429)
+    } else {
+      await expect(exchange()).rejects.toThrow('Connection lost')
+    }
+    objects.clear()
+    // Model an eventually consistent read of the original unused grant.
+    vi.mocked(env.OAUTH_KV.get).mockImplementation((async (key: string, options?: string | { type: string }) => {
+      const value = key === grantKey ? unusedGrant : kv.get(key)
+      const type = typeof options === 'string' ? options : options?.type
+      return value === undefined ? null : type === 'json' ? JSON.parse(value) : value
+    }) as typeof env.OAUTH_KV.get)
+    expect((await exchange()).status).toBe(400)
   })
 
   it('rejects a stale unused-code read after the claiming object restarts', async () => {
