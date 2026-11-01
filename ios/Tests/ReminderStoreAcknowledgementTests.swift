@@ -341,10 +341,11 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             let original = sample()
             let started = XCTestExpectation(description: "First write held before commit")
             let network = HeldWriteNetwork(original: original, started: started, failsFirst: failsFirst)
-            // Isolated preferences do not isolate the shared system Keychain.
+            // Isolate the shared Keychain and avoid requiring simulator Keychain entitlements.
             let credentials = MemorySessionCredentials()
             let store = ReminderStore(
-                defaults: defaults, credentials: credentials, serviceURL: URL(string: "https://reminders.invalid")!,
+                defaults: defaults, credentials: credentials,
+                serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key", requestData: { try await network.send($0) }
             )
             try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",

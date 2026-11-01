@@ -26,11 +26,12 @@ describe('board snapshot preferences', () => {
   }): SupabaseClient {
     return {
       from(table: string) {
-        const result = table === 'reminders' ? { data: [reminder], error: null } : prefs
+        const result = table === 'reminders' ? { data: [reminder], error: null, count: 1 } : prefs
         return {
           select() { return this },
           eq() { return this },
           order() { return this },
+          range() { return this },
           maybeSingle() { return Promise.resolve(result) },
           then(resolve: (value: typeof result) => unknown) {
             return Promise.resolve(result).then(resolve)
