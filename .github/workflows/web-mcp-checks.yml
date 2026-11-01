@@ -147,7 +147,7 @@ jobs:
             supabase/tests/reminder_push_replay.sql \
             supabase/migrations/202610280002_normalize_legacy_reminder_text.sql \
             supabase/tests/normalize_legacy_reminder_text.sql \
-            supabase/migrations/20261101000000_agent_token_revocation_budget.sql \
+            supabase/migrations/20261101000100_agent_token_revocation_budget.sql \
             supabase/tests/agent_token_revocation_budget.sql \
             supabase/tests/write_budgets.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
