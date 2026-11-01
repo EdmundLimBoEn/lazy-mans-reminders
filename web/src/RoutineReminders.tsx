@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -19,6 +19,14 @@ export function RoutineReminders({ userId }: { userId: string }) {
   const [error, setError] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
   const draftRevision = useRef(0)
+  const routineRows = useMemo(() => routines.map(routine => ({
+    routine,
+    content: <>
+      <p className="font-medium break-words">{routine.text}</p>
+      <p className="text-sm text-muted-foreground">{routineSummary(routine)}</p>
+      <p className="text-sm">{routine.enabled ? `Next: ${new Date(routine.next_run_at).toLocaleString(undefined, { timeZone: routine.timezone })} · ${routine.timezone}` : 'Paused'}</p>
+    </>,
+  })), [routines])
 
   const load = useCallback(async () => {
     const { data, error } = await supabase.from('routine_reminders')
@@ -30,11 +38,52 @@ export function RoutineReminders({ userId }: { userId: string }) {
   }, [userId])
 
   useEffect(() => {
-    void load()
+    let timer: ReturnType<typeof setTimeout> | undefined
+    let inFlight = false
+    let pending = false
+    let stopped = false
+
+    function schedule() {
+      if (stopped) return
+      pending = true
+      if (inFlight) return
+      clearTimeout(timer)
+      timer = setTimeout(() => void refresh(), 100)
+    }
+
+    async function refresh() {
+      if (stopped) return
+      clearTimeout(timer)
+      if (inFlight) {
+        pending = true
+        return
+      }
+      pending = false
+      inFlight = true
+      try {
+        await load()
+      } catch (error) {
+        if (!stopped) setError(error instanceof Error ? error.message : String(error))
+      } finally {
+        inFlight = false
+        // Events received during this read need one fresh snapshot afterward.
+        if (pending) schedule()
+      }
+    }
+
+    window.addEventListener('online', refresh)
+    void refresh()
     const channel = supabase.channel(`routines:${userId}`).on('postgres_changes',
       { event: '*', schema: 'public', table: 'routine_reminders', filter: `user_id=eq.${userId}` },
-      () => void load()).subscribe()
-    return () => { void supabase.removeChannel(channel) }
+      schedule).subscribe(status => {
+        if (status === 'SUBSCRIBED') void refresh()
+      })
+    return () => {
+      stopped = true
+      window.removeEventListener('online', refresh)
+      clearTimeout(timer)
+      void supabase.removeChannel(channel)
+    }
   }, [load, userId])
 
   function reset() {
@@ -135,10 +184,8 @@ export function RoutineReminders({ userId }: { userId: string }) {
     </form>
     {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
     {loading ? <p role="status" className="text-sm">Loading routines…</p> : routines.length === 0 ? <p className="text-sm text-muted-foreground">No routines yet.</p> :
-      <ul className="grid gap-3" aria-label="Routine reminders">{routines.map(routine => <li key={routine.id} className="grid gap-2 rounded-lg border p-4">
-        <p className="font-medium break-words">{routine.text}</p>
-        <p className="text-sm text-muted-foreground">{routineSummary(routine)}</p>
-        <p className="text-sm">{routine.enabled ? `Next: ${new Date(routine.next_run_at).toLocaleString(undefined, { timeZone: routine.timezone })} · ${routine.timezone}` : 'Paused'}</p>
+      <ul className="grid gap-3" aria-label="Routine reminders">{routineRows.map(({ routine, content }) => <li key={routine.id} className="grid gap-2 rounded-lg border p-4">
+        {content}
         <div className="flex flex-wrap gap-2">
           <Button size="sm" variant="outline" disabled={busy} onClick={() => edit(routine)}>Edit</Button>
           <Button size="sm" variant="outline" disabled={busy} onClick={() => void change(routine, false)}>{routine.enabled ? 'Pause' : 'Resume'}</Button>

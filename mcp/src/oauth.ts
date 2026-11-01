@@ -1,5 +1,5 @@
-import type { AuthRequest, OAuthHelpers } from '@cloudflare/workers-oauth-provider'
-import { MCP_RESOURCE, PENDING_AUTH_TTL_SECONDS, TOOLS } from './constants'
+import { ExternalTokenError, type AuthRequest, type OAuthHelpers } from '@cloudflare/workers-oauth-provider'
+import { mcpResourceForRequest, PENDING_AUTH_TTL_SECONDS, TOOLS } from './constants'
 import { resolveSession } from './auth'
 import {
   consentCanApprove,
@@ -64,7 +64,15 @@ export async function resolveExternalPat(input: {
   request: Request
   env: Env
 }): Promise<{ props: BoundProps; audience: string } | null> {
-  const session = await resolveSession(input.env, `Bearer ${input.token}`)
+  let session
+  try {
+    session = await resolveSession(input.env, `Bearer ${input.token}`)
+  } catch {
+    throw new ExternalTokenError('temporarily_unavailable', {
+      description: 'Account lookup is unavailable',
+      statusCode: 503,
+    })
+  }
   if (!session) return null
   return {
     props: {
@@ -72,7 +80,7 @@ export async function resolveExternalPat(input: {
       tokenId: session.tokenId,
       agentName: session.agentName,
     },
-    audience: MCP_RESOURCE,
+    audience: mcpResourceForRequest(input.request),
   }
 }
 
@@ -120,9 +128,13 @@ async function readJson(request: Request): Promise<Record<string, unknown> | Res
 async function requireUser(request: Request, env: Env, deps: IdentityDeps, cors: Record<string, string>) {
   const token = bearerToken(request)
   if (!token) return json({ error: 'unauthorized' }, 401, cors)
-  const user = await deps.verifyUser(env, token)
-  if (!user) return json({ error: 'unauthorized' }, 401, cors)
-  return user
+  try {
+    const user = await deps.verifyUser(env, token)
+    if (!user) return json({ error: 'unauthorized' }, 401, cors)
+    return user
+  } catch {
+    return json({ error: 'account_lookup_unavailable' }, 503, cors)
+  }
 }
 
 async function loadPending(env: Env, state: string): Promise<AuthRequest | null> {
@@ -209,7 +221,7 @@ async function denyConsent(request: Request, env: Env, deps: IdentityDeps): Prom
   if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
   const oauthRequest = await loadPending(env, state)
   // Consume even when KV misses the record: a later read may still be stale.
-  await consumeAuthorizationState(env, state)
+  if (!await consumeAuthorizationState(env, state)) return json({ error: 'expired_state' }, 400, cors)
   await env.OAUTH_KV.delete(`${PENDING_PREFIX}${state}`)
   if (!oauthRequest) return json({ redirectTo: null }, 200, cors)
   const client = await oauth.lookupClient(oauthRequest.clientId)
@@ -240,7 +252,12 @@ async function bindAuthorization(request: Request, env: Env, deps: IdentityDeps)
   // KV reads/deletes can overlap or be stale. Only the state object's winner
   // may create a grant, even when multiple callers read the pending record.
   if (!await consumeAuthorizationState(env, state)) return json({ error: 'expired_state' }, 400, cors)
-  await env.OAUTH_KV.delete(`${PENDING_PREFIX}${state}`)
+  try {
+    await env.OAUTH_KV.delete(`${PENDING_PREFIX}${state}`)
+  } catch {
+    // The state object prevents reuse; pending KV expires on its own.
+    // Cleanup failure must not burn an already-consumed approval.
+  }
 
   try {
     const { redirectTo } = await oauth.completeAuthorization({

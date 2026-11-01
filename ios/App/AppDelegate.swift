@@ -73,10 +73,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         Task { await AuthManager.shared.registerDevice(token: token) }
     }
 
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        BackgroundBoardRefresh.schedule()
-    }
-
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("APNs registration failed: \(error.localizedDescription)")
     }
@@ -86,16 +82,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         didReceiveRemoteNotification userInfo: [AnyHashable: Any],
         fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
     ) {
-        Task {
-            do {
-                let previous = await ReminderStore.shared.cached()
-                let refreshed = try await ReminderStore.shared.refresh()
-                await ReminderBoardSync.apply(refreshed)
-                completionHandler(previous == refreshed ? .noData : .newData)
-            } catch {
-                completionHandler(.failed)
-            }
-        }
+        SilentPushRefresh.start(completion: completionHandler)
     }
 
     func userNotificationCenter(

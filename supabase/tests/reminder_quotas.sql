@@ -22,7 +22,7 @@ insert into public.reminders(user_id, text, is_done)
 select auth.uid(), 'Completed ' || n, true from generate_series(1, 20) n;
 insert into public.reminders(user_id, text)
 select auth.uid(), 'Active ' || n from generate_series(1, 16) n;
-do $$ begin
+do $$ declare quota_detail text; begin
   assert (select count(*) = 16 from public.reminders where not is_done);
   begin
     insert into public.reminders(user_id, text) values (auth.uid(), 'Overflow');
@@ -34,6 +34,8 @@ do $$ begin
     update public.reminders set is_done = false where text = 'Completed 1';
     raise exception 'Reactivation bypassed the quota';
   exception when sqlstate 'P0001' then
+    get stacked diagnostics quota_detail = PG_EXCEPTION_DETAIL;
+    assert quota_detail = '16 LMR_CAPACITY_REACHED', 'Reopen quota must expose its machine-readable capacity';
     if sqlerrm <> 'You can have at most 16 active reminders. Complete or delete a reminder before adding another.' then raise; end if;
   end;
 end $$;

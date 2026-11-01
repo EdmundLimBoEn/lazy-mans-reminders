@@ -22,6 +22,7 @@ function fixture() {
     token,
     user_id: "owner",
     environment: "production",
+    updated_at: new Date(0).toISOString(),
     push_to_start_token: "start",
     activity_push_token: "activity",
     activity_started_at: new Date(0).toISOString(),
@@ -31,6 +32,7 @@ function fixture() {
     text: "Old",
     empty: false,
     readError: false,
+    prefsError: false,
     reads: 0,
     now: 0,
   };
@@ -60,7 +62,10 @@ function fixture() {
           };
         }
         if (table === "lock_screen_prefs") {
-          return { data: { max_lines: 6 }, error: null };
+          return {
+            data: state.prefsError ? null : { max_lines: 6 },
+            error: state.prefsError ? "unavailable" : null,
+          };
         }
         state.reads++;
         return {
@@ -234,6 +239,28 @@ Deno.test("board read and delivery failures release the slot and remain retryabl
   }
 });
 
+Deno.test("preference read failures preserve activity content and release the slot for retry", async () => {
+  const f = fixture();
+  f.state.prefsError = true;
+  let deliveries = 0;
+  const input = {
+    ...f,
+    devices: [f.devices[0]],
+    deliver: () => {
+      deliveries++;
+      return Promise.resolve(["sent" as const]);
+    },
+  };
+  assertEquals(await deliverDevices(input), ["retryable"]);
+  assertEquals(deliveries, 0);
+  assertEquals(f.slots.size, 0);
+
+  f.state.prefsError = false;
+  assertEquals(await deliverDevices(input), ["sent"]);
+  assertEquals(deliveries, 1);
+  assertEquals(f.slots.size, 0);
+});
+
 Deno.test("expired workers cannot begin another send or retry with an old snapshot", async () => {
   const f = fixture();
   const result = await deliverDevices({
@@ -269,3 +296,98 @@ Deno.test("a device removed or reassigned before reload receives no push", async
   assertEquals(f.state.reads, 0);
   assertEquals(f.slots.size, 0);
 });
+
+for (
+  const failure of [
+    "claim",
+    "recordStart",
+    "recordAdoption",
+    "release",
+    "retiring",
+  ] as const
+) {
+  for (const expired of [false, true]) {
+    Deno.test(`${failure} failure preserves alert delivery with expired slot=${expired}`, async () => {
+      const f = fixture();
+      const device = f.devices[0];
+      device.activity_push_token =
+        failure === "recordAdoption" || failure === "retiring"
+          ? "activity"
+          : null;
+      device.activity_started_at = null;
+      const sends: string[] = [];
+      const fail = () => {
+        if (expired) f.state.now += DELIVERY_SEND_WINDOW_MS;
+        return Promise.reject(new Error("bookkeeping unavailable"));
+      };
+      const result = await deliverDevices({
+        ...f,
+        devices: [device],
+        now: () => f.state.now,
+        alertCandidate: { id: "reminder", user_id: "owner", text: "Old" },
+        deliver: async (current, content, assertCurrent) => {
+          const live = await reconcileLiveActivity({
+            lines: content.lines,
+            activityToken: current.activity_push_token,
+            startToken: current.push_to_start_token,
+            retiringToken: failure === "retiring" ? "old" : null,
+            startedAt: null,
+            nowMs: 1000,
+            hasAlert: Boolean(content.alertRecord),
+            send: (event) => {
+              assertCurrent();
+              sends.push(event);
+              return Promise.resolve(failure === "release" ? "failed" : "sent");
+            },
+            claimStart: failure === "claim"
+              ? fail
+              : () => Promise.resolve("lease"),
+            releaseStart: failure === "release"
+              ? fail
+              : () => Promise.resolve(),
+            recordStart: failure === "recordStart"
+              ? fail
+              : () => Promise.resolve(),
+            recordAdoption: failure === "recordAdoption"
+              ? fail
+              : () => Promise.resolve(),
+            recordEnd: () => Promise.resolve(),
+            clearRetiring: failure === "retiring"
+              ? fail
+              : () => Promise.resolve(),
+          });
+          if (content.alertRecord && !live.deliveredAlert) {
+            assertCurrent();
+            sends.push("alert");
+            live.results.push("sent");
+          }
+          return live.results;
+        },
+      });
+      const delivered = failure === "recordStart" ||
+        failure === "recordAdoption";
+      const liveSends = failure === "claim" ? [] : [
+        failure === "retiring"
+          ? "end"
+          : failure === "recordAdoption"
+          ? "update"
+          : "start",
+      ];
+      assertEquals(sends, [
+        ...liveSends,
+        ...(!delivered && !expired ? ["alert"] : []),
+      ]);
+      assertEquals(
+        result,
+        expired && !delivered ? ["retryable"] : [
+          ...(liveSends.length
+            ? [failure === "release" ? "failed" : "sent"]
+            : []),
+          "retryable",
+          ...(!delivered ? ["sent"] : []),
+        ],
+      );
+      assertEquals(f.slots.size, 0);
+    });
+  }
+}

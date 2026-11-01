@@ -161,3 +161,71 @@ do $$ begin
     'Composite FK deletion must preserve the reminder and its owner';
 end $$;
 rollback;
+
+-- Text corrections must retain pending firings even when a full board delays them.
+begin;
+create temporary table routine_push_payloads(payload jsonb);
+create or replace function public.request_reminder_push(payload jsonb) returns bigint
+language plpgsql as $$ begin
+  insert into routine_push_payloads values (payload);
+  return 1;
+end $$;
+insert into auth.users(id) values ('11111111-1111-4111-8111-111111111111');
+insert into public.routine_reminders(user_id, text, interval_days, start_date, local_time, timezone)
+values ('11111111-1111-4111-8111-111111111111', 'Original', 1, current_date, '09:00', 'UTC');
+insert into public.reminders(user_id, text)
+select '11111111-1111-4111-8111-111111111111', 'Board item ' || n from generate_series(1, 16) n;
+update public.routine_reminders set next_run_at = now() - interval '1 minute';
+do $$ begin
+  assert public.fire_due_routines() = 0, 'Full board must leave the routine pending';
+end $$;
+set local role authenticated;
+set local request.jwt.claim.sub = '11111111-1111-4111-8111-111111111111';
+update public.routine_reminders set text = '  Corrected  ';
+do $$ begin
+  assert (select text = 'Corrected' and next_run_at = now() - interval '1 minute'
+    from public.routine_reminders), 'Text-only edit must trim text and preserve overdue firing';
+end $$;
+-- The web editor submits all schedule fields, even when only text changed.
+update public.routine_reminders set text = 'Corrected again', start_date = start_date,
+  local_time = local_time, timezone = timezone, interval_days = interval_days, enabled = enabled;
+do $$ begin
+  assert (select next_run_at = now() - interval '1 minute' from public.routine_reminders),
+    'Resubmitting unchanged schedule values must preserve overdue firing';
+end $$;
+reset role;
+delete from public.reminders where text = 'Board item 1';
+do $$ begin
+  assert public.fire_due_routines() = 1, 'Edited pending routine must fire when space opens';
+  assert exists (select 1 from public.reminders where routine_id is not null
+    and text = 'Corrected again' and routine_fired_at = now() - interval '1 minute'),
+    'Firing must use corrected text and the original occurrence timestamp';
+  assert public.fire_due_routines() = 0, 'Scheduler must still advance after firing';
+end $$;
+-- Use a distinct future marker so unconditional recalculation cannot pass by coincidence.
+update public.routine_reminders set next_run_at = now() + interval '12 hours';
+set local role authenticated;
+update public.routine_reminders set text = 'Future correction';
+do $$ begin
+  assert (select next_run_at = now() + interval '12 hours' from public.routine_reminders),
+    'Text-only edit must preserve a future firing too';
+end $$;
+reset role;
+-- Each actual schedule/state change must continue to calculate a new future run.
+do $$
+declare assignment text;
+begin
+  foreach assignment in array array[
+    'start_date = start_date + 1', 'local_time = time ''10:00''',
+    'timezone = ''Asia/Singapore''', 'interval_days = 2', 'enabled = false', 'enabled = true'
+  ] loop
+    update public.routine_reminders set next_run_at = now() - interval '1 minute';
+    execute 'set local role authenticated';
+    execute 'update public.routine_reminders set ' || assignment;
+    assert (select next_run_at = public.next_routine_run(start_date, local_time, timezone, interval_days, now())
+      and next_run_at > now() from public.routine_reminders),
+      'Changed schedule/state must recalculate: ' || assignment;
+    execute 'reset role';
+  end loop;
+end $$;
+rollback;

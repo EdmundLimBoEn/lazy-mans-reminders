@@ -1,11 +1,11 @@
-import { beforeEach, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import type { ReactElement, ReactNode } from 'react'
 import { RoutineReminders } from './RoutineReminders'
 
 // Exercise the component's real handlers with state retained between renders,
 // without requiring a browser or replacing the async save/change logic.
-const hooks = vi.hoisted(() => ({ states: [] as unknown[], cursor: 0, load: undefined as undefined | (() => Promise<void>) }))
-const db = vi.hoisted(() => ({ from: vi.fn() }))
+const hooks = vi.hoisted(() => ({ states: [] as unknown[], cursor: 0, effects: [] as Array<() => void | (() => void)>, load: undefined as undefined | (() => Promise<void>) }))
+const db = vi.hoisted(() => ({ channel: vi.fn(), removeChannel: vi.fn(), from: vi.fn() }))
 vi.mock('./supabase', () => ({ supabase: db }))
 vi.mock('react', async (importOriginal) => ({
   ...await importOriginal<typeof import('react')>(),
@@ -20,7 +20,15 @@ vi.mock('react', async (importOriginal) => ({
     if (!(index in hooks.states)) hooks.states[index] = { current: initial }
     return hooks.states[index]
   },
-  useEffect: () => {},
+  useEffect: (effect: () => void | (() => void)) => { hooks.effects.push(effect) },
+  useMemo: (calculate: () => unknown, dependencies: unknown[]) => {
+    const index = hooks.cursor++
+    const previous = hooks.states[index] as { dependencies: unknown[]; value: unknown } | undefined
+    if (!previous || dependencies.some((value, i) => !Object.is(value, previous.dependencies[i]))) {
+      hooks.states[index] = { dependencies, value: calculate() }
+    }
+    return (hooks.states[index] as { value: unknown }).value
+  },
 }))
 
 const routine = {
@@ -42,8 +50,10 @@ function nodes(node: ReactNode): ReactElement<Props>[] {
 }
 function render() {
   hooks.cursor = 0
+  hooks.effects = []
   const tree = nodes(RoutineReminders({ userId: 'user-1' }))
   return {
+    tree,
     form: tree.find(node => node.type === 'form')!.props,
     text: tree.find(node => node.props.id === 'routine-text')!.props,
     change: (id: string, value: string) => {
@@ -66,6 +76,52 @@ beforeEach(async () => {
   await hooks.load!()
   render().button('Edit').onClick()
   render().text.onChange({ target: { value: 'Keep my draft' } })
+})
+
+it('reuses saved routine content while typing and refreshes it when routine data changes', async () => {
+  const routines = Array.from({ length: 50 }, (_, index) => ({ ...routine, id: `routine-${index}` }))
+  const refresh = async (data: typeof routines) => {
+    db.from.mockReturnValue({ select: () => ({ eq: () => ({ order: async () => ({ data, error: null }) }) }) })
+    await hooks.load!()
+    return render()
+  }
+  const format = vi.spyOn(Date.prototype, 'toLocaleString')
+  try {
+    const initial = await refresh(routines)
+    expect(format).toHaveBeenCalledTimes(50)
+    const rowContent = (view: ReturnType<typeof render>) => view.tree
+      .filter(node => node.type === 'li').map(node => (node.props.children as ReactNode[])[0])
+    const initialContent = rowContent(initial)
+    format.mockClear()
+    for (let index = 0; index < 20; index++) {
+      render().change('routine-text', `Draft ${index}`)
+      render().change('routine-zone', `Draft timezone ${index}`)
+      const content = rowContent(render())
+      content.forEach((row, i) => expect(row).toBe(initialContent[i]))
+    }
+    expect(format).not.toHaveBeenCalled()
+
+    const updated = {
+      ...routine, text: 'Updated routine', interval_days: 2, local_time: '08:30',
+      next_run_at: '2026-11-01T08:30:00Z', timezone: 'Europe/London',
+    }
+    const view = await refresh([updated])
+    expect(format).toHaveBeenCalledTimes(1)
+    expect(format).toHaveBeenLastCalledWith(undefined, { timeZone: 'Europe/London' })
+    expect(format.mock.contexts[0].toISOString()).toBe(updated.next_run_at.replace('Z', '.000Z'))
+    const paragraphs = view.tree.filter(node => node.type === 'p').map(node => node.props.children)
+    expect(paragraphs).toContain('Updated routine')
+    expect(paragraphs).toContain('Every 2 days at 08:30 · Europe/London')
+    expect(paragraphs).toContain(`Next: ${format.mock.results[0].value} · Europe/London`)
+    const paused = await refresh([{ ...updated, enabled: false }])
+    expect(paused.tree.some(node => node.props.children === 'Paused')).toBe(true)
+    expect(format).toHaveBeenCalledTimes(1)
+    const empty = await refresh([])
+    expect(rowContent(empty)).toEqual([])
+    expect(empty.tree.some(node => node.props.children === 'No routines yet.')).toBe(true)
+  } finally {
+    format.mockRestore()
+  }
 })
 
 it.each(['insert', 'update'] as const)('uses the selected timezone for weekly %s start dates', async (operation) => {
@@ -200,4 +256,54 @@ it.each(['save'])('keeps the draft when %s returns a database error', async (sta
   expect(render().submit.disabled).toBe(false)
   expect(render().text.value).toBe('Keep my draft')
   expect(render().alert).toBe('Failed')
+})
+
+// Start the real subscription effect and drive recovery without row notifications.
+afterEach(() => { vi.unstubAllGlobals() })
+it.each(['SUBSCRIBED', 'online'])('recovers a failed read on %s and removes recovery listeners on cleanup', async trigger => {
+  const browser = new EventTarget()
+  vi.stubGlobal('window', browser)
+  let status: ((value: string) => void) | undefined
+  const channel = {
+    on: vi.fn().mockReturnThis(),
+    subscribe: vi.fn((callback?: (value: string) => void) => { status = callback; return channel }),
+  }
+  db.channel.mockReturnValue(channel)
+  db.removeChannel.mockResolvedValue(undefined)
+  db.from.mockImplementation(() => {
+    const query = {
+      select: () => query, eq: () => query, order: () => query,
+      maybeSingle: async () => ({ data: null, error: null }),
+      then: (resolve: (value: unknown) => void) => Promise.resolve({ data: null, error: { message: 'Offline' } }).then(resolve),
+    }
+    return query
+  })
+  render()
+  const cleanup = hooks.effects.at(-1)!()
+  await vi.waitFor(() => expect(db.channel).toHaveBeenCalled())
+  // Let the failed initial query settle before signalling recovery.
+  await new Promise(resolve => setTimeout(resolve, 0))
+  const failedCalls = db.from.mock.calls.length
+  db.from.mockReturnValue({ select: () => ({ eq: () => ({ order: async () => ({ data: [{ ...routine, text: 'Recovered routine' }], error: null }) }) }) })
+  if (trigger === 'online') browser.dispatchEvent(new Event('online'))
+  else status?.('SUBSCRIBED')
+  await vi.waitFor(() => expect(db.from.mock.calls.length).toBeGreaterThan(failedCalls))
+  await new Promise(resolve => setTimeout(resolve, 0))
+  hooks.cursor = 0
+  expect(nodes(RoutineReminders({ userId: 'user-1' })).some(node => node.props.children === 'Recovered routine')).toBe(true)
+  const recoveredCalls = db.from.mock.calls.length
+  status?.('CHANNEL_ERROR')
+  status?.('TIMED_OUT')
+  expect(db.from.mock.calls.length).toBe(recoveredCalls)
+  // A later re-subscription also reloads an otherwise idle account.
+  status?.('SUBSCRIBED')
+  await vi.waitFor(() => expect(db.from.mock.calls.length).toBeGreaterThan(recoveredCalls))
+  await new Promise(resolve => setTimeout(resolve, 0))
+  if (typeof cleanup === 'function') cleanup()
+  const finalCalls = db.from.mock.calls.length
+  browser.dispatchEvent(new Event('online'))
+  status?.('SUBSCRIBED')
+  await new Promise(resolve => setTimeout(resolve, 0))
+  expect(db.from.mock.calls.length).toBe(finalCalls)
+  expect(db.removeChannel).toHaveBeenCalledWith(channel)
 })

@@ -31,7 +31,8 @@ export async function resolveSession(
     .select('id, user_id, name, token_hash, revoked_at')
     .eq('id', presented.tokenId)
     .maybeSingle()
-  if (error || !data) return null
+  if (error) throw error
+  if (!data) return null
 
   const row = data as TokenRow
   if (row.revoked_at) return null
