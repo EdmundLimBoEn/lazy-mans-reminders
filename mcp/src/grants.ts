@@ -4,6 +4,7 @@ import { redirectOrigin } from './redirects'
 
 const PAGE_SIZE = 100
 const REVOCATION_CONCURRENCY = 4
+const CLIENT_LOOKUP_CONCURRENCY = 4
 /** Upper bound on KV list pages per pass so a corrupt cursor cannot loop forever. */
 const MAX_PAGES = 100
 
@@ -40,15 +41,19 @@ export async function listAllUserGrants(oauth: OAuthHelpers, userId: string): Pr
 
 export async function describeGrants(oauth: OAuthHelpers, grants: GrantSummary[]): Promise<GrantView[]> {
   const names = new Map<string, string | null>()
-  for (const grant of grants) {
-    if (names.has(grant.clientId)) continue
-    try {
-      const client = await oauth.lookupClient(grant.clientId)
-      names.set(grant.clientId, displayName(client?.clientName))
-    } catch {
-      names.set(grant.clientId, null)
+  const clientIds = [...new Set(grants.map((grant) => grant.clientId))]
+  let next = 0
+  await Promise.all(Array.from({ length: Math.min(CLIENT_LOOKUP_CONCURRENCY, clientIds.length) }, async () => {
+    while (next < clientIds.length) {
+      const clientId = clientIds[next++]
+      try {
+        const client = await oauth.lookupClient(clientId)
+        names.set(clientId, displayName(client?.clientName))
+      } catch {
+        names.set(clientId, null)
+      }
     }
-  }
+  }))
   return grants
     .map((grant) => ({
       id: grant.id,

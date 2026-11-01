@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { handleWorkerFetch } from './index'
+import { setup } from '../test/oauthWorker'
 
 vi.mock('agents/mcp/server', () => ({ createMcpHandler: vi.fn() }))
 
@@ -22,7 +23,7 @@ function environment(outcome: 'allowed' | 'limited' | 'missing' | 'error'): Env 
   }
   return {
     // Even unauthenticated requests initialize the provider's grant-storage wrapper.
-    OAUTH_KV: { get: vi.fn(async () => null) },
+    ...setup().env,
     WEB_ORIGINS: webOrigin, AUTH_RATE_LIMIT: limiter, MCP_RATE_LIMIT: limiter,
   } as unknown as Env
 }

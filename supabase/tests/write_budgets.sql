@@ -15,6 +15,15 @@ insert into auth.users(id) values
 set local role authenticated;
 set local request.jwt.claim.sub = '11111111-1111-4111-8111-111111111111';
 insert into public.reminders(user_id, text) values (auth.uid(), 'Budget fixture');
+reset role;
+-- Regression mode: simulate the first write landing in the previous minute.
+-- With the pin below moved past the five-write assertion, this run must fail.
+\if :{?write_budget_rollover}
+update public.user_write_budgets set window_started_at = statement_timestamp() - interval '2 minutes';
+\endif
+-- Hold a fixed future window to avoid a wall-clock minute rollover in this test.
+update public.user_write_budgets set window_started_at = statement_timestamp() + interval '1 hour';
+set local role authenticated;
 insert into public.lock_screen_prefs(user_id, max_lines) values (auth.uid(), 5);
 insert into public.device_tokens(user_id, token) values (auth.uid(), repeat('a', 64));
 insert into public.routine_reminders(user_id, text, interval_days, start_date, local_time, timezone)
@@ -26,8 +35,6 @@ reset role;
 do $$ begin
   assert (select writes = 5 from public.user_write_budgets), 'All tables share one budget; upsert counts once';
 end $$;
--- Hold a fixed future window to avoid a wall-clock minute rollover in this test.
-update public.user_write_budgets set window_started_at = statement_timestamp() + interval '1 hour';
 set local role authenticated;
 do $$ begin
   for i in 1..595 loop

@@ -1,6 +1,6 @@
 import type { GrantSummary, OAuthHelpers } from '@cloudflare/workers-oauth-provider'
 import { describe, expect, it } from 'vitest'
-import { cleanupUserGrants, listAllUserGrants, revokeUserGrant } from './grants'
+import { cleanupUserGrants, describeGrants, listAllUserGrants, revokeUserGrant } from './grants'
 
 function grant(partial: Partial<GrantSummary> & Pick<GrantSummary, 'id' | 'userId'>): GrantSummary {
   return {
@@ -107,5 +107,57 @@ describe('grant ownership', () => {
       },
     } as unknown as OAuthHelpers
     await expect(listAllUserGrants(oauth, 'user-a')).rejects.toThrow(/did not terminate/)
+  })
+})
+
+describe('grant descriptions', () => {
+  it('resolves distinct clients concurrently within a fixed bound and preserves descriptions', async () => {
+    const grants = Array.from({ length: 26 }, (_, i) => grant({
+      id: `grant-${i}`,
+      userId: 'user-a',
+      clientId: `client-${i % 13}`,
+      createdAt: i,
+      redirectUri: 'https://example.com/callback',
+      ...(i === 25 ? { expiresAt: 100 } : {}),
+    }))
+    const attempted: string[] = []
+    let active = 0
+    let peak = 0
+    const oauth = {
+      async lookupClient(id: string) {
+        attempted.push(id)
+        active += 1
+        peak = Math.max(peak, active)
+        // Finish out of order, including a failed lookup in the first batch.
+        await new Promise((resolve) => setTimeout(resolve, id === 'client-0' ? 10 : 0))
+        active -= 1
+        if (id === 'client-1') throw new Error('kv down')
+        if (id === 'client-2') return undefined
+        return { clientName: `Name ${id}` }
+      },
+    } as unknown as OAuthHelpers
+
+    const descriptions = await describeGrants(oauth, grants)
+    expect(peak).toBe(4)
+    expect(active).toBe(0)
+    expect(attempted).toHaveLength(13)
+    expect(new Set(attempted).size).toBe(13)
+    expect(descriptions).toEqual([...grants].reverse().map((item) => ({
+      id: item.id,
+      clientId: item.clientId,
+      clientName: ['client-1', 'client-2'].includes(item.clientId) ? null : `Name ${item.clientId}`,
+      redirectOrigin: 'https://example.com',
+      createdAt: item.createdAt,
+      expiresAt: item.expiresAt ?? null,
+    })))
+  })
+
+  it('does not look up clients for an empty listing', async () => {
+    let calls = 0
+    const oauth = {
+      async lookupClient() { calls += 1 },
+    } as unknown as OAuthHelpers
+    expect(await describeGrants(oauth, [])).toEqual([])
+    expect(calls).toBe(0)
   })
 })
