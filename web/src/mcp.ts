@@ -56,9 +56,9 @@ export function authCallbackUrl(): string {
 
 export function rememberReturnTo(): void {
   const next = connectReturnTo(window.location.pathname, window.location.search)
-  if (!next) return
   try {
-    sessionStorage.setItem(RETURN_TO_KEY, next)
+    if (next) sessionStorage.setItem(RETURN_TO_KEY, next)
+    else sessionStorage.removeItem(RETURN_TO_KEY)
   } catch {
     // Private mode can throw; return_to on the callback URL is the durable path.
   }
