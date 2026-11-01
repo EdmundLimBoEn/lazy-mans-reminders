@@ -66,6 +66,15 @@ actor ReminderStore {
     private var supabaseAnonKey: String { anonKey ?? AppConfig.supabaseAnonKey }
 
     private let cacheKey = "cached-reminders"
+    private let cacheRevisionKey = "cached-reminders-revision"
+    private let widgetSnapshotKey = "widget-reminders-snapshot"
+
+    private struct WidgetSnapshot: Codable {
+        let reminders: [Reminder]
+        let userID: UUID
+        let identityRevision: String?
+        let cacheRevision: String?
+    }
     private var sessionStorage: SharedSessionStorage {
         SharedSessionStorage(defaults: defaults, credentials: credentials)
     }
@@ -108,6 +117,7 @@ actor ReminderStore {
         }
         if previous == nil || previous?.userID != session.userID
             || authSessionID(previous?.accessToken) != authSessionID(session.accessToken) {
+            defaults.removeObject(forKey: widgetSnapshotKey)
             defaults.set(UUID().uuidString, forKey: identityRevisionKey)
         }
         try persist(session)
@@ -132,6 +142,7 @@ actor ReminderStore {
     func clearUserData() {
         defaults.set(UUID().uuidString, forKey: identityRevisionKey)
         sessionStorage.clear()
+        defaults.removeObject(forKey: widgetSnapshotKey)
         defaults.removeObject(forKey: cacheKey)
     }
 
@@ -142,6 +153,27 @@ actor ReminderStore {
     private func cachedSnapshot() -> [Reminder]? {
         guard let data = defaults.data(forKey: cacheKey) else { return nil }
         return try? ReminderJSON.decoder.decode([Reminder].self, from: data)
+    }
+
+    /// The app owns its cache. A widget snapshot is usable only until that cache
+    /// changes, including a mutation acknowledged while the widget fetch was in flight.
+    func widgetCached() -> [Reminder]? {
+        guard let session = storedSession(),
+              let data = defaults.data(forKey: widgetSnapshotKey),
+              let snapshot = try? ReminderJSON.decoder.decode(WidgetSnapshot.self, from: data),
+              snapshot.userID == session.userID,
+              snapshot.identityRevision == defaults.string(forKey: identityRevisionKey),
+              snapshot.cacheRevision == defaults.string(forKey: cacheRevisionKey) else {
+            return cachedSnapshot()
+        }
+        return snapshot.reminders
+    }
+
+    private func cache(_ reminders: [Reminder]) throws {
+        let data = try ReminderJSON.encoder.encode(reminders)
+        // Invalidate widget snapshots before publishing a newer app-owned board.
+        defaults.set(UUID().uuidString, forKey: cacheRevisionKey)
+        defaults.set(data, forKey: cacheKey)
     }
 
     /// Fallback helper. `??` uses a sync autoclosure, so `?? await cached()` does not compile.
@@ -160,7 +192,7 @@ actor ReminderStore {
                 updateCache: updateCache
             )
         } catch {
-            return cachedSnapshot()
+            return updateCache ? cachedSnapshot() : widgetCached()
         }
     }
 
@@ -170,6 +202,7 @@ actor ReminderStore {
         updateCache: Bool = true
     ) async throws -> [Reminder] {
         if isReordering { return cached() }
+        let cacheRevision = defaults.string(forKey: cacheRevisionKey)
         let revision = contentRevision
         refreshSequence += 1
         let sequence = refreshSequence
@@ -217,7 +250,13 @@ actor ReminderStore {
         if revision != contentRevision || sequence != refreshSequence || isReordering { return cached() }
         // Widget fetches cannot use process-local revisions to guard the app's cache.
         if updateCache {
-            defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
+            try cache(reminders)
+        } else if let userID = session.userID {
+            let snapshot = WidgetSnapshot(
+                reminders: reminders, userID: userID,
+                identityRevision: identityRevision, cacheRevision: cacheRevision
+            )
+            defaults.set(try ReminderJSON.encoder.encode(snapshot), forKey: widgetSnapshotKey)
         }
         return reminders
     }
@@ -297,7 +336,7 @@ actor ReminderStore {
               reordered.enumerated().allSatisfy({ index, reminder in
                   reminder.userID == ownerID && !reminder.isDone && reminder.sortOrder == index
               }) else { throw StoreError.mutationConflict }
-        defaults.set(try ReminderJSON.encoder.encode(reordered), forKey: cacheKey)
+        try cache(reordered)
         return reordered
     }
 
@@ -500,7 +539,7 @@ actor ReminderStore {
             if $0.sortOrder != $1.sortOrder { return $0.sortOrder < $1.sortOrder }
             return $0.createdAt < $1.createdAt
         }
-        defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: cacheKey)
+        try cache(reminders)
         return reminders
     }
 

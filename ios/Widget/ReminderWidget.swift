@@ -13,7 +13,7 @@ struct ReminderProvider: TimelineProvider {
 
     func getSnapshot(in context: Context, completion: @escaping (ReminderEntry) -> Void) {
         Task {
-            let reminders = await ReminderStore.shared.cached()
+            let reminders = await ReminderStore.shared.widgetCached()
             completion(ReminderEntry(date: .now, reminders: context.isPreview ? Self.samples : reminders))
         }
     }
