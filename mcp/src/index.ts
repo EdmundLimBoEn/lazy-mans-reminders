@@ -1,7 +1,7 @@
 import { getOAuthApi, OAuthError, OAuthProvider, type OAuthProviderOptions } from '@cloudflare/workers-oauth-provider'
 import { createMcpHandler } from 'agents/mcp/server'
 import { checkAccount, decideTokenExchange } from './accountGate'
-import { grantStorage } from './grantState'
+import { grantStorage, type CodeClaim } from './grantState'
 import { MCP_HOSTS, mcpResourceForRequest, MCP_WWW_AUTHENTICATE } from './constants'
 import { corsHeaders, handlePublicRequest, resolveExternalPat } from './oauth'
 import { prepareOauthRequest, rewriteOauthPath } from './oauthCompat'
@@ -77,7 +77,7 @@ async function handleMcp(
   })
 }
 
-function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: ExecutionContext): OAuthProviderOptions<Env> {
+function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: ExecutionContext, claim: CodeClaim = {}): OAuthProviderOptions<Env> {
   const options: OAuthProviderOptions<Env> = {
     apiRoute: '/mcp',
     apiHandler: { fetch: (request, nextEnv, ctx) => handleMcp(request, nextEnv, ctx, deps) },
@@ -115,9 +115,16 @@ function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: Ex
         let consumed: boolean
         try {
           const id = env.AUTHORIZATION_STATE.idFromName(`code:${exchange.userId}:${exchange.grantId}`)
-          const response = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/redeem', { method: 'POST' })
+          const attempt = crypto.randomUUID()
+          const response = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/redeem', {
+            method: 'POST', body: JSON.stringify({ attempt }),
+          })
           if (!response.ok) throw new Error()
           consumed = (await response.json<{ consumed: boolean }>()).consumed === true
+          if (consumed) {
+            claim.key = `grant:${exchange.userId}:${exchange.grantId}`
+            claim.attempt = attempt
+          }
         } catch {
           throw new OAuthError('temporarily_unavailable', {
             description: 'Token issuance is temporarily unavailable; retry shortly',
@@ -163,8 +170,9 @@ export async function handleWorkerFetch(
   if (limited) return limited
   const prepared = await prepareOauthRequest(request)
   if (prepared instanceof Response) return prepared
-  env = { ...env, OAUTH_KV: grantStorage(env) }
-  return new OAuthProvider(providerOptions(env, deps, mcpResourceForRequest(prepared), ctx)).fetch(prepared, env, ctx)
+  const claim: CodeClaim = {}
+  env = { ...env, OAUTH_KV: grantStorage(env, claim) }
+  return new OAuthProvider(providerOptions(env, deps, mcpResourceForRequest(prepared), ctx, claim)).fetch(prepared, env, ctx)
 }
 
 export default {

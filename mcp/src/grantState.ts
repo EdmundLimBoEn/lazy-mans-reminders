@@ -1,10 +1,13 @@
 import { OAuthError } from '@cloudflare/workers-oauth-provider'
 
+export type CodeClaim = { key?: string; attempt?: string }
+
 type Operation = {
   method: 'get' | 'put' | 'delete'
   key: string
   value?: string
   options?: KVNamespacePutOptions
+  codeAttempt?: string
 }
 
 function grantKey(key: string): string | null {
@@ -38,19 +41,40 @@ export class GrantState implements DurableObject {
         return method === 'get' ? Response.json(null) : new Response(null, { status: 409 })
       }
       if (method === 'get') return Response.json(await this.env.OAUTH_KV.get(key))
-      await this.env.OAUTH_KV.put(key, value!, options)
+      try {
+        await this.env.OAUTH_KV.put(key, value!, options)
+      } catch (error) {
+        // Only an explicit rejection of the first issuance write is safe to
+        // retry. Transport failures may have committed; later writes may leave
+        // credentials persisted. Neither may reopen the code.
+        if (operation.codeAttempt && key === grantKey(key) && error instanceof Error &&
+            /429 Too Many Requests/i.test(error.message)) {
+          const id = this.env.AUTHORIZATION_STATE.idFromName(`code:${key.slice('grant:'.length)}`)
+          const released = await this.env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/release', {
+            method: 'POST', body: JSON.stringify({ attempt: operation.codeAttempt }),
+          })
+          if (!released.ok) throw new Error('Grant state unavailable')
+          return new Response(null, { status: 429 })
+        }
+        throw error
+      }
       return new Response(null, { status: 204 })
     })
   }
 }
 
 /** Leave client records/listing in KV, but gate every grant/token read and mutation. */
-export function grantStorage(env: Env): KVNamespace {
+export function grantStorage(env: Env, claim: CodeClaim = {}): KVNamespace {
   const kv = env.OAUTH_KV
   async function call(operation: Operation): Promise<Response> {
     const id = env.GRANT_STATE.idFromName(grantKey(operation.key)!)
     const response = await env.GRANT_STATE.get(id).fetch('https://grant-state/storage', {
       method: 'POST', body: JSON.stringify(operation),
+    })
+    if (response.status === 429) throw new OAuthError('temporarily_unavailable', {
+      description: 'Token issuance is temporarily unavailable; retry shortly',
+      statusCode: 429,
+      headers: { 'Retry-After': '30' },
     })
     if (response.status === 409) throw new OAuthError('invalid_grant', { description: 'Grant not found' })
     if (!response.ok) throw new Error('Grant state unavailable')
@@ -68,7 +92,9 @@ export function grantStorage(env: Env): KVNamespace {
       }
       if (property === 'put') return async (key: string, value: string, options?: KVNamespacePutOptions) => {
         if (!grantKey(key)) return kv.put(key, value, options)
-        await call({ method: 'put', key, value, options })
+        const codeAttempt = key === claim.key ? claim.attempt : undefined
+        if (codeAttempt) claim.attempt = undefined
+        await call({ method: 'put', key, value, options, codeAttempt })
       }
       if (property === 'delete') return async (key: string) => {
         if (!grantKey(key)) return kv.delete(key)
