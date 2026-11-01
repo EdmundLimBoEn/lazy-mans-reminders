@@ -9,7 +9,8 @@ const makeRow = (id: number, isDone: boolean, userId = 'owner') => ({
   sort_order: 0, created_at: '2026-01-01T00:00:00Z', completed_at: null, user_id: userId,
 })
 
-function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'page' | 'count' | 'empty' | 'missing-count' | 'missing-page-count' | 'preferences') {
+function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'page' | 'count' | 'empty' | 'missing-count' | 'missing-page-count' | 'preferences', afterFirstPage?: () => void) {
+  let pageRequests = 0
   const requests: { url: URL; method: string }[] = []
   const fetch = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = new URL(String(input))
@@ -21,12 +22,15 @@ function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'pa
       }
       return Response.json({ max_lines: 6 })
     }
+    if (method === 'GET' && pageRequests++ === 1) afterFirstPage?.()
     const params = url.searchParams
     const filtered = rows.filter(row =>
       (!params.has('user_id') || params.get('user_id') === `eq.${row.user_id}`) &&
+      (!params.has('id') || row.id > params.get('id')!.slice(3)) &&
       (!params.has('is_done') || params.get('is_done') === `eq.${row.is_done}`))
     const offset = Number(params.get('offset') ?? 0)
-    if ((failure === 'page' && offset > 0) || (failure === 'count' && method === 'HEAD')) {
+    const laterPage = offset > 0 || params.has('id')
+    if ((failure === 'page' && laterPage) || (failure === 'count' && method === 'HEAD')) {
       return Response.json({ message: 'Synthetic storage failure' }, { status: 400 })
     }
     const order = (params.get('order') ?? '').split(',').map(value => value.split('.')[0])
@@ -39,9 +43,9 @@ function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'pa
       }
       return 0
     })
-    const page = failure === 'empty' && offset > 0 ? [] :
+    const page = failure === 'empty' && laterPage ? [] :
       filtered.slice(offset, offset + Math.min(cap, Number(params.get('limit') ?? cap)))
-    const headers: Record<string, string> = failure === 'missing-count' || (failure === 'missing-page-count' && offset > 0) ? {} : {
+    const headers: Record<string, string> = failure === 'missing-count' || (failure === 'missing-page-count' && laterPage) ? {} : {
       'content-range': `${offset}-${offset + page.length - 1}/${filtered.length}`,
     }
     return new Response(method === 'HEAD' ? null : JSON.stringify(page.map(({ user_id: _owner, ...row }) => row)), {
@@ -72,7 +76,30 @@ describe('MCP reminder listing pagination', () => {
     expect(pages.length).toBe(status === 'all' ? 3 : 2)
     for (const { url } of pages) {
       expect(url.searchParams.get('is_done')).toBe(status === 'all' ? null : `eq.${status === 'completed'}`)
-      expect(url.searchParams.get('order')).toBe('is_done.asc,sort_order.asc,created_at.asc,id.asc')
+      expect(url.searchParams.get('order')).toBe('id.asc')
+    }
+  })
+
+  it.each(['active', 'completed', 'all'] as const)('does not skip untouched %s rows when a fetched row is deleted', async status => {
+    const rows = Array.from({ length: 1002 }, (_, i) => makeRow(i, status !== 'active'))
+    const expected = rows.map(({ user_id: _owner, ...row }) => row)
+    const { client } = database(rows, 1000, undefined, () => { rows.shift() })
+    const result = await runBoardCommand(client, session, { kind: 'list', status })
+    expect(result).toMatchObject({ kind: 'snapshot', snapshot: { reminders: expected } })
+  })
+
+  it('restores board order after traversing IDs across pages', async () => {
+    const rows = [
+      { ...makeRow(0, true), sort_order: -1 },
+      { ...makeRow(1, false), sort_order: 2 },
+      { ...makeRow(2, false), created_at: '2026-02-01T00:00:00Z' },
+      makeRow(4, false), makeRow(3, false),
+    ]
+    const { client } = database(rows, 2)
+    const result = await runBoardCommand(client, session, { kind: 'list', status: 'all' })
+    expect(result.kind).toBe('snapshot')
+    if (result.kind === 'snapshot') {
+      expect(result.snapshot.reminders.map(row => row.id)).toEqual(['00003', '00004', '00002', '00001', '00000'])
     }
   })
 
@@ -84,7 +111,7 @@ describe('MCP reminder listing pagination', () => {
       reminders: rows.slice(5).map(({ user_id: _owner, ...row }) => row),
       capacity: { used: 5, maximum: 6, remaining: 1 },
     } })
-    expect(requests.filter(r => r.url.searchParams.has('offset')).map(r => r.url.searchParams.get('offset'))).toEqual(['0', '2'])
+    expect(requests.filter(r => r.url.searchParams.has('offset')).map(r => r.url.searchParams.get('id'))).toEqual([null, 'gt.00006'])
   })
 
   it('returns an empty completed list while retaining active capacity', async () => {
