@@ -429,21 +429,26 @@ final class AuthManager: ObservableObject {
             await ReminderBoardSync.clear()
             return
         }
-        await authSessionGate.shareIdentity(
-            previousUserID: await ReminderStore.shared.storedUserID(),
-            nextUserID: session.user.id,
-            clearUserData: { await ReminderStore.shared.clearUserData() },
-            clearBoard: { await ReminderBoardSync.clear() },
-            share: {
-                try? await ReminderStore.shared.saveSession(
-                    accessToken: session.accessToken,
-                    refreshToken: session.refreshToken,
-                    expiresAt: Date(timeIntervalSince1970: session.expiresAt),
-                    userID: session.user.id
-                )
-            },
-            didShare: { self.isSharedSessionReady = true }
-        )
+        do {
+            try await authSessionGate.shareIdentity(
+                previousUserID: await ReminderStore.shared.storedUserID(),
+                nextUserID: session.user.id,
+                clearUserData: { await ReminderStore.shared.clearUserData() },
+                clearBoard: { await ReminderBoardSync.clear() },
+                share: {
+                    try await ReminderStore.shared.saveSession(
+                        accessToken: session.accessToken,
+                        refreshToken: session.refreshToken,
+                        expiresAt: Date(timeIntervalSince1970: session.expiresAt),
+                        userID: session.user.id
+                    )
+                },
+                didShare: { self.isSharedSessionReady = true }
+            )
+        } catch {
+            // Keep the board gated when shared credentials could not be persisted.
+            return
+        }
         pushRegistration.bind(userID: session.user.id)
         await pushRegistration.flush()
         await syncLockScreenPrefsWhileLocked()
