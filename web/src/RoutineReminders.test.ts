@@ -307,3 +307,86 @@ it.each(['SUBSCRIBED', 'online'])('recovers a failed read on %s and removes reco
   expect(db.from.mock.calls.length).toBe(finalCalls)
   expect(db.removeChannel).toHaveBeenCalledWith(channel)
 })
+
+function deferred<T>() {
+  let resolve!: (value: T) => void
+  let reject!: (error: Error) => void
+  const promise = new Promise<T>((done, fail) => { resolve = done; reject = fail })
+  return { promise, resolve, reject }
+}
+
+type ReadResult = { data: typeof routine[] | null; error: { message: string } | null }
+function mockRead(promise: Promise<ReadResult>) {
+  db.from.mockReturnValueOnce({ select: () => ({ eq: () => ({ order: () => promise }) }) })
+}
+
+it.each(['insert', 'update', 'pause', 'resume', 'delete'])(
+  '%s reconciliation survives an older read completing afterward', async operation => {
+    if (operation === 'insert') render().button('Cancel edit').onClick()
+    if (operation === 'insert') render().change('routine-text', 'New routine')
+    if (operation === 'resume') {
+      mockRead(Promise.resolve({ data: [{ ...routine, enabled: false }], error: null }))
+      await hooks.load!()
+    }
+    const stale = deferred<ReadResult>()
+    mockRead(stale.promise)
+    const loading = hooks.load!()
+    const query = { eq: vi.fn() }
+    query.eq.mockReturnValueOnce(query).mockResolvedValueOnce({ error: null })
+    db.from.mockReturnValueOnce({ insert: () => Promise.resolve({ error: null }), update: () => query, delete: () => query })
+    const saved = operation === 'delete' ? [] : [{ ...routine, text: 'Saved routine', enabled: operation !== 'pause' }]
+    mockRead(Promise.resolve({ data: saved, error: null }))
+    if (operation === 'insert' || operation === 'update') await render().form.onSubmit({ preventDefault() {} })
+    else render().button(operation === 'delete' ? 'Delete routine' : operation === 'pause' ? 'Pause' : 'Resume').onClick()
+    await vi.waitFor(() => expect(render().submit.disabled).toBe(false))
+    const displayed = () => render().tree.filter(node => node.type === 'li').map(node => nodes(node).filter(child => child.type === 'p').map(child => child.props.children))
+    const reconciled = displayed()
+    expect(reconciled).toHaveLength(saved.length)
+    if (saved.length) expect(reconciled[0]).toContain('Saved routine')
+    stale.resolve({ data: [routine], error: null })
+    await loading
+    expect(displayed()).toEqual(reconciled)
+  },
+)
+
+it.each(['data', 'database error', 'rejection'])(
+  'ignores stale %s at both mutation boundaries', async outcome => {
+    const before = deferred<ReadResult>()
+    mockRead(before.promise)
+    const beforeLoad = hooks.load!()
+    const write = deferred<{ error: { message: string } }>()
+    const query = { eq: vi.fn() }
+    query.eq.mockReturnValueOnce(query).mockReturnValueOnce(write.promise)
+    db.from.mockReturnValueOnce({ update: () => query })
+    const saving = render().form.onSubmit({ preventDefault() {} })
+    const settle = (read: ReturnType<typeof deferred<ReadResult>>) => {
+      if (outcome === 'rejection') read.reject(new Error('Stale error'))
+      else read.resolve({ data: [], error: outcome === 'database error' ? { message: 'Stale error' } : null })
+    }
+    settle(before)
+    await beforeLoad
+    expect(render().alert).toBeUndefined()
+    expect(render().tree.filter(node => node.type === 'li')).toHaveLength(1)
+    const during = deferred<ReadResult>()
+    mockRead(during.promise)
+    const duringLoad = hooks.load!()
+    write.resolve({ error: { message: 'Write failed' } })
+    await saving
+    settle(during)
+    await duringLoad
+    expect(render().alert).toBe('Write failed')
+    expect(render().tree.filter(node => node.type === 'li')).toHaveLength(1)
+  },
+)
+
+it('keeps the newest snapshot when routine reads finish out of order', async () => {
+  const older = deferred<ReadResult>()
+  mockRead(older.promise)
+  const loading = hooks.load!()
+  mockRead(Promise.resolve({ data: [{ ...routine, enabled: false }], error: null }))
+  await hooks.load!()
+  expect(render().button('Resume')).toBeDefined()
+  older.resolve({ data: [routine], error: null })
+  await loading
+  expect(render().button('Resume')).toBeDefined()
+})
