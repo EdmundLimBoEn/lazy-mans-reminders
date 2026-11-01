@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { OAuthProvider } from '@cloudflare/workers-oauth-provider'
+import { MCP_HOSTS } from './constants'
 import { handlePublicRequest, resolveExternalPat } from './oauth'
 import { verifySupabaseUserWith } from './supabaseUser'
 import { hashSecret } from './token'
@@ -63,18 +64,20 @@ describe('personal token authentication through the OAuth provider', () => {
     authorizeEndpoint: '/authorize', tokenEndpoint: '/token',
     resolveExternalToken: resolveExternalPat,
   })
-  const request = () => provider.fetch(new Request('https://lmr-mcp.edmundlim.systems/mcp', {
+  const request = (host: string) => provider.fetch(new Request(`https://${host}/mcp`, {
     headers: { Authorization: `Bearer lmr_${tokenId}_test-secret` },
   }), env, { waitUntil: vi.fn() } as unknown as ExecutionContext)
 
-  it.each([503, 500, 429, 'network'])('returns 503 for lookup failure %s, then permits retry', async (failure) => {
+  it.each(
+    MCP_HOSTS.flatMap((host) => ([503, 500, 429, 'network'] as const).map((failure) => [host, failure] as const)),
+  )('on %s returns 503 for lookup failure %s, then permits retry', async (host, failure) => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
     accepted.mockClear()
     vi.stubGlobal('fetch', async () => {
       if (failure === 'network') throw new TypeError('test network failure')
       return json(failure as number, { message: 'test storage failure' })
     })
-    const pending = request()
+    const pending = request(host)
     await vi.runAllTimersAsync()
     const response = await pending
     expect(response.status).toBe(503)
@@ -85,15 +88,17 @@ describe('personal token authentication through the OAuth provider', () => {
     vi.stubGlobal('fetch', async (_input: unknown, init?: RequestInit) => init?.method === 'PATCH'
       ? new Response(null, { status: 204 })
       : json(200, { id: tokenId, user_id: tokenId, name: 'Test', token_hash, revoked_at: null }))
-    expect((await request()).status).toBe(200)
+    expect((await request(host)).status).toBe(200)
     expect(accepted).toHaveBeenCalledOnce()
   })
 
-  it.each(['missing', 'revoked', 'wrong-secret'])('still rejects a %s token', async (kind) => {
+  it.each(
+    MCP_HOSTS.flatMap((host) => (['missing', 'revoked', 'wrong-secret'] as const).map((kind) => [host, kind] as const)),
+  )('on %s still rejects a %s token', async (host, kind) => {
     vi.stubGlobal('fetch', async () => json(200, kind === 'missing' ? null : {
       id: tokenId, user_id: tokenId, name: 'Test', token_hash: '00'.repeat(32),
       revoked_at: kind === 'revoked' ? '2026-01-01T00:00:00Z' : null,
     }))
-    expect((await request()).status).toBe(401)
+    expect((await request(host)).status).toBe(401)
   })
 })

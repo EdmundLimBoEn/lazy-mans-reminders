@@ -137,6 +137,8 @@ jobs:
             supabase/tests/routine_reminders.sql \
             supabase/tests/reminder_quotas.sql \
             supabase/tests/write_budgets.sql \
+            supabase/migrations/202610280001_reminder_push_replay.sql \
+            supabase/tests/reminder_push_replay.sql \
             supabase/migrations/202610280002_normalize_legacy_reminder_text.sql \
             supabase/tests/normalize_legacy_reminder_text.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
