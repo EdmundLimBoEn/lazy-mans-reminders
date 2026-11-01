@@ -107,7 +107,7 @@ final class AuthSessionGateTests: XCTestCase {
         var publishedAccount = accountA
         var registeredOwner: UUID? = accountA
         var uploads: [UUID] = []
-        let registrar = PushTokenRegistrar(defaults: storage) { registration in
+        let registrar = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { registration in
             uploads.append(registration.userID)
             registeredOwner = registration.userID
         }
@@ -197,7 +197,7 @@ final class AuthSessionGateTests: XCTestCase {
                 let oldUser = UUID()
                 let nextUser = outcome == "switch" ? UUID() : oldUser
                 var sent: [PushTokenRegistrar.Registration] = []
-                let registrar = PushTokenRegistrar(defaults: storage) { sent.append($0) }
+                let registrar = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { sent.append($0) }
                 registrar.bind(userID: oldUser)
                 registrar.recordDeviceToken("device")
                 registrar.recordPushToStartToken("start")
@@ -248,7 +248,7 @@ final class AuthSessionGateTests: XCTestCase {
         let storage = UserDefaults(suiteName: suite)!
         defer { storage.removePersistentDomain(forName: suite) }
         let user = UUID()
-        let registrar = PushTokenRegistrar(defaults: storage) { _ in }
+        let registrar = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { _ in }
         registrar.bind(userID: user)
         registrar.recordDeviceToken("device")
         registrar.recordActivityToken("acknowledged", startedAt: Date(timeIntervalSince1970: 1_800_000_000))
@@ -256,13 +256,13 @@ final class AuthSessionGateTests: XCTestCase {
         await registrar.pause()
         registrar.registrationWasRemoved()
         // A cancelled authentication task may not be able to upload immediately.
-        let offline = PushTokenRegistrar(defaults: storage, retryDelay: {}) { _ in
+        let offline = PushTokenRegistrar(defaults: storage, retryDelay: {}, remove: { _, _ in }) { _ in
             throw URLError(.notConnectedToInternet)
         }
         await offline.flush()
         XCTAssertTrue(offline.needsRetry)
         var sent: [PushTokenRegistrar.Registration] = []
-        let relaunched = PushTokenRegistrar(defaults: storage) { sent.append($0) }
+        let relaunched = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { sent.append($0) }
         relaunched.bind(userID: user)
         await relaunched.flush()
         XCTAssertEqual(sent.first?.activityPushToken, "acknowledged")
@@ -310,7 +310,7 @@ final class AuthSessionGateTests: XCTestCase {
             let storage = UserDefaults(suiteName: suite)!
             defer { storage.removePersistentDomain(forName: suite) }
             var sent: [PushTokenRegistrar.Registration] = []
-            let registrar = PushTokenRegistrar(defaults: storage) { sent.append($0) }
+            let registrar = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { sent.append($0) }
             let user = UUID()
             let startedAt = Date(timeIntervalSince1970: 1_800_000_000)
             registrar.bind(userID: user)
@@ -355,7 +355,7 @@ final class AuthSessionGateTests: XCTestCase {
         let finishUpload = Signal()
         let pauseStarted = Signal()
         var sent: [String?] = []
-        let registrar = PushTokenRegistrar(defaults: storage) { registration in
+        let registrar = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { registration in
             sent.append(registration.activityPushToken)
             if sent.count == 1 {
                 uploadStarted.send()
@@ -414,7 +414,7 @@ final class AuthSessionGateTests: XCTestCase {
         let suite = "SignOutRetryTests-\(UUID().uuidString)"
         let storage = UserDefaults(suiteName: suite)!
         defer { storage.removePersistentDomain(forName: suite) }
-        let registrar = PushTokenRegistrar(defaults: storage) { _ in }
+        let registrar = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { _ in }
         registrar.bind(userID: UUID())
         registrar.recordDeviceToken("device-A")
         let gate = AuthSessionGate()
@@ -430,7 +430,7 @@ final class AuthSessionGateTests: XCTestCase {
         ))
         XCTAssertFalse(failed)
 
-        let relaunched = PushTokenRegistrar(defaults: storage) { _ in }
+        let relaunched = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { _ in }
         var deletedToken: String?
         let retried = await AuthSessionGate().cleanUp(operations: .init(
             setEndingSession: { _ in },
