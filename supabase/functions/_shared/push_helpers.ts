@@ -86,6 +86,8 @@ export function classifyWebhookPayload(payload: unknown): PayloadCheck {
     if (
       !record ||
       typeof record !== "object" ||
+      typeof record.id !== "string" ||
+      typeof record.user_id !== "string" ||
       !UUID_PATTERN.test(record.id) ||
       !UUID_PATTERN.test(record.user_id) ||
       !validReminderText(record.text)

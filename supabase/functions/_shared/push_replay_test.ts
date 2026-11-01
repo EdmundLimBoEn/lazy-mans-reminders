@@ -3,6 +3,7 @@ import {
   assertRejects,
 } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import { type PushJob, pushReplay } from "./push_replay.ts";
+import { reconcileLiveActivity } from "./live_activity_lifecycle.ts";
 
 function fixture() {
   let stored: PushJob = {
@@ -120,3 +121,55 @@ Deno.test("terminal rejection is not replayed and failed persistence leaves the 
   await assertRejects(() => f.restart().finish(["invalid"]));
   assertEquals(f.read().status, "pending");
 });
+
+for (const activityToken of [null, "activity"]) {
+  Deno.test(`accepted live ${activityToken ? "update" : "start"} suppresses fallback when persistence fails`, async () => {
+    const f = fixture();
+    const replay = f.restart();
+    f.failWrites();
+    const sends: string[] = [];
+    const live = await reconcileLiveActivity({
+      lines: ["Milk"],
+      activityToken,
+      startToken: "start",
+      retiringToken: null,
+      startedAt: activityToken ? new Date(0).toISOString() : null,
+      nowMs: 1000,
+      hasAlert: true,
+      send: (event, destination) =>
+        replay.send(`live:${destination}:${event}`, true, () => {
+          sends.push(event);
+          return Promise.resolve("sent");
+        }),
+      claimStart: () => Promise.resolve("lease"),
+      releaseStart: () => Promise.resolve(),
+      recordStart: () => Promise.resolve(),
+      recordEnd: () => Promise.resolve(),
+      recordAdoption: () => Promise.resolve(),
+      clearRetiring: () => Promise.resolve(),
+    });
+    // Same fallback guard used by send-reminder-push.
+    if (!live.deliveredAlert && !replay.alertSent) sends.push("fallback");
+    await replay.finish(live.results);
+    assertEquals(sends, [activityToken ? "update" : "start"]);
+    assertEquals(live.results, ["retryable"]);
+    assertEquals(replay.alertSent, true);
+    assertEquals(f.read().alert_sent, false);
+    assertEquals(f.read().status, "pending");
+  });
+}
+
+for (const result of ["sent", "retryable", "failed", "invalid"] as const) {
+  Deno.test(`failed persistence does not mark a non-alert ${result} as accepted`, async () => {
+    const f = fixture();
+    const replay = f.restart();
+    f.failWrites();
+    await assertRejects(
+      () =>
+        replay.send("live:retiring:end", false, () => Promise.resolve(result)),
+      Error,
+      "Could not save push delivery progress",
+    );
+    assertEquals(replay.alertSent, false);
+  });
+}

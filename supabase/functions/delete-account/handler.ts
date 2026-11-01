@@ -1,4 +1,3 @@
-import { USER_DATA_TABLES } from "../_shared/account_tables.ts";
 import {
   maybeRevokeAppleTokens,
   userHasAppleIdentity,
@@ -16,9 +15,7 @@ export const corsHeaders: Record<string, string> = {
 
 export type DeleteAccountUser = {
   id: string;
-  identities?: Array<{ provider?: string | null }> | null;
-  app_metadata?: { providers?: unknown } | null;
-};
+} & Parameters<typeof userHasAppleIdentity>[0];
 
 export type DeleteAccountDeps = {
   env: (name: string) => string | undefined;
@@ -32,10 +29,6 @@ export type DeleteAccountDeps = {
     authorization: string;
     fetchImpl?: typeof fetch;
   }) => Promise<GrantCleanupResult>;
-  deleteRows: (
-    table: string,
-    userId: string,
-  ) => Promise<{ error: unknown }>;
   deleteAuthUser: (userId: string) => Promise<{ error: unknown }>;
 };
 
@@ -156,17 +149,7 @@ export async function handleDeleteAccount(
     });
   }
 
-  for (const table of USER_DATA_TABLES) {
-    const { error: tableError } = await deps.deleteRows(table, user.id);
-    if (tableError) {
-      console.error(`Could not delete ${table}`, tableError);
-      return new Response("Could not delete account data", {
-        status: 500,
-        headers: corsHeaders,
-      });
-    }
-  }
-
+  // Auth-user cascades remove app data atomically and bypass exhausted write budgets.
   const { error: deleteError } = await deps.deleteAuthUser(user.id);
   if (deleteError) {
     console.error("Could not delete auth user", deleteError);

@@ -66,7 +66,7 @@ struct ReminderListView: View {
                 }
             }
             .refreshable { await refresh() }
-            .task(id: scenePhase) {
+            .task(id: scenePhase == .active && auth.isSharedSessionReady) {
                 guard scenePhase == .active else { return }
                 await refresh()
             }
@@ -211,7 +211,7 @@ struct ReminderListView: View {
                 .lineLimit(1...4)
                 .textInputAutocapitalization(.sentences)
                 .focused($composerFocused)
-                .disabled(atCapacity || isReordering || isDragging)
+                .disabled(atCapacity || isReordering || isDragging || draft.isSubmitting)
                 .submitLabel(.return)
                 .accessibilityLabel("New reminder")
                 .accessibilityHint(
@@ -372,6 +372,7 @@ struct ReminderListView: View {
     }
 
     private func refresh() async {
+        guard auth.isSharedSessionReady else { return }
         guard !isReordering && !isDragging else { return }
         let revision = boardRevision
         if !hasLoaded {
