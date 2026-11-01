@@ -126,7 +126,9 @@ final class AuthSessionClientTests: XCTestCase {
         let initial = Task {
             await gate.withLock { await client.auth.onAuthStateChange { _, _ in } }
         }
-        await fulfillment(of: [refreshStarted], timeout: 2)
+        // A cold CI simulator can stall while the SDK starts its first refresh.
+        // The continuation below controls the race; startup latency is not under test.
+        await fulfillment(of: [refreshStarted], timeout: 30)
         guard let finishRefresh else {
             initial.cancel()
             XCTFail("The SDK did not start the expected initial refresh")
