@@ -82,16 +82,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         didReceiveRemoteNotification userInfo: [AnyHashable: Any],
         fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
     ) {
-        Task {
-            do {
-                let previous = await ReminderStore.shared.cached()
-                let refreshed = try await ReminderStore.shared.refresh()
-                await ReminderBoardSync.apply(refreshed)
-                completionHandler(previous == refreshed ? .noData : .newData)
-            } catch {
-                completionHandler(.failed)
-            }
-        }
+        SilentPushRefresh.start(completion: completionHandler)
     }
 
     func userNotificationCenter(
