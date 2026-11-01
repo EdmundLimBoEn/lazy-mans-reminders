@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   pkceCodeFromCallbackUrl,
   pkceFlowIdFromCallbackUrl,
@@ -19,8 +19,13 @@ function isFlowStateError(message: string): boolean {
 export function AuthCallback({ onNavigate }: { onNavigate: (path: string) => void }) {
   const [error, setError] = useState('')
   const [retryHref, setRetryHref] = useState('/')
+  const started = useRef(false)
 
   useEffect(() => {
+    // StrictMode replays effects; redeem this callback and consume its return path only once.
+    if (started.current) return
+    started.current = true
+
     const href = window.location.href
     const params = new URLSearchParams(window.location.search)
     const oauthError = params.get('error_description') || params.get('error')
@@ -51,16 +56,13 @@ export function AuthCallback({ onNavigate }: { onNavigate: (path: string) => voi
         flowId ? { flowId } : undefined,
       )
       if (exchangeError) {
-        const { data } = await supabase.auth.getSession()
-        if (!data.session) {
-          setError(
-            isFlowStateError(exchangeError.message)
-              ? `${exchangeError.message} Start sign-in again so this callback gets a fresh verification code.`
-              : exchangeError.message,
-          )
-          setRetryHref(returnTo)
-          return
-        }
+        setError(
+          isFlowStateError(exchangeError.message)
+            ? `${exchangeError.message} Start sign-in again so this callback gets a fresh verification code.`
+            : exchangeError.message,
+        )
+        setRetryHref(returnTo)
+        return
       }
       // Full navigation keeps /connect?state=…; client navigate() would drop the query.
       window.location.replace(returnTo)

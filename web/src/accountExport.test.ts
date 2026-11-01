@@ -62,8 +62,9 @@ type Result = { data: unknown; error: { message: string } | null }
 let preferences: Result
 let reminderRows: AccountExportReminder[]
 let reminderCap: number
-let reminderFailureOffset: number | undefined
-const reminderRequests: { from: number; to: number; order?: string; userId?: string; columns?: string }[] = []
+let reminderFailurePage: number | undefined
+let afterReminderRead: (() => void) | undefined
+const reminderRequests: { after?: string; from: number; to: number; order?: string; userId?: string; columns?: string }[] = []
 const click = vi.fn()
 const createElement = vi.fn(() => ({ href: '', download: '', click }))
 const createObjectURL = vi.fn<(blob: Blob) => string>(() => 'blob:export')
@@ -75,8 +76,9 @@ beforeEach(() => {
   preferences = { data: { max_lines: 7 }, error: null }
   reminderRows = []
   reminderCap = 1000
-  reminderFailureOffset = undefined
+  reminderFailurePage = undefined
   reminderRequests.length = 0
+  afterReminderRead = undefined
   vi.stubGlobal('window', { location: { pathname: '/' } })
   vi.stubGlobal('document', { createElement })
   vi.spyOn(URL, 'createObjectURL').mockImplementation(createObjectURL)
@@ -86,18 +88,25 @@ beforeEach(() => {
       let order: string | undefined
       let userId: string | undefined
       let columns: string | undefined
-      const read = (from = 0, to = reminderCap - 1) => {
-        reminderRequests.push({ from, to, order, userId, columns })
-        const rows = order === 'id' ? [...reminderRows].sort((a, b) => a.id.localeCompare(b.id)) : reminderRows
-        return Promise.resolve(from === reminderFailureOffset
+      let after: string | undefined
+      let limit = reminderCap
+      const read = (from = 0, to = limit - 1) => {
+        reminderRequests.push({ after, from, to, order, userId, columns })
+        const filtered = reminderRows.filter(row => after === undefined || row.id > after)
+        const rows = order === 'id' ? [...filtered].sort((a, b) => a.id.localeCompare(b.id)) : filtered
+        const result = reminderRequests.length === reminderFailurePage
           ? { data: null, error: { message: 'Reminder page failed' } }
-          : { data: rows.slice(from, Math.min(to + 1, from + reminderCap)), error: null })
+          : { data: rows.slice(from, Math.min(to + 1, from + reminderCap)), error: null }
+        afterReminderRead?.()
+        return Promise.resolve(result)
       }
       const query = {
         select: (value: string) => { columns = value; return query },
         eq: (_column: string, value: string) => { userId = value; return query },
         order: (column: string) => { order = column; return query },
         range: read,
+        gt: (column: string, value: string) => { expect(column).toBe('id'); after = value; return query },
+        limit: (value: number) => { limit = value; return query },
         then: (resolve: (result: Result) => unknown) => read().then(resolve),
       }
       return query
@@ -171,7 +180,7 @@ it.each([0, 1000, 2005])('downloads all %i reminders in stable order with the ex
   expect(blob.type).toBe('application/json')
   expect(reminderRequests.every(request => request.order === 'id' && request.userId === 'A'
     && request.columns === 'id, text, sort_order, is_done, created_at')).toBe(true)
-  expect(reminderRequests.at(-1)?.from).toBe(count)
+  expect(reminderRequests.at(-1)?.after).toBe(count ? `r${String(count - 1).padStart(5, '0')}` : undefined)
 })
 
 it('continues after short pages when the API cap is smaller than the requested page', async () => {
@@ -181,22 +190,37 @@ it('continues after short pages when the API cap is smaller than the requested p
   await vi.waitFor(() => expect(click).toHaveBeenCalledTimes(1))
   const payload = JSON.parse(await createObjectURL.mock.calls[0][0].text())
   expect(payload.reminders).toEqual([...reminderRows].reverse())
-  expect(reminderRequests.map(request => request.from)).toEqual([0, 3, 6, 8])
+  expect(reminderRequests.map(request => request.after)).toEqual([undefined, 'r00002', 'r00005', 'r00007'])
   expect(reminderRequests.every(request => request.to >= request.from)).toBe(true)
 })
 
 it('does not download partial reminders when a later page fails and allows retry', async () => {
   reminderRows = reminders(1001)
-  reminderFailureOffset = 1000
+  reminderFailurePage = 2
   render('A').click('Download my data')
   await vi.waitFor(() => expect(render('A').download?.disabled).toBe(false))
   expect(render('A').text).toContain('Reminder page failed')
   expect(createObjectURL).not.toHaveBeenCalled()
   expect(click).not.toHaveBeenCalled()
 
-  reminderFailureOffset = undefined
+  reminderFailurePage = undefined
   render('A').click('Download my data')
   await vi.waitFor(() => expect(click).toHaveBeenCalledTimes(1))
   const payload = JSON.parse(await createObjectURL.mock.calls[0][0].text())
   expect(payload.reminders).toEqual([...reminderRows].reverse())
+})
+
+it.each(['r00000', 'r00999'])('does not skip untouched reminders when fetched reminder %s is deleted between pages', async (deletedId) => {
+  reminderRows = reminders(1002)
+  const expected = [...reminderRows].reverse()
+  afterReminderRead = () => {
+    if (reminderRequests.length === 1) {
+      reminderRows = reminderRows.filter(row => row.id !== deletedId)
+    }
+  }
+  render('A').click('Download my data')
+  await vi.waitFor(() => expect(click).toHaveBeenCalledTimes(1))
+  const payload = JSON.parse(await createObjectURL.mock.calls[0][0].text())
+  expect(reminderRows).toHaveLength(1001)
+  expect(payload.reminders).toEqual(expected)
 })

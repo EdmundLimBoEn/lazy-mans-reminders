@@ -21,7 +21,7 @@ final class ReminderStoreRefreshTests: XCTestCase {
             try await fixture.seed(widget, rows: [fixture.original])
 
             let refresh = Task {
-                await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
+                await widget.refreshOrCachedSnapshot(refreshAuthentication: false, updateCache: false)
             }
             await fulfillment(of: [started], timeout: 3)
             let expected = try await app.update(
@@ -45,7 +45,7 @@ final class ReminderStoreRefreshTests: XCTestCase {
         let widget = fixture.makeStore(network)
         try await fixture.seed(widget, rows: [])
         let refresh = Task {
-            await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
+            await widget.refreshOrCachedSnapshot(refreshAuthentication: false, updateCache: false)
         }
         await fulfillment(of: [started], timeout: 3)
         await network.finish(0, rows: [fixture.original])
@@ -63,12 +63,84 @@ final class ReminderStoreRefreshTests: XCTestCase {
         let widget = fixture.makeStore(network)
         try await fixture.seed(widget, rows: [fixture.original])
 
-        let timeline = await widget.refreshOrCached(refreshAuthentication: false, updateCache: false)
+        let timeline = await widget.refreshOrCachedSnapshot(refreshAuthentication: false, updateCache: false)
         let cache = await widget.cached()
         XCTAssertEqual(timeline, [fixture.original])
         XCTAssertEqual(cache, [fixture.original])
         let requests = await network.requestCount
         XCTAssertEqual(requests, 1, "Fallback must follow a failed fetch, not a missing session")
+    }
+
+    func testFailedWidgetRefreshWithoutUsableCacheShowsBoardError() async throws {
+        for cache in [nil, Data("invalid cache".utf8)] as [Data?] {
+            let fixture = Fixture()
+            defer { fixture.cleanUp() }
+            let network = Network(started: [], mutation: fixture.original, failsRequests: true)
+            let widget = fixture.makeStore(network)
+            try await fixture.seed(widget, rows: [])
+            fixture.defaults.set(cache, forKey: "cached-reminders")
+
+            let snapshot = await widget.refreshOrCachedSnapshot(refreshAuthentication: false, updateCache: false)
+
+            XCTAssertNil(snapshot)
+            XCTAssertEqual(ReminderActivityPresentation.displayLines(from: snapshot), ["Couldn’t Load Board"])
+            let requests = await network.requestCount
+            XCTAssertEqual(requests, 1)
+        }
+    }
+
+    func testHTTPFailureWithoutCacheShowsBoardError() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let widget = ReminderStore(
+            defaults: fixture.defaults, credentials: MemorySessionCredentials(),
+            serviceURL: URL(string: "https://reminders.invalid")!, anonKey: "test-key",
+            requestData: { request in
+                (Data(), HTTPURLResponse(url: request.url!, statusCode: 503,
+                                         httpVersion: nil, headerFields: nil)!)
+            }
+        )
+        try await fixture.seed(widget, rows: [])
+        fixture.defaults.removeObject(forKey: "cached-reminders")
+
+        let snapshot = await widget.refreshOrCachedSnapshot(refreshAuthentication: false, updateCache: false)
+
+        XCTAssertNil(snapshot)
+        XCTAssertEqual(ReminderActivityPresentation.displayLines(from: snapshot), ["Couldn’t Load Board"])
+    }
+
+    func testFailedWidgetRefreshWithCachedEmptyBoardShowsEmptyState() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let network = Network(started: [], mutation: fixture.original, failsRequests: true)
+        let widget = fixture.makeStore(network)
+        try await fixture.seed(widget, rows: [])
+
+        let snapshot = await widget.refreshOrCachedSnapshot(refreshAuthentication: false, updateCache: false)
+
+        XCTAssertEqual(snapshot, [])
+        XCTAssertEqual(ReminderActivityPresentation.displayLines(from: snapshot), ["Nothing to remember"])
+    }
+
+    func testSuccessfulEmptyWidgetRefreshWithoutCacheShowsEmptyState() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let started = expectation(description: "Widget refresh suspended")
+        let network = Network(started: [started], mutation: fixture.original)
+        let widget = fixture.makeStore(network)
+        try await fixture.seed(widget, rows: [])
+        fixture.defaults.removeObject(forKey: "cached-reminders")
+
+        let refresh = Task {
+            await widget.refreshOrCachedSnapshot(refreshAuthentication: false, updateCache: false)
+        }
+        await fulfillment(of: [started], timeout: 3)
+        await network.finish(0, rows: [])
+        let snapshot = await refresh.value
+
+        XCTAssertEqual(snapshot, [])
+        XCTAssertEqual(ReminderActivityPresentation.displayLines(from: snapshot), ["Nothing to remember"])
+        XCTAssertNil(fixture.defaults.data(forKey: "cached-reminders"))
     }
 
     func testDelayedRefreshCannotOverwriteAcknowledgedMutations() async throws {
