@@ -152,5 +152,8 @@ jobs:
             supabase/tests/write_budgets.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
+          # Exercise the initial write assertions with a deterministic minute rollover.
+          docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 \
+            -v write_budget_rollover=1 -f /tmp/supabase/tests/write_budgets.sql
       - if: always()
         run: docker rm -f routine-tests || true
