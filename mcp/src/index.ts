@@ -75,13 +75,13 @@ async function handleMcp(
   })
 }
 
-function providerOptions(env: Env, deps: IdentityDeps, resource: string): OAuthProviderOptions<Env> {
+function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: ExecutionContext): OAuthProviderOptions<Env> {
   const options: OAuthProviderOptions<Env> = {
     apiRoute: '/mcp',
     apiHandler: { fetch: (request, nextEnv, ctx) => handleMcp(request, nextEnv, ctx, deps) },
     defaultHandler: {
       fetch: (request, nextEnv) => handlePublicRequest(request, nextEnv, deps,
-        (pendingResource) => getOAuthApi(providerOptions(nextEnv, deps, pendingResource), nextEnv)),
+        (pendingResource) => getOAuthApi(providerOptions(nextEnv, deps, pendingResource, ctx), nextEnv)),
     },
     authorizeEndpoint: '/authorize',
     tokenEndpoint: '/token',
@@ -116,7 +116,7 @@ function providerOptions(env: Env, deps: IdentityDeps, resource: string): OAuthP
       resource_name: "Lazy Man's Reminders",
     },
     async resolveExternalToken(input) {
-      return resolveExternalPat(input)
+      return resolveExternalPat(input, (promise) => ctx.waitUntil(promise))
     },
   }
   return options
@@ -132,7 +132,7 @@ export async function handleWorkerFetch(
   if (limited) return limited
   const prepared = await prepareOauthRequest(request)
   if (prepared instanceof Response) return prepared
-  return new OAuthProvider(providerOptions(env, deps, mcpResourceForRequest(prepared))).fetch(prepared, env, ctx)
+  return new OAuthProvider(providerOptions(env, deps, mcpResourceForRequest(prepared), ctx)).fetch(prepared, env, ctx)
 }
 
 export default {
