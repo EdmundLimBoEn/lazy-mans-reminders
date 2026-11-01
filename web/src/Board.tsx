@@ -55,6 +55,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
   const loadSequence = useRef(0)
   const cleanupRef = useRef({ pending: false, nextAttemptAt: 0 })
   const reorderingRef = useRef(false)
+  const deferredRefreshRef = useRef<(() => void) | null>(null)
   const pendingMutationsRef = useRef(new Set<string>())
   const [pendingMutations, setPendingMutations] = useState(new Set<string>())
   const sensors = useSensors(
@@ -119,7 +120,8 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
 
   useEffect(() => {
     const recovery = connectionRefresh(async () => {
-      if (!reorderingRef.current) await load()
+      if (reorderingRef.current) deferredRefreshRef.current = () => recovery.refresh()
+      else await load()
     }, error => { if (error instanceof Error) setError(error.message) })
     let reloadTimer: number | undefined
     const channel = supabase
@@ -128,10 +130,13 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'reminders', filter: `user_id=eq.${session.user.id}` },
         () => {
-          if (reorderingRef.current) return
+          if (reorderingRef.current) {
+            deferredRefreshRef.current = recovery.refresh
+            return
+          }
           window.clearTimeout(reloadTimer)
           reloadTimer = window.setTimeout(() => {
-            if (!reorderingRef.current) recovery.refresh()
+            recovery.refresh()
           }, 100)
         },
       )
@@ -148,6 +153,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
       .subscribe(recovery.onStatus)
     return () => {
       recovery.dispose()
+      deferredRefreshRef.current = null
       window.clearTimeout(reloadTimer)
       void supabase.removeChannel(channel)
     }
@@ -258,6 +264,10 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
       } finally {
         reorderingRef.current = false
         setReordering(false)
+        // Replay notifications received during the write or reconciliation read.
+        const refresh = deferredRefreshRef.current
+        deferredRefreshRef.current = null
+        refresh?.()
       }
     }
   }

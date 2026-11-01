@@ -543,3 +543,45 @@ it('rolls back a failed reopen RPC before an unavailable recovery read', async (
   write.resolve({ error: null })
   await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
 })
+
+it.each(['notification', 'debounced notification', 'online', 'failed reorder'])('replays %s received during reorder reconciliation', async trigger => {
+  stored.push({ ...original, id: 'other', text: 'Other', sort_order: 1 })
+  await hooks.load!()
+  let notify!: () => void
+  const channel = {
+    on: vi.fn((_event, filter, callback) => {
+      if (filter.table === 'reminders') notify = callback
+      return channel
+    }),
+    subscribe: vi.fn().mockReturnThis(),
+  }
+  db.channel.mockReturnValue(channel)
+  render()
+  const cleanup = hooks.effects.at(-1)!()
+  await new Promise(resolve => setTimeout(resolve, 0))
+  db.rpc.mockImplementation((name: string) => name === 'reorder_reminders' ? write.promise : Promise.resolve({ error: null }))
+  const stale = deferred<Result>()
+  reads.push(stale)
+  // Exercise a notification whose debounce timer fires after reorder starts.
+  if (trigger === 'debounced notification') notify()
+  control('Move "Original" down').onClick!()
+  write.resolve({ error: trigger === 'failed reorder' ? { message: 'Write failed' } : null })
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  const callsBeforeReplay = db.from.mock.calls.length
+  stored = [{ ...original, text: 'Remote edit', is_done: true }, stored[1]]
+  if (trigger === 'online') window.dispatchEvent(new Event('online'))
+  else if (trigger !== 'debounced notification') {
+    for (let i = 0; i < 10; i++) notify()
+  }
+  await new Promise(resolve => setTimeout(resolve, 150))
+  expect(db.from.mock.calls.length).toBe(callsBeforeReplay)
+  stale.resolve({ data: [original, stored[1]], error: null })
+  try {
+    await vi.waitFor(() => expect(displayed()).toEqual(['Other', 'Remote edit']))
+    expect(control('Mark "Remote edit" active').disabled).toBe(false)
+    // The burst is coalesced into one follow-up read of reminders and prefs.
+    expect(db.from.mock.calls.length).toBe(callsBeforeReplay + 2)
+  } finally {
+    if (typeof cleanup === 'function') cleanup()
+  }
+})
