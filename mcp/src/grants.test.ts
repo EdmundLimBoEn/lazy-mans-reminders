@@ -39,6 +39,44 @@ function oauthFor(grants: GrantSummary[], options?: { fail?: string; pages?: Gra
 }
 
 describe('grant ownership', () => {
+  it.each([false, true])('bounds cleanup concurrency and verifies all results (failure: %s)', async (fail) => {
+    const grants = Array.from({ length: 13 }, (_, i) => grant({ id: `grant-${i}`, userId: 'user-a' }))
+    const attempted: string[] = []
+    let active = 0
+    let peak = 0
+    let listings = 0
+    const oauth = {
+      async listUserGrants(userId: string) {
+        expect(userId).toBe('user-a')
+        expect(active).toBe(0)
+        if (listings++ > 0) expect(attempted).toHaveLength(13)
+        return { items: [...grants] }
+      },
+      async revokeGrant(id: string, userId: string) {
+        expect(userId).toBe('user-a')
+        attempted.push(id)
+        active += 1
+        peak = Math.max(peak, active)
+        await new Promise((resolve) => setTimeout(resolve, 0))
+        active -= 1
+        if (fail && id === 'grant-0') throw new Error('kv down')
+        // A successful call can still leave an indexed grant behind.
+        if (fail && id === 'grant-12') return
+        grants.splice(grants.findIndex((item) => item.id === id), 1)
+      },
+    } as unknown as OAuthHelpers
+
+    expect(await cleanupUserGrants(oauth, 'user-a')).toEqual({
+      revoked: fail ? 12 : 13,
+      failed: fail ? 1 : 0,
+      remaining: fail ? 2 : 0,
+      complete: !fail,
+    })
+    expect(peak).toBe(4)
+    expect(new Set(attempted).size).toBe(13)
+    expect(listings).toBe(2)
+  })
+
   it('revokes client A without touching client B, and a second user cannot revoke A', async () => {
     const grants = [
       grant({ id: 'grant-a-aaaaaaaa', userId: 'user-a', clientId: 'client-a' }),

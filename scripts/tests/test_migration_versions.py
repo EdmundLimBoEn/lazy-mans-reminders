@@ -1,5 +1,6 @@
 """Exercise the migration guard through its CI command-line interface."""
 from pathlib import Path
+import re
 import subprocess
 import sys
 import tempfile
@@ -21,6 +22,14 @@ class MigrationVersionTests(unittest.TestCase):
         result = subprocess.run([sys.executable, str(SCRIPT)], cwd="/tmp",
                                 capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_workflow_sql_paths_exist_after_migration_renames(self):
+        workflow = (ROOT / ".github/workflows/web-mcp-checks.yml").read_text()
+        paths = re.findall(r"supabase/(?:migrations|tests)/[\w]+\.sql", workflow)
+        self.assertTrue(paths)
+        for path in paths:
+            with self.subTest(path=path):
+                self.assertTrue((ROOT / path).is_file(), f"Missing SQL file: {path}")
 
     def test_rejects_duplicate_versions_with_different_descriptions(self):
         for version in ("202610280001", "202610280002", "20261101000100"):

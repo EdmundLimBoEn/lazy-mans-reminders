@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { handleWorkerFetch } from './index'
-import { MCP_RESOURCE } from './constants'
+import { MCP_HOSTS } from './constants'
 import { hashSecret } from './token'
 import type { TokenSecret } from './domain'
 import type { OAuthProviderOptions } from '@cloudflare/workers-oauth-provider'
@@ -27,7 +27,9 @@ vi.mock('./server', () => ({ createServer: vi.fn() }))
 afterEach(() => vi.clearAllMocks())
 
 describe('personal-token MCP requests', () => {
-  it.each(['success', 'failure'])('responds before last-used bookkeeping completes (%s)', async (outcome) => {
+  it.each(MCP_HOSTS.flatMap((host) => ['success', 'failure'].map((outcome) => [host, outcome] as const)))(
+    'on %s responds before last-used bookkeeping completes (%s)', async (host, outcome) => {
+    const resource = `https://${host}/mcp`
     const tokenId = '11111111-1111-4111-8111-111111111111'
     const userId = '22222222-2222-4222-8222-222222222222'
     const secret = 'synthetic-test-secret' as TokenSecret
@@ -51,7 +53,7 @@ describe('personal-token MCP requests', () => {
         background.push(promise)
       },
     } as unknown as ExecutionContext
-    const request = new Request(MCP_RESOURCE, {
+    const request = new Request(resource, {
       headers: { Authorization: `Bearer lmr_${tokenId}_${secret}` },
     })
     let response: Response | undefined
@@ -71,7 +73,7 @@ describe('personal-token MCP requests', () => {
       expect(updateEq).toHaveBeenCalledWith('id', tokenId)
       expect(await response!.json()).toEqual({
         props: { userId, tokenId, agentName: 'Test agent' },
-        audience: MCP_RESOURCE,
+        audience: resource,
       })
     } finally {
       if (outcome === 'failure') fail(new Error('Bookkeeping unavailable'))

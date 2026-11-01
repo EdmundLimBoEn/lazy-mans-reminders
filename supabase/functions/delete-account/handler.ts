@@ -15,9 +15,7 @@ export const corsHeaders: Record<string, string> = {
 
 export type DeleteAccountUser = {
   id: string;
-  identities?: Array<{ provider?: string | null }> | null;
-  app_metadata?: { providers?: unknown } | null;
-};
+} & Parameters<typeof userHasAppleIdentity>[0];
 
 export type DeleteAccountDeps = {
   env: (name: string) => string | undefined;

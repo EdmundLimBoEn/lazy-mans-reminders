@@ -3,6 +3,7 @@ import { displayName } from './consent'
 import { redirectOrigin } from './redirects'
 
 const PAGE_SIZE = 100
+const REVOCATION_CONCURRENCY = 4
 /** Upper bound on KV list pages per pass so a corrupt cursor cannot loop forever. */
 const MAX_PAGES = 100
 
@@ -83,11 +84,19 @@ export async function revokeUserGrant(
  */
 export async function cleanupUserGrants(oauth: OAuthHelpers, userId: string): Promise<CleanupReport> {
   const grants = await listAllUserGrants(oauth, userId)
-  const outcomes = await Promise.allSettled(
-    grants.map((grant) => oauth.revokeGrant(grant.id, userId)),
-  )
-  const failed = outcomes.filter((outcome) => outcome.status === 'rejected').length
-  const revoked = outcomes.length - failed
+  let next = 0
+  let failed = 0
+  await Promise.all(Array.from({ length: Math.min(REVOCATION_CONCURRENCY, grants.length) }, async () => {
+    while (next < grants.length) {
+      const grant = grants[next++]
+      try {
+        await oauth.revokeGrant(grant.id, userId)
+      } catch {
+        failed += 1
+      }
+    }
+  }))
+  const revoked = grants.length - failed
   const remaining = (await listAllUserGrants(oauth, userId)).length
   return { revoked, failed, remaining, complete: failed === 0 && remaining === 0 }
 }

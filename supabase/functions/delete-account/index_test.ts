@@ -1,3 +1,4 @@
+import { exportJWK, generateKeyPair, SignJWT } from "npm:jose@6.2.10";
 import {
   assertEquals,
   assertExists,
@@ -5,6 +6,7 @@ import {
 import {
   APPLE_AUDIENCE,
   APPLE_CLIENT_SECRET_MAX_TTL_SECONDS,
+  APPLE_KEYS_URL,
   APPLE_REVOKE_URL,
   APPLE_TOKEN_URL,
   mintAppleClientSecret,
@@ -25,10 +27,35 @@ const NOW_SECONDS = 1_700_000_000;
 const APPLE_CLIENT_ID = "systems.edmundlim.LazyMansReminders";
 const APPLE_TEAM_ID = "TEAMID1234";
 const APPLE_KEY_ID = "KEYID12345";
+const APPLE_SUBJECT = "linked-apple-subject";
 const appleUser: DeleteAccountUser = {
   id: "11111111-1111-4111-8111-111111111111",
-  identities: [{ provider: "apple" }],
+  identities: [{
+    provider: "apple",
+    identity_data: { sub: APPLE_SUBJECT },
+  }],
 };
+
+const signingKeys = await generateKeyPair("RS256");
+const publicJwk = {
+  ...await exportJWK(signingKeys.publicKey),
+  kid: "test-apple-key",
+  alg: "RS256",
+};
+
+function appleIdToken(claims: Record<string, unknown> = {}) {
+  return new SignJWT({
+    iss: APPLE_AUDIENCE,
+    aud: APPLE_CLIENT_ID,
+    sub: APPLE_SUBJECT,
+    iat: NOW_SECONDS,
+    exp: NOW_SECONDS + 600,
+    ...claims,
+  }).setProtectedHeader({ alg: "RS256", kid: publicJwk.kid })
+    .sign(signingKeys.privateKey);
+}
+
+const validIdToken = await appleIdToken();
 
 const googleUser: DeleteAccountUser = {
   id: "22222222-2222-4222-8222-222222222222",
@@ -82,6 +109,7 @@ async function runDelete(input: {
   env?: Record<string, string | undefined>;
   token?: Response | ((body: string) => Response);
   revoke?: Response | ((body: string) => Response);
+  keys?: Response;
   grants?: { ok: false; reason: "incomplete" | "unreachable" };
   authError?: unknown;
   throwToken?: boolean;
@@ -126,6 +154,7 @@ async function runDelete(input: {
           Response.json({
             access_token: "access-token",
             refresh_token: "refresh-token",
+            id_token: validIdToken,
           });
         return Promise.resolve(
           typeof token === "function" ? token(body) : token,
@@ -135,6 +164,11 @@ async function runDelete(input: {
         const revoke = input.revoke ?? new Response(null, { status: 200 });
         return Promise.resolve(
           typeof revoke === "function" ? revoke(body) : revoke,
+        );
+      }
+      if (url === APPLE_KEYS_URL) {
+        return Promise.resolve(
+          input.keys ?? Response.json({ keys: [publicJwk] }),
         );
       }
       return Promise.resolve(
@@ -249,6 +283,7 @@ Deno.test("Apple users exchange the authorization code then revoke the refresh t
   assertEquals(result.warnings, []);
   assertEquals(result.appleCalls.map((call) => call.url), [
     APPLE_TOKEN_URL,
+    APPLE_KEYS_URL,
     APPLE_REVOKE_URL,
   ]);
 
@@ -269,7 +304,7 @@ Deno.test("Apple users exchange the authorization code then revoke the refresh t
   const exp = payload.exp as number;
   assertEquals(exp - NOW_SECONDS <= APPLE_CLIENT_SECRET_MAX_TTL_SECONDS, true);
 
-  const revokeCall = result.appleCalls[1];
+  const revokeCall = result.appleCalls[2];
   assertEquals(revokeCall.contentType, "application/x-www-form-urlencoded");
   const revokeForm = form(revokeCall.body);
   assertEquals(revokeForm.client_id, APPLE_CLIENT_ID);
@@ -282,12 +317,152 @@ Deno.test("Apple revoke falls back to the access token when no refresh token is 
   const result = await runDelete({
     user: appleUser,
     body: { appleAuthorizationCode: "auth-code-from-ios" },
-    token: Response.json({ access_token: "only-access" }),
+    token: Response.json({
+      access_token: "only-access",
+      id_token: validIdToken,
+    }),
   });
   await assertDeleted(result, appleUser.id);
-  const revokeForm = form(result.appleCalls[1].body);
+  const revokeForm = form(result.appleCalls[2].body);
   assertEquals(revokeForm.token, "only-access");
   assertEquals(revokeForm.token_type_hint, "access_token");
+});
+
+Deno.test("a different Apple subject cannot be revoked for the authenticated account", async () => {
+  for (
+    const tokens of [
+      { refresh_token: "other-refresh", access_token: "other-access" },
+      { access_token: "other-access" },
+    ]
+  ) {
+    const result = await runDelete({
+      user: {
+        ...appleUser,
+        identities: [
+          { provider: "google", identity_data: { sub: "other-apple-subject" } },
+          ...appleUser.identities!,
+        ],
+      },
+      body: {
+        appleAuthorizationCode: "other-account-code",
+        // Request data must never supply the trusted Apple subject.
+        appleSubject: "other-apple-subject",
+      },
+      token: Response.json({
+        ...tokens,
+        id_token: await appleIdToken({ sub: "other-apple-subject" }),
+      }),
+    });
+    assertEquals(await result.response.json(), {
+      ok: true,
+      appleRevocation: "manual_required",
+    });
+    assertEquals(result.deletedUserId, appleUser.id);
+    assertEquals(result.appleCalls.map((call) => call.url), [
+      APPLE_TOKEN_URL,
+      APPLE_KEYS_URL,
+    ]);
+    assertEquals(result.warnings, [{
+      event: "apple_token_revoke",
+      outcome: "skipped",
+      reason: "apple_identity_invalid",
+      endpoint: "token",
+    }]);
+  }
+});
+
+const invalidIdentityTokens: Record<string, () => Promise<unknown>> = {
+  missing: () => Promise.resolve(undefined),
+  malformed: () => Promise.resolve("not-a-jwt"),
+  "wrong issuer": () => appleIdToken({ iss: "https://other.example" }),
+  "wrong audience": () => appleIdToken({ aud: "other-client" }),
+  expired: () => appleIdToken({ exp: NOW_SECONDS }),
+  "missing expiry": () => appleIdToken({ exp: undefined }),
+  "missing subject": () => appleIdToken({ sub: undefined }),
+  "wrong subject type": () => appleIdToken({ sub: 123 }),
+  "future validity": () => appleIdToken({ nbf: NOW_SECONDS + 600 }),
+  "invalid signature": async () => {
+    const otherKeys = await generateKeyPair("RS256");
+    return new SignJWT(decodeJwt(validIdToken).payload)
+      .setProtectedHeader({ alg: "RS256", kid: publicJwk.kid })
+      .sign(otherKeys.privateKey);
+  },
+  "unknown signing key": () =>
+    new SignJWT(decodeJwt(validIdToken).payload)
+      .setProtectedHeader({ alg: "RS256", kid: "unknown" })
+      .sign(signingKeys.privateKey),
+  unsigned: () => {
+    const payload = validIdToken.split(".")[1];
+    return Promise.resolve(`${btoa('{"alg":"none"}')}.${payload}.`);
+  },
+};
+
+for (const [name, token] of Object.entries(invalidIdentityTokens)) {
+  Deno.test(`Apple revocation rejects an identity token with ${name}`, async () => {
+    const result = await runDelete({
+      user: appleUser,
+      body: { appleAuthorizationCode: "code" },
+      token: Response.json({
+        refresh_token: "refresh-token",
+        id_token: await token(),
+      }),
+    });
+    assertEquals(await result.response.json(), {
+      ok: true,
+      appleRevocation: "manual_required",
+    });
+    assertEquals(result.deletedUserId, appleUser.id);
+    assertEquals(
+      result.appleCalls.some((call) => call.url === APPLE_REVOKE_URL),
+      false,
+    );
+    assertEquals(result.warnings[0]?.reason, "apple_identity_invalid");
+  });
+}
+
+Deno.test("Apple users without a linked subject require manual revocation", async () => {
+  for (
+    const identities of [
+      undefined,
+      [{ provider: "apple" }],
+      [{ provider: "apple", identity_data: { sub: "" } }],
+      [{ provider: "apple", identity_data: { sub: 123 } }],
+      [{ provider: "google", identity_data: { sub: APPLE_SUBJECT } }],
+    ]
+  ) {
+    const result = await runDelete({
+      user: {
+        ...appleUser,
+        identities,
+        app_metadata: { providers: ["apple"] },
+      },
+      body: { appleAuthorizationCode: "code" },
+    });
+    assertEquals(await result.response.json(), {
+      ok: true,
+      appleRevocation: "manual_required",
+    });
+    assertEquals(result.deletedUserId, appleUser.id);
+    assertEquals(result.appleCalls, []);
+    assertEquals(result.warnings[0]?.reason, "apple_identity_missing");
+  }
+});
+
+Deno.test("Apple signing key outages skip revocation and preserve deletion", async () => {
+  const result = await runDelete({
+    user: appleUser,
+    body: { appleAuthorizationCode: "code" },
+    keys: new Response(null, { status: 503 }),
+  });
+  assertEquals(await result.response.json(), {
+    ok: true,
+    appleRevocation: "manual_required",
+  });
+  assertEquals(result.deletedUserId, appleUser.id);
+  assertEquals(result.appleCalls.map((call) => call.url), [
+    APPLE_TOKEN_URL,
+    APPLE_KEYS_URL,
+  ]);
 });
 
 Deno.test("Apple HTTP 400 still deletes the account", async () => {
@@ -373,12 +548,13 @@ Deno.test("transient revocation failures retry the same refresh token without re
   await assertDeleted(result, appleUser.id);
   assertEquals(result.appleCalls.map((call) => call.url), [
     APPLE_TOKEN_URL,
+    APPLE_KEYS_URL,
     APPLE_REVOKE_URL,
     APPLE_REVOKE_URL,
     APPLE_REVOKE_URL,
   ]);
   assertEquals(
-    result.appleCalls.slice(1).map((call) => form(call.body).token),
+    result.appleCalls.slice(2).map((call) => form(call.body).token),
     ["refresh-token", "refresh-token", "refresh-token"],
   );
 });
@@ -406,7 +582,7 @@ Deno.test("exhausted revocation retries and code exchange outages preserve delet
       revoke: () => new Response(null, { status: 503 }),
     });
     await assertDeleted(result, appleUser.id);
-    assertEquals(result.appleCalls.length, throwToken ? 1 : 4);
+    assertEquals(result.appleCalls.length, throwToken ? 1 : 5);
     assertEquals(result.warnings.length, 1);
     assertEquals(
       JSON.stringify(result.warnings).includes("refresh-token"),
