@@ -24,8 +24,9 @@ export function AuthCallback({ onNavigate }: { onNavigate: (path: string) => voi
     const href = window.location.href
     const params = new URLSearchParams(window.location.search)
     const oauthError = params.get('error_description') || params.get('error')
+    const storedReturnTo = consumeReturnTo()
     const returnTo = safeReturnPath(
-      pkceReturnToFromCallbackUrl(href) || consumeReturnTo(),
+      pkceReturnToFromCallbackUrl(href) || storedReturnTo,
       '/',
       window.location.origin,
     )
