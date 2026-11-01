@@ -126,7 +126,7 @@ it.each(['edit', 'complete', 'delete', 'add'])('%s invalidates pre-write reads a
   if (operation === 'complete') expect(control('Mark "Original" active')).toBeDefined()
   stored = acknowledged
   write.resolve({ error: null })
-  await vi.waitFor(() => expect(db.rpc).toHaveBeenCalledTimes(3))
+  await vi.waitFor(() => expect(db.from.mock.calls.filter(([table]) => table === 'lock_screen_prefs')).toHaveLength(3))
   await vi.waitFor(() => expect(displayed()).toEqual(acknowledged.map(row => row.text)))
 })
 
@@ -142,7 +142,7 @@ it.each(['before', 'after'])('reconciles a read started during an edit that retu
   }
   stored = acknowledged
   write.resolve({ error: null })
-  await vi.waitFor(() => expect(db.rpc).toHaveBeenCalledTimes(3))
+  await vi.waitFor(() => expect(db.from.mock.calls.filter(([table]) => table === 'lock_screen_prefs')).toHaveLength(3))
   await vi.waitFor(() => expect(displayed()).toEqual(['Updated']))
   stale.resolve({ data: [original], error: null })
   await loading
@@ -287,7 +287,7 @@ it('updates input and Add capacity after phone preference inserts/updates withou
   await hooks.load!()
   expect(control('New reminder').disabled).toBe(true)
   const subscription = subscribeToCapacity()
-  await vi.waitFor(() => expect(db.rpc).toHaveBeenCalledTimes(3))
+  await vi.waitFor(() => expect(db.from.mock.calls.filter(([table]) => table === 'lock_screen_prefs')).toHaveLength(3))
   const readsBefore = db.from.mock.calls.length
   subscription.emit(8)
   expect(control('New reminder').disabled).toBe(false)
@@ -316,8 +316,57 @@ it('does not let a pending board read overwrite newer phone capacity', async () 
   subscription.cleanup()
 })
 
+afterEach(() => {
+  vi.restoreAllMocks()
+  vi.unstubAllGlobals()
+})
+
+it('loads the initial board and finishes an edit while cleanup remains pending', async () => {
+  const cleanup = deferred<{ error: null }>()
+  db.rpc.mockReturnValue(cleanup.promise)
+  db.rpc.mockClear()
+  db.from.mockClear()
+  hooks.states = []
+  render()
+  const loading = hooks.load!()
+  await vi.waitFor(() => expect(displayed()).toEqual(['Original']))
+  await loading
+  expect(db.from).toHaveBeenCalledWith('reminders')
+  expect(db.from).toHaveBeenCalledWith('lock_screen_prefs')
+  stored = mutate('edit')
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Edit "Updated"').disabled).toBe(false))
+  expect(db.rpc).toHaveBeenCalledTimes(1)
+  cleanup.resolve({ error: null })
+})
+
+it.each(['success', 'error', 'rejection'])('throttles cleanup after %s and prevents overlapping attempts', async outcome => {
+  let now = Date.now() + 5 * 60 * 1000
+  vi.spyOn(Date, 'now').mockImplementation(() => now)
+  const cleanup = deferred<{ error: null }>()
+  db.rpc.mockReturnValueOnce(cleanup.promise)
+  await hooks.load!()
+  expect(db.rpc).toHaveBeenCalledTimes(2)
+  now += 5 * 60 * 1000
+  await hooks.load!()
+  expect(db.rpc).toHaveBeenCalledTimes(2)
+  cleanup.resolve({ error: null })
+  await Promise.resolve()
+  if (outcome === 'rejection') db.rpc.mockRejectedValueOnce(new Error('Offline'))
+  else db.rpc.mockResolvedValueOnce({ error: outcome === 'error' ? { message: 'Failed' } : null })
+  await hooks.load!()
+  expect(db.rpc).toHaveBeenCalledTimes(3)
+  await hooks.load!()
+  now += 5 * 60 * 1000 - 1
+  await hooks.load!()
+  expect(db.rpc).toHaveBeenCalledTimes(3)
+  now += 1
+  await hooks.load!()
+  expect(db.rpc).toHaveBeenCalledTimes(4)
+  expect(displayed()).toEqual(['Original'])
+})
+
 // Start the real subscription effect and drive recovery without row notifications.
-afterEach(() => { vi.unstubAllGlobals() })
 it.each(['SUBSCRIBED', 'online'])('recovers a failed read on %s and removes recovery listeners on cleanup', async trigger => {
   const browser = Object.assign(new EventTarget(), { clearTimeout, setTimeout })
   vi.stubGlobal('window', browser)
@@ -371,7 +420,7 @@ it('refreshes capacity after reconnection and keeps newer phone preferences over
   stored = Array.from({ length: 6 }, (_, index) => ({ ...original, id: String(index) }))
   await hooks.load!()
   const subscription = subscribeToCapacity()
-  await vi.waitFor(() => expect(db.rpc).toHaveBeenCalledTimes(3))
+  await vi.waitFor(() => expect(db.from.mock.calls.filter(([table]) => table === 'lock_screen_prefs')).toHaveLength(3))
   await new Promise(resolve => setTimeout(resolve, 0))
   subscription.emit(8)
   expect(control('New reminder').disabled).toBe(false)
