@@ -179,6 +179,8 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
         .update(changes)
         .eq('id', id)
         .eq('user_id', session.user.id)
+        .select('id')
+        .single()
       if (updateError) {
         // Restore only our optimistic row; preserve any newer state from a read.
         setReminders((items) => items.map((item) => item === optimistic ? previous : item))

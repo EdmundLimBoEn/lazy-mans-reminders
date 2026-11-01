@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import type { ReactElement, ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
+import { PostgrestClient } from '@supabase/postgrest-js'
 import App from './App'
 import Board from './Board'
 
@@ -89,7 +90,7 @@ beforeEach(async () => {
       update: (changes: unknown) => { db.update(changes); return mutation },
       delete: () => { db.delete(); return mutation }, insert: () => write.promise,
     }
-    const mutation = { eq: () => mutation, then: write.promise.then.bind(write.promise) }
+    const mutation = { eq: () => mutation, select: () => mutation, single: () => write.promise, then: write.promise.then.bind(write.promise) }
     expect(['reminders', 'lock_screen_prefs']).toContain(table)
     return query
   })
@@ -260,6 +261,44 @@ it('retains a failed edit draft and releases the guard for retry', async () => {
   stored = [{ ...original, text: 'Updated' }]
   write.resolve({ error: null })
   await vi.waitFor(() => expect(control('Edit "Updated"')).toBeDefined())
+})
+
+it.each(['empty', 'failed'])('retains a zero-row edit draft when the recovery read is %s', async recovery => {
+  const missingRow = 'Cannot coerce the result to a single JSON object'
+  const fetch = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
+    const singular = new Headers(init?.headers).get('Accept') === 'application/vnd.pgrst.object+json'
+    return singular
+      ? new Response(JSON.stringify({ code: 'PGRST116', message: missingRow, details: 'The result contains 0 rows', hint: null }), { status: 406 })
+      : new Response(null, { status: 204 })
+  })
+  const client = new PostgrestClient('https://example.invalid/rest/v1', { fetch })
+  const from = db.from.getMockImplementation()!
+  db.from.mockImplementation((table: string) => {
+    const query = from(table)
+    query.update = (changes: object) => client.from(table).update(changes)
+    return query
+  })
+  stored = [] // Another client deleted the reminder before this save.
+  if (recovery === 'failed') {
+    const failedRead = deferred<Result>()
+    failedRead.resolve({ data: null, error: { message: 'Offline read' } })
+    reads.push(failedRead)
+  }
+  mutate('edit')
+  await vi.waitFor(() => expect(fetch).toHaveBeenCalledOnce())
+  await vi.waitFor(() => expect(db.from.mock.calls.filter(([table]) => table === 'lock_screen_prefs')).toHaveLength(2))
+  await vi.waitFor(() => expect(displayed()).toEqual(recovery === 'empty' ? [] : ['Original']))
+  if (recovery === 'empty') {
+    expect(render().some(node => node.props.children === missingRow)).toBe(true)
+    // Make the row visible again to verify the draft survived reconciliation.
+    stored = [{ ...original }]
+    await hooks.load!()
+  }
+  await vi.waitFor(() => expect(control('Save reminder').disabled).toBe(false))
+  expect(control('Edit reminder: Original').value).toBe('Updated')
+  const [url, init] = fetch.mock.calls[0]
+  expect(new URL(String(url)).searchParams.get('select')).toBe('id')
+  expect(new Headers(init?.headers).get('Accept')).toBe('application/vnd.pgrst.object+json')
 })
 
 afterEach(() => {
