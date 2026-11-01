@@ -177,7 +177,21 @@ async function setCompletion(
     .eq('user_id', session.userId)
     .select('id, text, is_done, sort_order, created_at, completed_at')
     .maybeSingle()
-  if (error) return boardErrorFromStorage(error.message, error.details)
+  if (error) {
+    const maximum = capacityMaximumFromError(error.message, error.details)
+    if (!isDone && maximum !== null) {
+      const listed = await listBoard(supabase, session, 'active')
+      // Reopening is governed by the hard quota, not the lock-screen preference.
+      return capacityError({
+        reminders: listed.kind === 'snapshot' ? listed.snapshot.reminders : [],
+        capacity: capacityFromUsed(
+          listed.kind === 'snapshot' ? listed.snapshot.capacity.used : maximum,
+          maximum,
+        ),
+      })
+    }
+    return boardErrorFromStorage(error.message, error.details)
+  }
   if (!data) return { kind: 'not_found' }
   return { kind: 'changed', reminder: toReminderRow(data as ReminderSelect) }
 }
