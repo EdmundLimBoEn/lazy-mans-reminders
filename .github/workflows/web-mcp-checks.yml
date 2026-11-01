@@ -156,6 +156,9 @@ jobs:
             supabase/migrations/20261101000500_indexable_push_dispatch.sql \
             supabase/tests/indexable_push_dispatch.sql \
             supabase/tests/reminder_push_replay.sql \
+            supabase/migrations/20261101000400_retention_skip_locked.sql \
+            supabase/tests/budgeted_retention_cleanup.sql \
+            supabase/tests/retention_skip_locked.sql \
             supabase/tests/write_budgets.sql \
             supabase/migrations/202610280002_reopen_reminder_lock_order.sql \
             supabase/migrations/20261101000300_reopen_reminder_noop.sql \
