@@ -23,7 +23,7 @@ vi.mock('react', async original => ({
   useEffect: (effect: typeof hooks.effect) => { hooks.effect = effect },
 }))
 
-type Props = { children?: ReactNode; onClick?: () => void; disabled?: boolean; role?: string }
+type Props = { children?: ReactNode; onClick?: () => void; disabled?: boolean; role?: string; 'aria-busy'?: boolean }
 function nodes(node: ReactNode): ReactElement<Props>[] {
   if (Array.isArray(node)) return node.flatMap(nodes)
   if (!node || typeof node !== 'object' || !('props' in node)) return []
@@ -59,6 +59,29 @@ beforeEach(async () => {
   await vi.waitFor(() => expect(names()).toEqual(['Test agent']))
 })
 afterEach(() => vi.unstubAllGlobals())
+
+it.each(['populated', 'empty', 'http error', 'invalid body', 'rejection'])('gates the initial empty state for a %s response', async outcome => {
+  hooks.states = []
+  const pending = deferred<Response>()
+  fetchMock.mockReturnValueOnce(pending.promise)
+  const hasEmptyMessage = () => render().some(node => node.props.children === 'No connected agents.')
+
+  expect(hasEmptyMessage()).toBe(false)
+  expect(render()[0].props['aria-busy']).toBe(true)
+  hooks.effect!()
+  expect(hasEmptyMessage()).toBe(false)
+  expect(render()[0].props['aria-busy']).toBe(true)
+
+  if (outcome === 'rejection') pending.reject(new Error('Offline'))
+  else if (outcome === 'invalid body') pending.resolve(new Response('{}'))
+  else pending.resolve(response(outcome === 'populated' ? [agent] : [], outcome === 'http error' ? 500 : 200))
+
+  await vi.waitFor(() => expect(render()[0].props['aria-busy']).toBe(false))
+  expect(hasEmptyMessage()).toBe(outcome === 'empty')
+  expect(names()).toEqual(outcome === 'populated' ? ['Test agent'] : [])
+  expect(error()).toBe(['http error', 'invalid body', 'rejection'].includes(outcome)
+    ? 'Could not load connected agents.' : undefined)
+})
 
 it.each(['success', 'http error', 'rejection'])('ignores a token-refresh read returning %s after revocation reconciliation', async outcome => {
   const stale = deferred<Response>()
