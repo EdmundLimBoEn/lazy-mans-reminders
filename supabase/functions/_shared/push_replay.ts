@@ -36,7 +36,20 @@ export function pushReplay(
       key: string,
       carriesAlert: boolean,
       send: () => Promise<SendResult>,
+      destinationToken?: string | null,
     ) {
+      if (destinationToken !== undefined) {
+        // Do not reuse legacy, unscoped outcomes or persist raw APNs tokens.
+        const digest = await crypto.subtle.digest(
+          "SHA-256",
+          new TextEncoder().encode(JSON.stringify(destinationToken)),
+        );
+        const identity = Array.from(
+          new Uint8Array(digest),
+          (byte) => byte.toString(16).padStart(2, "0"),
+        ).join("");
+        key = `${key}:${identity}`;
+      }
       const previous = job.outcomes[key];
       if (previous && previous !== "retryable") return previous;
       assertCurrent();

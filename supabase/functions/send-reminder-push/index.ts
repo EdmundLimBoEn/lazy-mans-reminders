@@ -279,15 +279,10 @@ async function sendLiveActivityEvent(input: {
   lines: string[];
   alertBody?: string;
   destination: "push-to-start" | "activity" | "retiring";
+  token: string | null;
   quiet?: boolean;
 }): Promise<DeviceSendResult> {
-  const token = input.destination === "push-to-start"
-    ? parseLiveActivityToken(input.device.push_to_start_token)
-    : parseLiveActivityToken(
-      input.destination === "retiring"
-        ? input.device.retiring_activity_push_token
-        : input.device.activity_push_token,
-    );
+  const token = input.token;
   if (!token) return "failed";
 
   const jwt = await apnsJWT();
@@ -349,11 +344,19 @@ async function syncLiveActivity(input: {
     quiet: input.quiet,
     hasAlert: Boolean(input.alertBody),
     send: (event, destination) => {
+      const token = parseLiveActivityToken(
+        destination === "push-to-start"
+          ? input.device.push_to_start_token
+          : destination === "retiring"
+          ? input.device.retiring_activity_push_token
+          : input.device.activity_push_token,
+      );
       const send = () =>
         sendLiveActivityEvent({
           ...input,
           event,
           destination,
+          token,
           alertBody: destination === "retiring" || input.replay?.alertSent
             ? undefined
             : input.alertBody,
@@ -363,6 +366,7 @@ async function syncLiveActivity(input: {
           `live:${destination}:${event}`,
           destination !== "retiring" && Boolean(input.alertBody),
           send,
+          token,
         )
         : send();
     },
