@@ -126,6 +126,134 @@ final class ReminderStoreReorderTests: XCTestCase {
         XCTAssertEqual(cache, reordered)
     }
 
+    func testReorderWaitsForEveryCreateAndRecoversAfterSuccessFailureAndCancellation() async throws {
+        let failures: [Error?] = [nil, URLError(.timedOut), CancellationError()]
+        for failure in failures {
+            let fixture = Fixture()
+            defer { fixture.cleanUp() }
+            let firstStarted = expectation(description: "First create suspended")
+            let secondStarted = expectation(description: "Second create suspended")
+            let network = HeldCreates(started: [firstStarted, secondStarted])
+            let store = fixture.makeStore { try await network.send($0) }
+            try await fixture.seed(store)
+            let first = Task { try await store.create(text: "First") }
+            await fulfillment(of: [firstStarted], timeout: 3)
+            let second = Task { try await store.create(text: "Second") }
+            await fulfillment(of: [secondStarted], timeout: 3)
+            await assertReorderBlocked(store)
+
+            let created = Reminder(id: UUID(), userID: fixture.reminders[0].userID,
+                                   text: "First", sortOrder: 7, isDone: false,
+                                   createdAt: fixture.reminders[0].createdAt)
+            await network.finish(index: 0, data: try ReminderJSON.encoder.encode([created]))
+            _ = try await first.value
+            await assertReorderBlocked(store)
+            let cache = await store.cached()
+            XCTAssertEqual(cache, fixture.reminders + [created])
+
+            let secondCreated = Reminder(id: UUID(), userID: created.userID, text: "Second",
+                                         sortOrder: 8, isDone: false, createdAt: created.createdAt)
+            await network.finish(index: 1, data: try ReminderJSON.encoder.encode([secondCreated]), error: failure)
+            switch await second.result {
+            case .success: XCTAssertNil(failure)
+            case .failure: XCTAssertNotNil(failure)
+            }
+            let expected = fixture.reminders + [created] + (failure == nil ? [secondCreated] : [])
+            await assertReorderSucceeds(store, network: network, reminders: expected)
+        }
+    }
+
+    func testCreateBlocksReorderWhileRefreshingAuthenticationAndReleasesAfterAuthFailure() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let started = expectation(description: "Create authentication suspended")
+        let network = HeldCreates(started: [started])
+        let store = fixture.makeStore { try await network.send($0) }
+        try await fixture.seed(store)
+        try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
+                                    expiresAt: Date().addingTimeInterval(-60), userID: fixture.reminders[0].userID)
+        let create = Task { try await store.create(text: "First") }
+        await fulfillment(of: [started], timeout: 3)
+        await assertReorderBlocked(store)
+        await network.finish(index: 0, data: Data(), error: URLError(.timedOut))
+        do {
+            _ = try await create.value
+            XCTFail("Expired authentication must fail")
+        } catch {
+            XCTAssertEqual(error.localizedDescription, "Sign in to Lazy Man's Reminders on this iPhone first.")
+        }
+        try await fixture.seed(store)
+        await assertReorderSucceeds(store, network: network, reminders: fixture.reminders)
+    }
+
+    private func assertReorderBlocked(_ store: ReminderStore) async {
+        let before = await store.cached()
+        do {
+            _ = try await store.reorder(ids: before.reversed().map(\.id))
+            XCTFail("Outstanding creates must exclude reorder")
+        } catch {
+            XCTAssertEqual(error.localizedDescription,
+                           "The reminder change could not be confirmed. Refresh your board and try again.")
+        }
+        let after = await store.cached()
+        XCTAssertEqual(after, before)
+    }
+
+    private func assertReorderSucceeds(_ store: ReminderStore, network: HeldCreates, reminders: [Reminder]) async {
+        let reordered = reminders.reversed().enumerated().map { index, reminder in
+            var row = reminder
+            row.sortOrder = index
+            return row
+        }
+        do {
+            await network.allowReorder(try ReminderJSON.encoder.encode(reordered))
+            let result = try await store.reorder(ids: reordered.map(\.id))
+            XCTAssertEqual(result, reordered)
+            let cache = await store.cached()
+            XCTAssertEqual(cache, reordered)
+        } catch {
+            XCTFail("Finished creates must release reorder: \(error)")
+        }
+    }
+
+    private actor HeldCreates {
+        let started: [XCTestExpectation]
+        private var pending: [Int: CheckedContinuation<(Data, URLResponse), Error>] = [:]
+        private var requests: [URLRequest] = []
+        private var reorderData: Data?
+
+        init(started: [XCTestExpectation]) { self.started = started }
+
+        func send(_ request: URLRequest) async throws -> (Data, URLResponse) {
+            if request.url?.path == "/rest/v1/rpc/reorder_reminders" {
+                guard let reorderData else {
+                    XCTFail("Reorder reached transport while a create was outstanding")
+                    throw URLError(.badServerResponse)
+                }
+                return (reorderData, response(request))
+            }
+            let index = requests.count
+            guard index < started.count else { throw URLError(.badServerResponse) }
+            requests.append(request)
+            return try await withCheckedThrowingContinuation { continuation in
+                pending[index] = continuation
+                started[index].fulfill()
+            }
+        }
+
+        func allowReorder(_ data: Data) { reorderData = data }
+
+        func finish(index: Int, data: Data, error: Error? = nil) {
+            guard let continuation = pending.removeValue(forKey: index) else { return }
+            if let error { continuation.resume(throwing: error) }
+            else { continuation.resume(returning: (data, response(requests[index]))) }
+        }
+
+        private func response(_ request: URLRequest) -> URLResponse {
+            HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+        }
+    }
+
     private actor DelayedNetwork {
         let started: XCTestExpectation
         private var continuation: CheckedContinuation<(Data, URLResponse), Error>?

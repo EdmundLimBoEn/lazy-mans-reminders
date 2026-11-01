@@ -73,10 +73,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         Task { await AuthManager.shared.registerDevice(token: token) }
     }
 
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        BackgroundBoardRefresh.schedule()
-    }
-
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("APNs registration failed: \(error.localizedDescription)")
     }

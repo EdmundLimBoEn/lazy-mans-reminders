@@ -151,7 +151,7 @@ export async function deliverWithRetries(input: {
   ) => Promise<ApnsOutcome>;
   nextJwt: () => Promise<string>;
   onExpiredJwt: () => void;
-  onPrune: () => Promise<void>;
+  onPrune: (outcome: Extract<ApnsOutcome, { kind: "prune" }>) => Promise<void>;
   sleep: (ms: number) => Promise<void>;
 }): Promise<"sent" | "failed" | "retryable" | "invalid"> {
   let headers = input.headers;
@@ -166,7 +166,7 @@ export async function deliverWithRetries(input: {
     }
     if (outcome.kind === "sent") return "sent";
     if (outcome.kind === "prune") {
-      await input.onPrune();
+      await input.onPrune(outcome);
       return "invalid";
     }
     if (outcome.kind === "permanent") return "failed";
@@ -202,7 +202,7 @@ export type ApnsOutcome =
   | { kind: "sent" }
   | { kind: "uncertain"; status: number; reason: string }
   | { kind: "retryable"; status: number; reason: string }
-  | { kind: "prune"; status: number; reason: string }
+  | { kind: "prune"; status: number; reason: string; invalidatedAtMs?: number }
   | { kind: "expired_jwt"; status: number; reason: string }
   | { kind: "permanent"; status: number; reason: string };
 
@@ -224,7 +224,20 @@ export function classifyApnsResponse(
     return { kind: "expired_jwt", status, reason };
   }
   if (status === 410 || PRUNE_REASONS.has(reason)) {
-    return { kind: "prune", status, reason };
+    let invalidatedAtMs: number | undefined;
+    if (status === 410) {
+      try {
+        const timestamp = JSON.parse(body)?.timestamp;
+        if (typeof timestamp === "number" && Number.isSafeInteger(timestamp) &&
+          timestamp >= 0 && timestamp <= 8.64e15) {
+          invalidatedAtMs = timestamp;
+        }
+      } catch { /* A missing timestamp still permits revision-guarded cleanup. */ }
+    }
+    return {
+      kind: "prune", status, reason,
+      ...(invalidatedAtMs === undefined ? {} : { invalidatedAtMs }),
+    };
   }
   if (status === 429 || status >= 500) {
     return { kind: "retryable", status, reason };
