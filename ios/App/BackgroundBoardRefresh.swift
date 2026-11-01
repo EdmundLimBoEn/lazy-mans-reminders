@@ -37,7 +37,7 @@ enum BackgroundBoardRefresh {
                 await AuthManager.shared.waitForRestoration()
                 try Task.checkCancellation()
                 await AuthManager.shared.registerLiveActivityTokens()
-                let reminders = try await ReminderStore.shared.refresh()
+                let reminders = try await ReminderStore.shared.refresh(performMaintenance: false)
                 try Task.checkCancellation()
                 await ReminderBoardSync.apply(reminders)
                 success = true

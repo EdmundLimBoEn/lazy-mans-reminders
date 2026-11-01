@@ -265,7 +265,42 @@ describe('single-use authorization', () => {
     expect(replay.status).toBe(400)
     expect(await replay.json()).toEqual({ error: 'expired_state' })
     expect(oauth.completeAuthorization).not.toHaveBeenCalled()
-    expect((await deny()).status).toBe(200)
+    const repeatedDenial = await deny()
+    expect(repeatedDenial.status).toBe(400)
+    expect(await repeatedDenial.json()).toEqual({ error: 'expired_state' })
+  })
+
+  it('rejects denial when approval wins after denial reads the pending state', async () => {
+    const { kv, oauth, bind, deny } = await setup()
+    const get = kv.get.bind(kv)
+    let markRead!: () => void
+    const denialRead = new Promise<void>((resolve) => { markRead = resolve })
+    let release!: () => void
+    const resumeDenial = new Promise<void>((resolve) => { release = resolve })
+    vi.spyOn(kv, 'get').mockImplementationOnce(async (key: string) => {
+      const pending = await get(key, 'json')
+      markRead()
+      await resumeDenial
+      return pending
+    })
+    const deletePending = vi.spyOn(kv, 'delete')
+
+    const denial = deny()
+    await denialRead
+    try {
+      const approval = await bind()
+      expect(approval.status).toBe(200)
+      expect(await approval.json()).toEqual({ redirectTo: 'https://grok.example/callback?code=one' })
+    } finally {
+      release()
+    }
+
+    const denied = await denial
+    expect(denied.status).toBe(400)
+    expect(await denied.json()).toEqual({ error: 'expired_state' })
+    expect(denied.headers.get('Access-Control-Allow-Origin')).toBe('https://lmr.sillyapps.co')
+    expect(oauth.completeAuthorization).toHaveBeenCalledTimes(1)
+    expect(deletePending).toHaveBeenCalledTimes(1)
   })
 
   it('creates exactly one grant when both authenticated binds read the same pending state', async () => {

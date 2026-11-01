@@ -69,8 +69,9 @@ struct SharedSessionStorage {
 
     func read() throws -> Data? {
         if defaults.bool(forKey: signedOutKey) {
-            defaults.removeObject(forKey: legacyKey)
-            try credentials.delete()
+            // Reads must not perform deferred cleanup: another process can save a
+            // new session after we observe this marker. Failed sign-out deletion
+            // stays masked until an explicit write replaces the credentials.
             return nil
         }
         if let data = try credentials.read() {

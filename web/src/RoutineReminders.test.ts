@@ -21,6 +21,14 @@ vi.mock('react', async (importOriginal) => ({
     return hooks.states[index]
   },
   useEffect: (effect: () => void | (() => void)) => { hooks.effects.push(effect) },
+  useMemo: (calculate: () => unknown, dependencies: unknown[]) => {
+    const index = hooks.cursor++
+    const previous = hooks.states[index] as { dependencies: unknown[]; value: unknown } | undefined
+    if (!previous || dependencies.some((value, i) => !Object.is(value, previous.dependencies[i]))) {
+      hooks.states[index] = { dependencies, value: calculate() }
+    }
+    return (hooks.states[index] as { value: unknown }).value
+  },
 }))
 
 const routine = {
@@ -45,6 +53,7 @@ function render() {
   hooks.effects = []
   const tree = nodes(RoutineReminders({ userId: 'user-1' }))
   return {
+    tree,
     form: tree.find(node => node.type === 'form')!.props,
     text: tree.find(node => node.props.id === 'routine-text')!.props,
     change: (id: string, value: string) => {
@@ -67,6 +76,52 @@ beforeEach(async () => {
   await hooks.load!()
   render().button('Edit').onClick()
   render().text.onChange({ target: { value: 'Keep my draft' } })
+})
+
+it('reuses saved routine content while typing and refreshes it when routine data changes', async () => {
+  const routines = Array.from({ length: 50 }, (_, index) => ({ ...routine, id: `routine-${index}` }))
+  const refresh = async (data: typeof routines) => {
+    db.from.mockReturnValue({ select: () => ({ eq: () => ({ order: async () => ({ data, error: null }) }) }) })
+    await hooks.load!()
+    return render()
+  }
+  const format = vi.spyOn(Date.prototype, 'toLocaleString')
+  try {
+    const initial = await refresh(routines)
+    expect(format).toHaveBeenCalledTimes(50)
+    const rowContent = (view: ReturnType<typeof render>) => view.tree
+      .filter(node => node.type === 'li').map(node => (node.props.children as ReactNode[])[0])
+    const initialContent = rowContent(initial)
+    format.mockClear()
+    for (let index = 0; index < 20; index++) {
+      render().change('routine-text', `Draft ${index}`)
+      render().change('routine-zone', `Draft timezone ${index}`)
+      const content = rowContent(render())
+      content.forEach((row, i) => expect(row).toBe(initialContent[i]))
+    }
+    expect(format).not.toHaveBeenCalled()
+
+    const updated = {
+      ...routine, text: 'Updated routine', interval_days: 2, local_time: '08:30',
+      next_run_at: '2026-11-01T08:30:00Z', timezone: 'Europe/London',
+    }
+    const view = await refresh([updated])
+    expect(format).toHaveBeenCalledTimes(1)
+    expect(format).toHaveBeenLastCalledWith(undefined, { timeZone: 'Europe/London' })
+    expect(format.mock.contexts[0].toISOString()).toBe(updated.next_run_at.replace('Z', '.000Z'))
+    const paragraphs = view.tree.filter(node => node.type === 'p').map(node => node.props.children)
+    expect(paragraphs).toContain('Updated routine')
+    expect(paragraphs).toContain('Every 2 days at 08:30 · Europe/London')
+    expect(paragraphs).toContain(`Next: ${format.mock.results[0].value} · Europe/London`)
+    const paused = await refresh([{ ...updated, enabled: false }])
+    expect(paused.tree.some(node => node.props.children === 'Paused')).toBe(true)
+    expect(format).toHaveBeenCalledTimes(1)
+    const empty = await refresh([])
+    expect(rowContent(empty)).toEqual([])
+    expect(empty.tree.some(node => node.props.children === 'No routines yet.')).toBe(true)
+  } finally {
+    format.mockRestore()
+  }
 })
 
 it.each(['insert', 'update'] as const)('uses the selected timezone for weekly %s start dates', async (operation) => {
