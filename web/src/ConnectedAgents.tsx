@@ -4,13 +4,14 @@ import { parseGrantList, type GrantView } from './grantList'
 import { MCP_ORIGIN } from './mcp'
 
 export function ConnectedAgents({ accessToken }: { accessToken: string }) {
-  const [grants, setGrants] = useState<GrantView[]>([])
+  const [grants, setGrants] = useState<GrantView[] | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const readGeneration = useRef(0)
 
   const load = useCallback(async () => {
     const generation = ++readGeneration.current
+    setError('')
     const response = await fetch(`${MCP_ORIGIN}/grants`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     })
@@ -64,13 +65,13 @@ export function ConnectedAgents({ accessToken }: { accessToken: string }) {
   }
 
   return (
-    <div className="connected-agents flex flex-col gap-3">
+    <div className="connected-agents flex flex-col gap-3" aria-busy={grants === null && !error}>
       <div className="space-y-1">
         <h3 className="text-sm font-medium">Connected agents</h3>
         <p className="text-sm text-muted-foreground">These finished Allow. Revoke ends that agent’s access to your board.</p>
       </div>
       {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
-      {grants.length === 0 ? (
+      {grants === null ? null : grants.length === 0 ? (
         <p className="connected-empty rounded-lg border border-dashed px-3 py-4 text-center text-sm text-muted-foreground">No connected agents.</p>
       ) : (
         <ul className="agent-token-list divide-y rounded-lg border" aria-label="Connected agents">

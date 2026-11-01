@@ -34,6 +34,8 @@ vi.mock('react', async (original) => ({
 
 type Props = {
   disabled?: boolean; value?: string; children?: ReactNode; session?: Session; 'aria-label'?: string; text?: string; id?: string
+  ref?: (button: HTMLButtonElement | null) => void
+  onKeyDown?: (event: { key: string }) => void
   onClick?: () => void
   onChange?: (event: { target: { value: string } }) => void
   onSubmit?: (event: { preventDefault(): void }) => void
@@ -542,4 +544,49 @@ it('rolls back a failed reopen RPC before an unavailable recovery read', async (
   stored = [original]
   write.resolve({ error: null })
   await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
+})
+
+// Model React attaching the rendered Edit controls after a commit. The old
+// control is unmounted while editing, so restoration must use the new button.
+function attachEditButtons() {
+  const buttons = new Map<string, ReturnType<typeof vi.fn>>()
+  for (const node of render()) {
+    const label = node.props['aria-label']
+    if (!label?.startsWith('Edit "')) continue
+    const focus = vi.fn()
+    buttons.set(label, focus)
+    node.props.ref?.({ focus } as unknown as HTMLButtonElement)
+  }
+  return buttons
+}
+
+it.each(['Escape', 'Cancel', 'Save'])('restores the originating Edit control after %s', async action => {
+  stored.push({ ...original, id: 'other', text: 'Other', sort_order: 1 })
+  await hooks.load!()
+  for (const focus of attachEditButtons().values()) expect(focus).not.toHaveBeenCalled()
+  control('Edit "Other"').onClick!()
+  expect(attachEditButtons().has('Edit "Other"')).toBe(false)
+  if (action === 'Escape') control('Edit reminder: Other').onKeyDown!({ key: 'Escape' })
+  else if (action === 'Cancel') control('Cancel editing').onClick!()
+  else {
+    control('Edit reminder: Other').onChange!({ target: { value: 'Updated' } })
+    editForm().onSubmit!({ preventDefault() {} })
+    expect(attachEditButtons().has('Edit "Updated"')).toBe(false)
+    stored[1] = { ...stored[1], text: 'Updated' }
+    write.resolve({ error: null })
+    await vi.waitFor(() => expect(control('Edit "Updated"')).toBeDefined())
+  }
+  const buttons = attachEditButtons()
+  expect(buttons.get(`Edit "${action === 'Save' ? 'Updated' : 'Other'}"`)).toHaveBeenCalledOnce()
+  expect(buttons.get('Edit "Original"')).not.toHaveBeenCalled()
+  // Later commits must not steal focus back from wherever the user moved it.
+  for (const focus of attachEditButtons().values()) expect(focus).not.toHaveBeenCalled()
+})
+
+it('does not restore Edit focus when saving fails and the editor stays open', async () => {
+  mutate('edit')
+  write.resolve({ error: { message: 'Write failed' } })
+  await vi.waitFor(() => expect(control('Save reminder').disabled).toBe(false))
+  expect(control('Edit reminder: Original').value).toBe('Updated')
+  expect(attachEditButtons().size).toBe(0)
 })

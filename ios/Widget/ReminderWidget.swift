@@ -3,7 +3,7 @@ import WidgetKit
 
 struct ReminderEntry: TimelineEntry {
     let date: Date
-    let reminders: [Reminder]
+    let reminders: [Reminder]?
 }
 
 struct ReminderProvider: TimelineProvider {
@@ -20,7 +20,7 @@ struct ReminderProvider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<ReminderEntry>) -> Void) {
         Task {
-            let reminders = await ReminderStore.shared.refreshOrCached(
+            let reminders = await ReminderStore.shared.refreshOrCachedSnapshot(
                 refreshAuthentication: false, updateCache: false
             )
             let now = Date()

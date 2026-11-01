@@ -147,20 +147,24 @@ actor ReminderStore {
     }
 
     func cached() -> [Reminder] {
-        guard let data = defaults.data(forKey: cacheKey) else { return [] }
-        return (try? ReminderJSON.decoder.decode([Reminder].self, from: data)) ?? []
+        cachedSnapshot() ?? []
+    }
+
+    private func cachedSnapshot() -> [Reminder]? {
+        guard let data = defaults.data(forKey: cacheKey) else { return nil }
+        return try? ReminderJSON.decoder.decode([Reminder].self, from: data)
     }
 
     /// The app owns its cache. A widget snapshot is usable only until that cache
     /// changes, including a mutation acknowledged while the widget fetch was in flight.
-    func widgetCached() -> [Reminder] {
+    func widgetCached() -> [Reminder]? {
         guard let session = storedSession(),
               let data = defaults.data(forKey: widgetSnapshotKey),
               let snapshot = try? ReminderJSON.decoder.decode(WidgetSnapshot.self, from: data),
               snapshot.userID == session.userID,
               snapshot.identityRevision == defaults.string(forKey: identityRevisionKey),
               snapshot.cacheRevision == defaults.string(forKey: cacheRevisionKey) else {
-            return cached()
+            return cachedSnapshot()
         }
         return snapshot.reminders
     }
@@ -174,6 +178,13 @@ actor ReminderStore {
 
     /// Fallback helper. `??` uses a sync autoclosure, so `?? await cached()` does not compile.
     func refreshOrCached(refreshAuthentication: Bool = true, updateCache: Bool = true) async -> [Reminder] {
+        await refreshOrCachedSnapshot(
+            refreshAuthentication: refreshAuthentication, updateCache: updateCache
+        ) ?? []
+    }
+
+    /// Nil means loading failed without a decodable cache; an empty snapshot is a loaded board.
+    func refreshOrCachedSnapshot(refreshAuthentication: Bool = true, updateCache: Bool = true) async -> [Reminder]? {
         do {
             return try await refresh(
                 performMaintenance: false,
@@ -181,7 +192,7 @@ actor ReminderStore {
                 updateCache: updateCache
             )
         } catch {
-            return updateCache ? cached() : widgetCached()
+            return updateCache ? cachedSnapshot() : widgetCached()
         }
     }
 
