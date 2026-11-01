@@ -17,6 +17,7 @@ export function pushReplay(
   job: PushJob,
   assertCurrent: () => void,
 ) {
+  let alertSent = job.alert_sent;
   async function save(patch: Partial<PushJob>) {
     assertCurrent();
     const { data, error } = await supabase.from("reminder_push_jobs")
@@ -29,7 +30,7 @@ export function pushReplay(
   }
   return {
     get alertSent() {
-      return job.alert_sent;
+      return alertSent;
     },
     async send(
       key: string,
@@ -40,9 +41,11 @@ export function pushReplay(
       if (previous && previous !== "retryable") return previous;
       assertCurrent();
       const result = await send();
+      // Acceptance must suppress fallback even if saving progress fails.
+      alertSent ||= carriesAlert && result === "sent";
       await save({
         outcomes: { ...job.outcomes, [key]: result },
-        alert_sent: job.alert_sent || (carriesAlert && result === "sent"),
+        alert_sent: alertSent,
       });
       return result;
     },
