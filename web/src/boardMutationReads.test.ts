@@ -263,6 +263,46 @@ it('retains a failed edit draft and releases the guard for retry', async () => {
   await vi.waitFor(() => expect(control('Edit "Updated"')).toBeDefined())
 })
 
+it('reopens through the owner-locked RPC and reconciles the board', async () => {
+  stored = [{ ...original, is_done: true }]
+  await hooks.load!()
+  db.rpc.mockImplementation((name: string) => {
+    if (name === 'reopen_reminder') return { select: () => ({ single: () => write.promise }) }
+    return Promise.resolve({ error: null })
+  })
+  control('Mark "Original" active').onClick!()
+  expect(db.rpc).toHaveBeenCalledWith('reopen_reminder', {
+    p_user_id: 'user', p_reminder_id: 'note', p_text: null,
+  })
+  expect(db.update).not.toHaveBeenCalled()
+  stored = [original]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
+})
+
+it('rejects a zero-row reopen acknowledgement and restores the completed row', async () => {
+  stored = [{ ...original, is_done: true }]
+  await hooks.load!()
+  const missingRow = 'Cannot coerce the result to a single JSON object'
+  const fetch = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
+    const singular = new Headers(init?.headers).get('Accept') === 'application/vnd.pgrst.object+json'
+    return singular
+      ? new Response(JSON.stringify({ code: 'PGRST116', message: missingRow, details: 'The result contains 0 rows', hint: null }), { status: 406 })
+      : new Response('[]', { status: 200 })
+  })
+  const client = new PostgrestClient('https://example.invalid/rest/v1', { fetch })
+  db.rpc.mockImplementation((name: string, args: object) => client.rpc(name, args))
+  control('Mark "Original" active').onClick!()
+  await vi.waitFor(() => expect(fetch).toHaveBeenCalledOnce())
+  await vi.waitFor(() => expect(control('Mark "Original" active').disabled).toBe(false))
+  expect(render().some(node => node.props.children === missingRow)).toBe(true)
+  expect(db.update).not.toHaveBeenCalled()
+  const [url, init] = fetch.mock.calls[0]
+  expect(new URL(String(url)).pathname).toBe('/rest/v1/rpc/reopen_reminder')
+  expect(new URL(String(url)).searchParams.get('select')).toBe('id')
+  expect(new Headers(init?.headers).get('Accept')).toBe('application/vnd.pgrst.object+json')
+})
+
 it.each(['empty', 'failed'])('retains a zero-row edit draft when the recovery read is %s', async recovery => {
   const missingRow = 'Cannot coerce the result to a single JSON object'
   const fetch = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
@@ -399,4 +439,29 @@ it.each(['SUBSCRIBED', 'online'])('recovers a failed read on %s and removes reco
   await new Promise(resolve => setTimeout(resolve, 0))
   expect(db.from.mock.calls.length).toBe(finalCalls)
   expect(db.removeChannel).toHaveBeenCalledWith(channel)
+})
+
+it('rolls back a failed reopen RPC before an unavailable recovery read', async () => {
+  stored = [{ ...original, is_done: true }]
+  await hooks.load!()
+  db.rpc.mockImplementation((name: string) => {
+    if (name === 'reopen_reminder') return { select: () => ({ single: () => write.promise }) }
+    return Promise.resolve({ error: null })
+  })
+  const recovery = deferred<Result>()
+  reads.push(recovery)
+  control('Mark "Original" active').onClick!()
+  expect(control('Complete "Original"').disabled).toBe(true)
+  expect(db.update).not.toHaveBeenCalled()
+  write.resolve({ error: { message: 'Reopen failed' } })
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  expect(control('Mark "Original" active').disabled).toBe(true)
+  recovery.resolve({ data: null, error: { message: 'Offline read' } })
+  await vi.waitFor(() => expect(control('Mark "Original" active').disabled).toBe(false))
+
+  write = deferred()
+  control('Mark "Original" active').onClick!()
+  stored = [original]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(control('Complete "Original"').disabled).toBe(false))
 })
