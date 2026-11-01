@@ -190,7 +190,7 @@ async function setCompletion(
   if (!UUID.test(reminderId)) return { kind: 'not_found' }
 
   const query = isDone
-    ? supabase.from('reminders').update({ is_done: true }).eq('id', reminderId).eq('user_id', session.userId)
+    ? supabase.from('reminders').update({ is_done: true }).eq('id', reminderId).eq('user_id', session.userId).eq('is_done', false)
     : supabase.rpc('reopen_reminder', { p_user_id: session.userId, p_reminder_id: reminderId })
   const { data, error } = await query
     .select('id, text, is_done, sort_order, created_at, completed_at')
@@ -209,6 +209,14 @@ async function setCompletion(
       })
     }
     return boardErrorFromStorage(error.message, error.details)
+  }
+  if (!data && isDone) {
+    const existing = await supabase.from('reminders')
+      .select('id, text, is_done, sort_order, created_at, completed_at')
+      .eq('id', reminderId).eq('user_id', session.userId).eq('is_done', true)
+      .maybeSingle()
+    if (existing.error) return boardErrorFromStorage(existing.error.message, existing.error.details)
+    if (existing.data) return { kind: 'changed', reminder: toReminderRow(existing.data as ReminderSelect) }
   }
   if (!data) return { kind: 'not_found' }
   return { kind: 'changed', reminder: toReminderRow(data as ReminderSelect) }

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import type { ReactElement, ReactNode } from 'react'
 import { AuthCallback } from './AuthCallback'
-import { RETURN_TO_KEY } from './mcp'
+import { rememberReturnTo, RETURN_TO_KEY } from './mcp'
 
 // Keep hook state across renders and replay the effect as StrictMode does.
 const hooks = vi.hoisted(() => ({
@@ -36,9 +36,13 @@ function render() {
   hooks.cursor = 0
   return nodes(AuthCallback({ onNavigate: vi.fn() }))
 }
-function callback(path: string) {
+function visit(path: string) {
   const url = new URL(path, 'https://np.sillyapps.co')
-  vi.stubGlobal('window', { location: { href: url.href, search: url.search, origin: url.origin, replace } })
+  vi.stubGlobal('window', { location: { href: url.href, search: url.search, origin: url.origin, pathname: url.pathname, replace } })
+}
+function callback(path: string) {
+  hooks.states = []
+  visit(path)
   render()
   hooks.effect!()
 }
@@ -63,6 +67,7 @@ beforeEach(() => {
   storage = new Map()
   vi.stubGlobal('sessionStorage', {
     getItem: (key: string) => storage.get(key) ?? null,
+    setItem: (key: string, value: string) => { storage.set(key, value) },
     removeItem: (key: string) => storage.delete(key),
   })
 })
@@ -112,4 +117,38 @@ it.each([
   callback(path)
   expectError(message, '/')
   expect(auth.exchangeCodeForSession).not.toHaveBeenCalled()
+})
+
+it('consumes stored consent state even when the callback URL supplies the destination', async () => {
+  storage.set(RETURN_TO_KEY, '/connect?state=old')
+  await callback('/auth/callback?code=test&return_to=%2Fconnect%3Fstate%3Dcurrent')
+  expect(replace).toHaveBeenLastCalledWith('/connect?state=current')
+  expect(storage.has(RETURN_TO_KEY)).toBe(false)
+  await callback('/auth/callback?code=next')
+  expect(replace).toHaveBeenLastCalledWith('/')
+})
+
+it.each(['error=access_denied', ''])('consumes consent state on unsuccessful callbacks (%s)', async (query) => {
+  storage.set(RETURN_TO_KEY, '/connect?state=old')
+  await callback(`/auth/callback?return_to=%2Fconnect%3Fstate%3Dcurrent&${query}`)
+  expect(storage.has(RETURN_TO_KEY)).toBe(false)
+  expect(replace).not.toHaveBeenCalled()
+})
+
+it('clears abandoned consent state when a homepage sign-in starts', async () => {
+  visit('/connect?state=abandoned')
+  rememberReturnTo()
+  expect(storage.get(RETURN_TO_KEY)).toBe('/connect?state=abandoned')
+  visit('/')
+  rememberReturnTo()
+  await callback('/auth/callback?code=test')
+  expect(replace).toHaveBeenCalledWith('/')
+})
+
+it('preserves the stored fallback for a consent callback without return_to', async () => {
+  visit('/connect?state=current')
+  rememberReturnTo()
+  await callback('/auth/callback?code=test')
+  expect(replace).toHaveBeenCalledWith('/connect?state=current')
+  expect(storage.has(RETURN_TO_KEY)).toBe(false)
 })
