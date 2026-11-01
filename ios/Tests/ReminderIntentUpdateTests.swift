@@ -129,8 +129,7 @@ final class ReminderIntentUpdateTests: XCTestCase {
 
     func testSavedTargetResolvesCompletedReminderThenReopensWithoutCachingCompletedRows() async throws {
         let active = sample()
-        var completed = sample()
-        completed.userID = active.userID
+        var completed = sample(userID: active.userID)
         completed.isDone = true
         var reopened = completed
         reopened.isDone = false
@@ -205,8 +204,8 @@ final class ReminderIntentUpdateTests: XCTestCase {
         func increment() { value += 1 }
     }
 
-    private func sample() -> Reminder {
-        Reminder(id: UUID(), userID: UUID(), text: "Original", sortOrder: 3,
+    private func sample(userID: UUID = UUID()) -> Reminder {
+        Reminder(id: UUID(), userID: userID, text: "Original", sortOrder: 3,
                  isDone: false, createdAt: Date(timeIntervalSince1970: 1_775_000_000))
     }
 
