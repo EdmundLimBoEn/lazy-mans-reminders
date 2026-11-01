@@ -293,16 +293,21 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
         (async () => {
           const rows: AccountExportReminder[] = []
           const pageSize = 1000
+          let lastId: string | undefined
           while (true) {
-            const { data, error } = await supabase
+            let query = supabase
               .from('reminders')
               .select('id, text, sort_order, is_done, created_at')
               .eq('user_id', session.user.id)
               .order('id', { ascending: true })
-              .range(rows.length, rows.length + pageSize - 1)
+              .limit(pageSize)
+            // A deletion in an earlier page must not shift the next page past an unread row.
+            if (lastId !== undefined) query = query.gt('id', lastId)
+            const { data, error } = await query
             if (error) return { data: null, error }
             if (!data?.length) return { data: rows, error: null }
             rows.push(...data)
+            lastId = data[data.length - 1].id
             // Continue until empty: the API may cap pages below pageSize.
           }
         })(),
