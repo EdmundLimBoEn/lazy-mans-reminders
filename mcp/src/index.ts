@@ -3,7 +3,7 @@ import { createMcpHandler } from 'agents/mcp/server'
 import { checkAccount, decideTokenExchange } from './accountGate'
 import { MCP_HOSTS, mcpResourceForRequest, MCP_WWW_AUTHENTICATE } from './constants'
 import { corsHeaders, handlePublicRequest, resolveExternalPat } from './oauth'
-import { prepareOauthRequest } from './oauthCompat'
+import { prepareOauthRequest, rewriteOauthPath } from './oauthCompat'
 import { registrationRedirectError } from './redirects'
 import { enforceRateLimit } from './rateLimit'
 import { createServer } from './server'
@@ -128,7 +128,17 @@ export async function handleWorkerFetch(
   ctx: ExecutionContext,
   deps: IdentityDeps = defaultIdentityDeps,
 ): Promise<Response> {
-  const limited = await enforceRateLimit(request, env, corsHeaders(request, env))
+  const path = rewriteOauthPath(new URL(request.url).pathname)
+  // Match the provider's public routes; consent and account routes keep their allowlist.
+  const publicCors = path.startsWith('/mcp') || path === '/token' || path === '/register'
+  const origin = request.headers.get('Origin')
+  const limitCors = publicCors ? (origin ? {
+    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Methods': '*',
+    'Access-Control-Allow-Headers': 'Authorization, *',
+    'Access-Control-Expose-Headers': 'WWW-Authenticate, Retry-After',
+  } : {}) : corsHeaders(request, env)
+  const limited = await enforceRateLimit(request, env, limitCors)
   if (limited) return limited
   const prepared = await prepareOauthRequest(request)
   if (prepared instanceof Response) return prepared
