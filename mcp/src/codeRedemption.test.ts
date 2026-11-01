@@ -1,5 +1,7 @@
 import { getOAuthApi } from '@cloudflare/workers-oauth-provider'
 import { describe, expect, it, vi } from 'vitest'
+import { memoryObjects } from '../test/memoryObjects'
+import { GrantState } from './grantState'
 import { AuthorizationState } from './authorizationState'
 import { MCP_HOST, MCP_RESOURCE } from './constants'
 import { handleWorkerFetch } from './index'
@@ -58,6 +60,7 @@ async function setup() {
       }),
     },
   } as unknown as Env
+  env.GRANT_STATE = memoryObjects((state) => new GrantState(state, env))
   const oauth = getOAuthApi<Env>({
     apiRoute: '/mcp',
     apiHandler: { fetch: async () => new Response() },

@@ -21,6 +21,7 @@ function environment(outcome: 'allowed' | 'limited' | 'missing' | 'error'): Env 
     },
   }
   return {
+    OAUTH_KV: {},
     WEB_ORIGINS: webOrigin, AUTH_RATE_LIMIT: limiter, MCP_RATE_LIMIT: limiter,
   } as unknown as Env
 }
