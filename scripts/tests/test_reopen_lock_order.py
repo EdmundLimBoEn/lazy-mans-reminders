@@ -52,6 +52,14 @@ class ReopenLockOrderTests(unittest.TestCase):
         cls.sql(f"""
           grant select, insert, update, delete on public.reminders to authenticated, service_role;
           insert into auth.users values ('{OWNER}'), ('{OTHER}');
+        """)
+
+    def setUp(self):
+        # Commit fresh fixtures so both concurrent psql sessions can see them.
+        self.sql(f"""
+          begin;
+          delete from public.reminders;
+          delete from public.routine_reminders;
           insert into public.routine_reminders(id,user_id,text,interval_days,start_date,local_time,timezone)
             values ('{ROUTINE}','{OWNER}','Routine',1,current_date,'09:00','UTC');
           update public.routine_reminders set next_run_at = now() - interval '1 minute';
@@ -59,6 +67,7 @@ class ReopenLockOrderTests(unittest.TestCase):
             values ('{REMINDER}','{OWNER}','Completed',true,'{ROUTINE}');
           insert into public.reminders(id,user_id,text,is_done)
             values ('{OTHER}','{OTHER}','Other owner',true);
+          commit;
         """)
 
     @classmethod
@@ -122,6 +131,21 @@ class ReopenLockOrderTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, 'at most 16 active reminders'):
             self.sql(f"set role authenticated; set request.jwt.claim.sub='{OWNER}'; select * from public.reopen_reminder('{OWNER}','{REMINDER}')")
         self.assertEqual(self.sql(f"select is_done from reminders where id='{REMINDER}'"), 't')
+
+
+class ReopenFixtureIsolationTests(unittest.TestCase):
+    def test_orders_and_repeated_scheduler(self):
+        concurrency = 'test_concurrent_scheduler_and_reopen'
+        quota = 'test_ownership_permissions_and_quota'
+        for order in ((quota, concurrency, concurrency), (concurrency, quota, concurrency)):
+            with self.subTest(order=order):
+                # Keep one cluster for each sequence, exercising unittest's real setup lifecycle.
+                suite = unittest.TestSuite(ReopenLockOrderTests(name) for name in order)
+                result = unittest.TestResult()
+                suite.run(result)
+                self.assertEqual(result.errors, [])
+                self.assertEqual(result.failures, [])
+                self.assertEqual(result.testsRun, len(order))
 
 
 if __name__ == '__main__':
