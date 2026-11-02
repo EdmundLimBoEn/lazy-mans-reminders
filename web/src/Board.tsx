@@ -51,6 +51,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
   const deleteButtonRef = useRef<HTMLButtonElement>(null)
   const [deletingAccount, setDeletingAccount] = useState(false)
   const [exporting, setExporting] = useState(false)
+  const exportGeneration = useRef(0)
   const [maxLines, setMaxLines] = useState(DEFAULT_LOCK_SCREEN_MAX_LINES)
   const prefsRevision = useRef(0)
   const loadSequence = useRef(0)
@@ -63,6 +64,22 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   )
+
+  useEffect(() => {
+    // Invalidate immediately, before App renders the replacement account.
+    const invalidate = () => ++exportGeneration.current
+    setExporting(false)
+    const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      if (nextSession?.user.id !== session.user.id) {
+        invalidate()
+        setExporting(false)
+      }
+    })
+    return () => {
+      invalidate()
+      data.subscription.unsubscribe()
+    }
+  }, [session.user.id])
 
   useEffect(() => {
     if (!confirmDelete) return
@@ -296,6 +313,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
 
   async function downloadMyData() {
     if (exporting) return
+    const generation = exportGeneration.current
     setExporting(true)
     setError('')
     const [{ data: reminderRows, error: reminderError }, { data: prefs, error: prefsError }, { data: keys, error: keyError }, { data: routines, error: routineError }] =
@@ -314,6 +332,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
             // A deletion in an earlier page must not shift the next page past an unread row.
             if (lastId !== undefined) query = query.gt('id', lastId)
             const { data, error } = await query
+            if (generation !== exportGeneration.current) return { data: null, error: null }
             if (error) return { data: null, error }
             if (!data?.length) return { data: rows, error: null }
             rows.push(...data)
@@ -333,6 +352,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
           .is('revoked_at', null),
         supabase.from('routine_reminders').select('id,text,interval_days,start_date,local_time,timezone,enabled,next_run_at').eq('user_id', session.user.id),
       ])
+    if (generation !== exportGeneration.current) return
     if (reminderError || prefsError || keyError || routineError) {
       setError(reminderError?.message ?? prefsError?.message ?? keyError?.message ?? routineError?.message ?? 'Could not export your data.')
       setExporting(false)

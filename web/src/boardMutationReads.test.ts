@@ -7,7 +7,7 @@ import Board from './Board'
 
 // Run the real Board handlers with retained hooks and controllable database reads.
 const hooks = vi.hoisted(() => ({ effects: [] as (() => void | (() => void))[], states: [] as unknown[], cursor: 0, load: undefined as undefined | (() => Promise<void>) }))
-const db = vi.hoisted(() => ({ from: vi.fn(), rpc: vi.fn(), update: vi.fn(), delete: vi.fn(), channel: vi.fn(), removeChannel: vi.fn() }))
+const db = vi.hoisted(() => ({ auth: { onAuthStateChange: () => ({ data: { subscription: { unsubscribe: vi.fn() } } }) }, from: vi.fn(), rpc: vi.fn(), update: vi.fn(), delete: vi.fn(), channel: vi.fn(), removeChannel: vi.fn() }))
 vi.mock('./supabase', () => ({ supabase: db }))
 vi.mock('@dnd-kit/core', async (original) => ({
   ...await original<typeof import('@dnd-kit/core')>(),
