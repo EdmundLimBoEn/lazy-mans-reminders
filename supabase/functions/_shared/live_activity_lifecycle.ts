@@ -82,7 +82,10 @@ export async function reconcileLiveActivity(input: {
     }
 
     const leaseId = await input.claimStart(decision.kind === "update");
-    if (leaseId === null) return { results, deliveredAlert: false };
+    if (leaseId === null) {
+      results.push("retryable");
+      return { results, deliveredAlert: false };
+    }
     // On retryable results or exceptions (including uncertain delivery or
     // recording), let the lease expire rather than permitting another start.
     const result = await input.send("start", "push-to-start");
