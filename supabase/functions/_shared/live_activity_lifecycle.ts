@@ -14,6 +14,7 @@ export async function reconcileLiveActivity(input: {
   send: (
     event: "start" | "update" | "end",
     destination: "push-to-start" | "activity" | "retiring",
+    replacing?: boolean,
   ) => Promise<SendResult>;
   claimStart: (invalidActivity: boolean) => Promise<string | null>;
   releaseStart: (leaseId: string) => Promise<void>;
@@ -88,7 +89,11 @@ export async function reconcileLiveActivity(input: {
     }
     // On retryable results or exceptions (including uncertain delivery or
     // recording), let the lease expire rather than permitting another start.
-    const result = await input.send("start", "push-to-start");
+    const result = await input.send(
+      "start",
+      "push-to-start",
+      decision.kind === "recycle",
+    );
     results.push(result);
     if (result === "sent") {
       deliveredAlert = input.hasAlert;

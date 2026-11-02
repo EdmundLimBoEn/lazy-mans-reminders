@@ -343,7 +343,7 @@ async function syncLiveActivity(input: {
     nowMs: Date.now(),
     quiet: input.quiet,
     hasAlert: Boolean(input.alertBody),
-    send: (event, destination) => {
+    send: (event, destination, replacing) => {
       const token = parseLiveActivityToken(
         destination === "push-to-start"
           ? input.device.push_to_start_token
@@ -367,6 +367,13 @@ async function syncLiveActivity(input: {
           destination !== "retiring" && Boolean(input.alertBody),
           send,
           token,
+          event === "start"
+            ? {
+              previousToken: input.device.activity_push_token,
+              startedAt: new Date().toISOString(),
+              replacing: replacing === true,
+            }
+            : undefined,
         )
         : send();
     },
@@ -400,14 +407,21 @@ async function syncLiveActivity(input: {
       );
       if (error) throw new Error("Could not release Live Activity start");
     },
-    recordStart: (replacing, leaseId) =>
-      markActivityStarted(
+    recordStart: async (replacing, leaseId) => {
+      const start = input.replay?.acceptedStart;
+      // Legacy successes lack the original transition. Preserve registration
+      // rather than applying their bookkeeping to a possibly newer activity.
+      if (input.replay && !start) return;
+      await markActivityStarted(
         input.supabase,
-        input.device,
-        new Date().toISOString(),
-        replacing,
+        start
+          ? { ...input.device, activity_push_token: start.previousToken }
+          : input.device,
+        start?.startedAt ?? new Date().toISOString(),
+        start?.replacing ?? replacing,
         leaseId,
-      ),
+      );
+    },
     recordEnd: () =>
       markActivityEnded(
         input.supabase,

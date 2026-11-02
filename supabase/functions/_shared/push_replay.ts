@@ -1,13 +1,22 @@
 import type { ServiceClient } from "./device_delivery.ts";
 import type { SendResult } from "./live_activity_lifecycle.ts";
 
+export type StartTransition = {
+  previousToken: string | null;
+  startedAt: string;
+  replacing: boolean;
+};
+
 export type PushJob = {
   id: string;
   user_id: string;
   device_token: string;
   payload: unknown;
   status: string;
-  outcomes: Record<string, SendResult>;
+  outcomes: Record<
+    string,
+    SendResult | { result: "sent"; start: StartTransition }
+  >;
   alert_sent: boolean;
 };
 
@@ -18,6 +27,7 @@ export function pushReplay(
   assertCurrent: () => void,
 ) {
   let alertSent = job.alert_sent;
+  let acceptedStart: StartTransition | undefined;
   async function save(patch: Partial<PushJob>) {
     assertCurrent();
     const { data, error } = await supabase.from("reminder_push_jobs")
@@ -32,14 +42,18 @@ export function pushReplay(
     get alertSent() {
       return alertSent;
     },
+    get acceptedStart() {
+      return acceptedStart;
+    },
     async send(
       key: string,
       carriesAlert: boolean,
       send: () => Promise<SendResult>,
       destinationToken?: string | null,
+      start?: StartTransition,
     ) {
       if (destinationToken !== undefined) {
-        // Do not reuse legacy, unscoped outcomes or persist raw APNs tokens.
+        // Do not reuse legacy, unscoped outcomes or put raw APNs tokens in keys.
         const digest = await crypto.subtle.digest(
           "SHA-256",
           new TextEncoder().encode(JSON.stringify(destinationToken)),
@@ -51,13 +65,24 @@ export function pushReplay(
         key = `${key}:${identity}`;
       }
       const previous = job.outcomes[key];
-      if (previous && previous !== "retryable") return previous;
+      if (previous && previous !== "retryable") {
+        if (start) {
+          acceptedStart = typeof previous === "object"
+            ? previous.start
+            : undefined;
+        }
+        return typeof previous === "object" ? previous.result : previous;
+      }
       assertCurrent();
       const result = await send();
       // Acceptance must suppress fallback even if saving progress fails.
       alertSent ||= carriesAlert && result === "sent";
+      if (start && result === "sent") acceptedStart = start;
       await save({
-        outcomes: { ...job.outcomes, [key]: result },
+        outcomes: {
+          ...job.outcomes,
+          [key]: start && result === "sent" ? { result, start } : result,
+        },
         alert_sent: alertSent,
       });
       return result;
