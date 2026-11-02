@@ -167,7 +167,10 @@ jobs:
             supabase/tests/reopen_noop_budget.sql \
             supabase/migrations/20261102000100_live_activity_completion_lock.sql \
             supabase/tests/live_activity_start_lease.sql \
-            supabase/tests/live_activity_completion_lock.sql; do
+            supabase/tests/live_activity_completion_lock.sql \
+            supabase/migrations/20261109000100_scheduler_reminder_nowait.sql \
+            supabase/tests/routine_reminders.sql \
+            supabase/tests/reminder_quotas.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
           # Exercise the initial write assertions with a deterministic minute rollover.
