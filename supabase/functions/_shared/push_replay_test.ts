@@ -90,6 +90,95 @@ Deno.test("successful fallback alert survives restart while live delivery remain
   assertEquals(f.read().status, "complete");
 });
 
+for (const activityToken of [null, "old"]) {
+  Deno.test(`busy ${activityToken ? "renewal" : "initial start"} lease keeps the job pending until a later retry succeeds`, async () => {
+    const f = fixture();
+    // Dispatch at t=0 schedules a retry at t=120, but the worker only claims
+    // its two-minute start lease at t=10, so that lease expires at t=130.
+    let nowMs = 10_000;
+    let leaseExpiresAt = 0;
+    let starts = 0;
+    let alerts = 0;
+    let recordings = 0;
+    let releases = 0;
+    const run = async () => {
+      const replay = f.restart();
+      const hasAlert = !replay.alertSent;
+      const live = await reconcileLiveActivity({
+        lines: ["Milk"],
+        activityToken,
+        startToken: "start",
+        retiringToken: null,
+        startedAt: activityToken
+          ? new Date(-7 * 60 * 60 * 1000).toISOString()
+          : null,
+        nowMs,
+        hasAlert,
+        claimStart: () => {
+          if (nowMs < leaseExpiresAt) return Promise.resolve(null);
+          leaseExpiresAt = nowMs + 120_000;
+          return Promise.resolve("lease");
+        },
+        send: (event, destination) =>
+          replay.send(`live:${destination}:${event}`, hasAlert, () => {
+            starts++;
+            return Promise.resolve(starts === 1 ? "retryable" : "sent");
+          }, "start"),
+        releaseStart: () => {
+          releases++;
+          return Promise.resolve();
+        },
+        recordStart: () => {
+          recordings++;
+          return Promise.resolve();
+        },
+        recordEnd: () => Promise.resolve(),
+        recordAdoption: () => Promise.resolve(),
+        clearRetiring: () => Promise.resolve(),
+      });
+      const results = [...live.results];
+      if (!live.deliveredAlert && !replay.alertSent) {
+        results.push(
+          await replay.send("alert", true, () => {
+            alerts++;
+            return Promise.resolve("sent");
+          }),
+        );
+      }
+      await replay.finish(results);
+    };
+
+    await run();
+    assertEquals(f.read().status, "pending");
+    assertEquals({ starts, alerts, recordings, releases }, {
+      starts: 1,
+      alerts: 1,
+      recordings: 0,
+      releases: 0,
+    });
+
+    nowMs = 121_000;
+    await run();
+    assertEquals(f.read().status, "pending");
+    assertEquals({ starts, alerts, recordings, releases }, {
+      starts: 1,
+      alerts: 1,
+      recordings: 0,
+      releases: 0,
+    });
+
+    nowMs = 361_000;
+    await run();
+    assertEquals(f.read().status, "complete");
+    assertEquals({ starts, alerts, recordings, releases }, {
+      starts: 2,
+      alerts: 1,
+      recordings: 1,
+      releases: 0,
+    });
+  });
+}
+
 Deno.test("persisted live acceptance survives a subsequent bookkeeping exception", async () => {
   const f = fixture();
   await f.restart().send(

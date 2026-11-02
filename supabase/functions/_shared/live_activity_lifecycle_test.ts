@@ -359,6 +359,7 @@ for (const activityToken of [null, "old"]) {
     assertEquals(starts, 1);
     assertEquals(recordings, 1);
     assertEquals(results.map((r) => r.deliveredAlert), [true, false]);
+    assertEquals(results.map((r) => r.results), [["sent"], ["retryable"]]);
   });
 }
 
@@ -375,7 +376,7 @@ for (const activityToken of ["", "old"]) {
     assertEquals(first.deliveredAlert, false);
     device.advance(2 * 60 * 1000 - 1);
     const second = await device.run();
-    assertEquals(second.results, []);
+    assertEquals(second.results, ["retryable"]);
     assertEquals(device.sent, ["start:push-to-start"]);
     assertEquals(device.released, []);
     assertEquals(device.state.activityToken, activityToken);
@@ -519,7 +520,10 @@ for (const laterStatus of [200, 400, 410, 503]) {
         results: ["retryable"],
         deliveredAlert: false,
       });
-      assertEquals(await run(), { results: [], deliveredAlert: false });
+      assertEquals(await run(), {
+        results: ["retryable"],
+        deliveredAlert: false,
+      });
       assertEquals({ attempts, releases, recordings, prunes, sleeps, held }, {
         attempts: 1,
         releases: 0,
