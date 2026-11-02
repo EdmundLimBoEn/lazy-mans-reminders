@@ -372,6 +372,13 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
       method: 'POST',
       body: { expectedUserId },
     })
+    // Another tab may have replaced the account while deletion was pending.
+    const { data: latest, error: latestSessionError } = await supabase.auth.getSession()
+    if (latestSessionError || latest.session?.user.id !== expectedUserId) {
+      setConfirmDelete(null)
+      setDeletingAccount(false)
+      return
+    }
     if (invokeError || data?.ok !== true) {
       setError(
         invokeError?.message
