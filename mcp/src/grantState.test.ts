@@ -15,11 +15,58 @@ function setup() {
   const env = { OAUTH_KV: kv } as unknown as Env
   const state = memoryState()
   let object = new GrantState(state, env)
-  const call = (method: string, key = GRANT, value?: string) => object.fetch(new Request('https://grant-state/storage', {
-    method: 'POST', body: JSON.stringify({ method, key, value }),
+  const call = (method: string, key = GRANT, value?: string, rotation?: { from?: string; to: string }) => object.fetch(new Request('https://grant-state/storage', {
+    method: 'POST', body: JSON.stringify({ method, key, value, rotation }),
   }))
-  return { records, kv, state, call, restart: () => { object = new GrantState(state, env) } }
+  const rotate = (from: string, to: string) => call('put', GRANT,
+    JSON.stringify({ previousRefreshTokenId: from, refreshTokenId: to }), { from, to })
+  return { records, kv, state, call, rotate, restart: () => { object = new GrantState(state, env) } }
 }
+
+describe('atomic refresh rotation', () => {
+  it('rejects a reused predecessor after restart even when KV returns stale data', async () => {
+    const { records, rotate, restart, kv } = setup()
+    const initial = JSON.stringify({ refreshTokenId: 'initial' })
+    records.set(GRANT, initial)
+    expect((await rotate('initial', 'winner')).status).toBe(204)
+    restart()
+    records.set(GRANT, initial)
+    expect((await rotate('initial', 'loser')).status).toBe(409)
+    expect(kv.put).toHaveBeenCalledTimes(1)
+    expect((await rotate('winner', 'next')).status).toBe(204)
+  })
+
+  it('allows retry after KV explicitly rejects the rotation write', async () => {
+    const { records, rotate, restart, kv } = setup()
+    records.set(GRANT, JSON.stringify({ refreshTokenId: 'initial' }))
+    kv.put.mockRejectedValueOnce(new Error('KV PUT failed: 429 Too Many Requests'))
+    await expect(rotate('initial', 'rejected')).rejects.toThrow('429 Too Many Requests')
+    restart()
+    expect((await rotate('initial', 'retry')).status).toBe(204)
+  })
+
+  it('retains the reservation when a write may have committed', async () => {
+    const { records, rotate, restart, kv } = setup()
+    records.set(GRANT, JSON.stringify({ refreshTokenId: 'initial' }))
+    kv.put.mockImplementationOnce(async (key, value) => {
+      records.set(key, value)
+      throw new Error('Connection lost')
+    })
+    await expect(rotate('initial', 'uncertain')).rejects.toThrow('Connection lost')
+    restart()
+    expect((await rotate('initial', 'retry')).status).toBe(409)
+    expect(kv.put).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not write KV if the durable reservation fails', async () => {
+    const { records, rotate, kv, state } = setup()
+    records.set(GRANT, JSON.stringify({ refreshTokenId: 'initial' }))
+    vi.spyOn(state.storage, 'put').mockRejectedValueOnce(new Error('Storage unavailable'))
+    await expect(rotate('initial', 'rejected')).rejects.toThrow('Storage unavailable')
+    expect(kv.put).not.toHaveBeenCalled()
+    expect((await rotate('initial', 'retry')).status).toBe(204)
+  })
+})
 
 describe('authoritative grant revocation', () => {
   it('persists individual token revocation across restarts without revoking its grant or sibling tokens', async () => {
