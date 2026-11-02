@@ -7,11 +7,17 @@ import type { AccountExportReminder } from './lib/accountExport'
 
 // Follow the component-handler harness used by RoutineReminders.test.ts.
 // Keep separate hook state for App and its account subtree, respecting React keys.
-const hooks = vi.hoisted(() => ({ states: [] as unknown[], cursor: 0 }))
+const hooks = vi.hoisted(() => ({
+  states: [] as unknown[], cursor: 0, effects: [] as (() => void | (() => void))[],
+}))
 const db = vi.hoisted(() => ({
-  from: vi.fn(),
+  from: vi.fn(), channel: vi.fn(), removeChannel: vi.fn(),
+  auth: { onAuthStateChange: vi.fn() },
 }))
 vi.mock('./supabase', () => ({ supabase: db }))
+vi.mock('./lib/connectionRefresh', () => ({
+  connectionRefresh: () => ({ refresh: vi.fn(), dispose: vi.fn(), onStatus: vi.fn() }),
+}))
 vi.mock('@dnd-kit/core', async (original) => ({
   ...await original<typeof import('@dnd-kit/core')>(),
   useSensor: () => null,
@@ -21,13 +27,18 @@ vi.mock('react', async (original) => ({
   ...await original<typeof import('react')>(),
   useState: (initial: unknown) => {
     const index = hooks.cursor++
-    if (!(index in hooks.states)) hooks.states[index] = typeof initial === 'function' ? initial() : initial
-    return [hooks.states[index], (value: unknown) => { hooks.states[index] = value }]
+    const states = hooks.states
+    if (!(index in states)) states[index] = typeof initial === 'function' ? initial() : initial
+    return [states[index], (value: unknown) => { states[index] = value }]
   },
-  useRef: (current: unknown) => ({ current }),
+  useRef: (current: unknown) => {
+    const index = hooks.cursor++
+    if (!(index in hooks.states)) hooks.states[index] = { current }
+    return hooks.states[index]
+  },
   useMemo: (compute: () => unknown) => compute(),
   useCallback: (callback: unknown) => callback,
-  useEffect: () => {},
+  useEffect: (effect: () => void | (() => void)) => { hooks.effects.push(effect) },
 }))
 
 type Props = { children?: ReactNode; disabled?: boolean; onClick?: () => void; session?: Session }
@@ -40,15 +51,33 @@ function nodes(node: ReactNode): ReactElement<Props>[] {
 const session = (id: string) => ({ user: { id, email: `${id}@example.com` }, access_token: `token-${id}` }) as Session
 let boardStates: unknown[]
 let previousKey: string | null | undefined
+let cleanups: (() => void)[]
+const authListeners = new Set<(event: string, session: Session | null) => void>()
+function changeAccount(userId: string | null) {
+  for (const listener of authListeners) listener(userId ? 'SIGNED_IN' : 'SIGNED_OUT', userId ? session(userId) : null)
+}
+function unmount() {
+  for (const cleanup of cleanups) cleanup()
+  cleanups = []
+  previousKey = undefined
+}
 function render(userId: string) {
   hooks.states = ['/', session(userId), true, '', false]
   hooks.cursor = 0
   const board = nodes(App()).find(node => node.props.session)!
-  if (board.key !== previousKey) boardStates = []
+  const mounting = board.key !== previousKey
+  if (mounting) {
+    unmount()
+    boardStates = []
+  }
   previousKey = board.key
   hooks.states = boardStates
   hooks.cursor = 0
+  hooks.effects = []
   const tree = nodes(Board(board.props as Parameters<typeof Board>[0]))
+  if (mounting) {
+    cleanups = hooks.effects.map(effect => effect()).filter((cleanup): cleanup is () => void => typeof cleanup === 'function')
+  }
   return {
     download: tree.find(node => node.props.onClick && nodes(node).some(child => child.props.children === 'Download my data' || (Array.isArray(child.props.children) && child.props.children.includes('Download my data'))))?.props,
     click: (label: string) => tree.find(node => node.props.onClick && nodes(node).some(child =>
@@ -59,7 +88,7 @@ function render(userId: string) {
 }
 
 type Result = { data: unknown; error: { message: string } | null }
-let preferences: Result
+let preferences: Result | Promise<Result>
 let reminderRows: AccountExportReminder[]
 let reminderCap: number
 let reminderFailurePage: number | undefined
@@ -72,6 +101,14 @@ const createObjectURL = vi.fn<(blob: Blob) => string>(() => 'blob:export')
 beforeEach(() => {
   vi.clearAllMocks()
   boardStates = []
+  cleanups = []
+  authListeners.clear()
+  db.auth.onAuthStateChange.mockImplementation((listener) => {
+    authListeners.add(listener)
+    return { data: { subscription: { unsubscribe: () => authListeners.delete(listener) } } }
+  })
+  const channel = { on: vi.fn().mockReturnThis(), subscribe: vi.fn().mockReturnThis() }
+  db.channel.mockReturnValue(channel)
   previousKey = undefined
   preferences = { data: { max_lines: 7 }, error: null }
   reminderRows = []
@@ -79,7 +116,7 @@ beforeEach(() => {
   reminderFailurePage = undefined
   reminderRequests.length = 0
   afterReminderRead = undefined
-  vi.stubGlobal('window', { location: { pathname: '/' } })
+  vi.stubGlobal('window', { location: { pathname: '/' }, clearTimeout })
   vi.stubGlobal('document', { createElement })
   vi.spyOn(URL, 'createObjectURL').mockImplementation(createObjectURL)
   vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
@@ -124,6 +161,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  unmount()
   vi.restoreAllMocks()
   vi.unstubAllGlobals()
 })
@@ -223,4 +261,62 @@ it.each(['r00000', 'r00999'])('does not skip untouched reminders when fetched re
   const payload = JSON.parse(await createObjectURL.mock.calls[0][0].text())
   expect(reminderRows).toHaveLength(1001)
   expect(payload.reminders).toEqual(expected)
+})
+
+// Let the actual async handler (including Promise.all) settle before checking
+// that cancellation produced no download.
+const settleExport = () => new Promise(resolve => setTimeout(resolve, 0))
+
+it.each([1, 2])('cancels an export when auth changes during reminder page %i', async (page) => {
+  reminderRows = reminders(1002)
+  afterReminderRead = () => {
+    if (reminderRequests.length === page) {
+      changeAccount('B')
+      // Later requests are filtered for A but authorized as B, so RLS returns no rows.
+      reminderRows = []
+    }
+  }
+  render('A').click('Download my data')
+  await settleExport()
+  expect(createObjectURL).not.toHaveBeenCalled()
+  expect(click).not.toHaveBeenCalled()
+  expect(reminderRequests).toHaveLength(page)
+
+  afterReminderRead = undefined
+  render('B').click('Download my data')
+  await vi.waitFor(() => expect(click).toHaveBeenCalledTimes(1))
+  const payload = JSON.parse(await createObjectURL.mock.calls[0][0].text())
+  expect(payload.account.user_id).toBe('B')
+})
+
+it.each(['account change', 'sign out', 'unmount'])('cancels after pagination while preferences are pending on %s', async (reason) => {
+  let resolve!: (result: Result) => void
+  preferences = new Promise<Result>(done => { resolve = done })
+  render('A').click('Download my data')
+  await settleExport()
+  expect(reminderRequests).toHaveLength(1)
+  if (reason === 'account change') {
+    changeAccount('B')
+    render('B')
+  } else if (reason === 'sign out') changeAccount(null)
+  else unmount()
+  resolve({ data: { max_lines: 7 }, error: null })
+  await settleExport()
+  expect(createObjectURL).not.toHaveBeenCalled()
+  expect(createElement).not.toHaveBeenCalled()
+  expect(click).not.toHaveBeenCalled()
+})
+
+it('continues exporting across a token refresh for the same account', async () => {
+  reminderRows = reminders(1002)
+  afterReminderRead = () => {
+    for (const listener of authListeners) {
+      listener('TOKEN_REFRESHED', { ...session('A'), access_token: 'refreshed-token-A' })
+    }
+    render('A')
+  }
+  render('A').click('Download my data')
+  await vi.waitFor(() => expect(click).toHaveBeenCalledTimes(1))
+  const payload = JSON.parse(await createObjectURL.mock.calls[0][0].text())
+  expect(payload.reminders).toEqual([...reminderRows].reverse())
 })
