@@ -251,3 +251,41 @@ Deno.test("unscoped live outcomes cannot clear a new destination and alerts stay
     throw new Error("duplicate alert");
   });
 });
+
+Deno.test("only accepted starts retain their transition, scoped to the start destination", async () => {
+  const f = fixture();
+  const original = {
+    previousToken: null,
+    startedAt: "2026-11-02T00:00:00.000Z",
+    replacing: false,
+  };
+  const replacement = {
+    previousToken: "activity-B",
+    startedAt: "2026-11-02T08:00:00.000Z",
+    replacing: true,
+  };
+  let sends = 0;
+  const send = () => {
+    sends++;
+    return Promise.resolve("sent" as const);
+  };
+  const first = f.restart();
+  await first.send(
+    "start",
+    true,
+    () => Promise.resolve("retryable"),
+    "token-A",
+    original,
+  );
+  assertEquals(first.acceptedStart, undefined);
+  await f.restart().send("start", true, send, "token-A", replacement);
+  const retry = f.restart();
+  await retry.send("start", true, send, "token-A", original);
+  assertEquals(sends, 1);
+  assertEquals(retry.acceptedStart, replacement);
+  assertEquals(retry.alertSent, true);
+  const rotated = f.restart();
+  await rotated.send("start", false, send, "token-B", original);
+  assertEquals(sends, 2);
+  assertEquals(rotated.acceptedStart, original);
+});
