@@ -162,13 +162,16 @@ jobs:
             supabase/tests/write_budgets.sql \
             supabase/migrations/202610280002_reopen_reminder_lock_order.sql \
             supabase/migrations/20261101000300_reopen_reminder_noop.sql \
-            supabase/tests/reopen_noop_budget.sql; do
+            supabase/tests/reopen_noop_budget.sql \
+            supabase/migrations/20261102000100_live_activity_completion_lock.sql \
+            supabase/tests/live_activity_start_lease.sql \
+            supabase/tests/live_activity_completion_lock.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
           # Exercise the initial write assertions with a deterministic minute rollover.
           docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 \
             -v write_budget_rollover=1 -f /tmp/supabase/tests/write_budgets.sql
-          # Negative control, last because it deliberately breaks this disposable DB.
+          # Negative controls run last because they deliberately break this disposable DB.
           # The race test must reject a mint function without its advisory lock,
           # even while write-budget triggers are installed.
           docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 <<'SQL'
@@ -188,5 +191,22 @@ jobs:
             exit 1
           fi
           grep -q 'Concurrent mint bypassed the per-user lock' /tmp/token-lock-negative.log
+          # Restoring the old device lock must reproduce the acknowledgement race.
+          docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 <<'SQL'
+          do $$
+          declare
+            definition text := pg_get_functiondef('public.complete_live_activity_start(text,uuid,text,timestamptz,boolean,uuid)'::regprocedure);
+          begin
+            assert strpos(definition, 'for no key update') > 0, 'Completion lock mutation did not match';
+            execute replace(definition, 'for no key update', 'for update');
+          end $$;
+          SQL
+          if docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 \
+            -f /tmp/supabase/tests/live_activity_completion_lock.sql \
+            > /tmp/activity-lock-negative.log 2>&1; then
+            echo 'Acknowledgement race test accepted the incompatible device lock'
+            exit 1
+          fi
+          grep -Eq 'canceling statement due to lock timeout|deadlock detected' /tmp/activity-lock-negative.log
       - if: always()
         run: docker rm -f routine-tests || true
