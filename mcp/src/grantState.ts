@@ -8,6 +8,7 @@ type Operation = {
   value?: string
   options?: KVNamespacePutOptions
   codeAttempt?: string
+  rotation?: { from?: string; to: string }
 }
 
 function grantKey(key: string): string | null {
@@ -41,9 +42,32 @@ export class GrantState implements DurableObject {
         return method === 'get' ? Response.json(null) : new Response(null, { status: 409 })
       }
       if (method === 'get') return Response.json(await this.env.OAUTH_KV.get(key))
+      let previousRefreshTokenId: string | undefined
+      if (operation.rotation) {
+        previousRefreshTokenId = await this.state.storage.get<string>('refreshTokenId')
+        if (operation.rotation.from !== undefined) {
+          // Bootstrap existing grants once. Thereafter the durable head, not a
+          // possibly stale KV read, decides which refresh may commit.
+          if (previousRefreshTokenId === undefined) {
+            const stored = await this.env.OAUTH_KV.get(key)
+            previousRefreshTokenId = stored ? JSON.parse(stored).refreshTokenId : undefined
+          }
+          // The provider also accepts the previous token. Reject that replay:
+          // otherwise even sequential retries discard an issued successor.
+          if (operation.rotation.from !== previousRefreshTokenId) return new Response(null, { status: 409 })
+        }
+        // Reserve the successor before KV I/O. Concurrent refreshes based on
+        // the same predecessor must fail before publishing any credentials.
+        await this.state.storage.put('refreshTokenId', operation.rotation.to)
+      }
       try {
         await this.env.OAUTH_KV.put(key, value!, options)
       } catch (error) {
+        if (operation.rotation && error instanceof Error && /429 Too Many Requests/i.test(error.message)) {
+          if (previousRefreshTokenId === undefined) await this.state.storage.delete('refreshTokenId')
+          else await this.state.storage.put('refreshTokenId', previousRefreshTokenId)
+        }
+        // An uncertain write keeps its reservation: it may have committed.
         // Only an explicit rejection of the first issuance write is safe to
         // retry. Transport failures may have committed; later writes may leave
         // credentials persisted. Neither may reopen the code.
@@ -76,7 +100,7 @@ export function grantStorage(env: Env, claim: CodeClaim = {}): KVNamespace {
       statusCode: 429,
       headers: { 'Retry-After': '30' },
     })
-    if (response.status === 409) throw new OAuthError('invalid_grant', { description: 'Grant not found' })
+    if (response.status === 409) throw new OAuthError('invalid_grant', { description: 'Grant revoked or refresh token already used' })
     if (!response.ok) throw new Error('Grant state unavailable')
     return response
   }
@@ -94,7 +118,12 @@ export function grantStorage(env: Env, claim: CodeClaim = {}): KVNamespace {
         if (!grantKey(key)) return kv.put(key, value, options)
         const codeAttempt = key === claim.key ? claim.attempt : undefined
         if (codeAttempt) claim.attempt = undefined
-        await call({ method: 'put', key, value, options, codeAttempt })
+        const grant = key === grantKey(key) ? JSON.parse(value) : undefined
+        const rotation = grant?.refreshTokenId ? {
+          from: grant.previousRefreshTokenId as string | undefined,
+          to: grant.refreshTokenId as string,
+        } : undefined
+        await call({ method: 'put', key, value, options, codeAttempt, rotation })
       }
       if (property === 'delete') return async (key: string) => {
         if (!grantKey(key)) return kv.delete(key)

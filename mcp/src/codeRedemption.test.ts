@@ -103,6 +103,35 @@ async function setup() {
 }
 
 describe('authorization code redemption', () => {
+  it.each([false, true])('rejects a competing refresh instead of orphaning a successful response (legacy grant: %s)', async (legacy) => {
+    const { exchange, accountExists, env, token, client, request } = await setup()
+    const initial = await (await exchange()).json() as { refresh_token: string }
+    // Existing grants have no durable rotation head when this guard is introduced.
+    if (legacy) env.GRANT_STATE = memoryObjects((state) => new GrantState(state, env))
+    let release!: () => void
+    const bothValidated = new Promise<void>((resolve) => { release = resolve })
+    let arrivals = 0
+    accountExists.mockImplementation(async () => {
+      if (++arrivals === 2) release()
+      await bothValidated
+      return true
+    })
+    vi.mocked(env.OAUTH_KV.put).mockClear()
+    const refresh = () => token({
+      grant_type: 'refresh_token', client_id: client.clientId, refresh_token: initial.refresh_token,
+    })
+    const responses = await Promise.all([refresh(), refresh()])
+    accountExists.mockResolvedValue(true)
+    expect(responses.map((response) => response.status).sort()).toEqual([200, 400])
+    expect(await responses.find((response) => response.status === 400)!.json()).toMatchObject({ error: 'invalid_grant' })
+    expect(vi.mocked(env.OAUTH_KV.put).mock.calls.filter(([key]) => key.startsWith('token:'))).toHaveLength(1)
+    const tokens = await responses.find((response) => response.status === 200)!.json() as { access_token: string; refresh_token: string }
+    expect((await request('/mcp', { headers: { Authorization: `Bearer ${tokens.access_token}` } })).status).toBe(200)
+    // A later retry with the original token must not replace the winning rotation either.
+    expect((await refresh()).status).toBe(400)
+    expect((await token({ grant_type: 'refresh_token', client_id: client.clientId, refresh_token: tokens.refresh_token })).status).toBe(200)
+  })
+
   it('issues only one token response when two validated exchanges overlap', async () => {
     const { exchange, accountExists, env, token, client, request } = await setup()
     let release!: () => void
