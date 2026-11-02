@@ -2,6 +2,7 @@ import { getOAuthApi, OAuthError, OAuthProvider, type OAuthProviderOptions } fro
 import { createMcpHandler } from 'agents/mcp/server'
 import { checkAccount, decideTokenExchange } from './accountGate'
 import { grantStorage, type CodeClaim } from './grantState'
+import { readBodyBytes } from './jsonBody'
 import { MCP_HOSTS, mcpResourceForRequest, MCP_WWW_AUTHENTICATE } from './constants'
 import { corsHeaders, handlePublicRequest, resolveExternalPat } from './oauth'
 import { prepareOauthRequest, rewriteOauthPath } from './oauthCompat'
@@ -59,6 +60,13 @@ async function handleMcp(
   const account = await checkAccount(env, deps.accountExists, session.userId)
   if (account === 'unavailable') return json({ error: 'account_lookup_unavailable' }, 503)
   if (account === 'deleted') return unauthorized()
+
+  if (request.method === 'POST') {
+    // Bound streamed bytes before the SDK buffers and parses the body.
+    const bytes = await readBodyBytes(request, 1024 * 1024)
+    if (bytes instanceof Response) return bytes
+    request = new Request(request, { body: bytes })
+  }
 
   const handler = createMcpHandler(() => createServer(session, env), {
     route: '/mcp',
