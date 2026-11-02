@@ -30,6 +30,7 @@ describe('board snapshot preferences', () => {
         return {
           select() { return this },
           eq() { return this },
+          gt() { if (Array.isArray(result.data)) result.data = []; return this },
           order() { return this },
           range() { return this },
           maybeSingle() { return Promise.resolve(result) },

@@ -9,13 +9,13 @@ const makeRow = (id: number, isDone: boolean, userId = 'owner') => ({
   sort_order: 0, created_at: '2026-01-01T00:00:00Z', completed_at: null, user_id: userId,
 })
 
-function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'page' | 'count' | 'empty' | 'missing-count' | 'missing-page-count' | 'preferences', afterFirstPage?: () => void) {
+function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'page' | 'count' | 'missing-count' | 'preferences', afterFirstPage?: () => void) {
   let pageRequests = 0
-  const requests: { url: URL; method: string }[] = []
+  const requests: { url: URL; method: string; headers: Headers }[] = []
   const fetch = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = new URL(String(input))
     const method = init?.method ?? 'GET'
-    requests.push({ url, method })
+    requests.push({ url, method, headers: new Headers(init?.headers) })
     if (url.pathname.endsWith('/lock_screen_prefs')) {
       if (failure === 'preferences') {
         return Response.json({ message: 'Synthetic preference failure' }, { status: 400 })
@@ -43,10 +43,9 @@ function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'pa
       }
       return 0
     })
-    const page = failure === 'empty' && laterPage ? [] :
-      filtered.slice(offset, offset + Math.min(cap, Number(params.get('limit') ?? cap)))
-    const headers: Record<string, string> = failure === 'missing-count' || (failure === 'missing-page-count' && laterPage) ? {} : {
-      'content-range': `${offset}-${offset + page.length - 1}/${filtered.length}`,
+    const page = filtered.slice(offset, offset + Math.min(cap, Number(params.get('limit') ?? cap)))
+    const headers: Record<string, string> = failure === 'missing-count' ? {} : {
+      'content-range': `${offset}-${offset + page.length - 1}/${method === 'HEAD' ? filtered.length : '*'}`,
     }
     return new Response(method === 'HEAD' ? null : JSON.stringify(page.map(({ user_id: _owner, ...row }) => row)), {
       headers: { 'content-type': 'application/json', ...headers },
@@ -59,7 +58,7 @@ function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'pa
 }
 
 describe('MCP reminder listing pagination', () => {
-  it.each(['active', 'completed', 'all'] as const)('returns every owned %s row across a 1,000-row cap', async status => {
+  it.each(['active', 'completed', 'all'] as const)('returns every owned %s row across a 1,000-row cap without page counts', async status => {
     const rows = [...Array.from({ length: 1001 }, (_, i) => makeRow(i, false)),
       ...Array.from({ length: 1001 }, (_, i) => makeRow(i + 1001, true)),
       makeRow(3000, false, 'other'), makeRow(3001, true, 'other')]
@@ -73,11 +72,29 @@ describe('MCP reminder listing pagination', () => {
       reminders: expected, capacity: { used: 1001, maximum: 6, remaining: 0 },
     } })
     const pages = requests.filter(request => request.method === 'GET' && request.url.pathname.endsWith('/reminders'))
-    expect(pages.length).toBe(status === 'all' ? 3 : 2)
-    for (const { url } of pages) {
+    expect(pages.length).toBe(status === 'all' ? 4 : 3)
+    for (const { url, headers } of pages) {
       expect(url.searchParams.get('is_done')).toBe(status === 'all' ? null : `eq.${status === 'completed'}`)
       expect(url.searchParams.get('order')).toBe('id.asc')
+      expect(headers.get('prefer') ?? '').not.toContain('count=exact')
     }
+  })
+
+  it.each([0, 1000, 2000])('stops at an empty page after %i rows without requesting counts', async length => {
+    const rows = Array.from({ length }, (_, i) => makeRow(i, true))
+    const { client, requests } = database(rows, 1000)
+    expect(await runBoardCommand(client, session, { kind: 'list', status: 'completed' })).toEqual({
+      kind: 'snapshot', snapshot: {
+        reminders: rows.map(({ user_id: _owner, ...row }) => row),
+        capacity: { used: 0, maximum: 6, remaining: 6 },
+      },
+    })
+    const reminders = requests.filter(request => request.url.pathname.endsWith('/reminders'))
+    expect(reminders.filter(request => request.method === 'GET')).toHaveLength(length / 1000 + 1)
+    const counts = reminders.filter(request => request.headers.get('prefer')?.includes('count=exact'))
+    expect(counts).toHaveLength(1)
+    expect(counts[0].method).toBe('HEAD')
+    expect(counts[0].url.searchParams.get('is_done')).toBe('eq.false')
   })
 
   it.each(['active', 'completed', 'all'] as const)('does not skip untouched %s rows when a fetched row is deleted', async status => {
@@ -111,7 +128,7 @@ describe('MCP reminder listing pagination', () => {
       reminders: rows.slice(5).map(({ user_id: _owner, ...row }) => row),
       capacity: { used: 5, maximum: 6, remaining: 1 },
     } })
-    expect(requests.filter(r => r.url.searchParams.has('offset')).map(r => r.url.searchParams.get('id'))).toEqual([null, 'gt.00006'])
+    expect(requests.filter(r => r.url.searchParams.has('offset')).map(r => r.url.searchParams.get('id'))).toEqual([null, 'gt.00006', 'gt.00008'])
   })
 
   it('returns an empty completed list while retaining active capacity', async () => {
@@ -121,7 +138,7 @@ describe('MCP reminder listing pagination', () => {
     })
   })
 
-  it.each(['page', 'count', 'empty', 'missing-count', 'missing-page-count', 'preferences'] as const)('does not report a complete snapshot after %s failure', async failure => {
+  it.each(['page', 'count', 'missing-count', 'preferences'] as const)('does not report a complete snapshot after %s failure', async failure => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
     try {
       const { client } = database([makeRow(0, false), makeRow(1, true), makeRow(2, true)], 1, failure)
