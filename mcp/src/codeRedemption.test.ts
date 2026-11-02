@@ -13,9 +13,10 @@ vi.mock('agents/mcp/server', () => ({
 
 const USER = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
 const REDIRECT = 'https://client.example/callback'
+const OTHER_REDIRECT = 'https://client.example/other-callback'
 const VERIFIER = 'a'.repeat(43)
 
-async function setup() {
+async function setup(format: 'form' | 'json' = 'form') {
   const kv = new Map<string, string>()
   const states = new Map<string, DurableObjectState>()
   const objects = new Map<string, AuthorizationState>()
@@ -72,7 +73,7 @@ async function setup() {
     resourceMetadata: { resource: MCP_RESOURCE },
   }, env)
   const client = await oauth.createClient({
-    redirectUris: [REDIRECT], tokenEndpointAuthMethod: 'none',
+    redirectUris: [REDIRECT, OTHER_REDIRECT], tokenEndpointAuthMethod: 'none',
     grantTypes: ['authorization_code', 'refresh_token'], responseTypes: ['code'],
   })
   const challenge = Buffer.from(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(VERIFIER))).toString('base64url')
@@ -90,19 +91,69 @@ async function setup() {
     { waitUntil: vi.fn() } as unknown as ExecutionContext,
     { verifyUser: async () => null, accountExists },
   )
-  const token = (body: Record<string, string>) => request('/token', {
-    method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams(body).toString(),
+  const token = (body: Record<string, string>) => request(format === 'json' ? '/token/' : '/token', {
+    method: 'POST', headers: { 'Content-Type': format === 'json' ? 'application/json' : 'application/x-www-form-urlencoded' },
+    body: format === 'json' ? JSON.stringify(body) : new URLSearchParams(body).toString(),
   })
   const exchange = (overrides: Record<string, string> = {}) => token({
     grant_type: 'authorization_code', client_id: client.clientId, code, redirect_uri: REDIRECT,
     code_verifier: VERIFIER, ...overrides,
   })
   vi.mocked(env.OAUTH_KV.put).mockClear()
-  return { env, kv, objects, accountExists, oauth, client, exchange, token, request }
+  return { env, kv, objects, accountExists, oauth, client, code, exchange, token, request }
 }
 
 describe('authorization code redemption', () => {
+  it.each(['form', 'json'] as const)('rejects a different registered redirect URI in %s without consuming the code', async (format) => {
+    const { exchange, env, accountExists } = await setup(format)
+    const rejected = await exchange({ redirect_uri: OTHER_REDIRECT })
+    expect(rejected.status).toBe(400)
+    expect(await rejected.json()).toMatchObject({ error: 'invalid_grant' })
+    expect(rejected.headers.get('Cache-Control')).toBe('no-store')
+    expect(rejected.headers.get('Access-Control-Allow-Origin')).toBe('*')
+    expect(env.OAUTH_KV.put).not.toHaveBeenCalled()
+    expect(accountExists).not.toHaveBeenCalled()
+
+    const accepted = await exchange()
+    expect(accepted.status).toBe(200)
+    expect(await accepted.json()).toMatchObject({
+      access_token: expect.any(String), refresh_token: expect.any(String),
+    })
+  })
+
+  it('redeems a code with its original redirect URI', async () => {
+    const { exchange } = await setup()
+    const response = await exchange()
+    expect(response.status).toBe(200)
+    expect(await response.json()).toMatchObject({
+      access_token: expect.any(String), refresh_token: expect.any(String),
+    })
+  })
+
+  it.each(['missing', 'empty'])('rejects a %s redirect URI even with valid PKCE', async (redirect) => {
+    const { exchange, token, client, code, env } = await setup()
+    const response = await token({
+      grant_type: 'authorization_code', client_id: client.clientId, code, code_verifier: VERIFIER,
+      ...(redirect === 'empty' ? { redirect_uri: '' } : {}),
+    })
+    expect(response.status).toBe(400)
+    expect(await response.json()).toMatchObject({ error: 'invalid_grant' })
+    expect(env.OAUTH_KV.put).not.toHaveBeenCalled()
+    expect((await exchange()).status).toBe(200)
+  })
+
+  it('fails closed if the stored grant has no original redirect URI', async () => {
+    const { exchange, kv, env } = await setup()
+    const [key, value] = [...kv.entries()].find(([key]) => key.startsWith('grant:'))!
+    const grant = JSON.parse(value)
+    delete grant.redirectUri
+    kv.set(key, JSON.stringify(grant))
+    const response = await exchange()
+    expect(response.status).toBe(400)
+    expect(await response.json()).toMatchObject({ error: 'invalid_grant' })
+    expect(env.OAUTH_KV.put).not.toHaveBeenCalled()
+  })
+
   it('issues only one token response when two validated exchanges overlap', async () => {
     const { exchange, accountExists, env, token, client, request } = await setup()
     let release!: () => void
