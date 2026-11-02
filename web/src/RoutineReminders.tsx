@@ -5,6 +5,14 @@ import { Label } from '@/components/ui/label'
 import { supabase } from './supabase'
 import { localDate, routineSummary, weeklyStartDate, WEEKDAYS, type Routine } from './lib/routines'
 
+function formatNextRun(routine: Routine) {
+  try {
+    return new Date(routine.next_run_at).toLocaleString(undefined, { timeZone: routine.timezone })
+  } catch {
+    return routine.next_run_at
+  }
+}
+
 export function RoutineReminders({ userId }: { userId: string }) {
   const [routines, setRoutines] = useState<Routine[]>([])
   const [text, setText] = useState('')
@@ -26,7 +34,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
     content: <>
       <p className="font-medium break-words">{routine.text}</p>
       <p className="text-sm text-muted-foreground">{routineSummary(routine)}</p>
-      <p className="text-sm">{routine.enabled ? `Next: ${new Date(routine.next_run_at).toLocaleString(undefined, { timeZone: routine.timezone })} · ${routine.timezone}` : 'Paused'}</p>
+      <p className="text-sm">{routine.enabled ? `Next: ${formatNextRun(routine)} · ${routine.timezone}` : 'Paused'}</p>
     </>,
   })), [routines])
 
