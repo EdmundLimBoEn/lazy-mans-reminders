@@ -114,19 +114,18 @@ async function listBoard(
   while (true) {
     let query = supabase
       .from('reminders')
-      .select('id, text, is_done, sort_order, created_at, completed_at', { count: 'exact' })
+      .select('id, text, is_done, sort_order, created_at, completed_at')
       .eq('user_id', session.userId)
     if (status !== 'all') query = query.eq('is_done', status === 'completed')
     if (afterId !== undefined) query = query.gt('id', afterId)
-    const { data, error, count } = await query
+    const { data, error } = await query
       .order('id')
       .range(0, pageSize - 1)
     if (error) return boardErrorFromStorage(error.message, error.details)
-    if (count === null) return boardErrorFromStorage('Reminder count missing')
     const page = (data ?? []) as ReminderSelect[]
     reminders.push(...page)
-    if (page.length >= count) break
-    if (page.length === 0) return boardErrorFromStorage('Reminder page incomplete')
+    // A short page may reflect a smaller server cap, so read until empty.
+    if (page.length === 0) break
     // An ID cursor survives deletion of earlier rows and smaller server page caps.
     afterId = page[page.length - 1].id
   }

@@ -29,14 +29,14 @@ function setup(error: typeof quotaError | null = quotaError, listFails = false) 
   const changed = { ...active[0], id, is_done: false }
   const update = { update: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), select: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: error ? null : changed, error }) }
   const count = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), then: (resolve: (value: unknown) => unknown) => Promise.resolve({ count: active.length, error: null }).then(resolve) }
-  const list = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), order: vi.fn().mockReturnThis(), range: vi.fn().mockResolvedValue({
+  const list = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), gt: vi.fn().mockReturnThis(), order: vi.fn().mockReturnThis(), range: vi.fn().mockResolvedValue({ data: [], error: null }).mockResolvedValueOnce({
     data: active,
     count: active.length,
     error: listFails ? { message: 'read failed' } : null,
   }) }
   const prefs = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: { max_lines: 6 }, error: null }) }
   const rpc = vi.fn().mockReturnValue(update)
-  const from = vi.fn().mockReturnValueOnce(count).mockReturnValueOnce(prefs).mockReturnValueOnce(list)
+  const from = vi.fn().mockReturnValueOnce(count).mockReturnValueOnce(prefs).mockReturnValue(list)
   vi.mocked(createServiceRoleClient).mockReturnValue({ from, rpc } as unknown as SupabaseClient)
   createServer(session, {} as Env)
   return { update, count, list, from, rpc }
