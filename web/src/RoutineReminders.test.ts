@@ -78,6 +78,20 @@ beforeEach(async () => {
   render().text.onChange({ target: { value: 'Keep my draft' } })
 })
 
+it('renders the stored timestamp and timezone when the formatter rejects a saved timezone', async () => {
+  mockRead(Promise.resolve({ data: [{ ...routine, timezone: 'Factory' }], error: null }))
+  await hooks.load!()
+
+  const view = render()
+  const paragraphs = view.tree.filter(node => node.type === 'p').map(node => node.props.children)
+  expect(paragraphs).toContain(routine.text)
+  expect(paragraphs).toContain('Every Monday at 19:00 · Factory')
+  expect(paragraphs).toContain(`Next: ${routine.next_run_at} · Factory`)
+  expect(view.button('Edit').disabled).toBe(false)
+  expect(view.button('Pause').disabled).toBe(false)
+  expect(view.alert).toBeUndefined()
+})
+
 it('reuses saved routine content while typing and refreshes it when routine data changes', async () => {
   const routines = Array.from({ length: 50 }, (_, index) => ({ ...routine, id: `routine-${index}` }))
   const refresh = async (data: typeof routines) => {
