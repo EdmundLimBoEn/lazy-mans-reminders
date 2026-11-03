@@ -104,6 +104,46 @@ async function setup(format: 'form' | 'json' = 'form') {
 }
 
 describe('authorization code redemption', () => {
+  it.each(['form', 'json'] as const)('retries %s code exchange after redirect-check storage failures', async (format) => {
+    for (const failure of ['kv-rate-limit', 'kv-unavailable', 'grant-rate-limit', 'grant-unavailable']) {
+      const { exchange, env, kv, objects, accountExists } = await setup(format)
+      const before = new Map(kv)
+      const rateLimited = failure.endsWith('rate-limit')
+      if (failure.startsWith('kv-')) {
+        vi.mocked(env.OAUTH_KV.get).mockRejectedValueOnce(new Error(
+          rateLimited ? 'KV GET failed: 429 Too Many Requests' : 'Storage unavailable',
+        ))
+      } else {
+        vi.spyOn(env.GRANT_STATE, 'get').mockReturnValueOnce({
+          fetch: async () => new Response(null, { status: rateLimited ? 429 : 503 }),
+        } as unknown as DurableObjectStub)
+      }
+
+      const rejected = await exchange()
+      expect(rejected.status).toBe(rateLimited ? 429 : 503)
+      expect(await rejected.json()).toEqual({
+        error: 'temporarily_unavailable',
+        error_description: 'Token issuance is temporarily unavailable; retry shortly',
+      })
+      expect(rejected.headers.get('Content-Type')).toBe('application/json')
+      expect(rejected.headers.get('Cache-Control')).toBe('no-store')
+      expect(rejected.headers.get('Access-Control-Allow-Origin')).toBe('*')
+      expect(rejected.headers.get('Access-Control-Expose-Headers')).toContain('Retry-After')
+      expect(rejected.headers.get('Retry-After')).toBe('30')
+      expect(env.OAUTH_KV.put).not.toHaveBeenCalled()
+      expect(accountExists).not.toHaveBeenCalled()
+      expect(objects.size).toBe(0)
+      expect(kv).toEqual(before)
+
+      const accepted = await exchange()
+      expect(accepted.status).toBe(200)
+      expect(await accepted.json()).toMatchObject({
+        access_token: expect.any(String), refresh_token: expect.any(String),
+      })
+      expect((await exchange()).status).toBe(400)
+    }
+  })
+
   it.each([false, true])('retries refresh after access-token storage rejection (legacy grant: %s)', async (legacy) => {
     const { exchange, env, kv, token, client, request } = await setup()
     const initial = await (await exchange()).json() as { refresh_token: string }
