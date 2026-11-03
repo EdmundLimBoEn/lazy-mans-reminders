@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { memoryState } from '../test/memoryObjects'
-import { GrantState } from './grantState'
+import { GrantState, grantStorage } from './grantState'
 
 const GRANT = 'grant:user:grant'
 const TOKEN = 'token:user:grant:token'
@@ -20,10 +20,119 @@ function setup() {
   }))
   const rotate = (from: string, to: string) => call('put', GRANT,
     JSON.stringify({ previousRefreshTokenId: from, refreshTokenId: to }), { from, to })
-  return { records, kv, state, call, rotate, restart: () => { object = new GrantState(state, env) } }
+  env.GRANT_STATE = {
+    idFromName: (name: string) => name,
+    get: () => ({ fetch: (input: string, init?: RequestInit) => object.fetch(new Request(input, init)) }),
+  } as unknown as DurableObjectNamespace
+  return { records, kv, state, call, rotate, storage: () => grantStorage(env), restart: () => { object = new GrantState(state, env) } }
 }
 
 describe('atomic refresh rotation', () => {
+  async function pendingRefresh(stale = false) {
+    const context = setup()
+    const expiresAt = Math.floor(Date.now() / 1000) + 3600
+    const prior = JSON.stringify({
+      refreshTokenId: stale ? 'stale-successor' : 'initial',
+      previousRefreshTokenId: stale ? 'initial' : undefined,
+      encryptedProps: 'original', expiresAt,
+    })
+    // After a rollback, KV can still return the discarded successor. The
+    // provider accepts its previous token; the durable head remains authoritative.
+    if (stale) await context.state.storage.put('refreshTokenId', 'initial')
+    context.records.set(GRANT, prior)
+    const storage = context.storage()
+    await storage.get(GRANT, 'json')
+    await storage.put(GRANT, JSON.stringify({
+      refreshTokenId: 'successor', previousRefreshTokenId: 'initial', encryptedProps: 'replacement', expiresAt,
+    }), { expiration: expiresAt })
+    return { ...context, storage, prior, expiresAt }
+  }
+
+  it.each([false, true])('restores the usable grant and expiration across object restarts (stale read: %s)', async (stale) => {
+    const { storage, kv, records, restart, rotate, prior, expiresAt } = await pendingRefresh(stale)
+    restart()
+    kv.put.mockRejectedValueOnce(new Error('KV PUT failed: 429 Too Many Requests'))
+    await expect(storage.put(TOKEN, 'rejected')).rejects.toThrow('429 Too Many Requests')
+    restart()
+    // Reads must ignore the discarded KV successor, without another KV write.
+    expect(records.get(GRANT)).not.toBe(prior)
+    expect(kv.put).toHaveBeenCalledTimes(2)
+    expect(await storage.get(GRANT)).toBe(prior)
+    expect(await storage.get(GRANT, 'json')).toMatchObject({ expiresAt })
+    expect((await rotate('initial', 'retry')).status).toBe(204)
+    expect(await storage.get(GRANT)).toBe(records.get(GRANT))
+  })
+
+  it('excludes competing refreshes until the rejected token write has been recovered', async () => {
+    const { storage, kv, rotate, state } = await pendingRefresh()
+    expect((await rotate('initial', 'competitor')).status).toBe(409)
+    let entered!: () => void
+    const restoring = new Promise<void>((resolve) => { entered = resolve })
+    let resume!: () => void
+    const paused = new Promise<void>((resolve) => { resume = resolve })
+    kv.put.mockRejectedValueOnce(new Error('KV PUT failed: 429 Too Many Requests'))
+    const put = state.storage.put.bind(state.storage)
+    vi.spyOn(state.storage, 'put').mockImplementationOnce(async (...args: Parameters<typeof put>) => {
+      entered()
+      await paused
+      return put(...args)
+    })
+    const rejected = expect(storage.put(TOKEN, 'rejected')).rejects.toThrow('429 Too Many Requests')
+    await restoring
+    const retry = rotate('initial', 'retry')
+    try {
+      await new Promise<void>((resolve) => setImmediate(resolve))
+      expect(kv.put).toHaveBeenCalledTimes(2)
+    } finally {
+      resume()
+    }
+    await rejected
+    expect((await retry).status).toBe(204)
+    expect((await rotate('initial', 'competitor')).status).toBe(409)
+  })
+
+  it.each(['uncertain token', 'failed restore'])('keeps the successor reserved after %s storage failure', async (failure) => {
+    const { storage, kv, records, rotate, restart, state } = await pendingRefresh()
+    if (failure === 'uncertain token') {
+      kv.put.mockImplementationOnce(async (key, value) => {
+        records.set(key, value)
+        throw new Error('Connection lost')
+      })
+    } else {
+      kv.put.mockRejectedValueOnce(new Error('KV PUT failed: 429 Too Many Requests'))
+      vi.spyOn(state.storage, 'put').mockRejectedValueOnce(new Error('Connection lost'))
+    }
+    await expect(storage.put(TOKEN, 'possibly persisted')).rejects.toThrow('Connection lost')
+    restart()
+    expect((await rotate('initial', 'retry')).status).toBe(409)
+  })
+
+  it('does not roll back a later rotation on a delayed token rejection', async () => {
+    const { storage, kv, records, rotate } = await pendingRefresh()
+    expect((await rotate('successor', 'later')).status).toBe(204)
+    const later = records.get(GRANT)
+    kv.put.mockRejectedValueOnce(new Error('KV PUT failed: 429 Too Many Requests'))
+    await expect(storage.put(TOKEN, 'delayed')).rejects.toThrow('429 Too Many Requests')
+    expect(records.get(GRANT)).toBe(later)
+    expect((await rotate('initial', 'retry')).status).toBe(409)
+    expect((await rotate('later', 'next')).status).toBe(204)
+  })
+
+  it.each([false, true])('does not restore a revoked grant (previous recovery: %s)', async (recovered) => {
+    const { storage, kv, records, call, restart, state } = await pendingRefresh()
+    if (recovered) {
+      kv.put.mockRejectedValueOnce(new Error('KV PUT failed: 429 Too Many Requests'))
+      await expect(storage.put(TOKEN, 'rejected')).rejects.toThrow('429 Too Many Requests')
+    }
+    expect((await call('delete')).status).toBe(204)
+    restart()
+    await expect(storage.put(TOKEN, 'late')).rejects.toThrow('Grant revoked')
+    expect(await storage.get(GRANT)).toBeNull()
+    expect(records.has(GRANT)).toBe(false)
+    expect(await state.storage.get('recoveredGrant')).toBeUndefined()
+    expect(kv.put).toHaveBeenCalledTimes(recovered ? 2 : 1)
+  })
+
   it('rejects a reused predecessor after restart even when KV returns stale data', async () => {
     const { records, rotate, restart, kv } = setup()
     const initial = JSON.stringify({ refreshTokenId: 'initial' })

@@ -2,6 +2,12 @@ import { OAuthError } from '@cloudflare/workers-oauth-provider'
 
 export type CodeClaim = { key?: string; attempt?: string }
 
+type RefreshRecovery = {
+  from: string
+  to: string
+  grant: string
+}
+
 type Operation = {
   method: 'get' | 'put' | 'delete'
   key: string
@@ -9,6 +15,7 @@ type Operation = {
   options?: KVNamespacePutOptions
   codeAttempt?: string
   rotation?: { from?: string; to: string }
+  refreshRecovery?: RefreshRecovery
 }
 
 function grantKey(key: string): string | null {
@@ -34,6 +41,7 @@ export class GrantState implements DurableObject {
         // Retain markers to reject stale KV records and late writes. Legacy grants
         // can live indefinitely; token keys identify individual credentials.
         await this.state.storage.put(revocationKey, true)
+        if (key === grantKey(key)) await this.state.storage.delete('recoveredGrant')
         await this.env.OAUTH_KV.delete(key)
         return new Response(null, { status: 204 })
       }
@@ -41,7 +49,10 @@ export class GrantState implements DurableObject {
           (revocationKey !== 'revoked' && await this.state.storage.get(revocationKey))) {
         return method === 'get' ? Response.json(null) : new Response(null, { status: 409 })
       }
-      if (method === 'get') return Response.json(await this.env.OAUTH_KV.get(key))
+      if (method === 'get') {
+        const recovered = key === grantKey(key) ? await this.state.storage.get<string>('recoveredGrant') : undefined
+        return Response.json(recovered ?? await this.env.OAUTH_KV.get(key))
+      }
       let previousRefreshTokenId: string | undefined
       if (operation.rotation) {
         previousRefreshTokenId = await this.state.storage.get<string>('refreshTokenId')
@@ -63,6 +74,15 @@ export class GrantState implements DurableObject {
       try {
         await this.env.OAUTH_KV.put(key, value!, options)
       } catch (error) {
+        const recovery = operation.refreshRecovery
+        if (recovery && key !== grantKey(key) && error instanceof Error && /429 Too Many Requests/i.test(error.message) &&
+            await this.state.storage.get<string>('refreshTokenId') === recovery.to) {
+          // Restore the usable grant before reopening its generation. Keep it
+          // authoritative here: an immediate KV rewrite can itself be rate limited
+          // and KV reads may still return the discarded successor.
+          await this.state.storage.put('recoveredGrant', recovery.grant)
+          await this.state.storage.put('refreshTokenId', recovery.from)
+        }
         if (operation.rotation && error instanceof Error && /429 Too Many Requests/i.test(error.message)) {
           if (previousRefreshTokenId === undefined) await this.state.storage.delete('refreshTokenId')
           else await this.state.storage.put('refreshTokenId', previousRefreshTokenId)
@@ -82,6 +102,7 @@ export class GrantState implements DurableObject {
         }
         throw error
       }
+      if (key === grantKey(key)) await this.state.storage.delete('recoveredGrant')
       return new Response(null, { status: 204 })
     })
   }
@@ -90,6 +111,8 @@ export class GrantState implements DurableObject {
 /** Leave client records/listing in KV, but gate every grant/token read and mutation. */
 export function grantStorage(env: Env, claim: CodeClaim = {}): KVNamespace {
   const kv = env.OAUTH_KV
+  const grantReads = new Map<string, string>()
+  const refreshes = new Map<string, RefreshRecovery>()
   async function call(operation: Operation): Promise<Response> {
     const id = env.GRANT_STATE.idFromName(grantKey(operation.key)!)
     const response = await env.GRANT_STATE.get(id).fetch('https://grant-state/storage', {
@@ -111,6 +134,7 @@ export function grantStorage(env: Env, claim: CodeClaim = {}): KVNamespace {
       if (property === 'get') return async (key: string, options?: string | { type?: string }) => {
         if (!grantKey(key)) return kv.get(key, options as 'text')
         const value = await (await call({ method: 'get', key })).json<string | null>()
+        if (value !== null && key === grantKey(key)) grantReads.set(key, value)
         const type = typeof options === 'string' ? options : options?.type
         return value !== null && type === 'json' ? JSON.parse(value) : value
       }
@@ -123,7 +147,14 @@ export function grantStorage(env: Env, claim: CodeClaim = {}): KVNamespace {
           from: grant.previousRefreshTokenId as string | undefined,
           to: grant.refreshTokenId as string,
         } : undefined
-        await call({ method: 'put', key, value, options, codeAttempt, rotation })
+        const refreshRecovery = key !== grantKey(key) ? refreshes.get(grantKey(key)!) : undefined
+        await call({ method: 'put', key, value, options, codeAttempt, rotation, refreshRecovery })
+        const previous = grantReads.get(key)
+        if (rotation?.from && previous) {
+          // Carry this request's rotation through the provider's next token write.
+          refreshes.set(key, { from: rotation.from, to: rotation.to, grant: previous })
+        }
+        if (refreshRecovery) refreshes.delete(grantKey(key)!)
       }
       if (property === 'delete') return async (key: string) => {
         if (!grantKey(key)) return kv.delete(key)
