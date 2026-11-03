@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
+import { PostgrestClient } from '@supabase/postgrest-js'
 import type { ReactElement, ReactNode } from 'react'
 import { RoutineReminders } from './RoutineReminders'
 
@@ -66,6 +67,12 @@ function render() {
     submit: tree.find(node => node.props.type === 'submit')!.props,
     alert: tree.find(node => node.props.role === 'alert')?.props.children,
   }
+}
+
+// Support both plain mutations and edit saves that request a single returned row.
+function mutationResult<T>(result: T | Promise<T>) {
+  const promise = Promise.resolve(result)
+  return Object.assign(promise, { select: () => ({ single: () => promise }) })
 }
 
 beforeEach(async () => {
@@ -150,7 +157,7 @@ it.each(['insert', 'update'] as const)('uses the selected timezone for weekly %s
     render().change('routine-time', '22:00')
     render().change('routine-zone', 'America/New_York')
     const query = { eq: vi.fn() }
-    query.eq.mockReturnValueOnce(query).mockResolvedValueOnce({ error: null })
+    query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult({ error: null }))
     const write = vi.fn(() => operation === 'insert' ? Promise.resolve({ error: null }) : query)
     db.from.mockReturnValueOnce({ [operation]: write })
     await render().form.onSubmit({ preventDefault() {} })
@@ -180,7 +187,7 @@ it.each([
     if (id === 'routine-repeat' && value === 'weekly') render().change('routine-repeat', 'days')
     render().change(id, value)
     const query = { eq: vi.fn() }
-    query.eq.mockReturnValueOnce(query).mockResolvedValueOnce({ error: null })
+    query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult({ error: null }))
     const update = vi.fn(() => query)
     db.from.mockReturnValueOnce({ update })
     await render().form.onSubmit({ preventDefault() {} })
@@ -203,7 +210,7 @@ it.each(['insert', 'update', 'pause', 'delete'] as const)('releases busy control
   let reject!: (error: Error) => void
   const pending = new Promise((_, fail) => { reject = fail })
   const query = { eq: vi.fn(), insert: () => pending, update: vi.fn(), delete: vi.fn() }
-  query.eq.mockReturnValueOnce(query).mockReturnValueOnce(pending)
+  query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult(pending))
   query.update.mockReturnValue(query)
   query.delete.mockReturnValue(query)
   db.from.mockReturnValue(query)
@@ -225,7 +232,7 @@ it.each(['insert', 'update', 'pause', 'delete'] as const)('releases busy control
 
 it('releases controls and clears the saved draft if refresh throws after a save', async () => {
   const query = { eq: vi.fn() }
-  query.eq.mockReturnValueOnce(query).mockResolvedValueOnce({ error: null })
+  query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult({ error: null }))
   db.from.mockReturnValueOnce({ update: () => query }).mockImplementationOnce(() => { throw new Error('Refresh failed') })
   await render().form.onSubmit({ preventDefault() {} })
   expect(render().submit.disabled).toBe(false)
@@ -236,12 +243,53 @@ it('releases controls and clears the saved draft if refresh throws after a save'
 
 it('clears the draft after a successful save and refresh', async () => {
   const query = { eq: vi.fn() }
-  query.eq.mockReturnValueOnce(query).mockResolvedValueOnce({ error: null })
+  query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult({ error: null }))
   db.from.mockReturnValueOnce({ update: () => query })
   await render().form.onSubmit({ preventDefault() {} })
   expect(render().submit.disabled).toBe(false)
   expect(render().text.value).toBe('')
   expect(render().submit.children).toBe('Add routine')
+})
+
+it.each([false, true])('keeps a deleted routine draft when saving (deletion already refreshed: %s)', async refreshed => {
+  render().change('routine-repeat', 'days')
+  render().change('routine-days', '3')
+  render().change('routine-start', '2026-12-01')
+  render().change('routine-time', '20:30')
+  if (refreshed) {
+    mockRead(Promise.resolve({ data: [], error: null }))
+    await hooks.load!()
+  }
+  const message = 'Cannot coerce the result to a single JSON object'
+  // Exercise the real client: a zero-row PATCH succeeds unless a single
+  // returned row is requested, in which case PostgREST responds with PGRST116.
+  const fetch = vi.fn(async (_url: string | URL | Request, init?: RequestInit) => {
+    const headers = new Headers(init?.headers)
+    if (headers.get('Accept') === 'application/vnd.pgrst.object+json') {
+      return new Response(JSON.stringify({ code: 'PGRST116', message, details: 'The result contains 0 rows', hint: null }), { status: 406 })
+    }
+    return new Response(null, { status: 204 })
+  })
+  const client = new PostgrestClient('https://example.test', { fetch })
+  db.from.mockReturnValueOnce(client.from('routine_reminders'))
+  await render().form.onSubmit({ preventDefault() {} })
+
+  const view = render()
+  expect(view.text.value).toBe('Keep my draft')
+  expect(view.submit.children).toBe('Save routine')
+  expect(view.submit.disabled).toBe(false)
+  expect(view.button('Cancel edit').disabled).toBe(false)
+  expect(view.alert).toBe(message)
+  for (const [id, value] of [['routine-days', '3'], ['routine-start', '2026-12-01'], ['routine-time', '20:30']]) {
+    expect(view.tree.find(node => node.props.id === id)!.props.value).toBe(value)
+  }
+  expect(fetch).toHaveBeenCalledTimes(1)
+  const [url, init] = fetch.mock.calls[0]
+  expect(init?.method).toBe('PATCH')
+  expect(new URL(String(url)).searchParams.get('id')).toBe('eq.routine-1')
+  expect(new URL(String(url)).searchParams.get('user_id')).toBe('eq.user-1')
+  expect(new URL(String(url)).searchParams.get('select')).toBe('id')
+  expect(new Headers(init?.headers).get('Prefer')).toContain('return=representation')
 })
 
 it.each(['insert', 'update'] as const)('preserves edits made during a pending %s', async (operation) => {
@@ -252,7 +300,7 @@ it.each(['insert', 'update'] as const)('preserves edits made during a pending %s
   let resolve!: (result: { error: null }) => void
   const pending = new Promise<{ error: null }>(done => { resolve = done })
   const query = { eq: vi.fn() }
-  query.eq.mockReturnValueOnce(query).mockReturnValueOnce(pending)
+  query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult(pending))
   const write = vi.fn(() => operation === 'insert' ? pending : query)
   db.from.mockReturnValueOnce({ [operation]: write })
   const saving = render().form.onSubmit({ preventDefault() {} })
@@ -270,7 +318,7 @@ it.each(['insert', 'update'] as const)('preserves edits made during a pending %s
 
   // The preserved draft remains saveable, including its schedule changes.
   const nextQuery = { eq: vi.fn() }
-  nextQuery.eq.mockReturnValueOnce(nextQuery).mockResolvedValueOnce({ error: null })
+  nextQuery.eq.mockReturnValueOnce(nextQuery).mockReturnValueOnce(mutationResult({ error: null }))
   const nextWrite = vi.fn(() => operation === 'insert' ? Promise.resolve({ error: null }) : nextQuery)
   db.from.mockReturnValueOnce({ [operation]: nextWrite })
   await render().form.onSubmit({ preventDefault() {} })
@@ -282,7 +330,7 @@ it('preserves the draft when only its schedule changes during a save', async () 
   let resolve!: (result: { error: null }) => void
   const pending = new Promise<{ error: null }>(done => { resolve = done })
   const query = { eq: vi.fn() }
-  query.eq.mockReturnValueOnce(query).mockReturnValueOnce(pending)
+  query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult(pending))
   db.from.mockReturnValueOnce({ update: () => query })
   const saving = render().form.onSubmit({ preventDefault() {} })
   render().change('routine-weekday', '3')
@@ -294,7 +342,7 @@ it('preserves the draft when only its schedule changes during a save', async () 
 
 it.each(['save'])('keeps the draft when %s returns a database error', async (stage) => {
   const query = { eq: vi.fn() }
-  query.eq.mockReturnValueOnce(query).mockResolvedValueOnce({ error: stage === 'save' ? { message: 'Failed' } : null })
+  query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult({ error: stage === 'save' ? { message: 'Failed' } : null }))
   db.from.mockReturnValueOnce({ update: () => query })
   if (stage === 'refresh') {
     db.from.mockReturnValueOnce({ select: () => ({ eq: () => ({ order: async () => ({ data: null, error: { message: 'Failed' } }) }) }) })
@@ -379,7 +427,7 @@ it.each(['insert', 'update', 'pause', 'resume', 'delete'])(
     mockRead(stale.promise)
     const loading = hooks.load!()
     const query = { eq: vi.fn() }
-    query.eq.mockReturnValueOnce(query).mockResolvedValueOnce({ error: null })
+    query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult({ error: null }))
     db.from.mockReturnValueOnce({ insert: () => Promise.resolve({ error: null }), update: () => query, delete: () => query })
     const saved = operation === 'delete' ? [] : [{ ...routine, text: 'Saved routine', enabled: operation !== 'pause' }]
     mockRead(Promise.resolve({ data: saved, error: null }))
@@ -403,7 +451,7 @@ it.each(['data', 'database error', 'rejection'])(
     const beforeLoad = hooks.load!()
     const write = deferred<{ error: { message: string } }>()
     const query = { eq: vi.fn() }
-    query.eq.mockReturnValueOnce(query).mockReturnValueOnce(write.promise)
+    query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult(write.promise))
     db.from.mockReturnValueOnce({ update: () => query })
     const saving = render().form.onSubmit({ preventDefault() {} })
     const settle = (read: ReturnType<typeof deferred<ReadResult>>) => {
@@ -462,7 +510,7 @@ it.each(['insert', 'update', 'pause', 'resume', 'delete'].flatMap(operation =>
       await hooks.load!()
     }
     const query = { eq: vi.fn() }
-    query.eq.mockReturnValueOnce(query).mockResolvedValueOnce({ error: null })
+    query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult({ error: null }))
     db.from.mockReturnValueOnce({ insert: () => Promise.resolve({ error: null }), update: () => query, delete: () => query })
     const reconciliation = deferred<ReadResult>()
     mockRead(reconciliation.promise)

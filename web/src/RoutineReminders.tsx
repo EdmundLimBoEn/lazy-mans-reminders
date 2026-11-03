@@ -130,7 +130,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
       let result
       try {
         result = editingId
-          ? await supabase.from('routine_reminders').update(values).eq('id', editingId).eq('user_id', userId)
+          ? await supabase.from('routine_reminders').update(values).eq('id', editingId).eq('user_id', userId).select('id').single()
           : await supabase.from('routine_reminders').insert({ ...values, user_id: userId })
       } finally {
         // Invalidate reads started during the write, before reconciliation begins.
