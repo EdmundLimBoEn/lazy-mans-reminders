@@ -218,6 +218,61 @@ function editForm() {
   return render().find(node => node.type === 'form' && nodes(node).some(child => child.props['aria-label'] === 'Save reminder'))!.props
 }
 
+it('unlocks drag handles and Move actions after refresh removes the edited reminder', async () => {
+  stored.push(
+    { ...original, id: 'second', text: 'Second', sort_order: 1 },
+    { ...original, id: 'third', text: 'Third', sort_order: 2 },
+  )
+  await hooks.load!()
+  control('Edit "Original"').onClick!()
+  control('Edit reminder: Original').onChange!({ target: { value: 'Draft' } })
+  expect(render().find(node => node.props.id === 'second')!.props.disabled).toBe(true)
+
+  stored = stored.filter(row => row.id !== original.id)
+  await hooks.load!()
+  expect(displayed()).toEqual(['Second', 'Third'])
+  expect(render().some(node => node.props['aria-label'] === 'Save reminder')).toBe(false)
+  expect(render().find(node => node.props.id === 'second')!.props.disabled).toBe(false)
+  expect(render().find(node => node.props.id === 'third')!.props.disabled).toBe(false)
+
+  control('Move "Second" down').onClick!()
+  expect(displayed()).toEqual(['Third', 'Second'])
+  expect(db.rpc).toHaveBeenCalledWith('reorder_reminders', { p_ids: ['third', 'second'] })
+  stored = stored.map(row => ({ ...row, sort_order: row.id === 'third' ? 0 : 1 }))
+  await vi.waitFor(() => expect(control('Move "Second" up').disabled).toBe(false))
+  expect(displayed()).toEqual(['Third', 'Second'])
+})
+
+it.each(['present', 'failed', 'stale'])('preserves the edit draft when a refresh is %s', async scenario => {
+  control('Edit "Original"').onClick!()
+  control('Edit reminder: Original').onChange!({ target: { value: 'Draft' } })
+  const pending = deferred<Result>()
+  reads.push(pending)
+  const loading = hooks.load!()
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  if (scenario === 'stale') await hooks.load!()
+  pending.resolve(scenario === 'failed'
+    ? { data: null, error: { message: 'Offline read' } }
+    : { data: scenario === 'present' ? stored : [], error: null })
+  await loading
+  expect(control('Edit reminder: Original').value).toBe('Draft')
+})
+
+it('reconciles the current editor when it changes during a refresh', async () => {
+  stored.push({ ...original, id: 'second', text: 'Second', sort_order: 1 })
+  await hooks.load!()
+  control('Edit "Original"').onClick!()
+  const pending = deferred<Result>()
+  reads.push(pending)
+  const loading = hooks.load!()
+  await vi.waitFor(() => expect(reads).toHaveLength(0))
+  control('Edit "Second"').onClick!()
+  control('Edit reminder: Second').onChange!({ target: { value: 'New draft' } })
+  pending.resolve({ data: stored.filter(row => row.id === 'second'), error: null })
+  await loading
+  expect(control('Edit reminder: Second').value).toBe('New draft')
+})
+
 it('blocks overlapping saves synchronously and allows a newer edit only after acknowledgment', async () => {
   const complete = control('Complete "Original"').onClick!
   const remove = control('Delete "Original"').onClick!
@@ -359,7 +414,7 @@ it('rejects a zero-row reopen acknowledgement and restores the completed row', a
   expect(new Headers(init?.headers).get('Accept')).toBe('application/vnd.pgrst.object+json')
 })
 
-it.each(['empty', 'failed'])('retains a zero-row edit draft when the recovery read is %s', async recovery => {
+it.each(['empty', 'failed'])('reconciles a zero-row edit when the recovery read is %s', async recovery => {
   const missingRow = 'Cannot coerce the result to a single JSON object'
   const fetch = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
     const singular = new Headers(init?.headers).get('Accept') === 'application/vnd.pgrst.object+json'
@@ -386,12 +441,15 @@ it.each(['empty', 'failed'])('retains a zero-row edit draft when the recovery re
   await vi.waitFor(() => expect(displayed()).toEqual(recovery === 'empty' ? [] : ['Original']))
   if (recovery === 'empty') {
     expect(render().some(node => node.props.children === missingRow)).toBe(true)
-    // Make the row visible again to verify the draft survived reconciliation.
+    // An authoritative deletion closes the editor, even if the row later reappears.
     stored = [{ ...original }]
     await hooks.load!()
+    expect(render().some(node => node.props['aria-label'] === 'Save reminder')).toBe(false)
+    expect(control('Edit "Original"').disabled).toBe(false)
+  } else {
+    await vi.waitFor(() => expect(control('Save reminder').disabled).toBe(false))
+    expect(control('Edit reminder: Original').value).toBe('Updated')
   }
-  await vi.waitFor(() => expect(control('Save reminder').disabled).toBe(false))
-  expect(control('Edit reminder: Original').value).toBe('Updated')
   const [url, init] = fetch.mock.calls[0]
   expect(new URL(String(url)).searchParams.get('select')).toBe('id')
   expect(new Headers(init?.headers).get('Accept')).toBe('application/vnd.pgrst.object+json')
