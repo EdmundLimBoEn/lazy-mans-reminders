@@ -104,6 +104,28 @@ async function setup(format: 'form' | 'json' = 'form') {
 }
 
 describe('authorization code redemption', () => {
+  it.each([false, true])('retries refresh after access-token storage rejection (legacy grant: %s)', async (legacy) => {
+    const { exchange, env, kv, token, client, request } = await setup()
+    const initial = await (await exchange()).json() as { refresh_token: string }
+    if (legacy) env.GRANT_STATE = memoryObjects((state) => new GrantState(state, env))
+    const refresh = (refreshToken = initial.refresh_token) => token({
+      grant_type: 'refresh_token', client_id: client.clientId, refresh_token: refreshToken,
+    })
+    vi.mocked(env.OAUTH_KV.put)
+      .mockImplementationOnce(async (key, value) => { kv.set(key, value as string) })
+      .mockRejectedValueOnce(new Error('KV PUT failed: 429 Too Many Requests'))
+    const rejected = await refresh()
+    expect(rejected.status).toBe(429)
+    expect(rejected.headers.get('Retry-After')).toBe('30')
+    expect(await rejected.json()).toMatchObject({ error: 'temporarily_unavailable' })
+    const retry = await refresh()
+    expect(retry.status).toBe(200)
+    const tokens = await retry.json() as { access_token: string; refresh_token: string }
+    expect((await request('/mcp', { headers: { Authorization: `Bearer ${tokens.access_token}` } })).status).toBe(200)
+    expect((await refresh()).status).toBe(400)
+    expect((await refresh(tokens.refresh_token)).status).toBe(200)
+  })
+
   it.each([false, true])('rejects a competing refresh instead of orphaning a successful response (legacy grant: %s)', async (legacy) => {
     const { exchange, accountExists, env, token, client, request } = await setup()
     const initial = await (await exchange()).json() as { refresh_token: string }
