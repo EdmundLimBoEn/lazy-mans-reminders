@@ -148,6 +148,8 @@ async function clearLiveActivityColumn(
   const { error } = await query;
   if (error) {
     console.error(`Could not clear ${column}`, error);
+    // Keep reconciliation retryable until cleanup succeeds, before caching invalid.
+    throw new Error(`Could not clear ${column}`);
   }
 }
 
