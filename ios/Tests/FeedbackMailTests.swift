@@ -7,7 +7,7 @@ final class FeedbackMailTests: XCTestCase {
         XCTAssertEqual(
             FeedbackMail.url(info)?.absoluteString,
             "mailto:hello@edmundlim.systems"
-                + "?subject=Lazy%20Man%27s%20Reminders%20feedback%20%281.0%20build%207%29"
+                + "?subject=Notepad%20feedback%20%281.0%20build%207%29"
                 + "&body=%0A%0A---%0AApp%20version%3A%201.0%20%287%29%0AiOS%3A%2018.2%0A"
         )
     }

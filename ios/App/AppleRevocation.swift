@@ -36,7 +36,7 @@ enum AppleRevocation {
 
         var notice: String? {
             guard appleRevocation == "manual_required" else { return nil }
-            return "Your account and reminder data were deleted. Apple access could not be revoked automatically. To finish, open Settings, tap your name, then Sign in with Apple, select Lazy Man’s Reminders, and tap Delete. Apple’s instructions: https://support.apple.com/102571"
+            return "Your account and reminder data were deleted. Apple access could not be revoked automatically. To finish, open Settings, tap your name, then Sign in with Apple, select Notepad, and tap Delete. Apple’s instructions: https://support.apple.com/102571"
         }
     }
 

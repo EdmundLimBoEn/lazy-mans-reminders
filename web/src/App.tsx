@@ -284,7 +284,7 @@ export default function App() {
           <AlertDescription>
             <p>Your account and reminder data were deleted. Apple access could not be revoked automatically.</p>
             <a className="underline" href="https://support.apple.com/102571" target="_blank" rel="noreferrer">
-              Follow Apple’s instructions to stop using Sign in with Apple for Lazy Man’s Reminders.
+              Follow Apple’s instructions to stop using Sign in with Apple for Notepad.
             </a>
           </AlertDescription>
         </Alert>
