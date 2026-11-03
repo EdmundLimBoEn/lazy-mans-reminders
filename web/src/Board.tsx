@@ -128,7 +128,11 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
     ])
     if (sequence !== loadSequence.current) return
     if (fetchError) setError(fetchError.message)
-    else setReminders(data ?? [])
+    else {
+      const refreshed = data ?? []
+      setReminders(refreshed)
+      setEditingId(current => refreshed.some(item => item.id === current) ? current : null)
+    }
     const synced = prefsResult.data?.max_lines
     if (revision === prefsRevision.current && typeof synced === 'number' && synced >= 1) {
       setMaxLines(effectiveMaximum(synced))
