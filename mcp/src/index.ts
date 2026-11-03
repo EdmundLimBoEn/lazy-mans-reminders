@@ -178,7 +178,20 @@ async function checkCodeRedirect(request: Request, env: Env): Promise<Response |
   const [userId, grantId] = code.split(':')
   // Provider 0.10.3 stores the issuing redirectUri on the grant, but only checks
   // client registration at redemption. Reuse its record and existing code format.
-  const grant = await env.OAUTH_KV.get<{ redirectUri?: string }>(`grant:${userId}:${grantId}`, 'json')
+  let grant: { redirectUri?: string } | null
+  try {
+    grant = await env.OAUTH_KV.get<{ redirectUri?: string }>(`grant:${userId}:${grantId}`, 'json')
+  } catch (error) {
+    const rateLimited = (error instanceof OAuthError && error.statusCode === 429) ||
+      (error instanceof Error && /429 Too Many Requests/i.test(error.message))
+    const response = json({
+      error: 'temporarily_unavailable',
+      error_description: 'Token issuance is temporarily unavailable; retry shortly',
+    }, rateLimited ? 429 : 503)
+    response.headers.set('Retry-After', '30')
+    response.headers.set('Access-Control-Expose-Headers', 'Retry-After')
+    return response
+  }
   if (!grant?.redirectUri || form.get('redirect_uri') !== grant.redirectUri) {
     return json({ error: 'invalid_grant', error_description: 'Redirect URI does not match the authorization request' }, 400)
   }
