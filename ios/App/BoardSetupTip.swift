@@ -12,8 +12,8 @@ enum BoardSetupTip {
     }
 
     static let steps: [Step] = [
-        Step(symbol: "lock.rectangle.on.rectangle", text: "Add the Lazy Man’s Reminders widget to your Lock Screen: touch and hold the Lock Screen, tap Customize, then Add Widgets."),
-        Step(symbol: "bell.badge", text: "Allow Live Activities so your board stays on the Lock Screen (Settings → Lazy Man’s Reminders → Live Activities)."),
+        Step(symbol: "lock.rectangle.on.rectangle", text: "Add the Notepad widget to your Lock Screen: touch and hold the Lock Screen, tap Customize, then Add Widgets."),
+        Step(symbol: "bell.badge", text: "Allow Live Activities so your board stays on the Lock Screen (Settings → Notepad → Live Activities)."),
         Step(symbol: "app.badge", text: "Keep notifications on so reminders and board updates reach you."),
     ]
 

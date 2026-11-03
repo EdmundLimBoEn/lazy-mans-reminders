@@ -6,7 +6,7 @@ import UniformTypeIdentifiers
 import GeoToolbox
 
 /// Single board in this app. The reminders schema requires a list entity even
-/// though Lazy Man's Reminders does not have multiple lists.
+/// though Notepad does not have multiple lists.
 @available(iOS 27.0, *)
 @AppEnum(schema: .reminders.listType)
 enum ReminderListType: String {
@@ -41,7 +41,7 @@ struct ReminderListEntity {
     var displayRepresentation: DisplayRepresentation {
         DisplayRepresentation(
             title: "\(name)",
-            subtitle: "Lazy Man's Reminders",
+            subtitle: "Notepad",
             image: .init(systemName: "checklist")
         )
     }
@@ -171,7 +171,7 @@ struct ReminderEntity: IndexedEntity {
         attributes.displayName = title
         attributes.title = title
         attributes.textContent = title
-        attributes.contentDescription = "Reminder on your Lazy Man's Reminders board"
+        attributes.contentDescription = "Reminder on your Notepad board"
         attributes.identifier = id.uuidString
         return attributes
     }
@@ -286,7 +286,7 @@ extension ReminderEntity: IndexedEntity {
         attributes.displayName = title
         attributes.title = title
         attributes.textContent = title
-        attributes.contentDescription = "Reminder on your Lazy Man's Reminders board"
+        attributes.contentDescription = "Reminder on your Notepad board"
         attributes.identifier = id.uuidString
         return attributes
     }

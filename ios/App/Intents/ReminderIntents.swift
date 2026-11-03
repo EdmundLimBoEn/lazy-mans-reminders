@@ -12,7 +12,7 @@ enum ReminderIntentError: Error, CustomLocalizedStringResourceConvertible {
     var localizedStringResource: LocalizedStringResource {
         switch self {
         case .signedOut:
-            "Sign in to Lazy Man's Reminders on this iPhone first."
+            "Sign in to Notepad on this iPhone first."
         case .emptyText:
             "What should I add to your board?"
         case .atCapacity:

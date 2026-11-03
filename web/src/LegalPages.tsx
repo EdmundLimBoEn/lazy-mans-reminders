@@ -34,7 +34,7 @@ function LegalShell({
             href="/"
             onClick={go('/')}
           >
-            ← Lazy Man's Reminders
+            ← Notepad
           </a>
           <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Legal</p>
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1>
@@ -61,7 +61,7 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
     <LegalShell title="Privacy Policy" onNavigate={onNavigate}>
       <p>
         This Privacy Policy describes how <strong>Edmund Lim</strong> (“we”, “us”, or “operator”),
-        a sole operator in Singapore, handles personal information for Lazy Man's Reminders at{' '}
+        a sole operator in Singapore, handles personal information for Notepad at{' '}
         {SITE_URL}, the iOS app, lock-screen widgets, Live Activities, and the agent connector
         (together, the “Service”).
       </p>
@@ -316,7 +316,7 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
 
       <h2>11. Pricing</h2>
       <p>
-        Lazy Man's Reminders is free on the App Store and on the web. There are no in-app
+        Notepad is free on the App Store and on the web. There are no in-app
         purchases or subscriptions.
       </p>
 
@@ -333,7 +333,7 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
         Privacy questions and data requests:{' '}
         <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a><br />
         Operator: Edmund Lim, Singapore / edmundlim.systems<br />
-        Service: Lazy Man's Reminders ({SITE_URL})
+        Service: Notepad ({SITE_URL})
       </p>
     </LegalShell>
   )
@@ -343,7 +343,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
   return (
     <LegalShell title="Terms of Use" onNavigate={onNavigate}>
       <p>
-        These Terms of Use (“Terms”) govern access to Lazy Man's Reminders, including the
+        These Terms of Use (“Terms”) govern access to Notepad, including the
         website at {SITE_URL}, the iOS application, widgets, Live Activities, and the agent
         connector (collectively, the “Service”), operated by <strong>Edmund Lim</strong> in
         Singapore (“we”, “us”).
@@ -355,7 +355,7 @@ export function TermsPage({ onNavigate }: LegalPageProps) {
 
       <h2>1. The Service</h2>
       <p>
-        Lazy Man's Reminders is a personal reminder board. It syncs short reminder lines across
+        Notepad is a personal reminder board. It syncs short reminder lines across
         web and iOS and may show them on your lock screen and send push notifications. Features
         may change or stop as the product evolves. The Service is not a medical device, not an
         alarm for emergencies, and not a system of record for regulated records.
@@ -483,7 +483,7 @@ export function SupportPage({ onNavigate }: LegalPageProps) {
   return (
     <LegalShell title="Support" onNavigate={onNavigate}>
       <p>
-        Need help with Lazy Man's Reminders? Email{' '}
+        Need help with Notepad? Email{' '}
         <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> and include:
       </p>
       <ul>

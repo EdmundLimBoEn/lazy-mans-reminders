@@ -34,8 +34,8 @@ struct BoardPersistenceSection: View {
                 if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
             }
             DisclosureGroup("Add a lasting widget") {
-                Text("Home Screen: touch and hold an empty area, choose Edit → Add Widget, then Lazy Man’s Reminders → Board.")
-                Text("Lock Screen: touch and hold it, choose Customize → Lock Screen → Add Widgets, then Lazy Man’s Reminders.")
+                Text("Home Screen: touch and hold an empty area, choose Edit → Add Widget, then Notepad → Board.")
+                Text("Lock Screen: touch and hold it, choose Customize → Lock Screen → Add Widgets, then Notepad.")
                 Text("Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.")
             }
             .font(.footnote)

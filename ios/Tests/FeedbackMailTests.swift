@@ -7,7 +7,7 @@ final class FeedbackMailTests: XCTestCase {
         XCTAssertEqual(
             FeedbackMail.url(info)?.absoluteString,
             "mailto:hello@edmundlim.systems"
-                + "?subject=Lazy%20Man%27s%20Reminders%20feedback%20%281.0%20build%207%29"
+                + "?subject=Notepad%20feedback%20%281.0%20build%207%29"
                 + "&body=%0A%0A---%0AApp%20version%3A%201.0%20%287%29%0AiOS%3A%2018.2%0A"
         )
     }
@@ -22,7 +22,7 @@ final class FeedbackMailTests: XCTestCase {
             uniqueKeysWithValues: (components.queryItems ?? []).map { ($0.name, $0.value ?? "") }
         )
         XCTAssertEqual(items.keys.sorted(), ["body", "subject"])
-        XCTAssertEqual(items["subject"], "Lazy Man's Reminders feedback (1.2.3 build 42)")
+        XCTAssertEqual(items["subject"], "Notepad feedback (1.2.3 build 42)")
         XCTAssertEqual(items["body"], "\n\n---\nApp version: 1.2.3 (42)\niOS: 27.0.1\n")
     }
 
@@ -35,7 +35,7 @@ final class FeedbackMailTests: XCTestCase {
         XCTAssertFalse(url.absoluteString.contains("+"))
         XCTAssertEqual(
             components.queryItems?.first?.value,
-            "Lazy Man's Reminders feedback (1.0&cc=x@y.z build 7?bcc=a)"
+            "Notepad feedback (1.0&cc=x@y.z build 7?bcc=a)"
         )
     }
 

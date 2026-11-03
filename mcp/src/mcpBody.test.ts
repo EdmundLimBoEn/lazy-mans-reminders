@@ -82,7 +82,7 @@ describe('authenticated MCP body limit', () => {
         : text
       expect(JSON.parse(data)).toMatchObject({
         jsonrpc: '2.0', id: 1,
-        result: { serverInfo: { name: 'lazy-mans-reminders', version: '1.0.0' } },
+        result: { serverInfo: { name: 'notepad', version: '1.0.0' } },
       })
     }
     expect(createMcpHandler).toHaveBeenCalledTimes(2)

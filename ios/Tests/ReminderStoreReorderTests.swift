@@ -180,7 +180,7 @@ final class ReminderStoreReorderTests: XCTestCase {
             _ = try await create.value
             XCTFail("Expired authentication must fail")
         } catch {
-            XCTAssertEqual(error.localizedDescription, "Sign in to Lazy Man's Reminders on this iPhone first.")
+            XCTAssertEqual(error.localizedDescription, "Sign in to Notepad on this iPhone first.")
         }
         try await fixture.seed(store)
         await assertReorderSucceeds(store, network: network, reminders: fixture.reminders)

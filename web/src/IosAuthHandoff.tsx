@@ -27,7 +27,7 @@ export function IosAuthHandoff({ onNavigate }: { onNavigate: (path: string) => v
   if (result.status === 'empty') {
     return (
       <StatusShell title="This sign-in link is incomplete" role="alert" onNavigate={onNavigate}>
-        <StatusText>Return to Lazy Man's Reminders on this iPhone and request a new email link.</StatusText>
+        <StatusText>Return to Notepad on this iPhone and request a new email link.</StatusText>
       </StatusShell>
     )
   }
@@ -35,11 +35,11 @@ export function IosAuthHandoff({ onNavigate }: { onNavigate: (path: string) => v
   return (
     <StatusShell title="Open the app to finish" role="status" onNavigate={onNavigate}>
       <StatusText>
-        Email sign-in has to finish inside Lazy Man's Reminders. Tap below to hand this link to the
+        Email sign-in has to finish inside Notepad. Tap below to hand this link to the
         app on this iPhone.
       </StatusText>
       <Button asChild className="mt-3">
-        <a href={result.href}>Open Lazy Man's Reminders</a>
+        <a href={result.href}>Open Notepad</a>
       </Button>
     </StatusShell>
   )

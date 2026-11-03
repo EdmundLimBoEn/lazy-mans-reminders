@@ -327,7 +327,7 @@ final class ReminderStoreAcknowledgementTests: XCTestCase {
             _ = try await fixture.store.create(text: "New reminder", userID: UUID())
             XCTFail("Explicit owner must match the session")
         } catch {
-            XCTAssertEqual(error.localizedDescription, "Sign in to Lazy Man's Reminders on this iPhone first.")
+            XCTAssertEqual(error.localizedDescription, "Sign in to Notepad on this iPhone first.")
         }
         let cache = await fixture.store.cached()
         XCTAssertEqual(cache, [original])

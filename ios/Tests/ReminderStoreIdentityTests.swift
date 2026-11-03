@@ -424,7 +424,7 @@ final class ReminderStoreIdentityTests: XCTestCase {
             _ = try await task.value
             XCTFail("Obsolete request must throw instead of returning reminders to board sync")
         } catch {
-            XCTAssertEqual(error.localizedDescription, "Sign in to Lazy Man's Reminders on this iPhone first.")
+            XCTAssertEqual(error.localizedDescription, "Sign in to Notepad on this iPhone first.")
         }
     }
 

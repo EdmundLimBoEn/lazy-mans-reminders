@@ -149,7 +149,7 @@ function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: Ex
       resource,
       authorization_servers: MCP_HOSTS.map((host) => `https://${host}`),
       scopes_supported: ['board'],
-      resource_name: "Lazy Man's Reminders",
+      resource_name: "Notepad",
     },
     async resolveExternalToken(input) {
       return resolveExternalPat(input, (promise) => ctx.waitUntil(promise))
