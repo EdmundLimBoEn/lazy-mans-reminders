@@ -35,7 +35,7 @@ export function SiteHeader({
         }}
       >
         <BrandMark />
-        <span>Lazy Man's Reminders</span>
+        <span>Notepad</span>
       </a>
       <div className="flex items-center gap-1.5">{children}</div>
     </header>

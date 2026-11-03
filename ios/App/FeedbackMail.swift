@@ -40,7 +40,7 @@ enum FeedbackMail {
     }
 
     static func subject(_ info: AppInfo) -> String {
-        "Lazy Man's Reminders feedback (\(info.version) build \(info.build))"
+        "Notepad feedback (\(info.version) build \(info.build))"
     }
 
     static func body(_ info: AppInfo) -> String {

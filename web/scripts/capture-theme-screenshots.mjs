@@ -61,7 +61,7 @@ function boardFixture(variant) {
     <main class="board-shell">
       <header>
         <div>
-          <p class="eyebrow">Lazy Man's Reminders</p>
+          <p class="eyebrow">Notepad</p>
           <h1>Your board</h1>
         </div>
         <div class="account">

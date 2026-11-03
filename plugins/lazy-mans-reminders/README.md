@@ -1,4 +1,4 @@
-# Lazy Man's Reminders plugin
+# Notepad plugin
 
 Connects agents to the lock-screen board MCP at `https://np-mcp.sillyapps.co/mcp`. The previous host `https://lmr-mcp.edmundlim.systems/mcp` stays live.
 

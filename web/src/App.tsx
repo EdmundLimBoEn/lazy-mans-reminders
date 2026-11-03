@@ -219,14 +219,14 @@ export default function App() {
 
   useEffect(() => {
     const titles: Record<AppRoute, string> = {
-      '/': "Lazy Man's Reminders",
-      '/privacy': "Privacy · Lazy Man's Reminders",
-      '/terms': "Terms · Lazy Man's Reminders",
-      '/support': "Support · Lazy Man's Reminders",
-      '/auth/callback': "Signing in · Lazy Man's Reminders",
-      '/auth/ios': "Open the app · Lazy Man's Reminders",
-      '/connect': "Connect an agent · Lazy Man's Reminders",
-      'not-found': "Not found · Lazy Man's Reminders",
+      '/': "Notepad",
+      '/privacy': "Privacy · Notepad",
+      '/terms': "Terms · Notepad",
+      '/support': "Support · Notepad",
+      '/auth/callback': "Signing in · Notepad",
+      '/auth/ios': "Open the app · Notepad",
+      '/connect': "Connect an agent · Notepad",
+      'not-found': "Not found · Notepad",
     }
     document.title = titles[path]
   }, [path])
@@ -253,7 +253,7 @@ export default function App() {
   if (path === 'not-found') {
     return (
       <StatusShell title="Page not found" onNavigate={navigate}>
-        <StatusText>That URL is not part of Lazy Man's Reminders.</StatusText>
+        <StatusText>That URL is not part of Notepad.</StatusText>
         <Button asChild className="mt-3">
           <a href="/" onClick={(event) => { event.preventDefault(); navigate('/') }}>Back to the board</a>
         </Button>

@@ -1,9 +1,9 @@
 ---
 name: lazy-mans-reminders
-description: Use when the user mentions reminders, a lock-screen board, LMR, or wants to add to my board. Call Lazy Man's Reminders MCP tools to list, add, complete, or reopen items — never invent board data or ask for secrets in chat.
+description: Use when the user mentions reminders, a lock-screen board, LMR, Notepad, or wants to add to my board. Call Notepad MCP tools to list, add, complete, or reopen items — never invent board data or ask for secrets in chat.
 ---
 
-# Lazy Man's Reminders
+# Notepad
 
 Domain first: a reminder is `{ id, text, active|completed }`. On the wire, status is `is_done` (`false` = active, `true` = completed), plus `sort_order` and timestamps. `list_reminders` also returns `capacity: { used, maximum, remaining }` for **active** lock-screen lines. Treat tool results as the only source of truth.
 

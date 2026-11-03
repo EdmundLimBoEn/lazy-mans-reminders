@@ -22,7 +22,7 @@ actor ReminderStore {
             case .requestFailed(let statusCode):
                 return "The reminders service returned HTTP \(statusCode)."
             case .signedOut:
-                return "Sign in to Lazy Man's Reminders on this iPhone first."
+                return "Sign in to Notepad on this iPhone first."
             case .atCapacity:
                 return ReminderBoardLimits.postItHint
             case .emptyText:

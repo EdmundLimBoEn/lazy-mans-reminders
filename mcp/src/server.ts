@@ -6,7 +6,7 @@ import { CLIENT_STORAGE_ERROR, runBoardCommand } from './board'
 
 export function createServer(session: AgentSession, env: Env): McpServer {
   const server = new McpServer({
-    name: 'lazy-mans-reminders',
+    name: 'notepad',
     version: '1.0.0',
   })
   const supabase = createServiceRoleClient(env)

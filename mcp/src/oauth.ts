@@ -50,7 +50,7 @@ export function serverCard() {
   // Grok Bot and other static-header hosts should use board copy plus plugin
   // variable LMR_AGENT_TOKEN rather than this card.
   return {
-    name: "Lazy Man's Reminders",
+    name: "Notepad",
     version: '1.0.0',
     url: '/mcp',
     auth: { type: 'oauth' },

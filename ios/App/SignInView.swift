@@ -25,7 +25,7 @@ struct SignInView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Lazy Man's Reminders")
+                        Text("Notepad")
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(.secondary)
                         Text("Your board on this iPhone, the web, and the Lock Screen.")
