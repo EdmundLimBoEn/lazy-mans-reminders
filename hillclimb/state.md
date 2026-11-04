@@ -161,3 +161,9 @@ N is authorized to update only the full-board Add reminder expectation in the sh
 N also owns one behavior-aligned capacity-height assertion in BoardMultilineUITests: no forced two-line XXXL requirement after width is reclaimed. Intrinsic size, complete text, 44pt height, scaled type and native no-clipping checks remain required.
 
 N may resolve equivalent absent-Add-reminder queries in its two existing capacity test methods autonomously. Use `.exists` at capacity; retain enabled/disabled and target checks below capacity. Native failed-query evidence stays recorded.
+
+## P accepted; Q Account work starts
+
+Merged P source `9b3aea1` and evidence `045e4b6`. Parent inspected the native XXXL dark before/after originals and verified all 30 native image/reference hashes plus the supplied provenance digest. Island-only `.allowsTightening(surface == .island)` completes the second sample line without reducing type size or losing first-row text. Counts remain banner 5+5/4+6, Island 3+7/2+8; clearance gates and all 293 tests pass. Long stress lines still truncate naturally; no universal tail elimination or physical lock claim.
+
+Original17 is released, running light/Large, four settings restored, no owned Activities and own session closed. Q now owns only AccountView, BoardPersistenceSection, a new Account-only UI test and task evidence on original17. It will test native hard top-edge chrome and sentence-boundary spacing with exact words preserved. N/private Board17 and O/private Auth17 continue separately. Integrated revalidation and fresh round 6 grading wait for all handoffs.

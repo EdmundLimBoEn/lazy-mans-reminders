@@ -139,3 +139,9 @@ Edmund confirmed “Keep existing wording.” The raw network-error text is inte
 Round 5 independent Codex reports validate at **9.06 / 9.15**, both above the target and with no category below 7. Opus 5.5/medium now reviews this same packet; no final all-three success is claimed.
 
 Round 5 Opus completed at **8.69/minimum 7.8**. All reports validate; final success is not reached. Round 6 targets the remaining native chrome, capacity affordance and constrained-surface reading findings. Raw network-error copy is a closed product decision.
+
+## Round 6 Island readability
+
+Accepted native Island-only text tightening (`9b3aea1`): the XXXL sample ending now reads “sample notes.” while the first row stays complete. Type size, native line budgets, counts and corner/footer margins remain intact. All 293 worker tests pass; parent verified 30 native image/reference hashes and inspected the originals. Very long lines still use native tail truncation.
+
+[Before](tasks/activity-tightening/before/multiline-dark-XXXL-expanded.png) · [After](tasks/activity-tightening/after/multiline-dark-XXXL-expanded.png) · [Evidence and limits](tasks/activity-tightening/README.md). No new score is inferred before the full round 6 capture and review.
