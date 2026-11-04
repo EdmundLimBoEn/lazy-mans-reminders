@@ -67,7 +67,7 @@ final class SignInSurfaceUITests: XCTestCase {
     func testPasswordInboxAndErrorWrapInBothAppearancesAndSizes() {
         for style in ["light", "dark"] {
             for size in ["default", "XXXL"] {
-                for variant in ["password", "inbox", "error"] {
+                for variant in ["password", "inbox", "error", "loading"] {
                     launch(style: style, size: size, variant: variant)
                     if variant == "password" {
                         target(app.otherElements["signin.passwordTarget"])
@@ -78,6 +78,9 @@ final class SignInSurfaceUITests: XCTestCase {
                     } else if variant == "inbox" {
                         target(app.buttons["Use a Different Email"])
                         wraps("We sent a sign-in link to you@example.com.", style: .subheadline, size: size)
+                    } else if variant == "loading" {
+                        XCTAssertTrue(app.buttons["Send Sign-In Link, in progress"].exists)
+                        XCTAssertFalse(app.buttons["Send Sign-In Link, in progress"].isEnabled)
                     } else {
                         wraps("Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.", style: .footnote, size: size)
                     }
@@ -98,9 +101,79 @@ final class SignInSurfaceUITests: XCTestCase {
                 target(app.otherElements[variant == "keyboard" ? "signin.emailTarget" : "signin.passwordTarget"])
                 XCTAssertLessThanOrEqual(field.frame.maxY, app.keyboards.firstMatch.frame.minY)
                 XCTAssertTrue(app.buttons["Done"].waitForExistence(timeout: 5))
+                let done = app.buttons["Done"]
+                target(done)
+                let alternate = app.buttons[variant == "keyboard" ? "Use an Existing Password" : "Use a Sign-In Link Instead"]
+                XCTAssertLessThanOrEqual(alternate.frame.maxY + 8, done.frame.minY)
+                XCTAssertGreaterThanOrEqual(field.frame.minY, app.navigationBars.firstMatch.frame.maxY)
+                // Exercise real form scrolling as well as initial keyboard placement.
+                app.scrollViews.firstMatch.swipeUp(velocity: .slow)
+                for _ in 0..<4 {
+                    if alternate.frame.maxY + 8 <= done.frame.minY && alternate.frame.minY >= app.navigationBars.firstMatch.frame.maxY { break }
+                    app.swipeUp(velocity: .slow)
+                }
+                target(alternate)
+                XCTAssertTrue(alternate.isHittable)
+                XCTAssertFalse(alternate.frame.intersects(done.frame))
+                XCTAssertLessThanOrEqual(alternate.frame.maxY + 8, done.frame.minY)
+                XCTAssertLessThanOrEqual(alternate.frame.maxY, app.keyboards.firstMatch.frame.minY)
                 capture("signin-\(style)-\(size)-\(variant)")
+                done.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
+                XCTAssertTrue(app.keyboards.firstMatch.waitForNonExistence(timeout: 5))
+                field.tap()
+                XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+                for _ in 0..<4 {
+                    if alternate.frame.maxY + 8 <= done.frame.minY && alternate.frame.minY >= app.navigationBars.firstMatch.frame.maxY { break }
+                    app.swipeUp(velocity: .slow)
+                }
+                XCTAssertFalse(alternate.frame.intersects(done.frame))
+                XCTAssertLessThanOrEqual(alternate.frame.maxY + 8, done.frame.minY)
+                alternate.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: 0.5)).tap()
+                XCTAssertTrue(app.buttons[variant == "keyboard" ? "Use a Sign-In Link Instead" : "Use an Existing Password"].exists)
+                if app.keyboards.firstMatch.exists {
+                    done.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
+                    XCTAssertTrue(app.keyboards.firstMatch.waitForNonExistence(timeout: 5))
+                }
             }
             }
         }
     }
+    func testDemoBlocksExternalActionsAndAllowsLocalRecovery() {
+        launch(style: "light", size: "default")
+        XCTAssertFalse(app.buttons["Sign in with Apple"].isEnabled)
+        XCTAssertFalse(app.buttons["Sign in with Google"].isEnabled)
+        let email = app.textFields["Email address"]
+        email.coordinate(withNormalizedOffset: CGVector(dx: 0.03, dy: 0.5)).tap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+        email.typeText("you@example.com")
+        XCTAssertFalse(app.buttons["Send Sign-In Link"].isEnabled)
+        app.buttons["Clear text"].tap()
+        XCTAssertFalse(app.buttons["Clear text"].exists)
+        email.typeText("you@example.com")
+        app.buttons["Done"].tap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForNonExistence(timeout: 5))
+        app.buttons["Use an Existing Password"].tap()
+        let password = app.secureTextFields["Password"]
+        password.tap()
+        password.typeText("offline-only")
+        XCTAssertFalse(app.buttons["Sign In with Password"].isEnabled)
+        app.buttons["Done"].tap()
+        app.swipeUp()
+        for label in ["Privacy", "Terms", "Support"] {
+            XCTAssertTrue(app.buttons[label].exists)
+            XCTAssertFalse(app.buttons[label].isEnabled)
+        }
+        launch(style: "light", size: "default", variant: "inbox")
+        app.buttons["Use a Different Email"].tap()
+        XCTAssertTrue(app.textFields["Email address"].exists)
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+        app.buttons["Done"].tap()
+        launch(style: "light", size: "default", variant: "error")
+        app.textFields["Email address"].tap()
+        app.textFields["Email address"].typeText("x")
+        XCTAssertFalse(app.staticTexts["Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again."].exists)
+        XCTAssertTrue(app.keyboards.firstMatch.exists)
+        app.buttons["Done"].tap()
+    }
+
 }

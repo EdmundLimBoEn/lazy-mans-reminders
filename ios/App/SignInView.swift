@@ -13,11 +13,15 @@ struct SignInView: View {
     @State private var pending: PendingSignIn?
     @State private var inboxPulse = 0
     @State private var errorPulse = 0
+    @State private var errorAnnouncements = SignInErrorAnnouncementPolicy()
+#if DEBUG
+    @State private var fixtureNoticeCleared = false
+#endif
     @FocusState private var emailFocused: Bool
     @FocusState private var passwordFocused: Bool
 
 #if DEBUG
-    // Read-only demo variants retain HillclimbRoot's network-control hit-testing block.
+    // Only explicit sign-in demos permit local editing while blocking external actions.
     private var fixtureVariant: String? {
         HillclimbDemo.mode == .signin ? HillclimbDemo.argument("--hillclimb-signin-variant") : nil
     }
@@ -25,6 +29,7 @@ struct SignInView: View {
 
     private var displayedNotice: AuthNotice? {
 #if DEBUG
+        if fixtureNoticeCleared { return nil }
         switch fixtureVariant {
         case "inbox": return .checkInbox(email: "you@example.com")
         case "error": return .error("Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.")
@@ -32,6 +37,14 @@ struct SignInView: View {
         }
 #endif
         return auth.notice
+    }
+
+    private var blocksExternalActions: Bool {
+#if DEBUG
+        HillclimbDemo.mode == .signin
+#else
+        false
+#endif
     }
 
     private enum PendingSignIn {
@@ -75,22 +88,31 @@ struct SignInView: View {
             .scrollDismissesKeyboard(.interactively)
             .background(Color(.systemBackground))
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
-                if passwordFocused {
-                    scroll.scrollTo("signin.passwordTarget", anchor: .center)
-                } else if emailFocused {
-                    scroll.scrollTo("signin.emailTarget", anchor: .center)
+                if emailFocused || passwordFocused {
+                    scroll.scrollTo("signin.alternateTarget", anchor: .bottom)
                 }
             }
             }
             .navigationTitle("Sign In")
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button("Done") {
-                        emailFocused = false
-                        passwordFocused = false
+            .safeAreaInset(edge: .bottom, spacing: 8) {
+                if emailFocused || passwordFocused {
+                    HStack {
+                        Spacer()
+                        Button {
+                            emailFocused = false
+                            passwordFocused = false
+                        } label: {
+                            Text("Done")
+                                .frame(minWidth: 48, minHeight: 48)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(.tint)
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 4)
+                    .background(Color(.systemBackground))
                 }
             }
         }
@@ -99,6 +121,7 @@ struct SignInView: View {
             if fixtureVariant == "password" || fixtureVariant == "password-keyboard" {
                 usesPassword = true
             }
+            if fixtureVariant == "loading" { pending = .magicLink }
             if fixtureVariant == "keyboard" || fixtureVariant == "password-keyboard" {
                 try? await Task.sleep(for: .milliseconds(300))
             }
@@ -106,16 +129,21 @@ struct SignInView: View {
             if fixtureVariant == "password-keyboard" { passwordFocused = true }
         }
 #endif
+        .onChange(of: displayedNotice, initial: true) { _, notice in
+            if let message = errorAnnouncements.announcement(for: notice) {
+                UIAccessibility.post(notification: .announcement, argument: message)
+            }
+        }
         .sensoryFeedback(.success, trigger: inboxPulse)
         .sensoryFeedback(.error, trigger: errorPulse)
         .onChange(of: email) { _, _ in
-            if case .error = auth.notice {
-                auth.clearNotice()
+            if case .error = displayedNotice {
+                clearNotice()
             }
         }
         .onChange(of: password) { _, value in
-            if !value.isEmpty, case .error = auth.notice {
-                auth.clearNotice()
+            if !value.isEmpty, case .error = displayedNotice {
+                clearNotice()
             }
         }
         .onDisappear {
@@ -154,9 +182,11 @@ struct SignInView: View {
     private var providerSection: some View {
         SignInSection {
             SignInWithAppleButton(.signIn) { request in
+                guard !blocksExternalActions else { return }
                 pending = .apple
                 auth.configureAppleRequest(request)
             } onCompletion: { result in
+                guard !blocksExternalActions else { return }
                 Task {
                     await auth.handleAppleSignIn(result)
                     if auth.session == nil {
@@ -167,9 +197,10 @@ struct SignInView: View {
             .signInWithAppleFill(SignInAppleFill.fill(for: colorScheme))
             .frame(maxWidth: .infinity)
             .frame(height: max(44, signInButtonHeight))
-            .disabled(busy)
+            .disabled(busy || blocksExternalActions)
 
             Button {
+                guard !blocksExternalActions else { return }
                 pending = .google
                 Task {
                     await auth.signInWithGoogle()
@@ -186,7 +217,7 @@ struct SignInView: View {
             .controlSize(.large)
             .frame(maxWidth: .infinity)
             .frame(minHeight: max(44, signInButtonHeight))
-            .disabled(busy)
+            .disabled(busy || blocksExternalActions)
             .accessibilityHint("Opens Google sign-in in a secure browser sheet")
         }
     }
@@ -206,7 +237,7 @@ struct SignInView: View {
                     .textSelection(.enabled)
                     .fixedSize(horizontal: false, vertical: true)
                 Button("Use a Different Email") {
-                    auth.clearNotice()
+                    clearNotice()
                     pending = nil
                     emailFocused = true
                 }
@@ -254,24 +285,25 @@ struct SignInView: View {
                 .buttonBorderShape(.roundedRectangle)
                 .controlSize(.large)
                 .frame(maxWidth: .infinity)
-                .disabled(!emailIsPlausible || busy || (usesPassword && password.isEmpty))
+                .disabled(blocksExternalActions || !emailIsPlausible || busy || (usesPassword && password.isEmpty))
                 Button {
                     usesPassword.toggle()
                     password = ""
                     passwordFocused = false
-                    auth.clearNotice()
+                    clearNotice()
                 } label: {
                     Text(usesPassword ? "Use a Sign-In Link Instead" : "Use an Existing Password")
                         .fixedSize(horizontal: false, vertical: true)
                         .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .frame(maxWidth: .infinity, minHeight: 48)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(.tint)
                 .controlSize(.large)
-                .frame(maxWidth: .infinity, minHeight: 44)
+                .frame(maxWidth: .infinity, minHeight: 48)
                 .disabled(busy)
+                .id("signin.alternateTarget")
             }
         }
     }
@@ -371,6 +403,7 @@ struct SignInView: View {
                     .frame(minHeight: 44)
             }
         }
+        .disabled(blocksExternalActions)
         .font(.footnote)
         .frame(maxWidth: .infinity)
         .padding(.top, 8)
@@ -393,8 +426,15 @@ struct SignInView: View {
         .accessibilityLabel(showsProgress ? "\(title), in progress" : title)
     }
 
+    private func clearNotice() {
+#if DEBUG
+        if blocksExternalActions { fixtureNoticeCleared = true }
+#endif
+        auth.clearNotice()
+    }
+
     private func startPasswordSignIn() {
-        guard !busy,
+        guard !blocksExternalActions, !busy,
               let credentials = PasswordSignInCredentials(email: email, password: password)
         else { return }
         emailFocused = false
@@ -410,7 +450,7 @@ struct SignInView: View {
 
     private func sendMagicLink() async {
         let value = normalizedEmail
-        guard SignInEmail.isPlausible(value), !busy else { return }
+        guard !blocksExternalActions, SignInEmail.isPlausible(value), !busy else { return }
         pending = .magicLink
         await auth.sendMagicLink(to: value)
         pending = nil

@@ -71,7 +71,7 @@ struct HillclimbRoot: View {
     var body: some View {
         Group {
             if HillclimbDemo.mode == .signin {
-                SignInView().allowsHitTesting(false)
+                SignInView()
             } else {
                 ReminderListView(hillclimb: HillclimbDemo.mode)
             }
