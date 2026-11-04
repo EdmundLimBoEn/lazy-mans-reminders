@@ -4,6 +4,7 @@ import {
   assertMatch,
 } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import {
+  boardContent,
   boardLines,
   buildLiveActivityHeaders,
   buildLiveActivityPayload,
@@ -306,4 +307,40 @@ Deno.test("overnight replacement payload fits valid maximum Unicode boards", () 
       assertEquals(lines.length, 6);
     }
   }
+});
+
+Deno.test("structured board totals survive payload byte caps and retain legacy lines", () => {
+  for (
+    const text of ["Line", "😀".repeat(6000), "漢".repeat(6000), "+5 more"]
+  ) {
+    const content = boardContent([
+      Array.from({ length: 10 }, () => text).join("\n"),
+    ], 6);
+    assertEquals(content.hiddenLineCount, 5);
+    assertEquals(content.lines[5], "+5 more");
+    for (const event of ["start", "update", "end"] as const) {
+      const payload = buildLiveActivityPayload({
+        ...content,
+        event,
+        timestamp: 1,
+        staleDate: 2,
+        alertBody: "Alert".repeat(3000),
+      });
+      assertEquals(new TextEncoder().encode(payload).length <= 4096, true);
+      const state = JSON.parse(payload).aps["content-state"];
+      assertEquals(state.lines.length - 1 + state.hiddenLineCount, 10);
+      assertEquals(state.lines.at(-1), `+${state.hiddenLineCount} more`);
+      const kept = state.lines.slice(0, -1).slice(0, 3);
+      assertEquals(
+        kept.length + state.hiddenLineCount + state.lines.length - 1 -
+          kept.length,
+        10,
+      );
+    }
+  }
+  assertEquals(boardContent(["+5 more", "Second"], 6), {
+    lines: ["+5 more", "Second"],
+    hiddenLineCount: 0,
+  });
+  assertEquals(boardContent([" \n"], 6), { lines: [], hiddenLineCount: 0 });
 });

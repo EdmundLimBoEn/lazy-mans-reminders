@@ -1,0 +1,17 @@
+{
+  "source": "parent follow-up after worker970f567",
+  "dependency_setup": "deno cache for the pinned std@0.224.0 assertion dependency",
+  "command": [
+    "deno",
+    "test",
+    "--cached-only",
+    "supabase/functions/_shared/live_activity_test.ts",
+    "supabase/functions/_shared/board_loader_test.ts",
+    "supabase/functions/_shared/device_delivery_test.ts"
+  ],
+  "exit": 0,
+  "passed": 52,
+  "failed": 0,
+  "network_service_permissions": false,
+  "correction": "Updated existing empty-board content expectation to include hiddenLineCount:0; no assertions removed. Initial typed run failed before execution; corrected run executed52 tests."
+}

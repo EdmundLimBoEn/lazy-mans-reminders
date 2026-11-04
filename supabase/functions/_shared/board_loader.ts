@@ -1,6 +1,6 @@
 import type { ReminderRecord } from "./push_helpers.ts";
 import {
-  boardLines,
+  boardContent,
   LIVE_ACTIVITY_FALLBACK_MAX_LINES,
 } from "./live_activity.ts";
 
@@ -21,7 +21,9 @@ export async function loadBoardContent(
   supabase: BoardClient,
   userId: string,
   alertCandidate?: ReminderRecord,
-): Promise<{ lines: string[]; alertRecord?: ReminderRecord }> {
+): Promise<
+  { lines: string[]; hiddenLineCount: number; alertRecord?: ReminderRecord }
+> {
   const [{ data: reminders, error }, { data: prefs, error: prefsError }] =
     await Promise.all([
       supabase.from("reminders").select(
@@ -55,7 +57,7 @@ export async function loadBoardContent(
     : undefined;
   return {
     alertRecord,
-    lines: boardLines(
+    ...boardContent(
       texts,
       typeof prefs?.max_lines === "number"
         ? prefs.max_lines
