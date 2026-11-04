@@ -16,6 +16,7 @@ struct AccountView: View {
     var body: some View {
         NavigationStack {
             List {
+                Group {
                 if let error {
                     Section {
                         Label(error, systemImage: "exclamationmark.triangle.fill")
@@ -110,8 +111,14 @@ struct AccountView: View {
                             .accessibilityLabel("App \(FeedbackMail.versionFooter(appInfo))")
                     }
                 }
+                }
+                .disabled(hillclimbReadOnly)
             }
+            .environment(\.defaultMinListRowHeight, 44)
             .listStyle(.insetGrouped)
+            .scrollContentBackground(.hidden)
+            .background(Color(.systemGroupedBackground))
+            .contentMargins(.top, 8, for: .scrollContent)
             // Neutral rows; colour is reserved for state and destructive actions.
             .tint(.primary)
             .listSectionSpacing(.compact)
@@ -130,12 +137,15 @@ struct AccountView: View {
                         ProgressView()
                             .accessibilityLabel("Deleting account")
                     } else {
-                        Button("Done") { dismiss() }
+                        Button { dismiss() } label: {
+                            Text("Done")
+                                .frame(minWidth: 44, minHeight: 44)
+                                .contentShape(Rectangle())
+                        }
                     }
                 }
             }
             .disabled(isDeletingAccount)
-            .allowsHitTesting(!hillclimbReadOnly)
             .confirmationDialog(
                 "Sign Out",
                 isPresented: $showSignOut,
@@ -162,6 +172,7 @@ struct AccountView: View {
                 Text("This permanently deletes your reminders, device registrations, lock-screen prefs, agent access, and sign-in. This can’t be undone.")
             }
         }
+        .presentationBackground(Color(.systemGroupedBackground))
     }
 
     private var hillclimbReadOnly: Bool {
