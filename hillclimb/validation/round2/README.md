@@ -1,0 +1,16 @@
+Round2 integration verification uses source `8dbf6a8e07a5b88dd6748b77a5c8030740eb5309` on branch `t3/hillclimb-round2-verification`. No application/test/config source was edited. Generated isolated Config.xcconfig and Xcode project are ignored. Production file content hashes are in provenance.json; compare those hashes after the evidence commit, whose SHA necessarily differs from the build source.
+
+The unchanged combined scheme executed 249 unit tests and all 12 UI tests: 261 passed, zero failed, zero skipped. See combined-summary.json, combined-tests.json, test-command.json and checks.json. Tests used the exact build-for-testing xctestrun, one derived-data directory, original17, no parallel workers/clones, disabled package updates/resolution and 120/180-second execution limits. Initial build refused missing Package.resolved; one resolution populated the isolated generated workspace, then disabled-resolution builds succeeded. Native footer frame attachment and activities are retained. Rendered-unit contains twelve SwiftUI unit-renderer PNGs, not native Activity screenshots.
+
+The known sign-in Invalid frame dimension (negative or non-finite) warning recurred once in testFocusedEmailAndPasswordClearKeyboardInBothAppearances. That test passed; the diagnostic remains unresolved and is separate from assertion results. Other observed compiler/test-runner warnings are in observed-warnings.json. Streaming output was filtered; no claim of complete console export or warning-free execution is made. Release build overall exit was zero and produced the simulator binary; SwiftCompile also emitted unusual exit-zero/no-further-output diagnostics, retained in build-release.json. The tested Debug binary was reinstalled after Release, before demo capture (debug-restore.json).
+
+Captures use only explicit offline Debug fixtures on the isolated systems.edmundlim.NotepadHillclimb / group.systems.edmundlim.NotepadHillclimb configuration. Authentication controls and Account actions remain intentionally disabled; fixture dimming is not an enabled-production contrast measurement. Main matrix arguments use `--round 2`, as documented by actual shots.sh --help (there is no --round2 flag). The pinned command and true simulator/runtime appear in device.json, provenance.json, and capture manifests. Simulator hardware cutout appearance in still screenshots is not evidence of physical hardware geometry.
+
+No scores are assigned. Parent must review/merge the evidence and run fresh Sol/Astra grading. Opus eligibility requires both Codex grades >=8.5 in this same round; final target all three >=9 with no category <7. No push, PR, main merge, deployment or TestFlight action was performed.
+
+
+Fresh references: all four previously missing settled Reminders matches captured under reference/round2/. Final snapshot still reports16 reminders; blank composer dismissed with no content. Package.resolved here preserves build dependency provenance only and does not modify parent configuration.
+
+Handback complete: light appearance, large system text size, no owned demo Activities, Reminders still16 rows; own app/session closed without shutting down original17. See validation/round2/handback.json.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
