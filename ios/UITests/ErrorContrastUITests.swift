@@ -52,7 +52,7 @@ final class ErrorContrastUITests: XCTestCase {
             if state == "error" && error.frame.minY < app.navigationBars.firstMatch.frame.maxY { list.swipeDown(velocity: .slow) }
             try raster(error, name: "account-\(state)-\(style)-\(size)-reappeared", frame: error.frame.insetBy(dx: 8, dy: 4))
             for _ in 0..<8 {
-                if app.buttons["Delete Account…"].isHittable { break }
+                if app.buttons["Delete Account…"].isHittable && app.buttons["Delete Account…"].frame.maxY < app.frame.maxY - 34 { break }
                 list.swipeUp(velocity: .slow)
             }
             let delete = app.buttons["Delete Account…"]
