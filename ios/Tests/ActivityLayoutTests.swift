@@ -36,24 +36,25 @@ final class ActivityLayoutTests: XCTestCase {
                         bitsPerComponent: 8, bytesPerRow: bytesPerRow, space: CGColorSpaceCreateDeviceRGB(),
                         bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
                     context.draw(image, in: CGRect(x: 0, y: 0, width: image.width, height: image.height))
-                    var bands = 0
-                    var wasInk = false
-                    for y in 0..<image.height {
-                        let count = (0..<image.width).filter { x in
-                            let offset = y * bytesPerRow + x * 4
-                            let luminance = Int(pixels[offset]) + Int(pixels[offset + 1]) + Int(pixels[offset + 2])
-                            return scheme == .dark ? luminance > 500 : luminance < 260
-                        }.count
-                        let ink = count > 3
-                        if ink && !wasInk { bands += 1 }
-                        wasInk = ink
-                    }
-                    // Letters in the footer share a single continuous glyph band.
                     let pointSize = UIFontMetrics(forTextStyle: .subheadline).scaledValue(for: 15,
                         compatibleWith: UITraitCollection(preferredContentSizeCategory:
                             size == .large ? .large : size == .xxxLarge ? .extraExtraExtraLarge : .accessibilityExtraExtraExtraLarge))
                     let expected = ReminderActivityLayout.lineLimit(pointSize: pointSize, surface: surface)
-                    XCTAssertEqual(bands, expected, "Missing or clipped text row in rendered \(surface), \(size), \(scheme)")
+                    let rowHeight = Int(ReminderActivityLayout.rowHeight(pointSize: pointSize))
+                    let stride = rowHeight + Int(LockScreenLineBudget.lineSpacing)
+                    for row in 0..<expected {
+                        let inkRows = (row * stride..<min(image.height, row * stride + rowHeight)).filter { y in
+                            (0..<image.width).filter { x in
+                                let offset = y * bytesPerRow + x * 4
+                                let luminance = Int(pixels[offset]) + Int(pixels[offset + 1]) + Int(pixels[offset + 2])
+                                return scheme == .dark ? luminance > 500 : luminance < 260
+                            }.count > 3
+                        }.count
+                        // A digit such as 5 can have disconnected ink bands. Check
+                        // each allocated row's actual ink height, including the footer.
+                        XCTAssertGreaterThanOrEqual(inkRows, Int(pointSize * 0.55),
+                            "Missing or clipped row \(row) in rendered \(surface), \(size), \(scheme)")
+                    }
                 }
             }
         }
