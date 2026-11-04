@@ -45,7 +45,8 @@ def validate(root):
         result['errors'].append('Missing checks.json')
     else:
         checks = json.loads(checks_path.read_text())
-        if not checks.get('checks') or any(c.get('status') != 'passed' for c in checks['checks'] if c.get('required', True)):
+        required_checks = [c for c in checks.get('checks', []) if c.get('required', True)]
+        if not required_checks or any(c.get('status') != 'passed' for c in required_checks):
             result['errors'].append('Required programmatic checks have not all passed')
         if not checks.get('source_sha'):
             result['errors'].append('Checks missing source SHA')
