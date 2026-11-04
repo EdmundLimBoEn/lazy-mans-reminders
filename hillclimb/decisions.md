@@ -1,5 +1,7 @@
 # Decisions
 
+- 2026-11-05, Edmund: “Keep existing wording.” The raw network-error copy is intentionally retained. Close the optional wording question; future reviews should assess its presentation under this product constraint. No replacement copy is authorized.
+
 - 2026-11-04: Keep integration in the existing clean tracked checkout; untracked .cursor/, .tf-run-watch*.log, ios/.asc/, ios/ExportOptions.plist are out of scope. All worker checkouts are tool-created worktrees.
 - 2026-11-04: 30-category rubric with arithmetic mean and explicit evidence gaps. Ratings must remain honest.
 - 2026-11-04: Try iOS 26.2 standard simulator runtime because the only installed runtime supports only Duo. Do not alter runtime compatibility metadata.

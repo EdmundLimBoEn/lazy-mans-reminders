@@ -86,7 +86,7 @@ No App Store/TestFlight upload or deployment is authorized. Physical sign-in, pe
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
 
-Next batch: board intentional completion/Done/contrast, sign-in dark Apple control and spacing, Account typography/alignment/error announcements. Existing wording stays fixed pending the optional copy question.
+Next batch: board intentional completion/Done/contrast, sign-in dark Apple control and spacing, Account typography/alignment/error announcements. Existing wording stays fixed by Edmund’s explicit 2026-11-05 decision: “Keep existing wording.”
 
 ## Latest integrated improvements
 

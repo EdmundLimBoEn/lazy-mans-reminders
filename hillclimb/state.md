@@ -69,7 +69,7 @@ All are regular iPhone 17 Pro/iOS 26.2; no Duo was used. New device work require
 
 ## Constraints and open questions
 
-Preserve every user-facing string, branding and icon. No nested cards or decorative red/orange palette. The optional raw network-error wording question remains pending in `questions.md`; current copy stays intact and independent work continues.
+Preserve every user-facing string, branding and icon. No nested cards or decorative red/orange palette. Edmund confirmed on 2026-11-05: “Keep existing wording.” The raw network-error copy remains verbatim; the optional question in `questions.md` is closed.
 
 True physical Lock Screen, haptics, spoken VoiceOver, AX1–AX5, live account/auth flows and launch/frame-time metrics remain unverified. Selected system-setting captures do not certify every combination. Notification Center is not true device locking, and encoded recording frame rates are not display-performance metrics.
 
@@ -81,11 +81,11 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 
 ## Round 4 grade decision
 
-Validator confirms both Codex reports and required checks; only Opus is missing. Both overall scores exceed 8.5, so run the exact requested Opus 5.5/medium reviewer now. Final gate is still false. Scores continue increasing; three-round plateau is not established. Top remaining findings: board header-edge fragments, normal-size error/diagnostic text contrast, and targeted accessibility/Activity verification. Existing copy remains fixed pending Edmund's optional wording response.
+Validator confirms both Codex reports and required checks; only Opus is missing. Both overall scores exceed 8.5, so run the exact requested Opus 5.5/medium reviewer now. Final gate is still false. Scores continue increasing; three-round plateau is not established. Top remaining findings: board header-edge fragments, normal-size error/diagnostic text contrast, and targeted accessibility/Activity verification. Existing copy remains fixed; Edmund confirmed retaining it on 2026-11-05.
 
 ## Round 4 Opus and next batch
 
-Opus a9ea0dd is merged; all three reports validate with no schema/evidence errors, but the final numeric gate remains false. No three-round plateau: all completed grader series continue increasing. Next isolated workers: K sign-in/Account error contrast, legal-footer capture coverage and combined-settings keyboard reproduction; L board top edge, single VoiceOver paragraph stop and loading/error text contrast; M Activity readability/density investigation with actual native safety gates. No wording changes without Edmund's response. Each branch must build, pass existing+new checks and capture affected native states before acceptance.
+Opus a9ea0dd is merged; all three reports validate with no schema/evidence errors, but the final numeric gate remains false. No three-round plateau: all completed grader series continue increasing. Next isolated workers: K sign-in/Account error contrast, legal-footer capture coverage and combined-settings keyboard reproduction; L board top edge, single VoiceOver paragraph stop and loading/error text contrast; M Activity readability/density investigation with actual native safety gates. Retain existing wording, as Edmund confirmed on 2026-11-05. Each branch must build, pass existing+new checks and capture affected native states before acceptance.
 
 ## Next worker ownership (K/L/M)
 

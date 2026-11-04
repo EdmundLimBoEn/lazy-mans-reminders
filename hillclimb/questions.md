@@ -1,7 +1,7 @@
 # Questions for Edmund
 
-- **Pending, optional:** Keep the existing raw network-error wording, or supply exact replacement wording? The question was already presented asynchronously. No wording change is assumed. Layout, contrast, accessibility and testing work continues independently.
+- **Resolved, 2026-11-05:** Edmund: “Keep existing wording.” Retain the full existing raw network-error text. Do not introduce replacement error copy or ask this question again unless Edmund changes direction.
 
-Round4 reviews are complete; K and L fixes are merged, with round5 runtime validation next. The raw diagnostic stays verbatim under the existing heading and retry action. No shipping or branding decision is needed.
+No product question is pending. Layout, contrast, accessibility and interaction work continues under the existing wording and branding constraints.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
