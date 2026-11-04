@@ -111,6 +111,8 @@ final class AccessibilitySettingsUITests: XCTestCase {
     }
     private func capture(_ name: String) {
         let proof = XCTAttachment(screenshot: app.screenshot()); proof.name = "combined-settings-" + name; proof.lifetime = .keepAlways; add(proof)
+        let screen = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        screen.name = "combined-full-screen-" + name; screen.lifetime = .keepAlways; add(screen)
     }
     private func verifyKeyboardMatrix() {
         for style in ["light", "dark"] {
