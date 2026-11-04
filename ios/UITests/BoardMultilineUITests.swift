@@ -111,7 +111,13 @@ final class BoardMultilineUITests: XCTestCase {
                         XCTAssertTrue(app.staticTexts[message].exists)
                         XCTAssertEqual(try geometry()["boardErrorAnnouncements"]?.minX, 1)
                         if state == "error-empty" {
-                            XCTAssertTrue(app.buttons["Try Again"].exists)
+                            let retry = app.buttons["Try Again"]
+                            XCTAssertTrue(retry.exists)
+                            XCTAssertGreaterThanOrEqual(retry.frame.width, 44)
+                            XCTAssertGreaterThanOrEqual(retry.frame.height, 44)
+                            retry.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.1)).tap()
+                            XCTAssertFalse(app.keyboards.firstMatch.exists)
+                            XCTAssertEqual(try geometry()["boardErrorAnnouncements"]?.minX, 1)
                             let field = app.descendants(matching: .any).matching(identifier: "New reminder").firstMatch
                             field.tap()
                             XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))

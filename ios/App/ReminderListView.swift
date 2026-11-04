@@ -183,12 +183,16 @@ struct ReminderListView: View {
                 Button {
                     Task { await refresh() }
                 } label: {
-                    if isLoading {
-                        ProgressView()
-                            .controlSize(.regular)
-                    } else {
-                        Text("Try Again")
+                    Group {
+                        if isLoading {
+                            ProgressView()
+                                .controlSize(.regular)
+                        } else {
+                            Text("Try Again")
+                        }
                     }
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
                 }
                 .disabled(isLoading)
                 .accessibilityLabel(isLoading ? "Loading reminders" : "Try Again")
