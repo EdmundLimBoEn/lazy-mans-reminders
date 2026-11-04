@@ -1,0 +1,762 @@
+{
+  "captures": [
+    {
+      "file": "multiline-light-default-collapsed.png",
+      "surface": "collapsed",
+      "style": "light",
+      "size": "default",
+      "text": "multiline",
+      "sha256": "2b60c5fa406bda269f2a90a1d6412d19be610dd073d1b077356daf4bce3f7dfe"
+    },
+    {
+      "file": "multiline-light-default-expanded.png",
+      "surface": "expanded",
+      "style": "light",
+      "size": "default",
+      "text": "multiline",
+      "sha256": "ff127c61cb7270bd11b7c88692d0744e3fa502ab8c0895354bb266d88eac4b28"
+    },
+    {
+      "file": "multiline-light-default-notification-center.png",
+      "surface": "notification-center",
+      "style": "light",
+      "size": "default",
+      "text": "multiline",
+      "sha256": "f4275278f4359217e5a0f89e3d57521e92cbd6ed4cad6157a2c1cfeaa3515645"
+    },
+    {
+      "file": "multiline-light-XXXL-collapsed.png",
+      "surface": "collapsed",
+      "style": "light",
+      "size": "XXXL",
+      "text": "multiline",
+      "sha256": "ff5d92def591466ebc590dff0de3bbf00d05f6d2444bfe89c520035e3bc8e968"
+    },
+    {
+      "file": "multiline-light-XXXL-expanded.png",
+      "surface": "expanded",
+      "style": "light",
+      "size": "XXXL",
+      "text": "multiline",
+      "sha256": "72cd4c1ab83289f044b3fd417cca62258642c1bb392f1f8df3038d1bfb76634f"
+    },
+    {
+      "file": "multiline-light-XXXL-notification-center.png",
+      "surface": "notification-center",
+      "style": "light",
+      "size": "XXXL",
+      "text": "multiline",
+      "sha256": "df98c9b71c8d141af1391a75eca3662dda5574e39f845145167d354070a4e50c"
+    },
+    {
+      "file": "multiline-dark-default-collapsed.png",
+      "surface": "collapsed",
+      "style": "dark",
+      "size": "default",
+      "text": "multiline",
+      "sha256": "b5b272cd95a66b256ca6ced587629eb92ab6383c08c327fde4df698f259d2156"
+    },
+    {
+      "file": "multiline-dark-default-expanded.png",
+      "surface": "expanded",
+      "style": "dark",
+      "size": "default",
+      "text": "multiline",
+      "sha256": "ffcbe7a04bdbc3970325c0bd8252daba73b274a0197bace3d01d4fcf437fc791"
+    },
+    {
+      "file": "multiline-dark-default-notification-center.png",
+      "surface": "notification-center",
+      "style": "dark",
+      "size": "default",
+      "text": "multiline",
+      "sha256": "a4049eb08b3bbba7ec5100585594716a93f0be1bd5f267a95a8c63504f8c54c5"
+    },
+    {
+      "file": "multiline-dark-XXXL-collapsed.png",
+      "surface": "collapsed",
+      "style": "dark",
+      "size": "XXXL",
+      "text": "multiline",
+      "sha256": "8e494b415f8e125317af9f4efc6abdc89f9a22c85521e4d5a1e95ae84d153df6"
+    },
+    {
+      "file": "multiline-dark-XXXL-expanded.png",
+      "surface": "expanded",
+      "style": "dark",
+      "size": "XXXL",
+      "text": "multiline",
+      "sha256": "dde6ce8d79d01c8a38537bc0b3d92684f27a36a7507dc2bd222163e53948ffab"
+    },
+    {
+      "file": "multiline-dark-XXXL-notification-center.png",
+      "surface": "notification-center",
+      "style": "dark",
+      "size": "XXXL",
+      "text": "multiline",
+      "sha256": "bf3e862e8ac252af7ff5816fc22eb3ac9984d68e2120906692f81e5a8081db73"
+    }
+  ],
+  "operations": [
+    {
+      "utc": "2026-11-04T21:59:51.986181+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T21:59:52.482976+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T21:59:53.990005+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=activity",
+        "--launch-args=--hillclimb-activity",
+        "--launch-args=multiline",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-22d5f706a6a181433e91b61e\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:02.578270+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-default-collapsed.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-default-collapsed.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:03.574563+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "record",
+        "start",
+        "--scope",
+        "device",
+        "--hide-touches",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-default-expanded.mp4"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-default-expanded.mp4\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-22d5f706a6a181433e91b61e\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:05.773295+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "longpress",
+        "201",
+        "30",
+        "1500"
+      ],
+      "exit": 0,
+      "stdout": "Long pressed (201, 30)\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:06.443446+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: com.apple.springboard\nApp: com.apple.springboard\nSnapshot: 43 nodes\nSimulator AX snapshot unavailable (target-resolution-failed); used XCTest for an unverified app generation.\n@e1 [application]\n@e2 [other] \"jindo-container-view:1,client-identifier:com.apple.chrono.WidgetRenderer-Activities,element-identifier:activity:CFE9E3B6-8F79-4028-90A7-BA39F40B60A4:0x1079ecd30\"\n@e3 [other] \"Demo 1: Review the sample notes., Demo 2: Review the sample notes., Demo 3: Review the sample notes., +7 more\"\n@e4 [other] \"Demo 1: Review the sample notes.\"\n@e5 [text] \"Demo 2: Review the sample notes.\"\n@e6 [text] \"Demo 3: Review the sample notes.\"\n@e7 [text] \"+7 more\"\n@e8 [other] \"Search\"\n@e9 [other] \"Maps\"\n@e10 [element(44)] \"Maps\"\n@e11 [element(44)] \"Maps\"\n@e12 [element(44)] \"Calendar\"\n@e13 [element(44)] \"Photos\"\n@e14 [element(44)] \"Reminders\"\n@e15 [element(44)] \"News\"\n@e16 [element(44)] \"Health\"\n@e17 [element(44)] \"Wallet\"\n@e18 [element(44)] \"Settings\"\n@e19 [element(44)] \"Fitness\"\n@e20 [element(44)] \"Fitness\"\n@e21 [other] \"label-view\"\n@e22 [element(44)] \"Watch\"\n@e23 [other] \"label-view\"\n@e24 [element(44)] \"Contacts\"\n@e25 [other] \"label-view\"\n@e26 [element(44)] \"Files\"\n@e27 [other] \"label-view\"\n@e28 [element(44)] \"Preview\"\n@e29 [other] \"label-view\"\n@e30 [element(44)] \"Utilities folder\"\n@e31 [element(44)] \"Shortcuts\"\n@e32 [element(44)] \"Passwords\"\n@e33 [element(44)] \"Notepad\"\n@e34 [other] \"label-view\"\n@e35 [element(44)] \"HillclimbUITests-Runner\"\n@e36 [other] \"label-view\"\n@e37 [element(44)] \"AgentDeviceRunnerUITests-Runner\"\n@e38 [other] \"label-view\"\n@e39 [element(34)] \"Page 2 of 2\"\n@e40 [image] \"Search\"\n@e41 [other] \"Dock\"\n@e42 [element(44)] \"Safari\"\n@e43 [element(44)] \"Messages\"\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:07.141284+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "record",
+        "stop"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-default-expanded.mp4\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:14.940522+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-default-notification-center.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-default-notification-center.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:15.365459+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:15.624265+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:16.789163+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=activity",
+        "--launch-args=--hillclimb-activity",
+        "--launch-args=end",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-22d5f706a6a181433e91b61e\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:17.154212+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:17.425221+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "text-size",
+        "extra-extra-extra-large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to extra-extra-extra-large\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:18.671436+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=activity",
+        "--launch-args=--hillclimb-activity",
+        "--launch-args=multiline",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-22d5f706a6a181433e91b61e\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:27.262253+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-XXXL-collapsed.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-XXXL-collapsed.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:28.337128+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "record",
+        "start",
+        "--scope",
+        "device",
+        "--hide-touches",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-XXXL-expanded.mp4"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-XXXL-expanded.mp4\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-22d5f706a6a181433e91b61e\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:30.566793+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "longpress",
+        "201",
+        "30",
+        "1500"
+      ],
+      "exit": 0,
+      "stdout": "Long pressed (201, 30)\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:31.251558+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: com.apple.springboard\nApp: com.apple.springboard\nSnapshot: 42 nodes\nSimulator AX snapshot unavailable (target-resolution-failed); used XCTest for an unverified app generation.\n@e1 [application]\n@e2 [other] \"jindo-container-view:1,client-identifier:com.apple.chrono.WidgetRenderer-Activities,element-identifier:activity:98EA1FD6-0185-453A-833A-CBE0EF00A4B4:0x107acab60\"\n@e3 [other] \"Demo 1: Review the sample notes., Demo 2: Review the sample notes., +8 more\"\n@e4 [other] \"Demo 1: Review the sample notes.\"\n@e5 [text] \"Demo 2: Review the sample notes.\"\n@e6 [text] \"+8 more\"\n@e7 [other] \"Search\"\n@e8 [other] \"Maps\"\n@e9 [element(44)] \"Maps\"\n@e10 [element(44)] \"Maps\"\n@e11 [element(44)] \"Calendar\"\n@e12 [element(44)] \"Photos\"\n@e13 [element(44)] \"Reminders\"\n@e14 [element(44)] \"News\"\n@e15 [element(44)] \"Health\"\n@e16 [element(44)] \"Wallet\"\n@e17 [element(44)] \"Settings\"\n@e18 [element(44)] \"Fitness\"\n@e19 [element(44)] \"Fitness\"\n@e20 [other] \"label-view\"\n@e21 [element(44)] \"Watch\"\n@e22 [other] \"label-view\"\n@e23 [element(44)] \"Contacts\"\n@e24 [other] \"label-view\"\n@e25 [element(44)] \"Files\"\n@e26 [other] \"label-view\"\n@e27 [element(44)] \"Preview\"\n@e28 [other] \"label-view\"\n@e29 [element(44)] \"Utilities folder\"\n@e30 [element(44)] \"Shortcuts\"\n@e31 [element(44)] \"Passwords\"\n@e32 [element(44)] \"Notepad\"\n@e33 [other] \"label-view\"\n@e34 [element(44)] \"HillclimbUITests-Runner\"\n@e35 [other] \"label-view\"\n@e36 [element(44)] \"AgentDeviceRunnerUITests-Runner\"\n@e37 [other] \"label-view\"\n@e38 [element(34)] \"Page 2 of 2\"\n@e39 [image] \"Search\"\n@e40 [other] \"Dock\"\n@e41 [element(44)] \"Safari\"\n@e42 [element(44)] \"Messages\"\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:31.910500+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "record",
+        "stop"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-XXXL-expanded.mp4\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:39.679084+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-XXXL-notification-center.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-light-XXXL-notification-center.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:40.100854+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:40.366548+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "text-size",
+        "extra-extra-extra-large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to extra-extra-extra-large\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:41.560406+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=activity",
+        "--launch-args=--hillclimb-activity",
+        "--launch-args=end",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-22d5f706a6a181433e91b61e\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:41.922051+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "appearance",
+        "dark"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:42.221469+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:43.463605+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=activity",
+        "--launch-args=--hillclimb-activity",
+        "--launch-args=multiline",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-22d5f706a6a181433e91b61e\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:51.905718+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-default-collapsed.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-default-collapsed.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:52.937247+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "record",
+        "start",
+        "--scope",
+        "device",
+        "--hide-touches",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-default-expanded.mp4"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-default-expanded.mp4\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-22d5f706a6a181433e91b61e\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:55.209492+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "longpress",
+        "201",
+        "30",
+        "1500"
+      ],
+      "exit": 0,
+      "stdout": "Long pressed (201, 30)\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:55.916598+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: com.apple.springboard\nApp: com.apple.springboard\nSnapshot: 43 nodes\nSimulator AX snapshot unavailable (target-resolution-failed); used XCTest for an unverified app generation.\n@e1 [application]\n@e2 [other] \"jindo-container-view:1,client-identifier:com.apple.chrono.WidgetRenderer-Activities,element-identifier:activity:049753F0-0ABF-40C4-B6A8-01A70BB334DD:0x1079b1c10\"\n@e3 [other] \"Demo 1: Review the sample notes., Demo 2: Review the sample notes., Demo 3: Review the sample notes., +7 more\"\n@e4 [other] \"Demo 1: Review the sample notes.\"\n@e5 [text] \"Demo 2: Review the sample notes.\"\n@e6 [text] \"Demo 3: Review the sample notes.\"\n@e7 [text] \"+7 more\"\n@e8 [other] \"Search\"\n@e9 [other] \"Maps\"\n@e10 [element(44)] \"Maps\"\n@e11 [element(44)] \"Maps\"\n@e12 [element(44)] \"Calendar\"\n@e13 [element(44)] \"Photos\"\n@e14 [element(44)] \"Reminders\"\n@e15 [element(44)] \"News\"\n@e16 [element(44)] \"Health\"\n@e17 [element(44)] \"Wallet\"\n@e18 [element(44)] \"Settings\"\n@e19 [element(44)] \"Fitness\"\n@e20 [element(44)] \"Fitness\"\n@e21 [other] \"label-view\"\n@e22 [element(44)] \"Watch\"\n@e23 [other] \"label-view\"\n@e24 [element(44)] \"Contacts\"\n@e25 [other] \"label-view\"\n@e26 [element(44)] \"Files\"\n@e27 [other] \"label-view\"\n@e28 [element(44)] \"Preview\"\n@e29 [other] \"label-view\"\n@e30 [element(44)] \"Utilities folder\"\n@e31 [element(44)] \"Shortcuts\"\n@e32 [element(44)] \"Passwords\"\n@e33 [element(44)] \"Notepad\"\n@e34 [other] \"label-view\"\n@e35 [element(44)] \"HillclimbUITests-Runner\"\n@e36 [other] \"label-view\"\n@e37 [element(44)] \"AgentDeviceRunnerUITests-Runner\"\n@e38 [other] \"label-view\"\n@e39 [element(34)] \"Page 2 of 2\"\n@e40 [image] \"Search\"\n@e41 [other] \"Dock\"\n@e42 [element(44)] \"Safari\"\n@e43 [element(44)] \"Messages\"\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:00:56.586939+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "record",
+        "stop"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-default-expanded.mp4\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:04.315659+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-default-notification-center.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-default-notification-center.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:04.747004+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "appearance",
+        "dark"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:05.009157+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:06.241093+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=activity",
+        "--launch-args=--hillclimb-activity",
+        "--launch-args=end",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-22d5f706a6a181433e91b61e\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:06.597677+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "appearance",
+        "dark"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:06.866513+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "text-size",
+        "extra-extra-extra-large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to extra-extra-extra-large\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:08.050385+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=activity",
+        "--launch-args=--hillclimb-activity",
+        "--launch-args=multiline",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-22d5f706a6a181433e91b61e\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:16.225348+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-XXXL-collapsed.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-XXXL-collapsed.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:17.247182+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "record",
+        "start",
+        "--scope",
+        "device",
+        "--hide-touches",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-XXXL-expanded.mp4"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-XXXL-expanded.mp4\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-22d5f706a6a181433e91b61e\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:19.459122+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "longpress",
+        "201",
+        "30",
+        "1500"
+      ],
+      "exit": 0,
+      "stdout": "Long pressed (201, 30)\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:20.192296+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: com.apple.springboard\nApp: com.apple.springboard\nSnapshot: 42 nodes\nSimulator AX snapshot unavailable (target-resolution-failed); used XCTest for an unverified app generation.\n@e1 [application]\n@e2 [other] \"jindo-container-view:1,client-identifier:com.apple.chrono.WidgetRenderer-Activities,element-identifier:activity:C06391B0-B0F9-4B50-B8CD-562627AADFC4:0x100f5fd60\"\n@e3 [other] \"Demo 1: Review the sample notes., Demo 2: Review the sample notes., +8 more\"\n@e4 [other] \"Demo 1: Review the sample notes.\"\n@e5 [text] \"Demo 2: Review the sample notes.\"\n@e6 [text] \"+8 more\"\n@e7 [other] \"Search\"\n@e8 [other] \"Maps\"\n@e9 [element(44)] \"Maps\"\n@e10 [element(44)] \"Maps\"\n@e11 [element(44)] \"Calendar\"\n@e12 [element(44)] \"Photos\"\n@e13 [element(44)] \"Reminders\"\n@e14 [element(44)] \"News\"\n@e15 [element(44)] \"Health\"\n@e16 [element(44)] \"Wallet\"\n@e17 [element(44)] \"Settings\"\n@e18 [element(44)] \"Fitness\"\n@e19 [element(44)] \"Fitness\"\n@e20 [other] \"label-view\"\n@e21 [element(44)] \"Watch\"\n@e22 [other] \"label-view\"\n@e23 [element(44)] \"Contacts\"\n@e24 [other] \"label-view\"\n@e25 [element(44)] \"Files\"\n@e26 [other] \"label-view\"\n@e27 [element(44)] \"Preview\"\n@e28 [other] \"label-view\"\n@e29 [element(44)] \"Utilities folder\"\n@e30 [element(44)] \"Shortcuts\"\n@e31 [element(44)] \"Passwords\"\n@e32 [element(44)] \"Notepad\"\n@e33 [other] \"label-view\"\n@e34 [element(44)] \"HillclimbUITests-Runner\"\n@e35 [other] \"label-view\"\n@e36 [element(44)] \"AgentDeviceRunnerUITests-Runner\"\n@e37 [other] \"label-view\"\n@e38 [element(34)] \"Page 2 of 2\"\n@e39 [image] \"Search\"\n@e40 [other] \"Dock\"\n@e41 [element(44)] \"Safari\"\n@e42 [element(44)] \"Messages\"\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:20.873729+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "record",
+        "stop"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-XXXL-expanded.mp4\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:28.838662+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-XXXL-notification-center.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-6c58478e/hillclimb/tasks/activity-tightening/before/multiline-dark-XXXL-notification-center.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:29.318360+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "appearance",
+        "dark"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:29.625227+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "settings",
+        "text-size",
+        "extra-extra-extra-large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to extra-extra-extra-large\n",
+      "stderr": ""
+    },
+    {
+      "utc": "2026-11-04T22:01:30.944330+00:00",
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-22d5f706a6a181433e91b61e/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=activity",
+        "--launch-args=--hillclimb-activity",
+        "--launch-args=end",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-22d5f706a6a181433e91b61e\n",
+      "stderr": ""
+    }
+  ],
+  "deviceID": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+  "hostID": "local",
+  "sourceSHA": "cfc795434e33cbe6bf5fd613e41e7ed3afee79cc",
+  "dirty": true
+}
