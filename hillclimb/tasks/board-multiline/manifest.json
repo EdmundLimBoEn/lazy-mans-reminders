@@ -1,0 +1,196 @@
+{
+  "sourceSHA": "ed762ec8a2d79b9f572ebec53e49bf305cb17035",
+  "hostId": "local",
+  "deviceId": "066ECE57-46B4-414A-B53E-523775329360",
+  "runtime": "iOS 26.2",
+  "sources": {
+    "ios/App/LMRChrome.swift": "20808d7fe89cede927477448329de666b59c6fd1a46bbfbdc5f07d42f1a20b7f",
+    "ios/App/SilentPushRefresh.swift": "aad7faf4f9fc82bd4a3587c4d5caa312bb3b3bce011fdf843b7442bea0616918",
+    "ios/App/AppleRevocation.swift": "f7a7a352f36d8bb448ac52c9db052f8e7d2466f21fb31fa825457fedf6e0d3ce",
+    "ios/App/HillclimbDemo.swift": "39af7f250ad860b8693e9a88e71b50d7e3bba50121f0def4d2231a54cdb09d06",
+    "ios/App/BoardSetupTip.swift": "49f2be69c15c35150b39e88b2a0fc8457dabe41a9baa381ea38d498a53dd1049",
+    "ios/App/ReminderDraft.swift": "8f040de63eef85e8432d73700467e922a9357dcc8b73c8b26f4fd554a8b79cec",
+    "ios/App/LazyMansRemindersApp.swift": "b54fb4349338594704da284404616f85c30a75fbe6d39c412ed61441f84fdc60",
+    "ios/App/BoardPersistenceSection.swift": "eaa89de4344ef2e30146b1bf0e2c197c877f10555ffa84e95779c85e8037caff",
+    "ios/App/ReorderableReminderList.swift": "baef73ce8389e364bd8abaefe1b240eaf11d81687c1aba41af07fd148c498a50",
+    "ios/App/ReminderListView.swift": "de3fa186c8c31c7a1671d42a6b7b1243fe4ef305606414b58c2b4d5e2438f857",
+    "ios/App/FeedbackMail.swift": "9a1dd79f9ef972e89c14552aee6cf7a11020c7bfadb9734a5eb856c038bee82f",
+    "ios/App/HillclimbActivityDemo.swift": "20dfd48b081bd3527d0c3d69cb72dc85b4bc645feb7a32daf42702ffd39efcd3",
+    "ios/App/NativeAuthCallback.swift": "bdd7a6dac2143d393689417b3b2883431bdf84a8a8a5c23d1543e07fb8d345c9",
+    "ios/App/AppleCredentialMonitor.swift": "5a4375b32ac04093c59ead14b725d98e93c9e3cf518394b81008ba95fb20efab",
+    "ios/App/SignInView.swift": "3341a2e9e77c9702f82c22a8ec886ec2408c5f69d00aaa2a55a93666089e7298",
+    "ios/App/NotificationAccessPolicy.swift": "43e6f3701d91e630cdb7270838826ee0debfc97ca2f2ceb0cdbce76d272994cf",
+    "ios/App/AuthSessionGate.swift": "69a3750c6d88cf7a690f228e5272de7b45e999b8423bdea249c9f143f6413351",
+    "ios/App/AccountView.swift": "39b2bf2823af80da6af546d18b8d0a132ebe9d421317a62e36b7cd994770f096",
+    "ios/App/AuthManager.swift": "cc76c43785d5bc25a163fb32db7930a78ef1d4e58e2b609dabf22e87bfa4c708",
+    "ios/App/AppDelegate.swift": "8d2110f4bc8f75d5d65fb3f13cee73f2b7cf6af082462ce50c82b0c3c3211330",
+    "ios/App/AuthSessionClient.swift": "3cf173aeffe4ef3a947d1bdcdf1363ef57cf7643e8482d64e735af9571259ec4",
+    "ios/App/HillclimbGeometry.swift": "4245e21a7522d0db2d6c2d24b1d88af412559f10519aaa166bdf4f39a25f11f9",
+    "ios/App/BackgroundBoardRefresh.swift": "2d695522734617cafca466cd234fcbb95b85be1e73f8137424bfe2e765053df4",
+    "ios/App/PushTokenRegistrar.swift": "ea3c5fb069b571f9fb73f6c5df1fff417e42791be4fdb4271e4a03bbefa6437a",
+    "ios/App/ContentView.swift": "93f3df422fab67d4ebae9683df1767a5cc2f2268a924f520abf39968114b55ec",
+    "ios/App/PasswordSignInCredentials.swift": "9afe1a85986c0d9afdb5eb5c2a2ceb2e2f62752342754c9ce991f31af470833b"
+  },
+  "captures": [
+    {
+      "file": "full-light-default.png",
+      "mode": "full",
+      "state": null,
+      "style": "light",
+      "size": "default",
+      "sha256": "61469e901e44add41d7e4dd26ecaa1af714eeb680f5e5be3267ea3e50f82ec01"
+    },
+    {
+      "file": "empty-light-default.png",
+      "mode": "empty",
+      "state": null,
+      "style": "light",
+      "size": "default",
+      "sha256": "878ce7e340662fc7d9ca003158e18a3ece901f081b3dd7b31f635c84846ceeda"
+    },
+    {
+      "file": "loading-light-default.png",
+      "mode": "empty",
+      "state": "loading",
+      "style": "light",
+      "size": "default",
+      "sha256": "698c1ca78afc549f49d61ab8b0584fa845ae16ad4075957fcb1b7db3e3d8dd62"
+    },
+    {
+      "file": "error-empty-light-default.png",
+      "mode": "empty",
+      "state": "error-empty",
+      "style": "light",
+      "size": "default",
+      "sha256": "744c740c07403c39857c5619f4547b82b7a09ed2cd8ff9d731b68da4c3a4bb1c"
+    },
+    {
+      "file": "error-populated-light-default.png",
+      "mode": "full",
+      "state": "error-populated",
+      "style": "light",
+      "size": "default",
+      "sha256": "879139da8f6edb7fb68021bb1934099ad6c37ab5ae9cf4a36d211e643088e865"
+    },
+    {
+      "file": "full-light-XXXL.png",
+      "mode": "full",
+      "state": null,
+      "style": "light",
+      "size": "XXXL",
+      "sha256": "0742ab70240acc8046ebb7c08b45cc5efb665d32b3a127c1f65a9925fdd944b5"
+    },
+    {
+      "file": "empty-light-XXXL.png",
+      "mode": "empty",
+      "state": null,
+      "style": "light",
+      "size": "XXXL",
+      "sha256": "150c7a7acd2a213bd23a5b1cc0593f93e093a74880e27d016809d93732c03921"
+    },
+    {
+      "file": "loading-light-XXXL.png",
+      "mode": "empty",
+      "state": "loading",
+      "style": "light",
+      "size": "XXXL",
+      "sha256": "91cf17a031f35fbce2265a394a6c098b00ffb8663304355c2c03a83f8e6cd418"
+    },
+    {
+      "file": "error-empty-light-XXXL.png",
+      "mode": "empty",
+      "state": "error-empty",
+      "style": "light",
+      "size": "XXXL",
+      "sha256": "170ac631fbb23d0b2ef95106833d131096bfc66b4f4ddb70910cfa7a473395bd"
+    },
+    {
+      "file": "error-populated-light-XXXL.png",
+      "mode": "full",
+      "state": "error-populated",
+      "style": "light",
+      "size": "XXXL",
+      "sha256": "515b54fd448a391f74399524a7b1a3a3f0235414a95cb24e2c132504e15c9303"
+    },
+    {
+      "file": "full-dark-default.png",
+      "mode": "full",
+      "state": null,
+      "style": "dark",
+      "size": "default",
+      "sha256": "11d75152af21f6d5cb737ccfdf7e55326e7ed35db1cd06cca0c82f19bfb9bf19"
+    },
+    {
+      "file": "empty-dark-default.png",
+      "mode": "empty",
+      "state": null,
+      "style": "dark",
+      "size": "default",
+      "sha256": "3e7452279478ff008aca6dd76af825b9efd1e005443777855b5c6e89a5a9667c"
+    },
+    {
+      "file": "loading-dark-default.png",
+      "mode": "empty",
+      "state": "loading",
+      "style": "dark",
+      "size": "default",
+      "sha256": "66df64a4018948d56fe3a30cac43e150ceb9755cc265d943c0a0915cc8a3cdb9"
+    },
+    {
+      "file": "error-empty-dark-default.png",
+      "mode": "empty",
+      "state": "error-empty",
+      "style": "dark",
+      "size": "default",
+      "sha256": "e9c4b97d514010a4fb786b74c634038a8a3ea3cb0d16d9e96b6b7904dc699548"
+    },
+    {
+      "file": "error-populated-dark-default.png",
+      "mode": "full",
+      "state": "error-populated",
+      "style": "dark",
+      "size": "default",
+      "sha256": "11483bde6b286acd9e202c2578e58576006ae5b50538f35b468abb54e7565c32"
+    },
+    {
+      "file": "full-dark-XXXL.png",
+      "mode": "full",
+      "state": null,
+      "style": "dark",
+      "size": "XXXL",
+      "sha256": "8cdd46ca5d96a6c83d2bfbbfa71a59fed86e04831d9c6bdb69b4bfd154f09e12"
+    },
+    {
+      "file": "empty-dark-XXXL.png",
+      "mode": "empty",
+      "state": null,
+      "style": "dark",
+      "size": "XXXL",
+      "sha256": "be66880f6f4c82ecc4fa055a4f42cd04d11efd0251c7a02f0325598f253d919c"
+    },
+    {
+      "file": "loading-dark-XXXL.png",
+      "mode": "empty",
+      "state": "loading",
+      "style": "dark",
+      "size": "XXXL",
+      "sha256": "2c5c91e05e57923b6a38bca8114a65a55d00a769289dabf9a9a368e4111fd3c4"
+    },
+    {
+      "file": "error-empty-dark-XXXL.png",
+      "mode": "empty",
+      "state": "error-empty",
+      "style": "dark",
+      "size": "XXXL",
+      "sha256": "0e7ab60fa8402300aaf8f98d8dcc1b6709ba017cf7c62c238c1fee499b21720b"
+    },
+    {
+      "file": "error-populated-dark-XXXL.png",
+      "mode": "full",
+      "state": "error-populated",
+      "style": "dark",
+      "size": "XXXL",
+      "sha256": "783ea0e6999032f7115d0a9e1e9b93d9f714c2a8317bab411e9d6413dc25e262"
+    }
+  ]
+}
