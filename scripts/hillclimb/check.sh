@@ -8,7 +8,7 @@ inventory = json.loads(subprocess.check_output(['xcrun','simctl','list','devices
 for runtime, devices in inventory['devices'].items():
     for device in devices:
         if device['udid'] == sys.argv[1]:
-            if device['name'] != 'iPhone 17 Pro' or not runtime.endswith('iOS-26-2'):
+            if device.get('deviceTypeIdentifier') != 'com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro' or not runtime.endswith('iOS-26-2'):
                 sys.exit('Requires regular iPhone 17 Pro on iOS 26.2; Duo/27.1 rejected')
             sys.exit(0)
 sys.exit('Requested device unavailable')

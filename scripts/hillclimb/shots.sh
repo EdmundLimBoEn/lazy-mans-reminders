@@ -12,12 +12,12 @@ p.add_argument('--command', required=True, help='Exact agentDevice.command retur
 p.add_argument('--operations', required=True, help='JSON argv templates transcribed from pinned help; see harness.md')
 a=p.parse_args()
 d=json.loads(pathlib.Path(a.device).read_text())
-if d.get('name') != 'iPhone 17 Pro' or d.get('version') != '26.2' or d.get('hostId') != 'local':
+if d.get('name') not in ('iPhone 17 Pro', 'Hillclimb iPhone 17 Pro') or d.get('version', '').removeprefix('iOS ') != '26.2' or d.get('hostId') != 'local':
     p.error('Requires local regular iPhone 17 Pro / iOS 26.2; Duo is forbidden')
 if a.round < 1: p.error('round must be positive')
 command=shlex.split(a.command)
-if not any('agent-device' in part for part in command) or not any('session' in part for part in command):
-    p.error('Pass the exact pinned agent-device command WITH session from device_open')
+if not any('agent-device' in part for part in command) or not (any('session' in part for part in command) or (len(command) == 1 and '/device/targets/' in command[0])):
+    p.error('Pass the exact pinned agent-device command bound to its session from device_open')
 ops=json.loads(pathlib.Path(a.operations).read_text())
 for key in ('open','screenshot','bottom','pull','focus','close'):
     if not isinstance(ops.get(key),list) or not ops[key] or not all(isinstance(x,str) for x in ops[key]):
@@ -48,7 +48,7 @@ def capture(state,style,size,position='top'):
         if state=='composer' and 'focus' in ops: run('focus',values);time.sleep(1)
         if position=='bottom-after-pull':
             run('pull',values)
-            for _ in range(20): run('bottom',values)
+            run('bottom',values)
             time.sleep(1)
         run('screenshot',values)
         data=path.read_bytes()

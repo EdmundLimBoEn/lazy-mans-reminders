@@ -132,3 +132,9 @@ changes uncommitted; the delivered commit SHA is reported in the implementation
 handoff. No PR, push, merge, deployment or TestFlight action is part of this task.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Parent runtime follow-up
+
+Runtime iOS 26.2 installed; standard device named Hillclimb iPhone 17 Pro, UUID 78F5A64F-7B2E-4562-8EF9-10F3312CC694. The test runner successfully booted it and T3 now discovers and opens it. check.sh validates the actual deviceTypeIdentifier rather than its display name. shots.sh accepts T3 session-bound executable paths and normalizes the iOS version prefix. Its bottom operation now expects a verified scroll-to-bottom operation (agent-device scroll bottom) instead of blindly repeating it 20 times.
+
+The baseline runtime test suite is in progress; no runtime pass is claimed yet. Capture command help has been inspected on the actual T3 session.
