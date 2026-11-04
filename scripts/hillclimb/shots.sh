@@ -30,7 +30,9 @@ for token in ('{state}','{style}','{size}'):
     if not any(token in arg for arg in ops['open']): p.error('open must include '+token)
 if not any('{path}' in arg for arg in ops['screenshot']): p.error('screenshot must include {path}')
 out=pathlib.Path('hillclimb/rounds')/str(a.round)
-out.mkdir(parents=True,exist_ok=a.resume)
+if not a.resume and (out/'manifest.json').exists():
+    p.error('Core manifest already exists; use --resume to preserve its history')
+out.mkdir(parents=True,exist_ok=True)
 sha=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 manifest={'sourceSHA':sha,'dirty':bool(subprocess.check_output(['git','status','--porcelain'])),
  'device':d,'startedUTC':datetime.datetime.now(datetime.timezone.utc).isoformat(),

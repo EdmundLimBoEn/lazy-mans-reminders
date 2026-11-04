@@ -4,8 +4,8 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 """
 import argparse,pathlib
 from PIL import Image,ImageDraw
-p=argparse.ArgumentParser();p.add_argument('directory',type=pathlib.Path);a=p.parse_args();out=a.directory/'contact-sheets';out.mkdir(exist_ok=True)
-files=[f for f in sorted(a.directory.rglob('*.png')) if 'contact-sheets' not in f.parts and 'rejected' not in f.parts]
+p=argparse.ArgumentParser();p.add_argument('directory',type=pathlib.Path);p.add_argument('--direct',action='store_true',help='Only images directly in this directory');a=p.parse_args();out=a.directory/'contact-sheets';out.mkdir(exist_ok=True)
+files=[f for f in sorted(a.directory.glob('*.png') if a.direct else a.directory.rglob('*.png')) if 'contact-sheets' not in f.parts and 'rejected' not in f.parts]
 for offset in range(0,len(files),12):
  page=Image.new('RGB',(1000,4*460),'#777777');d=ImageDraw.Draw(page)
  for n,f in enumerate(files[offset:offset+12]):
