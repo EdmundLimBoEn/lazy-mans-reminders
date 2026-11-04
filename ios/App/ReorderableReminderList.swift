@@ -37,7 +37,7 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
             action.backgroundColor = .systemGreen
             return UISwipeActionsConfiguration(actions: [action])
         }
-        let list = UICollectionView(
+        let list = BoardCollectionView(
             frame: .zero,
             collectionViewLayout: UICollectionViewCompositionalLayout.list(using: configuration)
         )
@@ -243,6 +243,44 @@ private struct ReminderDragGrip: View {
     private var dots: some View {
         VStack(spacing: 3) {
             ForEach(0..<3) { _ in Circle().frame(width: 3, height: 3) }
+        }
+    }
+}
+
+private final class BoardCollectionView: UICollectionView {
+    private let topMask = CAGradientLayer()
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // The safe-area inset places the viewport below the bar's native effect.
+        // Soften only departing content; never change the offset or bottom ink.
+        guard contentOffset.y + adjustedContentInset.top > 0.5, bounds.height > 24 else {
+            layer.mask = nil
+            return
+        }
+        let solid = UIAccessibility.isReduceTransparencyEnabled || UIAccessibility.isDarkerSystemColorsEnabled
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        topMask.frame = bounds
+        topMask.startPoint = CGPoint(x: 0.5, y: 0)
+        topMask.endPoint = CGPoint(x: 0.5, y: 1)
+        topMask.colors = [UIColor.clear.cgColor, UIColor.black.cgColor, UIColor.black.cgColor]
+        let edge = (solid ? 6.0 : 24.0) / bounds.height
+        topMask.locations = solid ? [NSNumber(value: edge), NSNumber(value: edge), 1] : [0, NSNumber(value: edge), 1]
+        layer.mask = topMask
+        CATransaction.commit()
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        guard window != nil else { return }
+        var responder: UIResponder? = next
+        while let current = responder {
+            if let controller = current as? UIViewController {
+                controller.setContentScrollView(self, for: .top)
+                break
+            }
+            responder = current.next
         }
     }
 }

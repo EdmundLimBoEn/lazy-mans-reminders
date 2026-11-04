@@ -173,10 +173,22 @@ final class BoardMultilineUITests: XCTestCase {
                 let first = app.buttons.matching(NSPredicate(format: "value == %@", "Active")).firstMatch
                 let label = first.label
                 let text = app.staticTexts.matching(NSPredicate(format: "label == %@", label)).firstMatch
+                let tree = XCTAttachment(string: app.debugDescription + "\nParagraph exists: \(text.exists), hittable: \(text.isHittable)")
+                tree.name = "completion-AX-tree"
+                tree.lifetime = .keepAlways
+                add(tree)
                 XCTAssertTrue(text.exists)
+                XCTAssertFalse(text.isHittable)
+                XCTAssertEqual(app.buttons.matching(NSPredicate(format: "label == %@", label)).count, 1)
                 let g = try geometry()
                 let id = "00000000-0000-4000-8000-000000000001"
                 let rect = try XCTUnwrap(g["text-" + id])
+                let ideal = try XCTUnwrap(g["ideal-" + id])
+                XCTAssertGreaterThanOrEqual(rect.height + 0.5, ideal.height)
+                try assertTextContrast(app.screenshot().image, region: rect, dark: dark)
+                let rendered = try inkBounds(app.screenshot().image, in: rect, dark: dark)
+                XCTAssertGreaterThan(rendered.width, rect.width * 0.5)
+                XCTAssertGreaterThan(rendered.height, rect.height * 0.5)
                 app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: rect.midX, dy: rect.midY)).tap()
                 XCTAssertEqual(try geometry()["boardCompletions"]?.minX, 0)
                 XCTAssertTrue(first.exists)
