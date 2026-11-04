@@ -35,7 +35,7 @@ Support: https://np.sillyapps.co/support
 
 Promotional text: `A place for notes on your Lock Screen, your iPhone, and on the web.`
 
-What's New (1.0): (empty)
+What's New (1.0): `Placeholder: First release of Notepad.` (placeholder; replace before submission. ASC may not show this field for a first version.)
 
 Only add Siri/Apple Intelligence claims or exact phrases after testing them in the selected signed build. App Intents source/SDK guards are not runtime evidence. Do not promise uninterrupted or indefinite Live Activity persistence.
 
@@ -118,7 +118,7 @@ Populate Test Information before external invites:
 | Feedback email | `hello@edmundlim.systems` |
 | Marketing URL | none |
 | Privacy URL | `https://np.sillyapps.co/privacy` |
-| Beta App Description | Use the tested capabilities from Listing copy; describe it as a beta |
+| Beta App Description | Use the tested capabilities from Listing copy; describe it as a beta. Placeholder draft: `Placeholder: Beta of Notepad, a small reminder board for your iPhone, the web, and the Lock Screen.` |
 | Beta review access | Verified synthetic account, private credentials, contact and notes as above |
 
 What to Test (edit to the selected build):

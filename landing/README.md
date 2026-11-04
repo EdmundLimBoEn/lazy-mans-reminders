@@ -1,6 +1,6 @@
 # notepads.dev landing
 
-Static page. Copy is verbatim from the sillyapps.co Notepad entry; items marked `TODO(Edmund)` need Edmund's copy.
+Static page. Copy is verbatim from the sillyapps.co Notepad entry; text starting with `Placeholder:` (App Store button, footer) is temporary and should be replaced with final copy. The App Store button is a non-link until the app is live.
 
 Not deployed yet. Deploy (after Edmund OKs), from repo root:
 
