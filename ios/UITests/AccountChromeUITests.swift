@@ -35,6 +35,13 @@ final class AccountChromeUITests: XCTestCase {
                 done.tap()
                 app.buttons["Account"].tap()
                 XCTAssertLessThan(bar.frame.minY, 160)
+                grabber.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+                    .press(forDuration: 0.1, thenDragTo: app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: 201, dy: 446)))
+                usleep(900_000)
+                XCTAssertGreaterThan(bar.frame.minY, 400)
+                XCTAssertGreaterThanOrEqual(done.frame.height, 44)
+                XCTAssertGreaterThanOrEqual(done.frame.width, 44)
+                capture("\(style)-\(size)-medium-top")
                 app.terminate()
             }
         }
