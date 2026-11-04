@@ -1,145 +1,80 @@
-# Notepad UI hill climb
+# Hill climb state
 
-Integration: `hillclimb/ui`, based on origin/main `5fc4cbc`. Work is ongoing; score gate not reached. Never merge main, deploy, submit, force push, or touch Edmund's preexisting untracked files.
+Integration branch: `hillclimb/ui`. Main, deployment, App Store/TestFlight and force pushes are prohibited. Original user untracked files remain untouched. Current frozen app/test source: `b5d9bb3`.
 
-## Reviewer and stop rules
+## Current plan
 
-- Every round: independent gpt-6.1-sol/high and gpt-6-astra/high reviews of the same screenshots, source, checks and Apple reference pairs;30 detailed categories, honest arithmetic-mean overall.
-- Edmund's updated rule: Claude Opus5.5/medium ONLY if BOTH Codex graders score >=8.5 overall in the SAME round. This replaces every-other-round scheduling. Round1 is ineligible; Opus has not run.
-- Final stop unchanged: ALL THREE graders >=9 overall and NO category below7. Eligibility at8.5 is not completion.
-- Also stop for nearly exhausted Codex quota or3 plateau rounds. No dedicated quota tool is exposed. Current-session rate-limit metadata is available:7% used in a10080-minute window as of2026-11-04T14:39:08.493Z (rounds/2/usage.json); not near exhaustion. No waiting into the next weekly window is authorized.
+1. Complete independent round 4 Sol/high and Astra/high reviews of the same frozen packet. **Running.**
+2. Validate both reports. Run Opus 5.5/medium only if both same-round Codex overall scores are at least 8.5.
+3. Turn remaining findings into isolated, non-overlapping worker tasks. Each worker builds, passes the existing tests plus measurable regression gates, and captures affected screens before handoff.
+4. Merge passing branches into `hillclimb/ui`, run combined original17 validation, re-shoot the full matrix and re-grade.
+5. Stop only when all three graders score at least 9 with no category below 7, near actual quota exhaustion, or after three plateau rounds. No success or plateau is currently established.
 
 ## Scores
 
-| Round | Sol | Astra | Opus | Evidence |
-| --- | ---: | ---: | --- | --- |
-|0|Not graded|Not graded|Not due|Setup only|
-|1|6.88|6.70|Ineligible|18 app captures,5 usable Reminders references; Notes/native Activity initially missing|
-|2|8.11|8.16|Ineligible|Minimum7.0 each;261 combined tests passed;48 native images+4 fresh references|
+| Round | Grader | Overall | Lowest category |
+| --- | --- | ---: | ---: |
+| 1 | gpt-6.1-sol | 6.88 | 4 |
+| 1 | gpt-6-astra | 6.70 | 4 |
+| 2 | gpt-6.1-sol | 8.11 | 7 |
+| 2 | gpt-6-astra | 8.16 | 7 |
+| 3 | gpt-6.1-sol | 8.78 | 7.8 |
+| 3 | gpt-6-astra | 8.76 | 7.8 |
+| 3 | claude-opus-5.5 | 8.25 | 7.5 |
+| 4 | gpt-6.1-sol | Pending | Pending |
+| 4 | gpt-6-astra | Pending | Pending |
+| 4 | Claude Opus 5.5 | Eligibility pending | — |
 
-## Current tasks and ownership
+Each report has all 30 rubric categories. Round 1 and 2 were not Opus eligible. Round 3 passed the 8.5 eligibility threshold but did not meet the final stop gate. Reports and machine-readable scores live under `rounds/<n>/`.
 
-| Task | Status | Scope / evidence |
+## Task status
+
+| Task | Status | Evidence |
 | --- | --- | --- |
-|Capture harness|Merged|Offline isolated Debug modes; real geometry probes; repeatable/resumable captures. Round1 retains failed synthesized-scroll attempt and advised successful raw drag.|
-|Apple references|Merged, partial|5 usable Reminders references;4 transition frames excluded; Notes unavailable. pairs.json records gaps.|
-|A board-reading|Merged|cc98098/ef82a67/9ff1d6c: no final-ink fade, refresh cleanup, compact title/count, actual44pt field/Account/dismiss targets.253 tests passed (247 unit+6 board UI),3 fresh-process pull repetitions,20 capture hashes verified by parent.|
-|B signin-surfaces|Merged with recorded warning|04098b7/96077a3: flatter sections,44pt focus containers and keyboard scrolling.250 tests passed (247 unit+3 dedicated UI),24 settled captures verified. Invalid-frame runtime warning localized to keyboard-matrix test; source not identified.|
-|C activity-polish|Merged|dcc4200/de1ad3a: scalable native Activity rows, independent surface budgets and Island corner clearance.249 unit tests+1 native check each at default/XXXL passed;24 actual native captures verified.|
-|D account-surfaces|Merged|9f94f55: opaque grouped background, large on open/reopen with medium retained, safe demo scrolling/Done,44pt targets.249 unit+2 dedicated Account UI tests passed;16 hashes verified by parent. Original17 returned clean.|
+| Offline demo harness, geometry gates, repeatable capture scripts | Merged | `harness.md`, `scripts/hillclimb/` |
+| Apple reference captures | Merged; Notes unavailable | `reference/manifest.json`, `reference/round2/`, `reference/round3/` |
+| Board final-line ink, refresh settling, 44pt controls | Merged | `tasks/board-reading/` |
+| Native Activity corner clearance and scalable layout | Merged | `tasks/activity-polish/` |
+| Flat sign-in surfaces | Merged | `tasks/signin-surfaces/` |
+| Opaque Account sheet and detents | Merged | `tasks/account-surfaces/` |
+| Structured Activity overflow counts | Merged; backend preparation not deployed | `tasks/activity-overflow/` |
+| Sign-in keyboard recovery and announcements | Merged | `tasks/keyboard-recovery/` |
+| Multiline board, capacity wrapping and errors | Merged | `tasks/board-multiline/` |
+| Interactive-dismissal test correction | Merged; round 3 recheck passed | `validation/round3/recheck/` |
+| H: deliberate board completion, persistent Done, readable status/retry | Merged `aa69cb4` | `tasks/board-deliberate/` |
+| I: native Apple button, sign-in contrast and compact inset | Merged `551f880` | `tasks/signin-native/` |
+| J: Account typography, alignment and exact error announcements | Merged `7abefed` | `tasks/account-consistency/` |
+| Round 4 combined validation and native captures | Merged `5c43ea3` | `validation/round4/`, `rounds/4/` |
+| Round 4 independent Codex grading | Running | Reports pending |
 
-A returned source ownership before D was authorized to edit caller detents. No two workers edit the same file concurrently. Product fixes must build, run existing unit tests plus their affected checks and re-shoot before acceptance. Combined tests are still pending; worker-branch results are not a combined pass.
+## Current runtime evidence
 
-## Devices and capture status
+Round 4: **285/285 passed**, comprising 263 unit and 22 UI tests; zero failures/skips. Fresh unsigned arm64 Debug and Release builds, 23 iOS Python checks and 52+4 offline Deno tests passed. All eight normal-settings post-scroll keyboard cases and edge taps completed. Runtime warnings and scoped invalid-frame events were zero; 9,359 other error/fault events remain recorded.
 
-- Integration/reference device: regular Hillclimb iPhone17Pro, iOS26.2 (23C54), local, `78F5A64F-7B2E-4562-8EF9-10F3312CC694`,402x874pt /1206x2622px.
-- Only iOS27.1 was initially installed and supports Duo only. Standard26.2 installed and17 created. T3 discovery recovered after the authorized XCTest runner booted it; device_open/device_screenshot now work. Do not reintroduce old tooling-blocker claims.
-- Original17 has been returned by D with its app/session closed, light/default restored. Integration validation/capture may now use it. A used private regular17 `066ECE57-46B4-414A-B53E-523775329360`; B has its own listed above. Never use either Duo.
-- All interactive launches, settings, input and captures use each task's T3-returned pinned agent-device command. Xcode builds/installs/test runners remain allowed shell work. Do not reuse/close other sessions.
-- Activity worker ended only its demo Activities and closed its session. Native expanded Island evidence uses unmodified recording frames because still screenshots omit its overlay; Notification Center banner is not claimed as a truly locked device. Unit-rendered Activity rasters remain explicitly distinct.
+Parent verified all **288 native PNG hashes** and production input hashes. There are seven recordings and 17 usable Apple Reminders reference images. Twelve unit-rendered Activity rasters are separate and never count as simulator captures. Reference mismatches and rejected transitions remain explicit.
 
-## Next verifiable steps
+Actual Settings UI enabled Reduce Motion, Reduce Transparency and Increase Contrast, captured selected states, then restored all three to Off. One combined-settings still omits the alternate sign-in action; the recording shows it elsewhere. A complete repeatable clearance matrix is unproven, and unreachability is not diagnosed. Top-edge board fragments remain observed; bottom-row geometry and ink pass.
 
-1. A/B/C/D and round2 evidence are merged.249 unit+12 UI=261 passed, zero failures/skips.48 images and production source hashes verified by parent.
-2. Run fresh Sol/Astra round2 ratings. Fresh parent arm64 Release confirmation succeeded with new derived data/binary, exit0/BUILD SUCCEEDED; unusual earlier SwiftCompile diagnostics did not recur. Existing AuthManager warnings retained.
-3. Fresh Sol and Astra round2 graders. Invoke Opus5.5/medium only if both same-round overall >=8.5.
-4. Address next ranked findings in isolated branches; re-shoot/re-grade until final gate or explicit stopping rule. No score improvement is inferred from code/tests.
+New independent reviewer measurements identify low-contrast normal-size error text in SignIn/Account. Existing helper/footer raster checks excluded semantic error red. This remains a new finding to address after the frozen round 4 reviews; no passing error-contrast gate is claimed.
 
-## Open polish and evidence gaps
+## Devices and ownership
 
-- First-line alignment of long-row controls, XXXL capacity placeholder wrapping, and partially clipped empty guide while composing remain for a later task/round.
-- Sign-in keyboard-matrix run records an invalid-frame warning; parent result inspection localizes it to testFocusedEmailAndPasswordClearKeyboardInBothAppearances, but no console log is available. XXXL floating Done can overlap lower secondary action in the captured viewport; carry into integrated review.
-- Actual locked-device state, arbitrary wallpaper contrast, physical haptics, VoiceOver traversal and broader accessibility-setting interactions remain unverified. Apple Notes references remain unavailable.
-- Round1 baseline247 unit tests passed; later repaired fixture stability test1/1 passed. New baseline failures are retained in round1 artifacts; A's new checks now pass on its branch.
+All worker sessions are closed. No current device lease is active. Original17 remains booted, light/Large, accessibility switches Off and owned demo Activity IDs empty.
 
-Tracking: decisions.md, questions.md, REPORT.md, rounds/<n>/, tasks/<task>/. No current product question requires Edmund. All human shipping actions remain outside authorization.
+- Original17: `local`, `78F5A64F-7B2E-4562-8EF9-10F3312CC694`.
+- Private Board17: `066ECE57-46B4-414A-B53E-523775329360`.
+- Private Auth17: `8E8380DE-364D-4899-99B8-D15ED0494FFD`.
+
+All are regular iPhone 17 Pro/iOS 26.2; no Duo was used. New device work requires a new owned `device_open` session and its returned pinned command. Never reuse another worker session.
+
+## Constraints and open questions
+
+Preserve every user-facing string, branding and icon. No nested cards or decorative red/orange palette. The optional raw network-error wording question remains pending in `questions.md`; current copy stays intact and independent work continues.
+
+True physical Lock Screen, haptics, spoken VoiceOver, AX1–AX5, live account/auth flows and launch/frame-time metrics remain unverified. Selected system-setting captures do not certify every combination. Notification Center is not true device locking, and encoded recording frame rates are not display-performance metrics.
+
+Quota: current-session metadata reports **12% used** in the 10,080-minute weekly window; exact timestamp and fields are in `rounds/4/usage.json`. Check after each round; never wait into or spend against the next window.
+
+`REPORT.md` tracks category scores, before/after pairs, merged work and phone installation. The separate numerical validator retains the final all-three score rule; reviewer status is informational, not a circular programmatic requirement.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
-
-- D handoff accepted after parent source review, two representative screenshots and16 verified hashes. Read-only List controls disabled while scroll and Done work. All worker scopes are merged; no current worker holds original17. Combined integration validation is next, not yet claimed passed.
-
-- Integration validation/capture task next: new isolated worktree at current merged source, original17 lease, full combined Debug test suite plus Release build, fresh round2 matrix and current native Activity captures. No other worker remains active. Preserve all historical evidence; scripts now support round-specific Activity output.
-
-- Round2 source8dbf6a8, evidence0f0e3dc merged. Parent confirmed48 native image hashes and all recorded production-source hashes. Four previously missing settled Reminders matches now available; Notes remains unavailable. True locked-device capture is optional/unavailable evidence, not a fabricated required programmatic failure. All real unit/UI gates passed. Known sign-in invalid-frame warning recurred.
-
-- Round2 Sol/Astra graders running independently, source remains frozen. Parent fresh Release confirmation resolves compiler-result uncertainty; sign-in invalid-frame runtime warning remains. Before/after original17 screenshot pairs added to REPORT.md.
-
-## Round2 decision and next batch
-
-Both independent reviews complete: Sol8.11(+1.23), Astra8.16(+1.46), minimum7.0 each. Opus is NOT eligible. No plateau yet. Next isolated tasks: E multiline board/capacity/empty-guide and accessible board errors; F sign-in keyboard accessory/warning and accessible notices; G structured Activity overflow accounting through repeated caps. All preserve exact wording/branding/icon. No source edit occurs in integration while workers own files.
-
-## Next worker ownership
-
-- E board-multiline: ReminderListView, ReorderableReminderList, BoardSetupTip, HillclimbGeometry, existing board UI tests and new board tests. Can add loading/error variants through the existing --hillclimb-board-state argument in ReminderListView; DOES NOT own HillclimbDemo.swift.
-- F keyboard-recovery: SignInView, HillclimbDemo.swift (only sign-in safe interaction policy), sign-in tests and dedicated helper. No board files. Must disable real auth/provider/external actions in demo while allowing local fields/toggles/scroll/Done.
-- G activity-overflow: Activity shared model/layout/controller/widget, dedicated Activity tests/helper, and only necessary pure APNs presentation/backend metadata helpers/tests. No deploy/database migration/live calls. Preserve legacy payload compatibility and do not parse user text as metadata.
-- E uses private Board17; F private Auth17; G original17. Every worker closes its own session and reports exact test/capture provenance. Parent re-shoots original17 after merging passing candidates.
-
-## Next-batch handoff: G merged
-
-- G activity-overflow merged (970f567 + parent3020d31). Structured optional hiddenLineCount preserves counts across payload/surface/byte caps; literals resembling +N more are not parsed.266 iOS tests passed (254 unit+12 UI);8 actual native production-pipeline images verified by parent.
-- Parent filled assertion dependency cache and ran existing live_activity/board_loader/device_delivery Deno suites. Initial type-check exposed stale empty-board expected shape; added hiddenLineCount:0. Corrected run52 passed,0 failed, no service permissions. Worker’s earlier4 offline tests remain separately recorded.
-- Backward compatibility: original lines array retained; missing metadata decodes nil. Already-summarized legacy remote payloads cannot recover lost counts. Backend preparation code is committed ONLY, not deployed; current old remote payload limitation remains until separately authorized work outside this no-deploy hill climb.
-- E board-multiline and F keyboard-recovery remain awaiting handoff. They use private regular17 devices; G returned original17 clean, no owned demo Activities, own session closed. No next scores inferred before integrated capture/regrade.
-
-## Next-batch handoff: F merged
-
-- F keyboard-recovery3993113/evidence8c3d9e5 merged after parent source review,20 settled capture hashes and two representative XXXL images. Layout-participating bottom inset reserves Done's real48pt target; alternate action remains separated before/after scrolling, with edge taps and repeated focus/dismissal checks.
-- Worker267 combined tests passed (254 units+13 UI), then2 strengthened UI rechecks passed; zero failures/skips. These are worker-base counts, not combined G+F integration counts. UUID-matched backtrace localized prior invalid-frame faults to InputAccessoryBar; subsequent runtime issues and log faults zero. Integrated original17 validation is still required.
-- Error announcements deduplicate exact existing text without moving focus. Explicit demo allows local recovery but blocks provider/submit/legal actions, including keyboard submission. Spoken VoiceOver remains unobserved.
-- E board-multiline awaits handoff. Original17 remains available for next combined validation after E is accepted.
-
-## Next-batch handoff: E merged; round3 validation next
-
-- E board-multiline9497158/source1add78a accepted after source/test review,48 final-source image hashes and representative XXXL board/error captures. Final265 tests passed (250 units+15 UI), zero failures/skips, four successful builds. Worker-base sign-in warning predates merged F and must be checked again in integration.
-- First-line controls preserve44pt geometry and gain semantic contrast. Capacity message is static, intrinsic-height and noneditable with original copy/hint; disabled send/no keyboard focus checked. Flat guide hides while composing and restores unless dismissed. Existing error text announces once per presentation without moving focus. Retry target now44pt and edge-tested.
-- E/F/G all merged. No worker holds a device. Next: fresh isolated combined Debug suite, arm64 Release build, original17 full round3 captures including loading/error/keyboard recovery and production Activity counts, then independent Sol/Astra regrade. Expected combined count276 (260 unit+16 UI), to be confirmed by actual runner.
-
-## Round3 evidence retained; required keyboard gate failed
-
-- Evidence08c56a4 merged after parent confirmed102 native image hashes and all production hashes for6959de1. Eight new XXXL Apple references available. Debug/Release succeeded;23 Python and52+4 Deno tests passed. Actual combined result275 passed/1 failed/0 skipped;260 units passed,15/16 UI passed. No round3 score assigned yet.
-- Failure: keyboard matrix queried a Keyboard frame after a scroll could interactively dismiss it. Parent test-only correction confines drag to visible form, explicitly checks valid dismissal/refocus, and retains all clearance/target/edge-tap assertions. Required checks remain failed until fresh original17 rerun. No production source changed, prior failed evidence retained.
-
-## Round3 required gates accepted; independent graders running
-
-- Recheck5b0ca7e merged.276/276 passed (260 units+16 UI), zero failures/skips. Three dedicated keyboard repetitions completed24 cases; combined adds8. All original clearance/targets/edge taps remain. Parent verified110 native image hashes and production hash identity to6959de1; test revision542b9f7. Prior failed run remains preserved.
-- Fresh Debug build/Python23 passed; Release/backend52+4 explicitly reused based on53 production+11 backend hashes, not rerun claims. Zero observed runtimewarnings andinvalid-frame events; otherdiagnostics retained. Original17 cleaned andreturned.
-- Round3 Sol/high andAstra/high are independently grading the identical110-image/source/reference packet. No source edits during reviews. Opus requires both same-roundoverall>=8.5. Quota snapshot exported to rounds/3/usage.json from current-sessionrate-limit metadata.
-
-## Round3 Codex grades complete; Opus eligible
-
-Sol8.78 (minimum7.8), Astra8.76 (minimum7.8), all30 categories. Both exceed8.5, so commission requested Claude Opus5.5/medium on same frozen6959de1 source/110 nativeimages/17 references. Finalall3>=9/everycategory>=7 remains unmet. No plateau: overall scores continue rising. Remaining priorities: light secondary/capacity contrast, composerDonewithnonemptydraft, Account error announcement/recovery, populatedboardretry/diagnostic hierarchy while preserving all wording. No new implementation begins until same-source Opus review is commissioned.
-
-## Round3 Opus complete; next batch H/I/J
-
-| Grader | Overall | Minimum |
-|---|---:|---:|
-| gpt-6.1-sol/high |8.78|7.8|
-| gpt-6-astra/high |8.76|7.8|
-| Claude Opus5.5/medium |8.25|7.5|
-
-All30categoriespergrader; validatorerrorsnone; finalgatefalse. Opus52cc7d2 merged, report-only. Codex gainscontinue, no3-roundplateau. H board(readability,flatcapacity,nonemptyDone,completioncircleonly,retry/topedge) owns ReminderListView/ReorderableReminderList/HillclimbGeometry/boardtests. I sign-in(darkAppleboundary,contrast,compactDoneinset,safeenabled-stylecapture) owns LMRChrome/SignInView/HillclimbDemo(signinonly)/signin+chrometests. J Account(typography/alignment/exacterrorannouncements,safeenabled-stylecapture) owns AccountView/BoardPersistenceSection/accounttests+newhelper. No overlapping files; privateBoard17/privateAuth17/original17 respectively. Each must build,fulltests,andaffectedrecapturesbeforehandoff.
-
-## Next-batch handoff: I merged
-
-- I signin-native source551f880/evidencecddda8f merged after source/fixture safety review,37 verified native PNGs and original dark-enabled/XXXL-keyboard samples. Apple whiteOutline now visible in both appearances, normal help text uses adaptive primary ink, Done inset loses8pt padding while retaining48pt target. Existing wording/providerorder/authguardspreserved.
-- Worker277/277 (260 unit+17 UI), zero failures/skips;3 additional freshkeyboardmatrices yield32 completecasesincludingfullrun;0observedruntimewarnings/invalidframeevents. Nativepixel gate verifiesdarkAppleboundaryandnormaltextcontrast; enabled-stylefixture inert under root hit-testing plus callback guards, legalLinksdisabled. No Release/backendrerunclaimed. Parentoriginal17integratedround4validationstillrequired.
-- H board-deliberate andJ account-consistency remain active on privateBoard17/original17. I returnedAuth17 light/large,closedownsession,Activityids empty. Do not startoriginal17captureuntilJhandsback.
-
-## Next-batch handoff: H merged
-
-- H board-deliberate aa69cb4/evidence07bc30f accepted after source/test review,48 nativeimagehashes andrepresentativeXXXLboard/errorbottomoriginals. Circle-only44ptcompletion preserves fulltextlabel/value/hint/customCompleteaction,leading swipeandreorder. NonemptydraftDone persistsandretainsdraft. Capacityunboxedprimarytext,normalguidancehighercontrast. Populatederrorreusesexistingheading/retry,fullrawcopyretained; localfixturesneverstore/network.
-- Worker279/279 (260unit+19UI),zero failures/skips;3freshkeyboardmatrices24cases+8combined,emptyruntimeWarnings. Nativecontrast status21:1,hint/guide10.37light/11.42dark. Bottomsafearea/finalinkstillpass. SupportedsoftTOPedgeexplicitbutclippedfragmentsremain;noresolutionclaimed. Initial128-characterqueryfailurespreservedandfixedwithexactNSPredicatewithoutweakeningassertions.
-- H/privateBoard17 light/large,ownsessionclosed,booted. I alreadymerged. J/original17 stillawaitinghandoff; no combinedround4counts/scoreclaimed.
-
-## Next-batch handoff: J merged; round4 combined validation next
-
-- J account-consistency7abefed accepted after source/fixture safety review,84finalnativeimagehashes andoriginaldefaultlighttop/XXXLdarklower. Body-sizeddisclosurelabel,24pttrashicon/14pttitlegap,primaryhelper/footerink,separateexact-messageannouncementpolicies. Enabled-stylefixture permitslocaldisclosure/syntheticrecoverybutguardsrealnotification/signout/delete/settings/refreshandrootURLactions.
-- Worker281/281 (263unit+18UI),zero failures/skips,emptyruntimeWarnings;54nativecontrastchecksminimum13.94:1 andalignmentgatespass. Historicalprecontrast/failuresretained. Spokenspeech/liveaccountflows/physicalhapticsunobserved. Original17returnedlight/large,ownsessionclosed,running.
-- H/I/J allmerged. Noactiveworkerlease. Freshisolatedround4original17validationnext:expected285tests (263unit+22UI),actualrunnerauthoritative;Debug/Release,Python/Deno,core+extendedscreens/Activity/normalenabledstylesandinteractionstates. SourcefrozenduringcapturethenindependentSol/Astra;Opusonlyifbothsame-round>=8.5.
-
-## Round4 gates and evidence accepted; Codex review running
-
-- Round4 evidence5c43ea3 merged, app/testsourceb5d9bb3.285/285actualtests (263unit+22UI),zero failures/skips/expectedfailures. Fresharm64Debug/Release,Python23,Deno52+4passed. All8normalkeyboardcasesandedgeactionsverified. ZeroobservedruntimeWarnings/invalidframeevents;9359otherlogeventsretained.
-- Parentverified288nativePNGhashesandallrecordedproductioninputs;17AppleRemindersrefs,7recordings,12separateunitrenders. ActualOSReduceMotion/ReduceTransparency/IncreaseContrast toggledOnwithproofandrestoredOff;selectedcombined-settingskeyboardviewshowsDonebutalternateoutsideviewport,reachabilitynotproven. Thisoptionalnewcoverageconcernisnotdeclaredpassed. Topfragmentsremainobserved.
-- 'independentreviewerscoregate' changedtoinformationalrequired:false inchecks.json toavoidcircularprogrammaticrequirement; actualnumeric3-graderstopgateunchangedinvalidator. Allrealrequiredchecks pass. Sol/highandAstra/highareindependentlygradingthesamefrozenpacket;nosourceeditsduringreview. OpusonlybothnewCodexoverall>=8.5.

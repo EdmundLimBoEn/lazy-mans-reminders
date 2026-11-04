@@ -41,9 +41,9 @@ Round3: Sol8.78, Astra8.76; both minimum7.8. Opus8.25, minimum7.5; finalgateunme
 
 ## Current verification
 
-Current production/test source `b5d9bb3`. Round4 passed all285 tests:263 unit+22 UI. Prior round3 production was `6959de1`, with test correction `542b9f7`. Three additional fresh-process keyboard matrices passed all24 cases; combined run adds8. Test now supports valid interactive keyboard dismissal and refocus before checking keyboard geometry. Original275-pass/1-failure evidence stays intact. No assertions or normal dismissal behavior were disabled.
+Frozen production/test source: `b5d9bb3`. Round 4 passed **285/285 tests**: 263 unit and 22 UI, zero failures/skips. Fresh unsigned arm64 Debug/Release builds, 23 iOS Python checks and 52+4 offline Deno tests passed. All eight normal-settings keyboard cases completed their scrolling, clearance and edge-tap checks. Zero observed runtime warnings and invalid-frame events; other diagnostics remain retained. [Validation](validation/round4/README.md).
 
-Round4 fresh unsigned arm64 Debug/Release builds,23 Python iOS checks and52+4 offline Deno tests passed. Zero observed runtime warnings/invalid-frame events in complete recheck runs; other compiler/automation diagnostics remain. [Recheck](validation/round3/recheck/REPORT.md).
+The original round 3 275-pass/1-failure run stays intact. A test-only correction handled supported interactive keyboard dismissal and refocus; its subsequent 276-test recheck and three repeated keyboard matrices passed. No original geometry or edge-tap assertion was disabled.
 
 ## Screenshots and Apple references
 
@@ -88,26 +88,18 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 
 Next batch: board intentional completion/Done/contrast, sign-in dark Apple control and spacing, Account typography/alignment/error announcements. Existing wording stays fixed pending the optional copy question.
 
-## Next batch: sign-in accepted
+## Latest integrated improvements
 
-Source551f880/evidencecddda8f is merged: visible native white-outline Apple button in dark mode, readable normal help text and8pt less Done-inset padding with the48pt target retained.277 tests plus3 keyboard repetitions passed;37 native image hashes verified. Enabled-looking provider fixture remains inert; no live authentication was tested. Board and Account changes are pending before integratedround4validation. [Evidence](tasks/signin-native/REPORT.md).
+- Sign-in: visible native white-outline Apple button, readable help text and a 48pt Done inset with 8pt less padding. The toolbar path that produced invalid frames remains replaced. Enabled-looking provider captures are inert fixtures.
+- Board: completion only on the 44pt circle, Done for nonempty drafts with text retained, unboxed readable capacity status, and populated-error retry using existing labels and full diagnostic text.
+- Account: body-sized disclosure label, aligned delete-row icon/title, readable helper/footer text and exact-message error announcement deduplication. Enabled-style fixtures permit local disclosure/recovery while blocking real account and external actions.
 
-Written by gpt-6.1-sol in Codex on behalf of Edmund
+All three branches are merged. Their individual tests and affected captures are recorded under `tasks/`; current combined acceptance uses the fresh 285-test round 4 run.
 
-## Next batch: board accepted
+## Round 4 coverage and remaining findings
 
-Sourceaa69cb4/evidence07bc30f merged:44ptcircle-onlycompletion,Donefornonemptydrafts,unboxedreadablecapacitystatus/guidance,andpopulatederrorretryusingexistingcopy.279tests plus3keyboardmatricespassed;48nativehashesverified. Actualbottom-rowgeometry/inkpasses. Topclippedfragmentsremainobserveddespitesoftedgeflag;noresolutionclaimed. Accountworkerremainsbeforeintegratedround4validation. [Evidence](tasks/board-deliberate/README.md).
+The packet contains 288 verified native PNGs, seven recordings and 17 Apple Reminders references. Selected actual-system Reduce Motion, Reduce Transparency and Increase Contrast states were captured, and the original Off settings restored. The combined-settings recording shows the alternate sign-in action, but one settled viewport omits it; a complete clearance matrix remains unproven. This is not a diagnosis of unreachability.
 
-Written by gpt-6.1-sol in Codex on behalf of Edmund
-
-## Next batch: Account accepted; combined round4 next
-
-Account7abefed merged: consistentbodydisclosurelabel,aligneddestructiverow,readablehelper/footertext,exact-messageerrorannouncementdeduplicationandsafeenabled-stylepreview.281workertestspassed;84nativehashesand54contrastchecks(minimum13.94:1)verified. AllH/I/Jchangesarenowintegrated;freshoriginal17round4validationandgradingremain. [Evidence](tasks/account-consistency/REPORT.md).
-
-Written by gpt-6.1-sol in Codex on behalf of Edmund
-
-## Round4 validation complete
-
-285tests passed,288nativePNGhashesverified,7recordingsand17AppleRemindersreferences.FreshDebug/Release/Python23/Deno52+4passed. ActualsystemReduceMotion/ReduceTransparency/IncreaseContrast selectedstateswerecapturedandallsettingsrestored. Combined-settingskeyboardalternateactionisoutsideoneviewport;reachabilityremainsunproven.Top-edgefragmentsremain. TheseconcernsareexplicitlyincludedintheindependentCodexreviewpacket. [Validation](validation/round4/README.md) · [Observed limits](validation/round4/observations.md).
+Top-edge fragments remain observed. New reviewer measurements find normal-size red error-message text below 4.5:1 in sign-in and Account; the existing helper/footer contrast checks excluded semantic error red. No passing error-message contrast gate is claimed. Independent round 4 grades remain pending.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
