@@ -104,3 +104,11 @@
 | signin-light-default-top.png | hillclimb/reference/reminders-compose-light.png | No Apple sign-in reference; compose compares native form/keyboard treatment only |
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+| recheck/signin-light-default-keyboard.png | hillclimb/reference/reminders-compose-light.png | No Apple sign-in reference; compose compares native form/keyboard treatment only; Recheck after actual form scroll; no authentication counterpart |
+| recheck/signin-light-default-password-keyboard.png | hillclimb/reference/reminders-compose-light.png | No Apple sign-in reference; compose compares native form/keyboard treatment only; Recheck after actual form scroll; no authentication counterpart |
+| recheck/signin-light-XXXL-keyboard.png | hillclimb/reference/round3/reminders-compose-light-XXXL.png | No Apple sign-in reference; compose compares native form/keyboard treatment only; Recheck after actual form scroll; no authentication counterpart |
+| recheck/signin-light-XXXL-password-keyboard.png | hillclimb/reference/round3/reminders-compose-light-XXXL.png | No Apple sign-in reference; compose compares native form/keyboard treatment only; Recheck after actual form scroll; no authentication counterpart |
+| recheck/signin-dark-default-keyboard.png | hillclimb/reference/round2/reminders-compose-dark.png | No Apple sign-in reference; compose compares native form/keyboard treatment only; Recheck after actual form scroll; no authentication counterpart |
+| recheck/signin-dark-default-password-keyboard.png | hillclimb/reference/round2/reminders-compose-dark.png | No Apple sign-in reference; compose compares native form/keyboard treatment only; Recheck after actual form scroll; no authentication counterpart |
+| recheck/signin-dark-XXXL-keyboard.png | hillclimb/reference/round3/reminders-compose-dark-XXXL.png | No Apple sign-in reference; compose compares native form/keyboard treatment only; Recheck after actual form scroll; no authentication counterpart |
+| recheck/signin-dark-XXXL-password-keyboard.png | hillclimb/reference/round3/reminders-compose-dark-XXXL.png | No Apple sign-in reference; compose compares native form/keyboard treatment only; Recheck after actual form scroll; no authentication counterpart |

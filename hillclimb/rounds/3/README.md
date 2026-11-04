@@ -19,3 +19,9 @@ Gaps: true lock, arbitrary wallpapers, physical haptics, spoken VoiceOver/traver
 Cleanup: only the four recorded owned demo Activities were ended; owned-ID array is empty. Light/large restored, Reminders still16 rows, own apps/session closed, original17 left running. See validation/round3/handback.json and activity/cleanup.json.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Completed isolated keyboard recheck
+
+Fresh recheck at production-identical6959de1 passed276/276 (260 unit+16UI), zero failures/skips, plus three exact fresh-process keyboard matrix repetitions. All32 keyboard cases reached capture and edge taps. Eight post-scroll pinned native recheck images added; historical102 remain intact. No production/test changes were required. Runtime warnings and scoped invalid-frame events zero; other observed diagnostics retained. Historical baseline275/1/0 above remains a failed historical run, not relabeled. See ../../validation/round3/recheck/REPORT.md for test/validation revisions, exact commands, hashes, counts, warnings, Release reuse and cleanup. No ratings or stop-rule change.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
