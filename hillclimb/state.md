@@ -47,3 +47,5 @@ Task resumed; runtime validation in progress. No UI fix has been merged; no PR, 
 ## Round 1 grading handoff
 
 18 actual app PNGs verified and committed. Five usable Apple Reminders references; Notes unavailable, four transition references excluded. pairs.json records exact matches and gaps. Two independent 30-category Codex graders next. No production UI fixes merged yet. Baseline checks: existing247pass; XXXL pass; field22pt and Account36pt fail; pull idle timeout; fixture query fix pending rerun. Codex quota tool is not exposed; no quota claim made.
+
+- Runtime follow-up: repaired offline fixture stability test actually executed (1 test) and passed. Source/test packet otherwise frozen during independent round1 grading.
