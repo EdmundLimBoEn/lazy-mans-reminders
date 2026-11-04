@@ -56,6 +56,9 @@ struct HillclimbGeometryExport: UIViewRepresentable {
         override var accessibilityValue: String? {
             get {
                 var values = HillclimbGeometry.shared.frames.mapValues { [$0.minX, $0.minY, $0.width, $0.height] }
+                if let mode = HillclimbDemo.mode {
+                    values["fixtureCount"] = [Double(HillclimbDemo.reminders(for: mode).count), 0, 0, 0]
+                }
                 let auth = AuthManager.shared
                 values["authState"] = [auth.session == nil ? 0 : 1, auth.isRestoringSession ? 1 : 0,
                                        auth.isSharedSessionReady ? 1 : 0, auth.isAuthenticating ? 1 : 0]

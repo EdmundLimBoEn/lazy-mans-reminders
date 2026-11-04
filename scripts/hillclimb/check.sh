@@ -17,5 +17,6 @@ cd "$root"
 xcodegen generate --spec ios/project.yml
 xcodebuild test -project ios/LazyMansReminders.xcodeproj -scheme LazyMansReminders \
   -configuration Debug -destination "platform=iOS Simulator,id=$HILLCLIMB_UDID" \
+  -test-timeouts-enabled YES -default-test-execution-time-allowance 120 -maximum-test-execution-time-allowance 180 \
   -parallel-testing-enabled NO -resultBundlePath "${HILLCLIMB_RESULT:?Choose a fresh xcresult path}" \
   CODE_SIGNING_ALLOWED=NO

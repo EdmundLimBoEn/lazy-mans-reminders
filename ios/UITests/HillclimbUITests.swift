@@ -19,19 +19,36 @@ final class HillclimbUITests: XCTestCase {
         let values = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: [Double]])
         return values.mapValues { CGRect(x: $0[0], y: $0[1], width: $0[2], height: $0[3]) }
     }
-    private func bottom() {
+    private func lastRowID(_ geometry: [String: CGRect]) throws -> String {
+        let count = Int(try XCTUnwrap(geometry["fixtureCount"]).minX)
+        XCTAssertGreaterThan(count, 0)
+        return String(format: "00000000-0000-4000-8000-%012d", count)
+    }
+    private func bottom() throws {
         let list = app.collectionViews.firstMatch
         XCTAssertTrue(list.waitForExistence(timeout: 5))
         // Pull at the top, then traverse well beyond the finite fixture's capacity.
         list.swipeDown()
-        for _ in 0..<20 { list.swipeUp() }
+        var previous: CGRect?
+        for _ in 0..<12 {
+            let geometry = try frames()
+            if let id = try? lastRowID(geometry),
+               let row = geometry[id], let composer = geometry["composer"], let safe = geometry["safeArea"],
+               row.minY >= safe.minY, row.maxY <= composer.minY + 0.5 {
+                return
+            }
+            let lastVisible = list.cells.allElementsBoundByIndex.last?.frame
+            if let previous, previous == lastVisible { return }
+            previous = lastVisible
+            list.swipeUp(velocity: .fast)
+        }
+        XCTFail("Could not settle at the bottom within 12 swipes")
     }
     func testFullBoardBottomAboveComposerAfterPullAndScroll() throws {
         launch("full")
-        bottom()
+        try bottom()
         let geometry = try frames()
-        let rows = geometry.keys.filter { UUID(uuidString: $0) != nil }.sorted()
-        let lastID = try XCTUnwrap(rows.last)
+        let lastID = try lastRowID(geometry)
         let last = try XCTUnwrap(geometry[lastID])
         let composer = try XCTUnwrap(geometry["composer"])
         let safe = try XCTUnwrap(geometry["safeArea"])
@@ -50,7 +67,7 @@ final class HillclimbUITests: XCTestCase {
     }
     func testXXXLTextFitsAllocatedHeightAtBottom() throws {
         launch("long-text", xxxl: true)
-        bottom()
+        try bottom()
         let geometry = try frames()
         let safe = try XCTUnwrap(geometry["safeArea"])
         let composer = try XCTUnwrap(geometry["composer"])
@@ -66,8 +83,7 @@ final class HillclimbUITests: XCTestCase {
             XCTAssertGreaterThanOrEqual(actual.minX, safe.minX)
             XCTAssertLessThanOrEqual(actual.maxX, safe.maxX)
         }
-        let rows = geometry.keys.filter { UUID(uuidString: $0) != nil }.sorted()
-        let last = try XCTUnwrap(geometry[try XCTUnwrap(rows.last)])
+        let last = try XCTUnwrap(geometry[try lastRowID(geometry)])
         XCTAssertLessThanOrEqual(last.maxY, composer.minY + 0.5)
         XCTAssertGreaterThanOrEqual(last.minY, safe.minY, "Last long row cannot fit fully on screen")
     }
