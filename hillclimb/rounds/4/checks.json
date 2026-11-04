@@ -1,0 +1,141 @@
+{
+  "source_sha": "b5d9bb3df1b20d765ae5efff438190f396827456",
+  "testRevision": "b5d9bb3df1b20d765ae5efff438190f396827456",
+  "validationRevision": "This evidence commit; use git log -- hillclimb/validation/round4",
+  "checks": [
+    {
+      "name": "full existing unit suite",
+      "status": "passed",
+      "passed": 263,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": "../../validation/round4/combined-tests.json"
+    },
+    {
+      "name": "full existing UI suite",
+      "status": "passed",
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": "../../validation/round4/combined-tests.json"
+    },
+    {
+      "name": "combined scheme test execution",
+      "status": "passed",
+      "passed": 285,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": "../../validation/round4/combined-summary.json"
+    },
+    {
+      "name": "fresh iOS Python checks",
+      "status": "passed",
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": "../../validation/round4/python-ios.json"
+    },
+    {
+      "name": "fresh cached backend helper suites",
+      "status": "passed",
+      "passed": 52,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": "../../validation/round4/deno.json"
+    },
+    {
+      "name": "fresh offline overflow backend tests",
+      "status": "passed",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": "../../validation/round4/deno-overflow.json"
+    },
+    {
+      "name": "fresh unsigned arm64 Debug build",
+      "status": "passed",
+      "evidence": "../../validation/round4/build-Debug.json"
+    },
+    {
+      "name": "fresh unsigned arm64 Release build",
+      "status": "passed",
+      "evidence": "../../validation/round4/build-Release.json"
+    },
+    {
+      "name": "combined post-scroll keyboard matrix",
+      "status": "passed",
+      "cases": 8,
+      "extraRepeats": 0,
+      "reason": "H/I already supplied three additional repetitions each; no new failure concern",
+      "evidence": "../../validation/round4/matrix-proof.json"
+    },
+    {
+      "name": "runtime warnings and scoped invalid frames",
+      "status": "passed",
+      "runtimeWarnings": 0,
+      "invalidFrameEvents": 0,
+      "otherErrorFaultEvents": 9359,
+      "evidence": "../../validation/round4/runtime-summary.json"
+    },
+    {
+      "name": "true locked physical-device Activity",
+      "required": false,
+      "status": "unavailable",
+      "reason": "Simulator Notification Center is not a truly locked physical device"
+    },
+    {
+      "name": "launch/frame-time performance certification",
+      "required": false,
+      "status": "unavailable",
+      "reason": "No dedicated launch metric test added; suite performance metrics empty. Native recordings do not establish physical performance."
+    },
+    {
+      "name": "independent reviewer score gate",
+      "status": "pending",
+      "reason": "Parent-owned reviews have not run. No scores fabricated."
+    },
+    {
+      "name": "native source and screenshot/reference integrity",
+      "status": "passed",
+      "nativePNGCount": 288,
+      "evidence": "../../validation/round4/packet-integrity.json"
+    },
+    {
+      "name": "native board contrast and final-row geometry",
+      "status": "passed",
+      "states": 8,
+      "evidence": "../../validation/round4/pixel-geometry-results.json"
+    },
+    {
+      "name": "native Account helper/footer raster and alignment",
+      "status": "passed",
+      "samples": 54,
+      "evidence": "../../validation/round4/account-raster-results.json; ../../validation/round4/account-pixel-alignment.json"
+    },
+    {
+      "name": "actual system accessibility settings exercise and restoration",
+      "status": "passed",
+      "evidence": "../../validation/round4/accessibility-proof.json",
+      "limitation": "Selected combined-on views only; no full AX keyboard matrix"
+    },
+    {
+      "name": "selected combined-system-settings keyboard clearance",
+      "required": false,
+      "status": "pending",
+      "reason": "Done visible; alternate action outside selected viewport. Parent review/reproduction needed; no source defect diagnosed.",
+      "evidence": "accessibility/signin-light-XXXL-all-three-settled.png; ../../validation/round4/observations.md"
+    },
+    {
+      "name": "native multiline Activity conservation",
+      "status": "passed",
+      "visibleStates": 8,
+      "intentionallyEmptyCompactStates": 4,
+      "evidence": "activity/manifest.json; activity/pipeline-*.json"
+    },
+    {
+      "name": "own device/session cleanup",
+      "status": "passed",
+      "evidence": "../../validation/round4/device-handback.json; ../../validation/round4/accessibility-proof.json; ../../validation/round4/activity-cleanup.json"
+    }
+  ]
+}
