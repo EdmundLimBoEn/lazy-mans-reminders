@@ -1,0 +1,1497 @@
+{
+  "testIdentifier" : "SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances()",
+  "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances",
+  "testName" : "testFocusedEmailAndPasswordClearKeyboardInBothAppearances()",
+  "testRuns" : [
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804147.126,
+          "title" : "Start Test at 2026-11-04 22:55:47.126"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804147.285,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804148.591,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804149.303,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804147.29,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804147.289,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804150.621,
+              "title" : "Invalid frame dimension (negative or non-finite)."
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804151.983,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804151.982,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804150.939,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804153.111,
+                  "title" : "Checking existence of `Keyboard (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804153.11,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Keyboard (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804152.074,
+          "title" : "Waiting 8.0s for Keyboard (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804153.126,
+          "title" : "Checking existence of `\"Email address\" TextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804153.148,
+          "title" : "Checking existence of `\"signin.emailTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804153.17,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804153.198,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804153.224,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804153.25,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804153.276,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804153.292,
+          "title" : "Find the \"Email address\" TextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804153.318,
+          "title" : "Find the Keyboard (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804154.365,
+                  "title" : "Checking existence of `\"Done\" Button`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804154.365,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Done\" Button`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804153.328,
+          "title" : "Waiting 5.0s for \"Done\" Button to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804154.388,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-light-default-keyboard_0_E6BAF061-CA2D-4977-89C9-ADDEC0F303A0.png",
+              "payloadId" : "0~C6w96AkWsLcD_CmQTIsCzikzGIYeXQgKJu7bYtF9dSoI6skMstHVFWqpoDzjXh4jwbJ6ynQ6m6iy88O7yjZzqA==",
+              "timestamp" : 1793804154.48,
+              "uuid" : "BFDD95E6-DBA3-4BC0-BC3A-A993BAE8B737"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804154.48,
+              "title" : "signin-light-default-keyboard"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804154.48,
+          "title" : "Added attachment named 'signin-light-default-keyboard'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804154.482,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:81112"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804155.742,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804156.386,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804154.481,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804154.481,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804158.683,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804158.682,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804157.646,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804159.787,
+                  "title" : "Checking existence of `Keyboard (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804159.785,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Keyboard (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804158.753,
+          "title" : "Waiting 8.0s for Keyboard (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804159.803,
+          "title" : "Checking existence of `\"Password\" SecureTextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804159.826,
+          "title" : "Checking existence of `\"signin.passwordTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804159.849,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804159.878,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804159.903,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804159.929,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804159.957,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804159.973,
+          "title" : "Find the \"Password\" SecureTextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804159.998,
+          "title" : "Find the Keyboard (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804161.045,
+                  "title" : "Checking existence of `\"Done\" Button`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804161.045,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Done\" Button`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804160.011,
+          "title" : "Waiting 5.0s for \"Done\" Button to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804161.069,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-light-default-password-keyboard_0_1BE2E595-08DA-4DF2-BB97-3731C250D46F.png",
+              "payloadId" : "0~i1M1AW8ViLwviCEZNeeDoa13dFC6HVeZfbKzB8tsgRI7jyzkbS6hGWQix_JD8r3PT3m66Z0zDtPbLQW5mkkXJw==",
+              "timestamp" : 1793804161.148,
+              "uuid" : "4B96C8CE-75AA-47CA-B395-A36D94CE7909"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804161.148,
+              "title" : "signin-light-default-password-keyboard"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804161.148,
+          "title" : "Added attachment named 'signin-light-default-password-keyboard'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804161.149,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:81320"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804162.403,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804163.114,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804161.149,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804161.148,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804165.4,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804165.399,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804164.363,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804166.5,
+                  "title" : "Checking existence of `Keyboard (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804166.498,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Keyboard (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804165.467,
+          "title" : "Waiting 8.0s for Keyboard (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804166.518,
+          "title" : "Checking existence of `\"Email address\" TextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804166.552,
+          "title" : "Checking existence of `\"signin.emailTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804166.578,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804166.604,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804166.63,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804166.656,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804166.681,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804166.697,
+          "title" : "Find the \"Email address\" TextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804166.722,
+          "title" : "Find the Keyboard (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804167.766,
+                  "title" : "Checking existence of `\"Done\" Button`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804167.765,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Done\" Button`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804166.733,
+          "title" : "Waiting 5.0s for \"Done\" Button to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804167.8,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-light-XXXL-keyboard_0_7B77D03F-553B-44ED-8F6E-828A6B5EF7CE.png",
+              "payloadId" : "0~ulrdQlD2qnm-HHusnLjiF3yFe3i4HKDGWLsXDGolGqmrPX_mPSr9t7lA6OQzDrpO79SwHs7GmsrQf59-vV8n6w==",
+              "timestamp" : 1793804167.892,
+              "uuid" : "FBC51F19-56A1-4174-9D0C-A27EE489AD08"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804167.892,
+              "title" : "signin-light-XXXL-keyboard"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804167.892,
+          "title" : "Added attachment named 'signin-light-XXXL-keyboard'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804167.894,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:81667"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804169.162,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804169.807,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804167.893,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804167.893,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804172.107,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804172.106,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804171.072,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804173.22,
+                  "title" : "Checking existence of `Keyboard (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804173.218,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Keyboard (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804172.184,
+          "title" : "Waiting 8.0s for Keyboard (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804173.242,
+          "title" : "Checking existence of `\"Password\" SecureTextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804173.275,
+          "title" : "Checking existence of `\"signin.passwordTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804173.3,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804173.326,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804173.352,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804173.378,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804173.402,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804173.418,
+          "title" : "Find the \"Password\" SecureTextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804173.442,
+          "title" : "Find the Keyboard (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804174.486,
+                  "title" : "Checking existence of `\"Done\" Button`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804174.485,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Done\" Button`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804173.453,
+          "title" : "Waiting 5.0s for \"Done\" Button to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804174.518,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-light-XXXL-password-keyboard_0_236E64D2-5962-4BF2-B371-ECDE3B011931.png",
+              "payloadId" : "0~qjIZeNvhBEXglb68FAvDb3LPQv-TOeZ-rdajPe8V3VMFF2Gvp_lDSFTqRcuI2BefP-B27oopUzTYiXglpgylNA==",
+              "timestamp" : 1793804174.606,
+              "uuid" : "BC06777A-F298-4D9E-9814-BB7917CA056A"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804174.606,
+              "title" : "signin-light-XXXL-password-keyboard"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804174.606,
+          "title" : "Added attachment named 'signin-light-XXXL-password-keyboard'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804174.607,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:81760"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804175.871,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804176.518,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804174.607,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804174.607,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804178.813,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804178.811,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804177.777,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804179.917,
+                  "title" : "Checking existence of `Keyboard (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804179.916,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Keyboard (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804178.885,
+          "title" : "Waiting 8.0s for Keyboard (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804179.935,
+          "title" : "Checking existence of `\"Email address\" TextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804179.969,
+          "title" : "Checking existence of `\"signin.emailTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804179.994,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804180.02,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804180.047,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804180.073,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804180.097,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804180.111,
+          "title" : "Find the \"Email address\" TextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804180.134,
+          "title" : "Find the Keyboard (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804181.178,
+                  "title" : "Checking existence of `\"Done\" Button`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804181.177,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Done\" Button`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804180.144,
+          "title" : "Waiting 5.0s for \"Done\" Button to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804181.216,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-dark-default-keyboard_0_F987F5B1-5A35-4481-8F60-BA3FE626D46E.png",
+              "payloadId" : "0~L_RMoxmZkYGCxfok4I_gnWiGpnK3AeiYCIj4r-_7p2RRJYOF6SRBJky2H_Q2xJHfcqt7WplVigx0W6crJaYMSg==",
+              "timestamp" : 1793804181.32,
+              "uuid" : "D14FC3A9-0593-44B9-8FC9-50A627D6EC93"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804181.32,
+              "title" : "signin-dark-default-keyboard"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804181.32,
+          "title" : "Added attachment named 'signin-dark-default-keyboard'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804181.321,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:81791"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804182.585,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804183.164,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804181.321,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804181.32,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804185.466,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804185.462,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804184.424,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804186.57,
+                  "title" : "Checking existence of `Keyboard (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804186.569,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Keyboard (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804185.536,
+          "title" : "Waiting 8.0s for Keyboard (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804186.593,
+          "title" : "Checking existence of `\"Password\" SecureTextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804186.625,
+          "title" : "Checking existence of `\"signin.passwordTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804186.653,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804186.679,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804186.705,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804186.73,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804186.755,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804186.77,
+          "title" : "Find the \"Password\" SecureTextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804186.793,
+          "title" : "Find the Keyboard (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804187.835,
+                  "title" : "Checking existence of `\"Done\" Button`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804187.835,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Done\" Button`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804186.805,
+          "title" : "Waiting 5.0s for \"Done\" Button to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804187.862,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-dark-default-password-keyboard_0_D12B238C-4920-4177-97FF-53299F9F6573.png",
+              "payloadId" : "0~SHqnoL4bE_aPjnmE-F0X7BzGFjzUQBBdGvhPv0IMfM44GvXd-ECo6akf-GTtt3IluaWpE7P80sdazj_VQYOqlw==",
+              "timestamp" : 1793804187.949,
+              "uuid" : "DB054B99-3DD0-4EAC-90E9-4E5379E2853B"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804187.949,
+              "title" : "signin-dark-default-password-keyboard"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804187.949,
+          "title" : "Added attachment named 'signin-dark-default-password-keyboard'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804187.95,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:81831"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804189.217,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804189.875,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804187.95,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804187.949,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804192.162,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804192.161,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804191.136,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804193.262,
+                  "title" : "Checking existence of `Keyboard (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804193.261,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Keyboard (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804192.225,
+          "title" : "Waiting 8.0s for Keyboard (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804193.281,
+          "title" : "Checking existence of `\"Email address\" TextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804193.31,
+          "title" : "Checking existence of `\"signin.emailTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804193.335,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804193.362,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804193.39,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804193.416,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804193.44,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804193.455,
+          "title" : "Find the \"Email address\" TextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804193.48,
+          "title" : "Find the Keyboard (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804194.524,
+                  "title" : "Checking existence of `\"Done\" Button`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804194.523,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Done\" Button`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804193.49,
+          "title" : "Waiting 5.0s for \"Done\" Button to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804194.567,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-dark-XXXL-keyboard_0_C817E203-B15F-4946-ACBE-99099CE2572E.png",
+              "payloadId" : "0~OgtaT0c1Vxhk5NcVBo6qxJpU0DB4FapSo10qdAPG79EWpPK4C1n5EO1OVMv4R2fy17FbcOxLAVX3nFdqcPxdSQ==",
+              "timestamp" : 1793804194.664,
+              "uuid" : "5BD0B28B-27AE-4FAB-AC7B-D2AE4D5FA361"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804194.664,
+              "title" : "signin-dark-XXXL-keyboard"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804194.664,
+          "title" : "Added attachment named 'signin-dark-XXXL-keyboard'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804194.666,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:81848"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804195.933,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804196.591,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804194.666,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804194.665,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804198.9,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804198.899,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804197.874,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804199.999,
+                  "title" : "Checking existence of `Keyboard (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804199.998,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Keyboard (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804198.963,
+          "title" : "Waiting 8.0s for Keyboard (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804200.015,
+          "title" : "Checking existence of `\"Password\" SecureTextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804200.043,
+          "title" : "Checking existence of `\"signin.passwordTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804200.065,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804200.09,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804200.117,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804200.144,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804200.168,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804200.183,
+          "title" : "Find the \"Password\" SecureTextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804200.207,
+          "title" : "Find the Keyboard (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793804201.254,
+                  "title" : "Checking existence of `\"Done\" Button`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804201.253,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Done\" Button`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804200.218,
+          "title" : "Waiting 5.0s for \"Done\" Button to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804201.284,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-dark-XXXL-password-keyboard_0_AC9BB575-5139-4640-9E08-68A2342B42DE.png",
+              "payloadId" : "0~YuY02QsPf5WCmPEFkvjqN4Fqfl6sbOySi9ZAsqhKb4tIOZNAMcJDHxlWO0LelSiqPYTBERrAigK_WGdTLTKxLg==",
+              "timestamp" : 1793804201.383,
+              "uuid" : "F48EEE05-E9B8-4DD4-B614-EC0575D36E7B"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793804201.383,
+              "title" : "signin-dark-XXXL-password-keyboard"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804201.383,
+          "title" : "Added attachment named 'signin-dark-XXXL-password-keyboard'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793804201.386,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+        "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ]
+}
