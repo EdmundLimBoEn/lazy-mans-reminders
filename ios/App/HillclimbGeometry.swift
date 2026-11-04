@@ -123,3 +123,46 @@ struct HillclimbTextProbe: ViewModifier {
     }
 #endif
 }
+
+struct HillclimbFrameProbe: ViewModifier {
+    let key: String
+    func body(content: Content) -> some View {
+#if DEBUG
+        if HillclimbDemo.isActive {
+            content.background(GeometryReader { geometry in
+                Color.clear.onAppear { HillclimbGeometry.shared.frames[key] = geometry.frame(in: .global) }
+                    .onChange(of: geometry.frame(in: .global)) { _, frame in HillclimbGeometry.shared.frames[key] = frame }
+            })
+        } else { content }
+#else
+        content
+#endif
+    }
+}
+
+struct HillclimbCapacityProbe: ViewModifier {
+    func body(content: Content) -> some View {
+#if DEBUG
+        if HillclimbDemo.isActive {
+            content.background(GeometryReader { actual in
+                Text("Board full — combine lines instead").font(.body)
+                    .frame(width: actual.size.width, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .background(GeometryReader { ideal in
+                        Color.clear.onAppear { record(actual, ideal) }
+                            .onChange(of: actual.frame(in: .global)) { _, _ in record(actual, ideal) }
+                            .onChange(of: ideal.size) { _, _ in record(actual, ideal) }
+                    }).hidden().accessibilityHidden(true)
+            })
+        } else { content }
+#else
+        content
+#endif
+    }
+#if DEBUG
+    private func record(_ actual: GeometryProxy, _ ideal: GeometryProxy) {
+        HillclimbGeometry.shared.frames["capacity"] = actual.frame(in: .global)
+        HillclimbGeometry.shared.frames["capacityIdeal"] = CGRect(origin: .zero, size: ideal.size)
+    }
+#endif
+}

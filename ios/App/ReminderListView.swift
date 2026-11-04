@@ -221,8 +221,18 @@ struct ReminderListView: View {
             }
 
             HStack(alignment: .center, spacing: 8) {
+                if atCapacity {
+                    Text("Board full — combine lines instead")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .modifier(HillclimbCapacityProbe())
+                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                        .accessibilityIdentifier("board.capacity")
+                        .accessibilityHint("Board is full. Complete a reminder or combine lines.")
+                } else {
                 TextField(
-                    atCapacity ? "Board full — combine lines instead" : "New reminder",
+                    "New reminder",
                     text: Binding(get: { draft.text }, set: { draft.edit($0) }),
                     axis: .vertical
                 )
@@ -248,6 +258,8 @@ struct ReminderListView: View {
                         : "Adds a reminder to your board and Lock Screen"
                 )
                 .onSubmit { Task { await addReminder() } }
+
+                }
 
                 if composerFocused && draft.text.isEmpty {
                     Button { composerFocused = false } label: {
@@ -535,10 +547,17 @@ private struct ReminderRow: View {
     let reminder: Reminder
     let isCompleting: Bool
     let onComplete: () -> Void
+    @ScaledMetric(relativeTo: .body) private var firstLineHeight: CGFloat = 20.3
 
     var body: some View {
         Button(action: onComplete) {
-            Label {
+            HStack(alignment: .top, spacing: 8) {
+                Image(systemName: isCompleting ? "checkmark.circle.fill" : "circle")
+                    .font(.title3.weight(.light))
+                    .foregroundStyle(isCompleting ? Color.accentColor : Color(.secondaryLabel))
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
+                    .modifier(HillclimbFrameProbe(key: "circle-" + reminder.id.uuidString))
                 Text(reminder.text)
                     .font(.body)
                     .kerning(-0.1)
@@ -547,12 +566,7 @@ private struct ReminderRow: View {
                     .multilineTextAlignment(.leading)
                     .modifier(HillclimbTextProbe(id: reminder.id, text: reminder.text))
                     .frame(maxWidth: .infinity, alignment: .leading)
-            } icon: {
-                Image(systemName: isCompleting ? "checkmark.circle.fill" : "circle")
-                    .font(.title3.weight(.light))
-                    .foregroundStyle(isCompleting ? Color.accentColor : Color(.tertiaryLabel))
-                    .frame(minWidth: 44, minHeight: 44, alignment: .center)
-                    .contentShape(Rectangle())
+                    .padding(.top, max(0, (44 - firstLineHeight) / 2))
             }
         }
         .buttonStyle(.plain)

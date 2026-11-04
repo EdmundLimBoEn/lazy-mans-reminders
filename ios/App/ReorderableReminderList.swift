@@ -108,9 +108,10 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "reminder", for: indexPath)
             let reminder = items[indexPath.item]
             cell.contentConfiguration = UIHostingConfiguration {
-                HStack(spacing: 0) {
+                HStack(alignment: .top, spacing: 0) {
                     parent.row(reminder)
                     ReminderDragGrip(isEnabled: parent.isEnabled && items.count > 1)
+                        .modifier(HillclimbFrameProbe(key: "grip-" + reminder.id.uuidString))
                         .accessibilityLabel("Reorder \(reminder.text)")
                         .accessibilityValue("Position \(indexPath.item + 1) of \(items.count)")
                         .accessibilityAction(named: "Move up") { [weak self] in
@@ -228,7 +229,7 @@ private struct ReminderDragGrip: View {
             dots
             dots
         }
-        .foregroundStyle(.tertiary)
+        .foregroundStyle(.secondary)
         .opacity(isEnabled ? 1 : 0.3)
         .frame(width: 44, height: 44)
         .contentShape(Rectangle())
