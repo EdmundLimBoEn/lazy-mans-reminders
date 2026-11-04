@@ -63,6 +63,15 @@ final class SignInSurfaceUITests: XCTestCase {
                 XCTAssertFalse(app.keyboards.firstMatch.exists)
                 XCTAssertFalse(app.secureTextFields["Password"].exists)
                 XCTAssertEqual(app.navigationBars.firstMatch.identifier, "Sign In")
+                for label in ["Privacy", "Terms", "Support"] {
+                    let link = app.buttons[label]
+                    XCTAssertTrue(link.isEnabled)
+                    XCTAssertTrue(link.isHittable)
+                    assertNormalTextContrast(label, style: style, frame: link.frame)
+                    link.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+                    XCTAssertEqual(app.state, .runningForeground)
+                    XCTAssertTrue(app.navigationBars["Sign In"].exists)
+                }
                 capture("design-only-inert-enabled-signin-\(style)-\(size)")
             }
         }
@@ -89,8 +98,8 @@ final class SignInSurfaceUITests: XCTestCase {
         XCTAssertGreaterThan(Double(white) / Double(samples.count), 0.8)
     }
 
-    private func assertNormalTextContrast(_ text: String, style: String) {
-        let samples = pixels(in: app.staticTexts[text].frame)
+    private func assertNormalTextContrast(_ text: String, style: String, frame: CGRect? = nil) {
+        let samples = pixels(in: frame ?? app.staticTexts[text].frame)
         var histogram: [Int: Int] = [:]
         for rgb in samples {
             let key = Int(rgb[0]) << 16 | Int(rgb[1]) << 8 | Int(rgb[2])

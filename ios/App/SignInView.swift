@@ -83,7 +83,7 @@ struct SignInView: View {
                     if case .error(let message) = displayedNotice {
                         Label(message, systemImage: "exclamationmark.triangle.fill")
                             .font(.footnote)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.primary)
                             .symbolRenderingMode(.hierarchical)
                             .textSelection(.enabled)
                             .fixedSize(horizontal: false, vertical: true)
@@ -140,6 +140,10 @@ struct SignInView: View {
             if fixtureVariant == "password-keyboard" { passwordFocused = true }
         }
 #endif
+        .environment(\.openURL, OpenURLAction { url in
+            guard !blocksExternalActions else { return .discarded }
+            return .systemAction(url)
+        })
         .allowsHitTesting(!appearanceFixture)
         .onChange(of: displayedNotice, initial: true) { _, notice in
             if let message = errorAnnouncements.announcement(for: notice) {
@@ -416,7 +420,8 @@ struct SignInView: View {
                     .frame(minHeight: 44)
             }
         }
-        .disabled(blocksExternalActions)
+        .disabled(disablesDemoControls)
+        .tint(.primary)
         .font(.footnote)
         .frame(maxWidth: .infinity)
         .padding(.top, 8)
