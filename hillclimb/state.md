@@ -74,3 +74,10 @@ The final stop rule is unchanged: gpt-6.1-sol, gpt-6-astra and Claude Opus 5.5 m
 - B signin-surfaces: awaiting handoff, assigned8E8380DE-364D-4899-99B8-D15ED0494FFD; owns SignInView/LMRChrome/new sign-in tests.
 - D account surfaces: next isolated task, AccountView.swift plus new account tests only. Can use original17 after C's clean handback. No overlapping edits with A.
 - Next integration round remains pending A/B/D results, combined build/checks, all-state re-shoot on original17, two fresh Codex grades. Opus only if both same-round Codex overall >=8.5. Final stop remains all3 >=9 and every category >=7.
+
+## Batch handoff update: Board merged
+
+- A COMPLETE and merged: cc98098/ef82a67/9ff1d6c. Removed composer overhang and both bottom edge fades, single populated-list refresh owner with cleanup, compact title/count remains visible, actual44pt Account/input/dismiss targets. Parent reviewed source, relevant screenshot samples, test summaries and all20 capture hashes.
+- A validation:253 tests passed (247 unit +6 board UI), zero failures/skips. Pull check additionally3 fresh-process repetitions; full pull/idle and actual final-line pixel-contrast assertions remain enabled. Tests were on A branch before C integration; combined suite still pending.
+- Optional first-line row-control alignment, XXXL capacity placeholder and clipped empty-guide fragments remain for a later task/round; no scores inferred.
+- B sign-in and D account await handoff. A-owned board files are now free; D may adjust only Account caller detent selection after explicit PM handoff.
