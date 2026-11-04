@@ -243,11 +243,17 @@ struct SignInView: View {
                 .controlSize(.large)
                 .frame(maxWidth: .infinity)
                 .disabled(!emailIsPlausible || busy || (usesPassword && password.isEmpty))
-                Button(usesPassword ? "Use a Sign-In Link Instead" : "Use an Existing Password") {
+                Button {
                     usesPassword.toggle()
                     password = ""
                     passwordFocused = false
                     auth.clearNotice()
+                } label: {
+                    Text(usesPassword ? "Use a Sign-In Link Instead" : "Use an Existing Password")
+                        .fixedSize(horizontal: false, vertical: true)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(.tint)
@@ -267,6 +273,7 @@ struct SignInView: View {
                 .autocorrectionDisabled()
                 .font(.body)
                 .frame(minHeight: 44)
+                .contentShape(Rectangle())
                 .focused($emailFocused)
                 .submitLabel(usesPassword ? .next : .send)
                 .accessibilityLabel("Email address")
@@ -297,22 +304,32 @@ struct SignInView: View {
         .padding(.trailing, email.isEmpty ? 12 : 0)
         .frame(minHeight: 44)
         .background(Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .contentShape(Rectangle())
+        .onTapGesture { if !busy { emailFocused = true } }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("signin.emailTarget")
     }
 
     private var passwordField: some View {
-        SecureField("Password", text: $password)
-            .textContentType(.password)
-            .textInputAutocapitalization(.never)
-            .autocorrectionDisabled()
-            .privacySensitive()
-            .focused($passwordFocused)
-            .submitLabel(.go)
-            .accessibilityLabel("Password")
-            .onSubmit { startPasswordSignIn() }
-            .disabled(busy)
-            .padding(.horizontal, 12)
-            .frame(minHeight: 44)
-            .background(Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        VStack(spacing: 0) {
+            SecureField("Password", text: $password)
+                .textContentType(.password)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .privacySensitive()
+                .focused($passwordFocused)
+                .submitLabel(.go)
+                .accessibilityLabel("Password")
+                .onSubmit { startPasswordSignIn() }
+                .disabled(busy)
+        }
+        .padding(.horizontal, 12)
+        .frame(minHeight: 44)
+        .contentShape(Rectangle())
+        .background(Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .onTapGesture { if !busy { passwordFocused = true } }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("signin.passwordTarget")
     }
 
     private var legalFooter: some View {

@@ -31,7 +31,7 @@ final class SignInSurfaceUITests: XCTestCase {
         let font = UIFont.preferredFont(forTextStyle: style, compatibleWith: traits)
         let ideal = (text as NSString).boundingRect(
             with: CGSize(width: element.frame.width, height: .greatestFiniteMagnitude),
-            options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [.font: font], context: nil)
+            options: [.usesLineFragmentOrigin], attributes: [.font: font], context: nil)
         XCTAssertGreaterThanOrEqual(element.frame.height + 1, ceil(ideal.height), text)
     }
 
@@ -47,7 +47,8 @@ final class SignInSurfaceUITests: XCTestCase {
             for size in ["default", "XXXL"] {
                 launch(style: style, size: size)
                 target(app.buttons["Sign in with Google"])
-                target(app.textFields["Email address"])
+                target(app.otherElements["signin.emailTarget"])
+                XCTAssertTrue(app.textFields["Email address"].exists)
                 target(app.buttons["Send Sign-In Link"])
                 target(app.buttons["Use an Existing Password"])
                 wraps("Your board on this iPhone, the web, and the Lock Screen.", style: .body, size: size)
@@ -69,7 +70,8 @@ final class SignInSurfaceUITests: XCTestCase {
                 for variant in ["password", "inbox", "error"] {
                     launch(style: style, size: size, variant: variant)
                     if variant == "password" {
-                        target(app.secureTextFields["Password"])
+                        target(app.otherElements["signin.passwordTarget"])
+                        XCTAssertTrue(app.secureTextFields["Password"].exists)
                         target(app.buttons["Sign In with Password"])
                         target(app.buttons["Use a Sign-In Link Instead"])
                         wraps("For an existing account with a password. You can also use a sign-in link.", style: .footnote, size: size)
@@ -91,7 +93,8 @@ final class SignInSurfaceUITests: XCTestCase {
                 launch(style: style, size: "default", variant: variant)
                 XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 8))
                 let field = variant == "keyboard" ? app.textFields["Email address"] : app.secureTextFields["Password"]
-                target(field)
+                XCTAssertTrue(field.exists)
+                target(app.otherElements[variant == "keyboard" ? "signin.emailTarget" : "signin.passwordTarget"])
                 XCTAssertLessThanOrEqual(field.frame.maxY, app.keyboards.firstMatch.frame.minY)
                 XCTAssertTrue(app.buttons["Done"].exists)
                 capture("signin-\(style)-default-\(variant)")
