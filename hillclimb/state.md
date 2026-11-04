@@ -43,3 +43,7 @@ Task resumed; runtime validation in progress. No UI fix has been merged; no PR, 
 - Interrupted long scrolling UI test after >10 minutes of blind repeated edge swipes; not a passed or completed geometry gate. Raw summary in validation/baseline-test-summary.json.
 - Prepared harness follow-up bounds traversal, detects no progress, and identifies the actual final fixture row using fixture count instead of the last observed row. Assertions remain intact; revalidation pending.
 - T3 device_open and device_screenshot now work. Parent opened Reminders, completed welcome, left iCloud opt-in unanswered, closed own app session. Reference worker receives exclusive device handoff next. No auth/sign-in or sync enabled.
+
+## Round 1 grading handoff
+
+18 actual app PNGs verified and committed. Five usable Apple Reminders references; Notes unavailable, four transition references excluded. pairs.json records exact matches and gaps. Two independent 30-category Codex graders next. No production UI fixes merged yet. Baseline checks: existing247pass; XXXL pass; field22pt and Account36pt fail; pull idle timeout; fixture query fix pending rerun. Codex quota tool is not exposed; no quota claim made.

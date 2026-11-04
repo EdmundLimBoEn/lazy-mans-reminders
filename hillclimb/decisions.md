@@ -14,3 +14,5 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - 2026-11-04: Stop device interactions after device_open rejected the created regular17 twice and refreshed inventory stayed stale. Do not bypass T3 with simctl UI, another session or another automation channel. Keep unvalidated harness branch unmerged.
 
 - 2026-11-04: Resumed with shell-based xcodebuild test (authorized project test runner). It booted regular17; a subsequent device_list now discovers the simulator. Continue captures through device_open rather than bypassing prescribed UI tooling. Fix harness preflight to check deviceTypeIdentifier, not simulator display name.
+
+- 2026-11-04: Merged preparatory harness and baseline evidence with known failing NEW regression gates. This adds measurement/capture infrastructure, not a product UI fix; 247 existing tests passed. Product fixes must make their corresponding gates pass before merge. Failed capture attempt and raw-drag recovery retained.
