@@ -13,7 +13,7 @@ Integration: `hillclimb/ui`, based on origin/main `5fc4cbc`. Never merge main, d
 - Next: parent captures Apple reference states on standard17; then hand simulator to harness worker.
 - Done: score aggregation rejects missing evidence, arithmetic mismatch and unmet stop gate; synthetic validation exercised accepted and rejected cases.
 - Pending: independent sol/high and astra/high baseline graders, highest-impact isolated fix workers, merge only verified work.
-- Pending: re-capture/re-grade rounds, Opus 5.5 medium every other round or at Codex gate, usage check after each round.
+- Pending: re-capture/re-grade Codex-only rounds; run Claude Opus 5.5 at medium effort ONLY for a round where BOTH gpt-6.1-sol and gpt-6-astra score >=8.5 overall in that same round. No every-other-round schedule. Check usage after each round.
 - Pending: final category comparison, screenshot pairs, install instructions.
 
 ## Scores
@@ -21,7 +21,7 @@ Integration: `hillclimb/ui`, based on origin/main `5fc4cbc`. Never merge main, d
 | Round | sol | astra | Opus | Evidence |
 | --- | --- | --- | --- | --- |
 | 0 | not graded | not graded | not due | Setup only |
-| 1 | 6.88 | 6.70 | not due | 18 app shots, 5 usable Reminders references; Notes/Activity gaps |
+| 1 | 6.88 | 6.70 | not eligible (<8.5) | 18 app shots, 5 usable Reminders references; Notes/Activity gaps |
 
 ## Constraints and stop rules
 
@@ -60,3 +60,9 @@ Task resumed; runtime validation in progress. No UI fix has been merged; no PR, 
 - Each worker must build, execute existing tests plus affected gates and save affected screenshots before done. Product fixes merge only after passing relevant gates.
 
 Quota check after round1: no limit/usage tool exposed in current catalog. Do not infer remaining weekly quota; stop on actual near-limit indication if available. No weekly-window waiting authorized.
+
+## Current reviewer eligibility and final stop rule
+
+Edmund's updated rule supersedes the original every-other-round Opus schedule: only invoke Claude Opus 5.5 / medium after BOTH Codex graders score >=8.5 overall for the SAME round. Otherwise continue Codex-only rounds. Round 1 is not eligible.
+
+The final stop rule is unchanged: gpt-6.1-sol, gpt-6-astra and Claude Opus 5.5 must ALL score >=9 overall, with NO category below 7. The 8.5 eligibility threshold does not satisfy the final stop rule.

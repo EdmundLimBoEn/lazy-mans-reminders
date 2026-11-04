@@ -18,3 +18,5 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - 2026-11-04: Merged preparatory harness and baseline evidence with known failing NEW regression gates. This adds measurement/capture infrastructure, not a product UI fix; 247 existing tests passed. Product fixes must make their corresponding gates pass before merge. Failed capture attempt and raw-drag recovery retained.
 
 - Round1: honest baselines Sol6.88/Astra6.70. Keep incomplete Notes/native Activity evidence explicit. Prioritize final-line readability, measured targets, flatter sign-in and calmer account surfaces. Use separate worker file ownership; maintain same original17 integration capture device for reference pairing.
+
+- 2026-11-04, Edmund's reviewer-schedule change: Opus only grades a round when gpt-6.1-sol AND gpt-6-astra each score >=8.5 overall in that same round. This replaces the every-other-round schedule and any unconditional next-round Opus plan. Until eligible, use Codex-only rounds. Final stop rule unchanged: all three graders >=9 overall and every category >=7. Round 1 (6.88 / 6.70) is ineligible; no Opus reviewer has been launched.
