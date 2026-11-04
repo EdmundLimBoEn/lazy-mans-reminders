@@ -13,11 +13,11 @@ import WidgetKit
 struct ReminderLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: ReminderAttributes.self) { context in
-            lockScreenBanner(lines: context.state.lines)
+            lockScreenBanner(state: context.state)
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.bottom) {
-                    expandedIsland(lines: context.state.lines)
+                    expandedIsland(state: context.state)
                 }
                 // The expanded pill's bottom corner starts curving while the
                 // last line is still drawing. Extra bottom margin keeps that
@@ -34,8 +34,8 @@ struct ReminderLiveActivity: Widget {
     }
 
     @ViewBuilder
-    private func lockScreenBanner(lines: [String]) -> some View {
-        ReminderActivityLinesView(lines: lines, surface: .lockScreen)
+    private func lockScreenBanner(state: ReminderAttributes.ContentState) -> some View {
+        ReminderActivityLinesView(lines: state.lines, hiddenLineCount: state.hiddenLineCount, surface: .lockScreen)
         .padding(.top, 14)
         .padding(.bottom, 12)
         .padding(.horizontal, 16)
@@ -46,8 +46,8 @@ struct ReminderLiveActivity: Widget {
     }
 
     @ViewBuilder
-    private func expandedIsland(lines: [String]) -> some View {
-        ReminderActivityLinesView(lines: lines, surface: .island)
+    private func expandedIsland(state: ReminderAttributes.ContentState) -> some View {
+        ReminderActivityLinesView(lines: state.lines, hiddenLineCount: state.hiddenLineCount, surface: .island)
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
         .frame(maxWidth: .infinity, alignment: .leading)
         // The island background is always black. Force dark so `.primary`

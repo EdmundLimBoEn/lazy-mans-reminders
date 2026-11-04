@@ -22,11 +22,17 @@ enum HillclimbActivityDemo {
                 ? String(repeating: "Review the sample notes and gather the details for tomorrow. ", count: 4)
                 : "Review the sample notes.")
         }
+        let multiline = HillclimbDemo.argument("--hillclimb-activity") == "multiline"
+        let reminders = [Reminder(id: UUID(), userID: UUID(),
+            text: (1...10).map { "Demo \($0): Review the sample notes." }.joined(separator: "\n"),
+            sortOrder: 0, isDone: false, createdAt: .now)]
+        let state = multiline ? ReminderActivityPresentation.state(from: reminders, limit: 6)
+            : ReminderAttributes.ContentState(lines: lines)
         do {
             let activity = try Activity.request(attributes: ReminderAttributes(),
-                content: ActivityContent(state: .init(lines: lines), staleDate: nil), pushType: nil)
+                content: ActivityContent(state: state, staleDate: nil), pushType: nil)
             defaults.set([activity.id], forKey: ownedKey)
-            record(["status": "requested", "id": activity.id, "lines": lines,
+            record(["status": "requested", "id": activity.id, "lines": state.lines, "hiddenLineCount": state.hiddenLineCount ?? 0,
                     "authorization": ActivityAuthorizationInfo().areActivitiesEnabled])
         } catch {
             record(["status": "failed", "error": String(describing: error)])

@@ -7,8 +7,13 @@ final class ActivityLayoutTests: XCTestCase {
         for size in [DynamicTypeSize.large, .xxxLarge, .accessibility5] {
             for surface in [ReminderActivityLayout.Surface.lockScreen, .island] {
                 for scheme in [ColorScheme.light, .dark] {
+                    let reminder = Reminder(id: UUID(), userID: UUID(),
+                        text: (1...10).map { "Demo \($0): " + String(repeating: "Review sample notes. ", count: 8) }.joined(separator: "\n"),
+                        sortOrder: 0, isDone: false, createdAt: .now)
+                    let state = ReminderActivityPresentation.state(from: [reminder], limit: 6)
                     let view = ReminderActivityLinesView(
-                        lines: (1...16).map { "Demo \($0): " + String(repeating: "Review sample notes. ", count: 8) },
+                        lines: state.lines,
+                        hiddenLineCount: state.hiddenLineCount,
                         surface: surface)
                         .environment(\.dynamicTypeSize, size)
                         .environment(\.colorScheme, scheme)

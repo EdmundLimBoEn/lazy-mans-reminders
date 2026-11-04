@@ -88,12 +88,14 @@ enum ReminderActivityLayout {
 /// Shared by the native widget and rendered-layout regression checks.
 struct ReminderActivityLinesView: View {
     let lines: [String]
+    var hiddenLineCount: Int? = nil
     let surface: ReminderActivityLayout.Surface
     @ScaledMetric(relativeTo: .subheadline) private var pointSize = LockScreenLineBudget.pointSize
 
     var body: some View {
         let limit = ReminderActivityLayout.lineLimit(pointSize: pointSize, surface: surface)
-        let display = ReminderActivityPresentation.surfaceLines(lines, limit: limit)
+        let display = ReminderActivityPresentation.surfaceLines(
+            ReminderAttributes.ContentState(lines: lines, hiddenLineCount: hiddenLineCount), limit: limit)
         VStack(alignment: .leading, spacing: LockScreenLineBudget.lineSpacing) {
             ForEach(Array(display.enumerated()), id: \.offset) { _, line in
                 Text(line)
