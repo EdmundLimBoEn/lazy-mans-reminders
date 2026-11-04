@@ -86,3 +86,11 @@ Validator confirms both Codex reports and required checks; only Opus is missing.
 ## Round 4 Opus and next batch
 
 Opus a9ea0dd is merged; all three reports validate with no schema/evidence errors, but the final numeric gate remains false. No three-round plateau: all completed grader series continue increasing. Next isolated workers: K sign-in/Account error contrast, legal-footer capture coverage and combined-settings keyboard reproduction; L board top edge, single VoiceOver paragraph stop and loading/error text contrast; M Activity readability/density investigation with actual native safety gates. No wording changes without Edmund's response. Each branch must build, pass existing+new checks and capture affected native states before acceptance.
+
+## Next worker ownership (K/L/M)
+
+- K: SignInView.swift, AccountView.swift, SignInSurfaceUITests.swift, new error-contrast/settings UI tests and task-local evidence. Private Auth17. Reproduce actual combined system settings, preserve normal keyboard tests, fix error/diagnostic contrast and safe enabled legal-link appearance.
+- L: ReminderListView.swift, ReorderableReminderList.swift, HillclimbGeometry.swift, existing board UI tests and new board tests. Private Board17. Native top-edge treatment, one accessible paragraph stop, and readable board loading/error text. No sign-in or Account edits.
+- M: Shared Activity layout/model presentation and widget, dedicated Activity tests/new performance-only UI file. Original17. Investigate native density/word-boundary readability while retaining adaptive type, count conservation and footer/corner gates; optionally collect public simulator launch metrics. No global demo/harness or other workers' test files.
+
+All use isolated tool-created worktrees off the current integration branch, build and pass the full existing285-test baseline plus new checks, capture actual affected states and hand back their own device sessions. Production copy remains fixed.
