@@ -29,7 +29,7 @@ final class BoardMultilineUITests: XCTestCase {
                 let capacity = app.staticTexts["board.capacity"]
                 XCTAssertEqual(capacity.label, "Board full — combine lines instead")
                 XCTAssertEqual(app.textViews.count + app.textFields.count, 0)
-                XCTAssertFalse(app.buttons["Add reminder"].isEnabled)
+                XCTAssertFalse(app.buttons["Add reminder"].exists)
                 let actual = try XCTUnwrap(g["capacity"])
                 let ideal = try XCTUnwrap(g["capacityIdeal"])
                 XCTAssertGreaterThanOrEqual(actual.height + 0.5, ideal.height)
