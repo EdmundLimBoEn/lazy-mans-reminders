@@ -73,7 +73,7 @@ Preserve every user-facing string, branding and icon. No nested cards or decorat
 
 True physical Lock Screen, haptics, spoken VoiceOver, AX1–AX5, live account/auth flows and launch/frame-time metrics remain unverified. Selected system-setting captures do not certify every combination. Notification Center is not true device locking, and encoded recording frame rates are not display-performance metrics.
 
-Quota: current-session metadata reports **12% used** in the 10,080-minute weekly window; exact timestamp and fields are in `rounds/4/usage.json`. Check after each round; never wait into or spend against the next window.
+Quota: current-session metadata reports **14% used** in the 10,080-minute weekly window; exact timestamp and fields are in `rounds/4/usage.json`. Check after each round; never wait into or spend against the next window.
 
 `REPORT.md` tracks category scores, before/after pairs, merged work and phone installation. The separate numerical validator retains the final all-three score rule; reviewer status is informational, not a circular programmatic requirement.
 
