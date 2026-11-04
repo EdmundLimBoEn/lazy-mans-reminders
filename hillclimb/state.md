@@ -59,7 +59,7 @@ New independent reviewer measurements identify low-contrast normal-size error te
 
 ## Devices and ownership
 
-L and K released their private devices. The restoration recheck left only its own original17 Device-panel session and Settings open after reference errors; no settings were changed. Request that owner close its own session. A new combined validation uses a fresh owned session and the standard test runner; never reuse or close the previous owner session.
+L and K released their private devices. The restoration recheck changed no settings. Its owner closed its own original17 session without shutdown (cleanup d3e70bd). A new combined validation uses a fresh owned session and the standard test runner; never reuse or close the previous owner session.
 
 - Original17: `local`, `78F5A64F-7B2E-4562-8EF9-10F3312CC694`.
 - Private Board17: `066ECE57-46B4-414A-B53E-523775329360`.
@@ -117,3 +117,7 @@ A new isolated test worker uses original17 to rebuild the integration source and
 - L0265cb4/evidence46e6b4f merged after source/native review and144 verified final native PNG hashes (60manual+84XCTest). Worker287/287 (263unit+24UI), zero failures/skips, retains all285 baseline IDs. Top-only24pt mask affects departed content; fresh top/pull has none. Accessibility settings use6pt opaque boundary. Bottom fade remains off; final-row geometry/ink still pass. Duplicate paragraph reading node removed; loading/error text contrast21:1. Speech is unobserved.
 - Teardown recheck1eb1f9c built successfully but ran0tests. Snapshot-reference failure and its single advised retry failed; no pass inferred. OriginalReduceMotionOff/AutoPlayMessageEffectsOn were read, no settings changed. Its test-only value instrumentation and exact failures are merged for the combined run.
 - Combined K+L expected293tests (263unit+30UI); actual runner counts authoritative. All app fixes now integrated, Activity renderer unchanged. Next isolated round5 validation runs focusedSettingspreflight, fullsuite, freshDebug/Release/otherchecks and fullmatrix on original17. Restoration is pending until executed proofs match all4original values.
+
+## Round5 validation assigned
+
+All K/L source changes and restoration instrumentation are merged. The previous owner closed only its own original17 session successfully; no active worker owns a device. New combined validation uses a fresh original17 session and the authorized XCTest runner, starting with both Settings methods to verify all4original/restored values. Full expected293tests includes K+L; actual counts are authoritative. Fresh Debug/Release/other checks and all native states precede fresh independent grades. Optional public launch metrics may add one test; no unmeasured timing claim is allowed.
