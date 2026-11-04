@@ -35,6 +35,9 @@ import UIKit
 @MainActor final class HillclimbGeometry {
     static let shared = HillclimbGeometry()
     var frames: [String: CGRect] = [:]
+    var boardRetryAttempts = 0
+    var boardCompletions = 0
+    var boardMoves = 0
     var boardErrorAnnouncements: [String] = []
     weak var list: UICollectionView?
 }
@@ -74,6 +77,9 @@ struct HillclimbGeometryExport: UIViewRepresentable {
                     values["refreshState"] = [list.refreshControl?.isRefreshing == true ? 1 : 0, 0, 0, 0]
                 }
                 values["boardErrorAnnouncements"] = [Double(HillclimbGeometry.shared.boardErrorAnnouncements.count), 0, 0, 0]
+                values["boardRetryAttempts"] = [Double(HillclimbGeometry.shared.boardRetryAttempts), 0, 0, 0]
+                values["boardCompletions"] = [Double(HillclimbGeometry.shared.boardCompletions), 0, 0, 0]
+                values["boardMoves"] = [Double(HillclimbGeometry.shared.boardMoves), 0, 0, 0]
                 let auth = AuthManager.shared
                 values["authState"] = [auth.session == nil ? 0 : 1, auth.isRestoringSession ? 1 : 0,
                                        auth.isSharedSessionReady ? 1 : 0, auth.isAuthenticating ? 1 : 0]
