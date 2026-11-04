@@ -141,6 +141,7 @@ struct AccountView: View {
             .accessibilityIdentifier("account.settings")
             .environment(\.defaultMinListRowHeight, 44)
             .listStyle(.insetGrouped)
+            .modifier(AccountHardScrollEdge())
             .scrollContentBackground(.hidden)
             .background(Color(.systemGroupedBackground))
             .contentMargins(.top, 8, for: .scrollContent)
@@ -174,7 +175,8 @@ struct AccountView: View {
                     } else {
                         Button { dismiss() } label: {
                             Text("Done")
-                                .frame(minWidth: 44, minHeight: 44)
+                                // Medium sheets scale content; retain a 44pt on-screen target.
+                                .frame(minWidth: 46, minHeight: 46)
                                 .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
@@ -351,5 +353,15 @@ private struct AccountRow: View {
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel(title)
+    }
+}
+
+private struct AccountHardScrollEdge: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content.scrollEdgeEffectStyle(.hard, for: .top)
+        } else {
+            content
+        }
     }
 }
