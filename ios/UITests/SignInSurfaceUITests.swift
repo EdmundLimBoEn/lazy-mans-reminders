@@ -107,10 +107,10 @@ final class SignInSurfaceUITests: XCTestCase {
                 XCTAssertLessThanOrEqual(alternate.frame.maxY + 8, done.frame.minY)
                 XCTAssertGreaterThanOrEqual(field.frame.minY, app.navigationBars.firstMatch.frame.maxY)
                 // Exercise real form scrolling as well as initial keyboard placement.
-                app.scrollViews.firstMatch.swipeUp(velocity: .slow)
+                scrollFormAndRestoreKeyboard(field: field)
                 for _ in 0..<4 {
                     if alternate.frame.maxY + 8 <= done.frame.minY && alternate.frame.minY >= app.navigationBars.firstMatch.frame.maxY { break }
-                    app.swipeUp(velocity: .slow)
+                    scrollFormAndRestoreKeyboard(field: field)
                 }
                 target(alternate)
                 XCTAssertTrue(alternate.isHittable)
@@ -124,7 +124,7 @@ final class SignInSurfaceUITests: XCTestCase {
                 XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
                 for _ in 0..<4 {
                     if alternate.frame.maxY + 8 <= done.frame.minY && alternate.frame.minY >= app.navigationBars.firstMatch.frame.maxY { break }
-                    app.swipeUp(velocity: .slow)
+                    scrollFormAndRestoreKeyboard(field: field)
                 }
                 XCTAssertFalse(alternate.frame.intersects(done.frame))
                 XCTAssertLessThanOrEqual(alternate.frame.maxY + 8, done.frame.minY)
@@ -137,6 +137,26 @@ final class SignInSurfaceUITests: XCTestCase {
             }
             }
         }
+    }
+    private func scrollFormAndRestoreKeyboard(field: XCUIElement) {
+        XCTAssertTrue(app.keyboards.firstMatch.exists)
+        let top = app.navigationBars.firstMatch.frame.maxY + 12
+        let bottom = min(app.buttons["Done"].frame.minY - 12, app.keyboards.firstMatch.frame.minY - 12)
+        XCTAssertGreaterThan(bottom - top, 44)
+        let origin = app.coordinate(withNormalizedOffset: .zero)
+        let start = origin.withOffset(CGVector(dx: app.frame.midX, dy: bottom))
+        let end = origin.withOffset(CGVector(dx: app.frame.midX, dy: top))
+        start.press(forDuration: 0.05, thenDragTo: end)
+        // Interactive dismissal is valid; refocus before querying keyboard geometry.
+        if !app.keyboards.firstMatch.exists {
+            XCTAssertTrue(app.buttons["Done"].waitForNonExistence(timeout: 5))
+            XCTAssertTrue(field.isHittable)
+            field.tap()
+        }
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["Done"].waitForExistence(timeout: 5))
+        XCTAssertGreaterThanOrEqual(field.frame.minY, app.navigationBars.firstMatch.frame.maxY)
+        XCTAssertLessThanOrEqual(field.frame.maxY, app.buttons["Done"].frame.minY)
     }
     func testDemoBlocksExternalActionsAndAllowsLocalRecovery() {
         launch(style: "light", size: "default")
