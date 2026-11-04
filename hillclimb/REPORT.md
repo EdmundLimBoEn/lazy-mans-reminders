@@ -93,3 +93,9 @@ Next batch: board intentional completion/Done/contrast, sign-in dark Apple contr
 Source551f880/evidencecddda8f is merged: visible native white-outline Apple button in dark mode, readable normal help text and8pt less Done-inset padding with the48pt target retained.277 tests plus3 keyboard repetitions passed;37 native image hashes verified. Enabled-looking provider fixture remains inert; no live authentication was tested. Board and Account changes are pending before integratedround4validation. [Evidence](tasks/signin-native/REPORT.md).
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Next batch: board accepted
+
+Sourceaa69cb4/evidence07bc30f merged:44ptcircle-onlycompletion,Donefornonemptydrafts,unboxedreadablecapacitystatus/guidance,andpopulatederrorretryusingexistingcopy.279tests plus3keyboardmatricespassed;48nativehashesverified. Actualbottom-rowgeometry/inkpasses. Topclippedfragmentsremainobserveddespitesoftedgeflag;noresolutionclaimed. Accountworkerremainsbeforeintegratedround4validation. [Evidence](tasks/board-deliberate/README.md).
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
