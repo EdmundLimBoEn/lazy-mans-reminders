@@ -37,3 +37,5 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - Round2 parent Release recheck: fresh arm64-only build for original17, new derived data, new binary, exit0 and BUILD SUCCEEDED. Prior exit0/no-output compiler errors did not recur. Existing AuthManager warnings and sign-in runtime warning remain separately recorded; no app changes.
 
 - Round2 quota check: current Codex session token_count.rate_limits metadata reports6% used in a10080-minute window at2026-11-04T14:26:42.750Z; no secondary limit exposed, not near exhaustion. Exported only rate-limit fields, no conversation content or account credentials. Use this scoped current-session metadata for future round checks when no purpose-built limit tool exists.
+
+- Round2 grades: Sol8.11/Astra8.16, minima7.0; Opus not eligible. Shared priorities are XXXL keyboard accessory separation, full capacity copy wrapping and first-line control alignment. Sol also identified hidden-count loss from repeated Activity caps. Next3 isolated tasks split board, sign-in and Activity data/presentation ownership. No ratings inflated to trigger Opus.

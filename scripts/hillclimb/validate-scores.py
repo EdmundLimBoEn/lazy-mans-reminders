@@ -38,7 +38,7 @@ def validate(root):
             for name in paths:
                 if not (root / name).is_file():
                     errors.append(f'Missing evidence file: {name}')
-        result['graders'][model] = {'overall': overall, 'minimum': min(values) if overall else None, 'errors': errors, 'evidence_gaps': data.get('evidence_gaps', [])}
+        result['graders'][model] = {'overall': overall, 'minimum': min(values) if overall else None, 'errors': errors, 'evidence_gaps': data.get('evidence_gaps', []), 'source_sha': data.get('source_sha'), 'categories': categories, 'findings': data.get('findings', [])}
         result['errors'].extend(f'{model}: {error}' for error in errors)
     checks_path = root / 'checks.json'
     if not checks_path.exists():
@@ -54,6 +54,8 @@ def validate(root):
             source = json.loads((root / f'scores-{model}.json').read_text()).get('source_sha')
             if source != checks.get('source_sha'):
                 result['errors'].append(f'{model}: checks and grading source SHA differ')
+    codex = [result['graders'].get(model) for model in MODELS[:2]]
+    result['opus_eligible'] = all(g is not None and not g['errors'] and g['overall'] is not None and g['overall'] >= 8.5 for g in codex)
     result['gate_passed'] = not result['errors'] and len(result['graders']) == 3 and all(
         g['overall'] >= 9 and g['minimum'] >= 7 for g in result['graders'].values())
     return result

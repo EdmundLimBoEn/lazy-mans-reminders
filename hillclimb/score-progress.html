@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html,body{margin:0;background:transparent;color:var(--foreground);font-family:var(--font-sans)}
+#notepad-scores figure{margin:0}
+#notepad-scores figcaption{font-weight:500;margin-bottom:20px}
+#notepad-scores .model{font-weight:500;margin:18px 0 10px}
+#notepad-scores .plot{display:grid;grid-template-columns:30px minmax(0,1fr) 44px;gap:10px;align-items:center}
+#notepad-scores .track{height:18px;background:var(--muted)}
+#notepad-scores .mark{height:18px}
+#notepad-scores .sol{background:var(--chart-1)}
+#notepad-scores .astra{background:var(--chart-2)}
+#notepad-scores .before{opacity:.35}
+#notepad-scores .value{text-align:right;font-variant-numeric:tabular-nums}
+#notepad-scores .axis{display:flex;justify-content:space-between;margin:10px 44px 0 40px;color:var(--muted-foreground)}
+#notepad-scores .note{margin-top:18px;color:var(--muted-foreground)}
+</style>
+</head>
+<body>
+<div id="notepad-scores">
+<figure aria-label="Codex UI ratings on a ten-point scale: Sol rises from 6.88 to 8.11; Astra rises from 6.70 to 8.16.">
+<figcaption>UI grades · score out of 10</figcaption>
+<div class="model">gpt-6.1-sol · +1.23</div>
+<div class="plot">
+<span>R1</span><div class="track"><div class="mark sol before" style="width:68.8%"></div></div><span class="value">6.88</span>
+<span>R2</span><div class="track"><div class="mark sol" style="width:81.1%"></div></div><span class="value">8.11</span>
+</div>
+<div class="model">gpt-6-astra · +1.46</div>
+<div class="plot">
+<span>R1</span><div class="track"><div class="mark astra before" style="width:67%"></div></div><span class="value">6.70</span>
+<span>R2</span><div class="track"><div class="mark astra" style="width:81.6%"></div></div><span class="value">8.16</span>
+</div>
+<div class="axis" aria-hidden="true"><span>0</span><span>5</span><span>10</span></div>
+<div class="note">Opus eligibility: both Codex grades ≥8.5 in the same round.</div>
+</figure>
+</div>
+</body>
+</html>

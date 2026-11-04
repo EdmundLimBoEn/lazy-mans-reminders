@@ -7,7 +7,7 @@ Integration: `hillclimb/ui`, based on origin/main `5fc4cbc`. Work is ongoing; sc
 - Every round: independent gpt-6.1-sol/high and gpt-6-astra/high reviews of the same screenshots, source, checks and Apple reference pairs;30 detailed categories, honest arithmetic-mean overall.
 - Edmund's updated rule: Claude Opus5.5/medium ONLY if BOTH Codex graders score >=8.5 overall in the SAME round. This replaces every-other-round scheduling. Round1 is ineligible; Opus has not run.
 - Final stop unchanged: ALL THREE graders >=9 overall and NO category below7. Eligibility at8.5 is not completion.
-- Also stop for nearly exhausted Codex quota or3 plateau rounds. No dedicated quota tool is exposed. Current-session rate-limit metadata is available:6% used in a10080-minute weekly window as of2026-11-04T14:26:42.750Z (rounds/2/usage.json); not near exhaustion. No waiting into the next weekly window is authorized.
+- Also stop for nearly exhausted Codex quota or3 plateau rounds. No dedicated quota tool is exposed. Current-session rate-limit metadata is available:7% used in a10080-minute window as of2026-11-04T14:39:08.493Z (rounds/2/usage.json); not near exhaustion. No waiting into the next weekly window is authorized.
 
 ## Scores
 
@@ -15,7 +15,7 @@ Integration: `hillclimb/ui`, based on origin/main `5fc4cbc`. Work is ongoing; sc
 | --- | ---: | ---: | --- | --- |
 |0|Not graded|Not graded|Not due|Setup only|
 |1|6.88|6.70|Ineligible|18 app captures,5 usable Reminders references; Notes/native Activity initially missing|
-|2|Grading next|Grading next|Only if both Codex >=8.5|261 combined tests passed;48 fresh native images+4 fresh references on original17|
+|2|8.11|8.16|Ineligible|Minimum7.0 each;261 combined tests passed;48 native images+4 fresh references|
 
 ## Current tasks and ownership
 
@@ -63,3 +63,14 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - Round2 source8dbf6a8, evidence0f0e3dc merged. Parent confirmed48 native image hashes and all recorded production-source hashes. Four previously missing settled Reminders matches now available; Notes remains unavailable. True locked-device capture is optional/unavailable evidence, not a fabricated required programmatic failure. All real unit/UI gates passed. Known sign-in invalid-frame warning recurred.
 
 - Round2 Sol/Astra graders running independently, source remains frozen. Parent fresh Release confirmation resolves compiler-result uncertainty; sign-in invalid-frame runtime warning remains. Before/after original17 screenshot pairs added to REPORT.md.
+
+## Round2 decision and next batch
+
+Both independent reviews complete: Sol8.11(+1.23), Astra8.16(+1.46), minimum7.0 each. Opus is NOT eligible. No plateau yet. Next isolated tasks: E multiline board/capacity/empty-guide and accessible board errors; F sign-in keyboard accessory/warning and accessible notices; G structured Activity overflow accounting through repeated caps. All preserve exact wording/branding/icon. No source edit occurs in integration while workers own files.
+
+## Next worker ownership
+
+- E board-multiline: ReminderListView, ReorderableReminderList, BoardSetupTip, HillclimbGeometry, existing board UI tests and new board tests. Can add loading/error variants through the existing --hillclimb-board-state argument in ReminderListView; DOES NOT own HillclimbDemo.swift.
+- F keyboard-recovery: SignInView, HillclimbDemo.swift (only sign-in safe interaction policy), sign-in tests and dedicated helper. No board files. Must disable real auth/provider/external actions in demo while allowing local fields/toggles/scroll/Done.
+- G activity-overflow: Activity shared model/layout/controller/widget, dedicated Activity tests/helper, and only necessary pure APNs presentation/backend metadata helpers/tests. No deploy/database migration/live calls. Preserve legacy payload compatibility and do not parse user text as metadata.
+- E uses private Board17; F private Auth17; G original17. Every worker closes its own session and reports exact test/capture provenance. Parent re-shoots original17 after merging passing candidates.
