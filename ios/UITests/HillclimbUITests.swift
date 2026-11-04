@@ -1,4 +1,5 @@
 import XCTest
+import UIKit
 
 final class HillclimbUITests: XCTestCase {
     private var app: XCUIApplication!
@@ -6,8 +7,8 @@ final class HillclimbUITests: XCTestCase {
         continueAfterFailure = false
         app = XCUIApplication()
     }
-    private func launch(_ mode: String, xxxl: Bool = false) {
-        app.launchArguments = ["--hillclimb-demo", mode, "--hillclimb-style", "light",
+    private func launch(_ mode: String, xxxl: Bool = false, style: String = "light") {
+        app.launchArguments = ["--hillclimb-demo", mode, "--hillclimb-style", style,
                                "--hillclimb-size", xxxl ? "XXXL" : "default"]
         app.launch()
         XCTAssertTrue(app.otherElements["hillclimb.geometry"].waitForExistence(timeout: 10))
@@ -29,6 +30,7 @@ final class HillclimbUITests: XCTestCase {
         XCTAssertTrue(list.waitForExistence(timeout: 5))
         // Pull at the top, then traverse well beyond the finite fixture's capacity.
         list.swipeDown()
+        XCTAssertEqual(try frames()["refreshState"]?.minX, 0, "Pull must finish refreshing before the next gesture")
         var previous: CGRect?
         for _ in 0..<12 {
             let geometry = try frames()
@@ -55,6 +57,7 @@ final class HillclimbUITests: XCTestCase {
         XCTAssertGreaterThan(last.height, 0)
         XCTAssertGreaterThanOrEqual(last.minY, safe.minY)
         XCTAssertLessThanOrEqual(last.maxY, composer.minY + 0.5, "Last row is obscured by the composer")
+        try assertFinalInk(geometry, dark: false)
     }
     func testTopControlsAvoidIslandAndHave44PointTargets() throws {
         launch("full")
@@ -86,6 +89,7 @@ final class HillclimbUITests: XCTestCase {
         let last = try XCTUnwrap(geometry[try lastRowID(geometry)])
         XCTAssertLessThanOrEqual(last.maxY, composer.minY + 0.5)
         XCTAssertGreaterThanOrEqual(last.minY, safe.minY, "Last long row cannot fit fully on screen")
+        try assertFinalInk(geometry, dark: false)
     }
     func testComposerKeyboardDismissTarget() {
         launch("composer")
@@ -118,6 +122,48 @@ final class HillclimbUITests: XCTestCase {
         app.launch()
         XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label == %@", label)).firstMatch.waitForExistence(timeout: 5))
     }
+    func testDarkBoardBottomInkAfterPull() throws {
+        for xxxl in [false, true] {
+            launch(xxxl ? "long-text" : "full", xxxl: xxxl, style: "dark")
+            try bottom()
+            try assertFinalInk(frames(), dark: true)
+        }
+    }
+
+    private func assertFinalInk(_ geometry: [String: CGRect], dark: Bool) throws {
+        let text = try XCTUnwrap(geometry["text-" + lastRowID(geometry)])
+        let fade = try XCTUnwrap(geometry["bottomFade"])
+        let composer = try XCTUnwrap(geometry["composer"])
+        XCTAssertLessThanOrEqual(text.maxY, min(fade.minY, composer.minY) + 0.5,
+                                 "Final rendered text must clear the entire bottom edge effect")
+        let screenshot = app.screenshot()
+        let attachment = XCTAttachment(screenshot: screenshot)
+        attachment.name = "settled-final-ink"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+        let image = try XCTUnwrap(screenshot.image.cgImage)
+        let scale = CGFloat(image.width) / app.frame.width
+        let region = CGRect(x: text.minX, y: text.maxY - 18, width: text.width, height: 16)
+        let crop = try XCTUnwrap(image.cropping(to: region.applying(CGAffineTransform(scaleX: scale, y: scale))))
+        var pixels = [UInt8](repeating: 0, count: crop.width * crop.height * 4)
+        let context = try XCTUnwrap(CGContext(data: &pixels, width: crop.width, height: crop.height,
+            bitsPerComponent: 8, bytesPerRow: crop.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+        context.draw(crop, in: CGRect(x: 0, y: 0, width: crop.width, height: crop.height))
+        var strongInk = 0
+        for index in stride(from: 0, to: pixels.count, by: 4) {
+            let red = pixels[index]
+            let green = pixels[index + 1]
+            let blue = pixels[index + 2]
+            if dark {
+                if red > 200 && green > 200 && blue > 200 { strongInk += 1 }
+            } else {
+                if red < 55 && green < 55 && blue < 55 { strongInk += 1 }
+            }
+        }
+        XCTAssertGreaterThan(strongInk, 20, "Final line must contain high-contrast ink, not faded gray glyphs")
+    }
+
     private func assertTarget(_ element: XCUIElement, file: StaticString = #filePath, line: UInt = #line) {
         XCTAssertTrue(element.exists, file: file, line: line)
         XCTAssertGreaterThanOrEqual(element.frame.width, 44, "\(element.label) width", file: file, line: line)

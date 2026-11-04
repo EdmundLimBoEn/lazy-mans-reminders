@@ -35,6 +35,7 @@ import UIKit
 @MainActor final class HillclimbGeometry {
     static let shared = HillclimbGeometry()
     var frames: [String: CGRect] = [:]
+    weak var list: UICollectionView?
 }
 struct HillclimbGeometryExport: UIViewRepresentable {
     func makeUIView(context: Context) -> ExportView { ExportView() }
@@ -58,6 +59,18 @@ struct HillclimbGeometryExport: UIViewRepresentable {
                 var values = HillclimbGeometry.shared.frames.mapValues { [$0.minX, $0.minY, $0.width, $0.height] }
                 if let mode = HillclimbDemo.mode {
                     values["fixtureCount"] = [Double(HillclimbDemo.reminders(for: mode).count), 0, 0, 0]
+                }
+                if let list = HillclimbGeometry.shared.list {
+                    let viewport = list.convert(list.bounds, to: nil)
+                    values["listViewport"] = [viewport.minX, viewport.minY, viewport.width, viewport.height]
+                    var fadeHeight: CGFloat = 0
+                    if #available(iOS 26.0, *), !list.bottomEdgeEffect.isHidden {
+                        // UIKit exposes no effect bounds. Reject the whole viewport
+                        // conservatively if an unmeasurable fade is reintroduced.
+                        fadeHeight = viewport.height
+                    }
+                    values["bottomFade"] = [viewport.minX, viewport.maxY - fadeHeight, viewport.width, fadeHeight]
+                    values["refreshState"] = [list.refreshControl?.isRefreshing == true ? 1 : 0, 0, 0, 0]
                 }
                 let auth = AuthManager.shared
                 values["authState"] = [auth.session == nil ? 0 : 1, auth.isRestoringSession ? 1 : 0,

@@ -54,7 +54,7 @@ struct ReminderListView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(.systemBackground))
             .navigationTitle("Your Board")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .modifier(BoardNavigationSubtitle(text: boardSubtitle))
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 composer
@@ -76,7 +76,6 @@ struct ReminderListView: View {
                     .accessibilityHint("Sign out, privacy, and delete account")
                 }
             }
-            .refreshable { await refresh() }
             .task(id: scenePhase == .active && auth.isSharedSessionReady) {
                 guard scenePhase == .active else { return }
                 await refresh()
@@ -134,6 +133,7 @@ struct ReminderListView: View {
             }
             .frame(maxWidth: .infinity, minHeight: 320)
         }
+        .refreshable { await refresh() }
     }
 
     @ViewBuilder
@@ -171,6 +171,7 @@ struct ReminderListView: View {
             }
             .frame(maxWidth: .infinity, minHeight: 320)
         }
+        .refreshable { await refresh() }
     }
 
     private var reminderList: some View {
@@ -286,17 +287,6 @@ struct ReminderListView: View {
         .padding(.horizontal, 16)
         .padding(.top, 6)
         .padding(.bottom, 8)
-        .background(alignment: .top) {
-            LinearGradient(
-                colors: [Color(.systemBackground).opacity(0), Color(.systemBackground)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .frame(height: 36)
-            .offset(y: -36)
-            .allowsHitTesting(false)
-            .accessibilityHidden(true)
-        }
         .background(Color(.systemBackground).allowsHitTesting(false))
         .accessibilityElement(children: .contain)
         .modifier(HillclimbComposerProbe())
@@ -402,6 +392,7 @@ struct ReminderListView: View {
         } else if reminders.isEmpty && error != nil {
             isLoading = true
         }
+        defer { isLoading = false }
         do {
             let refreshed = try await ReminderBoardSync.refreshForeground()
             guard revision == boardRevision, !isReordering, !isDragging else { return }
@@ -518,7 +509,7 @@ private struct BoardErrorBanner: View {
 private struct BoardScrollEdge: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26.0, *) {
-            content.scrollEdgeEffectStyle(.soft, for: .bottom)
+            content.scrollEdgeEffectHidden(true, for: .bottom)
         } else {
             content
         }
