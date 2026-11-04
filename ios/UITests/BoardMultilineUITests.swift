@@ -46,6 +46,8 @@ final class BoardMultilineUITests: XCTestCase {
                     XCTAssertGreaterThanOrEqual(target.height, 44)
                 }
                 let shot = app.screenshot().image
+                try assertTextContrast(shot, region: actual, dark: dark)
+                try assertTextContrast(shot, region: XCTUnwrap(g["capacityHint"]), dark: dark)
                 let circleInk = try inkBounds(shot, in: circle, dark: dark)
                 let gripInk = try inkBounds(shot, in: grip, dark: dark)
                 let firstLine = CGRect(x: text.minX, y: text.minY, width: text.width, height: xxxl ? 31 : 21)
@@ -134,6 +136,139 @@ final class BoardMultilineUITests: XCTestCase {
                 }
             }
         }
+    }
+
+    func testNonemptyDraftDonePreservesTextAndRefocusMatrix() throws {
+        for dark in [false, true] {
+            for xxxl in [false, true] {
+                launch("composer", xxxl: xxxl, dark: dark)
+                let field = app.descendants(matching: .any).matching(identifier: "New reminder").firstMatch
+                field.tap()
+                field.typeText("Remember the weekly review")
+                let done = app.buttons["Done"]
+                XCTAssertTrue(done.exists)
+                XCTAssertGreaterThanOrEqual(done.frame.width, 44)
+                XCTAssertGreaterThanOrEqual(done.frame.height, 44)
+                XCTAssertTrue(app.buttons["Add reminder"].isEnabled)
+                attach("nonempty-focused-\(dark)-\(xxxl)")
+                done.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: 0.5)).tap()
+                XCTAssertFalse(app.keyboards.firstMatch.exists)
+                XCTAssertEqual(field.value as? String, "Remember the weekly review")
+                field.tap()
+                XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+                XCTAssertEqual(field.value as? String, "Remember the weekly review")
+                app.buttons["Done"].tap()
+                XCTAssertEqual(try geometry()["authState"], .zero)
+            }
+        }
+    }
+
+    func testOnlyCircleCompletesLocalFixtureAndGripStillReordersMatrix() throws {
+        for dark in [false, true] {
+            for xxxl in [false, true] {
+                app.launchArguments = ["--hillclimb-demo", "long-text", "--hillclimb-size", xxxl ? "XXXL" : "default",
+                    "--hillclimb-style", dark ? "dark" : "light", "--hillclimb-board-interaction", "local"]
+                app.launch()
+                XCTAssertTrue(app.otherElements["hillclimb.geometry"].waitForExistence(timeout: 10))
+                let first = app.buttons.matching(NSPredicate(format: "value == %@", "Active")).firstMatch
+                let label = first.label
+                let text = app.staticTexts.matching(NSPredicate(format: "label == %@", label)).firstMatch
+                XCTAssertTrue(text.exists)
+                let g = try geometry()
+                let id = "00000000-0000-4000-8000-000000000001"
+                let rect = try XCTUnwrap(g["text-" + id])
+                app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: rect.midX, dy: rect.midY)).tap()
+                XCTAssertEqual(try geometry()["boardCompletions"]?.minX, 0)
+                XCTAssertTrue(first.exists)
+                XCTAssertEqual(first.value as? String, "Active")
+                let grip = app.otherElements.matching(NSPredicate(format: "label == %@", "Reorder " + label)).firstMatch
+                XCTAssertTrue(grip.exists)
+                XCTAssertEqual(grip.value as? String, "Position 1 of 7")
+                XCTAssertGreaterThanOrEqual(grip.frame.width, 44)
+                let start = grip.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+                start.press(forDuration: 0.15, thenDragTo: start.withOffset(CGVector(dx: 0, dy: rect.height + 40)))
+                XCTAssertEqual(try geometry()["boardMoves"]?.minX, 1)
+                let circle = app.buttons.matching(NSPredicate(format: "label == %@", label)).firstMatch
+                XCTAssertGreaterThanOrEqual(circle.frame.width, 44)
+                XCTAssertGreaterThanOrEqual(circle.frame.height, 44)
+                circle.coordinate(withNormalizedOffset: CGVector(dx: 0.03, dy: 0.5)).tap()
+                XCTAssertFalse(app.buttons.matching(NSPredicate(format: "label == %@", label)).firstMatch.exists)
+                XCTAssertEqual(try geometry()["boardCompletions"]?.minX, 1)
+                XCTAssertEqual(try geometry()["authState"], .zero)
+                attach("local-completion-\(dark)-\(xxxl)")
+            }
+        }
+    }
+
+    func testPopulatedRetryRecoversLocallyOnceWithoutFocusOrDuplicateAnnouncement() throws {
+        for dark in [false, true] {
+            for xxxl in [false, true] {
+                app.launchArguments = ["--hillclimb-demo", "full", "--hillclimb-board-state", "error-populated",
+                    "--hillclimb-board-retry", "recover", "--hillclimb-size", xxxl ? "XXXL" : "default",
+                    "--hillclimb-style", dark ? "dark" : "light"]
+                app.launch()
+                XCTAssertTrue(app.otherElements["hillclimb.geometry"].waitForExistence(timeout: 10))
+                XCTAssertTrue(app.staticTexts["Couldn’t Load Board"].exists)
+                let message = URLError(.notConnectedToInternet).localizedDescription
+                XCTAssertTrue(app.staticTexts[message].exists)
+                let retry = app.buttons["Try Again"]
+                XCTAssertGreaterThanOrEqual(retry.frame.width, 44)
+                XCTAssertGreaterThanOrEqual(retry.frame.height, 44)
+                let rows = app.buttons.matching(NSPredicate(format: "value == %@", "Active"))
+                let firstLabel = rows.firstMatch.label
+                let list = app.collectionViews.firstMatch
+                for _ in 0..<8 { list.swipeUp(velocity: .fast) }
+                let g = try geometry()
+                let last = try XCTUnwrap(g["00000000-0000-4000-8000-000000000007"])
+                let viewport = try XCTUnwrap(g["listViewport"])
+                let composer = try XCTUnwrap(g["composer"])
+                XCTAssertGreaterThanOrEqual(last.minY, viewport.minY)
+                XCTAssertLessThanOrEqual(last.maxY, composer.minY + 0.5)
+                attach("populated-error-bottom-\(dark)-\(xxxl)")
+                retry.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: 0.5)).tap()
+                XCTAssertFalse(app.staticTexts[message].exists)
+                XCTAssertFalse(app.keyboards.firstMatch.exists)
+                XCTAssertEqual(try geometry()["boardRetryAttempts"]?.minX, 1)
+                XCTAssertEqual(try geometry()["boardErrorAnnouncements"]?.minX, 1)
+                for _ in 0..<8 { list.swipeDown(velocity: .fast) }
+                XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label == %@", firstLabel)).firstMatch.exists)
+                XCTAssertTrue(app.staticTexts["Board full — combine lines instead"].exists)
+                attach("populated-recovered-\(dark)-\(xxxl)")
+            }
+        }
+    }
+
+    private func assertTextContrast(_ image: UIImage, region: CGRect, dark: Bool) throws {
+        let cg = try XCTUnwrap(image.cgImage)
+        let scale = CGFloat(cg.width) / app.frame.width
+        let crop = try XCTUnwrap(cg.cropping(to: region.applying(CGAffineTransform(scaleX: scale, y: scale))))
+        var pixels = [UInt8](repeating: 0, count: crop.width * crop.height * 4)
+        let context = try XCTUnwrap(CGContext(data: &pixels, width: crop.width, height: crop.height,
+            bitsPerComponent: 8, bytesPerRow: crop.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+        context.draw(crop, in: CGRect(x: 0, y: 0, width: crop.width, height: crop.height))
+        var counts: [Int: Int] = [:]
+        for i in stride(from: 0, to: pixels.count, by: 4) {
+            let rgb = Int(pixels[i]) << 16 | Int(pixels[i + 1]) << 8 | Int(pixels[i + 2])
+            counts[rgb, default: 0] += 1
+        }
+        func luminance(_ rgb: Int) -> Double {
+            let channels = [rgb >> 16 & 255, rgb >> 8 & 255, rgb & 255].map { value -> Double in
+                let c = Double(value) / 255
+                return c <= 0.04045 ? c / 12.92 : pow((c + 0.055) / 1.055, 2.4)
+            }
+            return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722
+        }
+        let background = try XCTUnwrap(counts.max(by: { $0.value < $1.value })).key
+        // Solid interiors dominate the text histogram. Exclude background and
+        // near-background antialiasing rather than treating edge blends as ink.
+        let bg = luminance(background)
+        let ink = try XCTUnwrap(counts.filter {
+            dark ? luminance($0.key) > bg + 0.2 : luminance($0.key) < bg - 0.2
+        }.max(by: { $0.value < $1.value }))
+        XCTAssertGreaterThan(ink.value, 20)
+        let fg = luminance(ink.key)
+        XCTAssertGreaterThanOrEqual((max(fg, bg) + 0.05) / (min(fg, bg) + 0.05), 4.5)
     }
 
     private func inkBounds(_ image: UIImage, in region: CGRect, dark: Bool) throws -> CGRect {

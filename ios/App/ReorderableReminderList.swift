@@ -43,7 +43,10 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
         )
         list.backgroundColor = .systemBackground
         list.alwaysBounceVertical = true
-        if #available(iOS 26.0, *) { list.bottomEdgeEffect.isHidden = true }
+        if #available(iOS 26.0, *) {
+            list.bottomEdgeEffect.isHidden = true
+            list.topEdgeEffect.style = .soft
+        }
 #if DEBUG
         if HillclimbDemo.isActive { HillclimbGeometry.shared.list = list }
 #endif
