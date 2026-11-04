@@ -1,0 +1,25 @@
+{
+  "command": [
+    "xcodebuild",
+    "build-for-testing",
+    "-project",
+    "ios/LazyMansReminders.xcodeproj",
+    "-scheme",
+    "LazyMansReminders",
+    "-configuration",
+    "Debug",
+    "-destination",
+    "platform=iOS Simulator,id=8E8380DE-364D-4899-99B8-D15ED0494FFD",
+    "-derivedDataPath",
+    "/tmp/notepad-keyboard-recovery-dd",
+    "-disableAutomaticPackageResolution",
+    "-skipPackageUpdates",
+    "CODE_SIGNING_ALLOWED=NO"
+  ],
+  "exit": 0,
+  "observations": [
+    "2026-11-04 23:16:43.543 appintentsmetadataprocessor[13836:2486708] warning: Metadata extraction skipped, no AppIntents.framework dependency found",
+    "** TEST BUILD SUCCEEDED **"
+  ],
+  "binary_sha256": "60b78ba4f3d6916cea2f5227edb87161c02ebf741c60a2af95489a0c999e6ae2"
+}
