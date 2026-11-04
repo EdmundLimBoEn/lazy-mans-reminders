@@ -10,6 +10,13 @@ struct AccountView: View {
     @State private var showDeleteAccount = false
     @State private var isDeletingAccount = false
     @State private var error: String?
+    @State private var errorAnnouncements = AccountErrorAnnouncementPolicy()
+
+    init() {
+#if DEBUG
+        _error = State(initialValue: AccountCaptureFixture.error)
+#endif
+    }
     @State private var notificationAccess = NotificationAccessPolicy.Access.ask
     private var appInfo: FeedbackMail.AppInfo { .current }
 
@@ -23,7 +30,7 @@ struct AccountView: View {
                                 .font(.footnote)
                                 .foregroundStyle(.red)
                                 .textSelection(.enabled)
-                                .accessibilityAddTraits(.updatesFrequently)
+                                .accessibilityIdentifier("account.error")
                         }
                     }
 
@@ -55,12 +62,21 @@ struct AccountView: View {
                         notificationRow
                     } footer: {
                         Text(NotificationAccessPolicy.footer(notificationAccess))
+                            .accountMeasure("notifications.footer")
+                            .foregroundStyle(.primary)
                     }
 
-                    BoardPersistenceSection(registration: auth.pushRegistration)
+                    BoardPersistenceSection(registration: auth.pushRegistration, fixtureRecovery: {
+#if DEBUG
+                        if AccountCaptureFixture.state == "error" {
+                            error = error == nil ? AccountCaptureFixture.signOutError : nil
+                        }
+#endif
+                    })
 
                     Section {
                         Button {
+                            guard !hillclimbReadOnly else { return }
                             showSignOut = true
                         } label: {
                             AccountRow("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
@@ -93,26 +109,34 @@ struct AccountView: View {
                         }
                     } footer: {
                         Text("Or email \(FeedbackMail.address)")
+                            .accountMeasure("feedback.footer")
+                            .foregroundStyle(.primary)
                             .textSelection(.enabled)
                     }
 
                     Section {
                         Button(role: .destructive) {
+                            guard !hillclimbReadOnly else { return }
                             showDeleteAccount = true
                         } label: {
-                            Label("Delete Account…", systemImage: "trash")
+                            AccountRow("Delete Account…", systemImage: "trash", destructive: true)
                         }
                         .disabled(isDeletingAccount)
                     } footer: {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.")
+                                .accountMeasure("delete.footer")
+                                .foregroundStyle(Color(.label))
                             Text(FeedbackMail.versionFooter(appInfo))
+                                .accountMeasure("version.footer")
+                                .foregroundStyle(Color(.label))
                                 .textSelection(.enabled)
                                 .accessibilityLabel("App \(FeedbackMail.versionFooter(appInfo))")
                         }
                     }
                 }
-                .disabled(hillclimbReadOnly)
+                .disabled(hillclimbReadOnly && !AccountCaptureFixture.enabledAppearance)
+                .allowsHitTesting(!hillclimbReadOnly || AccountCaptureFixture.enabledAppearance)
             }
             .accessibilityIdentifier("account.settings")
             .environment(\.defaultMinListRowHeight, 44)
@@ -128,6 +152,16 @@ struct AccountView: View {
             .interactiveDismissDisabled(isDeletingAccount)
             .sensoryFeedback(.error, trigger: error)
             .task { await refreshNotificationAccess() }
+            .onChange(of: error, initial: true) { _, message in
+                if let announcement = errorAnnouncements.announcement(for: message) {
+                    UIAccessibility.post(notification: .announcement, argument: announcement)
+                }
+            }
+            .environment(\.openURL, OpenURLAction { url in
+                guard !hillclimbReadOnly else { return .discarded }
+                openURL(url)
+                return .handled
+            })
             .onChange(of: scenePhase) { _, phase in
                 guard phase == .active else { return }
                 Task { await refreshNotificationAccess() }
@@ -154,8 +188,10 @@ struct AccountView: View {
                 titleVisibility: .visible
             ) {
                 Button("Sign Out") {
+                    guard !hillclimbReadOnly else { return }
                     Task {
                         error = nil
+                        _ = errorAnnouncements.announcement(for: nil)
                         if !(await auth.signOut()) {
                             error = "Couldn’t disconnect notifications. You’re still signed in. Reconnect and try signing out again before giving this iPhone to someone else."
                         }
@@ -175,6 +211,7 @@ struct AccountView: View {
             }
         }
         .presentationBackground(Color(.systemGroupedBackground))
+        .modifier(AccountCaptureProbe())
     }
 
     private var hillclimbReadOnly: Bool {
@@ -232,6 +269,7 @@ struct AccountView: View {
             LabeledContent("Notifications", value: NotificationAccessPolicy.value(notificationAccess))
         case .ask:
             Button("Allow Notifications") {
+                guard !hillclimbReadOnly else { return }
                 Task {
                     await AppDelegate.requestPushIfNeeded()
                     await refreshNotificationAccess()
@@ -239,7 +277,7 @@ struct AccountView: View {
             }
         case .blocked:
             Button {
-                if let url = NotificationAccessPolicy.notificationSettingsURL() {
+                if !hillclimbReadOnly, let url = NotificationAccessPolicy.notificationSettingsURL() {
                     openURL(url)
                 }
             } label: {
@@ -263,7 +301,10 @@ struct AccountView: View {
     }
 
     private func deleteAccount() async {
+        guard !hillclimbReadOnly else { return }
         isDeletingAccount = true
+        error = nil
+        _ = errorAnnouncements.announcement(for: nil)
         do {
             try await AppleRevocation.deleteAccount(using: auth)
         } catch {
@@ -279,22 +320,26 @@ private struct AccountRow: View {
     let title: String
     let systemImage: String
     var external = false
+    var destructive = false
 
-    init(_ title: String, systemImage: String, external: Bool = false) {
+    init(_ title: String, systemImage: String, external: Bool = false, destructive: Bool = false) {
         self.title = title
         self.systemImage = systemImage
         self.external = external
+        self.destructive = destructive
     }
 
     var body: some View {
         HStack(spacing: 14) {
             Image(systemName: systemImage)
                 .font(.body)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(destructive ? Color.red : Color.secondary)
                 .frame(width: 24)
+                .accountMeasure("\(title).icon")
                 .accessibilityHidden(true)
             Text(title)
-                .foregroundStyle(.primary)
+                .foregroundStyle(destructive ? Color.red : Color.primary)
+                .accountMeasure("\(title).title")
             Spacer(minLength: 8)
             if external {
                 Image(systemName: "arrow.up.right")

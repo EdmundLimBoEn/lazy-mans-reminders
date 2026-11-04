@@ -80,3 +80,84 @@ final class AccountPresentationTests: XCTestCase {
         }
     }
 }
+
+extension AccountPresentationTests {
+    func testEnabledAccountTypographyAndAlignment() throws {
+        for size in ["default", "XXXL"] {
+            for style in ["light", "dark"] {
+                launchEnabled(style: style, size: size)
+                let list = app.collectionViews["account.settings"]
+                let disclosure = app.buttons["Add a lasting widget"]
+                if !disclosure.isHittable { list.swipeUp(velocity: .slow) }
+                let before = try accountFrames()
+                let refresh = try XCTUnwrap(before["refresh.title"])
+                let widget = try XCTUnwrap(before["disclosure.title"])
+                XCTAssertEqual(refresh[3], widget[3], accuracy: 1, "Sibling body text must have equal actual height")
+                XCTAssertTrue(disclosure.isEnabled)
+                disclosure.tap()
+                let home = app.staticTexts["Home Screen: touch and hold an empty area, choose Edit → Add Widget, then Notepad → Board."]
+                XCTAssertTrue(home.waitForExistence(timeout: 3))
+                for _ in 0..<6 {
+                    if app.buttons["Delete Account…"].isHittable { break }
+                    list.swipeUp(velocity: .slow)
+                }
+                list.swipeUp(velocity: .slow)
+                let frames = try accountFrames()
+                let delete = try XCTUnwrap(frames["Delete Account….title"])
+                let feedback = try XCTUnwrap(frames["Send Feedback.title"])
+                XCTAssertEqual(delete[0], feedback[0], accuracy: 0.5)
+                XCTAssertEqual(try XCTUnwrap(frames["Delete Account….icon"])[2], 24, accuracy: 0.5)
+                XCTAssertEqual(delete[0] - (try XCTUnwrap(frames["Delete Account….icon"])[0] + 24), 14, accuracy: 0.5)
+                let footer = app.staticTexts["Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in."]
+                XCTAssertTrue(footer.isHittable)
+                XCTAssertLessThanOrEqual(footer.frame.maxY, app.frame.maxY - 34)
+                app.buttons["Delete Account…"].tap()
+                XCTAssertFalse(app.alerts["Delete Account?"].exists)
+                app.navigationBars["Account"].buttons["Done"].tap()
+                app.terminate()
+            }
+        }
+    }
+
+    func testSafeAccountErrorsClearAndReappear() throws {
+        for state in ["error", "refresh-error"] {
+            launchEnabled(style: "light", size: "XXXL", state: state)
+            let id = state == "error" ? "account.error" : "account.refreshResult"
+            let message = app.staticTexts[id]
+            XCTAssertTrue(message.waitForExistence(timeout: 5))
+            let exact = state == "error"
+                ? "Couldn’t disconnect notifications. You’re still signed in. Reconnect and try signing out again before giving this iPhone to someone else."
+                : "Couldn’t refresh. Your saved board is still available."
+            XCTAssertEqual(message.label, exact)
+            let list = app.collectionViews["account.settings"]
+            let retry = app.buttons["Refresh Board Now"]
+            for _ in 0..<4 {
+                if retry.isHittable { break }
+                list.swipeUp(velocity: .slow)
+            }
+            XCTAssertTrue(retry.isEnabled)
+            retry.tap()
+            XCTAssertFalse(message.exists)
+            retry.tap()
+            XCTAssertTrue(message.waitForExistence(timeout: 3))
+            XCTAssertEqual(message.label, exact)
+            XCTAssertFalse(app.alerts["Delete Account?"].exists)
+            app.navigationBars["Account"].buttons["Done"].tap()
+            app.terminate()
+        }
+    }
+
+    private func launchEnabled(style: String, size: String, state: String? = nil) {
+        app.launchArguments = ["--hillclimb-demo", "account", "--hillclimb-style", style,
+                               "--hillclimb-size", size, "--hillclimb-account-appearance", "enabled"]
+        if let state { app.launchArguments += ["--hillclimb-account-state", state] }
+        app.launch()
+        XCTAssertTrue(app.navigationBars["Account"].waitForExistence(timeout: 10))
+    }
+
+    private func accountFrames() throws -> [String: [Double]] {
+        let probe = app.descendants(matching: .any)["account.geometry"]
+        let value = try XCTUnwrap(probe.value as? String)
+        return try XCTUnwrap(JSONSerialization.jsonObject(with: Data(value.utf8)) as? [String: [Double]])
+    }
+}
