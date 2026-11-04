@@ -4,7 +4,7 @@ set -euo pipefail
 root="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$root"
 python3 - "$@" <<'PY'
-import argparse, datetime, hashlib, json, pathlib, shlex, subprocess, time
+import argparse, datetime, hashlib, json, pathlib, shlex, subprocess, time, struct
 p=argparse.ArgumentParser(description='Capture actual demo UI using a T3 pinned agent-device session')
 p.add_argument('--round', required=True, type=int)
 p.add_argument('--resume', action='store_true', help='Preserve successful captures and retain failed attempts')
@@ -40,7 +40,9 @@ if a.resume:
 def save(): (out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 def run(key,values):
     argv=[arg.format(**values) for arg in ops[key]]
-    subprocess.run(command+argv,check=True)
+    result=subprocess.run(command+argv,text=True,capture_output=True)
+    manifest.setdefault('operationsLog',[]).append({'argv':command+argv,'exit':result.returncode,'stdout':result.stdout,'stderr':result.stderr});save()
+    if result.returncode: raise RuntimeError(result.stdout+result.stderr)
 def capture(state,style,size,position='top'):
     if any(c['state']==state and c['style']==style and c['size']==size and c['position']==position and c['status']=='captured' for c in manifest['captures']):
         return
@@ -56,10 +58,11 @@ def capture(state,style,size,position='top'):
             run('pull',values)
             run('bottom',values)
             time.sleep(1)
+        subprocess.run(command+['wait','stable','1000','10000'],check=True)
         run('screenshot',values)
         data=path.read_bytes()
         if not data.startswith(b'\x89PNG\r\n\x1a\n'): raise RuntimeError('Capture is not PNG')
-        record.update(status='captured',sha256=hashlib.sha256(data).hexdigest(),bytes=len(data))
+        record.update(status='captured',sha256=hashlib.sha256(data).hexdigest(),bytes=len(data),dimensions=list(struct.unpack('>II',data[16:24])))
     except Exception as error:
         record.update(status='failed',error=str(error));raise
     finally: save()

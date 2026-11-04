@@ -1,0 +1,85 @@
+{
+  "source_sha": "6959de17bb4d74fa1518914988645a3ea0313a68",
+  "checks": [
+    {
+      "name": "full existing unit suite",
+      "status": "passed",
+      "count": 260,
+      "evidence": "../../validation/round3/actual-counts.json"
+    },
+    {
+      "name": "full existing UI suite",
+      "status": "failed",
+      "passed": 15,
+      "failed": 1,
+      "selected": 16,
+      "skipped": 0,
+      "evidence": "../../validation/round3/baseline-failure.md"
+    },
+    {
+      "name": "combined scheme test execution",
+      "status": "failed",
+      "count": 276,
+      "passed": 275,
+      "failed": 1,
+      "skipped": 0,
+      "evidence": "../../validation/round3/combined-summary.json"
+    },
+    {
+      "name": "fresh unsigned arm64 Debug build-for-testing",
+      "status": "passed",
+      "evidence": "../../validation/round3/build-Debug.json"
+    },
+    {
+      "name": "fresh unsigned arm64 Release build and artifact",
+      "status": "passed",
+      "evidence": "../../validation/round3/build-Release.json; ../../validation/round3/Release-artifact.json"
+    },
+    {
+      "name": "iOS Python checks",
+      "status": "passed",
+      "count": 23,
+      "evidence": "../../validation/round3/python-ios.json"
+    },
+    {
+      "name": "cached existing Deno helper suites",
+      "status": "passed",
+      "count": 52,
+      "evidence": "../../validation/round3/deno.json"
+    },
+    {
+      "name": "offline overflow Deno tests",
+      "status": "passed",
+      "count": 4,
+      "evidence": "../../validation/round3/deno-overflow.json"
+    },
+    {
+      "name": "keyboard runtime issues and scoped invalid-frame logs",
+      "status": "passed",
+      "runtimeWarnings": 0,
+      "invalidFrameEvents": 0,
+      "evidence": "../../validation/round3/runtime-log-summary.json",
+      "limitation": "Keyboard matrix stopped after failure; not all keyboard interactions completed."
+    },
+    {
+      "name": "broader Python discovery including database fixture",
+      "required": false,
+      "status": "failed",
+      "evidence": "../../validation/round3/python.json",
+      "reason": "initdb not installed;69 executed,2 failures+1setUpClass error."
+    },
+    {
+      "name": "true locked-device Activity",
+      "required": false,
+      "status": "pending",
+      "reason": "Supported simulator workflow provides Notification Center only."
+    },
+    {
+      "name": "native production multiline Activity conservation",
+      "status": "passed",
+      "count": 8,
+      "evidence": "activity/manifest.json; activity/pipeline-*.json",
+      "limitation": "4 additional compact screenshots show intended empty views; Notification Center is not true locked-device certification."
+    }
+  ]
+}

@@ -12,10 +12,10 @@ import subprocess
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--command', required=True, help='Exact pinned device_open agentDevice.command')
-parser.add_argument('--out', type=pathlib.Path, default=pathlib.Path('hillclimb/tasks/activity-polish'), help='Use a fresh round directory to preserve prior evidence')
+parser.add_argument('--out', type=pathlib.Path, required=True, help='Use a fresh round directory to preserve prior evidence')
 parser.add_argument('--style', choices=['light', 'dark'], required=True)
 parser.add_argument('--size', choices=['default', 'XXXL'], required=True)
-parser.add_argument('--text', choices=['short', 'long'], required=True)
+parser.add_argument('--text', choices=['short', 'long', 'multiline'], required=True)
 parser.add_argument('--surface', choices=['prepare', 'collapsed', 'expanded', 'notification-center', 'end'], required=True)
 a = parser.parse_args()
 command = shlex.split(a.command)
@@ -50,6 +50,8 @@ else:
     # Navigate only after inspecting the fresh SpringBoard snapshot. This script
     # captures the current surface; it never substitutes a SwiftUI replica.
     path = out / f'{a.text}-{a.style}-{a.size}-{a.surface}.png'
+    if path.exists():
+        raise SystemExit('Refusing to overwrite existing native evidence: ' + str(path))
     if a.surface == 'expanded':
         video = path.with_suffix('.mp4')
         run('record', 'start', '--scope', 'device', '--hide-touches', str(video))
