@@ -53,6 +53,7 @@ final class AccessibilitySettingsUITests: XCTestCase {
         accessibility.tap()
         for (page, labels) in [("Motion", ["Reduce Motion"]), ("Display & Text Size", ["Reduce Transparency", "Increase Contrast"])] {
             settings.staticTexts[page].tap()
+            recordSettings(page: page, stage: restoring ? "before-restore" : "original")
             for label in labels {
                 let toggle = settings.switches[label]
                 XCTAssertTrue(toggle.waitForExistence(timeout: 5), label)
@@ -79,10 +80,21 @@ final class AccessibilitySettingsUITests: XCTestCase {
                 if (effects.value as? String == "1") != desired { effects.switches.firstMatch.tap() }
                 XCTAssertEqual(effects.value as? String, desired ? "1" : "0", "Restore the dependent Motion setting")
             }
+            recordSettings(page: page, stage: restoring ? "restored" : "enabled")
             let proof = XCTAttachment(screenshot: settings.screenshot())
             proof.name = "actual-settings-\(page)-\(restoring ? "restored" : "enabled")"; proof.lifetime = .keepAlways; add(proof)
             settings.navigationBars.buttons.firstMatch.tap()
         }
+    }
+
+    private func recordSettings(page: String, stage: String) {
+        let values = settings.switches.allElementsBoundByIndex.map {
+            "\($0.label)=\($0.value ?? "nil")"
+        }.joined(separator: "\n")
+        let proof = XCTAttachment(string: "page=\(page) stage=\(stage) originals=\(originals)\n\(values)\n\(settings.debugDescription)")
+        proof.name = "settings-values-\(page)-\(stage)"
+        proof.lifetime = .keepAlways
+        add(proof)
     }
 
     private func launch(style: String, size: String, variant: String) {
