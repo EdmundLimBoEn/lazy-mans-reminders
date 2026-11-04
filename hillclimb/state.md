@@ -159,3 +159,5 @@ Each worker must build, pass the existing 293 tests plus new measurable checks, 
 N is authorized to update only the full-board Add reminder expectation in the shared HillclimbUITests file, alongside its assigned new tests. The new capacity-to-available transition must verify the returned button remains at least 44pt. All existing test IDs and other assertions stay intact.
 
 N also owns one behavior-aligned capacity-height assertion in BoardMultilineUITests: no forced two-line XXXL requirement after width is reclaimed. Intrinsic size, complete text, 44pt height, scaled type and native no-clipping checks remain required.
+
+N may resolve equivalent absent-Add-reminder queries in its two existing capacity test methods autonomously. Use `.exists` at capacity; retain enabled/disabled and target checks below capacity. Native failed-query evidence stays recorded.
