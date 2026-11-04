@@ -28,7 +28,7 @@ struct AccountView: View {
                         Section {
                             Label(error, systemImage: "exclamationmark.triangle.fill")
                                 .font(.footnote)
-                                .foregroundStyle(.red)
+                                .foregroundStyle(.primary)
                                 .textSelection(.enabled)
                                 .accessibilityIdentifier("account.error")
                         }
@@ -338,7 +338,7 @@ private struct AccountRow: View {
                 .accountMeasure("\(title).icon")
                 .accessibilityHidden(true)
             Text(title)
-                .foregroundStyle(destructive ? Color.red : Color.primary)
+                .foregroundStyle(Color.primary)
                 .accountMeasure("\(title).title")
             Spacer(minLength: 8)
             if external {
