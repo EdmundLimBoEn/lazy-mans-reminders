@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import time
 
 root = Path(__file__).resolve().parents[3]
 out = Path(__file__).resolve().parent
@@ -13,6 +14,7 @@ manifest = {
     'source_sha256': hashlib.sha256((root / 'ios/App/SignInView.swift').read_bytes()).hexdigest(),
     'device': '8E8380DE-364D-4899-99B8-D15ED0494FFD',
     'safety': 'Read-only offline fixture; no authentication controls enabled.',
+    'settle_seconds': 2,
     'captures': [],
     'author': 'Written by gpt-6.1-sol in Codex on behalf of Edmund',
 }
@@ -27,6 +29,7 @@ for style in ('light', 'dark'):
                                 '--launch-args=--hillclimb-style', f'--launch-args={style}',
                                 '--launch-args=--hillclimb-size', f'--launch-args={size}',
                                 '--launch-args=--hillclimb-signin-variant', f'--launch-args={variant}'], check=True)
+                time.sleep(2)
                 subprocess.run([agent, 'screenshot', str(path), '--pixel-density', '3', '--normalize-status-bar'], check=True)
                 record.update(status='captured', sha256=hashlib.sha256(path.read_bytes()).hexdigest())
             except Exception as error:

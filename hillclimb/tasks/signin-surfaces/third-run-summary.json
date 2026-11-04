@@ -1,0 +1,67 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+        "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 248,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "LazyMansReminders · Built with macOS 27.2",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1793797696.696,
+  "passedTests" : 248,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+    {
+      "issueType" : "Runtime Warning",
+      "message" : "Invalid frame dimension (negative or non-finite)."
+    }
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793797639.348,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "XCTAssertGreaterThanOrEqual failed: (\"43.33333333333334\") is less than (\"44.0\") - Your board on this iPhone, the web, and the Lock Screen.",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 248,
+      "testIdentifierString" : "SignInSurfaceUITests/testDefaultAndXXXLControlsAndTextInBothAppearances()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInSurfaceUITests/testDefaultAndXXXLControlsAndTextInBothAppearances",
+      "testName" : "testDefaultAndXXXLControlsAndTextInBothAppearances()"
+    },
+    {
+      "failureText" : "XCTAssertGreaterThanOrEqual failed: (\"34.66666666666674\") is less than (\"36.0\") - For an existing account with a password. You can also use a sign-in link.",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 250,
+      "testIdentifierString" : "SignInSurfaceUITests/testPasswordInboxAndErrorWrapInBothAppearancesAndSizes()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInSurfaceUITests/testPasswordInboxAndErrorWrapInBothAppearancesAndSizes",
+      "testName" : "testPasswordInboxAndErrorWrapInBothAppearancesAndSizes()"
+    }
+  ],
+  "title" : "Test - LazyMansReminders",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "37% of duration",
+      "text" : "2 longest test runs with outlier durations exceeding 0.07s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 250
+}
