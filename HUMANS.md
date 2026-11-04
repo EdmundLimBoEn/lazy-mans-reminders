@@ -1,5 +1,11 @@
 # Human actions
 
+## UI hill climb, 4 November 2026
+
+- [ ] Refresh/restart T3 device discovery until regular iPhone 17 Pro `78F5A64F-7B2E-4562-8EF9-10F3312CC694` (iOS 26.2) appears and device_open succeeds. simctl sees it; T3 currently lists only Duo devices. Resume hillclimb/ui reference capture and harness validation afterward. No shipping action is authorized.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
+
 ## App Store draft verified, 12 October 2026
 
 - [x] Save the listing name **Lazy Man's Reminders**, subtitle **Lock Screen reminder board**, reviewed description/keywords, canonical support/marketing/privacy URLs and manual version release.

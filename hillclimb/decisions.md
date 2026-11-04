@@ -10,3 +10,5 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - 2026-11-04 user addition: compare against paired Apple Notes and Reminders reference states; preserve independent layout. Require executable geometry/accessibility checks wherever measurable. Use iPhone 17 Pro for shared reference device.
 
 - 2026-11-04: Authorized minimal Debug-only explicit demo guard in AuthManager initializer and inert demo app delegate to prevent auth restoration/network work. Normal Debug and Release behavior must remain unchanged.
+
+- 2026-11-04: Stop device interactions after device_open rejected the created regular17 twice and refreshed inventory stayed stale. Do not bypass T3 with simctl UI, another session or another automation channel. Keep unvalidated harness branch unmerged.
