@@ -90,3 +90,5 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - Round 6 N: use `.exists` for the omitted full-board Add reminder control in both existing capacity methods. Native `.isEnabled` on an absent element throws instead of establishing absence. Authorized routine equivalent capacity-only expectation corrections in those two methods; preserve unrelated assertions, below-capacity enabled/disabled/44pt checks and initial failure evidence.
 
 - Accepted P `9b3aea1`/`045e4b6`: native Island-only tightening gains the complete XXXL sample ending without manual truncation, type scaling or count/margin changes. Parent native comparison and all30image/reference hashes verify the gain; 293 tests and safety gates pass. Keep M rejected and disclose long-line truncation remains. Release original17 to Q Account work.
+
+- Accepted N `3b5e61d`/source `7c2793a`: only production behavior change omits Add at capacity. Parent verified all16nativeimage/reference hashes and inspected XXXL bottom. Worker297/297 retains293priorIDs; below-capacity44pt/enabled-state checks replace inappropriate full-board target assumptions. Exact wording and Dynamic Type retained; no forced line wrapping.

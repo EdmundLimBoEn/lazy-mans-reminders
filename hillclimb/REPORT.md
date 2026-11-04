@@ -145,3 +145,9 @@ Round 5 Opus completed at **8.69/minimum 7.8**. All reports validate; final succ
 Accepted native Island-only text tightening (`9b3aea1`): the XXXL sample ending now reads “sample notes.” while the first row stays complete. Type size, native line budgets, counts and corner/footer margins remain intact. All 293 worker tests pass; parent verified 30 native image/reference hashes and inspected the originals. Very long lines still use native tail truncation.
 
 [Before](tasks/activity-tightening/before/multiline-dark-XXXL-expanded.png) · [After](tasks/activity-tightening/after/multiline-dark-XXXL-expanded.png) · [Evidence and limits](tasks/activity-tightening/README.md). No new score is inferred before the full round 6 capture and review.
+
+## Round 6 capacity presentation
+
+The full-board status now uses the width previously occupied by a disabled send arrow (`7c2793a`). The arrow returns below capacity. Exact copy and scaled typography are preserved; XXXL can fit the full status on one line. **297 worker tests pass**, including four new native state/geometry/ink/interaction cases and all prior 293 IDs. Parent verified all 16 final capture/reference hashes.
+
+[XXXL full-board bottom](tasks/board-capacity/accepted-captures/capacity-dark-XXXL-bottom-after-pull.png) · [Returned composer](tasks/board-capacity/accepted-captures/capacity-dark-XXXL-normal-composer-draft.png) · [Evidence](tasks/board-capacity/README.md). Combined round 6 verification follows the remaining sign-in and Account handoffs.

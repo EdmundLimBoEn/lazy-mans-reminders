@@ -167,3 +167,11 @@ N may resolve equivalent absent-Add-reminder queries in its two existing capacit
 Merged P source `9b3aea1` and evidence `045e4b6`. Parent inspected the native XXXL dark before/after originals and verified all 30 native image/reference hashes plus the supplied provenance digest. Island-only `.allowsTightening(surface == .island)` completes the second sample line without reducing type size or losing first-row text. Counts remain banner 5+5/4+6, Island 3+7/2+8; clearance gates and all 293 tests pass. Long stress lines still truncate naturally; no universal tail elimination or physical lock claim.
 
 Original17 is released, running light/Large, four settings restored, no owned Activities and own session closed. Q now owns only AccountView, BoardPersistenceSection, a new Account-only UI test and task evidence on original17. It will test native hard top-edge chrome and sentence-boundary spacing with exact words preserved. N/private Board17 and O/private Auth17 continue separately. Integrated revalidation and fresh round 6 grading wait for all handoffs.
+
+## N accepted: full-board affordance removed
+
+Merged N `3b5e61d` (tested source `7c2793a`) after source review and parent verification of all 16 accepted native image/reference hashes and dimensions. The only production edit conditionally omits Add at capacity. The exact status receives the reclaimed width; XXXL type remains scaled and now fits naturally on one line. Parent inspected the dark XXXL bottom original: final row ink clears the hint and status.
+
+Worker **297/297** (263 unit + 34 UI), no failures/skips; all 293 prior IDs retained. Four new native tests verify absent Add at capacity, full status width/intrinsic height, final-row ink after pull, local completion, returned 44pt button, draft enablement and Done retention. Authorized old assertions now test existence; the fixed two-line expectation was removed. Initial failed native query remains in evidence. Board17 is returned running with original settings restored, no owned Activities and own session closed.
+
+N+P are integrated. O sign-in and Q Account remain active on their assigned devices. Combined round 6 tests/captures and actual performance measurements wait for those handoffs; no worker-only pass or new score is claimed as integrated acceptance.
