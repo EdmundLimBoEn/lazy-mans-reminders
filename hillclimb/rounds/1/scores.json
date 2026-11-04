@@ -1,0 +1,25 @@
+{
+  "graders": {
+    "gpt-6.1-sol": {
+      "overall": 6.88,
+      "minimum": 4.0,
+      "errors": [
+        "Unresolved evidence gaps"
+      ]
+    },
+    "gpt-6-astra": {
+      "overall": 6.7,
+      "minimum": 4,
+      "errors": [
+        "Unresolved evidence gaps"
+      ]
+    }
+  },
+  "gate_passed": false,
+  "errors": [
+    "gpt-6.1-sol: Unresolved evidence gaps",
+    "gpt-6-astra: Unresolved evidence gaps",
+    "Missing scores-claude-opus-5.5.json",
+    "Required programmatic checks have not all passed"
+  ]
+}

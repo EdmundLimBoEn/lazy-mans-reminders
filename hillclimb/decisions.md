@@ -16,3 +16,5 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - 2026-11-04: Resumed with shell-based xcodebuild test (authorized project test runner). It booted regular17; a subsequent device_list now discovers the simulator. Continue captures through device_open rather than bypassing prescribed UI tooling. Fix harness preflight to check deviceTypeIdentifier, not simulator display name.
 
 - 2026-11-04: Merged preparatory harness and baseline evidence with known failing NEW regression gates. This adds measurement/capture infrastructure, not a product UI fix; 247 existing tests passed. Product fixes must make their corresponding gates pass before merge. Failed capture attempt and raw-drag recovery retained.
+
+- Round1: honest baselines Sol6.88/Astra6.70. Keep incomplete Notes/native Activity evidence explicit. Prioritize final-line readability, measured targets, flatter sign-in and calmer account surfaces. Use separate worker file ownership; maintain same original17 integration capture device for reference pairing.

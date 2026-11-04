@@ -20,7 +20,8 @@ Integration: `hillclimb/ui`, based on origin/main `5fc4cbc`. Never merge main, d
 
 | Round | sol | astra | Opus | Evidence |
 | --- | --- | --- | --- | --- |
-| 0 | pending | pending | not due | No screenshots yet |
+| 0 | not graded | not graded | not due | Setup only |
+| 1 | 6.88 | 6.70 | not due | 18 app shots, 5 usable Reminders references; Notes/Activity gaps |
 
 ## Constraints and stop rules
 
@@ -49,3 +50,13 @@ Task resumed; runtime validation in progress. No UI fix has been merged; no PR, 
 18 actual app PNGs verified and committed. Five usable Apple Reminders references; Notes unavailable, four transition references excluded. pairs.json records exact matches and gaps. Two independent 30-category Codex graders next. No production UI fixes merged yet. Baseline checks: existing247pass; XXXL pass; field22pt and Account36pt fail; pull idle timeout; fixture query fix pending rerun. Codex quota tool is not exposed; no quota claim made.
 
 - Runtime follow-up: repaired offline fixture stability test actually executed (1 test) and passed. Source/test packet otherwise frozen during independent round1 grading.
+
+## Current batch: round 2 candidates
+
+- A: final-line readability + pull-to-refresh settling. Own ReminderListView.swift, ReorderableReminderList.swift, HillclimbGeometry.swift and existing UI tests. Priority highest. Includes actual rendered ink/fade boundary gate; do not weaken existing assertions. Touch-target work in same files follows serially if scope permits a separately reviewable commit.
+- B: sign-in surface simplification. Own SignInView.swift and dedicated new tests only; preserve every user-facing string and provider flow.
+- C: native Live Activity/Island layout and isolated actual Activity evidence. Own Widget/ReminderLiveActivity.swift, Shared/LockScreenLineBudget.swift/related dedicated tests, HillclimbDemo.swift and a new Debug helper; do not touch A files.
+- Device lease: original regular17 stays parent-controlled for integration re-shooting. Parallel workers use tool-discovered separate regular17 simulators or request an explicit handoff; no concurrent test/UI action on same device. Avoid Duo.
+- Each worker must build, execute existing tests plus affected gates and save affected screenshots before done. Product fixes merge only after passing relevant gates.
+
+Quota check after round1: no limit/usage tool exposed in current catalog. Do not infer remaining weekly quota; stop on actual near-limit indication if available. No weekly-window waiting authorized.
