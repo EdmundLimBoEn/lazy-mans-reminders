@@ -1,41 +1,41 @@
 # Notepad UI hill climb: progress report
 
-Work continues on `hillclimb/ui`. Round4 Codex grades are **Sol8.97** and **Astra8.95**, with minima8.1/8.2. Opus5.5/medium is now eligible on the same packet. Final stop requires all three>=9, with no category below7; it has not been reached.
+Work continues on `hillclimb/ui`. Round4 Codex grades are **Sol8.97** and **Astra8.95**, with minima8.1/8.2. Opus5.5/medium scored **8.51**, minimum7.6. Final stop requires all three>=9, with no category below7; it has not been reached.
 
 ## Category scores
 
 | Category | R1 Sol | R4 Sol | R1 Astra | R4 Astra | R3 Opus | R4 Opus |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Visual hierarchy | 7.5 | 9.2 | 7 | 9.2 | 8.5 | Pending |
-| Spacing/grid | 7.0 | 9.1 | 7 | 9.0 | 8.3 | Pending |
-| Typography scale | 8.5 | 9.2 | 8 | 9.2 | 8.2 | Pending |
-| Dynamic Type | 7.5 | 9.0 | 7 | 8.9 | 8.6 | Pending |
-| Light contrast | 7.0 | 8.7 | 7 | 8.5 | 8.4 | Pending |
-| Dark contrast | 6.5 | 9.0 | 6.5 | 8.9 | 8.0 | Pending |
-| Iconography | 8.0 | 9.3 | 8 | 9.3 | 8.6 | Pending |
-| Safe area / Dynamic Island | 8.0 | 9.4 | 8 | 9.2 | 8.8 | Pending |
-| Scroll/pull-down / last row | 4.0 | 8.2 | 4 | 8.4 | 8.4 | Pending |
-| List rows | 6.5 | 9.2 | 6.5 | 9.3 | 7.8 | Pending |
-| Empty states | 7.0 | 9.3 | 7.5 | 9.4 | 8.8 | Pending |
-| Composer ergonomics | 6.0 | 9.4 | 6 | 9.3 | 8.6 | Pending |
-| Keyboard handling | 7.0 | 9.0 | 7.5 | 9.0 | 8.5 | Pending |
-| Sheet presentation/detents | 7.0 | 9.2 | 6 | 9.2 | 8.5 | Pending |
-| Navigation clarity | 7.5 | 9.3 | 7 | 9.3 | 8.7 | Pending |
-| Touch targets | 4.5 | 9.5 | 4.5 | 9.4 | 8.4 | Pending |
-| Haptics | 7.0 | 8.1 | 7 | 8.2 | 7.5 | Pending |
-| Animation/transitions | 6.5 | 8.8 | 6.5 | 8.7 | 7.6 | Pending |
-| Loading states | 7.5 | 9.0 | 7 | 8.8 | 8.5 | Pending |
-| Error states | 7.5 | 8.5 | 7 | 8.5 | 7.6 | Pending |
-| VoiceOver/labels | 7.5 | 8.6 | 7.5 | 8.6 | 8.2 | Pending |
-| iOS HIG consistency | 7.5 | 9.2 | 7 | 9.2 | 8.1 | Pending |
-| Lock Screen / Live Activity | 6.0 | 8.4 | 6 | 8.6 | 7.8 | Pending |
-| Sign-in/onboarding | 6.5 | 9.1 | 6.5 | 9.0 | 8.0 | Pending |
-| Settings/account | 7.0 | 9.1 | 6 | 9.0 | 8.1 | Pending |
-| Performance feel | 6.5 | 8.3 | 6.5 | 8.2 | 7.6 | Pending |
-| Delight | 6.5 | 9.0 | 6.5 | 8.8 | 7.8 | Pending |
-| Long text | 7.0 | 9.0 | 7 | 9.0 | 8.7 | Pending |
-| Reduced Motion / Transparency | 7.0 | 8.5 | 6 | 8.7 | 8.0 | Pending |
-| Palette / minimalism | 7.0 | 9.6 | 7 | 9.6 | 9.0 | Pending |
+| Visual hierarchy | 7.5 | 9.2 | 7 | 9.2 | 8.5 | 8.8 |
+| Spacing/grid | 7.0 | 9.1 | 7 | 9.0 | 8.3 | 8.7 |
+| Typography scale | 8.5 | 9.2 | 8 | 9.2 | 8.2 | 8.7 |
+| Dynamic Type | 7.5 | 9.0 | 7 | 8.9 | 8.6 | 8.7 |
+| Light contrast | 7.0 | 8.7 | 7 | 8.5 | 8.4 | 8.6 |
+| Dark contrast | 6.5 | 9.0 | 6.5 | 8.9 | 8.0 | 8.8 |
+| Iconography | 8.0 | 9.3 | 8 | 9.3 | 8.6 | 8.8 |
+| Safe area / Dynamic Island | 8.0 | 9.4 | 8 | 9.2 | 8.8 | 8.8 |
+| Scroll/pull-down / last row | 4.0 | 8.2 | 4 | 8.4 | 8.4 | 8.4 |
+| List rows | 6.5 | 9.2 | 6.5 | 9.3 | 7.8 | 8.8 |
+| Empty states | 7.0 | 9.3 | 7.5 | 9.4 | 8.8 | 8.9 |
+| Composer ergonomics | 6.0 | 9.4 | 6 | 9.3 | 8.6 | 8.8 |
+| Keyboard handling | 7.0 | 9.0 | 7.5 | 9.0 | 8.5 | 8.5 |
+| Sheet presentation/detents | 7.0 | 9.2 | 6 | 9.2 | 8.5 | 8.7 |
+| Navigation clarity | 7.5 | 9.3 | 7 | 9.3 | 8.7 | 8.8 |
+| Touch targets | 4.5 | 9.5 | 4.5 | 9.4 | 8.4 | 8.8 |
+| Haptics | 7.0 | 8.1 | 7 | 8.2 | 7.5 | 7.6 |
+| Animation/transitions | 6.5 | 8.8 | 6.5 | 8.7 | 7.6 | 8.0 |
+| Loading states | 7.5 | 9.0 | 7 | 8.8 | 8.5 | 8.6 |
+| Error states | 7.5 | 8.5 | 7 | 8.5 | 7.6 | 8.0 |
+| VoiceOver/labels | 7.5 | 8.6 | 7.5 | 8.6 | 8.2 | 8.2 |
+| iOS HIG consistency | 7.5 | 9.2 | 7 | 9.2 | 8.1 | 8.6 |
+| Lock Screen / Live Activity | 6.0 | 8.4 | 6 | 8.6 | 7.8 | 7.8 |
+| Sign-in/onboarding | 6.5 | 9.1 | 6.5 | 9.0 | 8.0 | 8.6 |
+| Settings/account | 7.0 | 9.1 | 6 | 9.0 | 8.1 | 8.7 |
+| Performance feel | 6.5 | 8.3 | 6.5 | 8.2 | 7.6 | 7.7 |
+| Delight | 6.5 | 9.0 | 6.5 | 8.8 | 7.8 | 7.9 |
+| Long text | 7.0 | 9.0 | 7 | 9.0 | 8.7 | 8.7 |
+| Reduced Motion / Transparency | 7.0 | 8.5 | 6 | 8.7 | 8.0 | 8.4 |
+| Palette / minimalism | 7.0 | 9.6 | 7 | 9.6 | 9.0 | 9.0 |
 
 Start/current category comparisons are shown above. Full intervening-round histories remain in their score reports. [Round4 machine-readable scores](rounds/4/scores.json).
 
@@ -100,6 +100,8 @@ All three branches are merged. Their individual tests and affected captures are 
 
 The packet contains 288 verified native PNGs, seven recordings and 17 Apple Reminders references. Selected actual-system Reduce Motion, Reduce Transparency and Increase Contrast states were captured, and the original Off settings restored. The combined-settings recording shows the alternate sign-in action, but one settled viewport omits it; a complete clearance matrix remains unproven. This is not a diagnosis of unreachability.
 
-Top-edge fragments remain observed. New reviewer measurements find normal-size red error-message text below 4.5:1 in sign-in and Account; the existing helper/footer contrast checks excluded semantic error red. No passing error-message contrast gate is claimed. Independent Codex grades are complete. Opus review follows; no final success is claimed.
+Top-edge fragments remain observed. New reviewer measurements find normal-size red error-message text below 4.5:1 in sign-in and Account; the existing helper/footer contrast checks excluded semantic error red. No passing error-message contrast gate is claimed. Independent Codex grades are complete. Opus8.51 confirms the loop continues; no final success is claimed.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+Round4 all-three reviews validate; final gate is false. Next work covers board edge/VoiceOver polish, informational text contrast, combined-settings keyboard reproduction and safe Activity readability investigation. Existing copy stays fixed.
