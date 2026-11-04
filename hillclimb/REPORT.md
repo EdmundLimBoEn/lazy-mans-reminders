@@ -1,6 +1,6 @@
 # Notepad UI hill climb: progress report
 
-Work continues on `hillclimb/ui`. Final score gate has not been reached. Round3 runtime checks pass; Codex grades are Sol8.78 and Astra8.76 (minimum7.8 each). Opus scored8.25 (minimum7.5); the loop continues. Opus runs only when both Codex overall grades reach8.5 in the same round. Stop requires all three>=9, with no category below7.
+Work continues on `hillclimb/ui`. Final score gate has not been reached. Round4 runtime checks pass; independent Codex grading is running. Latest completed grades: Codex grades are Sol8.78 and Astra8.76 (minimum7.8 each). Opus scored8.25 (minimum7.5); the loop continues. Opus runs only when both Codex overall grades reach8.5 in the same round. Stop requires all three>=9, with no category below7.
 
 ## Category scores
 
@@ -41,20 +41,20 @@ Round3: Sol8.78, Astra8.76; both minimum7.8. Opus8.25, minimum7.5; finalgateunme
 
 ## Current verification
 
-Production source `6959de1`; test correction `542b9f7`. All276 tests passed:260 unit+16 UI. Three additional fresh-process keyboard matrices passed all24 cases; combined run adds8. Test now supports valid interactive keyboard dismissal and refocus before checking keyboard geometry. Original275-pass/1-failure evidence stays intact. No assertions or normal dismissal behavior were disabled.
+Current production/test source `b5d9bb3`. Round4 passed all285 tests:263 unit+22 UI. Prior round3 production was `6959de1`, with test correction `542b9f7`. Three additional fresh-process keyboard matrices passed all24 cases; combined run adds8. Test now supports valid interactive keyboard dismissal and refocus before checking keyboard geometry. Original275-pass/1-failure evidence stays intact. No assertions or normal dismissal behavior were disabled.
 
-Fresh unsigned arm64 Debug/Release builds,23 Python iOS checks and52+4 offline Deno tests passed. Recheck rebuilt Debug; Release/backend results were explicitly reused after53 production+11 backend hashes matched. Zero observed runtime warnings/invalid-frame events in complete recheck runs; other compiler/automation diagnostics remain. [Recheck](validation/round3/recheck/REPORT.md).
+Round4 fresh unsigned arm64 Debug/Release builds,23 Python iOS checks and52+4 offline Deno tests passed. Zero observed runtime warnings/invalid-frame events in complete recheck runs; other compiler/automation diagnostics remain. [Recheck](validation/round3/recheck/REPORT.md).
 
 ## Screenshots and Apple references
 
-Round1 has18 native baseline images; round2 has48; round3 has110 (102 original plus8 post-scroll keyboard rechecks). Every grading image has device/source/hash provenance on the original regular iPhone17Pro/iOS26.2. Round3 adds8 actual XXXL Apple Reminders references for list, bottom, compose and Details in both appearances. Pairings exclude rejected transition frames and disclose imperfect matches. Notes, Apple sign-in and exact Activity equivalents remain unavailable. [Round3 inventory](rounds/3/inventory.json) · [Reference pairings](rounds/3/pairings.md).
+Round1 has18 native baseline images; round2 has48; round3 has110 (102 original plus8 post-scroll keyboard rechecks); round4 has288. Every grading image has device/source/hash provenance on the original regular iPhone17Pro/iOS26.2. Round3 adds8 actual XXXL Apple Reminders references for list, bottom, compose and Details in both appearances. Pairings exclude rejected transition frames and disclose imperfect matches. Notes, Apple sign-in and exact Activity equivalents remain unavailable. [Round4 inventory](rounds/4/inventory.json) · [Reference pairings](rounds/4/pairings.md).
 
-| State | Before: round1 | Current: round3 |
+| State | Before: round1 | Current: round4 |
 | --- | --- | --- |
-| Final row after pull | ![Before](rounds/1/full-light-default-bottom-after-pull.png) | ![Current](rounds/3/full-light-default-bottom-after-pull.png) |
-| Sign-in surfaces | ![Before](rounds/1/signin-light-default-top.png) | ![Current](rounds/3/signin-light-default-top.png) |
-| Account initial sheet | ![Before](rounds/1/account-dark-default-top.png) | ![Current](rounds/3/account-dark-default-top.png) |
-| Composer keyboard | ![Before](rounds/1/composer-light-default-top.png) | ![Current](rounds/3/composer-light-default-top.png) |
+| Final row after pull | ![Before](rounds/1/full-light-default-bottom-after-pull.png) | ![Current](rounds/4/full-light-default-bottom-after-pull.png) |
+| Sign-in surfaces | ![Before](rounds/1/signin-light-default-top.png) | ![Current](rounds/4/signin-light-default-top.png) |
+| Account initial sheet | ![Before](rounds/1/account-dark-default-top.png) | ![Current](rounds/4/account-dark-default-top.png) |
+| Composer keyboard | ![Before](rounds/1/composer-light-default-top.png) | ![Current](rounds/4/composer-light-default-top.png) |
 
 Native Activity has no round1 native baseline, so no baseline pair is invented. Expanded Island evidence uses unmodified recording frames; Notification Center banners do not certify actual locked-device geometry. Unit-rendered attachments are separate from native captures.
 
@@ -74,7 +74,7 @@ Individual task counts and retained intermediate failures are in [task evidence]
 
 ## Remaining limits
 
-True device locking, physical cutout geometry, arbitrary wallpapers, tactile haptics, spoken VoiceOver, accessibility sizes beyondXXXL, broader system contrast/motion/transparency settings and measured motion/performance remain unverified. Source/tests support only the claims recorded with them. Current-session quota metadata reports9% used in the10080-minute weekly window; [snapshot](rounds/3/usage.json). No plateau decision before fresh grades.
+True device locking, physical cutout geometry, arbitrary wallpapers, tactile haptics, spoken VoiceOver, accessibility sizes beyondXXXL, broader system contrast/motion/transparency settings and measured motion/performance remain unverified. Source/tests support only the claims recorded with them. Current-session quota metadata reports10% used in the10080-minute weekly window; [snapshot](rounds/4/usage.json). No plateau decision before fresh grades.
 
 ## Install on a phone
 
@@ -103,5 +103,11 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 ## Next batch: Account accepted; combined round4 next
 
 Account7abefed merged: consistentbodydisclosurelabel,aligneddestructiverow,readablehelper/footertext,exact-messageerrorannouncementdeduplicationandsafeenabled-stylepreview.281workertestspassed;84nativehashesand54contrastchecks(minimum13.94:1)verified. AllH/I/Jchangesarenowintegrated;freshoriginal17round4validationandgradingremain. [Evidence](tasks/account-consistency/REPORT.md).
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Round4 validation complete
+
+285tests passed,288nativePNGhashesverified,7recordingsand17AppleRemindersreferences.FreshDebug/Release/Python23/Deno52+4passed. ActualsystemReduceMotion/ReduceTransparency/IncreaseContrast selectedstateswerecapturedandallsettingsrestored. Combined-settingskeyboardalternateactionisoutsideoneviewport;reachabilityremainsunproven.Top-edgefragmentsremain. TheseconcernsareexplicitlyincludedintheindependentCodexreviewpacket. [Validation](validation/round4/README.md) · [Observed limits](validation/round4/observations.md).
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund

@@ -92,7 +92,9 @@
     {
       "name": "independent reviewer score gate",
       "status": "pending",
-      "reason": "Parent-owned reviews have not run. No scores fabricated."
+      "reason": "Parent-owned reviews have not run. No scores fabricated.",
+      "required": false,
+      "note": "Informational review status. Numeric three-grader stop gate is evaluated separately by validate-scores.py; this is not a programmatic test."
     },
     {
       "name": "native source and screenshot/reference integrity",
