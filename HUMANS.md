@@ -2,7 +2,7 @@
 
 ## UI hill climb, 4 November 2026
 
-- [x] T3 discovery recovered after XCTest booted regular iPhone 17 Pro `78F5A64F-7B2E-4562-8EF9-10F3312CC694` (iOS 26.2) appears and device_open succeeds. simctl sees it; T3 currently lists only Duo devices. Resume hillclimb/ui reference capture and harness validation afterward. No shipping action is authorized.
+- [x] T3 discovery recovered after the XCTest runner booted regular iPhone 17 Pro `78F5A64F-7B2E-4562-8EF9-10F3312CC694` (iOS 26.2). device_open and device_screenshot now work; no human action remains for discovery.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
 

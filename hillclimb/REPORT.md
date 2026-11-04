@@ -1,6 +1,6 @@
-# Notepad UI hill climb: blocked progress report
+# Notepad UI hill climb: progress report
 
-Status: infrastructure-blocked before baseline capture. Target >=9/10 from sol/high, astra/high and Opus 5.5/medium has NOT been achieved or evaluated. No screenshot score round exists.
+Status: resumed. Simulator access recovered after XCTest booted the standard device. Existing runtime suite: 247 passed; composer field target fails at 22pt height; long scrolling test interrupted and being bounded before rerun. Target >=9/10 from sol/high, astra/high and Opus 5.5/medium has NOT been achieved or evaluated. No screenshot score round exists.
 
 ## Start and end scores
 
@@ -24,6 +24,6 @@ There is no validated hillclimb UI build to install yet. After completing captur
 
 ## Resume
 
-Refresh/restart T3 device discovery until the regular17 is visible and opens. Capture Apple reference pairs, validate and merge the prepared harness, capture Notepad baseline, then run independent graders and the fix/recheck loop. Native Live Activity capture is not yet supported by the offline fixture and remains an explicit evidence gap. Codex quota was not available through the exposed tool catalog; inspect limits before the first rating round.
+Device discovery and opening now work. Continue reference captures and bounded geometry validation. Capture Apple reference pairs, validate and merge the prepared harness, capture Notepad baseline, then run independent graders and the fix/recheck loop. Native Live Activity capture is not yet supported by the offline fixture and remains an explicit evidence gap. Codex quota was not available through the exposed tool catalog; inspect limits before the first rating round.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
