@@ -35,6 +35,7 @@ import UIKit
 @MainActor final class HillclimbGeometry {
     static let shared = HillclimbGeometry()
     var frames: [String: CGRect] = [:]
+    var boardErrorAnnouncements: [String] = []
     weak var list: UICollectionView?
 }
 struct HillclimbGeometryExport: UIViewRepresentable {
@@ -72,6 +73,7 @@ struct HillclimbGeometryExport: UIViewRepresentable {
                     values["bottomFade"] = [viewport.minX, viewport.maxY - fadeHeight, viewport.width, fadeHeight]
                     values["refreshState"] = [list.refreshControl?.isRefreshing == true ? 1 : 0, 0, 0, 0]
                 }
+                values["boardErrorAnnouncements"] = [Double(HillclimbGeometry.shared.boardErrorAnnouncements.count), 0, 0, 0]
                 let auth = AuthManager.shared
                 values["authState"] = [auth.session == nil ? 0 : 1, auth.isRestoringSession ? 1 : 0,
                                        auth.isSharedSessionReady ? 1 : 0, auth.isAuthenticating ? 1 : 0]
@@ -120,6 +122,49 @@ struct HillclimbTextProbe: ViewModifier {
     private func record(_ actual: GeometryProxy, _ ideal: GeometryProxy) {
         HillclimbGeometry.shared.frames["text-" + id.uuidString] = actual.frame(in: .global)
         HillclimbGeometry.shared.frames["ideal-" + id.uuidString] = CGRect(origin: .zero, size: ideal.size)
+    }
+#endif
+}
+
+struct HillclimbFrameProbe: ViewModifier {
+    let key: String
+    func body(content: Content) -> some View {
+#if DEBUG
+        if HillclimbDemo.isActive {
+            content.background(GeometryReader { geometry in
+                Color.clear.onAppear { HillclimbGeometry.shared.frames[key] = geometry.frame(in: .global) }
+                    .onChange(of: geometry.frame(in: .global)) { _, frame in HillclimbGeometry.shared.frames[key] = frame }
+            })
+        } else { content }
+#else
+        content
+#endif
+    }
+}
+
+struct HillclimbCapacityProbe: ViewModifier {
+    func body(content: Content) -> some View {
+#if DEBUG
+        if HillclimbDemo.isActive {
+            content.background(GeometryReader { actual in
+                Text("Board full — combine lines instead").font(.body)
+                    .frame(width: actual.size.width, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .background(GeometryReader { ideal in
+                        Color.clear.onAppear { record(actual, ideal) }
+                            .onChange(of: actual.frame(in: .global)) { _, _ in record(actual, ideal) }
+                            .onChange(of: ideal.size) { _, _ in record(actual, ideal) }
+                    }).hidden().accessibilityHidden(true)
+            })
+        } else { content }
+#else
+        content
+#endif
+    }
+#if DEBUG
+    private func record(_ actual: GeometryProxy, _ ideal: GeometryProxy) {
+        HillclimbGeometry.shared.frames["capacity"] = actual.frame(in: .global)
+        HillclimbGeometry.shared.frames["capacityIdeal"] = CGRect(origin: .zero, size: ideal.size)
     }
 #endif
 }

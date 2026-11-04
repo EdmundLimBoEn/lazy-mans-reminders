@@ -36,7 +36,7 @@ struct BoardSetupTipCard: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline) {
                 Text("Keep Your Board in View")
-                    .font(.headline)
+                    .font(.subheadline.weight(.semibold))
                     .accessibilityAddTraits(.isHeader)
                 Spacer()
                 Button(action: onDismiss) {
@@ -58,16 +58,12 @@ struct BoardSetupTipCard: View {
                         .fixedSize(horizontal: false, vertical: true)
                 } icon: {
                     Image(systemName: step.symbol)
-                        .foregroundStyle(.tint)
+                        .foregroundStyle(.secondary)
                 }
             }
         }
-        .padding(16)
+        .padding(.vertical, 8)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            Color(.secondarySystemGroupedBackground),
-            in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-        )
         .accessibilityElement(children: .contain)
     }
 }

@@ -1,0 +1,130 @@
+[
+  {
+    "name": "baseline-light",
+    "path": "hillclimb/rounds/2/full-light-default-top.png",
+    "foreground": [
+      197,
+      197,
+      199
+    ],
+    "background": [
+      255,
+      255,
+      255
+    ],
+    "ratio": 1.723,
+    "method": "Most frequent neutral non-background pixel in completion-circle-only column x48:180,y300:1800 of 3x native capture; sRGB relative luminance. Anti-aliased edge pixels excluded by modal sampling."
+  },
+  {
+    "name": "baseline-dark",
+    "path": "hillclimb/rounds/2/full-dark-default-top.png",
+    "foreground": [
+      70,
+      70,
+      73
+    ],
+    "background": [
+      0,
+      0,
+      0
+    ],
+    "ratio": 2.233,
+    "method": "Most frequent neutral non-background pixel in completion-circle-only column x48:180,y300:1800 of 3x native capture; sRGB relative luminance. Anti-aliased edge pixels excluded by modal sampling."
+  },
+  {
+    "name": "final-light",
+    "path": "hillclimb/tasks/board-multiline/target2-attachments/AE0E4035-387C-46DE-B24E-465AA27E20FB.png",
+    "foreground": [
+      138,
+      138,
+      142
+    ],
+    "background": [
+      255,
+      255,
+      255
+    ],
+    "ratio": 3.439,
+    "method": "Most frequent neutral non-background pixel in completion-circle-only column x48:180,y300:1800 of 3x native capture; sRGB relative luminance. Anti-aliased edge pixels excluded by modal sampling."
+  },
+  {
+    "name": "final-dark",
+    "path": "hillclimb/tasks/board-multiline/target2-attachments/C451117C-FD21-497A-A141-9C82AC32D599.png",
+    "foreground": [
+      141,
+      141,
+      147
+    ],
+    "background": [
+      0,
+      0,
+      0
+    ],
+    "ratio": 6.364,
+    "method": "Most frequent neutral non-background pixel in completion-circle-only column x48:180,y300:1800 of 3x native capture; sRGB relative luminance. Anti-aliased edge pixels excluded by modal sampling."
+  },
+  {
+    "name": "baseline-light-grip",
+    "path": "hillclimb/rounds/2/full-light-default-top.png",
+    "foreground": [
+      232,
+      232,
+      232
+    ],
+    "background": [
+      255,
+      255,
+      255
+    ],
+    "ratio": 1.225,
+    "method": "Modal neutral foreground in grip-only column x1050:1182,y300:1800 of 3x native capture; sRGB relative luminance."
+  },
+  {
+    "name": "baseline-dark-grip",
+    "path": "hillclimb/rounds/2/full-dark-default-top.png",
+    "foreground": [
+      42,
+      42,
+      44
+    ],
+    "background": [
+      0,
+      0,
+      0
+    ],
+    "ratio": 1.466,
+    "method": "Modal neutral foreground in grip-only column x1050:1182,y300:1800 of 3x native capture; sRGB relative luminance."
+  },
+  {
+    "name": "final-light-grip",
+    "path": "hillclimb/tasks/board-multiline/target2-attachments/AE0E4035-387C-46DE-B24E-465AA27E20FB.png",
+    "foreground": [
+      128,
+      128,
+      128
+    ],
+    "background": [
+      255,
+      255,
+      255
+    ],
+    "ratio": 3.949,
+    "method": "Modal neutral foreground in grip-only column x1050:1182,y300:1800 of 3x native capture; sRGB relative luminance."
+  },
+  {
+    "name": "final-dark-grip",
+    "path": "hillclimb/tasks/board-multiline/target2-attachments/C451117C-FD21-497A-A141-9C82AC32D599.png",
+    "foreground": [
+      128,
+      128,
+      128
+    ],
+    "background": [
+      0,
+      0,
+      0
+    ],
+    "ratio": 5.317,
+    "method": "Modal neutral foreground in grip-only column x1050:1182,y300:1800 of 3x native capture; sRGB relative luminance."
+  }
+]

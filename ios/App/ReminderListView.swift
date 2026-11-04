@@ -15,6 +15,7 @@ struct ReminderListView: View {
     @State private var isLoading = true
     @State private var hasLoaded = false
     @State private var error: String?
+    @State private var errorAnnouncementPolicy = BoardErrorAnnouncementPolicy()
     @State private var completingIDs: Set<UUID> = []
     @State private var isReordering = false
     @State private var boardRevision = 0
@@ -33,6 +34,18 @@ struct ReminderListView: View {
             _isLoading = State(initialValue: false)
             _hasLoaded = State(initialValue: true)
             _showAccount = State(initialValue: mode == .account)
+            switch HillclimbDemo.argument("--hillclimb-board-state") {
+            case "loading":
+                _reminders = State(initialValue: [])
+                _isLoading = State(initialValue: true)
+                _hasLoaded = State(initialValue: false)
+            case "error-empty", "error-populated":
+                if HillclimbDemo.argument("--hillclimb-board-state") == "error-empty" {
+                    _reminders = State(initialValue: [])
+                }
+                _error = State(initialValue: URLError(.notConnectedToInternet).localizedDescription)
+            default: break
+            }
         }
     }
 #endif
@@ -42,6 +55,8 @@ struct ReminderListView: View {
             Group {
                 if isLoading && !hasLoaded && reminders.isEmpty {
                     ProgressView("Loading reminders")
+                        .accessibilityIdentifier("board.loading")
+                        .accessibilityLabel("Loading reminders")
                         .controlSize(.large)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if reminders.isEmpty, let error {
@@ -84,6 +99,8 @@ struct ReminderListView: View {
                 guard scenePhase == .active else { return }
                 await refresh()
             }
+            .onAppear { announceBoardError(error) }
+            .onChange(of: error) { _, message in announceBoardError(message) }
             .sensoryFeedback(.success, trigger: hapticTick)
             .sensoryFeedback(.error, trigger: errorTick)
             .onReceive(NotificationCenter.default.publisher(for: .didUpdateReminders)) { _ in
@@ -122,7 +139,7 @@ struct ReminderListView: View {
                 } description: {
                     Text("Nothing on your board. Add a reminder below.")
                 }
-                if BoardSetupTip.shouldShow(
+                if !composerFocused && BoardSetupTip.shouldShow(
                     hasLoaded: hasLoaded,
                     isBoardEmpty: reminders.isEmpty,
                     hasError: error != nil,
@@ -136,7 +153,7 @@ struct ReminderListView: View {
                     .padding(.horizontal, 20)
                     .transition(.opacity)
                 }
-                boardSiriTip
+                if !composerFocused { boardSiriTip }
             }
             .frame(maxWidth: .infinity, minHeight: 320)
         }
@@ -166,12 +183,16 @@ struct ReminderListView: View {
                 Button {
                     Task { await refresh() }
                 } label: {
-                    if isLoading {
-                        ProgressView()
-                            .controlSize(.regular)
-                    } else {
-                        Text("Try Again")
+                    Group {
+                        if isLoading {
+                            ProgressView()
+                                .controlSize(.regular)
+                        } else {
+                            Text("Try Again")
+                        }
                     }
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
                 }
                 .disabled(isLoading)
                 .accessibilityLabel(isLoading ? "Loading reminders" : "Try Again")
@@ -221,8 +242,22 @@ struct ReminderListView: View {
             }
 
             HStack(alignment: .center, spacing: 8) {
+                if atCapacity {
+                    Text("Board full — combine lines instead")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .modifier(HillclimbCapacityProbe())
+                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                        .contentShape(Rectangle())
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("Board full — combine lines instead")
+                        .accessibilityAddTraits(.isStaticText)
+                        .accessibilityIdentifier("board.capacity")
+                        .accessibilityHint("Board is full. Complete a reminder or combine lines.")
+                } else {
                 TextField(
-                    atCapacity ? "Board full — combine lines instead" : "New reminder",
+                    "New reminder",
                     text: Binding(get: { draft.text }, set: { draft.edit($0) }),
                     axis: .vertical
                 )
@@ -248,6 +283,8 @@ struct ReminderListView: View {
                         : "Adds a reminder to your board and Lock Screen"
                 )
                 .onSubmit { Task { await addReminder() } }
+
+                }
 
                 if composerFocused && draft.text.isEmpty {
                     Button { composerFocused = false } label: {
@@ -390,6 +427,17 @@ struct ReminderListView: View {
         }
     }
 
+    private func announceBoardError(_ message: String?) {
+        if let announcement = errorAnnouncementPolicy.update(message) {
+            UIAccessibility.post(notification: .announcement, argument: announcement)
+#if DEBUG
+            if HillclimbDemo.isActive {
+                HillclimbGeometry.shared.boardErrorAnnouncements.append(announcement)
+            }
+#endif
+        }
+    }
+
     private func presentError(_ message: String) {
         error = message
         errorTick += 1
@@ -517,7 +565,7 @@ private struct BoardErrorBanner: View {
             Divider()
         }
         .accessibilityElement(children: .contain)
-        .accessibilityAddTraits(.updatesFrequently)
+
     }
 }
 
@@ -535,10 +583,17 @@ private struct ReminderRow: View {
     let reminder: Reminder
     let isCompleting: Bool
     let onComplete: () -> Void
+    @ScaledMetric(relativeTo: .body) private var firstLineHeight: CGFloat = 20.3
 
     var body: some View {
         Button(action: onComplete) {
-            Label {
+            HStack(alignment: .top, spacing: 8) {
+                Image(systemName: isCompleting ? "checkmark.circle.fill" : "circle")
+                    .font(.title3.weight(.light))
+                    .foregroundStyle(isCompleting ? Color.accentColor : Color(.secondaryLabel))
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
+                    .modifier(HillclimbFrameProbe(key: "circle-" + reminder.id.uuidString))
                 Text(reminder.text)
                     .font(.body)
                     .kerning(-0.1)
@@ -547,12 +602,7 @@ private struct ReminderRow: View {
                     .multilineTextAlignment(.leading)
                     .modifier(HillclimbTextProbe(id: reminder.id, text: reminder.text))
                     .frame(maxWidth: .infinity, alignment: .leading)
-            } icon: {
-                Image(systemName: isCompleting ? "checkmark.circle.fill" : "circle")
-                    .font(.title3.weight(.light))
-                    .foregroundStyle(isCompleting ? Color.accentColor : Color(.tertiaryLabel))
-                    .frame(minWidth: 44, minHeight: 44, alignment: .center)
-                    .contentShape(Rectangle())
+                    .padding(.top, max(0, (44 - firstLineHeight) / 2))
             }
         }
         .buttonStyle(.plain)
@@ -575,5 +625,15 @@ private struct BoardNavigationSubtitle: ViewModifier {
         } else {
             content
         }
+    }
+}
+
+struct BoardErrorAnnouncementPolicy {
+    private var visibleMessage: String?
+
+    mutating func update(_ message: String?) -> String? {
+        defer { visibleMessage = message }
+        guard let message, message != visibleMessage else { return nil }
+        return message
     }
 }

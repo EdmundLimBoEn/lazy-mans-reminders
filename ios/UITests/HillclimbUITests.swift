@@ -67,8 +67,11 @@ final class HillclimbUITests: XCTestCase {
         XCTAssertGreaterThanOrEqual(account.frame.minY, safe.minY)
         assertTarget(account)
         assertTarget(app.buttons["Add reminder"])
-        let capacityField = app.descendants(matching: .any).matching(identifier: "New reminder").firstMatch
-        XCTAssertFalse(capacityField.isEnabled)
+        let capacityField = app.staticTexts["board.capacity"]
+        XCTAssertEqual(capacityField.label, "Board full — combine lines instead")
+        XCTAssertEqual(app.textFields.count + app.textViews.count, 0)
+        XCTAssertFalse(app.buttons["Add reminder"].isEnabled)
+        assertTarget(capacityField)
         capacityField.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.1)).tap()
         XCTAssertFalse(app.keyboards.firstMatch.exists, "A full board must not focus the disabled composer")
         account.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5)).tap()
