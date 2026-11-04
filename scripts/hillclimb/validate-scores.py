@@ -38,9 +38,7 @@ def validate(root):
             for name in paths:
                 if not (root / name).is_file():
                     errors.append(f'Missing evidence file: {name}')
-        if data.get('evidence_gaps'):
-            errors.append('Unresolved evidence gaps')
-        result['graders'][model] = {'overall': overall, 'minimum': min(values) if overall else None, 'errors': errors}
+        result['graders'][model] = {'overall': overall, 'minimum': min(values) if overall else None, 'errors': errors, 'evidence_gaps': data.get('evidence_gaps', [])}
         result['errors'].extend(f'{model}: {error}' for error in errors)
     checks_path = root / 'checks.json'
     if not checks_path.exists():

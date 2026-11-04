@@ -57,3 +57,5 @@ Tracking: decisions.md, questions.md, REPORT.md, rounds/<n>/, tasks/<task>/. No 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
 
 - D handoff accepted after parent source review, two representative screenshots and16 verified hashes. Read-only List controls disabled while scroll and Done work. All worker scopes are merged; no current worker holds original17. Combined integration validation is next, not yet claimed passed.
+
+- Integration validation/capture task next: new isolated worktree at current merged source, original17 lease, full combined Debug test suite plus Release build, fresh round2 matrix and current native Activity captures. No other worker remains active. Preserve all historical evidence; scripts now support round-specific Activity output.
