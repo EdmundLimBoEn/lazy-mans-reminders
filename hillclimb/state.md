@@ -99,3 +99,9 @@ Both independent reviews complete: Sol8.11(+1.23), Astra8.16(+1.46), minimum7.0 
 
 - Evidence08c56a4 merged after parent confirmed102 native image hashes and all production hashes for6959de1. Eight new XXXL Apple references available. Debug/Release succeeded;23 Python and52+4 Deno tests passed. Actual combined result275 passed/1 failed/0 skipped;260 units passed,15/16 UI passed. No round3 score assigned yet.
 - Failure: keyboard matrix queried a Keyboard frame after a scroll could interactively dismiss it. Parent test-only correction confines drag to visible form, explicitly checks valid dismissal/refocus, and retains all clearance/target/edge-tap assertions. Required checks remain failed until fresh original17 rerun. No production source changed, prior failed evidence retained.
+
+## Round3 required gates accepted; independent graders running
+
+- Recheck5b0ca7e merged.276/276 passed (260 units+16 UI), zero failures/skips. Three dedicated keyboard repetitions completed24 cases; combined adds8. All original clearance/targets/edge taps remain. Parent verified110 native image hashes and production hash identity to6959de1; test revision542b9f7. Prior failed run remains preserved.
+- Fresh Debug build/Python23 passed; Release/backend52+4 explicitly reused based on53 production+11 backend hashes, not rerun claims. Zero observed runtimewarnings andinvalid-frame events; otherdiagnostics retained. Original17 cleaned andreturned.
+- Round3 Sol/high andAstra/high are independently grading the identical110-image/source/reference packet. No source edits during reviews. Opus requires both same-roundoverall>=8.5. Quota snapshot exported to rounds/3/usage.json from current-sessionrate-limit metadata.

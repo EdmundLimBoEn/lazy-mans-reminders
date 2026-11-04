@@ -100,3 +100,9 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 Round3 has102 verified native images and8 new XXXL Apple reference states. Fresh arm64 Debug/Release builds,23 Python iOS checks and52+4 Deno tests passed. Full iOS run:275 passed,1 failed,0 skipped; the keyboard test queried a frame after scrolling dismissed the keyboard. Test-only correction now handles interactive dismissal/refocus while retaining geometry and touch assertions. A fresh original17 rerun is required before grading/acceptance; original failed evidence stays intact. Production screenshot source remains6959de1. [Evidence](rounds/3/README.md).
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Round3 recheck accepted
+
+The corrected test passed all276 tests (260 unit+16 UI), plus three complete keyboard repetitions.110 native captures now have verified hashes; production remains6959de1, test542b9f7. Zero observed runtime warnings or invalid-frame events; other diagnostics retained. Historical Release/backend results are explicitly reused based on unchanged inputs. Independent Codex grading is running. [Recheck evidence](validation/round3/recheck/REPORT.md).
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
