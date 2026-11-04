@@ -16,6 +16,24 @@ struct SignInView: View {
     @FocusState private var emailFocused: Bool
     @FocusState private var passwordFocused: Bool
 
+#if DEBUG
+    // Read-only demo variants retain HillclimbRoot's network-control hit-testing block.
+    private var fixtureVariant: String? {
+        HillclimbDemo.mode == .signin ? HillclimbDemo.argument("--hillclimb-signin-variant") : nil
+    }
+#endif
+
+    private var displayedNotice: AuthNotice? {
+#if DEBUG
+        switch fixtureVariant {
+        case "inbox": return .checkInbox(email: "you@example.com")
+        case "error": return .error("Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.")
+        default: break
+        }
+#endif
+        return auth.notice
+    }
+
     private enum PendingSignIn {
         case apple, google, magicLink, password
     }
@@ -34,9 +52,9 @@ struct SignInView: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
-                    providerCard
-                    emailCard
-                    if case .error(let message) = auth.notice {
+                    providerSection
+                    emailSection
+                    if case .error(let message) = displayedNotice {
                         Label(message, systemImage: "exclamationmark.triangle.fill")
                             .font(.footnote)
                             .foregroundStyle(.red)
@@ -54,7 +72,7 @@ struct SignInView: View {
                 .frame(maxWidth: .infinity)
             }
             .scrollDismissesKeyboard(.interactively)
-            .background(Color(.systemGroupedBackground))
+            .background(Color(.systemBackground))
             .navigationTitle("Sign In")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
@@ -67,6 +85,15 @@ struct SignInView: View {
                 }
             }
         }
+#if DEBUG
+        .task {
+            if fixtureVariant == "password" || fixtureVariant == "password-keyboard" {
+                usesPassword = true
+            }
+            if fixtureVariant == "keyboard" { emailFocused = true }
+            if fixtureVariant == "password-keyboard" { passwordFocused = true }
+        }
+#endif
         .sensoryFeedback(.success, trigger: inboxPulse)
         .sensoryFeedback(.error, trigger: errorPulse)
         .onChange(of: email) { _, _ in
@@ -112,8 +139,8 @@ struct SignInView: View {
         SignInEmail.isPlausible(normalizedEmail)
     }
 
-    private var providerCard: some View {
-        SignInCard {
+    private var providerSection: some View {
+        SignInSection {
             SignInWithAppleButton(.signIn) { request in
                 pending = .apple
                 auth.configureAppleRequest(request)
@@ -153,9 +180,9 @@ struct SignInView: View {
     }
 
     @ViewBuilder
-    private var emailCard: some View {
-        if case .checkInbox(let sentTo) = auth.notice {
-            SignInCard {
+    private var emailSection: some View {
+        if case .checkInbox(let sentTo) = displayedNotice {
+            SignInSection {
                 Label("Check Your Inbox", systemImage: "envelope.badge")
                     .font(.headline)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -177,13 +204,14 @@ struct SignInView: View {
                 .frame(maxWidth: .infinity)
             }
         } else {
-            SignInCard {
+            SignInSection {
                 Text("Email")
                     .font(.headline)
                     .accessibilityAddTraits(.isHeader)
                 Text("Use the same address as the web board.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
                 emailField
                 if !normalizedEmail.isEmpty && !emailIsPlausible {
                     Text("Enter a valid email address.")
@@ -221,7 +249,8 @@ struct SignInView: View {
                     passwordFocused = false
                     auth.clearNotice()
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(.plain)
+                .foregroundStyle(.tint)
                 .controlSize(.large)
                 .frame(maxWidth: .infinity, minHeight: 44)
                 .disabled(busy)
@@ -237,6 +266,7 @@ struct SignInView: View {
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .font(.body)
+                .frame(minHeight: 44)
                 .focused($emailFocused)
                 .submitLabel(usesPassword ? .next : .send)
                 .accessibilityLabel("Email address")
@@ -318,6 +348,8 @@ struct SignInView: View {
     private func signInButtonLabel(title: String, showsProgress: Bool) -> some View {
         ZStack {
             Text(title)
+                .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.center)
                 .opacity(showsProgress ? 0 : 1)
             if showsProgress {
                 ProgressView()
@@ -354,7 +386,7 @@ struct SignInView: View {
     }
 }
 
-private struct SignInCard<Content: View>: View {
+private struct SignInSection<Content: View>: View {
     var content: Content
 
     init(@ViewBuilder content: () -> Content) {
@@ -365,12 +397,7 @@ private struct SignInCard<Content: View>: View {
         VStack(alignment: .leading, spacing: 12) {
             content
         }
-        .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            Color(.secondarySystemGroupedBackground),
-            in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-        )
     }
 }
 
