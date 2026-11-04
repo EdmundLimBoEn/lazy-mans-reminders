@@ -89,15 +89,17 @@ final class SignInSurfaceUITests: XCTestCase {
 
     func testFocusedEmailAndPasswordClearKeyboardInBothAppearances() {
         for style in ["light", "dark"] {
+            for size in ["default", "XXXL"] {
             for variant in ["keyboard", "password-keyboard"] {
-                launch(style: style, size: "default", variant: variant)
+                launch(style: style, size: size, variant: variant)
                 XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 8))
                 let field = variant == "keyboard" ? app.textFields["Email address"] : app.secureTextFields["Password"]
                 XCTAssertTrue(field.exists)
                 target(app.otherElements[variant == "keyboard" ? "signin.emailTarget" : "signin.passwordTarget"])
                 XCTAssertLessThanOrEqual(field.frame.maxY, app.keyboards.firstMatch.frame.minY)
                 XCTAssertTrue(app.buttons["Done"].waitForExistence(timeout: 5))
-                capture("signin-\(style)-default-\(variant)")
+                capture("signin-\(style)-\(size)-\(variant)")
+            }
             }
         }
     }

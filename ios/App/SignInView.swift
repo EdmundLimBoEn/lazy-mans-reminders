@@ -40,6 +40,7 @@ struct SignInView: View {
 
     var body: some View {
         NavigationStack {
+            ScrollViewReader { scroll in
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     VStack(alignment: .leading, spacing: 8) {
@@ -73,6 +74,14 @@ struct SignInView: View {
             }
             .scrollDismissesKeyboard(.interactively)
             .background(Color(.systemBackground))
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
+                if passwordFocused {
+                    scroll.scrollTo("signin.passwordTarget", anchor: .center)
+                } else if emailFocused {
+                    scroll.scrollTo("signin.emailTarget", anchor: .center)
+                }
+            }
+            }
             .navigationTitle("Sign In")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
@@ -311,6 +320,7 @@ struct SignInView: View {
         .onTapGesture { if !busy { emailFocused = true } }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("signin.emailTarget")
+        .id("signin.emailTarget")
     }
 
     private var passwordField: some View {
@@ -333,6 +343,7 @@ struct SignInView: View {
         .onTapGesture { if !busy { passwordFocused = true } }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("signin.passwordTarget")
+        .id("signin.passwordTarget")
     }
 
     private var legalFooter: some View {
