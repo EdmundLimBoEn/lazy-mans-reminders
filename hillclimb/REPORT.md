@@ -59,7 +59,7 @@ Activity task retained an intermediate candidate clipping image and recording; t
 
 ## Remaining limits
 
-Actual device locking is unavailable through the simulator interface; Native Notification Center banner plus expanded Island recording evidence are available. Arbitrary wallpaper contrast, physical haptics and true hardware Island behavior remain unverified. Notes references remain unavailable. No exposed quota tool was found; no remaining-weekly-quota estimate is fabricated. Stop on actual near-limit indication if available; do not wait into the next weekly window.
+Actual device locking is unavailable through the simulator interface; Native Notification Center banner plus expanded Island recording evidence are available. Arbitrary wallpaper contrast, physical haptics and true hardware Island behavior remain unverified. Notes references remain unavailable. No dedicated quota tool was found; current-session rate-limit metadata now reports6% used in the weekly window (timestamped in rounds/2/usage.json). Stop on actual near-limit indication if available; do not wait into the next weekly window.
 
 ## Install on a phone
 

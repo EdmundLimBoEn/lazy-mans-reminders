@@ -7,7 +7,7 @@ Integration: `hillclimb/ui`, based on origin/main `5fc4cbc`. Work is ongoing; sc
 - Every round: independent gpt-6.1-sol/high and gpt-6-astra/high reviews of the same screenshots, source, checks and Apple reference pairs;30 detailed categories, honest arithmetic-mean overall.
 - Edmund's updated rule: Claude Opus5.5/medium ONLY if BOTH Codex graders score >=8.5 overall in the SAME round. This replaces every-other-round scheduling. Round1 is ineligible; Opus has not run.
 - Final stop unchanged: ALL THREE graders >=9 overall and NO category below7. Eligibility at8.5 is not completion.
-- Also stop for nearly exhausted Codex quota or3 plateau rounds. No quota/limit tool is exposed; no quota estimate is fabricated and no waiting into next weekly window is authorized.
+- Also stop for nearly exhausted Codex quota or3 plateau rounds. No dedicated quota tool is exposed. Current-session rate-limit metadata is available:6% used in a10080-minute weekly window as of2026-11-04T14:26:42.750Z (rounds/2/usage.json); not near exhaustion. No waiting into the next weekly window is authorized.
 
 ## Scores
 
