@@ -96,7 +96,7 @@ final class SignInSurfaceUITests: XCTestCase {
                 XCTAssertTrue(field.exists)
                 target(app.otherElements[variant == "keyboard" ? "signin.emailTarget" : "signin.passwordTarget"])
                 XCTAssertLessThanOrEqual(field.frame.maxY, app.keyboards.firstMatch.frame.minY)
-                XCTAssertTrue(app.buttons["Done"].exists)
+                XCTAssertTrue(app.buttons["Done"].waitForExistence(timeout: 5))
                 capture("signin-\(style)-default-\(variant)")
             }
         }

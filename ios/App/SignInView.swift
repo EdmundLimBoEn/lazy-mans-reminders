@@ -90,6 +90,9 @@ struct SignInView: View {
             if fixtureVariant == "password" || fixtureVariant == "password-keyboard" {
                 usesPassword = true
             }
+            if fixtureVariant == "keyboard" || fixtureVariant == "password-keyboard" {
+                try? await Task.sleep(for: .milliseconds(300))
+            }
             if fixtureVariant == "keyboard" { emailFocused = true }
             if fixtureVariant == "password-keyboard" { passwordFocused = true }
         }
