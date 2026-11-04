@@ -20,8 +20,13 @@ manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else 
 }
 def run(*args):
     manifest['commands'].append([command, *args])
-    result = subprocess.run([command, *args], check=True, capture_output=True, text=True)
+    result = subprocess.run([command, *args], capture_output=True, text=True)
     print(result.stdout[-1500:], flush=True)
+    if result.returncode:
+        manifest.setdefault('failures', []).append({'command': [command, *args], 'stdout': result.stdout, 'stderr': result.stderr})
+        manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
+        print(result.stderr, flush=True)
+        result.check_returncode()
     manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
 
 def launch():
@@ -39,15 +44,16 @@ def shot(detent, position):
                                 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
     manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
 
-run('settings', 'appearance', style)
-run('settings', 'text-size', 'extra-extra-extra-large' if size == 'XXXL' else 'large')
-time.sleep(3)
-launch()
-shot('large', 'top')
-run('swipe', '201', '780', '201', '240', '--count', '8', '--pause-ms', '300')
-time.sleep(2)
-shot('large', 'lower')
-launch()
+if '--medium-only' not in sys.argv:
+    run('settings', 'appearance', style)
+    run('settings', 'text-size', 'extra-extra-extra-large' if size == 'XXXL' else 'large')
+    time.sleep(3)
+    launch()
+    shot('large', 'top')
+    run('swipe', '201', '780', '201', '240', '--count', '8', '--pause-ms', '300')
+    time.sleep(2)
+    shot('large', 'lower')
+    launch()
 run('gesture', 'pan', '201', '69', '0', '355', '600')
 time.sleep(3)
 shot('medium', 'top')
