@@ -4,7 +4,7 @@ Integration branch: `hillclimb/ui`. Main, deployment, App Store/TestFlight and f
 
 ## Current plan
 
-1. Round 5 Codex reviews validate: **Sol 9.06/minimum 8.0; Astra 9.15/minimum 8.2**. Opus 5.5/medium is eligible and is next. Final all-three gate remains false.
+1. Round 5 Codex reviews validate: **Sol 9.06/minimum 8.0; Astra 9.15/minimum 8.2**. Opus 5.5/medium is **8.69/minimum 7.8**. Final all-three gate remains false; continue round 6.
 2. Validate both reports. Run Opus 5.5/medium only if both same-round Codex overall scores are at least 8.5.
 3. Turn remaining findings into isolated, non-overlapping worker tasks. Each worker builds, passes the existing tests plus measurable regression gates, and captures affected screens before handoff.
 4. Merge passing branches into `hillclimb/ui`, run combined original17 validation, re-shoot the full matrix and re-grade.
@@ -26,6 +26,7 @@ Integration branch: `hillclimb/ui`. Main, deployment, App Store/TestFlight and f
 | 4 | Claude Opus 5.5 | 8.51 | 7.6 |
 | 5 | gpt-6.1-sol | 9.06 | 8.0 |
 | 5 | gpt-6-astra | 9.15 | 8.2 |
+| 5 | Claude Opus 5.5 | 8.69 | 7.8 |
 
 Each report has all 30 rubric categories. Round 1 and 2 were not Opus eligible. Round 3 passed the 8.5 eligibility threshold but did not meet the final stop gate. Reports and machine-readable scores live under `rounds/<n>/`.
 
@@ -141,3 +142,16 @@ Evidence `0e61a06` is merged. Parent verified all 394 native PNG hashes/dimensio
 Round 5 Astra report validates: all 30 categories, exact mean 9.15, minimum 8.2 and all 394 screenshot/17 reference paths exist. No final success or Opus eligibility is inferred before Sol completes.
 
 Round 5 Sol also validates: overall 9.06, minimum 8.0. Both Codex reports cover all 30 categories and the frozen c60288d packet. Aggregate validator reports only missing Opus; all required programmatic checks pass. Commission exact Opus 5.5/medium independently. Final gate remains unmet until its result.
+
+## Round 5 complete; round 6 plan
+
+Opus f1acaa7 is merged: **8.69**, minimum **7.8**. All three reports validate and all programmatic checks pass; final numeric gate is false. Scores continue improving, with no three-round plateau. Wording remains explicitly unchanged.
+
+Next isolated tasks, with exclusive files and regular17 devices:
+- N: omit the disabled add affordance at board capacity; preserve full-width status, 44pt height, final-row ink/geometry and all composer interactions. Private Board17.
+- O: sign-in native top-edge treatment, measured footer reachability and persistent existing Password label; reproduce the one unconfirmed Apple loading-label omission. Private Auth17.
+- P: native Island-only tightening experiment; accept only if actual glyph content/readability improves while scaled size, line totals and footer/corner clearance hold. Original17. The rejected word-boundary renderer stays rejected.
+- Q queued after a device returns: Account native top-edge treatment and sentence-boundary spacing for the existing persistence paragraph, preserving every word.
+- Integrated validation must add actual public simulator launch/scroll metrics with samples and scope, rather than infer timing from recordings. Physical haptics, spoken VoiceOver and true lock remain gaps.
+
+Each worker must build, pass the existing 293 tests plus new measurable checks, capture affected native states, restore original settings and close only its own session. No source edits outside ownership, main merge, push by children or shipping.

@@ -80,3 +80,5 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - Round 5 Astra 9.15/minimum 8.2 accepted after schema, arithmetic and evidence-path checks. Sol remains in progress; do not launch Opus until its same-round result establishes eligibility. No Activity change is justified solely to remove a native tail ellipsis at the cost of content.
 
 - Round 5 Sol 9.06/minimum 8.0 accepted; both Codex reports validate, so Opus 5.5/medium is authorized by the >=8.5 schedule. Both Codex graders exceed 9; no final success is claimed before the independent third report.
+
+- Round 5 Opus 8.69/minimum 7.8 accepted (f1acaa7); all reports validate but final gate is false. Continue with small native-chrome/capacity/reading tasks and actual performance measurements. Reviewer suggestions are hypotheses: retain only demonstrated improvements, especially Island tightening. Preserve exact wording; paragraph spacing may change only at existing sentence boundaries. No physical evidence is inferred.

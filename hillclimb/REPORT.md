@@ -1,41 +1,41 @@
 # Notepad UI hill climb: progress report
 
-Work continues on `hillclimb/ui`. Round 5 Codex grades are **Sol 9.06** and **Astra 9.15**, with minima **8.0/8.2**. Round 5 Opus is next; its latest completed round 4 score is **8.51**, minimum **7.6**. Final stop requires all three>=9, with no category below7; it has not been reached.
+Work continues on `hillclimb/ui`. Round 5 Codex grades are **Sol 9.06** and **Astra 9.15**, with minima **8.0/8.2**. Round 5 Opus is **8.69**, minimum **7.8**; the final gate remains unmet. Final stop requires all three>=9, with no category below7; it has not been reached.
 
 ## Category scores
 
-| Category | R1 Sol | R5 Sol | R1 Astra | R5 Astra | R3 Opus | R4 Opus |
+| Category | R1 Sol | R5 Sol | R1 Astra | R5 Astra | R3 Opus | R5 Opus |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Visual hierarchy | 7.5 | 9.2 | 7 | 9.3 | 8.5 | 8.8 |
-| Spacing/grid | 7.0 | 9.2 | 7 | 9.2 | 8.3 | 8.7 |
-| Typography scale | 8.5 | 9.2 | 8 | 9.2 | 8.2 | 8.7 |
-| Dynamic Type | 7.5 | 8.9 | 7 | 8.9 | 8.6 | 8.7 |
-| Light contrast | 7.0 | 9.3 | 7 | 9.4 | 8.4 | 8.6 |
-| Dark contrast | 6.5 | 9.3 | 6.5 | 9.4 | 8.0 | 8.8 |
+| Visual hierarchy | 7.5 | 9.2 | 7 | 9.3 | 8.5 | 8.9 |
+| Spacing/grid | 7.0 | 9.2 | 7 | 9.2 | 8.3 | 8.8 |
+| Typography scale | 8.5 | 9.2 | 8 | 9.2 | 8.2 | 8.8 |
+| Dynamic Type | 7.5 | 8.9 | 7 | 8.9 | 8.6 | 8.8 |
+| Light contrast | 7.0 | 9.3 | 7 | 9.4 | 8.4 | 8.9 |
+| Dark contrast | 6.5 | 9.3 | 6.5 | 9.4 | 8.0 | 8.9 |
 | Iconography | 8.0 | 9.2 | 8 | 9.3 | 8.6 | 8.8 |
-| Safe area / Dynamic Island | 8.0 | 9.4 | 8 | 9.2 | 8.8 | 8.8 |
-| Scroll/pull-down / last row | 4.0 | 9.3 | 4 | 9.2 | 8.4 | 8.4 |
-| List rows | 6.5 | 9.2 | 6.5 | 9.4 | 7.8 | 8.8 |
+| Safe area / Dynamic Island | 8.0 | 9.4 | 8 | 9.2 | 8.8 | 8.9 |
+| Scroll/pull-down / last row | 4.0 | 9.3 | 4 | 9.2 | 8.4 | 8.9 |
+| List rows | 6.5 | 9.2 | 6.5 | 9.4 | 7.8 | 8.9 |
 | Empty states | 7.0 | 9.2 | 7.5 | 9.4 | 8.8 | 8.9 |
-| Composer ergonomics | 6.0 | 9.3 | 6 | 9.3 | 8.6 | 8.8 |
-| Keyboard handling | 7.0 | 9.4 | 7.5 | 9.4 | 8.5 | 8.5 |
+| Composer ergonomics | 6.0 | 9.3 | 6 | 9.3 | 8.6 | 8.7 |
+| Keyboard handling | 7.0 | 9.4 | 7.5 | 9.4 | 8.5 | 8.8 |
 | Sheet presentation/detents | 7.0 | 9.3 | 6 | 9.2 | 8.5 | 8.7 |
-| Navigation clarity | 7.5 | 9.2 | 7 | 9.3 | 8.7 | 8.8 |
-| Touch targets | 4.5 | 9.3 | 4.5 | 9.4 | 8.4 | 8.8 |
-| Haptics | 7.0 | 8.0 | 7 | 8.2 | 7.5 | 7.6 |
-| Animation/transitions | 6.5 | 8.6 | 6.5 | 8.7 | 7.6 | 8.0 |
-| Loading states | 7.5 | 8.8 | 7 | 9.3 | 8.5 | 8.6 |
-| Error states | 7.5 | 9.3 | 7 | 9.2 | 7.6 | 8.0 |
-| VoiceOver/labels | 7.5 | 8.8 | 7.5 | 9.1 | 8.2 | 8.2 |
-| iOS HIG consistency | 7.5 | 9.2 | 7 | 9.3 | 8.1 | 8.6 |
-| Lock Screen / Live Activity | 6.0 | 8.5 | 6 | 8.6 | 7.8 | 7.8 |
-| Sign-in/onboarding | 6.5 | 9.0 | 6.5 | 9.3 | 8.0 | 8.6 |
+| Navigation clarity | 7.5 | 9.2 | 7 | 9.3 | 8.7 | 8.9 |
+| Touch targets | 4.5 | 9.3 | 4.5 | 9.4 | 8.4 | 9.1 |
+| Haptics | 7.0 | 8.0 | 7 | 8.2 | 7.5 | 7.8 |
+| Animation/transitions | 6.5 | 8.6 | 6.5 | 8.7 | 7.6 | 8.2 |
+| Loading states | 7.5 | 8.8 | 7 | 9.3 | 8.5 | 8.7 |
+| Error states | 7.5 | 9.3 | 7 | 9.2 | 7.6 | 8.7 |
+| VoiceOver/labels | 7.5 | 8.8 | 7.5 | 9.1 | 8.2 | 8.6 |
+| iOS HIG consistency | 7.5 | 9.2 | 7 | 9.3 | 8.1 | 8.8 |
+| Lock Screen / Live Activity | 6.0 | 8.5 | 6 | 8.6 | 7.8 | 8.1 |
+| Sign-in/onboarding | 6.5 | 9.0 | 6.5 | 9.3 | 8.0 | 8.8 |
 | Settings/account | 7.0 | 9.1 | 6 | 9.2 | 8.1 | 8.7 |
-| Performance feel | 6.5 | 8.1 | 6.5 | 8.2 | 7.6 | 7.7 |
-| Delight | 6.5 | 8.8 | 6.5 | 9.0 | 7.8 | 7.9 |
-| Long text | 7.0 | 9.0 | 7 | 9.0 | 8.7 | 8.7 |
-| Reduced Motion / Transparency | 7.0 | 9.1 | 6 | 9.2 | 8.0 | 8.4 |
-| Palette / minimalism | 7.0 | 9.5 | 7 | 9.6 | 9.0 | 9.0 |
+| Performance feel | 6.5 | 8.1 | 6.5 | 8.2 | 7.6 | 7.9 |
+| Delight | 6.5 | 8.8 | 6.5 | 9.0 | 7.8 | 8.1 |
+| Long text | 7.0 | 9.0 | 7 | 9.0 | 8.7 | 8.8 |
+| Reduced Motion / Transparency | 7.0 | 9.1 | 6 | 9.2 | 8.0 | 8.7 |
+| Palette / minimalism | 7.0 | 9.5 | 7 | 9.6 | 9.0 | 9.1 |
 
 Start/current category comparisons are shown above. Full intervening-round histories remain in their score reports. [Round4 machine-readable scores](rounds/4/scores.json).
 
@@ -137,3 +137,5 @@ The full-device combined-settings supplements show complete keyboards where XCTe
 Edmund confirmed “Keep existing wording.” The raw network-error text is intentionally retained and the copy question is closed.
 
 Round 5 independent Codex reports validate at **9.06 / 9.15**, both above the target and with no category below 7. Opus 5.5/medium now reviews this same packet; no final all-three success is claimed.
+
+Round 5 Opus completed at **8.69/minimum 7.8**. All reports validate; final success is not reached. Round 6 targets the remaining native chrome, capacity affordance and constrained-surface reading findings. Raw network-error copy is a closed product decision.

@@ -420,11 +420,231 @@
           "programmatic_check": "For any candidate, capture actual ActivityKit light/dark default/XXXL states and compare visible original-character prefixes against this baseline, requiring no loss in either visible row. Require counts 3+7/default and 2+8/XXXL, complete footer ink and unchanged scaled type, plus ActivityNativeLayoutTests and the existing iOS suite. Current conservation and footer checks passed in the supplied packet; this proposed improvement was not implemented or run."
         }
       ]
+    },
+    "claude-opus-5.5": {
+      "overall": 8.69,
+      "minimum": 7.8,
+      "errors": [],
+      "evidence_gaps": [
+        "Physical haptics never felt; Haptics is a provisional source-aware grade.",
+        "Spoken VoiceOver output and traversal order never heard; AX snapshots and source only.",
+        "True physical Lock Screen, arbitrary wallpapers and locked-device Live Activity unobserved; Notification Center is not true locking.",
+        "AX1 to AX5 accessibility sizes not captured; Dynamic Type observed only up to XXXL.",
+        "No launch, frame-time or physical performance measurement; seven recordings sampled at three frames each show sampled motion only.",
+        "Live authentication, magic-link delivery, Apple/Google provider sheets and AutoFill success never exercised.",
+        "XCTest attachments omit protected password keyboards in eight focused images; the eight pinned manual combined-keyboard captures are the complete keyboard evidence.",
+        "No Apple Notes reference available; no exact Apple counterpart for sign-in, Account settings, Activity, error, loading, medium detent or system-settings states. Pairings compare native form/list treatment only.",
+        "Reduce Motion behaviour of animations not recorded; motion gating is source-derived.",
+        "Unit ImageRenderer rasters and rejected captures were not counted as native evidence."
+      ],
+      "source_sha": "c60288dae3173383442723e70f7874b8878d891d",
+      "categories": [
+        {
+          "name": "Visual hierarchy",
+          "score": 8.9,
+          "rationale": "Observed across board, empty, error, Account and Sign In families: reminder text leads under a quiet inline 'Your Board' title with a live '7 of 7' subtitle, matching the Reminders list's text-first weight without copying its large blue title. Board-full status is primary unboxed text above the hint. The error banner reads title, detail, Try Again in order, and K's primary diagnostic ink keeps the detail as readable as the title. Account rows are neutral with Delete Account as the only red glyph. Remaining hierarchy cost is the dense persistence paragraph in Account (OPUS5-05)."
+        },
+        {
+          "name": "Spacing/grid",
+          "score": 8.8,
+          "rationale": "Observed: 16pt leading inset, 56pt separator inset aligned to the text column, consistent 4pt row padding, and the composer's 16pt gutters line up with list text in every default and XXXL board capture. Account uses insetGrouped compact section spacing similar to the Reminders Details sheet. Sign In keeps a 20pt column with 24pt section rhythm. Minor: Sign In at default leaves a large empty lower half, which is acceptable for a short form."
+        },
+        {
+          "name": "Typography scale",
+          "score": 8.8,
+          "rationale": "Observed and source: body for rows and composer, headline for banner and account name, footnote/caption for diagnostic, hint and legal, and a large-title Sign In. All use text styles or ScaledMetric, so the scale tracks Dynamic Type. Row kerning -0.1 is subtle. The Island uses a fixed semibold 15pt scaled metric, consistent with the reference list weight at XXXL."
+        },
+        {
+          "name": "Dynamic Type",
+          "score": 8.8,
+          "rationale": "Observed in every XXXL family: rows wrap fully with no truncation, the capacity line wraps to two lines and stays inside a 44pt row, Account rows like Background App Refresh wrap value under title, and Sign In reflows without clipping. The hint plus status block consumes about 120pt at XXXL but the final row still clears it in all 16 bottom states (geometry JSON). AX1 to AX5 were not captured, so behaviour above XXXL is unobserved."
+        },
+        {
+          "name": "Light contrast",
+          "score": 8.9,
+          "rationale": "Measured by the packet: diagnostic/destructive rasters minimum 12.06:1, Account helper/footer samples minimum 13.94:1, capacity 21:1 and hint 10.37:1 on white. Enabled legal links are now primary ink rather than the earlier 1.7:1 disabled grey. Disabled controls (Send Sign-In Link, Sign In with Password) stay low contrast, which is the native disabled treatment and exempt from text contrast minimums."
+        },
+        {
+          "name": "Dark contrast",
+          "score": 8.9,
+          "rationale": "Observed in all dark families: pure black board, white primary rows, secondary grey circles and grip still visible, banner on regularMaterial dark grey with white detail. Account footers in primary ink on grouped black read clearly. Increase Contrast captures show solid secondaryGroupedBackground banner and thicker composer stroke. No dark-only washed-out text found beyond intentional disabled controls."
+        },
+        {
+          "name": "Iconography",
+          "score": 8.8,
+          "rationale": "SF Symbols throughout: light-weight circle and checkmark.circle.fill for completion, two-column dot grip, person.crop.circle account button, exclamationmark.triangle for errors, neutral grey row glyphs with an arrow.up.right external hint in Account. Weights and sizes sit with the Reminders reference. The hand-built grip uses 3pt circles instead of the system line.3.horizontal reorder glyph; it reads fine but is a custom element."
+        },
+        {
+          "name": "Safe area / Dynamic Island",
+          "score": 8.9,
+          "rationale": "Observed: the nav bar and account button clear the Island in all board and Sign In captures, the composer sits above the home indicator, and the 6pt solid boundary under Reduce Transparency/Increase Contrast holds. Fresh top and pull states show no mask. Expanded Island content keeps a 20pt bottom margin so the last line clears the pill's curve. Minor: at rest, the XXXL Sign In password form's legal footer sits under the home indicator (OPUS5-04)."
+        },
+        {
+          "name": "Scroll/pull-down / last row",
+          "score": 8.9,
+          "rationale": "Measured by the packet in 16 states: bottom geometry and final-line ink pass, and the final row is fully above the hint/composer after pull in light/dark default/XXXL. The prior clipped-fragment band under the header is replaced by L's 24pt top mask, active only once content departs; native-top-falloff.json measures first-14px maximum contrast about 1.59:1 rising to about 20:1 in the next 58px. Bottom fade is off so the last line is never dimmed. This is a custom mask, not Apple's blur, but it visually matches the Reminders reference's soft top departure."
+        },
+        {
+          "name": "List rows",
+          "score": 8.9,
+          "rationale": "Observed: circle, text and grip align to the first text line through firstLineHeight-based padding; separators are inset to the text column and hidden on top. Source: the visible text is accessibility-hidden so each row is one completion stop plus a separate reorder grip, verified by 60 AX snapshots. Completing state dims and strikes through. Swipe Complete uses systemGreen, a native swipe affordance. Rows are much longer than reference rows because seeded text is long; wrapping matches Reminders' multi-line rows."
+        },
+        {
+          "name": "Empty states",
+          "score": 8.9,
+          "rationale": "Observed: ContentUnavailableView 'All Clear' with a checkmark, one-line guidance, then a one-time dismissible 'Keep Your Board in View' tip with grey symbols. The tip hides while composing so the keyboard view stays focused. Compared with Reminders' bare 'No Reminders', this adds useful setup without nesting cards. The Siri tip is source-only and absent from captures."
+        },
+        {
+          "name": "Composer ergonomics",
+          "score": 8.7,
+          "rationale": "Observed: a quiet 22pt-radius field with hairline stroke, inline keyboard-dismiss affordance and a filled arrow button that appears primary only when text exists; multi-line draft grows to 2 lines at XXXL without clipping. At capacity it becomes status text, but the disabled send circle remains as a dead control beside it (OPUS5-03). Compared with Reminders, which composes inline in the list, the bottom composer is a reasonable product choice."
+        },
+        {
+          "name": "Keyboard handling",
+          "score": 8.8,
+          "rationale": "Observed in board composer, normal sign-in keyboards and the eight pinned combined-setting full-device captures: complete email keyboards after a real pan, Done at 48pt, alternate action at least 116pt above the keyboard, no AutoFill menu, interactive dismiss on the list. The earlier settled-state miss of 'Use an Existing Password' is resolved. Protected password keyboards are omitted from XCTest attachments, so those visuals are partial; the manual pinned captures show them."
+        },
+        {
+          "name": "Sheet presentation/detents",
+          "score": 8.7,
+          "rationale": "Observed: Account presents large by default with a visible grabber, medium/large detents, scroll-to-resize content interaction and grouped background, matching the Details sheet's construction. Medium-detent and recovered states keep content reachable. Weakness: in medium and scrolled states the inline 'Account' title sits on top of iOS 26 soft-edge ghost text such as 'Sign Out', 'Privacy' or 'Refresh Board Now' (OPUS5-02). The Reminders reference shows similar ghosting, so this is native behaviour but still busy. No medium-detent Apple reference exists."
+        },
+        {
+          "name": "Navigation clarity",
+          "score": 8.9,
+          "rationale": "Single-screen board with one account entry point and a modal sheet with Done; Sign In uses a large title collapsing to inline. Labels are clear and there is no ambiguous nesting. The account button is a 44pt glyph with an accessibility hint. Matches the shallow Reminders list/sheet model."
+        },
+        {
+          "name": "Touch targets",
+          "score": 9.1,
+          "rationale": "Source and AX geometry: completion circle 44x44, grip 44x44, account button 44pt, banner dismiss and Try Again 44pt, composer field 44pt minimum, add button max(44, scaled+16), Done 48pt, legal links 44pt minimum height. Edge taps on Done/alternate and circle-only completion were exercised by tests. No target below 44pt found."
+        },
+        {
+          "name": "Haptics",
+          "score": 7.8,
+          "rationale": "Source-only: success on add/complete/reorder, error on failures in board and Account, and selection feedback when a drag begins. The mapping is restrained and HIG-appropriate. Physical haptics were never felt, so this is a provisional source-aware grade and cannot reach 9 without device observation."
+        },
+        {
+          "name": "Animation/transitions",
+          "score": 8.2,
+          "rationale": "Sampled only: seven recordings at three distributed samples show Island expansion, sheet scrolling and composer focus transitions without visible tearing or layout jumps in the samples. Source uses 0.2s easeInOut board changes, opacity transitions for the tip and keyboard affordance, and disables animation under Reduce Motion. No frame timing was measured and sampled stills cannot show smoothness."
+        },
+        {
+          "name": "Loading states",
+          "score": 8.7,
+          "rationale": "Observed: centred large ProgressView with primary 'Loading reminders' label in all four appearance/size cells; Try Again turns into an inline spinner and is disabled during retry; Sign In shows an in-button spinner for the pending provider with other actions dimmed. There is no skeleton, which is fine for a seven-item board. No Apple loading reference exists."
+        },
+        {
+          "name": "Error states",
+          "score": 8.7,
+          "rationale": "Observed: full-screen 'Couldn't Load Board' with triangle, detail and Try Again; populated banner on material with title, dismiss and Try Again; Sign In inline triangle message; Account inline error section and the 'Couldn't refresh' recovery row. K renders diagnostic and destructive text in primary ink (minimum 12.06:1) and errors are announced once. The raw network copy is a closed product decision (Edmund, 2026-11-05: keep existing wording) and is not scored down. Retry and recovery paths were exercised. Error tint for Try Again is the indigo accent, not red."
+        },
+        {
+          "name": "VoiceOver/labels",
+          "score": 8.6,
+          "rationale": "Source plus 60 native AX snapshots: one full-label completion button per row with value and a named Complete action, separate reorder leaf with position value and Move up/down actions, labelled composer and add button, announcements for add, complete, reorder and errors, combined account header label. Duplicate static paragraph stops were removed. Spoken VoiceOver output and traversal were never heard, so this stays below 9."
+        },
+        {
+          "name": "iOS HIG consistency",
+          "score": 8.8,
+          "rationale": "Uses native NavigationStack, inline/large titles, insetGrouped List, ContentUnavailableView, system sheets and detents, SF Symbols, system keyboard, UIRefreshControl and native swipe actions. Custom pieces (top mask, bottom composer, dot grip, solid composer field) are restrained. The only visible friction is the soft-edge title overlap in sheets and the dead send button at capacity."
+        },
+        {
+          "name": "Lock Screen / Live Activity",
+          "score": 8.1,
+          "rationale": "Observed in Notification Center and expanded Island: banner 5+5 default and 4+6 XXXL on clear glass, Island 3+7 default and 2+8 XXXL, compact/minimal intentionally empty so the collapsed Island never widens. Footer/count/corner gates pass. Weakness: the XXXL Island second line ends mid-word ('sample not...', OPUS5-01). The rejected word-boundary candidate correctly stays unapplied because it dropped a previously fitting word. Notification Center is not true locking; wallpapers and physical lock are unobserved. No Apple Activity reference."
+        },
+        {
+          "name": "Sign-in/onboarding",
+          "score": 8.8,
+          "rationale": "Observed across 28 enabled sign-in states plus combined settings: Notepad name and one-line value, Sign in with Apple outlined white, Google in a quiet filled button, email field with plausibility gating, password alternate, Check Your Inbox state with Use a Different Email, inline error and enabled legal links. Keyboard states keep the action and alternate in view. Minor: soft-edge title overlap when scrolled at XXXL (OPUS5-02) and the resting footer under the home indicator in the XXXL password form (OPUS5-04). No Apple auth reference."
+        },
+        {
+          "name": "Settings/account",
+          "score": 8.7,
+          "rationale": "Observed across 84 enabled Account states and 18 extras: signed-in header with initial avatar, notifications row and footer, persistence status rows with expandable widget guidance, Sign Out, external links with quiet arrows, feedback footer, destructive Delete Account with explicit consequence footer and version. Guidance expands in place and recovery rows show 'Couldn't refresh' inline. Weakness: the Live Activity/background explanation is a 7 to 9 line primary-ink paragraph at XXXL that dominates the sheet (OPUS5-05)."
+        },
+        {
+          "name": "Performance feel",
+          "score": 7.9,
+          "rationale": "Unmeasured. No launch or frame-time metric exists (no-launch-metric.json); encoded video frame rates are not display performance. Source avoids obvious costs: diffed reloads skipped during drag, deferred board updates, refresh guarded by revision. Recordings sampled at three points show no visible stalls. Provisional."
+        },
+        {
+          "name": "Delight",
+          "score": 8.1,
+          "rationale": "Quiet craft rather than flourish: the post-it capacity hint, the one-time Lock Screen tip, consistent haptic mapping, the Island that stays narrow when collapsed and the soft top departure. Nothing feels gimmicky, but there is little moment-of-joy motion (completion is a dim/strike then removal) and haptics are unfelt."
+        },
+        {
+          "name": "Long text",
+          "score": 8.8,
+          "rationale": "Observed with very long seeded rows in default and XXXL: rows wrap fully with no line limit, separators and grips stay aligned, the last row clears the composer after pull, Account footers wrap fully. The only truncation is deliberate one-line Activity rows, with the XXXL Island mid-word tail noted in OPUS5-01."
+        },
+        {
+          "name": "Reduced Motion / Transparency",
+          "score": 8.7,
+          "rationale": "Observed with actual system Settings enabled and restored at each method teardown: solid secondaryGroupedBackground banner, 6pt opaque top boundary instead of the 24pt fade, 1pt composer stroke, Account errors at 12+:1, combined-setting keyboards complete. Source gates board and tip animations and the Activity marquee on Reduce Motion. Motion under Reduce Motion was not recorded, so behaviour is partly source-derived."
+        },
+        {
+          "name": "Palette / minimalism",
+          "score": 9.1,
+          "rationale": "Observed: black/white/grey system palette with the indigo accent reserved for actions such as Try Again and links, systemGreen only on the swipe Complete action, red only on the Delete Account glyph. No nested cards, no decorative red/orange, and branding/icon/wording preserved. This is the strongest category and fits the minimal Apple-native taste."
+        }
+      ],
+      "findings": [
+        {
+          "id": "OPUS5-01",
+          "severity": "low",
+          "screen": "activity/multiline-dark-XXXL-expanded.png, activity/multiline-light-XXXL-expanded.png (expanded Island, XXXL)",
+          "evidence": "Observed at full resolution: line 2 renders 'Demo 2: Review the sample not...' above '+8 more'. Counts and footer gates pass and the rejected word-boundary candidate correctly stays unapplied because it removed a word that previously fitted. Source: ReminderActivityLinesView uses .lineLimit(1) and .truncationMode(.tail) with no tightening.",
+          "fix": "Add .allowsTightening(true) to the Island line Text only (no smaller type size, no content loss), so the last few glyphs can fit by tightening letter spacing. Keep 2+8 and do not drop words.",
+          "confidence": "medium",
+          "basis": "observed + source-derived",
+          "programmatic_check": "Render ReminderActivityLinesView(surface: .island) at xxxLarge with the multiline fixture; assert the visible row count stays 2, hidden count stays 8 and line 2 has no ellipsis, or that the ellipsis only follows a complete word. Then re-capture the native XXXL expanded Island and run the existing 293-test suite."
+        },
+        {
+          "id": "OPUS5-02",
+          "severity": "low",
+          "screen": "account-enabled/screens/error-*-medium-recovered.png ('Sign Out' ghost beside 'Account'), refresh-error-*-medium-lower.png and detents-*-medium-lower.png ('Privacy'/'Support' ghost), extras/account-*-XXXL-large-lower.png, signin-enabled/signin-*-XXXL-keyboard.png ('Sign In' over blurred paragraph)",
+          "evidence": "Observed: when Account or Sign In content scrolls under the inline title, the iOS 26 soft scroll-edge effect leaves legible ghost text beside or behind the title. The Reminders reference (reminders-bottom-dark, round3 bottom XXXL) shows the same native ghosting, so this is native behaviour, but in the compact medium sheet it makes the title row busier than the reference.",
+          "fix": "On the Account List and the Sign In ScrollView, apply .scrollEdgeEffectStyle(.hard, for: .top) on iOS 26 so the title region gets a crisp opaque edge. Do not add custom blur or forced snapping.",
+          "confidence": "medium",
+          "basis": "observed",
+          "programmatic_check": "For the listed captures, crop the nav-title band (title bbox expanded 8pt) and assert no non-title glyph pixels exceed 1.5:1 against the bar background; verify medium/large detents and the 293-test suite still pass."
+        },
+        {
+          "id": "OPUS5-03",
+          "severity": "low",
+          "screen": "full-*-default-top.png, long-text-*-XXXL-*.png, board/*-top.png, edge/captures/*-normal-*.png (composer at capacity)",
+          "evidence": "Observed: at capacity the composer shows 'Board full \u2014 combine lines instead' as status text, but a disabled tertiary arrow circle stays at the trailing edge. Source: the add Button is always rendered and only .disabled(!canAdd). It is a dead control beside a status line.",
+          "fix": "When atCapacity, omit the add Button (keep the status text, hint and strings unchanged) so the row reads as status only.",
+          "confidence": "high",
+          "basis": "observed + source-derived",
+          "programmatic_check": "At capacity, assert no hittable 'Add reminder' element in the AX tree and that the status text frame keeps minHeight 44 and full width; existing capacity, hint and bottom-geometry assertions keep passing."
+        },
+        {
+          "id": "OPUS5-04",
+          "severity": "low",
+          "screen": "signin-enabled/signin-light-XXXL-password.png, signin-enabled/signin-dark-XXXL-password.png, extras/signin-*-XXXL-password.png",
+          "evidence": "Observed at full resolution: at the resting scroll position the 'Privacy \u00b7 Terms \u00b7 Support' footer baseline crosses the home indicator. The form is taller than the viewport, so the footer is scroll content and is likely reachable by scrolling (bottom padding 32pt in source), but the resting still shows a collision. Not verified by a scrolled capture.",
+          "fix": "No layout change needed if reachability is confirmed; optionally add .contentMargins(.bottom, 16, for: .scrollContent) so the footer clears the indicator once scrolled to the end.",
+          "confidence": "medium",
+          "basis": "observed",
+          "programmatic_check": "In the XXXL password variant, scroll to bottom and assert the legal footer's maxY is at least 8pt above the bottom safe-area inset and each link is hittable."
+        },
+        {
+          "id": "OPUS5-05",
+          "severity": "low",
+          "screen": "account-*-default-top.png, extras/account-*-XXXL-large-top.png, account-enabled/screens/normal-*-XXXL-large-top.png, refresh-error-*-XXXL-*.png",
+          "evidence": "Observed: the Keep Your Board Visible footer ('iOS limits each Live Activity to eight hours...') is one 5-line block at default and 7 to 9 lines at XXXL in primary ink, the heaviest text mass in the sheet. Wording is preserved and contrast is high; the issue is presentation density.",
+          "fix": "Keep every word. Split the existing string at its sentence boundaries into two Text views with 6pt spacing (Live Activity sentences, then background refresh/widget sentences) so it scans as two short paragraphs.",
+          "confidence": "medium",
+          "basis": "observed",
+          "programmatic_check": "Assert the concatenated footer text equals the current string exactly, both parts keep >=7:1 contrast, and Account guidance/recovery captures still pass."
+        }
+      ]
     }
   },
   "gate_passed": false,
-  "errors": [
-    "Missing scores-claude-opus-5.5.json"
-  ],
+  "errors": [],
   "opus_eligible": true
 }
