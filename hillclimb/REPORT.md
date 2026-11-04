@@ -119,3 +119,11 @@ K source2e6aa8c/evidence41c2027 merged. Existing error text and destructive Acco
 The worker restored incidental Auto-Play Message Effects drift manually. Parent added a test-only teardown correction to remember/restore it; that newer test revision still requires the upcoming integrated runtime validation. Board-edge work remains active. [Evidence](tasks/error-keyboard/README.md).
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Board edge and accessibility follow-up accepted
+
+L0265cb4/evidence46e6b4f merged: top-only softening during departed-content scrolling, an opaque accessibility-settings edge, one reminder reading stop and primary loading/error text.287worker tests passed;144finalnativeimagehashes verified. Bottom-row geometry/ink remains intact. Native binding alone was ineffective; the top-only mask is the actual treatment.
+
+The separate Motion restoration attempt built but ran0tests because manual device references failed. No setting changed; its value instrumentation and failures are retained. Combined K+L round5 validation must execute the restoration proofs and expected293tests before grading. [Board evidence](tasks/board-edge-accessibility/README.md) · [Unrun restoration attempt](tasks/motion-cleanup-recheck/README.md).
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
