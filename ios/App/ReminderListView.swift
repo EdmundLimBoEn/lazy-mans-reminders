@@ -55,6 +55,8 @@ struct ReminderListView: View {
             Group {
                 if isLoading && !hasLoaded && reminders.isEmpty {
                     ProgressView("Loading reminders")
+                        .accessibilityIdentifier("board.loading")
+                        .accessibilityLabel("Loading reminders")
                         .controlSize(.large)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if reminders.isEmpty, let error {
@@ -243,6 +245,10 @@ struct ReminderListView: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .modifier(HillclimbCapacityProbe())
                         .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                        .contentShape(Rectangle())
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("Board full — combine lines instead")
+                        .accessibilityAddTraits(.isStaticText)
                         .accessibilityIdentifier("board.capacity")
                         .accessibilityHint("Board is full. Complete a reminder or combine lines.")
                 } else {

@@ -101,7 +101,10 @@ final class BoardMultilineUITests: XCTestCase {
                     app.launch()
                     XCTAssertTrue(app.otherElements["hillclimb.geometry"].waitForExistence(timeout: 10))
                     if state == "loading" {
-                        XCTAssertTrue(app.progressIndicators.firstMatch.exists)
+                        let loading = app.descendants(matching: .any).matching(identifier: "board.loading").firstMatch
+                        XCTAssertTrue(loading.exists)
+                        XCTAssertEqual(loading.label, "Loading reminders")
+                        XCTAssertFalse(app.buttons["Try Again"].exists)
                         XCTAssertFalse(app.staticTexts["All Clear"].exists)
                     } else {
                         let message = URLError(.notConnectedToInternet).localizedDescription
