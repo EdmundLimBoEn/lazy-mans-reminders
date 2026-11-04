@@ -46,20 +46,24 @@ Each report has all 30 rubric categories. Round 1 and 2 were not Opus eligible. 
 | J: Account typography, alignment and exact error announcements | Merged `7abefed` | `tasks/account-consistency/` |
 | Round 4 combined validation and native captures | Merged `5c43ea3` | `validation/round4/`, `rounds/4/` |
 | Round 4 independent Codex grading | Complete | `rounds/4/scores-gpt-*.md/json` |
+| K: error contrast, legal fixture, combined-settings keyboard proof | Merged; integrated gates passed | `tasks/error-keyboard/` |
+| L: board top edge, diagnostic contrast and single accessibility stop | Merged; integrated gates passed | `tasks/board-edge-accessibility/` |
+| M: Activity word-boundary experiment | Renderer rejected; evidence retained | `tasks/activity-readability/` |
+| Four-setting test restoration | Merged; verified at each teardown | `validation/round5/combined-restoration-proof.json` |
+| Round 5 combined validation/captures | Merged `0e61a06` | `validation/round5/`, `rounds/5/` |
+| Round 5 independent Codex grading | Running | `rounds/5/` |
 
 ## Current runtime evidence
 
-Round 4: **285/285 passed**, comprising 263 unit and 22 UI tests; zero failures/skips. Fresh unsigned arm64 Debug and Release builds, 23 iOS Python checks and 52+4 offline Deno tests passed. All eight normal-settings post-scroll keyboard cases and edge taps completed. Runtime warnings and scoped invalid-frame events were zero; 9,359 other error/fault events remain recorded.
+Round 5: **293/293 passed** (263 unit, 30 UI), zero failures/skips. Fresh unsigned arm64 Debug/Release, Python 23 and Deno 52+4 passed. The two actual Settings methods passed in both focused and full runs, restoring all four original values at each teardown. Both normal and actual combined-settings keyboard matrices pass with 48pt Done and at least 116pt alternate clearance.
 
-Parent verified all **288 native PNG hashes** and production input hashes. There are seven recordings and 17 usable Apple Reminders reference images. Twelve unit-rendered Activity rasters are separate and never count as simulator captures. Reference mismatches and rejected transitions remain explicit.
+Parent verified **394 native images**, their paired reference hashes and integrated source hashes. Seven recordings and 17 usable Apple Reminders references accompany the packet. Twelve unit-rendered Activity rasters remain separate. Protected XCTest keyboard captures are partial; eight clean full-device supplements show the complete combined-settings keyboards.
 
-Actual Settings UI enabled Reduce Motion, Reduce Transparency and Increase Contrast, captured selected states, then restored all three to Off. One combined-settings still omits the alternate sign-in action; the recording shows it elsewhere. A complete repeatable clearance matrix is unproven, and unreachability is not diagnosed. Top-edge board fragments remain observed; bottom-row geometry and ink pass.
-
-New independent reviewer measurements identify low-contrast normal-size error text in SignIn/Account. Existing helper/footer raster checks excluded semantic error red. This remains a new finding to address after the frozen round 4 reviews; no passing error-contrast gate is claimed.
+Error/destructive-label contrast gates now pass (minimum 12.06:1); board diagnostic ink is 21:1. Top-only departing-content treatment and an opaque accessibility boundary pass native checks, while fresh-top ink and final-row geometry/ink remain intact. The mask is custom and does not claim native Apple blur. Accessibility-tree tests show one completion stop plus a separate reorder leaf; spoken traversal remains unobserved. Runtime warnings/invalid frames were zero, with 15,457 other events retained.
 
 ## Devices and ownership
 
-L and K released their private devices. The restoration recheck changed no settings. Its owner closed its own original17 session without shutdown (cleanup d3e70bd). A new combined validation uses a fresh owned session and the standard test runner; never reuse or close the previous owner session.
+All workers have released their device sessions. Round 5 returned original17 running, light/Large, with all four original Settings values restored and no owned Activity. No device work is currently active.
 
 - Original17: `local`, `78F5A64F-7B2E-4562-8EF9-10F3312CC694`.
 - Private Board17: `066ECE57-46B4-414A-B53E-523775329360`.

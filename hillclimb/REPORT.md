@@ -70,11 +70,11 @@ Native Activity has no round1 native baseline, so no baseline pair is invented. 
 - Board multiline (`d9fa416`, `8e384d0`, `1add78a`): first-line control alignment, semantic contrast, intrinsic-height static capacity copy, flat guide hidden during composing, exact-text error announcements and44pt retry.
 - Test correction (`542b9f7`): confines form scrolling above the keyboard and verifies dismissal/refocus before geometry checks.
 
-Individual task counts and retained intermediate failures are in [task evidence](tasks). Current integrated276-test pass supersedes worker-only totals. All merges stay on `hillclimb/ui`; main, deployment, uploads and force pushes remain untouched. Existing user untracked files are preserved.
+Individual task counts and retained intermediate failures are in [task evidence](tasks). Current integrated **293-test pass** supersedes worker-only totals. All merges stay on `hillclimb/ui`; main, deployment, uploads and force pushes remain untouched. Existing user untracked files are preserved.
 
 ## Remaining limits
 
-True device locking, physical cutout geometry, arbitrary wallpapers, tactile haptics, spoken VoiceOver, accessibility sizes beyondXXXL, broader system contrast/motion/transparency settings and measured motion/performance remain unverified. Source/tests support only the claims recorded with them. Current-session quota metadata reports14% used in the10080-minute weekly window; [snapshot](rounds/4/usage.json). No plateau decision before fresh grades.
+True device locking, physical cutout geometry, arbitrary wallpapers, tactile haptics, spoken VoiceOver, accessibility sizes beyond XXXL and measured motion/performance remain unverified. The actual Reduce Motion/Reduce Transparency/Increase Contrast combination now passes the tested default/XXXL keyboard and contrast cases; other combinations are not certified. Source/tests support only the claims recorded with them. Current-session quota metadata reports 17% used in the 10080-minute weekly window; [snapshot](rounds/5/usage.json). No plateau decision before fresh grades.
 
 ## Install on a phone
 
