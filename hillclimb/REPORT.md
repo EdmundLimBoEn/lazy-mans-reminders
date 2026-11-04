@@ -157,3 +157,9 @@ The full-board status now uses the width previously occupied by a disabled send 
 Sign-in now keeps the existing Password label visible with a nonempty secure value and gives the native field a 48pt frame (`e22a84a`). The native iOS 26 hard top edge reduces departing-content ghosting in the measured title bands. Legal links are reachable after scrolling and clear the native safe bottom by at least 18.33pt; no extra padding was needed. The earlier single Apple loading-label omission did not reproduce in 36 settled samples.
 
 **297 worker tests pass**, including four new methods and the unchanged normal/combined keyboard matrix. Parent verified 72 image/reference hashes. [Populated keyboard](tasks/signin-chrome/final-native-dark-XXXL-focused.png) · [Footer reached by scrolling](tasks/signin-chrome/final-native-light-XXXL-bottom.png) · [Evidence and limits](tasks/signin-chrome/README.md). The full integrated source still requires round 6 verification and grading after the Account handoff.
+
+## Round 6 Account chrome and guidance
+
+Account’s native hard top edge clears departing text beside the title. The existing persistence guidance is split at a sentence boundary into two paragraphs with 6pt spacing; all words are preserved and measured contrast is at least 17.01:1. Done uses a 46pt local frame to retain at least 44.2pt on-screen in the scaled medium sheet. **296 worker tests pass** with all 293 prior IDs; parent verified all 60 native image/reference hashes.
+
+[Readable XXXL guidance](tasks/account-chrome/manual-dark-XXXL-centered.png) · [Evidence](tasks/account-chrome/README.md). N, O, P and Q are integrated; fresh combined round 6 validation, measurements and grading remain required. No final success is claimed.
