@@ -7,7 +7,7 @@ import UserNotifications
 
 /// Explicit launch arguments are the only switch; normal Debug launches stay live.
 enum HillclimbDemo {
-    enum Mode: String, CaseIterable { case full, empty, composer, account, signin, longText = "long-text" }
+    enum Mode: String, CaseIterable { case full, empty, composer, account, signin, longText = "long-text", activity }
     static func argument(_ key: String) -> String? {
         let args = ProcessInfo.processInfo.arguments
         guard let index = args.firstIndex(of: key), args.indices.contains(index + 1) else { return nil }
@@ -76,6 +76,7 @@ struct HillclimbRoot: View {
                 ReminderListView(hillclimb: HillclimbDemo.mode)
             }
         }
+        .task { await HillclimbActivityDemo.runIfRequested() }
         .defaultAppStorage(HillclimbDemo.defaults)
         .preferredColorScheme(HillclimbDemo.argument("--hillclimb-style") == "dark" ? .dark : .light)
         .modifier(HillclimbTypeSize())
