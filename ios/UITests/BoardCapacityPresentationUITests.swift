@@ -44,6 +44,11 @@ final class BoardCapacityPresentationUITests: XCTestCase {
         XCTAssertEqual(status.frame.minX, composer.minX + 30, accuracy: 1)
         XCTAssertEqual(status.frame.maxX, composer.maxX - 21, accuracy: 1)
         let actual = try XCTUnwrap(g["capacity"])
+        XCTAssertGreaterThan(actual.height, xxxl ? 26 : 20)
+        if xxxl {
+            let type = try XCTUnwrap(g["typeSize"])
+            XCTAssertGreaterThan(type.minX, type.minY)
+        }
         XCTAssertGreaterThanOrEqual(actual.height + 0.5, try XCTUnwrap(g["capacityIdeal"]).height)
         try assertTextContrast(app.screenshot().image, region: actual, dark: dark)
         try capture("full-top", dark: dark, xxxl: xxxl)

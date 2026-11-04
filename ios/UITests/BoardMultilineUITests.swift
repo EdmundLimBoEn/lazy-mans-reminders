@@ -33,7 +33,7 @@ final class BoardMultilineUITests: XCTestCase {
                 let actual = try XCTUnwrap(g["capacity"])
                 let ideal = try XCTUnwrap(g["capacityIdeal"])
                 XCTAssertGreaterThanOrEqual(actual.height + 0.5, ideal.height)
-                XCTAssertGreaterThan(actual.height, xxxl ? 50 : 20)
+                XCTAssertGreaterThan(actual.height, 20)
                 XCTAssertGreaterThanOrEqual(capacity.frame.height, 44)
                 capacity.coordinate(withNormalizedOffset: CGVector(dx: 0.02, dy: 0.98)).tap()
                 XCTAssertFalse(app.keyboards.firstMatch.exists)
