@@ -103,6 +103,7 @@ struct ReminderActivityLinesView: View {
                     .foregroundStyle(.primary)
                     .lineLimit(1)
                     .truncationMode(.tail)
+                    .allowsTightening(surface == .island)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .frame(height: ReminderActivityLayout.rowHeight(pointSize: pointSize))
             }

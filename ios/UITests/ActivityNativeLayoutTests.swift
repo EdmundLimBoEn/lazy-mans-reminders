@@ -15,6 +15,18 @@ final class ActivityNativeLayoutTests: XCTestCase {
         let footer = springboard.staticTexts.matching(NSPredicate(format: "label MATCHES %@", "\\+[0-9]+ more")).firstMatch
         XCTAssertTrue(footer.waitForExistence(timeout: 5), "Actual ActivityKit overflow row was not exposed")
         XCTAssertEqual(footer.label, "+7 more")
+        let rows = springboard.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Demo ")).allElementsBoundByIndex
+        XCTAssertEqual(rows.count, 3, "Native Island must retain three original rows")
+        XCTAssertEqual(rows.map(\.label), (1...3).map { "Demo \($0): Review the sample notes." },
+                       "Accessibility content conservation; visible glyph tails are checked separately from recordings")
+        XCTAssertEqual(rows.count + 7, 10)
+        for (index, row) in rows.enumerated() {
+            XCTAssertGreaterThanOrEqual(row.frame.height, 18)
+            XCTAssertGreaterThanOrEqual(row.frame.minX, 30)
+            XCTAssertLessThanOrEqual(row.frame.maxX, window.frame.width - 30)
+            if index > 0 { XCTAssertGreaterThanOrEqual(row.frame.minY, rows[index - 1].frame.maxY) }
+        }
+        XCTAssertGreaterThanOrEqual(footer.frame.minY, try XCTUnwrap(rows.last).frame.maxY)
         let frame = footer.frame
         XCTAssertGreaterThanOrEqual(frame.height, 18, "Last row has insufficient glyph height")
         XCTAssertGreaterThanOrEqual(frame.minX, 30, "Last row enters the Island's curved lower-left corner")

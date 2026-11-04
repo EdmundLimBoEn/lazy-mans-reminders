@@ -1,0 +1,12 @@
+diff --git a/ios/Shared/LockScreenLineBudget.swift b/ios/Shared/LockScreenLineBudget.swift
+index 1f82971..45ca043 100644
+--- a/ios/Shared/LockScreenLineBudget.swift
++++ b/ios/Shared/LockScreenLineBudget.swift
+@@ -103,6 +103,7 @@ struct ReminderActivityLinesView: View {
+                     .foregroundStyle(.primary)
+                     .lineLimit(1)
+                     .truncationMode(.tail)
++                    .allowsTightening(surface == .island)
+                     .frame(maxWidth: .infinity, alignment: .leading)
+                     .frame(height: ReminderActivityLayout.rowHeight(pointSize: pointSize))
+             }
