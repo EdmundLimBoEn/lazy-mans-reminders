@@ -57,6 +57,76 @@ final class BoardMultilineUITests: XCTestCase {
             }
         }
     }
+    func testGuideHidesRestoresAndDismissalPersistsWhileEditing() throws {
+        for dark in [false, true] {
+            for xxxl in [false, true] {
+                launch("empty", xxxl: xxxl, dark: dark)
+                let heading = app.staticTexts["Keep Your Board in View"]
+                XCTAssertTrue(heading.exists)
+                let field = app.descendants(matching: .any).matching(identifier: "New reminder").firstMatch
+                field.tap()
+                XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+                XCTAssertFalse(heading.exists)
+                XCTAssertFalse(app.buttons["Dismiss tip"].exists)
+                attach("guide-focused-\(dark)-\(xxxl)")
+                app.buttons["Done"].tap()
+                XCTAssertTrue(heading.waitForExistence(timeout: 5))
+                let instructions = [
+                    "Add the Notepad widget to your Lock Screen: touch and hold the Lock Screen, tap Customize, then Add Widgets.",
+                    "Allow Live Activities so your board stays on the Lock Screen (Settings → Notepad → Live Activities).",
+                    "Keep notifications on so reminders and board updates reach you."
+                ]
+                for instruction in instructions { XCTAssertTrue(app.staticTexts[instruction].exists) }
+                attach("guide-restored-\(dark)-\(xxxl)")
+                let dismiss = app.buttons["Dismiss tip"]
+                XCTAssertGreaterThanOrEqual(dismiss.frame.width, 44)
+                XCTAssertGreaterThanOrEqual(dismiss.frame.height, 44)
+                dismiss.tap()
+                XCTAssertFalse(heading.exists)
+                field.tap()
+                XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+                app.buttons["Done"].tap()
+                XCTAssertFalse(heading.exists)
+            }
+        }
+    }
+
+    func testOfflineLoadingAndErrorsMatrix() throws {
+        for dark in [false, true] {
+            for xxxl in [false, true] {
+                for state in ["loading", "error-empty", "error-populated"] {
+                    app.launchArguments = ["--hillclimb-demo", state == "error-populated" ? "full" : "empty",
+                        "--hillclimb-board-state", state, "--hillclimb-size", xxxl ? "XXXL" : "default",
+                        "--hillclimb-style", dark ? "dark" : "light"]
+                    app.launch()
+                    XCTAssertTrue(app.otherElements["hillclimb.geometry"].waitForExistence(timeout: 10))
+                    if state == "loading" {
+                        XCTAssertTrue(app.progressIndicators.firstMatch.exists)
+                        XCTAssertFalse(app.staticTexts["All Clear"].exists)
+                    } else {
+                        let message = URLError(.notConnectedToInternet).localizedDescription
+                        XCTAssertTrue(app.staticTexts[message].exists)
+                        XCTAssertEqual(try geometry()["boardErrorAnnouncements"]?.minX, 1)
+                        if state == "error-empty" {
+                            XCTAssertTrue(app.buttons["Try Again"].exists)
+                            let field = app.descendants(matching: .any).matching(identifier: "New reminder").firstMatch
+                            field.tap()
+                            XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+                            XCTAssertEqual(try geometry()["boardErrorAnnouncements"]?.minX, 1)
+                            app.buttons["Done"].tap()
+                        } else {
+                            app.buttons["Dismiss"].tap()
+                            XCTAssertFalse(app.staticTexts[message].exists)
+                            XCTAssertEqual(try geometry()["boardErrorAnnouncements"]?.minX, 1)
+                            XCTAssertTrue(app.collectionViews.firstMatch.exists)
+                        }
+                    }
+                    attach("\(state)-\(dark)-\(xxxl)")
+                }
+            }
+        }
+    }
+
     private func inkBounds(_ image: UIImage, in region: CGRect, dark: Bool) throws -> CGRect {
         let cg = try XCTUnwrap(image.cgImage)
         let scale = CGFloat(cg.width) / app.frame.width

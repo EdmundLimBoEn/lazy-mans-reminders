@@ -15,6 +15,7 @@ struct ReminderListView: View {
     @State private var isLoading = true
     @State private var hasLoaded = false
     @State private var error: String?
+    @State private var errorAnnouncementPolicy = BoardErrorAnnouncementPolicy()
     @State private var completingIDs: Set<UUID> = []
     @State private var isReordering = false
     @State private var boardRevision = 0
@@ -33,6 +34,18 @@ struct ReminderListView: View {
             _isLoading = State(initialValue: false)
             _hasLoaded = State(initialValue: true)
             _showAccount = State(initialValue: mode == .account)
+            switch HillclimbDemo.argument("--hillclimb-board-state") {
+            case "loading":
+                _reminders = State(initialValue: [])
+                _isLoading = State(initialValue: true)
+                _hasLoaded = State(initialValue: false)
+            case "error-empty", "error-populated":
+                if HillclimbDemo.argument("--hillclimb-board-state") == "error-empty" {
+                    _reminders = State(initialValue: [])
+                }
+                _error = State(initialValue: URLError(.notConnectedToInternet).localizedDescription)
+            default: break
+            }
         }
     }
 #endif
@@ -84,6 +97,8 @@ struct ReminderListView: View {
                 guard scenePhase == .active else { return }
                 await refresh()
             }
+            .onAppear { announceBoardError(error) }
+            .onChange(of: error) { _, message in announceBoardError(message) }
             .sensoryFeedback(.success, trigger: hapticTick)
             .sensoryFeedback(.error, trigger: errorTick)
             .onReceive(NotificationCenter.default.publisher(for: .didUpdateReminders)) { _ in
@@ -122,7 +137,7 @@ struct ReminderListView: View {
                 } description: {
                     Text("Nothing on your board. Add a reminder below.")
                 }
-                if BoardSetupTip.shouldShow(
+                if !composerFocused && BoardSetupTip.shouldShow(
                     hasLoaded: hasLoaded,
                     isBoardEmpty: reminders.isEmpty,
                     hasError: error != nil,
@@ -136,7 +151,7 @@ struct ReminderListView: View {
                     .padding(.horizontal, 20)
                     .transition(.opacity)
                 }
-                boardSiriTip
+                if !composerFocused { boardSiriTip }
             }
             .frame(maxWidth: .infinity, minHeight: 320)
         }
@@ -402,6 +417,17 @@ struct ReminderListView: View {
         }
     }
 
+    private func announceBoardError(_ message: String?) {
+        if let announcement = errorAnnouncementPolicy.update(message) {
+            UIAccessibility.post(notification: .announcement, argument: announcement)
+#if DEBUG
+            if HillclimbDemo.isActive {
+                HillclimbGeometry.shared.boardErrorAnnouncements.append(announcement)
+            }
+#endif
+        }
+    }
+
     private func presentError(_ message: String) {
         error = message
         errorTick += 1
@@ -529,7 +555,7 @@ private struct BoardErrorBanner: View {
             Divider()
         }
         .accessibilityElement(children: .contain)
-        .accessibilityAddTraits(.updatesFrequently)
+
     }
 }
 
@@ -589,5 +615,15 @@ private struct BoardNavigationSubtitle: ViewModifier {
         } else {
             content
         }
+    }
+}
+
+struct BoardErrorAnnouncementPolicy {
+    private var visibleMessage: String?
+
+    mutating func update(_ message: String?) -> String? {
+        defer { visibleMessage = message }
+        guard let message, message != visibleMessage else { return nil }
+        return message
     }
 }
