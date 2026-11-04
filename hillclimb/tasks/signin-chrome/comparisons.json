@@ -1,0 +1,20 @@
+[
+  {
+    "before": "hillclimb/tasks/signin-chrome/before-light-XXXL-password-populated.png",
+    "after": "hillclimb/tasks/signin-chrome/final-native-light-XXXL-focused.png",
+    "change": "Exact existing Password remains visible above populated secure field; native hard title edge reduces departing-content ink",
+    "limit": "Additional label and48pt row shift content; not a binary-only A/B."
+  },
+  {
+    "before": "hillclimb/tasks/signin-chrome/before-light-XXXL-password-resting.png",
+    "after": "hillclimb/tasks/signin-chrome/full/7DB5003A-6295-42A8-B087-514245867DC6.png",
+    "change": "Resting partial/below-viewport footer is distinguished from measured reachable bottom; no production bottom margin change",
+    "limit": "Initial versus bottom states intentionally differ; enabled root inert fixture uses explicit programmatic bottom scroll."
+  },
+  {
+    "before": "hillclimb/tasks/signin-chrome/before-light-XXXL-password-bottom-settled.png",
+    "after": "hillclimb/tasks/signin-chrome/final-native-light-XXXL-bottom.png",
+    "change": "Ordinary disabled fixture retains actual native gesture scroll and populated secure value with persistent name",
+    "limit": "Ordinary links are disabled; enabled link appearance/safety is separately tested."
+  }
+]

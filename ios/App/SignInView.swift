@@ -90,6 +90,7 @@ struct SignInView: View {
                             .accessibilityAddTraits(.updatesFrequently)
                     }
                     legalFooter
+                        .id("signin.legalFooter")
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 8)
@@ -97,6 +98,14 @@ struct SignInView: View {
                 .frame(maxWidth: 560)
                 .frame(maxWidth: .infinity)
             }
+#if DEBUG
+            .task {
+                if appearanceFixture && HillclimbDemo.argument("--hillclimb-signin-scroll") == "bottom" {
+                    scroll.scrollTo("signin.legalFooter", anchor: .bottom)
+                }
+            }
+#endif
+            .signInTopEdge()
             .scrollDismissesKeyboard(.interactively)
             .background(Color(.systemBackground))
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
@@ -280,6 +289,9 @@ struct SignInView: View {
                         .accessibilityAddTraits(.updatesFrequently)
                 }
                 if usesPassword {
+                    Text("Password")
+                        .font(.headline)
+                        .accessibilityHidden(true)
                     passwordField
                     Text("For an existing account with a password. You can also use a sign-in link.")
                         .font(.footnote)
@@ -375,6 +387,7 @@ struct SignInView: View {
     private var passwordField: some View {
         VStack(spacing: 0) {
             SecureField("Password", text: $password)
+                .frame(minHeight: 48)
                 .textContentType(.password)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
@@ -386,7 +399,7 @@ struct SignInView: View {
                 .disabled(busy)
         }
         .padding(.horizontal, 12)
-        .frame(minHeight: 44)
+        .frame(minHeight: 48)
         .contentShape(Rectangle())
         .background(Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
         .onTapGesture { if !busy { passwordFocused = true } }
@@ -491,6 +504,15 @@ private struct SignInSection<Content: View>: View {
 }
 
 private extension View {
+    @ViewBuilder
+    func signInTopEdge() -> some View {
+        if #available(iOS 26.0, *) {
+            scrollEdgeEffectStyle(.hard, for: .top)
+        } else {
+            self
+        }
+    }
+
     @ViewBuilder
     func signInWithAppleFill(_ fill: SignInAppleFill) -> some View {
         switch fill {
