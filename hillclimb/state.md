@@ -24,7 +24,7 @@ Integration: `hillclimb/ui`, based on origin/main `5fc4cbc`. Work is ongoing; sc
 |Capture harness|Merged|Offline isolated Debug modes; real geometry probes; repeatable/resumable captures. Round1 retains failed synthesized-scroll attempt and advised successful raw drag.|
 |Apple references|Merged, partial|5 usable Reminders references;4 transition frames excluded; Notes unavailable. pairs.json records gaps.|
 |A board-reading|Merged|cc98098/ef82a67/9ff1d6c: no final-ink fade, refresh cleanup, compact title/count, actual44pt field/Account/dismiss targets.253 tests passed (247 unit+6 board UI),3 fresh-process pull repetitions,20 capture hashes verified by parent.|
-|B signin-surfaces|Awaiting handoff|SignInView/LMRChrome and dedicated new tests; separate regular17 device8E8380DE-364D-4899-99B8-D15ED0494FFD.|
+|B signin-surfaces|Merged with recorded warning|04098b7/96077a3: flatter sections,44pt focus containers and keyboard scrolling.250 tests passed (247 unit+3 dedicated UI),24 settled captures verified. Invalid-frame runtime warning localized to keyboard-matrix test; source not identified.|
 |C activity-polish|Merged|dcc4200/de1ad3a: scalable native Activity rows, independent surface budgets and Island corner clearance.249 unit tests+1 native check each at default/XXXL passed;24 actual native captures verified.|
 |D account-surfaces|In progress|Opaque quieter AccountView, safe read-only demo scrolling, new tests. After A handoff, explicitly authorized ONLY Account caller detent state/selection in ReminderListView; no other board edits. Original17 exclusive lease.|
 
@@ -40,7 +40,7 @@ A returned source ownership before D was authorized to edit caller detents. No t
 
 ## Next verifiable steps
 
-1. Review/merge B and D passing results, preserving copy/branding/icon and offline isolation.
+1. Review/merge D passing result, preserving copy/branding/icon and offline isolation. A/B/C are merged.
 2. Build and run combined existing/affected tests; Release build; capture all matching states on original17, including native Activity evidence on integrated source.
 3. Fresh Sol and Astra round2 graders. Invoke Opus5.5/medium only if both same-round overall >=8.5.
 4. Address next ranked findings in isolated branches; re-shoot/re-grade until final gate or explicit stopping rule. No score improvement is inferred from code/tests.
@@ -48,6 +48,7 @@ A returned source ownership before D was authorized to edit caller detents. No t
 ## Open polish and evidence gaps
 
 - First-line alignment of long-row controls, XXXL capacity placeholder wrapping, and partially clipped empty guide while composing remain for a later task/round.
+- Sign-in keyboard-matrix run records an invalid-frame warning; parent result inspection localizes it to testFocusedEmailAndPasswordClearKeyboardInBothAppearances, but no console log is available. XXXL floating Done can overlap lower secondary action in the captured viewport; carry into integrated review.
 - Actual locked-device state, arbitrary wallpaper contrast, physical haptics, VoiceOver traversal and broader accessibility-setting interactions remain unverified. Apple Notes references remain unavailable.
 - Round1 baseline247 unit tests passed; later repaired fixture stability test1/1 passed. New baseline failures are retained in round1 artifacts; A's new checks now pass on its branch.
 
