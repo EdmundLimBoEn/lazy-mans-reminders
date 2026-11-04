@@ -66,9 +66,18 @@ struct BoardPersistenceSection: View {
         } header: {
             Text("Keep Your Board Visible")
         } footer: {
-            Text("iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed. Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.")
-                    .accountMeasure("persistence.footer")
-                .foregroundStyle(.primary)
+            VStack(alignment: .leading, spacing: 6) {
+                Text(AccountGuidance.activity)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accountMeasure("persistence.activity")
+                    .accessibilityIdentifier("account.guidance.activity")
+                Text(AccountGuidance.background)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accountMeasure("persistence.background")
+                    .accessibilityIdentifier("account.guidance.background")
+            }
+            .accountMeasure("persistence.footer")
+            .foregroundStyle(.primary)
         }
         .onChange(of: result, initial: true) { _, message in
             if let announcement = announcements.announcement(for: message) {
@@ -117,4 +126,9 @@ struct BoardPersistenceSection: View {
             result = "Couldn’t refresh. Your saved board is still available."
         }
     }
+}
+
+enum AccountGuidance {
+    static let activity = "iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed."
+    static let background = "Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight."
 }
