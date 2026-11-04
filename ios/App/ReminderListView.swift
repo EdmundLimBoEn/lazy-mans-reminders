@@ -21,6 +21,7 @@ struct ReminderListView: View {
     @State private var isDragging = false
     @State private var hasDeferredBoardUpdate = false
     @State private var showAccount = false
+    @State private var accountDetent: PresentationDetent = .large
     @AppStorage(BoardSetupTip.storageKey) private var setupTipDismissed = false
     @FocusState private var composerFocused: Bool
     @ScaledMetric(relativeTo: .body) private var addVisualSize: CGFloat = 28
@@ -92,10 +93,13 @@ struct ReminderListView: View {
             .task(id: isDragging || isReordering) {
                 await replayDeferredBoardUpdate()
             }
+            .onChange(of: showAccount) { _, presented in
+                if !presented { accountDetent = .large }
+            }
             .sheet(isPresented: $showAccount) {
                 AccountView()
                     .environmentObject(auth)
-                    .presentationDetents([.medium, .large])
+                    .presentationDetents([.medium, .large], selection: $accountDetent)
                     .presentationDragIndicator(.visible)
                     .presentationContentInteraction(.scrolls)
             }

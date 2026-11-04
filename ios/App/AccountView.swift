@@ -17,103 +17,104 @@ struct AccountView: View {
         NavigationStack {
             List {
                 Group {
-                if let error {
-                    Section {
-                        Label(error, systemImage: "exclamationmark.triangle.fill")
-                            .font(.footnote)
-                            .foregroundStyle(.red)
-                            .textSelection(.enabled)
-                            .accessibilityAddTraits(.updatesFrequently)
-                    }
-                }
-
-                Section {
-                    Label {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(accountTitle)
-                                .font(.headline)
+                    if let error {
+                        Section {
+                            Label(error, systemImage: "exclamationmark.triangle.fill")
+                                .font(.footnote)
+                                .foregroundStyle(.red)
                                 .textSelection(.enabled)
-                            if let subtitle = accountSubtitle {
-                                Text(subtitle)
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
+                                .accessibilityAddTraits(.updatesFrequently)
+                        }
+                    }
+
+                    Section {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(accountTitle)
+                                    .font(.headline)
                                     .textSelection(.enabled)
+                                if let subtitle = accountSubtitle {
+                                    Text(subtitle)
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                        .textSelection(.enabled)
+                                }
                             }
+                        } icon: {
+                            Text(accountInitial)
+                                .font(.headline)
+                                .foregroundStyle(Color(.systemBackground))
+                                .frame(width: 40, height: 40)
+                                .background(Circle().fill(Color.primary))
                         }
-                    } icon: {
-                        Text(accountInitial)
-                            .font(.headline)
-                            .foregroundStyle(Color(.systemBackground))
-                            .frame(width: 40, height: 40)
-                            .background(Circle().fill(Color.primary))
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel(accountAccessibilityLabel)
                     }
-                    .accessibilityElement(children: .combine)
-                    .accessibilityLabel(accountAccessibilityLabel)
-                }
 
-                Section {
-                    notificationRow
-                } footer: {
-                    Text(NotificationAccessPolicy.footer(notificationAccess))
-                }
+                    Section {
+                        notificationRow
+                    } footer: {
+                        Text(NotificationAccessPolicy.footer(notificationAccess))
+                    }
 
-                BoardPersistenceSection(registration: auth.pushRegistration)
+                    BoardPersistenceSection(registration: auth.pushRegistration)
 
-                Section {
-                    Button {
-                        showSignOut = true
-                    } label: {
-                        AccountRow("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
-                    }
-                    .disabled(isDeletingAccount)
-                    .accessibilityHint("Signs you out on this iPhone")
-                }
-
-                Section {
-                    Link(destination: LMRWeb.privacy) {
-                        AccountRow("Privacy", systemImage: "hand.raised", external: true)
-                    }
-                    Link(destination: LMRWeb.terms) {
-                        AccountRow("Terms", systemImage: "doc.plaintext", external: true)
-                    }
-                    Link(destination: LMRWeb.support) {
-                        AccountRow("Support", systemImage: "questionmark.circle", external: true)
-                    }
-                    Link(destination: LMRWeb.dataExport) {
-                        AccountRow("Download My Data", systemImage: "square.and.arrow.down", external: true)
-                    }
-                }
-
-                Section {
-                    if let feedbackURL = FeedbackMail.url(appInfo) {
-                        Link(destination: feedbackURL) {
-                            AccountRow("Send Feedback", systemImage: "envelope", external: true)
+                    Section {
+                        Button {
+                            showSignOut = true
+                        } label: {
+                            AccountRow("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
                         }
-                        .accessibilityHint("Opens Mail with your app and iOS version filled in")
+                        .disabled(isDeletingAccount)
+                        .accessibilityHint("Signs you out on this iPhone")
                     }
-                } footer: {
-                    Text("Or email \(FeedbackMail.address)")
-                        .textSelection(.enabled)
-                }
 
-                Section {
-                    Button(role: .destructive) {
-                        showDeleteAccount = true
-                    } label: {
-                        Label("Delete Account…", systemImage: "trash")
+                    Section {
+                        Link(destination: LMRWeb.privacy) {
+                            AccountRow("Privacy", systemImage: "hand.raised", external: true)
+                        }
+                        Link(destination: LMRWeb.terms) {
+                            AccountRow("Terms", systemImage: "doc.plaintext", external: true)
+                        }
+                        Link(destination: LMRWeb.support) {
+                            AccountRow("Support", systemImage: "questionmark.circle", external: true)
+                        }
+                        Link(destination: LMRWeb.dataExport) {
+                            AccountRow("Download My Data", systemImage: "square.and.arrow.down", external: true)
+                        }
                     }
-                    .disabled(isDeletingAccount)
-                } footer: {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.")
-                        Text(FeedbackMail.versionFooter(appInfo))
+
+                    Section {
+                        if let feedbackURL = FeedbackMail.url(appInfo) {
+                            Link(destination: feedbackURL) {
+                                AccountRow("Send Feedback", systemImage: "envelope", external: true)
+                            }
+                            .accessibilityHint("Opens Mail with your app and iOS version filled in")
+                        }
+                    } footer: {
+                        Text("Or email \(FeedbackMail.address)")
                             .textSelection(.enabled)
-                            .accessibilityLabel("App \(FeedbackMail.versionFooter(appInfo))")
                     }
-                }
+
+                    Section {
+                        Button(role: .destructive) {
+                            showDeleteAccount = true
+                        } label: {
+                            Label("Delete Account…", systemImage: "trash")
+                        }
+                        .disabled(isDeletingAccount)
+                    } footer: {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.")
+                            Text(FeedbackMail.versionFooter(appInfo))
+                                .textSelection(.enabled)
+                                .accessibilityLabel("App \(FeedbackMail.versionFooter(appInfo))")
+                        }
+                    }
                 }
                 .disabled(hillclimbReadOnly)
             }
+            .accessibilityIdentifier("account.settings")
             .environment(\.defaultMinListRowHeight, 44)
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
@@ -142,6 +143,7 @@ struct AccountView: View {
                                 .frame(minWidth: 44, minHeight: 44)
                                 .contentShape(Rectangle())
                         }
+                        .buttonStyle(.plain)
                     }
                 }
             }
