@@ -1,0 +1,51 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+      "deviceName" : "Hillclimb iPhone 17 Pro",
+      "modelName" : "iPhone 17 Pro",
+      "osBuildNumber" : "23C54",
+      "osVersion" : "26.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "duration" : "Ran for 12 seconds",
+  "durationInSeconds" : 12.374433040618896,
+  "hasMediaAttachments" : false,
+  "hasPerformanceMetrics" : false,
+  "startTime" : 1793804706.909,
+  "testDescription" : "Test case with 1 run",
+  "testIdentifier" : "ActivityNativeLayoutTests/testExpandedIslandLastLineClearsRoundedCorners()",
+  "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ActivityNativeLayoutTests/testExpandedIslandLastLineClearsRoundedCorners",
+  "testName" : "testExpandedIslandLastLineClearsRoundedCorners()",
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ],
+  "testResult" : "Passed",
+  "testRuns" : [
+    {
+      "children" : [
+        {
+          "duration" : "12s",
+          "durationInSeconds" : 12.374433040618896,
+          "name" : "Test Scheme Action",
+          "nodeIdentifier" : "1",
+          "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ActivityNativeLayoutTests/testExpandedIslandLastLineClearsRoundedCorners",
+          "nodeType" : "Test Plan Configuration",
+          "result" : "Passed"
+        }
+      ],
+      "details" : "iOS Simulator 26.2",
+      "duration" : "12s",
+      "durationInSeconds" : 12.374433040618896,
+      "name" : "iPhone 17 Pro",
+      "nodeIdentifier" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+      "nodeType" : "Device",
+      "result" : "Passed"
+    }
+  ]
+}
