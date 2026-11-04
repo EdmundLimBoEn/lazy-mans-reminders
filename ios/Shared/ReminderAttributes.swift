@@ -42,6 +42,11 @@ enum ReminderActivityPresentation {
         return Array(source.prefix(ReminderBoardLimits.lockScreenMaxLines))
     }
 
+    /// Keep an explicit overflow row when a surface has less room than the board.
+    static func surfaceLines(_ lines: [String], limit: Int) -> [String] {
+        capped(lines.isEmpty ? ["Nothing to remember"] : lines, limit: max(1, limit))
+    }
+
     static func previewLines(_ lines: [String], limit: Int = 6) -> [String] {
         capped(lines, limit: limit)
     }
