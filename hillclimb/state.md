@@ -119,3 +119,9 @@ Sol8.78 (minimum7.8), Astra8.76 (minimum7.8), all30 categories. Both exceed8.5, 
 | Claude Opus5.5/medium |8.25|7.5|
 
 All30categoriespergrader; validatorerrorsnone; finalgatefalse. Opus52cc7d2 merged, report-only. Codex gainscontinue, no3-roundplateau. H board(readability,flatcapacity,nonemptyDone,completioncircleonly,retry/topedge) owns ReminderListView/ReorderableReminderList/HillclimbGeometry/boardtests. I sign-in(darkAppleboundary,contrast,compactDoneinset,safeenabled-stylecapture) owns LMRChrome/SignInView/HillclimbDemo(signinonly)/signin+chrometests. J Account(typography/alignment/exacterrorannouncements,safeenabled-stylecapture) owns AccountView/BoardPersistenceSection/accounttests+newhelper. No overlapping files; privateBoard17/privateAuth17/original17 respectively. Each must build,fulltests,andaffectedrecapturesbeforehandoff.
+
+## Next-batch handoff: I merged
+
+- I signin-native source551f880/evidencecddda8f merged after source/fixture safety review,37 verified native PNGs and original dark-enabled/XXXL-keyboard samples. Apple whiteOutline now visible in both appearances, normal help text uses adaptive primary ink, Done inset loses8pt padding while retaining48pt target. Existing wording/providerorder/authguardspreserved.
+- Worker277/277 (260 unit+17 UI), zero failures/skips;3 additional freshkeyboardmatrices yield32 completecasesincludingfullrun;0observedruntimewarnings/invalidframeevents. Nativepixel gate verifiesdarkAppleboundaryandnormaltextcontrast; enabled-stylefixture inert under root hit-testing plus callback guards, legalLinksdisabled. No Release/backendrerunclaimed. Parentoriginal17integratedround4validationstillrequired.
+- H board-deliberate andJ account-consistency remain active on privateBoard17/original17. I returnedAuth17 light/large,closedownsession,Activityids empty. Do not startoriginal17captureuntilJhandsback.

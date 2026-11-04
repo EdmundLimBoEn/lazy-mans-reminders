@@ -87,3 +87,9 @@ No App Store/TestFlight upload or deployment is authorized. Physical sign-in, pe
 Written by gpt-6.1-sol in Codex on behalf of Edmund
 
 Next batch: board intentional completion/Done/contrast, sign-in dark Apple control and spacing, Account typography/alignment/error announcements. Existing wording stays fixed pending the optional copy question.
+
+## Next batch: sign-in accepted
+
+Source551f880/evidencecddda8f is merged: visible native white-outline Apple button in dark mode, readable normal help text and8pt less Done-inset padding with the48pt target retained.277 tests plus3 keyboard repetitions passed;37 native image hashes verified. Enabled-looking provider fixture remains inert; no live authentication was tested. Board and Account changes are pending before integratedround4validation. [Evidence](tasks/signin-native/REPORT.md).
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
