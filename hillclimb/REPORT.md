@@ -74,7 +74,7 @@ Individual task counts and retained intermediate failures are in [task evidence]
 
 ## Remaining limits
 
-True device locking, physical cutout geometry, arbitrary wallpapers, tactile haptics, spoken VoiceOver, accessibility sizes beyondXXXL, broader system contrast/motion/transparency settings and measured motion/performance remain unverified. Source/tests support only the claims recorded with them. Current-session quota metadata reports10% used in the10080-minute weekly window; [snapshot](rounds/4/usage.json). No plateau decision before fresh grades.
+True device locking, physical cutout geometry, arbitrary wallpapers, tactile haptics, spoken VoiceOver, accessibility sizes beyondXXXL, broader system contrast/motion/transparency settings and measured motion/performance remain unverified. Source/tests support only the claims recorded with them. Current-session quota metadata reports12% used in the10080-minute weekly window; [snapshot](rounds/4/usage.json). No plateau decision before fresh grades.
 
 ## Install on a phone
 
