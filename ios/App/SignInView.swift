@@ -47,6 +47,18 @@ struct SignInView: View {
 #endif
     }
 
+    private var appearanceFixture: Bool {
+#if DEBUG
+        HillclimbDemo.mode == .signin && HillclimbDemo.argument("--hillclimb-signin-appearance") == "enabled"
+#else
+        false
+#endif
+    }
+
+    private var disablesDemoControls: Bool {
+        blocksExternalActions && !appearanceFixture
+    }
+
     private enum PendingSignIn {
         case apple, google, magicLink, password
     }
@@ -59,10 +71,10 @@ struct SignInView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Notepad")
                             .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.primary)
                         Text("Your board on this iPhone, the web, and the Lock Screen.")
                             .font(.body)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.primary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
@@ -111,7 +123,6 @@ struct SignInView: View {
                         .foregroundStyle(.tint)
                     }
                     .padding(.horizontal, 20)
-                    .padding(.vertical, 4)
                     .background(Color(.systemBackground))
                 }
             }
@@ -129,6 +140,7 @@ struct SignInView: View {
             if fixtureVariant == "password-keyboard" { passwordFocused = true }
         }
 #endif
+        .allowsHitTesting(!appearanceFixture)
         .onChange(of: displayedNotice, initial: true) { _, notice in
             if let message = errorAnnouncements.announcement(for: notice) {
                 UIAccessibility.post(notification: .announcement, argument: message)
@@ -195,9 +207,10 @@ struct SignInView: View {
                 }
             }
             .signInWithAppleFill(SignInAppleFill.fill(for: colorScheme))
+            .accessibilityIdentifier("signin.apple")
             .frame(maxWidth: .infinity)
             .frame(height: max(44, signInButtonHeight))
-            .disabled(busy || blocksExternalActions)
+            .disabled(busy || disablesDemoControls)
 
             Button {
                 guard !blocksExternalActions else { return }
@@ -217,7 +230,7 @@ struct SignInView: View {
             .controlSize(.large)
             .frame(maxWidth: .infinity)
             .frame(minHeight: max(44, signInButtonHeight))
-            .disabled(busy || blocksExternalActions)
+            .disabled(busy || disablesDemoControls)
             .accessibilityHint("Opens Google sign-in in a secure browser sheet")
         }
     }
@@ -233,7 +246,7 @@ struct SignInView: View {
                     .accessibilityAddTraits(.updatesFrequently)
                 Text("We sent a sign-in link to \(sentTo).")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.primary)
                     .textSelection(.enabled)
                     .fixedSize(horizontal: false, vertical: true)
                 Button("Use a Different Email") {
@@ -253,20 +266,20 @@ struct SignInView: View {
                     .accessibilityAddTraits(.isHeader)
                 Text("Use the same address as the web board.")
                     .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.primary)
                     .fixedSize(horizontal: false, vertical: true)
                 emailField
                 if !normalizedEmail.isEmpty && !emailIsPlausible {
                     Text("Enter a valid email address.")
                         .font(.footnote)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
                         .accessibilityAddTraits(.updatesFrequently)
                 }
                 if usesPassword {
                     passwordField
                     Text("For an existing account with a password. You can also use a sign-in link.")
                         .font(.footnote)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 Button {
@@ -285,7 +298,7 @@ struct SignInView: View {
                 .buttonBorderShape(.roundedRectangle)
                 .controlSize(.large)
                 .frame(maxWidth: .infinity)
-                .disabled(blocksExternalActions || !emailIsPlausible || busy || (usesPassword && password.isEmpty))
+                .disabled(disablesDemoControls || !emailIsPlausible || busy || (usesPassword && password.isEmpty))
                 Button {
                     usesPassword.toggle()
                     password = ""
@@ -476,8 +489,6 @@ private extension View {
     @ViewBuilder
     func signInWithAppleFill(_ fill: SignInAppleFill) -> some View {
         switch fill {
-        case .black:
-            signInWithAppleButtonStyle(.black)
         case .whiteOutline:
             signInWithAppleButtonStyle(.whiteOutline)
         }

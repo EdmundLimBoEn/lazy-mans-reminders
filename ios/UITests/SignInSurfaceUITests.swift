@@ -42,6 +42,79 @@ final class SignInSurfaceUITests: XCTestCase {
         add(attachment)
     }
 
+    func testEnabledAppearanceIsInertAndAppleBoundaryIsVisible() {
+        for style in ["light", "dark"] {
+            for size in ["default", "XXXL"] {
+                app.launchArguments = ["--hillclimb-demo", "signin", "--hillclimb-style", style,
+                    "--hillclimb-size", size, "--hillclimb-signin-appearance", "enabled"]
+                app.launch()
+                XCTAssertTrue(app.navigationBars["Sign In"].waitForExistence(timeout: 10))
+                let apple = app.buttons["signin.apple"]
+                target(apple)
+                XCTAssertTrue(apple.isEnabled)
+                XCTAssertTrue(app.buttons["Sign in with Google"].isEnabled)
+                if style == "dark" { assertAppleBoundary(apple.frame) }
+                assertNormalTextContrast("Your board on this iPhone, the web, and the Lock Screen.", style: style)
+                assertNormalTextContrast("Use the same address as the web board.", style: style)
+                apple.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+                app.buttons["Sign in with Google"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+                app.textFields["Email address"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+                app.buttons["Use an Existing Password"].coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+                XCTAssertFalse(app.keyboards.firstMatch.exists)
+                XCTAssertFalse(app.secureTextFields["Password"].exists)
+                XCTAssertEqual(app.navigationBars.firstMatch.identifier, "Sign In")
+                capture("design-only-inert-enabled-signin-\(style)-\(size)")
+            }
+        }
+    }
+
+    private func pixels(in frame: CGRect) -> [[UInt8]] {
+        let image = app.screenshot().image.cgImage!
+        let scale = CGFloat(image.width) / app.frame.width
+        let crop = image.cropping(to: CGRect(x: frame.minX * scale, y: frame.minY * scale,
+                                            width: frame.width * scale, height: frame.height * scale))!
+        var bytes = [UInt8](repeating: 0, count: crop.width * crop.height * 4)
+        let context = CGContext(data: &bytes, width: crop.width, height: crop.height,
+            bitsPerComponent: 8, bytesPerRow: crop.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+        context.draw(crop, in: CGRect(x: 0, y: 0, width: crop.width, height: crop.height))
+        return stride(from: 0, to: bytes.count, by: 4).map { Array(bytes[$0..<$0+3]) }
+    }
+
+    private func assertAppleBoundary(_ frame: CGRect) {
+        // A strip away from the centered label must contain the native white bezel/fill.
+        let strip = CGRect(x: frame.minX + 6, y: frame.minY + 8, width: 8, height: frame.height - 16)
+        let samples = pixels(in: strip)
+        let white = samples.filter { $0.allSatisfy { $0 > 200 } }.count
+        XCTAssertGreaterThan(Double(white) / Double(samples.count), 0.8)
+    }
+
+    private func assertNormalTextContrast(_ text: String, style: String) {
+        let samples = pixels(in: app.staticTexts[text].frame)
+        var histogram: [Int: Int] = [:]
+        for rgb in samples {
+            let key = Int(rgb[0]) << 16 | Int(rgb[1]) << 8 | Int(rgb[2])
+            histogram[key, default: 0] += 1
+        }
+        let background = style == "light" ? 255.0 : 0.0
+        let ink = histogram.filter { key, _ in
+            let channels = [Double((key >> 16) & 255), Double((key >> 8) & 255), Double(key & 255)]
+            return channels.allSatisfy { abs($0 - background) > 40 }
+        }.max { $0.value < $1.value }
+        XCTAssertNotNil(ink)
+        guard let ink else { return }
+        XCTAssertGreaterThan(ink.value, 20)
+        func linear(_ value: Double) -> Double {
+            let s = value / 255
+            return s <= 0.04045 ? s / 12.92 : pow((s + 0.055) / 1.055, 2.4)
+        }
+        let key = ink.key
+        let luminance = 0.2126 * linear(Double((key >> 16) & 255))
+            + 0.7152 * linear(Double((key >> 8) & 255)) + 0.0722 * linear(Double(key & 255))
+        let ratio = style == "light" ? 1.05 / (luminance + 0.05) : (luminance + 0.05) / 0.05
+        XCTAssertGreaterThanOrEqual(ratio, 4.5, text)
+    }
+
     func testDefaultAndXXXLControlsAndTextInBothAppearances() {
         for style in ["light", "dark"] {
             for size in ["default", "XXXL"] {
