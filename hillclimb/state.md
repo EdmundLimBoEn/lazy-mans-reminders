@@ -41,7 +41,7 @@ A returned source ownership before D was authorized to edit caller detents. No t
 ## Next verifiable steps
 
 1. A/B/C/D and round2 evidence are merged.249 unit+12 UI=261 passed, zero failures/skips.48 images and production source hashes verified by parent.
-2. Run fresh Sol/Astra round2 ratings. Release overall exit0/artifact is recorded with unusual SwiftCompile exit0/no-output diagnostics; parent confirmation pending.
+2. Run fresh Sol/Astra round2 ratings. Fresh parent arm64 Release confirmation succeeded with new derived data/binary, exit0/BUILD SUCCEEDED; unusual earlier SwiftCompile diagnostics did not recur. Existing AuthManager warnings retained.
 3. Fresh Sol and Astra round2 graders. Invoke Opus5.5/medium only if both same-round overall >=8.5.
 4. Address next ranked findings in isolated branches; re-shoot/re-grade until final gate or explicit stopping rule. No score improvement is inferred from code/tests.
 
@@ -61,3 +61,5 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - Integration validation/capture task next: new isolated worktree at current merged source, original17 lease, full combined Debug test suite plus Release build, fresh round2 matrix and current native Activity captures. No other worker remains active. Preserve all historical evidence; scripts now support round-specific Activity output.
 
 - Round2 source8dbf6a8, evidence0f0e3dc merged. Parent confirmed48 native image hashes and all recorded production-source hashes. Four previously missing settled Reminders matches now available; Notes remains unavailable. True locked-device capture is optional/unavailable evidence, not a fabricated required programmatic failure. All real unit/UI gates passed. Known sign-in invalid-frame warning recurred.
+
+- Round2 Sol/Astra graders running independently, source remains frozen. Parent fresh Release confirmation resolves compiler-result uncertainty; sign-in invalid-frame runtime warning remains. Before/after original17 screenshot pairs added to REPORT.md.

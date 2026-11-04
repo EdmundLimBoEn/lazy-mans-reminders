@@ -33,3 +33,5 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - 2026-11-04: Validator retains declared evidence gaps as report data rather than adding an unauthorized blanket no-gaps stop rule. Edmund explicitly permits documenting unreachable reference states. Final numeric gate remains all3>=9/every category>=7, with required programmatic checks and genuine source/image evidence validated.
 
 - Round2 integration accepted as evidence:261 actual tests passed,48 native images,4 fresh settled Reminders references, source hashes match. Recorded warning/compile diagnostics remain visible to graders. Optional unreachable locked-device capture is explicitly nonrequired; genuine fix regression checks remain required. No scores inferred from test passes.
+
+- Round2 parent Release recheck: fresh arm64-only build for original17, new derived data, new binary, exit0 and BUILD SUCCEEDED. Prior exit0/no-output compiler errors did not recur. Existing AuthManager warnings and sign-in runtime warning remain separately recorded; no app changes.

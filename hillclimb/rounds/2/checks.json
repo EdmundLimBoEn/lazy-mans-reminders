@@ -113,8 +113,9 @@
         "CODE_SIGNING_ALLOWED=NO",
         "-quiet"
       ],
-      "evidence": "build-release.json; overall exit 0 with compiler diagnostic noted",
-      "validation_base": "../../validation/round2/"
+      "evidence": "../../validation/round2/release-arm64-confirmation.json",
+      "validation_base": "../../validation/round2/",
+      "confirmation": "Fresh arm64 derived-data build exit0/BUILD SUCCEEDED/new binary; prior unusual diagnostics did not recur. Existing AuthManager warnings retained."
     },
     {
       "name": "native round2 capture matrix",
