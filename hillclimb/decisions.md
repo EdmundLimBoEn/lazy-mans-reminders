@@ -49,3 +49,5 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - Round3 evidence is retained without accepting failed required gates. Correct test scrolling to operate inside visible form and explicitly restore keyboard after supported interactive dismissal; do not change normal dismissal UX to satisfy an invalid test assumption. Require full combined rerun plus repeated affected matrix, with original app hashes checked before reusing screenshots.
 
 - Accepted round3 recheck5b0ca7e after276/276 and3 complete keyboard repetitions. App inputs unchanged, so historicalRelease/backend/screenshots remain valid with explicit reuse provenance. Keep original275/1 failure intact and distinguish test542b9f7 from production6959de1. Commissioned independent requested-model reviews on same packet.
+
+- Round3 Sol8.78/Astra8.76, minima7.8 each. Validator confirms Opus eligibility and onlymissingOpus result; allrequiredchecks pass. Request exactOpus5.5/medium review now, no substitutedmodel andno finalsuccessclaim.

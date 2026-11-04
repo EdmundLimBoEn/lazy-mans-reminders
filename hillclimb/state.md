@@ -105,3 +105,7 @@ Both independent reviews complete: Sol8.11(+1.23), Astra8.16(+1.46), minimum7.0 
 - Recheck5b0ca7e merged.276/276 passed (260 units+16 UI), zero failures/skips. Three dedicated keyboard repetitions completed24 cases; combined adds8. All original clearance/targets/edge taps remain. Parent verified110 native image hashes and production hash identity to6959de1; test revision542b9f7. Prior failed run remains preserved.
 - Fresh Debug build/Python23 passed; Release/backend52+4 explicitly reused based on53 production+11 backend hashes, not rerun claims. Zero observed runtimewarnings andinvalid-frame events; otherdiagnostics retained. Original17 cleaned andreturned.
 - Round3 Sol/high andAstra/high are independently grading the identical110-image/source/reference packet. No source edits during reviews. Opus requires both same-roundoverall>=8.5. Quota snapshot exported to rounds/3/usage.json from current-sessionrate-limit metadata.
+
+## Round3 Codex grades complete; Opus eligible
+
+Sol8.78 (minimum7.8), Astra8.76 (minimum7.8), all30 categories. Both exceed8.5, so commission requested Claude Opus5.5/medium on same frozen6959de1 source/110 nativeimages/17 references. Finalall3>=9/everycategory>=7 remains unmet. No plateau: overall scores continue rising. Remaining priorities: light secondary/capacity contrast, composerDonewithnonemptydraft, Account error announcement/recovery, populatedboardretry/diagnostic hierarchy while preserving all wording. No new implementation begins until same-source Opus review is commissioned.

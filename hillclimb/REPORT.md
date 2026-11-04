@@ -1,43 +1,43 @@
 # Notepad UI hill climb: progress report
 
-Work continues on `hillclimb/ui`. Final score gate has not been reached. Round3 runtime checks pass and independent Codex grading is running. Opus runs only when both Codex overall grades reach8.5 in the same round. Stop requires all three>=9, with no category below7.
+Work continues on `hillclimb/ui`. Final score gate has not been reached. Round3 runtime checks pass; Codex grades are Sol8.78 and Astra8.76 (minimum7.8 each). Opus review is now eligible. Opus runs only when both Codex overall grades reach8.5 in the same round. Stop requires all three>=9, with no category below7.
 
 ## Category scores
 
-| Category | R1 Sol | R2 Sol | R1 Astra | R2 Astra |
-| --- | ---: | ---: | ---: | ---: |
-| Visual hierarchy | 7.5 | 8.5 | 7 | 8.5 |
-| Spacing/grid | 7.0 | 8.0 | 7 | 8.2 |
-| Typography scale | 8.5 | 8.5 | 8 | 8.5 |
-| Dynamic Type | 7.5 | 7.8 | 7 | 8.0 |
-| Light contrast | 7.0 | 8.2 | 7 | 8.3 |
-| Dark contrast | 6.5 | 8.3 | 6.5 | 8.3 |
-| Iconography | 8.0 | 8.4 | 8 | 8.5 |
-| Safe area / Dynamic Island | 8.0 | 8.0 | 8 | 8.5 |
-| Scroll/pull-down / last row | 4.0 | 9.0 | 4 | 9.2 |
-| List rows | 6.5 | 7.5 | 6.5 | 7.8 |
-| Empty states | 7.0 | 8.0 | 7.5 | 8.2 |
-| Composer ergonomics | 6.0 | 8.2 | 6 | 8.6 |
-| Keyboard handling | 7.0 | 7.0 | 7.5 | 7.2 |
-| Sheet presentation/detents | 7.0 | 9.0 | 6 | 9.0 |
-| Navigation clarity | 7.5 | 8.5 | 7 | 8.7 |
-| Touch targets | 4.5 | 9.0 | 4.5 | 9.0 |
-| Haptics | 7.0 | 7.5 | 7 | 7.0 |
-| Animation/transitions | 6.5 | 7.5 | 6.5 | 7.4 |
-| Loading states | 7.5 | 7.5 | 7 | 7.6 |
-| Error states | 7.5 | 7.8 | 7 | 7.5 |
-| VoiceOver/labels | 7.5 | 7.8 | 7.5 | 7.5 |
-| iOS HIG consistency | 7.5 | 8.4 | 7 | 8.5 |
-| Lock Screen / Live Activity | 6.0 | 7.7 | 6 | 8.0 |
-| Sign-in/onboarding | 6.5 | 8.0 | 6.5 | 7.8 |
-| Settings/account | 7.0 | 8.7 | 6 | 8.5 |
-| Performance feel | 6.5 | 7.5 | 6.5 | 7.6 |
-| Delight | 6.5 | 7.4 | 6.5 | 7.5 |
-| Long text | 7.0 | 8.4 | 7 | 8.3 |
-| Reduced Motion / Transparency | 7.0 | 8.0 | 6 | 8.0 |
-| Palette / minimalism | 7.0 | 9.2 | 7 | 9.0 |
+| Category | R1 Sol | R2 Sol | R3 Sol | R1 Astra | R2 Astra | R3 Astra |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Visual hierarchy | 7.5 | 8.5 | 9.1 | 7 | 8.5 | 9.0 |
+| Spacing/grid | 7.0 | 8.0 | 9.0 | 7 | 8.2 | 8.9 |
+| Typography scale | 8.5 | 8.5 | 9.0 | 8 | 8.5 | 9.0 |
+| Dynamic Type | 7.5 | 7.8 | 8.8 | 7 | 8.0 | 9.0 |
+| Light contrast | 7.0 | 8.2 | 8.2 | 7 | 8.3 | 8.0 |
+| Dark contrast | 6.5 | 8.3 | 9.1 | 6.5 | 8.3 | 9.0 |
+| Iconography | 8.0 | 8.4 | 9.1 | 8 | 8.5 | 9.2 |
+| Safe area / Dynamic Island | 8.0 | 8.0 | 9.2 | 8 | 8.5 | 9.0 |
+| Scroll/pull-down / last row | 4.0 | 9.0 | 9.2 | 4 | 9.2 | 9.5 |
+| List rows | 6.5 | 7.5 | 9.1 | 6.5 | 7.8 | 9.0 |
+| Empty states | 7.0 | 8.0 | 9.0 | 7.5 | 8.2 | 9.0 |
+| Composer ergonomics | 6.0 | 8.2 | 8.8 | 6 | 8.6 | 8.1 |
+| Keyboard handling | 7.0 | 7.0 | 9.1 | 7.5 | 7.2 | 8.8 |
+| Sheet presentation/detents | 7.0 | 9.0 | 9.1 | 6 | 9.0 | 9.2 |
+| Navigation clarity | 7.5 | 8.5 | 9.1 | 7 | 8.7 | 8.7 |
+| Touch targets | 4.5 | 9.0 | 9.1 | 4.5 | 9.0 | 9.2 |
+| Haptics | 7.0 | 7.5 | 7.8 | 7 | 7.0 | 8.0 |
+| Animation/transitions | 6.5 | 7.5 | 8.0 | 6.5 | 7.4 | 8.3 |
+| Loading states | 7.5 | 7.5 | 8.8 | 7 | 7.6 | 8.7 |
+| Error states | 7.5 | 7.8 | 8.2 | 7 | 7.5 | 7.8 |
+| VoiceOver/labels | 7.5 | 7.8 | 8.3 | 7.5 | 7.5 | 8.3 |
+| iOS HIG consistency | 7.5 | 8.4 | 9.0 | 7 | 8.5 | 8.9 |
+| Lock Screen / Live Activity | 6.0 | 7.7 | 8.6 | 6 | 8.0 | 8.8 |
+| Sign-in/onboarding | 6.5 | 8.0 | 8.7 | 6.5 | 7.8 | 8.9 |
+| Settings/account | 7.0 | 8.7 | 8.8 | 6 | 8.5 | 8.5 |
+| Performance feel | 6.5 | 7.5 | 8.0 | 6.5 | 7.6 | 8.5 |
+| Delight | 6.5 | 7.4 | 8.5 | 6.5 | 7.5 | 8.5 |
+| Long text | 7.0 | 8.4 | 9.0 | 7 | 8.3 | 9.1 |
+| Reduced Motion / Transparency | 7.0 | 8.0 | 8.2 | 6 | 8.0 | 8.3 |
+| Palette / minimalism | 7.0 | 9.2 | 9.4 | 7 | 9.0 | 9.5 |
 
-Round3 scores pending. No Opus result is claimed. [Machine-readable scores](rounds/2/scores.json).
+Round3: Sol8.78, Astra8.76; both minimum7.8. No Opus result is claimed. [Machine-readable scores](rounds/3/scores.json).
 
 ## Current verification
 

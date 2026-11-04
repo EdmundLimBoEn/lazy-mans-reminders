@@ -21,20 +21,22 @@ html,body{margin:0;background:transparent;color:var(--foreground);font-family:va
 </head>
 <body>
 <div id="notepad-scores">
-<figure aria-label="Codex UI ratings on a ten-point scale: Sol rises from 6.88 to 8.11; Astra rises from 6.70 to 8.16.">
+<figure aria-label="Codex UI ratings out of ten: Sol 6.88, 8.11, 8.78; Astra 6.70, 8.16, 8.76 over three rounds.">
 <figcaption>UI grades · score out of 10</figcaption>
-<div class="model">gpt-6.1-sol · +1.23</div>
+<div class="model">gpt-6.1-sol</div>
 <div class="plot">
 <span>R1</span><div class="track"><div class="mark sol before" style="width:68.8%"></div></div><span class="value">6.88</span>
 <span>R2</span><div class="track"><div class="mark sol" style="width:81.1%"></div></div><span class="value">8.11</span>
+<span>R3</span><div class="track"><div class="mark sol" style="width:87.8%"></div></div><span class="value">8.78</span>
 </div>
-<div class="model">gpt-6-astra · +1.46</div>
+<div class="model">gpt-6-astra</div>
 <div class="plot">
 <span>R1</span><div class="track"><div class="mark astra before" style="width:67%"></div></div><span class="value">6.70</span>
 <span>R2</span><div class="track"><div class="mark astra" style="width:81.6%"></div></div><span class="value">8.16</span>
+<span>R3</span><div class="track"><div class="mark astra" style="width:87.6%"></div></div><span class="value">8.76</span>
 </div>
 <div class="axis" aria-hidden="true"><span>0</span><span>5</span><span>10</span></div>
-<div class="note">Opus eligibility: both Codex grades ≥8.5 in the same round.</div>
+<div class="note">Round 3 qualifies for Opus. Final target: all three ≥9; every category ≥7.</div>
 </figure>
 </div>
 </body>
