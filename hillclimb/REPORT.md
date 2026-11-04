@@ -82,3 +82,9 @@ After final integrated verification, use hillclimb/ui, generate ios/LazyMansRemi
 Native Activity has fresh integrated round2 evidence; no round1 native baseline existed, so no baseline pair is invented. Current numeric after scores are the independent round2 results above.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Sign-in keyboard follow-up accepted
+
+Task F replaces the invalid-frame InputAccessoryBar path with a layout-participating bottom inset. Done and the alternate action have48pt targets and measured separation at default/XXXL before and after scrolling.267 worker tests passed, plus2 strengthened UI rechecks.20 settled native captures verified; zero post-fix invalid-frame diagnostics. Error announcements preserve exact text and deduplicate presentations; spoken VoiceOver remains unobserved. Integrated original17 capture/regrade is pending. [Evidence](tasks/keyboard-recovery/README.md).
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund

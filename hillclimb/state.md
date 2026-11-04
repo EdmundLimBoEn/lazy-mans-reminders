@@ -81,3 +81,10 @@ Both independent reviews complete: Sol8.11(+1.23), Astra8.16(+1.46), minimum7.0 
 - Parent filled assertion dependency cache and ran existing live_activity/board_loader/device_delivery Deno suites. Initial type-check exposed stale empty-board expected shape; added hiddenLineCount:0. Corrected run52 passed,0 failed, no service permissions. Worker’s earlier4 offline tests remain separately recorded.
 - Backward compatibility: original lines array retained; missing metadata decodes nil. Already-summarized legacy remote payloads cannot recover lost counts. Backend preparation code is committed ONLY, not deployed; current old remote payload limitation remains until separately authorized work outside this no-deploy hill climb.
 - E board-multiline and F keyboard-recovery remain awaiting handoff. They use private regular17 devices; G returned original17 clean, no owned demo Activities, own session closed. No next scores inferred before integrated capture/regrade.
+
+## Next-batch handoff: F merged
+
+- F keyboard-recovery3993113/evidence8c3d9e5 merged after parent source review,20 settled capture hashes and two representative XXXL images. Layout-participating bottom inset reserves Done's real48pt target; alternate action remains separated before/after scrolling, with edge taps and repeated focus/dismissal checks.
+- Worker267 combined tests passed (254 units+13 UI), then2 strengthened UI rechecks passed; zero failures/skips. These are worker-base counts, not combined G+F integration counts. UUID-matched backtrace localized prior invalid-frame faults to InputAccessoryBar; subsequent runtime issues and log faults zero. Integrated original17 validation is still required.
+- Error announcements deduplicate exact existing text without moving focus. Explicit demo allows local recovery but blocks provider/submit/legal actions, including keyboard submission. Spoken VoiceOver remains unobserved.
+- E board-multiline awaits handoff. Original17 remains available for next combined validation after E is accepted.
