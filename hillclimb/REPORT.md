@@ -105,3 +105,9 @@ Top-edge fragments remain observed. New reviewer measurements find normal-size r
 Written by gpt-6.1-sol in Codex on behalf of Edmund
 
 Round4 all-three reviews validate; final gate is false. Next work covers board edge/VoiceOver polish, informational text contrast, combined-settings keyboard reproduction and safe Activity readability investigation. Existing copy stays fixed.
+
+## Activity readability experiment
+
+Candidate6a563b1 passed289 tests and native count/corner checks, but its word-boundary rendering removed a previously fitting final word without adding visible content. The parent kept the current renderer. Twelve native image hashes verified; candidate source/tests and provenance are retained as an experiment. No density or launch-performance improvement is claimed. [Experiment and decision](tasks/activity-readability/README.md).
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund

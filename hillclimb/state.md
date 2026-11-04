@@ -94,3 +94,9 @@ Opus a9ea0dd is merged; all three reports validate with no schema/evidence error
 - M: Shared Activity layout/model presentation and widget, dedicated Activity tests/new performance-only UI file. Original17. Investigate native density/word-boundary readability while retaining adaptive type, count conservation and footer/corner gates; optionally collect public simulator launch metrics. No global demo/harness or other workers' test files.
 
 All use isolated tool-created worktrees off the current integration branch, build and pass the full existing285-test baseline plus new checks, capture actual affected states and hand back their own device sessions. Production copy remains fixed.
+
+## M handoff: experiment retained; renderer unchanged
+
+- Candidate6a563b1 was reviewed:289candidate tests passed (267unit+22UI),12nativePNGhashesverified,eightvisiblecount/ink/cornergatespassed,fourrecordingsretained. No launch metric was recorded.
+- Parent declined the rendering change: word-boundary truncation removes the last word from a previously complete XXXL first row while keeping2+8. This is not an adequate readability/density improvement. Native renderer/type/margins/counts remain unchanged. Candidate source/tests saved as tasks/activity-readability/candidate.patch, with exact worker evidence and an explicit PM disposition. Candidate tests are not integrated acceptance.
+- Original17 is returned light/Large, ownedActivitiesempty,ownsessionclosed,running. K/privateAuth17 andL/privateBoard17 remain active. Round5 combined validation follows their handoffs.
