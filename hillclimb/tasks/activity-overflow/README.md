@@ -33,3 +33,9 @@ Changed source/test files (all assigned scope):
 - `supabase/functions/send-reminder-push/index.ts`
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Parent acceptance follow-up
+
+Fetched the pinned assertion dependency into the Deno cache, then the existing three suites type-checked and executed52 tests successfully with zero failures and no service permissions. Initial type-check exposed the old device_delivery empty-board expected object missing hiddenLineCount:0; that exact expectation was updated without weakening assertions. This resolves the prior backend-suite gap. No backend deployment occurred.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
