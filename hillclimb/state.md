@@ -15,7 +15,7 @@ Integration: `hillclimb/ui`, based on origin/main `5fc4cbc`. Work is ongoing; sc
 | --- | ---: | ---: | --- | --- |
 |0|Not graded|Not graded|Not due|Setup only|
 |1|6.88|6.70|Ineligible|18 app captures,5 usable Reminders references; Notes/native Activity initially missing|
-|2|Pending|Pending|Only if both Codex >=8.5|Awaiting completed batch, combined checks and original17 re-shoot|
+|2|Grading next|Grading next|Only if both Codex >=8.5|261 combined tests passed;48 fresh native images+4 fresh references on original17|
 
 ## Current tasks and ownership
 
@@ -40,8 +40,8 @@ A returned source ownership before D was authorized to edit caller detents. No t
 
 ## Next verifiable steps
 
-1. A/B/C/D are reviewed and merged. Start combined Debug tests, Release build and round2 integration capture in an isolated example-config worktree.
-2. Build and run combined existing/affected tests; Release build; capture all matching states on original17, including native Activity evidence on integrated source.
+1. A/B/C/D and round2 evidence are merged.249 unit+12 UI=261 passed, zero failures/skips.48 images and production source hashes verified by parent.
+2. Run fresh Sol/Astra round2 ratings. Release overall exit0/artifact is recorded with unusual SwiftCompile exit0/no-output diagnostics; parent confirmation pending.
 3. Fresh Sol and Astra round2 graders. Invoke Opus5.5/medium only if both same-round overall >=8.5.
 4. Address next ranked findings in isolated branches; re-shoot/re-grade until final gate or explicit stopping rule. No score improvement is inferred from code/tests.
 
@@ -59,3 +59,5 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - D handoff accepted after parent source review, two representative screenshots and16 verified hashes. Read-only List controls disabled while scroll and Done work. All worker scopes are merged; no current worker holds original17. Combined integration validation is next, not yet claimed passed.
 
 - Integration validation/capture task next: new isolated worktree at current merged source, original17 lease, full combined Debug test suite plus Release build, fresh round2 matrix and current native Activity captures. No other worker remains active. Preserve all historical evidence; scripts now support round-specific Activity output.
+
+- Round2 source8dbf6a8, evidence0f0e3dc merged. Parent confirmed48 native image hashes and all recorded production-source hashes. Four previously missing settled Reminders matches now available; Notes remains unavailable. True locked-device capture is optional/unavailable evidence, not a fabricated required programmatic failure. All real unit/UI gates passed. Known sign-in invalid-frame warning recurred.

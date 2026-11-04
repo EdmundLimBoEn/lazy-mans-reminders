@@ -31,3 +31,5 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - 2026-11-04: Accepted Account9f94f55 after249 unit+2 actual UI passes and16 verified captures. Large on open/reopen, medium remains; background is opaque semantic grouped color. Group-scoped disabled actions preserve demo safety while scroll/Done remain usable. Caller detent edits occurred only after A source handoff. All4 product workers now merged; run fresh combined checks and captures on original17 before grading.
 
 - 2026-11-04: Validator retains declared evidence gaps as report data rather than adding an unauthorized blanket no-gaps stop rule. Edmund explicitly permits documenting unreachable reference states. Final numeric gate remains all3>=9/every category>=7, with required programmatic checks and genuine source/image evidence validated.
+
+- Round2 integration accepted as evidence:261 actual tests passed,48 native images,4 fresh settled Reminders references, source hashes match. Recorded warning/compile diagnostics remain visible to graders. Optional unreachable locked-device capture is explicitly nonrequired; genuine fix regression checks remain required. No scores inferred from test passes.
