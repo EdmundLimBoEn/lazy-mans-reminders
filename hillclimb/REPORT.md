@@ -99,3 +99,9 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 Sourceaa69cb4/evidence07bc30f merged:44ptcircle-onlycompletion,Donefornonemptydrafts,unboxedreadablecapacitystatus/guidance,andpopulatederrorretryusingexistingcopy.279tests plus3keyboardmatricespassed;48nativehashesverified. Actualbottom-rowgeometry/inkpasses. Topclippedfragmentsremainobserveddespitesoftedgeflag;noresolutionclaimed. Accountworkerremainsbeforeintegratedround4validation. [Evidence](tasks/board-deliberate/README.md).
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Next batch: Account accepted; combined round4 next
+
+Account7abefed merged: consistentbodydisclosurelabel,aligneddestructiverow,readablehelper/footertext,exact-messageerrorannouncementdeduplicationandsafeenabled-stylepreview.281workertestspassed;84nativehashesand54contrastchecks(minimum13.94:1)verified. AllH/I/Jchangesarenowintegrated;freshoriginal17round4validationandgradingremain. [Evidence](tasks/account-consistency/REPORT.md).
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
