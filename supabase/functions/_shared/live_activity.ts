@@ -35,17 +35,29 @@ export function parseStartedAtMs(
 }
 
 export function boardLines(texts: string[], limit: number): string[] {
-  const cap = Math.max(1, limit);
+  return boardContent(texts, limit).lines;
+}
+
+export function boardContent(
+  texts: string[],
+  limit: number,
+): { lines: string[]; hiddenLineCount: number } {
+  const cap = Math.max(1, Math.floor(limit));
   const flattened = texts.flatMap((text) =>
-    text.split("\n").map((line) => line.trim()).filter((line) =>
-      line.length > 0
-    )
+    text.split(/\r\n|[\n\r\v\f\u0085\u2028\u2029]/).map((line) => line.trim())
+      .filter(Boolean)
   );
-  if (flattened.length === 0) return [];
-  if (flattened.length <= cap) return flattened;
-  const visible = flattened.slice(0, Math.max(cap - 1, 0));
-  const overflow = flattened.length - visible.length;
-  return [...visible, `+${overflow} more`];
+  const visible = flattened.length > cap
+    ? flattened.slice(0, cap - 1)
+    : flattened;
+  const hiddenLineCount = flattened.length - visible.length;
+  return {
+    lines: [
+      ...visible,
+      ...(hiddenLineCount > 0 ? [`+${hiddenLineCount} more`] : []),
+    ],
+    hiddenLineCount,
+  };
 }
 
 export function decideLiveActivity(input: {
@@ -126,6 +138,7 @@ export function liveActivityStaleDateUnix(nowUnix: number): number {
 type LiveActivityPayloadInput = {
   event: "start" | "update" | "end";
   lines: string[];
+  hiddenLineCount?: number;
   timestamp: number;
   alertBody?: string;
   staleDate: number;
@@ -136,7 +149,12 @@ function assembleLiveActivityPayload(input: LiveActivityPayloadInput): string {
   const aps: Record<string, unknown> = {
     timestamp: input.timestamp,
     event: input.event,
-    "content-state": { lines: input.lines },
+    "content-state": {
+      lines: input.lines,
+      ...(input.hiddenLineCount == null
+        ? {}
+        : { hiddenLineCount: input.hiddenLineCount }),
+    },
     "stale-date": input.staleDate,
     "relevance-score": 100,
   };
@@ -162,6 +180,42 @@ function assembleLiveActivityPayload(input: LiveActivityPayloadInput): string {
 export function buildLiveActivityPayload(
   input: LiveActivityPayloadInput,
 ): string {
+  if (input.hiddenLineCount != null) {
+    const hidden = Math.max(0, input.hiddenLineCount);
+    const visible = hidden > 0 ? input.lines.slice(0, -1) : input.lines.slice();
+    let alertBody = input.alertBody;
+    const render = () =>
+      assembleLiveActivityPayload({
+        ...input,
+        alertBody,
+        lines: [...visible, ...(hidden > 0 ? [`+${hidden} more`] : [])],
+        hiddenLineCount: hidden,
+      });
+    // Reserve each original's ellipsis and the legacy footer before fitting text.
+    if (payloadBytes(render()) > APNS_PAYLOAD_BYTE_LIMIT) {
+      const originals = visible.slice();
+      visible.fill(OVERFLOW_MARK);
+      if (alertBody != null) {
+        alertBody = longestFittingText(alertBody, (candidate) => {
+          const previous = alertBody;
+          alertBody = candidate;
+          const payload = render();
+          alertBody = previous;
+          return payload;
+        });
+      }
+      for (let index = 0; index < originals.length; index++) {
+        visible[index] = longestFittingText(originals[index], (candidate) => {
+          const previous = visible[index];
+          visible[index] = candidate;
+          const payload = render();
+          visible[index] = previous;
+          return payload;
+        });
+      }
+    }
+    return render();
+  }
   if (
     payloadBytes(assembleLiveActivityPayload(input)) <= APNS_PAYLOAD_BYTE_LIMIT
   ) {

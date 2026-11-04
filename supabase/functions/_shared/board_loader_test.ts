@@ -115,7 +115,11 @@ for (
       inserted.user_id,
       inserted,
     );
-    assertEquals(content, { lines: [], alertRecord: undefined });
+    assertEquals(content, {
+      lines: [],
+      hiddenLineCount: 0,
+      alertRecord: undefined,
+    });
   });
 }
 
@@ -141,7 +145,11 @@ Deno.test("a different active reminder cannot revive the deleted event's alert",
     inserted.user_id,
     inserted,
   );
-  assertEquals(content, { lines: ["Other"], alertRecord: undefined });
+  assertEquals(content, {
+    lines: ["Other"],
+    hiddenLineCount: 0,
+    alertRecord: undefined,
+  });
 });
 
 for (const type of ["INSERT", "UPDATE"] as const) {
@@ -187,4 +195,22 @@ Deno.test("alert candidate does not turn a failed board read into push content",
       inserted,
     )
   );
+});
+
+Deno.test("multiline board loading preserves structured hidden originals", async () => {
+  const content = await loadBoardContent(
+    client([{
+      text: Array.from({ length: 10 }, (_, i) => `Line ${i + 1}`).join("\n"),
+    }]),
+    "user",
+  );
+  assertEquals(content.lines, [
+    "Line 1",
+    "Line 2",
+    "Line 3",
+    "Line 4",
+    "Line 5",
+    "+5 more",
+  ]);
+  assertEquals(content.hiddenLineCount, 5);
 });
