@@ -1,0 +1,32 @@
+[
+  {
+    "command": [
+      "xcrun",
+      "xcresulttool",
+      "get",
+      "log",
+      "--type",
+      "console",
+      "--path",
+      "/tmp/notepad-round4-original17-combined.xcresult"
+    ],
+    "exit": 1,
+    "bytes": 0,
+    "stderr": "Error: No console log available\n"
+  },
+  {
+    "command": [
+      "xcrun",
+      "xcresulttool",
+      "get",
+      "log",
+      "--type",
+      "action",
+      "--path",
+      "/tmp/notepad-round4-original17-combined.xcresult"
+    ],
+    "exit": 0,
+    "bytes": 3727120,
+    "stderr": ""
+  }
+]

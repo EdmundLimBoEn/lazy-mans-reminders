@@ -20,6 +20,8 @@ command=shlex.split(a.command)
 if not any('agent-device' in part for part in command) or not (any('session' in part for part in command) or (len(command) == 1 and '/device/targets/' in command[0])):
     p.error('Pass the exact pinned agent-device command bound to its session from device_open')
 ops=json.loads(pathlib.Path(a.operations).read_text())
+ops.setdefault('appearance',['settings','appearance','{style}'])
+ops.setdefault('text-size',['settings','text-size','{system_size}'])
 for key in ('open','screenshot','bottom','pull','focus','close'):
     if not isinstance(ops.get(key),list) or not ops[key] or not all(isinstance(x,str) for x in ops[key]):
         p.error('Missing argv template: '+key)
@@ -47,10 +49,12 @@ def capture(state,style,size,position='top'):
     if any(c['state']==state and c['style']==style and c['size']==size and c['position']==position and c['status']=='captured' for c in manifest['captures']):
         return
     path=(out/f'{state}-{style}-{size}-{position}.png').resolve()
-    values=dict(state=state,style=style,size=size,path=str(path))
+    values=dict(state=state,style=style,size=size,path=str(path),system_size='extra-extra-extra-large' if size=='XXXL' else 'large')
     record=dict(state=state,style=style,size=size,position=position,path=path.name,status='pending')
     manifest['captures'].append(record);save()
     try:
+        run('appearance',values)
+        run('text-size',values)
         run('open',values)
         time.sleep(2)
         if state=='composer' and 'focus' in ops: run('focus',values);time.sleep(1)

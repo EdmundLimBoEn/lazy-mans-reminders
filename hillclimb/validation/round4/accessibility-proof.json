@@ -1,0 +1,46 @@
+{
+  "nativeSystemUI": true,
+  "environmentInjection": false,
+  "proof": [
+    {
+      "evidence": "settings-motion-original.json",
+      "states": {
+        "Reduce Motion": "0"
+      }
+    },
+    {
+      "evidence": "settings-display-original.json",
+      "states": {
+        "Reduce Transparency": "0",
+        "Increase Contrast": "0"
+      }
+    },
+    {
+      "evidence": "settings-motion-confirmed-enabled.json",
+      "states": {
+        "Reduce Motion": "1"
+      }
+    },
+    {
+      "evidence": "settings-display-enabled.json",
+      "states": {
+        "Reduce Transparency": "1",
+        "Increase Contrast": "1"
+      }
+    },
+    {
+      "evidence": "settings-motion-final-restored.json",
+      "states": {
+        "Reduce Motion": "0"
+      }
+    },
+    {
+      "evidence": "settings-display-restored.json",
+      "states": {
+        "Reduce Transparency": "0",
+        "Increase Contrast": "0"
+      }
+    }
+  ],
+  "limitation": "Selected combined-on states only, not a complete accessibility keyboard matrix. Selected settled email viewport shows Done but alternate action is outside visible form; AX clearance is unproven. Baseline eight cases remain passed."
+}

@@ -1,0 +1,3245 @@
+{
+  "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+  "device": {
+    "hostId": "local",
+    "id": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+    "name": "Hillclimb iPhone 17 Pro",
+    "version": "iOS 26.2",
+    "build": "23C54",
+    "points": [
+      402,
+      874
+    ],
+    "pixels": [
+      1206,
+      2622
+    ]
+  },
+  "production_source_sha256": {
+    "ios/App/LMRChrome.swift": "13f4e57d420409d5dbe62b777131fa97e436be56b16c664ee1dcdb87788eb752",
+    "ios/App/SilentPushRefresh.swift": "aad7faf4f9fc82bd4a3587c4d5caa312bb3b3bce011fdf843b7442bea0616918",
+    "ios/App/LazyMansReminders.entitlements": "9da0987a1a8065577f7e5c8bdf7302838472c9cde046493697d7fe3375bfe97b",
+    "ios/App/AppleRevocation.swift": "f7a7a352f36d8bb448ac52c9db052f8e7d2466f21fb31fa825457fedf6e0d3ce",
+    "ios/App/HillclimbDemo.swift": "634073b51959fe64f687a875a0f12bce7bec1bfcba2287e8782204a1b6ea5666",
+    "ios/App/BoardSetupTip.swift": "49f2be69c15c35150b39e88b2a0fc8457dabe41a9baa381ea38d498a53dd1049",
+    "ios/App/ReminderDraft.swift": "8f040de63eef85e8432d73700467e922a9357dcc8b73c8b26f4fd554a8b79cec",
+    "ios/App/LazyMansRemindersApp.swift": "b54fb4349338594704da284404616f85c30a75fbe6d39c412ed61441f84fdc60",
+    "ios/App/SignInErrorAnnouncementPolicy.swift": "2568da786f97367a9cc0ce7a10eac9bc61cb8ef3e61f81c2693af704ac12f7c2",
+    "ios/App/BoardPersistenceSection.swift": "7fd19718339b1d1937cb72464b39af82a0fcda1e9f601a595ef13aa36d0ced02",
+    "ios/App/ReorderableReminderList.swift": "d4d08d070f1989b739465bd3527012a4d44b4b0960598a1da2c9762fe0ae06bb",
+    "ios/App/AccountErrorAnnouncementPolicy.swift": "48c13e63b4e5fa52ef096cae710de401b67adb13adfa639c7f338887c1064ee1",
+    "ios/App/ReminderListView.swift": "1ce4a05146b9491e21f274912b03696ff5fb19785a3417f4296ea3616ee1f9c4",
+    "ios/App/FeedbackMail.swift": "9a1dd79f9ef972e89c14552aee6cf7a11020c7bfadb9734a5eb856c038bee82f",
+    "ios/App/HillclimbActivityDemo.swift": "2e972a935cdbba0f12829fd1edcb7d9201590c70d94c27de4bd184a670dc5440",
+    "ios/App/NativeAuthCallback.swift": "bdd7a6dac2143d393689417b3b2883431bdf84a8a8a5c23d1543e07fb8d345c9",
+    "ios/App/AppleCredentialMonitor.swift": "5a4375b32ac04093c59ead14b725d98e93c9e3cf518394b81008ba95fb20efab",
+    "ios/App/SignInView.swift": "23ab663ab0afaff332da8de9a87a0131fa70f7807bf0b31de4b99736939d51a0",
+    "ios/App/NotificationAccessPolicy.swift": "43e6f3701d91e630cdb7270838826ee0debfc97ca2f2ceb0cdbce76d272994cf",
+    "ios/App/AuthSessionGate.swift": "69a3750c6d88cf7a690f228e5272de7b45e999b8423bdea249c9f143f6413351",
+    "ios/App/AccountView.swift": "8e7eeb8256ac7fbeb851ed104593a033ba4063f922d5f6b421de7f684d6642f0",
+    "ios/App/AuthManager.swift": "cc76c43785d5bc25a163fb32db7930a78ef1d4e58e2b609dabf22e87bfa4c708",
+    "ios/App/AppDelegate.swift": "8d2110f4bc8f75d5d65fb3f13cee73f2b7cf6af082462ce50c82b0c3c3211330",
+    "ios/App/AuthSessionClient.swift": "3cf173aeffe4ef3a947d1bdcdf1363ef57cf7643e8482d64e735af9571259ec4",
+    "ios/App/HillclimbGeometry.swift": "53a458a26ca3a151925c459cdbf63ad5cba39030ad96568d70ed409ca6acf076",
+    "ios/App/BackgroundBoardRefresh.swift": "2d695522734617cafca466cd234fcbb95b85be1e73f8137424bfe2e765053df4",
+    "ios/App/PushTokenRegistrar.swift": "ea3c5fb069b571f9fb73f6c5df1fff417e42791be4fdb4271e4a03bbefa6437a",
+    "ios/App/ContentView.swift": "93f3df422fab67d4ebae9683df1767a5cc2f2268a924f520abf39968114b55ec",
+    "ios/App/Info.plist": "334863a27f42ab0b66b0c1b036f2dd4932cf7290440139386bc07e749263cdc5",
+    "ios/App/PasswordSignInCredentials.swift": "9afe1a85986c0d9afdb5eb5c2a2ceb2e2f62752342754c9ce991f31af470833b",
+    "ios/App/Assets.xcassets/Contents.json": "0fd49ba3c3585c709678e0046a821c3c60685ec7063720d30d3a3448be3a208b",
+    "ios/App/Intents/ReminderEntities.swift": "0f8713451dc202437f0e8fcce9903e3d729624fa7d1300e62328232e5fb3f32c",
+    "ios/App/Intents/ReminderShortcuts.swift": "8ae7bbfd628d3f8feec7fa9082c6aff4f4db672a62ddf720611a95743fc8d2c3",
+    "ios/App/Intents/ReminderPublicationCoordinator.swift": "ae6283ad20d9fe9f083f47a39544d8e78761e2595b6882b9ed1bf695cb60b1a8",
+    "ios/App/Intents/ReminderIntents.swift": "681076b196ccb26dcf5f6803e23c128b5c343ed9a72666c99e824de822fb0be2",
+    "ios/App/Intents/ReminderBoardSync.swift": "2112a8070f8ac647414d9fbd926a8e9b08e42a9cfa00d5776f65ab7c46e94a64",
+    "ios/App/Assets.xcassets/AppIcon.appiconset/Contents.json": "3725fefca1cc2f15dcff52b03b7db47884c8141e5be1d4e559367b76117f8c48",
+    "ios/App/Assets.xcassets/AppIcon.appiconset/AppIcon.png": "5f7a67ef2ec5adc92ef9926faa92b3db89d38ae61c5d977d9d80e5fd8fd0dc28",
+    "ios/App/Assets.xcassets/AccentColor.colorset/Contents.json": "25b0dbfc6f282b654ea45dd2fe5045322e288f6f236ba36c17ac7cb8e3d420e2",
+    "ios/Shared/ReminderLiveActivityController.swift": "935afbbb4001fbbf9273ba1a7590c368849650cfccd149e5e142e8bd89e773d1",
+    "ios/Shared/ReminderAttributes.swift": "60801c4e74bd7b70f54de21b99d3da4b301ed7a8d024679f3675fd11fc7fd148",
+    "ios/Shared/LockScreenLineBudget.swift": "5969d51937279a76d10297b2354f8e254de8ade2f768f7f3db3bd7ebe53a53d3",
+    "ios/Shared/Reminder.swift": "79597dabb4fb6fc901b54e9a6584618c5eb9fe763d7dac102883970d2cdbfcc3",
+    "ios/Shared/ReminderBoardLimits.swift": "dd19c49789ede9bea3a4a81c5db86166dc62d65496d89257bb21919ea312f9ad",
+    "ios/Shared/ReminderIntentSupport.swift": "c4491ca2d578c63e2ee3b506431a4e61d58eacf60ac27aefb551a776ad2d4411",
+    "ios/Shared/LiveActivityPolicy.swift": "312348092d54f49a99c35cb424482aa3d1d1240ffc9634e393826d94a46ec8ae",
+    "ios/Shared/ReminderStore.swift": "af19f39b38e3b3a9510d0a396f39df902467aacc9b72e29c3d6119a4b80bbe00",
+    "ios/Shared/SharedSessionStorage.swift": "fd22f54385221301bc5d0f076cbbed641bc1defaea4db89aad6e16e1c0822245",
+    "ios/Shared/PrivacyInfo.xcprivacy": "b6f23e9a8881be04389624714c7419e487f4140dc0626f350311239171fe3874",
+    "ios/Shared/AppConfig.swift": "36baff71c317625d6f1303a0b49f5903b57bbb516a6d9858c0d2f14d11ca9038",
+    "ios/Widget/ReminderWidget.swift": "976d531fe1f73f23d9e3366e56e63739e169362d0fcb7583a5d8ad4b45cb9cbf",
+    "ios/Widget/ReminderLiveActivity.swift": "5b88332974c00812011e2da42eff1e2c2380147efeacbb69a173f9f6628ba0e5",
+    "ios/Widget/ReminderWidget.entitlements": "7778da7d05bb3c22c04027128628e6fc0b02dd57bf4c92031759c9d8b7a5af46",
+    "ios/Widget/Info.plist": "d04ff3813690c080814dfea33c7f42fd4ce6264d26ae17eb5759092ca1be8294"
+  },
+  "images": [
+    {
+      "file": "accessibility/account-dark-XXXL-all-three-enabled.png",
+      "sha256": "9d474707ff60724f93cbb0cdd602a411acd7211b7ba47a871c730a22217546fa",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "accessibility/board-light-XXXL-all-three-enabled.png",
+      "sha256": "beb54e0e377b8b3f6a5748c9fc94e12f2c0e99c9a54e1a0f4ba3590a72f58b6c",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "accessibility/settings-display-enabled.png",
+      "sha256": "deb4ea82831367c949c5d281fd1c5359161d83b8ea82704e1eab3ee665d5a2d4",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-system-setting-proof"
+    },
+    {
+      "file": "accessibility/settings-display-original.png",
+      "sha256": "caf2a9ea0201a5b2f171ff19203cb60280f247ef151b68a6ae87b89e183e7198",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-system-setting-proof"
+    },
+    {
+      "file": "accessibility/settings-display-restored.png",
+      "sha256": "0553beffd6ff237bbf6d2f859b0d1195059a3ca213a843f577521a1de4ca2bbe",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-system-setting-proof"
+    },
+    {
+      "file": "accessibility/settings-motion-confirmed-enabled.png",
+      "sha256": "dd6ff44e537a0e89e5b9b3ff3dbe69325c452792ec3e67eb7ae0c83bcdab1379",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-system-setting-proof"
+    },
+    {
+      "file": "accessibility/settings-motion-final-restored.png",
+      "sha256": "d8d832a7c68a82ecfcbf356248a7fe184081bda23e41c50557bc2a0fcb6369df",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-system-setting-proof"
+    },
+    {
+      "file": "accessibility/settings-motion-original.png",
+      "sha256": "c55b7f4679fbfdfb8ccb587bba6a772d7472267ba6cd1b519f97c209ec452a28",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-system-setting-proof"
+    },
+    {
+      "file": "accessibility/settings-motion-restored.png",
+      "sha256": "2d2bcc444b7c9924104a4ed6536384a0fd659fbcc78a7956dd98c3282cf970fa",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-system-setting-proof"
+    },
+    {
+      "file": "accessibility/signin-light-XXXL-all-three-settled.png",
+      "sha256": "4a441cf4c17d092173fa005e5c8cd16bb920c82ee2f8e657941cab4c4e50cbe2",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-dark-default-top.png",
+      "sha256": "5a1684893304683be93db5dcae9bc0d9292ea057d198639ea16312ec29dbf5c2",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-dark-XXXL-expanded-medium-lower.png",
+      "sha256": "9a560d634a58cdcb3aebdb6156687dc9abb849c8fdcd8ad5f20c2f719c4744fc",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-dark-XXXL-expanded-medium-top.png",
+      "sha256": "6677c6fee13432d93a6c781074bedde53be171d5a7290fc2b664d8b72968019f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-dark-XXXL-normal-medium-lower.png",
+      "sha256": "a565ef7005bfb2d7db22d8aeaac9ffecaa4372a67d1df78aac2fd78aac455bfb",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-dark-XXXL-normal-medium-top.png",
+      "sha256": "6842122b7a7afc0ceb599db8a77ebc68913f35745987ef15371622970ae3d697",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-dark-default-expanded-medium-lower.png",
+      "sha256": "2652852835ecce0879dccd8ae78f7c1300d3b1a20fbef89ef9a49a38d499362b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-dark-default-expanded-medium-top.png",
+      "sha256": "b0004222480a6a0ef595c9751c49237319275afa727f5bd43036c596c539eac8",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-dark-default-normal-medium-lower.png",
+      "sha256": "aee161e852f4ae32fb31c36c9059e7bae87623ada50b752d27a066f80b72fd8a",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-dark-default-normal-medium-top.png",
+      "sha256": "7a545d47a87a295f02b7c64a100d67c6340f7cb85d474b75975fc293edc930c4",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-light-XXXL-expanded-medium-lower.png",
+      "sha256": "d45002c59e4efbc838f2afd648de0641f0118cf079b11ed74f2061c90bb9541d",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-light-XXXL-expanded-medium-top.png",
+      "sha256": "1e99504b31963f407f5a26ef1ad7080979fa26990a4472b4498d358a58adf075",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-light-XXXL-normal-medium-lower.png",
+      "sha256": "700e99fb7372b5e12320b7e66e239be1ab4f04645a2a87ed1e99b43ee84d7966",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-light-XXXL-normal-medium-top.png",
+      "sha256": "50177d2680ba9ce32416fa003dedccf5925ad290dd051fed756df1d7422e3162",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-light-default-expanded-medium-lower.png",
+      "sha256": "5a6e984bac238bf7062e24113c66a28fc5577d87144982b061b6873d2ba9f785",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-light-default-expanded-medium-top.png",
+      "sha256": "d0d944f8355036fe4862adbd86a94742bf5259101d1ccfd5dc733fe22c9604a5",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-light-default-normal-medium-lower.png",
+      "sha256": "b173493fd03d38908f1d49ef4da6ef71f490e8680f920e794a41c778ec81884e",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/detents-light-default-normal-medium-top.png",
+      "sha256": "7048f1c115058c9c2fe49a81c3acc661c171ed57d0074261ef866d18a24c1bf4",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-dark-XXXL-initial.png",
+      "sha256": "3afb9ce3f9625bc8fe66c4ff5610375a8e6ef2b278ffc201e8e9724b0bf901d9",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-dark-XXXL-medium-lower.png",
+      "sha256": "3e9402dd77b17dc6947ec102a53848b42cb17179ff93107fbcc554c529638ad2",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-dark-XXXL-medium-reappeared.png",
+      "sha256": "613448bd92570896bb515ce20e2b7af0f2f6ab838e39405721f12a8cb27667ad",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-dark-XXXL-medium-recovered.png",
+      "sha256": "206086e3b4fb853eaaafb40cf6e120216de0c9d56a4bcf64a54f00224606d864",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-dark-XXXL-reappeared.png",
+      "sha256": "421f6d8af4e11b69662c4a9355d581e0f74903cb0dbacb986779c29d7eb2d299",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-dark-XXXL-recovered.png",
+      "sha256": "072eaf0f3dbe5ac2cc47870ac0fd1ca1316f1dd8ed82b383d2a9055b0b92bb56",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-dark-default-initial.png",
+      "sha256": "c009ea41e5920c19ee374744507ec36d2ff548b8505f83751c932e8e86ffc439",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-dark-default-medium-lower.png",
+      "sha256": "a182cf3018e8c98fe319bc129a9457efd42188d20f65b7ba4a0f3d82db743375",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-dark-default-medium-reappeared.png",
+      "sha256": "53d0730c93195dc04a62393fb0398458c6b59768148142bf8caae48cf979952f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-dark-default-medium-recovered.png",
+      "sha256": "894c3f842410f30916355de264374e1c7b52cd135c655a537c5f34538e4dd4ae",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-dark-default-reappeared.png",
+      "sha256": "c009ea41e5920c19ee374744507ec36d2ff548b8505f83751c932e8e86ffc439",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-dark-default-recovered.png",
+      "sha256": "9776b2d10be7cf2ed3426531e28268c0050b60dcaf9322912fa1055eda5b99da",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-light-XXXL-initial.png",
+      "sha256": "72db0b102a3effd307dde4499d7044227afffdd59367181dd09ed91c8800b122",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-light-XXXL-medium-lower.png",
+      "sha256": "89b3a4bfe279a8da9d7aec754f3e00e7ff94fb1c1dcff0d0e4184e0cb4ccadf0",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-light-XXXL-medium-reappeared.png",
+      "sha256": "962f62be9826997ad987db19e0d3886f34558d0199dfc8ad3214e9f163e1e126",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-light-XXXL-medium-recovered.png",
+      "sha256": "70221497b88c863c5fd1e4704e1bf2d5379b7131a285f1b51bc358d828729012",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-light-XXXL-reappeared.png",
+      "sha256": "79cdefa9ce101ee1f786975518fe0d9c85a1e0c0009219db7afadf3a7d4882a8",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-light-XXXL-recovered.png",
+      "sha256": "f83f062a2ff5fa59e0bf00d550bf5c36ad3ddec5ce9495b54dd8a7f6ecbc343d",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-light-default-initial.png",
+      "sha256": "890cd38cb3f9e4d5e08b296190c306f137af09ebf541565a9142e1ac795ce50a",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-light-default-medium-lower.png",
+      "sha256": "4deff4d4c1d348a0900fb425b8ce4088cc376e3eee704dfc7a5d87902587419b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-light-default-medium-reappeared.png",
+      "sha256": "5805923ad91e270798b2bb632f2184785fb68f7bd23fd365fdb3cabed1a18823",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-light-default-medium-recovered.png",
+      "sha256": "c65793bb1d86deeed2e23866c30b1fcbdac798845b12753582bd86e76e8b9001",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-light-default-reappeared.png",
+      "sha256": "cb25d2d24fee6f35f91c0899cb2fdd140a7c5ba9038706c1936039cbafe56aec",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/error-light-default-recovered.png",
+      "sha256": "6a44c9fa59e82b380addf4389cf1c8055199c10534e71adba593c1c6cfd02706",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-dark-XXXL-expanded-guidance.png",
+      "sha256": "88848a4f18538878cc4b09276e238c2f7c21cc9333ce23ea7e3998280489472f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-dark-XXXL-expanded-lower.png",
+      "sha256": "89bb111803a0b3556dbb75bfe8300170e5870b13194fdfeba56841b9cb804cf1",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-dark-XXXL-expanded-top.png",
+      "sha256": "e6d06cff863365ea7c46fb38a5c651422dfa7c8be3b88aa0346d6e6c3d5c5c27",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-dark-XXXL-large-top.png",
+      "sha256": "f07feae4d3e79b55845c22e2f8368f3af19b0234b885bd48608195c94bf2e0ce",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-dark-default-expanded-guidance.png",
+      "sha256": "c32c33d679806eb7e8243e9dd6d07a97dac7427cdfc4ea8f778c167e5e7f1125",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-dark-default-expanded-lower.png",
+      "sha256": "786156d93baa312e946223abf9fdf3f135f73c40d6813e4993a8e45155becf0e",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-dark-default-expanded-top.png",
+      "sha256": "e1ed77fb217df4772e87584a5ec9e7b72a36d492ec0f13c5c347b7ae5122b993",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-dark-default-large-top.png",
+      "sha256": "5f5d5c1f1796661069b0583d117802bf86192edc630791c6f0070e819290f0ba",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-light-XXXL-expanded-guidance.png",
+      "sha256": "41db8f403e9d1e34bc55dee8a31210623cebc57270e26ff6e0b1dfb62076d8fc",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-light-XXXL-expanded-lower.png",
+      "sha256": "c6cc8dd8b4c4fbbffd81d4cde726c33ddde0fe66a0b27197803bef8d56894904",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-light-XXXL-expanded-top.png",
+      "sha256": "838941f3e4fbe47b42b2b556ae503825b5d9f49b297d5c8f6c3c409f11bd7cc8",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-light-XXXL-large-top.png",
+      "sha256": "935f73c744b82a99860a664a53c74e8b217606b565bfaf213a4dea3bba4f8031",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-light-default-expanded-guidance.png",
+      "sha256": "7511b613d3c1a5f931df7c3d58bcfe2dbc8110f5b8e4a8ac72a786d416f47a26",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-light-default-expanded-lower.png",
+      "sha256": "43f62911aa8547033b0831a0d7be236083534c0683f1d47d880fb99c47150077",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-light-default-expanded-top.png",
+      "sha256": "31d96505a7447ad0a44409c464feb93c22b383dc906f09245f5bd72d7a0f0172",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal-light-default-large-top.png",
+      "sha256": "b62101026fc3f85fc926f6ead824796fab328e678491f94910481a7f5cd635c0",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal3-dark-XXXL-persistence-centered.png",
+      "sha256": "4e417ff01e3b6852f6b6c012335317e30634da80ec6d66d21893671a8fa9c9ab",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal3-dark-default-persistence-centered.png",
+      "sha256": "cbbe01d271cd6c9cedd647536874b65307ce4ea06155f387c23dbf870273a309",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal3-light-XXXL-persistence-centered.png",
+      "sha256": "20657a594ab3fdcaea86eeb2100f03eae6c724e140f76255eeb7fe5129a80f06",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/normal3-light-default-persistence-centered.png",
+      "sha256": "7e8896738ecac9a4a8cea4a5ded95b7c8c3f62905fa6fa9287e76cfad8ce8b0d",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-dark-XXXL-initial.png",
+      "sha256": "1df112a6ea665b9aa537c250edb91b7be6c5d352d41d2cab81a96efcd7ec5264",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-dark-XXXL-medium-lower.png",
+      "sha256": "17c28d6db97654c761c705c10707b6f2abc41a4519bd0efcb2e6e49b0aa13ea1",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-dark-XXXL-medium-reappeared.png",
+      "sha256": "0115c2d737721ecc2efc721f357c02e225e48fb3faf30f86a5d086d49b26a5c8",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-dark-XXXL-medium-recovered.png",
+      "sha256": "0ffdee7f43d6ef6d49ad07b8901ef2224c90046603574339da79ca47e6637162",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-dark-XXXL-reappeared.png",
+      "sha256": "1df112a6ea665b9aa537c250edb91b7be6c5d352d41d2cab81a96efcd7ec5264",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-dark-XXXL-recovered.png",
+      "sha256": "b9e801756375a09ba70742c3b71d84222f2d1cd391fd105d74d1b08294d0f5cd",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-dark-default-initial.png",
+      "sha256": "384b708621be7d66fcb18771c89de570a4f46931c50489e5be89dd3a39ead9c7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-dark-default-medium-lower.png",
+      "sha256": "bb1e0ff8a293b7adb0c544eab8f9397051a954104e3bba72231f2fb45213da90",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-dark-default-medium-reappeared.png",
+      "sha256": "c3756457fbd30599a88cbc2ff0704830c5a5fd4475ff35d65e133cec23bb8e1f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-dark-default-medium-recovered.png",
+      "sha256": "259644085727afce7a46e7a3f9a777887368935d174d6f7837fd856534f00514",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-dark-default-reappeared.png",
+      "sha256": "75506e801147105a1f6f8c1e4fa2541bb2df4934f481024e2183c5bfaf691b04",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-dark-default-recovered.png",
+      "sha256": "2dd12f765844cc41a9521283bdf9885679d65bbdb26f0697bf0e0c1569ac805f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-light-XXXL-initial.png",
+      "sha256": "cf4c92efb30c04ae4d81395cfdd47f8c34bc84c055b61ecbb9f3cb7ab0a852d3",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-light-XXXL-medium-lower.png",
+      "sha256": "b88f2ea87ae64192312f3cdecf7198c1907ff670e368beaae15b7c9d79abc812",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-light-XXXL-medium-reappeared.png",
+      "sha256": "ed618f9b8f893526a35ef87c47225e49979e5d73a7ec8e0022656bb5d443327c",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-light-XXXL-medium-recovered.png",
+      "sha256": "60c5f140c48a4450dd4df1cc7921ab7b672af46e496090651d09fa65205aaf27",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-light-XXXL-reappeared.png",
+      "sha256": "17c997e8a03ec805ebb2763321935732cef350913d0f9a6ca77be0a92834492b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-light-XXXL-recovered.png",
+      "sha256": "5568c1c7b0a291407d9f5a47bfe4cf9b2521e27966810ab0fbd37e492edfc507",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-light-default-initial.png",
+      "sha256": "119f4b4820282c946b1d744b73e688d5b20c4b0223871fb1832871b2cab1c9d2",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-light-default-medium-lower.png",
+      "sha256": "e918a4bd1dc717781ee4cb985ffd6bea70ab004fcd7a627652fd891aa61d9df1",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-light-default-medium-reappeared.png",
+      "sha256": "ad3a4647b7f1da0e4a6937f5c38c1eb13c053980b0a6d018e8a67b8d1bd26bc0",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-light-default-medium-recovered.png",
+      "sha256": "f85970181ac8045ca7a32980b736a9897477b0edce3e6c048aec9750f732697b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-light-default-reappeared.png",
+      "sha256": "86aca11d86cc2801ca2a9f9207518e3879153f10633ff274bc3c712a1c6249d1",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-enabled/screens/refresh-error-light-default-recovered.png",
+      "sha256": "f5eefa3076b692838b33304c4ae228b77f94b45913def4f8ed76cfcb7dcf33c7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "account-light-default-top.png",
+      "sha256": "f32a49295ca29d7df01b11b7a0c3fe47ca1187dd19e44bee88909ebf19d1b56b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "activity/multiline-dark-XXXL-collapsed.png",
+      "sha256": "5622ee19c08cc992cedc7e9433baa3a655dca68f82c135fcb3a2511e62355488",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-activity"
+    },
+    {
+      "file": "activity/multiline-dark-XXXL-expanded.png",
+      "sha256": "7d992aba857248a26aa1789ab36ca61b39586fe7b89f8de0f87611a027610772",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-activity"
+    },
+    {
+      "file": "activity/multiline-dark-XXXL-notification-center.png",
+      "sha256": "98c9f72182a4a96d2fe2b2dd2e8dbb0fbdff4f1ac5cc8277fc35a64f1fc428a5",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-activity"
+    },
+    {
+      "file": "activity/multiline-dark-default-collapsed.png",
+      "sha256": "0c9411e43d769dfadcae65452f0599e8acb5c280ea78b7a94ea3f5d1ae4eb30a",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-activity"
+    },
+    {
+      "file": "activity/multiline-dark-default-expanded.png",
+      "sha256": "f65ccce40600b7171cd5997337378e51944cd44011d38781d474854e17197273",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-activity"
+    },
+    {
+      "file": "activity/multiline-dark-default-notification-center.png",
+      "sha256": "14b6046836d19ce00d04d2d2389f7a1a7d4947d67ded18633eda84a40a505e9c",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-activity"
+    },
+    {
+      "file": "activity/multiline-light-XXXL-collapsed.png",
+      "sha256": "eabcfc8eaef9504c24598a06a8a8c203508b16d014c4b7ff0dd8258c57df00de",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-activity"
+    },
+    {
+      "file": "activity/multiline-light-XXXL-expanded.png",
+      "sha256": "304903e315f504ae81fb556b5ece838f98ad3180f801767db557abc7a339b1f7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-activity"
+    },
+    {
+      "file": "activity/multiline-light-XXXL-notification-center.png",
+      "sha256": "d00a2712f30c474f28d39af41b5088bef37d4a1d03500e42e8aae1e915803132",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-activity"
+    },
+    {
+      "file": "activity/multiline-light-default-collapsed.png",
+      "sha256": "02c8e4e4eb9186c58d1f9284a5aeb104924b88e778f38f14995a3a90a0d75058",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-activity"
+    },
+    {
+      "file": "activity/multiline-light-default-expanded.png",
+      "sha256": "59d10f4a76035de542ca31c5b752765f1817a4a8f471102a8bd87ff16ddfc6dd",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-activity"
+    },
+    {
+      "file": "activity/multiline-light-default-notification-center.png",
+      "sha256": "f8b31e78953a988a72c9d184ab937493a547dc093de19a97a6164fe897bb49ff",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-activity"
+    },
+    {
+      "file": "board/dark-XXXL-completion-after.png",
+      "sha256": "966ee67f249fcfeeb84516412e60823004423e0edc0a8f9817eba6b3fca06d6c",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-XXXL-completion-before.png",
+      "sha256": "74e08183f30216db9d467197ab7e4138dd0267247ee7ce8ae47a3704f35b8b0f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-XXXL-completion-text-tap.png",
+      "sha256": "6d2cbe8ad1aa2d57ff71f038bf2dc51326c4aee33bb5baaa345a171e5e6a6da3",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-XXXL-guide.png",
+      "sha256": "a83d56212775cc68c877819a5add752ae16277374070e28feefe452a0863427c",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-XXXL-nonempty-dismissed.png",
+      "sha256": "2b9e5ba07df5ca9e0311ec7e9fdab685a5b57969dceb57757cd5f6a8b74682ba",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-XXXL-nonempty-focused.png",
+      "sha256": "b109708f5962a2789411a89b36b1618f54e1bc46c10a79828423f9221c94e31e",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-XXXL-nonempty-refocused.png",
+      "sha256": "b62fa80decf0157245801cecd962acaf1ddd72ba3bd6976d3facc955ebf10eb7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-XXXL-populated-error-bottom.png",
+      "sha256": "c94e2873e78f5280c53416bc8fc62c539a980fe9b537f1c514e2ee8eb5ab6008",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-XXXL-populated-error.png",
+      "sha256": "70dd70e2e32976e7c835625c0eedb5b42beaad4b5e887383152e16c098f6689b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-XXXL-retry-recovered.png",
+      "sha256": "e30f04e1e89b5fe9ebad91d7bb6b765bc8c465bae73017ef367b95bc2e810828",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-XXXL-top.png",
+      "sha256": "237ae859f92fa0b02f3d6690b0f13809f40d7b201c66729372f053e10fe96ae6",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-XXXL-true-bottom-after-pull.png",
+      "sha256": "6705cac485a30fb20c15fae61818c8e2533577f0570ea643b8dfe518dde7f3b9",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-default-completion-after.png",
+      "sha256": "62ce44ebc01a79252bcf4757c1b9577b77d6275de382ce7c5a38f456071a48c7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-default-completion-before.png",
+      "sha256": "3d3888a240acba1e967a361add8f27602e98148b4a3cf5b9d439defe9bdbdb8f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-default-completion-text-tap.png",
+      "sha256": "08d81a285498d4bb748bf884fda9a126b51aa7459aefbcb5ab1ebb34d33c8bb5",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-default-guide.png",
+      "sha256": "61c9e3a4f49509dbb53d9d1a5cef4a2eb0fa0572b770f442e7703775a21ff2d9",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-default-nonempty-dismissed.png",
+      "sha256": "abc99d9f6155a0fa1b1d612ac79cae0c0131928dcd25448cefbbeb86f1a0f498",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-default-nonempty-focused.png",
+      "sha256": "5613da696a724a463a4a09ee138f6bf49a730911ccda3c0c7f0d42177f5a93e0",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-default-nonempty-refocused.png",
+      "sha256": "ea68be52b743091f151761f7629a886b44ea36e8e97667f5c498e2913cbb5868",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-default-populated-error-bottom.png",
+      "sha256": "41d2bd2f5cb673170cc21782570c8c41e9f1f590bbd36bd85c57ce2a80090ed2",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-default-populated-error.png",
+      "sha256": "80707ff5ff990db8e267080efecb84a2bc6af101a7ea2c8e2ac3ede74327b8ac",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-default-retry-recovered.png",
+      "sha256": "51808a68d23ad4ce9f8274a6ce247e5c54c21cb9dd7180acaf63d709ee1b6e9c",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-default-top.png",
+      "sha256": "25e132c67cf226172e27d10db0c9c6764d8910478d5862e826692233492aed4a",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/dark-default-true-bottom-after-pull.png",
+      "sha256": "93d3f60ab9838fc33e09ca1bc1880767b83c06cbda86aba51500d6d0b60dd370",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-XXXL-completion-after.png",
+      "sha256": "fd1d913af787644a931e7223ebc0bc7decfcf25b1cedd9028ba3678e5f35e05e",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-XXXL-completion-before.png",
+      "sha256": "08ce09e4685528336e5112f85ec5a4cdd0b50c963d01df7efc1da98288ef67a7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-XXXL-completion-text-tap.png",
+      "sha256": "1166d13998eba213f8fba53fd538799a6f33a377467cb5800faf2fa44b3c0468",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-XXXL-guide.png",
+      "sha256": "18da37b706a225fb718187c976e4a835c684be0fb21be114018d67e06d26569c",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-XXXL-nonempty-dismissed.png",
+      "sha256": "6bfdd7053d4a3fe18c76866cbf18986723216de95181c0d0f26141148aafd5df",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-XXXL-nonempty-focused.png",
+      "sha256": "cbe2e6a4a4582a16e0bb0a31d3f6b72b9130e405799691f9a97055d0e0ae4f7a",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-XXXL-nonempty-refocused.png",
+      "sha256": "7a5a5921af6ecc96104ebb47bcaa539575cfa774295345d0d8ed42b74cf8b762",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-XXXL-populated-error-bottom.png",
+      "sha256": "b1a918e0a7c999237afa4782c8c2e7d43abe9460995fcca6adcac1ad44e92a6b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-XXXL-populated-error.png",
+      "sha256": "7536cefe1c0a3d8d5e10ec2f62cddbf8e629dae362c798c08fcd7e32f4612b63",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-XXXL-retry-recovered.png",
+      "sha256": "d76ebe8576a3d0c9421dbd2cacb375aca1ffb624322f75cf9c6484c04f927a48",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-XXXL-top.png",
+      "sha256": "81e4ff15b28b10567eec30bc636b64ed07c6b3b89f1082ea63b07e6df1677456",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-XXXL-true-bottom-after-pull.png",
+      "sha256": "5fe723edbeea4c469c55dc635d64c71c9f614731b442f9b97c8d4d0a7823c3fb",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-default-completion-after.png",
+      "sha256": "8c90dd5154193588a2cc92c17d8af1a20f1ee9cc090b20880633717407400677",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-default-completion-before.png",
+      "sha256": "c82ff4915ae3a0d88d51dc88be19b62c8d53e6506fb3d28a311fb345e5360089",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-default-completion-text-tap.png",
+      "sha256": "dc811d75beeacf7af1aabaa9d421a52d8071718e791023ee6a8e15c262fc9e80",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-default-guide.png",
+      "sha256": "f8b4ecbefa084d424b530f7c98ae3cec30157d4c572491d4af07d2743eec3dcf",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-default-nonempty-dismissed.png",
+      "sha256": "dda853a40123ffaf4bcb072cf775ce41ef364bdf99ef4697438bc3e8a09031b0",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-default-nonempty-focused.png",
+      "sha256": "1fe9060f2ceb77b976bdc2e893b4912cdf100aae8b9281c671a11a90118dbc18",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-default-nonempty-refocused.png",
+      "sha256": "91a37cb906c1ad3717c5debb50eff13932e2b901aa3c9b8336c5a3365a9bb33a",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-default-populated-error-bottom.png",
+      "sha256": "52f7c3b7187f9f5c808ac82b6d767aeeec52119d61f2db80042acd5cfc2095e4",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-default-populated-error.png",
+      "sha256": "bae70e2795ebe1730a943280c023cd9aa68860a47f0aa71a50d3c27a5984db11",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-default-retry-recovered.png",
+      "sha256": "f59cfb0002d5dadc321cfb9c9028e88c5308412e2f486a02e1d4056add212a49",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-default-top.png",
+      "sha256": "e0c03e83f4dd23c229126bc3a8aab3df503d72ce8fe5d6dba654bfac49d0a28b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "board/light-default-true-bottom-after-pull.png",
+      "sha256": "ba44221e81e778681c7b22c8a61b9c7d36d5db35c394a0b568cb0571d094043b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "composer-dark-default-top.png",
+      "sha256": "c16f0649b3d6778106498485d4237ad9ad66cfaba74aa5d030dbaacbf857b021",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "composer-light-default-top.png",
+      "sha256": "c3f713d22ffe543b2f10a8385016606b8a6e87ead3652b50aace6e7cc7b67a83",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "empty-dark-default-top.png",
+      "sha256": "1238e421e84d8d9f517792288483dacd46e2b6af60c2ff3d78d01c1c050c05d2",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "empty-light-default-top.png",
+      "sha256": "1e633688b01162d47e3c81cf33e30e682b2e03252a6b8a3d19fdd9b6d0e34444",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-dark-XXXL-large-lower.png",
+      "sha256": "fd1b82ed1ef04003b6aa8b41c40703a6ff5f9d400bc34fd0c865f4dd23c6e81f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-dark-XXXL-large-top.png",
+      "sha256": "78fb3153f98b1db4ea9b8aa80e566337feb24e93ebbd7318a5d99feb5341162c",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-dark-XXXL-medium-lower.png",
+      "sha256": "57cca7402080cef73a287b9169c9e66090fc337ffeb01ead07d22b2f3ce1a154",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-dark-XXXL-medium-top.png",
+      "sha256": "1b434d893827926c6167f8afe6c471eb66c4240cbd088cf7b6e6841e10c6d03c",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-dark-default-large-lower.png",
+      "sha256": "dfffa1df051f93c19126bb32d99ec9b7fb3897d2499304bd01721f7b06dd19cf",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-dark-default-large-top.png",
+      "sha256": "602576159532afb10720ba7fc935e2272a1b45a315901ce2da0ccd1eb4355f21",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-dark-default-medium-lower.png",
+      "sha256": "1cde003c5bda6e76cc598816f6194c3cd86c593923685d756ed574c3be93edbb",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-dark-default-medium-top.png",
+      "sha256": "641df54a3452022208f55fd0f97eacb7a9ca725156ef0cdbdc2b1e84b3563fcb",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-light-XXXL-large-lower.png",
+      "sha256": "3e49d5eb6f8d3a9b55f461ed5fc2eb25406d32429ba017c53f49cc12e46c7e91",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-light-XXXL-large-top.png",
+      "sha256": "584b4e6693fe43a6853dfa663c4b7297d1ca064238da9ef503d536d343c26928",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-light-XXXL-medium-lower.png",
+      "sha256": "963ae678bf12cca11caabe74afc88eefc3a6184e241447c76900520e4b9fbf80",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-light-XXXL-medium-top.png",
+      "sha256": "331da5a8a4a167142e3f89e82aa1561687d02bee5af2e75192922c2b6aa745c5",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-light-default-large-lower.png",
+      "sha256": "2d7bfad4fc933e8565d053b52be122e4b5c95f77404ba4f1eb3c4a8024f8831f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-light-default-large-top.png",
+      "sha256": "b088a6254ddae8325041cdac625881d6a8ceded47ed5cc2c9f72cc6a729d1bcc",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-light-default-medium-lower.png",
+      "sha256": "6bc7ea46844b60d61d0a919dfe5474f569a91fdef124aa9df8c77d4389797716",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/account-light-default-medium-top.png",
+      "sha256": "d15c9910690077820b53c35224a07e42df777a46f3a2905b1952928168a26f63",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-empty-dark-XXXL-retry-recovered.png",
+      "sha256": "732a5ce019030ecf659eead9f69a904b14c3e2823203f4c80c35b540e061e0df",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-empty-dark-XXXL.png",
+      "sha256": "8d6f8b24d79287faa5ffd337da781820d85bdebc67d2c8e5523300b8c46e67b6",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-empty-dark-default-retry-recovered.png",
+      "sha256": "2e11e4dd88f0084a88f9d9e3484ab9440dee3d590a085dbf7fb006ed6b76d5c1",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-empty-dark-default.png",
+      "sha256": "f6eb35b9b5cf7d281baef6c4d0083a7971e69d3cffe4362236bab9c413d9dbf7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-empty-light-XXXL-retry-recovered.png",
+      "sha256": "6c8506acd62b30157a1e56411a2a640883ef660371feb93be184a2027cd4df41",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-empty-light-XXXL.png",
+      "sha256": "cc73095a870953476272cf766ee542cdabaeab5ffd16ba91c20882d9d1815517",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-empty-light-default-retry-recovered.png",
+      "sha256": "471e1ef78d250abba57961ea528fc8af1bc4d2626ea3ce2636f9fd690735dbd6",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-empty-light-default.png",
+      "sha256": "f460dc1c2a41358500db458f53d9d9adae84a3c0e809d28cb93ee03fea95a4f7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-populated-dark-XXXL-recovered.png",
+      "sha256": "8ff332829d927c1f924795579dda7da934591491b55ee48dd4c0b4371959c38a",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-populated-dark-XXXL.png",
+      "sha256": "60774b84b438ef284cf12d8ae44dc7382019cadf073fc3f64bba338dc81fbd7b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-populated-dark-default-recovered.png",
+      "sha256": "f37dcc72fc30068d34fdb92ec6821459d38e08b0ed8d26cc5dea040492a2cc5c",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-populated-dark-default.png",
+      "sha256": "b40332c27e1430f13e72d4f4f028d8c2349853e5df04d2c669baa327cda4f565",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-populated-light-XXXL-recovered.png",
+      "sha256": "8e9824fc36f33d19c495a6a35a3d3ad89a0ca2e2c5d7ae6506351cbd0dd79052",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-populated-light-XXXL.png",
+      "sha256": "c8be799bda00cd32101e34295e049c343afc2f94538935c0c3b6c76066353248",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-populated-light-default-recovered.png",
+      "sha256": "0e6b23948579e8f5e760e10a8abf14ab548a1310d22cf93ed2d574079dac1af3",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-error-populated-light-default.png",
+      "sha256": "504c464ff7fcb924f056489e9cfbb35b3af9d2c9cef93ce758ff33305c121b5a",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-loading-dark-XXXL.png",
+      "sha256": "f18ad2cee79ba025bd391a7168727ddb0ca3bf7f82102a4fcccb1cdcbcaafd1b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-loading-dark-default.png",
+      "sha256": "3e3d8cf8b3e62361db04b842dd2979129c79482ee20e6c4ca98732453b85d55d",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-loading-light-XXXL.png",
+      "sha256": "7a461464116069e246c58f492b77c67d47ffade59234cf1c74458376dd68f7b9",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/board-loading-light-default.png",
+      "sha256": "d8d5a0746ec5b4a528a4dc82eb79efeac8a76e1bff43e324271a6fd709589d5f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/guide-dark-XXXL-before.png",
+      "sha256": "18dd2d17e7d3fbf06a3e075522847f1044526d3c8a2ca1065a6841ef51b21118",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/guide-dark-XXXL-focused.png",
+      "sha256": "42c2d1412b45d41e43e3d1db16de994a1515c6e639cc08cced7aa630fa95ed76",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/guide-dark-XXXL-restored.png",
+      "sha256": "664af314dd34b8f9f74e4e5d6fdc9bd4c1961d165f694193b36c3fe334fd0525",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/guide-dark-default-before.png",
+      "sha256": "4196099ddc0a06cdc323c0dd38c221a28a24f2a8fb3780bc09ad67f5ea3b47b8",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/guide-dark-default-focused.png",
+      "sha256": "a4fe7d61818c4055ec60e087b73aefc7421fc0e4f45fabfa39958fb9d9efe960",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/guide-dark-default-restored.png",
+      "sha256": "a2d3791fab88ba0eb49843b98ad8951af40eeb33113c5a3d1fd8aa0dfba7bde9",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/guide-light-XXXL-before.png",
+      "sha256": "56008e3dd90bc58734eadb37b6a915e3315eef85fed566557fe81a7ee9190cdc",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/guide-light-XXXL-focused.png",
+      "sha256": "fd9ffcca62f1b6af673463062272ceda656baa2095cda50a663866817f12d108",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/guide-light-XXXL-restored.png",
+      "sha256": "6e5155911c2f742f440b1b612723847289e6b9220b006c19ec5608679cba3e1f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/guide-light-default-before.png",
+      "sha256": "ed0a94450bb702c20ecfb863745e8860bdc38314ef1f2d041bfa6ecf266c9ff6",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/guide-light-default-focused.png",
+      "sha256": "ae0751091bc74d4fc4a416db73347780d36186d533529e0683d06d814a353d52",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/guide-light-default-restored.png",
+      "sha256": "9b885d41d0c94d76345ef12797472bfbf2b90ebc04135378c1c86ef853484647",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-XXXL-default.png",
+      "sha256": "4875316c6bdedc1b137ee8f7393cbaafa34ea6c9c1dd146f4eb931946b77504d",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-XXXL-error.png",
+      "sha256": "29dc7dbd2b759e6c54ed2b3de039b7bfc42e765226b0ee0382af75109a426ec1",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-XXXL-inbox.png",
+      "sha256": "c5bde7577c4d6f0b4b53682bf6ac3dc14a735bc3bcb936dec702ac867a9f1fe5",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-XXXL-keyboard.png",
+      "sha256": "902b97f00d8e1a13d850af5d8cd511f8b9e06ffce0d1b4aba1253cac87661b9d",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-XXXL-loading.png",
+      "sha256": "0e3c0a553aa2b3e141c211f0e153de05ccc8a568fab43bad2b0648a06c7b20f0",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-XXXL-password-keyboard.png",
+      "sha256": "6c01de53149e0d73a09c2cd8e98cb03accd8adb721582a0cd1faef3f99d2cd41",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-XXXL-password.png",
+      "sha256": "1366576fc1fb4e3daf774da6489e44044d12ac880052cfe8da83e447606c820a",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-default-default.png",
+      "sha256": "03cc1dc99f359d042601f5fd78f97af4180861d6165402a94615031e00e62d2b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-default-error.png",
+      "sha256": "0be4d5e2a4207e58bbc84c06ca57e9f28fdde47fc981ff3ad5378eec1aebfbd3",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-default-inbox.png",
+      "sha256": "e3feb7ff2c485529b6eccdebac190662a8316e079dc7d009309941cc871f8066",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-default-keyboard.png",
+      "sha256": "b1b24bfa37c618740d5c74eff5d4d62fab6a7f92a6f2ea4bfbcdb99dd4694147",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-default-loading.png",
+      "sha256": "00fa56fe46e904e57b5bcead86574f5d73cb876c0875ec33a80902f5f54082c2",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-default-password-keyboard.png",
+      "sha256": "57845f3322cae4af98ef6388bcbae6104d68c4c72bf8f3a5358d97636cd57ad0",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-dark-default-password.png",
+      "sha256": "f081a64e15f4f6da83575563dcca28d3148a91b03f868d59a0e86e5f0eb768a8",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-XXXL-default.png",
+      "sha256": "a2d375350b2f196750c2fa58c0e4076d2382d84b23591619077b414c2004493f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-XXXL-error.png",
+      "sha256": "eb4472149dcd2abc4db96aa776dc9681e694d3c34df2bc05726886fadd0de500",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-XXXL-inbox.png",
+      "sha256": "b811716ee3757ed2a523e2a0c0779fbfebca9c52d2a61f0179e2d56e41ab011f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-XXXL-keyboard.png",
+      "sha256": "884ea07ff6d18cfe5ea6c19e552239f0e364b7d6f8a13a838838dbe769f0405b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-XXXL-loading.png",
+      "sha256": "73bf9863637ca80e6111e910a71c6ce6daeaf42018ae91fdfbf48cff0c6c0fea",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-XXXL-password-keyboard.png",
+      "sha256": "edd5cefa4e9440c3bc5585f1d77ef96b6c6472fdc97f51d4b0f514463cee7303",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-XXXL-password.png",
+      "sha256": "0fe52febb832beeae7eba4c1f2a8022c7552efc498ede2debd028e24acaa6138",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-default-default.png",
+      "sha256": "1642ab8945434770aafeb5e2b29c7d216e2936d4a75d0be8381e5c77d62742a7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-default-error.png",
+      "sha256": "3be29972224ef88f467bae1dbd5c9a02c45efab2e5ebff6b455c35cb94450649",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-default-inbox.png",
+      "sha256": "40bd1115175c331a965f5726d89352868d82ef9d31d10a2fce486f90e1f08141",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-default-keyboard.png",
+      "sha256": "ef790dbc1b7cf02b10fff1e0c86853e25422d65d988a1a60bf61cc00510749cf",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-default-loading.png",
+      "sha256": "79f80d12a6c0b8315c9aca9095e3da25012427b1ff3774a8f8bcb0aac53f7028",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-default-password-keyboard.png",
+      "sha256": "88cb7c5178d29daeafac0c6b9b6a3da8178377a957cc2b5e86cf51168310ffe5",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "extras/signin-light-default-password.png",
+      "sha256": "3297ef908549139cba9e9a06076adcbc082c6d71d98a32fb9914d179049f662f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "full-dark-default-bottom-after-pull.png",
+      "sha256": "7c269c9a745718eb5706a8fa8f1dbfdcb9499049cfa3b5e29e2869627281101e",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "full-dark-default-top.png",
+      "sha256": "3c85b6fbb2c885dd29b824296aeaea6e161aa00483867429e35ee8b0ecccfb87",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "full-light-default-bottom-after-pull.png",
+      "sha256": "19d83ebcde1ab0a99d68a751e45e222fedd60e2d177356f79221a2fb8d001c38",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "full-light-default-top.png",
+      "sha256": "f122696cfe5386ea5b7622f00a4982cefc4219bc829c6afbd829a54e9f3d658c",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "keyboards/signin-dark-XXXL-keyboard.png",
+      "sha256": "770e0a5ea5cbc3cf10ca234306ca24f3405996b2ceaf8bdf6d85554f344598f1",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "keyboards/signin-dark-XXXL-password-keyboard.png",
+      "sha256": "665d9bc26aa8b0dd88f504fdaeb84e38d856551b5d8aa19cc7ff9e183f0c6305",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "keyboards/signin-dark-default-keyboard.png",
+      "sha256": "a9bb5c3dd601c7d2102d0b0f2d62429170e8f2416799b33911217b57b082eceb",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "keyboards/signin-dark-default-password-keyboard.png",
+      "sha256": "a8dbbbcc3c0b4cacc39a348a57b2fdaf0dbe88afc08395596037c7d4866690d3",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "keyboards/signin-light-XXXL-keyboard.png",
+      "sha256": "1a47bf746436e924a63e0a9035a88e95c36b6b5da7d18249e14cb2dde29e79cf",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "keyboards/signin-light-XXXL-password-keyboard.png",
+      "sha256": "8b4f8ec705622b3814a36c0d30310db00041aa97f638bcf9f6dd25a6be1d3dda",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "keyboards/signin-light-default-keyboard.png",
+      "sha256": "835534378e9a7d84830a50406a2388107d086cc38eca1a1e9e5ad0cd9ed2598a",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "keyboards/signin-light-default-password-keyboard.png",
+      "sha256": "e0de6742f640886ebe43ae9d349a1746dccd60b72be2a1e352615795ebfd12c6",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "long-text-dark-XXXL-bottom-after-pull.png",
+      "sha256": "29dd96ca70349bdf65eafc4b7789c5f065defeabef4b679d5a2a2b2680de11a7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "long-text-dark-XXXL-top.png",
+      "sha256": "eb97472b7bdda029d4a885bfa8b76254bc49bfc86dbf99db522c303819d0530e",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "long-text-dark-default-top.png",
+      "sha256": "581ac4c13722c92f3a433ffc233735afa4d4b688bdd99f4cb3e0ed7ea6159302",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "long-text-light-XXXL-bottom-after-pull.png",
+      "sha256": "cc5f24867a37a6263668720db18884ac7b9eecc36061e7f329c13014957c9dc3",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "long-text-light-XXXL-top.png",
+      "sha256": "95f396c7c2b36dc58d4e6d45f87933a17026dd9d7bb5b8a5443e4f4ad885d832",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "long-text-light-default-top.png",
+      "sha256": "ae0459aae5903e8e7337739a57845b96eab0fde7d96476a5e9a43754be753558",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "motion/account-dark-XXXL-lower.png",
+      "sha256": "cc1a8017f28e522acf37c113bc8d769bc6c7906e2f0177e74cf246d5f3fb1de7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "motion/composer-light-default-dismissed.png",
+      "sha256": "9a39c15878d0ec2f9c06c4063baa21b48f48e90b9a901e8566e325dec7d12ded",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "motion/composer-light-default-focused.png",
+      "sha256": "659dcf51505cded8d796ef7a0ca24a026055e719fce4d921042d905b0d5c7069",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "motion/composer-light-default-refocused.png",
+      "sha256": "239419f9d4124ee00b25c864b61981970422c265dfc44a22fe8c3b7a44ca0a47",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-dark-default-top.png",
+      "sha256": "22c82bec82c2204c2f1d65a18bfa205db559119bdc856a0768d6a7cfba5c98e0",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-XXXL-default.png",
+      "sha256": "9110b62f990931fb48d2263870b878b7dd98b85dbf57b214481d2724bb26e8e7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-XXXL-error.png",
+      "sha256": "4616193416ab973db1801c5464b271793eeb063bbedea2514264e334ef32f460",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-XXXL-inbox.png",
+      "sha256": "1bb9c34fc9692d5223319fbbf86754b4abc5145377659963bd1ea7427d1f75f2",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-XXXL-keyboard.png",
+      "sha256": "89f01d11297e0907218314bb592cd1a438dcc03e875b4f473493ce55a19c303d",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-XXXL-loading.png",
+      "sha256": "8c775e48b96a4a8a3f74743e02a6a7a0529d4600bffe68694f71af45a9a30d89",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-XXXL-password-keyboard.png",
+      "sha256": "5777624d61f7f6ac4a6e37be80386e80d35b1651c2cb426f088c986394ad1d2e",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-XXXL-password.png",
+      "sha256": "07d0724958e288ed38413c70140e6b59fe38efa029048fe7a91debca0e5e679b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-default-default.png",
+      "sha256": "3ecc77349e9293175515311587954f7dae8d2519d13702e1d16ede0baa2ffcc9",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-default-error.png",
+      "sha256": "f99cf374525295b22dd255598624bf60e3623203c408bd93d059b5df6524e464",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-default-inbox.png",
+      "sha256": "67cb5f69dec9e23243bea4dcfb506d7d777830f7bd7cb3908b67299f07447f7d",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-default-keyboard.png",
+      "sha256": "ecafd0eb403a7c4fc06e4722d2f17f1a7077d0bb73109ebdaef3dd244d4aa0e6",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-default-loading.png",
+      "sha256": "34ec0cc78f8707d73edd51157379394de0ee0531d3c991ef2734e22e76976d63",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-default-password-keyboard.png",
+      "sha256": "39540b4d0b541170c46d6b731f4fd7e792d6cf50179f11a59af1fec03cf2f8e7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-dark-default-password.png",
+      "sha256": "5e4979fd84ebf0e545a225644f5a37beec0d57f2619bc64c904327bcf367f6cd",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-XXXL-default.png",
+      "sha256": "eb3113401c25365adc7575e28daabf06912d84675ac7ab29e3c097a8144de6ad",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-XXXL-error.png",
+      "sha256": "2168aca81ef9b7c90bceb51eddd47ce0560a7c7f058c5d15f8d3c518f34858d3",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-XXXL-inbox.png",
+      "sha256": "98530c0fad6ddf84ba010dbc5241705c65c8b76f3a40576171817aca4ac6c191",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-XXXL-keyboard.png",
+      "sha256": "12e82243c15733981fd421edfffdf3e8516b3d1c1a7701ede247f2b8f15b0aac",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-XXXL-loading.png",
+      "sha256": "daf9c4a3c760c6ead82ffc08e2bc8d233cd6e5854032c1c40fb53bb326b677f9",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-XXXL-password-keyboard.png",
+      "sha256": "e08a2cce3c4c78b36f731c5fbb723f050ad2e8ac0619a63e1746c9b67f2c7bf3",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-XXXL-password.png",
+      "sha256": "cb235ed2e5926357723f06591a0b8285b51ded166146b65d7716c99b811b40b0",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-default-default.png",
+      "sha256": "d4bc42a242cc2f8d992167634d042074872407e820d94b26144c662b186adc3d",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-default-error.png",
+      "sha256": "71b6170ccff1a622a62fa0ab20156124b3d0558328c8e1dc309cf67b73cfc976",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-default-inbox.png",
+      "sha256": "238cc2dfcc8ac1252e5fbd8963da7d4ce7719bb9f9e39542a7043337626409b8",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-default-keyboard.png",
+      "sha256": "5d1992153bdc46afc88c03bace02ab93c55fe67bb25c4c699ceaa17f41d6c30f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-default-loading.png",
+      "sha256": "e55146a7a021ad602d57862ee02b2687ab02831ddf902a2342d6a7fa24843930",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-default-password-keyboard.png",
+      "sha256": "24dfbbc18ddec11abe125276362e4b4ba58a748267d45ce91557c7e92f0c4470",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-enabled/signin-light-default-password.png",
+      "sha256": "47f21b1a12565f5ad65a84fb8357b804418f7bec1bde725a0da9d550b4e406a8",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    },
+    {
+      "file": "signin-light-default-top.png",
+      "sha256": "3ad1feccdc73af656f50fe4aec283a57a6032977f375d47429638589c06a8951",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "status": "captured",
+      "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+      "kind": "native-app"
+    }
+  ],
+  "count": 288
+}
