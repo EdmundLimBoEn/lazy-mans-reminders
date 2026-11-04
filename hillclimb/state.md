@@ -155,3 +155,5 @@ Next isolated tasks, with exclusive files and regular17 devices:
 - Integrated validation must add actual public simulator launch/scroll metrics with samples and scope, rather than infer timing from recordings. Physical haptics, spoken VoiceOver and true lock remain gaps.
 
 Each worker must build, pass the existing 293 tests plus new measurable checks, capture affected native states, restore original settings and close only its own session. No source edits outside ownership, main merge, push by children or shipping.
+
+N is authorized to update only the full-board Add reminder expectation in the shared HillclimbUITests file, alongside its assigned new tests. The new capacity-to-available transition must verify the returned button remains at least 44pt. All existing test IDs and other assertions stay intact.
