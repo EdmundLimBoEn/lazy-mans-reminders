@@ -62,9 +62,22 @@ final class AccessibilitySettingsUITests: XCTestCase {
                     before.name = "actual-settings-original-" + label; before.lifetime = .keepAlways; add(before)
                 }
                 if originals[label] == nil { originals[label] = value == "1" }
+                if label == "Reduce Motion", !restoring {
+                    let effects = settings.switches["Auto-Play Message Effects"]
+                    XCTAssertTrue(effects.waitForExistence(timeout: 5))
+                    if originals["Auto-Play Message Effects"] == nil {
+                        originals["Auto-Play Message Effects"] = try XCTUnwrap(effects.value as? String) == "1"
+                    }
+                }
                 let desired = restoring ? try XCTUnwrap(originals[label]) : enabled
                 if (value == "1") != desired { toggle.switches.firstMatch.tap() }
                 XCTAssertEqual(toggle.value as? String, desired ? "1" : "0", label)
+            }
+            if page == "Motion", restoring, let desired = originals["Auto-Play Message Effects"] {
+                let effects = settings.switches["Auto-Play Message Effects"]
+                XCTAssertTrue(effects.waitForExistence(timeout: 5))
+                if (effects.value as? String == "1") != desired { effects.switches.firstMatch.tap() }
+                XCTAssertEqual(effects.value as? String, desired ? "1" : "0", "Restore the dependent Motion setting")
             }
             let proof = XCTAttachment(screenshot: settings.screenshot())
             proof.name = "actual-settings-\(page)-\(restoring ? "restored" : "enabled")"; proof.lifetime = .keepAlways; add(proof)

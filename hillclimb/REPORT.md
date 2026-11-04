@@ -111,3 +111,11 @@ Round4 all-three reviews validate; final gate is false. Next work covers board e
 Candidate6a563b1 passed289 tests and native count/corner checks, but its word-boundary rendering removed a previously fitting final word without adding visible content. The parent kept the current renderer. Twelve native image hashes verified; candidate source/tests and provenance are retained as an experiment. No density or launch-performance improvement is claimed. [Experiment and decision](tasks/activity-readability/README.md).
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Error contrast and accessibility keyboard follow-up
+
+K source2e6aa8c/evidence41c2027 merged. Existing error text and destructive Account label use readable primary ink, and the inert enabled sign-in fixture now renders legal links normally while discarding demo URLs.291worker tests and44nativecontrastgates passed (minimum12.06:1); all8normal and8actualcombined-settingskeyboardcases passed.123acceptednativeimagehashesverified. No production keyboard change was needed.
+
+The worker restored incidental Auto-Play Message Effects drift manually. Parent added a test-only teardown correction to remember/restore it; that newer test revision still requires the upcoming integrated runtime validation. Board-edge work remains active. [Evidence](tasks/error-keyboard/README.md).
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
