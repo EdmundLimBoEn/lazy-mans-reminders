@@ -1,0 +1,107 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+      "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+      "modelName" : "iPhone 17 Pro",
+      "osBuildNumber" : "23C54",
+      "osVersion" : "26.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "2m 43s",
+                  "durationInSeconds" : 163.81603598594666,
+                  "name" : "testCombinedActualSettingsKeyboardMatrix()",
+                  "nodeIdentifier" : "AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "AccessibilitySettingsUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "37s",
+                  "durationInSeconds" : 37.13223600387573,
+                  "name" : "testDarkDefaultErrors()",
+                  "nodeIdentifier" : "ErrorContrastUITests/testDarkDefaultErrors()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ErrorContrastUITests/testDarkDefaultErrors",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "46s",
+                  "durationInSeconds" : 46.29792392253876,
+                  "name" : "testDarkXXXLErrors()",
+                  "nodeIdentifier" : "ErrorContrastUITests/testDarkXXXLErrors()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ErrorContrastUITests/testDarkXXXLErrors",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "36s",
+                  "durationInSeconds" : 36.55792498588562,
+                  "name" : "testLightDefaultErrors()",
+                  "nodeIdentifier" : "ErrorContrastUITests/testLightDefaultErrors()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ErrorContrastUITests/testLightDefaultErrors",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "name" : "XCTAssertLessThan failed: (\"916.3333333333334\") is not less than (\"840.0\")",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-917d931c/ios/UITests/ErrorContrastUITests.swift",
+                        "lineNumber" : 81
+                      }
+                    }
+                  ],
+                  "duration" : "41s",
+                  "durationInSeconds" : 41.58652698993683,
+                  "name" : "testLightXXXLErrors()",
+                  "nodeIdentifier" : "ErrorContrastUITests/testLightXXXLErrors()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ErrorContrastUITests/testLightXXXLErrors",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "ErrorContrastUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ErrorContrastUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "HillclimbUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "LazyMansReminders",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}
