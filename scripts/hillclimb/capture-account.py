@@ -25,7 +25,7 @@ def shot(name):
     op('snapshot')
     geometry=op('get','attrs','id="account.geometry"')
     p=out/'screens'/f'{name}.png';p.parent.mkdir(exist_ok=True)
-    if p.exists(): raise RuntimeError('Preserve existing screenshot '+str(p))
+    if p.exists(): return
     op('screenshot',str(p),'--pixel-density','3')
     manifest['images'].append(dict(path=str(p.relative_to(root)),geometry=geometry,sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
     manifestpath.write_text(json.dumps(manifest,indent=2))
@@ -63,9 +63,11 @@ elif a.mode=='errors':
     for style in ['light','dark']:
         for size in ['default','XXXL']:
             for state in ['error','refresh-error']:
-                print(open_fixture(style,size,state),flush=True)
                 prefix=f'{state}-{style}-{size}'
+                if (out/'screens'/f'{prefix}-medium-lower.png').exists(): continue
+                print(open_fixture(style,size,state),flush=True)
                 shot(prefix+'-initial')
+                op('scroll','top','--settle')
                 op('scroll','down','--until','label="Refresh Board Now"','--settle')
                 op('press','label="Refresh Board Now"','--settle')
                 shot(prefix+'-recovered')
@@ -73,6 +75,7 @@ elif a.mode=='errors':
                 shot(prefix+'-reappeared')
                 op('gesture','pan','201','69','0','377','700')
                 shot(prefix+'-medium-reappeared')
+                op('scroll','top','--settle')
                 op('scroll','down','--until','label="Refresh Board Now"','--settle')
                 op('press','label="Refresh Board Now"','--settle')
                 shot(prefix+'-medium-recovered')
