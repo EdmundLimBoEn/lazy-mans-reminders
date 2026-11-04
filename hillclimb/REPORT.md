@@ -88,3 +88,9 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 Task F replaces the invalid-frame InputAccessoryBar path with a layout-participating bottom inset. Done and the alternate action have48pt targets and measured separation at default/XXXL before and after scrolling.267 worker tests passed, plus2 strengthened UI rechecks.20 settled native captures verified; zero post-fix invalid-frame diagnostics. Error announcements preserve exact text and deduplicate presentations; spoken VoiceOver remains unobserved. Integrated original17 capture/regrade is pending. [Evidence](tasks/keyboard-recovery/README.md).
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Board multiline and recovery follow-up accepted
+
+Task E aligns completion/grip controls with the first text line, improves semantic icon contrast, wraps the full-capacity message, flattens the empty-board guide and hides it during composing. Existing error copy announces once per presentation; retry has a measured44pt target.265 worker tests passed;48 final-source captures verified. All E/F/G changes are merged, with integrated original17 validation and round3 grading next. [Evidence](tasks/board-multiline/README.md).
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund

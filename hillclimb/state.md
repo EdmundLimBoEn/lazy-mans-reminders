@@ -88,3 +88,9 @@ Both independent reviews complete: Sol8.11(+1.23), Astra8.16(+1.46), minimum7.0 
 - Worker267 combined tests passed (254 units+13 UI), then2 strengthened UI rechecks passed; zero failures/skips. These are worker-base counts, not combined G+F integration counts. UUID-matched backtrace localized prior invalid-frame faults to InputAccessoryBar; subsequent runtime issues and log faults zero. Integrated original17 validation is still required.
 - Error announcements deduplicate exact existing text without moving focus. Explicit demo allows local recovery but blocks provider/submit/legal actions, including keyboard submission. Spoken VoiceOver remains unobserved.
 - E board-multiline awaits handoff. Original17 remains available for next combined validation after E is accepted.
+
+## Next-batch handoff: E merged; round3 validation next
+
+- E board-multiline9497158/source1add78a accepted after source/test review,48 final-source image hashes and representative XXXL board/error captures. Final265 tests passed (250 units+15 UI), zero failures/skips, four successful builds. Worker-base sign-in warning predates merged F and must be checked again in integration.
+- First-line controls preserve44pt geometry and gain semantic contrast. Capacity message is static, intrinsic-height and noneditable with original copy/hint; disabled send/no keyboard focus checked. Flat guide hides while composing and restores unless dismissed. Existing error text announces once per presentation without moving focus. Retry target now44pt and edge-tested.
+- E/F/G all merged. No worker holds a device. Next: fresh isolated combined Debug suite, arm64 Release build, original17 full round3 captures including loading/error/keyboard recovery and production Activity counts, then independent Sol/Astra regrade. Expected combined count276 (260 unit+16 UI), to be confirmed by actual runner.
