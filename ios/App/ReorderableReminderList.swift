@@ -43,6 +43,10 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
         )
         list.backgroundColor = .systemBackground
         list.alwaysBounceVertical = true
+        if #available(iOS 26.0, *) { list.bottomEdgeEffect.isHidden = true }
+#if DEBUG
+        if HillclimbDemo.isActive { HillclimbGeometry.shared.list = list }
+#endif
         list.keyboardDismissMode = .interactive
         list.dataSource = coordinator
         list.register(UICollectionViewListCell.self, forCellWithReuseIdentifier: "reminder")
@@ -57,6 +61,11 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
         refresh.addTarget(coordinator, action: #selector(Coordinator.refresh), for: .valueChanged)
         list.refreshControl = refresh
         return list
+    }
+
+    static func dismantleUIView(_ list: UICollectionView, coordinator: Coordinator) {
+        coordinator.refreshTask?.cancel()
+        list.refreshControl?.endRefreshing()
     }
 
     func updateUIView(_ list: UICollectionView, context: Context) {
@@ -82,6 +91,7 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
         weak var dragGesture: UIPanGestureRecognizer?
         private(set) var isDragging = false
         private var dragOffset = CGPoint.zero
+        var refreshTask: Task<Void, Never>?
 
         init(parent: ReorderableReminderList) {
             self.parent = parent
@@ -192,9 +202,19 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
         }
 
         @objc func refresh() {
-            Task { @MainActor in
+            guard refreshTask == nil else { return }
+            refreshTask = Task { @MainActor in
+                defer {
+                    UIView.performWithoutAnimation {
+                        list?.refreshControl?.endRefreshing()
+                        list?.layoutIfNeeded()
+                    }
+                    refreshTask = nil
+                }
                 await parent.onRefresh()
-                list?.refreshControl?.endRefreshing()
+                while list?.isDragging == true && !Task.isCancelled {
+                    try? await Task.sleep(for: .milliseconds(16))
+                }
             }
         }
     }
