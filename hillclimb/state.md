@@ -74,3 +74,10 @@ Both independent reviews complete: Sol8.11(+1.23), Astra8.16(+1.46), minimum7.0 
 - F keyboard-recovery: SignInView, HillclimbDemo.swift (only sign-in safe interaction policy), sign-in tests and dedicated helper. No board files. Must disable real auth/provider/external actions in demo while allowing local fields/toggles/scroll/Done.
 - G activity-overflow: Activity shared model/layout/controller/widget, dedicated Activity tests/helper, and only necessary pure APNs presentation/backend metadata helpers/tests. No deploy/database migration/live calls. Preserve legacy payload compatibility and do not parse user text as metadata.
 - E uses private Board17; F private Auth17; G original17. Every worker closes its own session and reports exact test/capture provenance. Parent re-shoots original17 after merging passing candidates.
+
+## Next-batch handoff: G merged
+
+- G activity-overflow merged (970f567 + parent3020d31). Structured optional hiddenLineCount preserves counts across payload/surface/byte caps; literals resembling +N more are not parsed.266 iOS tests passed (254 unit+12 UI);8 actual native production-pipeline images verified by parent.
+- Parent filled assertion dependency cache and ran existing live_activity/board_loader/device_delivery Deno suites. Initial type-check exposed stale empty-board expected shape; added hiddenLineCount:0. Corrected run52 passed,0 failed, no service permissions. Worker’s earlier4 offline tests remain separately recorded.
+- Backward compatibility: original lines array retained; missing metadata decodes nil. Already-summarized legacy remote payloads cannot recover lost counts. Backend preparation code is committed ONLY, not deployed; current old remote payload limitation remains until separately authorized work outside this no-deploy hill climb.
+- E board-multiline and F keyboard-recovery remain awaiting handoff. They use private regular17 devices; G returned original17 clean, no owned demo Activities, own session closed. No next scores inferred before integrated capture/regrade.
