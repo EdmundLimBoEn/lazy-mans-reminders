@@ -127,3 +127,11 @@ L0265cb4/evidence46e6b4f merged: top-only softening during departed-content scro
 The separate Motion restoration attempt built but ran0tests because manual device references failed. No setting changed; its value instrumentation and failures are retained. Combined K+L round5 validation must execute the restoration proofs and expected293tests before grading. [Board evidence](tasks/board-edge-accessibility/README.md) · [Unrun restoration attempt](tasks/motion-cleanup-recheck/README.md).
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Round 5 validation
+
+Combined K+L source is verified at `c60288dae3173383442723e70f7874b8878d891d`: **293/293 tests passed** (263 unit, 30 UI), including every prior baseline ID. Both actual Settings methods restored all four original values at each teardown. Fresh Debug/Release, Python 23 and Deno 52+4 passed. Parent verified all 394 native images and paired reference hashes, plus integrated production/test/backend hashes. Seven recordings remain transition evidence; no launch metric was measured.
+
+The full-device combined-settings supplements show complete keyboards where XCTest protected-image captures are partial. Native top-edge, final-row ink, contrast and accessibility-tree checks passed; speech and physical sensation remain unobserved. The simulator was returned running with its original settings, light/Large and no owned Activity. [Evidence and limitations](validation/round5/README.md). Independent round 5 grades are running; latest completed scores remain round 4.
+
+Edmund confirmed “Keep existing wording.” The raw network-error text is intentionally retained and the copy question is closed.

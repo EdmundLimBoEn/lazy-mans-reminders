@@ -1,10 +1,10 @@
 # Hill climb state
 
-Integration branch: `hillclimb/ui`. Main, deployment, App Store/TestFlight and force pushes are prohibited. Original user untracked files remain untouched. Latest graded app/test source: `b5d9bb3`. The integration branch now includes K; the next combined validation will freeze a new source revision.
+Integration branch: `hillclimb/ui`. Main, deployment, App Store/TestFlight and force pushes are prohibited. Original user untracked files remain untouched. Latest graded app/test source: `b5d9bb3`. K and L are integrated. Round 5 validation is accepted at frozen app/test source `c60288dae3173383442723e70f7874b8878d891d`; fresh independent Codex reviews are running.
 
 ## Current plan
 
-1. Round 4 Sol/high and Astra/high reviews complete: **8.97 and 8.95**. Opus review complete: **8.51**, minimum **7.6**. Continue the next fix batch.
+1. Round 5 Sol/high and Astra/high reviews are running against the same verified 394-image packet and frozen source. Latest completed scores remain round 4: **8.97 / 8.95 / 8.51**.
 2. Validate both reports. Run Opus 5.5/medium only if both same-round Codex overall scores are at least 8.5.
 3. Turn remaining findings into isolated, non-overlapping worker tasks. Each worker builds, passes the existing tests plus measurable regression gates, and captures affected screens before handoff.
 4. Merge passing branches into `hillclimb/ui`, run combined original17 validation, re-shoot the full matrix and re-grade.
@@ -121,3 +121,13 @@ A new isolated test worker uses original17 to rebuild the integration source and
 ## Round5 validation assigned
 
 All K/L source changes and restoration instrumentation are merged. The previous owner closed only its own original17 session successfully; no active worker owns a device. New combined validation uses a fresh original17 session and the authorized XCTest runner, starting with both Settings methods to verify all4original/restored values. Full expected293tests includes K+L; actual counts are authoritative. Fresh Debug/Release/other checks and all native states precede fresh independent grades. Optional public launch metrics may add one test; no unmeasured timing claim is allowed.
+
+## Round 5 validation accepted; Codex reviews running
+
+Evidence `0e61a06` is merged. Parent verified all 394 native PNG hashes/dimensions and paired reference hashes, plus 54 production, 38 test and 28 backend file hashes against the integrated files. The only new Swift change attaches full-screen XCTest evidence; production source is unchanged from accepted K+L.
+
+- **293/293 passed:** 263 unit + 30 UI, retaining all 285 prior IDs; no failures or skips. The two Settings methods passed first, then in the full suite. All four original switch values match restored values at each teardown, including Auto-Play Message Effects.
+- Fresh unsigned arm64 Debug/Release, Python 23 and Deno 52+4 passed. Runtime warnings/invalid frames: zero; 15,457 other events retained.
+- 394 native images, seven recordings and 17 usable Apple references. Protected XCTest password images are explicitly partial; eight clean full-device keyboard supplements cover the real combined-settings matrix. Top-only mask/opaque accessibility boundary and final-row ink/geometry pass. No launch metric or physical/spoken certification.
+- Original17 returned running, light/Large, all four settings restored, owned Activities empty and own session closed. Full evidence: `validation/round5/README.md`.
+- Both requested Codex/high graders now independently review all 30 categories, paired screenshots and current source. No round 5 score or Opus eligibility is assumed. Edmund’s confirmed existing-wording decision applies to both reviewers.
