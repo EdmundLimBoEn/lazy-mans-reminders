@@ -12,6 +12,7 @@ import subprocess
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--command', required=True, help='Exact pinned device_open agentDevice.command')
+parser.add_argument('--out', type=pathlib.Path, default=pathlib.Path('hillclimb/tasks/activity-polish'), help='Use a fresh round directory to preserve prior evidence')
 parser.add_argument('--style', choices=['light', 'dark'], required=True)
 parser.add_argument('--size', choices=['default', 'XXXL'], required=True)
 parser.add_argument('--text', choices=['short', 'long'], required=True)
@@ -20,7 +21,7 @@ a = parser.parse_args()
 command = shlex.split(a.command)
 if len(command) != 1 or '/device/targets/' not in command[0] or not command[0].endswith('/agent-device'):
     parser.error('Requires exact T3 pinned executable')
-out = pathlib.Path('hillclimb/tasks/activity-polish').resolve()
+out = a.out.resolve()
 out.mkdir(parents=True, exist_ok=True)
 manifest_path = out / 'manifest.json'
 manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {'captures': [], 'operations': []}
