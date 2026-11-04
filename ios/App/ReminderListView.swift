@@ -309,33 +309,35 @@ struct ReminderListView: View {
                     .transition(.opacity)
                 }
 
-                Button {
-                    Task { await addReminder() }
-                } label: {
-                    Group {
-                        if draft.isSubmitting {
-                            ProgressView()
-                                .controlSize(.small)
-                                .accessibilityHidden(true)
-                        } else {
-                            Image(systemName: "arrow.up")
-                                .font(.subheadline.weight(.semibold))
-                                .foregroundStyle(canAdd ? Color(.systemBackground) : Color(.tertiaryLabel))
-                                .accessibilityHidden(true)
+                if !atCapacity {
+                    Button {
+                        Task { await addReminder() }
+                    } label: {
+                        Group {
+                            if draft.isSubmitting {
+                                ProgressView()
+                                    .controlSize(.small)
+                                    .accessibilityHidden(true)
+                            } else {
+                                Image(systemName: "arrow.up")
+                                    .font(.subheadline.weight(.semibold))
+                                    .foregroundStyle(canAdd ? Color(.systemBackground) : Color(.tertiaryLabel))
+                                    .accessibilityHidden(true)
+                            }
                         }
+                        .frame(width: addVisualSize, height: addVisualSize)
+                        .background {
+                            Circle()
+                                .fill(canAdd ? Color.primary : Color(.quaternarySystemFill))
+                        }
+                        .frame(width: addHitSize, height: addHitSize)
+                        .contentShape(Rectangle())
                     }
-                    .frame(width: addVisualSize, height: addVisualSize)
-                    .background {
-                        Circle()
-                            .fill(canAdd ? Color.primary : Color(.quaternarySystemFill))
-                    }
-                    .frame(width: addHitSize, height: addHitSize)
-                    .contentShape(Rectangle())
+                    .buttonStyle(.plain)
+                    .disabled(!canAdd)
+                    .accessibilityLabel(draft.isSubmitting ? "Adding reminder" : "Add reminder")
+                    .accessibilityHint("Saves the text as a new reminder")
                 }
-                .buttonStyle(.plain)
-                .disabled(!canAdd)
-                .accessibilityLabel(draft.isSubmitting ? "Adding reminder" : "Add reminder")
-                .accessibilityHint("Saves the text as a new reminder")
             }
             .padding(.leading, 14)
             .padding(.trailing, 5)

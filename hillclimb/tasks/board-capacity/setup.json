@@ -1,0 +1,16 @@
+{
+  "baseSHA": "cfc795434e33cbe6bf5fd613e41e7ed3afee79cc",
+  "branch": "t3/board-capacity-presentation",
+  "config": "example-derived by scripts/hillclimb/setup.sh; no existing config",
+  "setupCommands": [
+    "scripts/hillclimb/setup.sh",
+    "xcodebuild -resolvePackageDependencies -project ios/LazyMansReminders.xcodeproj -scheme LazyMansReminders -derivedDataPath /tmp/hillclimb-board-capacity-N-DD",
+    "scripts/hillclimb/setup.sh"
+  ],
+  "initialResolveExit": 0,
+  "initialTextSize": "large",
+  "initialDisk": "13GiB",
+  "deviceID": "066ECE57-46B4-414A-B53E-523775329360",
+  "hostId": "local",
+  "session": "t3-1929ba3d12fa4e0973b7347e"
+}
