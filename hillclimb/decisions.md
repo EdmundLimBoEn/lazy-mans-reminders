@@ -6,3 +6,5 @@
 - 2026-11-04: No branding/copy changes and no shipping actions.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+- 2026-11-04 user addition: compare against paired Apple Notes and Reminders reference states; preserve independent layout. Require executable geometry/accessibility checks wherever measurable. Use iPhone 17 Pro for shared reference device.
