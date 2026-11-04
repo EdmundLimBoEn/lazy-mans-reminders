@@ -151,3 +151,9 @@ Accepted native Island-only text tightening (`9b3aea1`): the XXXL sample ending 
 The full-board status now uses the width previously occupied by a disabled send arrow (`7c2793a`). The arrow returns below capacity. Exact copy and scaled typography are preserved; XXXL can fit the full status on one line. **297 worker tests pass**, including four new native state/geometry/ink/interaction cases and all prior 293 IDs. Parent verified all 16 final capture/reference hashes.
 
 [XXXL full-board bottom](tasks/board-capacity/accepted-captures/capacity-dark-XXXL-bottom-after-pull.png) · [Returned composer](tasks/board-capacity/accepted-captures/capacity-dark-XXXL-normal-composer-draft.png) · [Evidence](tasks/board-capacity/README.md). Combined round 6 verification follows the remaining sign-in and Account handoffs.
+
+## Round 6 sign-in chrome
+
+Sign-in now keeps the existing Password label visible with a nonempty secure value and gives the native field a 48pt frame (`e22a84a`). The native iOS 26 hard top edge reduces departing-content ghosting in the measured title bands. Legal links are reachable after scrolling and clear the native safe bottom by at least 18.33pt; no extra padding was needed. The earlier single Apple loading-label omission did not reproduce in 36 settled samples.
+
+**297 worker tests pass**, including four new methods and the unchanged normal/combined keyboard matrix. Parent verified 72 image/reference hashes. [Populated keyboard](tasks/signin-chrome/final-native-dark-XXXL-focused.png) · [Footer reached by scrolling](tasks/signin-chrome/final-native-light-XXXL-bottom.png) · [Evidence and limits](tasks/signin-chrome/README.md). The full integrated source still requires round 6 verification and grading after the Account handoff.
