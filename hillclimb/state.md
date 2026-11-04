@@ -4,7 +4,7 @@ Integration branch: `hillclimb/ui`. Main, deployment, App Store/TestFlight and f
 
 ## Current plan
 
-1. Complete independent round 4 Sol/high and Astra/high reviews of the same frozen packet. **Running.**
+1. Round 4 Sol/high and Astra/high reviews complete: **8.97 and 8.95**. Run Opus 5.5/medium on the same frozen packet.
 2. Validate both reports. Run Opus 5.5/medium only if both same-round Codex overall scores are at least 8.5.
 3. Turn remaining findings into isolated, non-overlapping worker tasks. Each worker builds, passes the existing tests plus measurable regression gates, and captures affected screens before handoff.
 4. Merge passing branches into `hillclimb/ui`, run combined original17 validation, re-shoot the full matrix and re-grade.
@@ -21,9 +21,9 @@ Integration branch: `hillclimb/ui`. Main, deployment, App Store/TestFlight and f
 | 3 | gpt-6.1-sol | 8.78 | 7.8 |
 | 3 | gpt-6-astra | 8.76 | 7.8 |
 | 3 | claude-opus-5.5 | 8.25 | 7.5 |
-| 4 | gpt-6.1-sol | Pending | Pending |
-| 4 | gpt-6-astra | Pending | Pending |
-| 4 | Claude Opus 5.5 | Eligibility pending | — |
+| 4 | gpt-6.1-sol | 8.97 | 8.1 |
+| 4 | gpt-6-astra | 8.95 | 8.2 |
+| 4 | Claude Opus 5.5 | Eligible; review next | — |
 
 Each report has all 30 rubric categories. Round 1 and 2 were not Opus eligible. Round 3 passed the 8.5 eligibility threshold but did not meet the final stop gate. Reports and machine-readable scores live under `rounds/<n>/`.
 
@@ -45,7 +45,7 @@ Each report has all 30 rubric categories. Round 1 and 2 were not Opus eligible. 
 | I: native Apple button, sign-in contrast and compact inset | Merged `551f880` | `tasks/signin-native/` |
 | J: Account typography, alignment and exact error announcements | Merged `7abefed` | `tasks/account-consistency/` |
 | Round 4 combined validation and native captures | Merged `5c43ea3` | `validation/round4/`, `rounds/4/` |
-| Round 4 independent Codex grading | Running | Reports pending |
+| Round 4 independent Codex grading | Complete | `rounds/4/scores-gpt-*.md/json` |
 
 ## Current runtime evidence
 
@@ -78,3 +78,7 @@ Quota: current-session metadata reports **12% used** in the 10,080-minute weekly
 `REPORT.md` tracks category scores, before/after pairs, merged work and phone installation. The separate numerical validator retains the final all-three score rule; reviewer status is informational, not a circular programmatic requirement.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Round 4 grade decision
+
+Validator confirms both Codex reports and required checks; only Opus is missing. Both overall scores exceed 8.5, so run the exact requested Opus 5.5/medium reviewer now. Final gate is still false. Scores continue increasing; three-round plateau is not established. Top remaining findings: board header-edge fragments, normal-size error/diagnostic text contrast, and targeted accessibility/Activity verification. Existing copy remains fixed pending Edmund's optional wording response.

@@ -61,3 +61,5 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - Accepted J7abefed after281tests,84verifiedimages,54contrastchecksandsafety/sourceinspection. Preservefullcopy/destructiverole;enabledstyleAccountfixturesguardrealhandlersanddiscardexternalURLswhileallowingonlylocaldisclosure/syntheticrecovery. Allthreefollowupsaccepted; dofreshcombinedoriginal17validationbeforegrades. Nochangebasedsolelyonworker-basecounts.
 
 - Acceptedround4validationprovenancewith285passingtestsand288verifiednativeimages;notUI9acceptance. Keepcombined-settingskeyboardviewportandtopedgeconcernvisible. Reviewer-scorestatusisinformational,notarequiredprogrammatictest;three-modelnumericstoppingruleunaltered. Reviewcurrentimages/sourceindependentlybeforefixingundiagnosedcombined-settingreachability.
+
+- Round 4 Codex results accepted: Sol 8.97/min8.1; Astra 8.95/min8.2. Both reports cover all30 categories and the same frozen b5d9bb3 packet. Validator confirms Opus eligibility, all real programmatic checks and report integrity. Run exact Opus5.5/medium; do not round8.97 or8.95 up to9 or declare final success.
