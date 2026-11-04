@@ -1,29 +1,68 @@
 # Notepad UI hill climb: progress report
 
-Status: resumed. Simulator access recovered after XCTest booted the standard device. Existing runtime suite: 247 passed; composer field target fails at 22pt height; long scrolling test interrupted and being bounded before rerun. Target >=9/10 from sol/high, astra/high and Opus 5.5/medium has NOT been achieved or evaluated. No screenshot score round exists.
+Work continues on hillclimb/ui. Final score gate is not reached. Round1 is the actual screenshot baseline: Sol6.88 and Astra6.70 over30 categories. Opus has not run; it is eligible only after BOTH Codex graders score >=8.5 overall in the same round. Final stop remains all three >=9 with every category >=7.
 
-## Start and end scores
+## Category scores
 
-All 30 categories in rubric.md remain ungraded for all three models. No before/after pairs exist because T3 cannot open the created regular iPhone 17 Pro. Reference images are pending too. scores.json records the missing evidence and a failed completion gate. No scores have been fabricated.
+| Category | Round1 Sol | Round1 Astra | After integrated batch |
+| --- | ---: | ---: | --- |
+| Visual hierarchy | 7.5 | 7 | Pending |
+| Spacing/grid | 7 | 7 | Pending |
+| Typography scale | 8.5 | 8 | Pending |
+| Dynamic Type | 7.5 | 7 | Pending |
+| Light contrast | 7 | 7 | Pending |
+| Dark contrast | 6.5 | 6.5 | Pending |
+| Iconography | 8 | 8 | Pending |
+| Safe area / Dynamic Island | 8 | 8 | Pending |
+| Scroll/pull-down / last row | 4 | 4 | Pending |
+| List rows | 6.5 | 6.5 | Pending |
+| Empty states | 7 | 7.5 | Pending |
+| Composer ergonomics | 6 | 6 | Pending |
+| Keyboard handling | 7 | 7.5 | Pending |
+| Sheet presentation/detents | 7 | 6 | Pending |
+| Navigation clarity | 7.5 | 7 | Pending |
+| Touch targets | 4.5 | 4.5 | Pending |
+| Haptics | 7 | 7 | Pending |
+| Animation/transitions | 6.5 | 6.5 | Pending |
+| Loading states | 7.5 | 7 | Pending |
+| Error states | 7.5 | 7 | Pending |
+| VoiceOver/labels | 7.5 | 7.5 | Pending |
+| iOS HIG consistency | 7.5 | 7 | Pending |
+| Lock Screen / Live Activity | 6 | 6 | Pending |
+| Sign-in/onboarding | 6.5 | 6.5 | Pending |
+| Settings/account | 7 | 6 | Pending |
+| Performance feel | 6.5 | 6.5 | Pending |
+| Delight | 6.5 | 6.5 | Pending |
+| Long text | 7 | 7 | Pending |
+| Reduced Motion / Transparency | 7 | 6 | Pending |
+| Palette / minimalism | 7 | 7 | Pending |
 
-## Completed work
+No after score is inferred from source changes or passing tests. A new full integration capture and independent grading round follows the batch.
 
-Integration hillclimb/ui created from origin/main 5fc4cbc and pushed. Tracking, 30-category rubric, Apple reference protocol and machine-readable score validator committed. Validator exercised with synthetic accepted/rejected packets. User's preexisting untracked files preserved.
+## Screenshot evidence and comparisons
 
-Prepared, unmerged branch hillclimb/capture-harness, commit f0e4f513f9df290f96a0f7c6fdb0d5d533888241, contains offline Debug fixtures, actual UI measurement probes, UI tests, capture/setup/check scripts. Worker reports Debug build-for-testing, Release build and 23 Python iOS checks passed. These are compilation/source checks, not simulator runtime evidence. XCTest, geometry assertions, screenshots and fixture isolation at runtime remain unvalidated. No production UI fix merged.
+Round1 contains18 real1206x2622 screenshots in light/dark, including full/empty boards, composer, account, sign-in, long text, XXXL and bottom-after-pull. Its manifest retains a failed synthesized scroll attempt and the successful advised raw-drag recovery. Five usable Apple Reminders references are paired in rounds/1/pairs.json; Notes is unavailable in this runtime and four transitional Reminders captures are excluded. Before/after app pairs will use the matching states from the next integration round.
 
-Installed standard iOS 26.2 runtime and created regular Hillclimb iPhone 17 Pro, UUID 78F5A64F-7B2E-4562-8EF9-10F3312CC694. T3 device_list still lists only Duo devices; device_open twice returned “No device … on This machine … Call device_list for current ids.” The prescribed inventory refresh did not fix it. Device rules require stopping rather than bypassing this failure.
+- [Baseline final row](rounds/1/full-light-default-bottom-after-pull.png): geometrically contained, but final ink fades beneath chrome.
+- [Baseline XXXL final row](rounds/1/long-text-light-XXXL-bottom-after-pull.png).
+- [Native Island after candidate fix](tasks/activity-polish/long-dark-XXXL-expanded.png): actual native recording frame, clear footer and rounded-corner clearance.
+- [Native Activity banner after candidate fix](tasks/activity-polish/long-light-XXXL-notification-center.png): Notification Center, not a truly locked-device capture.
 
-## Merged changes
+Activity task retained an intermediate candidate clipping image and recording; these are not baseline round1 evidence. See its task report and manifest for exact source/operation provenance. Unit-rendered Activity images are explicitly separate from native surface captures.
 
-Tracking and scoring infrastructure only. Capture harness intentionally remains unmerged until runtime verification. No PR to main, deployment, App Store or TestFlight action.
+## Merged changes and verification
 
-## Installation on a phone
+- Integration created from origin/main5fc4cbc; original untracked files preserved. All work stays off main and no deploy/submission/force-push occurred.
+- Capture/rating infrastructure: offline isolated Debug fixtures, actual frame/height probes, repeatable capture script, reference-pair manifest and score validator. Existing247 XCTest tests passed on regular17; repaired offline fixture UI test1/1 passed. Baseline measured field22pt/Account36pt failures and a pull-idle timeout remain recorded until board fixes pass.
+- Activity task dcc4200/de1ad3a: scalable typography, independent surface line budgets, native Island lower-corner clearance and existing overflow wording. Board capacity/storage/schema unchanged. Build and249 unit tests passed; native Island check1/1 at default and1/1 at XXXL. Parent inspected representative native images and verified24 capture hashes before merging.
+- Board and sign-in tasks await handoff. Account opacity/readability is a separate task next. All integrated checks and all-state captures will run after the batch; no new combined pass is claimed yet.
 
-There is no validated hillclimb UI build to install yet. After completing capture/test gates and merging passing worker changes to hillclimb/ui: open the generated ios/LazyMansReminders.xcodeproj in Xcode, select hillclimb/ui, use your existing private Config.xcconfig and development signing team, choose a connected trusted iPhone, then Build and Run. Do not use the isolated screenshot configuration for normal account testing. No upload or distribution step is required or authorized. Hardware sign-in, notifications and Live Activity behavior still need device verification.
+## Remaining limits
 
-## Resume
+Actual device locking is unavailable through the simulator interface; Native Notification Center banner plus expanded Island recording evidence are available. Arbitrary wallpaper contrast, physical haptics and true hardware Island behavior remain unverified. Notes references remain unavailable. No exposed quota tool was found; no remaining-weekly-quota estimate is fabricated. Stop on actual near-limit indication if available; do not wait into the next weekly window.
 
-Device discovery and opening now work. Continue reference captures and bounded geometry validation. Capture Apple reference pairs, validate and merge the prepared harness, capture Notepad baseline, then run independent graders and the fix/recheck loop. Native Live Activity capture is not yet supported by the offline fixture and remains an explicit evidence gap. Codex quota was not available through the exposed tool catalog; inspect limits before the first rating round.
+## Install on a phone
+
+After final integrated verification, use hillclimb/ui, generate ios/LazyMansReminders.xcodeproj with the existing XcodeGen workflow and your existing private Config.xcconfig/development signing team. Select a connected trusted iPhone in Xcode and Build and Run. The screenshot configuration uses an isolated demo bundle/group and is not the normal account build. No upload, App Store or TestFlight step is authorized. Physical sign-in, notifications, persistence and haptics require phone validation.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund

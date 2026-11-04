@@ -66,3 +66,11 @@ Quota check after round1: no limit/usage tool exposed in current catalog. Do not
 Edmund's updated rule supersedes the original every-other-round Opus schedule: only invoke Claude Opus 5.5 / medium after BOTH Codex graders score >=8.5 overall for the SAME round. Otherwise continue Codex-only rounds. Round 1 is not eligible.
 
 The final stop rule is unchanged: gpt-6.1-sol, gpt-6-astra and Claude Opus 5.5 must ALL score >=9 overall, with NO category below 7. The 8.5 eligibility threshold does not satisfy the final stop rule.
+
+## Batch handoff update: Activity merged
+
+- C COMPLETE and merged: dcc4200 + de1ad3a. Scalable native Activity text, per-surface row budgets, rounded-Island corner clearance, explicit offline demo and real native evidence. Parent reviewed source, two representative native captures, test summaries, and all24 capture hashes. 249 unit tests passed; native Island check1/1 at default and1/1 at XXXL. True locked-device state unavailable; Notification Center banner and recorded expanded Island are actual native evidence. Do not call intermediate candidate image a round1 baseline.
+- A board-reading: awaiting handoff, assigned066ECE57-46B4-414A-B53E-523775329360; owns board/list/probe/existing UI-test files.
+- B signin-surfaces: awaiting handoff, assigned8E8380DE-364D-4899-99B8-D15ED0494FFD; owns SignInView/LMRChrome/new sign-in tests.
+- D account surfaces: next isolated task, AccountView.swift plus new account tests only. Can use original17 after C's clean handback. No overlapping edits with A.
+- Next integration round remains pending A/B/D results, combined build/checks, all-state re-shoot on original17, two fresh Codex grades. Opus only if both same-round Codex overall >=8.5. Final stop remains all3 >=9 and every category >=7.
