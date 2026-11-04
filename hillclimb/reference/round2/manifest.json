@@ -1,0 +1,90 @@
+{
+  "source_sha": "8dbf6a8e07a5b88dd6748b77a5c8030740eb5309",
+  "device": {
+    "hostId": "local",
+    "id": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+    "name": "Hillclimb iPhone 17 Pro",
+    "version": "iOS 26.2",
+    "physical": false
+  },
+  "captures": [
+    {
+      "file": "reminders-bottom-light.png",
+      "state": "bottom",
+      "appearance": "light",
+      "reference_status": "usable",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "pixel_density": 3,
+      "sha256": "2d1738a934818f9ea8774f3917df571b8719b1e458e25a45a73b87011fc7eb5d",
+      "settling": "after navigation/style command and fresh snapshot; visually inspected saved PNG",
+      "capture_time_utc": "2026-11-04T14:11:50.610582+00:00",
+      "content": "Existing 16-row list; Final demo reminder fully visible"
+    },
+    {
+      "file": "reminders-compose-dark.png",
+      "state": "compose",
+      "appearance": "dark",
+      "reference_status": "usable",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "pixel_density": 3,
+      "sha256": "78160a2896c1f1516a618502b70bb524e9c082003c9e2c14b6063eef23e87062",
+      "settling": "after navigation/style command and fresh snapshot; visually inspected saved PNG",
+      "capture_time_utc": "2026-11-04T14:14:47.125291+00:00",
+      "content": "Blank new row with real keyboard; no text entered; Done dismisses empty row"
+    },
+    {
+      "file": "reminders-sheet-light.png",
+      "state": "sheet",
+      "appearance": "light",
+      "reference_status": "usable",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "pixel_density": 3,
+      "sha256": "41af5c21715eba6fae23b6881ebec10e940c1816b863cc39f6ac542c431d2c65",
+      "settling": "after navigation/style command and fresh snapshot; visually inspected saved PNG",
+      "capture_time_utc": "2026-11-04T14:12:51.092842+00:00",
+      "content": "Details on existing Buy oats; canceled without editing"
+    },
+    {
+      "file": "reminders-top-dark.png",
+      "state": "top",
+      "appearance": "dark",
+      "reference_status": "usable",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "pixel_density": 3,
+      "sha256": "2f2fa6c8c2d289d7eb3b675efc4783c467bf54fab04f432f7a38c28274ab3943",
+      "settling": "after navigation/style command and fresh snapshot; visually inspected saved PNG",
+      "capture_time_utc": "2026-11-04T14:14:11.889269+00:00",
+      "content": "Existing seeded list at top; Buy oats first"
+    }
+  ],
+  "safety": "Existing local list only; no duplicate seeds, edits, completion changes, deletions or saved compose content. iCloud not enabled.",
+  "limitations": [
+    "Notes unavailable; installation not retried.",
+    "Default system type large; not an exact XXXL comparison.",
+    "Return-to-Notepad status bar breadcrumb present.",
+    "Initial label selector for Buy oats did not match; fresh snapshot/ref retry succeeded."
+  ],
+  "command": "/Users/limboenedmund/.t3/userdata/device/targets/t3-575f6498c28b7806ff449831/agent-device",
+  "operations": [
+    "open com.apple.reminders",
+    "click existing Reminders, 16 reminders list",
+    "swipe 180 700 180 250 --count 3 --pause-ms 300; screenshot bottom light",
+    "swipe 180 250 180 700 --count 4 --pause-ms 300; snapshot; click Buy oats ref; click Edit Details ref; screenshot sheet light; Cancel",
+    "settings appearance dark; snapshot; screenshot top dark",
+    "click New Reminder; snapshot; screenshot compose dark; Done with blank row",
+    "settings appearance light; settings text-size large"
+  ],
+  "author": "Written by gpt-6.1-sol in Codex on behalf of Edmund"
+}
