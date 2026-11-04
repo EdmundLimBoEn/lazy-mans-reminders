@@ -94,3 +94,9 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 Task E aligns completion/grip controls with the first text line, improves semantic icon contrast, wraps the full-capacity message, flattens the empty-board guide and hides it during composing. Existing error copy announces once per presentation; retry has a measured44pt target.265 worker tests passed;48 final-source captures verified. All E/F/G changes are merged, with integrated original17 validation and round3 grading next. [Evidence](tasks/board-multiline/README.md).
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Round3 evidence and required-gate recheck
+
+Round3 has102 verified native images and8 new XXXL Apple reference states. Fresh arm64 Debug/Release builds,23 Python iOS checks and52+4 Deno tests passed. Full iOS run:275 passed,1 failed,0 skipped; the keyboard test queried a frame after scrolling dismissed the keyboard. Test-only correction now handles interactive dismissal/refocus while retaining geometry and touch assertions. A fresh original17 rerun is required before grading/acceptance; original failed evidence stays intact. Production screenshot source remains6959de1. [Evidence](rounds/3/README.md).
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
