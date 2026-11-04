@@ -54,7 +54,11 @@ struct ReminderListView: View {
         NavigationStack {
             Group {
                 if isLoading && !hasLoaded && reminders.isEmpty {
-                    ProgressView("Loading reminders")
+                    ProgressView {
+                        Text("Loading reminders")
+                            .foregroundStyle(Color.primary)
+                            .modifier(HillclimbFrameProbe(key: "loadingLabel"))
+                    }
                         .accessibilityIdentifier("board.loading")
                         .accessibilityLabel("Loading reminders")
                         .controlSize(.large)
@@ -181,6 +185,8 @@ struct ReminderListView: View {
                 Label("Couldn’t Load Board", systemImage: "exclamationmark.triangle")
             } description: {
                 Text(message)
+                    .foregroundStyle(Color.primary)
+                    .modifier(HillclimbFrameProbe(key: "errorDescription"))
             } actions: {
                 Button {
                     Task { await retryBoard() }
@@ -657,9 +663,9 @@ private struct ReminderRow: View {
                 .modifier(HillclimbTextProbe(id: reminder.id, text: reminder.text))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, max(0, (44 - firstLineHeight) / 2))
+                .accessibilityHidden(true)
         }
         .opacity(isCompleting ? 0.55 : 1)
-        .accessibilityElement(children: .contain)
     }
 }
 

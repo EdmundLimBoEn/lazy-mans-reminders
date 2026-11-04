@@ -66,6 +66,7 @@ struct HillclimbGeometryExport: UIViewRepresentable {
                 }
                 if let list = HillclimbGeometry.shared.list {
                     let viewport = list.convert(list.bounds, to: nil)
+                    values["scrollOffset"] = [list.contentOffset.y, list.adjustedContentInset.top, 0, 0]
                     values["listViewport"] = [viewport.minX, viewport.minY, viewport.width, viewport.height]
                     var fadeHeight: CGFloat = 0
                     if #available(iOS 26.0, *), !list.bottomEdgeEffect.isHidden {
