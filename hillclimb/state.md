@@ -4,7 +4,7 @@ Integration branch: `hillclimb/ui`. Main, deployment, App Store/TestFlight and f
 
 ## Current plan
 
-1. Round 5 Sol/high and Astra/high reviews are running against the same verified 394-image packet and frozen source. Latest completed scores remain round 4: **8.97 / 8.95 / 8.51**.
+1. Round 5 Codex reviews validate: **Sol 9.06/minimum 8.0; Astra 9.15/minimum 8.2**. Opus 5.5/medium is eligible and is next. Final all-three gate remains false.
 2. Validate both reports. Run Opus 5.5/medium only if both same-round Codex overall scores are at least 8.5.
 3. Turn remaining findings into isolated, non-overlapping worker tasks. Each worker builds, passes the existing tests plus measurable regression gates, and captures affected screens before handoff.
 4. Merge passing branches into `hillclimb/ui`, run combined original17 validation, re-shoot the full matrix and re-grade.
@@ -24,6 +24,8 @@ Integration branch: `hillclimb/ui`. Main, deployment, App Store/TestFlight and f
 | 4 | gpt-6.1-sol | 8.97 | 8.1 |
 | 4 | gpt-6-astra | 8.95 | 8.2 |
 | 4 | Claude Opus 5.5 | 8.51 | 7.6 |
+| 5 | gpt-6.1-sol | 9.06 | 8.0 |
+| 5 | gpt-6-astra | 9.15 | 8.2 |
 
 Each report has all 30 rubric categories. Round 1 and 2 were not Opus eligible. Round 3 passed the 8.5 eligibility threshold but did not meet the final stop gate. Reports and machine-readable scores live under `rounds/<n>/`.
 
@@ -51,7 +53,7 @@ Each report has all 30 rubric categories. Round 1 and 2 were not Opus eligible. 
 | M: Activity word-boundary experiment | Renderer rejected; evidence retained | `tasks/activity-readability/` |
 | Four-setting test restoration | Merged; verified at each teardown | `validation/round5/combined-restoration-proof.json` |
 | Round 5 combined validation/captures | Merged `0e61a06` | `validation/round5/`, `rounds/5/` |
-| Round 5 independent Codex grading | Running | `rounds/5/` |
+| Round 5 independent Codex grading | Complete; both >=9 | `rounds/5/` |
 
 ## Current runtime evidence
 
@@ -135,3 +137,7 @@ Evidence `0e61a06` is merged. Parent verified all 394 native PNG hashes/dimensio
 - 394 native images, seven recordings and 17 usable Apple references. Protected XCTest password images are explicitly partial; eight clean full-device keyboard supplements cover the real combined-settings matrix. Top-only mask/opaque accessibility boundary and final-row ink/geometry pass. No launch metric or physical/spoken certification.
 - Original17 returned running, light/Large, all four settings restored, owned Activities empty and own session closed. Full evidence: `validation/round5/README.md`.
 - Both requested Codex/high graders now independently review all 30 categories, paired screenshots and current source. No round 5 score or Opus eligibility is assumed. Edmund’s confirmed existing-wording decision applies to both reviewers.
+
+Round 5 Astra report validates: all 30 categories, exact mean 9.15, minimum 8.2 and all 394 screenshot/17 reference paths exist. No final success or Opus eligibility is inferred before Sol completes.
+
+Round 5 Sol also validates: overall 9.06, minimum 8.0. Both Codex reports cover all 30 categories and the frozen c60288d packet. Aggregate validator reports only missing Opus; all required programmatic checks pass. Commission exact Opus 5.5/medium independently. Final gate remains unmet until its result.

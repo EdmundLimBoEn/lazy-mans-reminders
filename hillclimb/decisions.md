@@ -76,3 +76,7 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - The focused Motion recheck1eb1f9c has0tests and cannot pass restoration. Its manual reference navigation stopped after the prescribed failed retry. Retain instrumentation/failure evidence. A new complete integration validation will execute the already-authorized project XCTest runner, without repeating failed reference input or reusing another session. Owner-only session housekeeping is separate from UI retries.
 
 - 2026-11-05: Accepted round 5 evidence `0e61a06` after parent hash/source review: 293/293 tests, per-method four-setting restoration, fresh builds/offline checks and 394 paired native images. Keep protected-image, true-lock, speech/haptics and unmeasured performance limitations explicit. Commission fresh independent Sol/high and Astra/high reviews before deciding Opus eligibility.
+
+- Round 5 Astra 9.15/minimum 8.2 accepted after schema, arithmetic and evidence-path checks. Sol remains in progress; do not launch Opus until its same-round result establishes eligibility. No Activity change is justified solely to remove a native tail ellipsis at the cost of content.
+
+- Round 5 Sol 9.06/minimum 8.0 accepted; both Codex reports validate, so Opus 5.5/medium is authorized by the >=8.5 schedule. Both Codex graders exceed 9; no final success is claimed before the independent third report.
