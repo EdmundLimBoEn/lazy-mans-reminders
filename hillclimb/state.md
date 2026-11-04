@@ -1,6 +1,6 @@
 # Hill climb state
 
-Integration branch: `hillclimb/ui`. Main, deployment, App Store/TestFlight and force pushes are prohibited. Original user untracked files remain untouched. Current frozen app/test source: `b5d9bb3`.
+Integration branch: `hillclimb/ui`. Main, deployment, App Store/TestFlight and force pushes are prohibited. Original user untracked files remain untouched. Latest graded app/test source: `b5d9bb3`. The integration branch now includes K; the next combined validation will freeze a new source revision.
 
 ## Current plan
 
@@ -59,7 +59,7 @@ New independent reviewer measurements identify low-contrast normal-size error te
 
 ## Devices and ownership
 
-All worker sessions are closed. No current device lease is active. Original17 remains booted, light/Large, accessibility switches Off and owned demo Activity IDs empty.
+L still owns private Board17. K released private Auth17. Original17 is assigned to a focused teardown recheck; new leases must use their own sessions. Previous handoffs restored light/Large and cleared owned demo Activities.
 
 - Original17: `local`, `78F5A64F-7B2E-4562-8EF9-10F3312CC694`.
 - Private Board17: `066ECE57-46B4-414A-B53E-523775329360`.
@@ -107,3 +107,7 @@ All use isolated tool-created worktrees off the current integration branch, buil
 - Worker291/291 (263unit+28UI),zero failures/skips.44nativecontrastgates passed, minimum12.06:1. All8normal+8actualcombined-system-settingskeyboardcasespassed;Done48pt,alternateclearance>=116pt. No keyboard production change was justified or made. Runtimewarnings/invalidframeevents0;15,220otherlogeventsandcompilerdiagnosticsretained.
 - PrivateAuth17 settings were restored manually, including incidental Auto-Play Message Effects drift. Parent adds a small TEST-ONLY teardown correction to remember/restore that dependent setting automatically. This correction is not yet runtime-verified; next combined original17 validation must execute it and confirm restoration. Do not attribute the worker291pass to the newer test revision.
 - K ownsessionclosed,light/Large,Activitiesempty,devicebooted. L board-edge worker remains active. M renderer is unchanged after rejected experiment. Integrated round5 validation follows L handoff and includes this teardown check.
+
+## Focused cleanup recheck assigned
+
+A new isolated test worker uses original17 to rebuild the integration source and execute the two AccessibilitySettingsUITests with the parent teardown correction. It must verify the original and restored Auto-Play Message Effects value plus all three requested switches, preserve real keyboard/raster assertions, and report actual counts. No production edits. This runs alongside L's separate privateBoard17 work; full round5 validation waits for both leases to return.
