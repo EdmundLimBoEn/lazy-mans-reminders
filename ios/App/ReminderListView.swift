@@ -72,7 +72,10 @@ struct ReminderListView: View {
                         showAccount = true
                     } label: {
                         Label("Account", systemImage: "person.crop.circle")
+                            .frame(minWidth: 44, minHeight: 44)
+                            .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
                     .accessibilityHint("Sign out, privacy, and delete account")
                 }
             }
@@ -220,6 +223,14 @@ struct ReminderListView: View {
                     axis: .vertical
                 )
                 .font(.body)
+                .frame(minHeight: 44)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    if !atCapacity && !isReordering && !isDragging && !draft.isSubmitting {
+                        composerFocused = true
+                    }
+                }
+                .accessibilityElement(children: .combine)
                 .tint(.primary)
                 .lineLimit(1...4)
                 .textInputAutocapitalization(.sentences)
@@ -239,7 +250,7 @@ struct ReminderListView: View {
                         Image(systemName: "keyboard.chevron.compact.down")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                            .frame(width: 32, height: 44)
+                            .frame(width: 44, height: 44)
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)

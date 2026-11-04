@@ -67,6 +67,12 @@ final class HillclimbUITests: XCTestCase {
         XCTAssertGreaterThanOrEqual(account.frame.minY, safe.minY)
         assertTarget(account)
         assertTarget(app.buttons["Add reminder"])
+        let capacityField = app.descendants(matching: .any).matching(identifier: "New reminder").firstMatch
+        XCTAssertFalse(capacityField.isEnabled)
+        capacityField.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.1)).tap()
+        XCTAssertFalse(app.keyboards.firstMatch.exists, "A full board must not focus the disabled composer")
+        account.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5)).tap()
+        XCTAssertTrue(app.navigationBars["Account"].waitForExistence(timeout: 5))
     }
     func testXXXLTextFitsAllocatedHeightAtBottom() throws {
         launch("long-text", xxxl: true)
@@ -96,11 +102,12 @@ final class HillclimbUITests: XCTestCase {
         let field = app.descendants(matching: .any).matching(identifier: "New reminder").firstMatch
         XCTAssertTrue(field.waitForExistence(timeout: 5))
         assertTarget(field)
-        field.tap()
+        field.coordinate(withNormalizedOffset: CGVector(dx: 0.15, dy: 0.1)).tap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
         let dismiss = app.buttons["Done"]
         XCTAssertTrue(dismiss.waitForExistence(timeout: 5))
         assertTarget(dismiss)
-        dismiss.tap()
+        dismiss.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5)).tap()
         XCTAssertFalse(app.keyboards.firstMatch.exists)
     }
     func testOfflineRoutesAndFixtureStability() throws {
