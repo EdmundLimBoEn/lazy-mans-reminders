@@ -37,7 +37,7 @@ final class HillclimbUITests: XCTestCase {
                row.minY >= safe.minY, row.maxY <= composer.minY + 0.5 {
                 return
             }
-            let lastVisible = list.cells.allElementsBoundByIndex.last?.frame
+            let lastVisible = geometry[try lastRowID(geometry)]
             if let previous, previous == lastVisible { return }
             previous = lastVisible
             list.swipeUp(velocity: .fast)
@@ -113,10 +113,10 @@ final class HillclimbUITests: XCTestCase {
         XCTAssertEqual(auth, .zero, "Demo must have no authenticated/restoring/shared session")
         let label = first.label
         first.tap() // Demo completion must never reach the production store.
-        XCTAssertTrue(app.buttons[label].exists)
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label == %@", label)).firstMatch.exists)
         app.terminate()
         app.launch()
-        XCTAssertTrue(app.buttons[label].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label == %@", label)).firstMatch.waitForExistence(timeout: 5))
     }
     private func assertTarget(_ element: XCUIElement, file: StaticString = #filePath, line: UInt = #line) {
         XCTAssertTrue(element.exists, file: file, line: line)

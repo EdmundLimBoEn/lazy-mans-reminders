@@ -7,6 +7,7 @@ python3 - "$@" <<'PY'
 import argparse, datetime, hashlib, json, pathlib, shlex, subprocess, time
 p=argparse.ArgumentParser(description='Capture actual demo UI using a T3 pinned agent-device session')
 p.add_argument('--round', required=True, type=int)
+p.add_argument('--resume', action='store_true', help='Preserve successful captures and retain failed attempts')
 p.add_argument('--device', required=True, help='JSON device object returned by device_open')
 p.add_argument('--command', required=True, help='Exact agentDevice.command returned by device_open, including its session')
 p.add_argument('--operations', required=True, help='JSON argv templates transcribed from pinned help; see harness.md')
@@ -27,17 +28,22 @@ for token in ('{state}','{style}','{size}'):
     if not any(token in arg for arg in ops['open']): p.error('open must include '+token)
 if not any('{path}' in arg for arg in ops['screenshot']): p.error('screenshot must include {path}')
 out=pathlib.Path('hillclimb/rounds')/str(a.round)
-out.mkdir(parents=True,exist_ok=False)
+out.mkdir(parents=True,exist_ok=a.resume)
 sha=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 manifest={'sourceSHA':sha,'dirty':bool(subprocess.check_output(['git','status','--porcelain'])),
  'device':d,'startedUTC':datetime.datetime.now(datetime.timezone.utc).isoformat(),
  'liveActivity':{'status':'unavailable','reason':'Offline fixture does not start ActivityKit or mutate shared board storage'},
  'captures':[],'operations':ops}
+if a.resume:
+    manifest=json.loads((out/'manifest.json').read_text())
+    manifest.setdefault('operationAttempts', []).append(ops)
 def save(): (out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 def run(key,values):
     argv=[arg.format(**values) for arg in ops[key]]
     subprocess.run(command+argv,check=True)
 def capture(state,style,size,position='top'):
+    if any(c['state']==state and c['style']==style and c['size']==size and c['position']==position and c['status']=='captured' for c in manifest['captures']):
+        return
     path=(out/f'{state}-{style}-{size}-{position}.png').resolve()
     values=dict(state=state,style=style,size=size,path=str(path))
     record=dict(state=state,style=style,size=size,position=position,path=path.name,status='pending')

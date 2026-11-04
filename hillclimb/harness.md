@@ -138,3 +138,11 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 Runtime iOS 26.2 installed; standard device named Hillclimb iPhone 17 Pro, UUID 78F5A64F-7B2E-4562-8EF9-10F3312CC694. The test runner successfully booted it and T3 now discovers and opens it. check.sh validates the actual deviceTypeIdentifier rather than its display name. shots.sh accepts T3 session-bound executable paths and normalizes the iOS version prefix. Its bottom operation now expects a verified scroll-to-bottom operation (agent-device scroll bottom) instead of blindly repeating it 20 times.
 
 The baseline runtime test suite is in progress; no runtime pass is claimed yet. Capture command help has been inspected on the actual T3 session.
+
+## Actual round 1 baseline
+
+18 app screenshots captured with the prescribed pinned command on regular17, both appearances, all six app states, full board bottom after pull, XXXL long-text top and bottom. Manifest retains one failed synthesized scroll attempt plus the successful advised raw-drag recovery. Successful images/hash/dimensions verified. Native Live Activity remains unavailable in the fixture. No actual product UI fixes in this branch.
+
+Runtime existing suite: 247 passed. New UI baseline: composer field 22pt height and Account 36pt width fail 44pt checks; XXXL geometry passed; full-board test timed out waiting for app idle after pull. Fixture stability encountered an XCTest identifier-length query error; predicate fix prepared, pending runtime rerun. Test activity confirms a 60s missing animations-complete notification after pull, then timeout at the next swipe. Test traversal now avoids querying every off-screen cell; original frame assertions remain.
+
+shots.sh accepts --resume, retains failed attempts, preserves successful images, and records changed operation templates. operations.example.json reflects actual tested commands without a session. It uses raw drags inside the observed 402x874pt list; verify bounds when changing device/keyboard/layout.
