@@ -135,6 +135,7 @@ struct AccountView: View {
                 }
             }
             .disabled(isDeletingAccount)
+            .allowsHitTesting(!hillclimbReadOnly)
             .confirmationDialog(
                 "Sign Out",
                 isPresented: $showSignOut,
@@ -161,6 +162,14 @@ struct AccountView: View {
                 Text("This permanently deletes your reminders, device registrations, lock-screen prefs, agent access, and sign-in. This can’t be undone.")
             }
         }
+    }
+
+    private var hillclimbReadOnly: Bool {
+#if DEBUG
+        HillclimbDemo.isActive
+#else
+        false
+#endif
     }
 
     private var accountEmail: String? {
@@ -233,6 +242,9 @@ struct AccountView: View {
     }
 
     private func refreshNotificationAccess() async {
+#if DEBUG
+        if HillclimbDemo.isActive { notificationAccess = .ask; return }
+#endif
         let settings = await UNUserNotificationCenter.current().notificationSettings()
         notificationAccess = NotificationAccessPolicy.access(for: settings.authorizationStatus)
     }

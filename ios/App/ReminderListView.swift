@@ -25,6 +25,17 @@ struct ReminderListView: View {
     @FocusState private var composerFocused: Bool
     @ScaledMetric(relativeTo: .body) private var addVisualSize: CGFloat = 28
 
+#if DEBUG
+    init(hillclimb mode: HillclimbDemo.Mode? = nil) {
+        if let mode {
+            _reminders = State(initialValue: HillclimbDemo.reminders(for: mode))
+            _isLoading = State(initialValue: false)
+            _hasLoaded = State(initialValue: true)
+            _showAccount = State(initialValue: mode == .account)
+        }
+    }
+#endif
+
     var body: some View {
         NavigationStack {
             Group {
@@ -185,6 +196,7 @@ struct ReminderListView: View {
                 Task { await markDone(reminder) }
             }
             .reminderOnscreenIdentity(reminder.id)
+            .modifier(HillclimbRowProbe(id: reminder.id, text: reminder.text))
         }
         .modifier(BoardScrollEdge())
     }
@@ -287,6 +299,7 @@ struct ReminderListView: View {
         }
         .background(Color(.systemBackground).allowsHitTesting(false))
         .accessibilityElement(children: .contain)
+        .modifier(HillclimbComposerProbe())
     }
 
     @ViewBuilder
@@ -323,6 +336,9 @@ struct ReminderListView: View {
     }
 
     private func moveReminders(from offsets: IndexSet, to destination: Int) {
+#if DEBUG
+        guard !HillclimbDemo.isActive else { return }
+#endif
         guard !reorderDisabled else { return }
         let previousIDs = reminders.map(\.id)
         reminders.move(fromOffsets: offsets, toOffset: destination)
@@ -347,6 +363,9 @@ struct ReminderListView: View {
     }
 
     private func replayDeferredBoardUpdate() async {
+#if DEBUG
+        guard !HillclimbDemo.isActive else { return }
+#endif
         while hasDeferredBoardUpdate && !isDragging && !isReordering {
             let revision = boardRevision
             let cached = await ReminderStore.shared.cached()
@@ -372,6 +391,9 @@ struct ReminderListView: View {
     }
 
     private func refresh() async {
+#if DEBUG
+        guard !HillclimbDemo.isActive else { return }
+#endif
         guard auth.isSharedSessionReady else { return }
         guard !isReordering && !isDragging else { return }
         let revision = boardRevision
@@ -396,6 +418,9 @@ struct ReminderListView: View {
     }
 
     private func addReminder() async {
+#if DEBUG
+        guard !HillclimbDemo.isActive else { return }
+#endif
         guard canAdd, let userID = auth.session?.user.id else { return }
         if atCapacity {
             presentError(ReminderBoardLimits.postItHint)
@@ -421,6 +446,9 @@ struct ReminderListView: View {
     }
 
     private func markDone(_ reminder: Reminder) async {
+#if DEBUG
+        guard !HillclimbDemo.isActive else { return }
+#endif
         guard !isReordering, !isDragging, !completingIDs.contains(reminder.id) else { return }
         completingIDs.insert(reminder.id)
         defer { completingIDs.remove(reminder.id) }
@@ -511,6 +539,7 @@ private struct ReminderRow: View {
                     .foregroundStyle(isCompleting ? .secondary : .primary)
                     .strikethrough(isCompleting)
                     .multilineTextAlignment(.leading)
+                    .modifier(HillclimbTextProbe(id: reminder.id, text: reminder.text))
                     .frame(maxWidth: .infinity, alignment: .leading)
             } icon: {
                 Image(systemName: isCompleting ? "checkmark.circle.fill" : "circle")
