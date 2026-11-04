@@ -66,7 +66,7 @@ final class HillclimbUITests: XCTestCase {
         XCTAssertTrue(account.exists)
         XCTAssertGreaterThanOrEqual(account.frame.minY, safe.minY)
         assertTarget(account)
-        assertTarget(app.buttons["Add reminder"])
+        XCTAssertFalse(app.buttons["Add reminder"].exists)
         let capacityField = app.staticTexts["board.capacity"]
         XCTAssertEqual(capacityField.label, "Board full — combine lines instead")
         XCTAssertEqual(app.textFields.count + app.textViews.count, 0)
