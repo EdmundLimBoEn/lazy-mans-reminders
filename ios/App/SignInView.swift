@@ -78,8 +78,9 @@ struct SignInView: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
-                    providerSection
                     emailSection
+                    Divider()
+                    providerSection
                     if case .error(let message) = displayedNotice {
                         Label(message, systemImage: "exclamationmark.triangle.fill")
                             .font(.footnote)
@@ -110,7 +111,7 @@ struct SignInView: View {
             .background(Color(.systemBackground))
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
                 if emailFocused || passwordFocused {
-                    scroll.scrollTo("signin.alternateTarget", anchor: .bottom)
+                    scroll.scrollTo(passwordFocused ? "signin.passwordGroup" : "signin.emailGroup", anchor: .top)
                 }
             }
             }
@@ -138,7 +139,7 @@ struct SignInView: View {
         }
 #if DEBUG
         .task {
-            if fixtureVariant == "password" || fixtureVariant == "password-keyboard" {
+            if fixtureVariant == "password" || fixtureVariant == "password-keyboard" || fixtureVariant == "password-loading" {
                 usesPassword = true
             }
             if appearanceFixture && HillclimbDemo.argument("--hillclimb-signin-filled") == "yes" {
@@ -146,6 +147,7 @@ struct SignInView: View {
                 if usesPassword { password = "Demo-password" }
             }
             if fixtureVariant == "loading" { pending = .magicLink }
+            if fixtureVariant == "password-loading" { pending = .password }
             if fixtureVariant == "keyboard" || fixtureVariant == "password-keyboard" {
                 try? await Task.sleep(for: .milliseconds(300))
             }
@@ -258,7 +260,7 @@ struct SignInView: View {
             .frame(maxWidth: .infinity)
             .frame(minHeight: max(44, signInButtonHeight))
             .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 6))
-            .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.primary, lineWidth: 1))
+            .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.primary, lineWidth: 0.5))
             .disabled(busy || disablesDemoControls)
             .accessibilityHint("Opens Google sign-in in a secure browser sheet")
         }
@@ -310,6 +312,7 @@ struct SignInView: View {
                     }
                 }
                 .modifier(SignInDensityProbe(key: "emailGroup"))
+                .id("signin.emailGroup")
                 if usesPassword {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Password")
@@ -325,6 +328,7 @@ struct SignInView: View {
                             .modifier(SignInDensityProbe(key: "passwordHelper"))
                     }
                     .modifier(SignInDensityProbe(key: "passwordGroup"))
+                    .id("signin.passwordGroup")
                 }
                 VStack(alignment: .leading, spacing: 8) {
                     Button {
@@ -473,18 +477,18 @@ struct SignInView: View {
     }
 
     private func signInButtonLabel(title: String, showsProgress: Bool) -> some View {
-        ZStack {
-            Text(title)
-                .fixedSize(horizontal: false, vertical: true)
-                .multilineTextAlignment(.center)
-                .opacity(showsProgress ? 0 : 1)
-            if showsProgress {
-                ProgressView()
-                    .accessibilityHidden(true)
+        Text(title)
+            .fixedSize(horizontal: false, vertical: true)
+            .multilineTextAlignment(.center)
+            .opacity(showsProgress ? 0 : 1)
+            .frame(maxWidth: .infinity, minHeight: 22)
+            .overlay {
+                if showsProgress {
+                    ProgressView()
+                        .controlSize(.regular)
+                        .accessibilityHidden(true)
+                }
             }
-        }
-        .frame(maxWidth: .infinity)
-        .frame(minHeight: 22)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(showsProgress ? "\(title), in progress" : title)
     }

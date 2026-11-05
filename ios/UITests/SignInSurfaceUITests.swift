@@ -139,7 +139,7 @@ final class SignInSurfaceUITests: XCTestCase {
                 let google = app.buttons["Sign in with Google"].frame
                 let email = app.textFields["Email address"].frame
                 XCTAssertGreaterThan(google.minY, intro.maxY)
-                XCTAssertGreaterThan(email.minY, google.maxY)
+                XCTAssertGreaterThan(google.minY, email.maxY)
                 XCTAssertGreaterThanOrEqual(intro.minY, app.navigationBars.firstMatch.frame.maxY)
                 capture("signin-\(style)-\(size)")
             }

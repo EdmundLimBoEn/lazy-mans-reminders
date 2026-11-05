@@ -121,6 +121,42 @@ final class SignInChromeUITests: XCTestCase {
         }
     }
 
+    func testEmptyPasswordFirstFocusAndRefocusKeepsHeading() throws {
+        try verifyEmptyPasswordFocus(prefix: "normal")
+    }
+
+    func testCombinedEmptyPasswordFirstFocusAndRefocusKeepsHeading() throws {
+        try configure(restoring: false)
+        settings.terminate()
+        try verifyEmptyPasswordFocus(prefix: "combined")
+    }
+
+    private func verifyEmptyPasswordFocus(prefix: String) throws {
+        for style in ["light", "dark"] {
+            for size in ["default", "XXXL"] {
+                launch(style, size, "password-keyboard")
+                for cycle in 0..<2 {
+                    XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 8))
+                    let field = app.secureTextFields["Password"]
+                    let raw = try XCTUnwrap(app.otherElements["signin.densityFrames"].value as? String)
+                    let frames = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(raw.utf8)) as? [String: [Double]])
+                    let v = try XCTUnwrap(frames["passwordHeading"])
+                    let heading = CGRect(x: v[0], y: v[1], width: v[2], height: v[3])
+                    let nav = app.navigationBars.firstMatch.frame
+                    capture("first-focus-\(prefix)-\(style)-\(size)-\(cycle)", details: raw)
+                    XCTAssertGreaterThanOrEqual(heading.minY + 1.0 / 3, nav.maxY)
+                    XCTAssertLessThanOrEqual(heading.maxY, field.frame.minY)
+                    XCTAssertGreaterThan(ink(heading, style: style), 100)
+                    XCTAssertLessThanOrEqual(field.frame.maxY, app.buttons["Done"].frame.minY)
+                    XCTAssertGreaterThanOrEqual(field.frame.height, 44)
+                    app.buttons["Done"].tap()
+                    XCTAssertTrue(app.keyboards.firstMatch.waitForNonExistence(timeout: 5))
+                    if cycle == 0 { field.tap() }
+                }
+            }
+        }
+    }
+
     private func assertPasswordInk(field: XCUIElement, style: String, size: String, state: String) {
         let target = app.otherElements["signin.passwordTarget"].frame
         let height: CGFloat = size == "XXXL" ? 28 : 22

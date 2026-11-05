@@ -47,11 +47,11 @@ struct BoardPersistenceSection: View {
                 if !AccountCaptureFixture.readOnly, let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
             }
             DisclosureGroup {
-                Text("Home Screen: touch and hold an empty area, choose Edit → Add Widget, then Notepad → Board.")
+                instruction("Home Screen: touch and hold an empty area, choose Edit → Add Widget, then Notepad → Board.", prefix: "Home Screen:")
                     .accountMeasure("home.helper")
                     .font(.footnote)
                     .foregroundStyle(.primary.opacity(0.75))
-                Text("Lock Screen: touch and hold it, choose Customize → Lock Screen → Add Widgets, then Notepad.")
+                instruction("Lock Screen: touch and hold it, choose Customize → Lock Screen → Add Widgets, then Notepad.", prefix: "Lock Screen:")
                     .accountMeasure("lock.helper")
                     .font(.footnote)
                     .foregroundStyle(.primary.opacity(0.75))
@@ -89,6 +89,14 @@ struct BoardPersistenceSection: View {
             liveActivitiesEnabled = ActivityAuthorizationInfo().areActivitiesEnabled
             backgroundRefresh = UIApplication.shared.backgroundRefreshStatus
         }
+    }
+
+    private func instruction(_ text: String, prefix: String) -> Text {
+        var content = AttributedString(text)
+        if let range = content.range(of: prefix) {
+            content[range].font = .footnote.weight(.semibold)
+        }
+        return Text(content)
     }
 
     private var refreshStatus: String {

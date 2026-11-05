@@ -138,3 +138,9 @@ Retain both independent ratings exactly: Sol8.50/min7 and Astra8.13/min7, all30c
 Address these bounded findings directly as PM on a new isolated branch; no new implementation delegate for small review fixes. Prototype and inspect a clear email work area and secondary provider block, preserve every word/branding/Apple→Google order and guards, then prove stable native loading/focus geometry and rerun the full iOS suite. Preserve named tests and explain any layout-order assertion updates. Round8 requires fresh full-matrix evidence and both Codex reviews before Opus eligibility is reconsidered.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Round8 prototype and ownership cleanup
+
+Email-first hierarchy and secondary provider block are provisional, not visually accepted. Native spinner is a non-sizing regular overlay; focus scrolling targets the active field group; existing instruction prefixes gain semibold emphasis. Existing source-order assertions are updated for the deliberate composition change while target/contrast requirements remain. Two Debug builds pass; new runtime tests/full suite remain unrun. Device open fails DEVICE_IN_USE for the previous U owner, and prescribed status recovery is unsupported. Stop manual UI and request only exact owner-session release; never close another session. Preserve the failure in tasks/login-focus-polish/device-ownership-error.json.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
