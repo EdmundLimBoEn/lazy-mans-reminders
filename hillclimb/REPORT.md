@@ -1,41 +1,41 @@
 # Notepad UI hill climb: progress report
 
-Work continues on `hillclimb/ui`. Round 5 Codex grades are **Sol 9.06** and **Astra 9.15**, with minima **8.0/8.2**. Round 5 Opus is **8.69**, minimum **7.8**; the final gate remains unmet. Final stop requires all three>=9, with no category below7; it has not been reached.
+Work continues on `hillclimb/ui`. Round 6 Codex grades are **Sol 8.83** and **Astra 8.92**, with minima **7.8/8.0**. Both identify remaining crowding. Round 6 Opus is deferred until the density fixes to conserve Claude tokens; its latest completed round 5 score is **8.69**, minimum **7.8**. The final all-three >=9/minimum7 gate remains unmet.
 
 ## Category scores
 
-| Category | R1 Sol | R5 Sol | R1 Astra | R5 Astra | R3 Opus | R5 Opus |
+| Category | R1 Sol | R6 Sol | R1 Astra | R6 Astra | R3 Opus | R5 Opus |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Visual hierarchy | 7.5 | 9.2 | 7 | 9.3 | 8.5 | 8.9 |
-| Spacing/grid | 7.0 | 9.2 | 7 | 9.2 | 8.3 | 8.8 |
-| Typography scale | 8.5 | 9.2 | 8 | 9.2 | 8.2 | 8.8 |
-| Dynamic Type | 7.5 | 8.9 | 7 | 8.9 | 8.6 | 8.8 |
-| Light contrast | 7.0 | 9.3 | 7 | 9.4 | 8.4 | 8.9 |
-| Dark contrast | 6.5 | 9.3 | 6.5 | 9.4 | 8.0 | 8.9 |
-| Iconography | 8.0 | 9.2 | 8 | 9.3 | 8.6 | 8.8 |
-| Safe area / Dynamic Island | 8.0 | 9.4 | 8 | 9.2 | 8.8 | 8.9 |
-| Scroll/pull-down / last row | 4.0 | 9.3 | 4 | 9.2 | 8.4 | 8.9 |
-| List rows | 6.5 | 9.2 | 6.5 | 9.4 | 7.8 | 8.9 |
-| Empty states | 7.0 | 9.2 | 7.5 | 9.4 | 8.8 | 8.9 |
-| Composer ergonomics | 6.0 | 9.3 | 6 | 9.3 | 8.6 | 8.7 |
-| Keyboard handling | 7.0 | 9.4 | 7.5 | 9.4 | 8.5 | 8.8 |
-| Sheet presentation/detents | 7.0 | 9.3 | 6 | 9.2 | 8.5 | 8.7 |
-| Navigation clarity | 7.5 | 9.2 | 7 | 9.3 | 8.7 | 8.9 |
-| Touch targets | 4.5 | 9.3 | 4.5 | 9.4 | 8.4 | 9.1 |
-| Haptics | 7.0 | 8.0 | 7 | 8.2 | 7.5 | 7.8 |
-| Animation/transitions | 6.5 | 8.6 | 6.5 | 8.7 | 7.6 | 8.2 |
-| Loading states | 7.5 | 8.8 | 7 | 9.3 | 8.5 | 8.7 |
-| Error states | 7.5 | 9.3 | 7 | 9.2 | 7.6 | 8.7 |
-| VoiceOver/labels | 7.5 | 8.8 | 7.5 | 9.1 | 8.2 | 8.6 |
-| iOS HIG consistency | 7.5 | 9.2 | 7 | 9.3 | 8.1 | 8.8 |
-| Lock Screen / Live Activity | 6.0 | 8.5 | 6 | 8.6 | 7.8 | 8.1 |
-| Sign-in/onboarding | 6.5 | 9.0 | 6.5 | 9.3 | 8.0 | 8.8 |
-| Settings/account | 7.0 | 9.1 | 6 | 9.2 | 8.1 | 8.7 |
-| Performance feel | 6.5 | 8.1 | 6.5 | 8.2 | 7.6 | 7.9 |
-| Delight | 6.5 | 8.8 | 6.5 | 9.0 | 7.8 | 8.1 |
-| Long text | 7.0 | 9.0 | 7 | 9.0 | 8.7 | 8.8 |
-| Reduced Motion / Transparency | 7.0 | 9.1 | 6 | 9.2 | 8.0 | 8.7 |
-| Palette / minimalism | 7.0 | 9.5 | 7 | 9.6 | 9.0 | 9.1 |
+| Visual hierarchy | 7.5 | 8 | 7 | 8.3 | 8.5 | 8.9 |
+| Spacing/grid | 7.0 | 8 | 7 | 8.2 | 8.3 | 8.8 |
+| Typography scale | 8.5 | 9.1 | 8 | 8.9 | 8.2 | 8.8 |
+| Dynamic Type | 7.5 | 9 | 7 | 9.3 | 8.6 | 8.8 |
+| Light contrast | 7.0 | 9.4 | 7 | 9.3 | 8.4 | 8.9 |
+| Dark contrast | 6.5 | 9.4 | 6.5 | 9.3 | 8.0 | 8.9 |
+| Iconography | 8.0 | 9.3 | 8 | 9.2 | 8.6 | 8.8 |
+| Safe area / Dynamic Island | 8.0 | 9.2 | 8 | 9.3 | 8.8 | 8.9 |
+| Scroll/pull-down / last row | 4.0 | 9.4 | 4 | 9.5 | 8.4 | 8.9 |
+| List rows | 6.5 | 8.7 | 6.5 | 8.9 | 7.8 | 8.9 |
+| Empty states | 7.0 | 8.4 | 7.5 | 8.8 | 8.8 | 8.9 |
+| Composer ergonomics | 6.0 | 9.1 | 6 | 9.1 | 8.6 | 8.7 |
+| Keyboard handling | 7.0 | 9.2 | 7.5 | 9.3 | 8.5 | 8.8 |
+| Sheet presentation/detents | 7.0 | 9.1 | 6 | 9.3 | 8.5 | 8.7 |
+| Navigation clarity | 7.5 | 9.1 | 7 | 9.2 | 8.7 | 8.9 |
+| Touch targets | 4.5 | 9.4 | 4.5 | 9.5 | 8.4 | 9.1 |
+| Haptics | 7.0 | 8.2 | 7 | 8.2 | 7.5 | 7.8 |
+| Animation/transitions | 6.5 | 8.5 | 6.5 | 8.7 | 7.6 | 8.2 |
+| Loading states | 7.5 | 9.2 | 7 | 9.2 | 8.5 | 8.7 |
+| Error states | 7.5 | 9.2 | 7 | 9 | 7.6 | 8.7 |
+| VoiceOver/labels | 7.5 | 8.9 | 7.5 | 8.8 | 8.2 | 8.6 |
+| iOS HIG consistency | 7.5 | 8.8 | 7 | 9 | 8.1 | 8.8 |
+| Lock Screen / Live Activity | 6.0 | 8.9 | 6 | 8.8 | 7.8 | 8.1 |
+| Sign-in/onboarding | 6.5 | 8.4 | 6.5 | 8.5 | 8.0 | 8.8 |
+| Settings/account | 7.0 | 7.8 | 6 | 8 | 8.1 | 8.7 |
+| Performance feel | 6.5 | 8.3 | 6.5 | 8.2 | 7.6 | 7.9 |
+| Delight | 6.5 | 8 | 6.5 | 8.4 | 7.8 | 8.1 |
+| Long text | 7.0 | 8.4 | 7 | 9 | 8.7 | 8.8 |
+| Reduced Motion / Transparency | 7.0 | 9.2 | 6 | 9.3 | 8.0 | 8.7 |
+| Palette / minimalism | 7.0 | 9.3 | 7 | 9 | 9.0 | 9.1 |
 
 Start/current category comparisons are shown above. Full intervening-round histories remain in their score reports. [Round4 machine-readable scores](rounds/4/scores.json).
 
@@ -175,3 +175,5 @@ One extra required gesture check failed on the deliberately noninteractive enabl
 The new focused method proves allfour real-gesture variants: XXXL content moves127pt and the footer clears the safe bottom by50.33pt. **308/308 tests pass**, retaining all307prior IDs, with per-method restoration. No production change was needed. Historicalfailure/provenance remain intact; required checks now pair actualordinarygestures with separate enabled-appearance geometry/inertness.
 
 [Proof and retained limitations](validation/round6/recheck/README.md). Both Codex/high reviews are running against the same537historical+20supplemental native images and byte-identical production source. They explicitly audit the crowding Edmund flagged; no final acceptance or new score is claimed.
+
+Round 6 Codex density audits validate at **8.83 / 8.92**. Account guidance/action hierarchy, sign-in field grouping and full-capacity status/help alignment drive the next three isolated tasks. Safety checks remain passing; visual crowding remains unresolved. [Sol review](rounds/6/scores-gpt-6.1-sol.md) · [Astra review](rounds/6/scores-gpt-6-astra.md).

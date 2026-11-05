@@ -4,7 +4,7 @@ Integration branch: `hillclimb/ui`. All accepted work is merged and pushed here.
 
 ## Current plan
 
-1. Round 6 Sol/high and Astra/high reviews are running against the same frozen packet. Their explicit priority is Edmund’s feedback that the UI looks crowded, particularly Account and sign-in.
+1. Round 6 reviews are complete: Sol **8.83/minimum 7.8**, Astra **8.92/minimum 8.0**. Both identify Account/sign-in/capacity-footer density. Fix that feedback in the next isolated batch.
 2. Validate both independent 30-category reports. Only run Opus 5.5/medium if both same-round Codex overall scores are at least 8.5. Use Cursor Opus 5.5/medium if Claude API tokens run out; that exact provider/model/effort is confirmed available.
 3. Turn actionable findings, including the crowding concern, into small isolated tasks with non-overlapping source ownership. Each task builds, passes the existing suite and meaningful new checks, then captures affected native states before acceptance.
 4. Revalidate and re-shoot the integrated source before the next grading round. Preserve every user-facing word, branding and icon. No nested cards or decorative red/orange palette.
@@ -27,8 +27,10 @@ Integration branch: `hillclimb/ui`. All accepted work is merged and pushed here.
 | 5 | gpt-6.1-sol | 9.06 | 8.0 |
 | 5 | gpt-6-astra | 9.15 | 8.2 |
 | 5 | Claude Opus 5.5 | 8.69 | 7.8 |
+| 6 | gpt-6.1-sol | 8.83 | 7.8 |
+| 6 | gpt-6-astra | 8.92 | 8.0 |
 
-Each report uses the exact 30 rubric categories and arithmetic mean rounded to two decimals. Rounds 1–2 were not Opus eligible. Round 6 has no scores yet; latest completed results are round 5. Reports and machine-readable aggregates are under `rounds/<n>/`.
+Each report uses the exact 30 rubric categories and arithmetic mean rounded to two decimals. Rounds 1–2 were not Opus eligible. Round 6 Codex reports validate. Opus is eligible but deferred until after the crowding batch to conserve limited Claude tokens. Round 5 remains the latest three-grader round. Reports and machine-readable aggregates are under `rounds/<n>/`.
 
 ## Round 6 accepted verification
 
@@ -65,7 +67,7 @@ Evidence: `validation/round6/README.md`, `validation/round6/recheck/README.md`, 
 | P native Island-only tightening | Merged; complete short XXXL sample lines, counts unchanged | `tasks/activity-tightening/` |
 | Q Account hard edge, paragraph spacing and Done size | Merged; exact wording, 6pt spacing, 44pt on-screen target | `tasks/account-chrome/` |
 | Combined round 6 and corrected gesture proof | Merged; all required gates pass | `validation/round6/`, `validation/round6/recheck/` |
-| Round 6 independent Codex reviews | Running; density audit required | `rounds/6/` |
+| Round 6 independent Codex reviews | Complete; density findings accepted | `rounds/6/` |
 
 ## Edmund’s crowding priority
 
@@ -73,7 +75,7 @@ Direct feedback: “looks croweded as fuck”; check it on the next pass. Accoun
 
 ## Devices and ownership
 
-All workers have released their sessions. Only the two source/screenshot review agents are active; no device is owned. Original17 is running light/Large, original switches restored, no owned Activities, and own app/Settings/session/panel closed.
+All workers have released their sessions. Account density worker R owns original17 in a new isolated session; upcoming S sign-in and T capacity-footer workers use separate private devices. Review agents are complete. Original17 is running light/Large, original switches restored, no owned Activities, and own app/Settings/session/panel closed.
 
 | Device | Host | ID |
 | --- | --- | --- |
@@ -96,3 +98,13 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 ## Density pass starts in parallel with frozen round 6 reviews
 
 Account is the clearest source-supported crowding task: AccountView explicitly uses compact section spacing and the full guidance is primary ink. One isolated worker will compare native default grouped spacing and quieter accessible explanatory ink, preserving every word and all controls. It owns only AccountView, BoardPersistenceSection, a new AccountDensity UI test and task evidence on original17. Round6 reviewers continue against unchanged root/frozen production; no worker code is merged during their review. Candidate acceptance requires native before/after improvement, >=7:1 guidance contrast, full reachability and all308baseline tests plus new checks.
+
+## Density batch ownership and reviewer routing
+
+Both round 6 reports validate all30categories,557screenshot paths,17refs and exact means. The lower ratings explicitly reflect crowding/hierarchy findings, not failed safety gates. No three-round plateau is established.
+
+- R Account is active: native section rhythm, passive identity chrome, quieter explanatory ink with >=7:1 guidance contrast and distinct semantic boundaries.
+- S Sign-in is next: unpainted field/helper/action groups with 6–8pt internal and 16–20pt between-field spacing, preserving all methods, words and targets.
+- T capacity footer is next: status first, unchanged hint second, shared leading edge and no taller footer; preserve final-row clearance and normal composer behavior. Prefer this bounded reviewer-supported layout over moving content into a new list footer.
+
+Opus eligibility is true, but defer this round’s optional Opus run until the revised density batch; Claude API tokens are limited and the direct user concern is already actionable. This does not change the numeric eligibility or final stop rules, and no missing Opus score is invented. R7 must use fresh combined validation/captures and independent Codex reports before another Opus call. Exact Cursor Opus5.5/medium remains the authorized quota fallback.
