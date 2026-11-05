@@ -11,7 +11,7 @@
     "failed": 1,
     "reason": "User scroll leaves activefield69.67<116 navigation edge"
   },
-  "fullSuite": "not started",
+  "fullSuite": "pending",
   "manualCapture": "stopped on stale prior-owner claim; no forced takeover",
   "nativeCaptureFallback": "Project XCTest canonical board/composer/account/signin sweep plus existing stress/Activity checks; protected keyboard frames partial",
   "futureSteps": [
@@ -35,5 +35,11 @@
       "existing keyboard user scroll matrix"
     ]
   },
-  "nativeActivityCapture": "New project XCTest captures actual system light/dark and text-size settings, with restoration; unrun pending compile"
+  "nativeActivityCapture": "New project XCTest captures actual system light/dark and text-size settings, with restoration; unrun pending compile",
+  "captureEnumeration": "61UI methods including both canonical and both Activity capture methods, no enumeration errors; enumeration itself lists allUI rather than filteredselection",
+  "canonicalCaptureMethods": {
+    "passed": 4,
+    "failed": 0,
+    "actual": "two Activity methods plus two canonical core methods; all explicitly executed"
+  }
 }
