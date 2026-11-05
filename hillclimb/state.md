@@ -92,3 +92,7 @@ Physical haptics, spoken VoiceOver, true locked-device behavior/wallpapers, AX1â
 Detailed historical actions and rejected attempts remain in `decisions.md`, task evidence and Git history. A root Git read stall was repaired by restoring only committed sign-in evidence to byte-identical HEAD content; no application or user files changed.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Density pass starts in parallel with frozen round 6 reviews
+
+Account is the clearest source-supported crowding task: AccountView explicitly uses compact section spacing and the full guidance is primary ink. One isolated worker will compare native default grouped spacing and quieter accessible explanatory ink, preserving every word and all controls. It owns only AccountView, BoardPersistenceSection, a new AccountDensity UI test and task evidence on original17. Round6 reviewers continue against unchanged root/frozen production; no worker code is merged during their review. Candidate acceptance requires native before/after improvement, >=7:1 guidance contrast, full reachability and all308baseline tests plus new checks.
