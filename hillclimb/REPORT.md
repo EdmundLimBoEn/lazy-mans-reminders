@@ -163,3 +163,9 @@ Sign-in now keeps the existing Password label visible with a nonempty secure val
 Account’s native hard top edge clears departing text beside the title. The existing persistence guidance is split at a sentence boundary into two paragraphs with 6pt spacing; all words are preserved and measured contrast is at least 17.01:1. Done uses a 46pt local frame to retain at least 44.2pt on-screen in the scaled medium sheet. **296 worker tests pass** with all 293 prior IDs; parent verified all 60 native image/reference hashes.
 
 [Readable XXXL guidance](tasks/account-chrome/manual-dark-XXXL-centered.png) · [Evidence](tasks/account-chrome/README.md). N, O, P and Q are integrated; fresh combined round 6 validation, measurements and grading remain required. No final success is claimed.
+
+## Round 6 combined evidence, pending footer recheck
+
+**307/307 tests pass**, retaining all304 prior IDs, with per-method four-setting restoration and fresh Debug/Release/Python23/Deno52+4. Parent verified537 native PNG/reference pairs; these include repeated samples. Five public simulator Debug samples establish launch mean1.0319s, scroll clock4.6921s and scroll signpost duration2.3505s. They do not establish hardware feel, frame pacing or a before/after improvement.
+
+One extra required gesture check failed on the deliberately noninteractive enabled-appearance fixture. Its root has hit testing disabled. The historical failure remains intact; a focused recheck must prove actual footer gestures on the gesture-enabled fixture before required gates can be accepted. [Exact failure](validation/round6/parent-findings.md) · [Full evidence and metric samples](validation/round6/README.md). Crowding remains an explicit user priority for the next design pass.
