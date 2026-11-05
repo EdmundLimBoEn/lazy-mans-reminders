@@ -14,7 +14,14 @@ enum AuthNotice: Equatable {
 final class AuthManager: ObservableObject {
     static let shared = AuthManager()
 
-    lazy var pushRegistration = PushTokenRegistrar { [client] registration in
+    lazy var pushRegistration = PushTokenRegistrar(remove: { [client] token, userID in
+        try await client.from("device_tokens")
+            .delete().eq("token", value: token).eq("user_id", value: userID).execute()
+        let rows: [AuthSessionGate.DeviceTokenRow] = try await client.from("device_tokens")
+            .select("token").eq("token", value: token).eq("user_id", value: userID)
+            .execute().value
+        try AuthSessionGate.verifyAbsence(rows)
+    }) { [client] registration in
         try await client.from("device_tokens")
             .upsert(registration, onConflict: "token")
             .execute()
@@ -329,17 +336,8 @@ final class AuthManager: ObservableObject {
     }
 
     private func removeDeviceToken() async throws {
-        guard let userID = session?.user.id,
-              let token = pushRegistration.deviceToken else { return }
-        try await client.from("device_tokens")
-            .delete().eq("token", value: token).eq("user_id", value: userID).execute()
-        // DELETE may already have committed on an earlier attempt whose response
-        // was lost, or registration may never have succeeded.
-        let rows: [AuthSessionGate.DeviceTokenRow] = try await client.from("device_tokens")
-            .select("token").eq("token", value: token).eq("user_id", value: userID)
-            .execute().value
-        try AuthSessionGate.verifyAbsence(rows)
-        pushRegistration.registrationWasRemoved()
+        guard let userID = session?.user.id else { return }
+        try await pushRegistration.removeRegistrations(userID: userID)
     }
 
     private var cleanupOperations: AuthSessionGate.CleanupOperations {
