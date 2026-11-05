@@ -17,6 +17,8 @@ struct SignInView: View {
 #if DEBUG
     @State private var fixtureNoticeCleared = false
 #endif
+    @State private var focusFrames: [String: CGRect] = [:]
+    @State private var scrollIsIdle = true
     @FocusState private var emailFocused: Bool
     @FocusState private var passwordFocused: Bool
 
@@ -78,8 +80,9 @@ struct SignInView: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
-                    providerSection
                     emailSection
+                    Divider()
+                    providerSection
                     if case .error(let message) = displayedNotice {
                         Label(message, systemImage: "exclamationmark.triangle.fill")
                             .font(.footnote)
@@ -108,9 +111,18 @@ struct SignInView: View {
             .signInTopEdge()
             .scrollDismissesKeyboard(.interactively)
             .background(Color(.systemBackground))
+            .background(SignInFocusFrame(key: "viewport"))
+            .onPreferenceChange(SignInFocusFramesKey.self) { frames in
+                focusFrames = frames
+                if scrollIsIdle { restoreFocusedGroup(scroll, frames: frames) }
+            }
+            .signInScrollPhase { idle in
+                scrollIsIdle = idle
+                if idle { restoreFocusedGroup(scroll, frames: focusFrames) }
+            }
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
                 if emailFocused || passwordFocused {
-                    scroll.scrollTo("signin.alternateTarget", anchor: .bottom)
+                    scroll.scrollTo(passwordFocused ? "signin.passwordGroup" : "signin.emailGroup", anchor: .top)
                 }
             }
             }
@@ -138,7 +150,7 @@ struct SignInView: View {
         }
 #if DEBUG
         .task {
-            if fixtureVariant == "password" || fixtureVariant == "password-keyboard" {
+            if fixtureVariant == "password" || fixtureVariant == "password-keyboard" || fixtureVariant == "password-loading" {
                 usesPassword = true
             }
             if appearanceFixture && HillclimbDemo.argument("--hillclimb-signin-filled") == "yes" {
@@ -146,6 +158,7 @@ struct SignInView: View {
                 if usesPassword { password = "Demo-password" }
             }
             if fixtureVariant == "loading" { pending = .magicLink }
+            if fixtureVariant == "password-loading" { pending = .password }
             if fixtureVariant == "keyboard" || fixtureVariant == "password-keyboard" {
                 try? await Task.sleep(for: .milliseconds(300))
             }
@@ -203,6 +216,15 @@ struct SignInView: View {
         }
     }
 
+    private func restoreFocusedGroup(_ scroll: ScrollViewProxy, frames: [String: CGRect]) {
+        guard emailFocused || passwordFocused,
+              let viewport = frames["viewport"],
+              let group = frames[passwordFocused ? "passwordGroup" : "emailGroup"],
+              group.height <= viewport.height,
+              group.minY < viewport.minY - 1 || group.maxY > viewport.maxY + 1 else { return }
+        scroll.scrollTo(passwordFocused ? "signin.passwordGroup" : "signin.emailGroup", anchor: .top)
+    }
+
     private var busy: Bool {
         pending != nil || auth.isAuthenticating
     }
@@ -258,7 +280,7 @@ struct SignInView: View {
             .frame(maxWidth: .infinity)
             .frame(minHeight: max(44, signInButtonHeight))
             .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 6))
-            .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.primary, lineWidth: 1))
+            .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.primary, lineWidth: 0.5))
             .disabled(busy || disablesDemoControls)
             .accessibilityHint("Opens Google sign-in in a secure browser sheet")
         }
@@ -310,6 +332,8 @@ struct SignInView: View {
                     }
                 }
                 .modifier(SignInDensityProbe(key: "emailGroup"))
+                .id("signin.emailGroup")
+                .background(SignInFocusFrame(key: "emailGroup"))
                 if usesPassword {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Password")
@@ -325,6 +349,8 @@ struct SignInView: View {
                             .modifier(SignInDensityProbe(key: "passwordHelper"))
                     }
                     .modifier(SignInDensityProbe(key: "passwordGroup"))
+                    .id("signin.passwordGroup")
+                    .background(SignInFocusFrame(key: "passwordGroup"))
                 }
                 VStack(alignment: .leading, spacing: 8) {
                     Button {
@@ -473,18 +499,18 @@ struct SignInView: View {
     }
 
     private func signInButtonLabel(title: String, showsProgress: Bool) -> some View {
-        ZStack {
-            Text(title)
-                .fixedSize(horizontal: false, vertical: true)
-                .multilineTextAlignment(.center)
-                .opacity(showsProgress ? 0 : 1)
-            if showsProgress {
-                ProgressView()
-                    .accessibilityHidden(true)
+        Text(title)
+            .fixedSize(horizontal: false, vertical: true)
+            .multilineTextAlignment(.center)
+            .opacity(showsProgress ? 0 : 1)
+            .frame(maxWidth: .infinity, minHeight: 22)
+            .overlay {
+                if showsProgress {
+                    ProgressView()
+                        .controlSize(.regular)
+                        .accessibilityHidden(true)
+                }
             }
-        }
-        .frame(maxWidth: .infinity)
-        .frame(minHeight: 22)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(showsProgress ? "\(title), in progress" : title)
     }
@@ -603,3 +629,31 @@ private struct SignInDensityProbe: ViewModifier {
         }
     }
 #endif
+
+private struct SignInFocusFramesKey: PreferenceKey {
+    static var defaultValue: [String: CGRect] = [:]
+    static func reduce(value: inout [String: CGRect], nextValue: () -> [String: CGRect]) {
+        value.merge(nextValue(), uniquingKeysWith: { _, next in next })
+    }
+}
+
+private struct SignInFocusFrame: View {
+    let key: String
+    var body: some View {
+        GeometryReader { geometry in
+            Color.clear.preference(key: SignInFocusFramesKey.self,
+                                   value: [key: geometry.frame(in: .global)])
+        }
+    }
+}
+
+private extension View {
+    @ViewBuilder func signInScrollPhase(_ change: @escaping (Bool) -> Void) -> some View {
+        if #available(iOS 18.0, *) {
+            self.onScrollPhaseChange { _, phase in change(phase == .idle) }
+        } else {
+            self.simultaneousGesture(DragGesture().onChanged { _ in change(false) }
+                .onEnded { _ in change(true) })
+        }
+    }
+}

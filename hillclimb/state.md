@@ -6,9 +6,9 @@ Integration branch: `hillclimb/ui`. All accepted application work is merged here
 
 1. Round 7 source `e9f7ace58b493dd4aa3acb27325eaea7cf0ed352` and combined evidence are merged. Independent reviews are complete: Sol8.50/min7 and Astra8.13/min7. Both say login is materially clearer but identify remaining hierarchy/loading/focus polish. Opus is ineligible because Astra<8.5. Next: isolated PM fix pass and fresh round8 validation.
 2. Validate both independent 30-category reports. Only run Opus 5.5/medium if both same-round Codex overall scores are at least 8.5. Use Cursor Opus 5.5/medium if Claude API tokens run out; that exact provider/model/effort is confirmed available.
-3. Turn actionable findings, including the crowding concern, into small isolated tasks with non-overlapping source ownership. Each task builds, passes the existing suite and meaningful new checks, then captures affected native states before acceptance.
+3. Primary PM owns the bounded round8 login and Account-prefix fixes in hillclimb/login-focus-polish. No new implementation delegates. Run one serial heavy validation/capture window, retain prior named tests and review actual native results before integration.
 4. Revalidate and re-shoot the integrated source before the next grading round. Preserve every user-facing word, branding and icon. No nested cards or decorative red/orange palette.
-5. Stop only when all three graders are at least 9 with no category below 7, actual Codex quota is nearly exhausted, or scores plateau for three rounds. No final success or plateau is established. Latest usage snapshot: 33% of the current weekly window used (`rounds/7/usage.json`); not near exhaustion.
+5. Stop only when all three graders are at least 9 with no category below 7, actual Codex quota is nearly exhausted, or scores plateau for three rounds. No final success or plateau is established. Latest observed usage snapshot: 35% of the current weekly window used (`validation/round8/pregrade-usage-snapshots.json`); not near exhaustion. A fresh check is required after the next reviews.
 
 ## Scores
 
@@ -33,6 +33,14 @@ Integration branch: `hillclimb/ui`. All accepted application work is merged here
 | 7 | gpt-6-astra | 8.13 | 7.0 |
 
 Each report uses the exact 30 rubric categories and arithmetic mean rounded to two decimals. Rounds 1–2 were not Opus eligible. Round 6 Codex reports validate. Opus is eligible but deferred until after the crowding batch to conserve limited Claude tokens. Round 5 remains the latest three-grader round. Reports and machine-readable aggregates are under `rounds/<n>/`.
+
+## Round 8 current verification
+
+PM production candidate `46c1a5b` changes only SignInView and BoardPersistenceSection. Current app/test revision `20ae77e` is frozen with94tracked+2generated inputs. Email is the contiguous first work area; Apple then Google form a secondary block. Loading uses a non-sizing native spinner, focus settlement preserves the measured heading/field, and Account emphasizes existing instruction prefixes. Every original word remains.
+
+Unfiltered325/325passed:263unit+62UI,zero failures/skips,all317baseline IDs retained. All five Settings methods independently started/restored0/1/0/0. Source acceptance, fresh Release, Python23, cached Deno52+4, Debug restoration and installed identities passed. All required checks pass; parent integration and independent grades are next. Historical322/2synthetic-heading failures and323/1keyboard timeout remain failed. Explicit recovery restored recorded switch originals0/1/0/0; the exact eight-case keyboard matrix is now split by appearance with unchanged assertions/240-300second limits, focused2/2passed. Five Settings methods must independently prove restoration in the complete run. No round8 merge, push or independent grade yet;technical acceptance passes.
+
+Native review selection contains332canonical images,16movie excerpts,60matched login pairs and17Apple references. All indexed acquisition sheets and native motion samples were inspected; tests and candidate selection do not establish visual9/10. Source/binary bindings and gaps remain explicit. See `tasks/login-focus-polish/README.md` and `validation/round8/`.
 
 ## Round 7 accepted verification
 
@@ -163,3 +171,35 @@ Sol8.50 and Astra8.13 are honest new independent ratings; both describe the defa
 PM handles bounded review fixes directly on a fresh isolated branch rather than spawning another implementation delegate. Priorities: native loading button grows52→67pt/default (~21ptXXXL); focus scroll can place the empty Password heading under navigation; default login still lacks a strong first task; custom Google outline weight; unchanged Account Home/Lock prefixes need scanability. Prototype a clear email work area with secondary provider block while retaining Apple→Google order, every word, native Apple branding, all auth/fixture guards and Dynamic Type. Inspect whole empty/filled default screens before choosing. No change to wording, branding, shipping, or inactive submit semantics.
 
 Add native loading-footprint and first-focus/refocus heading+field regression gates. Preserve existing test IDs, touch/contrast/keyboard/last-row/settings-restoration gates; only update assertions that encode deliberately superseded layout order, with explicit rationale. Fresh full scheme/build and repeatable round8 capture must pass before integration. Existing sourcee9f7 and round7 evidence remain frozen.
+
+## Round8 PM implementation underway
+
+Isolated branch hillclimb/login-focus-polish. Prototype moves the email work area before a separated secondary Apple/Google group, retaining provider order and every word. A regular progress overlay preserves text-derived button height; focus scroll targets the active field group instead of the alternate action. Home/Lock instruction prefixes gain semantic emphasis without changing complete strings. New native loading geometry and first-empty-focus/refocus tests are added, including combined-settings restoration through the existing helper. Only deliberately obsolete provider/email order assertions changed; strict target/contrast checks remain.
+
+Two unsigned Debug build-for-testing invocations succeeded. Runtime/visual acceptance and the full regression suite remain pending. Fresh derived data /tmp/hillclimb-focus-PM-DD. Owned original17 session t3-ce030ecac872ebe3cf548598; original switches/lightLarge restoration still required at handback. Parent awake PID33824 remains active. No merge/push or round8 score claimed.
+
+Manual capture is stopped on DEVICE_IN_USE from the old U session; its advised status command is unsupported. The previous owner has been asked only to release its own exact session without UI/settings changes or shutdown. No new implementation delegation or test/review assignment. No test runner is active during cleanup. Continue native review and focused tests after ownership release.
+
+Previous owner reported supported device_close success, but a fresh parent device_open then CLIopen again returned DEVICE_IN_USE for the same old owner. The prescribed status advice was already unsupported. Stop manual capture; retain the error rather than taking over or closing another session. Project XCTest runner is independent and its focused loading/focus methods now run. No fresh manual screenshots or new tests are yet claimed passing.
+
+Focused first round8 check passed2/2 with native screenshots: loading footprint stable and empty Password first-focus/refocus heading clear at bothsizes/styles. Parent inspected light/dark filled and XXXLheading originals. Combined-settings and existing layout checks now run; fullsuite and finalcaptures stillpending. Manual claim remains stale after owner CLIcloseSESSION_NOT_FOUND; use sanctioned projectXCTest, label protectedkeyboardpartial, do not take over claim.
+
+Focused combined/layout run:7passed/1failed of8. Combined empty-password firstfocus/refocus, grouping/copy, targets, disabled semantics and contrast pass; existing keyboard user-scroll test finds active field minY69.67 above navigation bottom116. This is a source behavior failure, not a44pt target problem or permitted test waiver. Preserve the raw run. PM adds measured focused-group/viewport bounds and restores the group only when scrolling settles with it outside the viewport; interactive keyboard dismissal stays enabled. New build/focused verification pending.
+
+Corrected focus source passes3/3focusedmethods, including previously failing keyboard user-scroll matrix and both normal/combined firstfocus. Current source46c1a5b. New capture methods are explicitly running; no coverage granted for the two previously omitted methods. Capture argument type errors corrected; failed builds retained. Fullsuite/Release/Python/Deno/round8grading remain pending. Canonical capture methods use projectXCTest, and native Activity captures use actual system appearance/text-size settings with restoration; protected keyboard and recording gaps stay explicit.
+
+Canonical explicit capture run passes4/4, zero failures/skips, runtimeWarnings empty: native short/long Activity bothstyles/defaultXXXL via real OSappearance/Settings textsize with restoration, plus canonical account/signin and board/composer top/bottom/keyboard states. Parent inspected short darkXXXLIsland2+8completewords, lightdefaultbanner5+5, email-first default and truebottom darkXXXL. These are direct XCTest native screenshots, not video-derived2sframes; protectedkeyboardframes remain partial. Fullunfilteredsuite and round8scores stillpending.
+
+Full unfiltered expected324test suite now running serially against frozen candidate. Finalbuild passed and all96inputs match. Generated xctestrun copy differs only in UI SystemAttachmentLifetime=keepAlways, documented hash/diff proof; binaries/selectors equal. Explicit test timeouts enabled240/300, diagnosticsnever. No fullpass claim until actual summary/IDs verified. Retain fullrawstdout compressed and xcresultlocal.
+
+Full unfiltered run progress: unit suite passed; AccessibilitySettings, AccountChrome, AccountDensity, AccountPresentation, ActivityCapture, ActivityNativeLayout, BoardCapacityDensity and BoardCapacityPresentation suites passed so far. BoardEdge checks are now running. Whole suite remains pending; no partial pass is an integration gate.
+
+Round8 historical unfiltered run:322passed/2failed/0skip. Both failures used an obsolete synthetic Password heading rectangle; native recording and measured geometry show its full heading. Test-only correction fc08b41 reads the actual heading and retains navigation, field, ink and title-band checks. Recorded app binaries are byte-identical; Widget source/cache reuse is separately recorded. Corrected focused recheck is running; full acceptance remains pending.
+
+Round8 evidence selection:332canonical native review captures from522acquisitions;12unit renders separate. All42raw contact sheets,24native movie witnesses and16movies sampled at3points were inspected. Sixty exact named login pairs and all17Apple reference pairings are recorded. Latest actual Codex usage snapshot:35%weekly used at2026-11-05T18:25:37Z; no quota stop. Corrected full validation is still running, with no acceptance/merge/score yet.
+
+Corrected round8 full run remains FAILED:323passed/1timeout/0skip. The8case combined keyboard method had two60s XCTest animation-notification waits, and forced timeout bypassed its Settings teardown. Later methods inherited1/1/1/1. Recovery is running through native project XCTest with the captured0/1/0/0originals. Test-only20ae77e splits the exact8cases between light/dark methods, preserving all assertions and240/300limits; new expected full count325. All13recorded app/widget packaged hashes match the prior build. No new production change, merge, push or score.
+
+Native recorded-original recovery passed1/1 and verified all4switches restored0/1/0/0. The bounded light/dark focus run uses the original generatedxctestrun without recovery overrides. Full325 remains pending.
+
+Bounded matrix focused2/2passed with all8cases and exact four-switch originals restored independently by both methods. Fresh unfiltered325is running on source20ae77e using the unchanged generatedxctestrun, no recovery override, serial240/300limits and diagnosticsnever. Final acceptance requires this complete pass, Release/offline/Debug restoration and fresh grading.

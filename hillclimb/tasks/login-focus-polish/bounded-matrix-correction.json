@@ -1,0 +1,21 @@
+{
+  "author": "Written by gpt-6.1-sol in Codex on behalf of Edmund",
+  "historicalSourceSHA": "fc08b417d9a38d79c726678048100362ccfaf1ec",
+  "historicalResult": {
+    "passed": 323,
+    "failed": 1,
+    "skipped": 0
+  },
+  "failure": "AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix():240second execution allowance",
+  "observedLog": "At127.58s afterDone, XCTest waited60.04s for an app animation completion notification; before refocusing it waited another60.03s. No layout assertion failed. Historical same-app matrix passed in170.38s. No host-load or app-responsiveness cause is claimed.",
+  "restorationFailure": "Timed-out method has original/enabled stage proofs but no restored stage. Later methods recorded inherited1/1/1/1 rather than original0/1/0/0. Current simulator switches require recovery before another full run.",
+  "originals": {
+    "Reduce Motion": false,
+    "Auto-Play Message Effects": true,
+    "Reduce Transparency": false,
+    "Increase Contrast": false
+  },
+  "correction": "Keep existing test ID for four light cases; add one dark-method ID for the other four cases, using identical helper assertions/actions. Default240/max300 remain unchanged; no quiescence bypass. Explicit recovery environment carries the captured original values into native Settings UI before a focused run. No production change.",
+  "status": "Debug build and recovery1/1passed; bounded matrix focused2/2passed with all8original cases and independent exact four-switch restoration. Unfiltered full325running; still no acceptance.",
+  "recoveryProof": "recorded-settings-recovery-proof.json"
+}

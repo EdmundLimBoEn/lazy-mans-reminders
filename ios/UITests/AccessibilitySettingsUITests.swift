@@ -5,7 +5,19 @@ final class AccessibilitySettingsUITests: XCTestCase {
     private let settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
     private var originals: [String: Bool] = [:]
 
-    override func setUpWithError() throws { continueAfterFailure = false }
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+        if let recovery = ProcessInfo.processInfo.environment["HILLCLIMB_RESTORE_ORIGINALS"] {
+            let recorded = try JSONDecoder().decode([String: Bool].self, from: Data(recovery.utf8))
+            XCTAssertEqual(Set(recorded.keys), Set([
+                "Reduce Motion", "Auto-Play Message Effects", "Reduce Transparency", "Increase Contrast",
+            ]))
+            originals = recorded
+            try configure(enabled: false, restoring: true)
+            settings.terminate()
+            originals.removeAll()
+        }
+    }
 
     override func tearDownWithError() throws {
         app.terminate()
@@ -16,7 +28,13 @@ final class AccessibilitySettingsUITests: XCTestCase {
     func testCombinedActualSettingsKeyboardMatrix() throws {
         try configure(enabled: true)
         settings.terminate()
-        verifyKeyboardMatrix()
+        verifyKeyboardMatrix(styles: ["light"])
+    }
+
+    func testCombinedActualSettingsDarkKeyboardMatrix() throws {
+        try configure(enabled: true)
+        settings.terminate()
+        verifyKeyboardMatrix(styles: ["dark"])
     }
 
     func testCombinedActualSettingsErrorContrast() throws {
@@ -114,8 +132,8 @@ final class AccessibilitySettingsUITests: XCTestCase {
         let screen = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
         screen.name = "combined-full-screen-" + name; screen.lifetime = .keepAlways; add(screen)
     }
-    private func verifyKeyboardMatrix() {
-        for style in ["light", "dark"] {
+    private func verifyKeyboardMatrix(styles: [String]) {
+        for style in styles {
             for size in ["default", "XXXL"] {
             for variant in ["keyboard", "password-keyboard"] {
                 launch(style: style, size: size, variant: variant)

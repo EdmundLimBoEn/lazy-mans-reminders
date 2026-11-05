@@ -2,6 +2,8 @@
 
 The verified combined login and density improvements are merged into `hillclimb/ui`. **Round7 passed317/317 tests**; independent ratings are **Sol8.50/minimum7 and Astra8.13/minimum7**. Latest Opus is Round5 8.69/minimum7.8. Round7Opus is ineligible because Astra<8.5. Round6 Opus was deferred to conserve Claude tokens while addressing Edmund’s login/crowding feedback. The final all-three>=9/minimum7 goal remains unmet. Both graders see a clearer default login but still flag hierarchy, loading reflow and first-focus polish. The next bounded PM pass addresses those findings; the lower aggregate is retained, without claiming a regression in every unchanged category.
 
+Round8 candidate passed325/325tests plus fresh Release/Python23/Deno52+4, source/ID retention, settings restoration and installed-binary checks. It is technically accepted on `hillclimb/login-focus-polish`; integration and independent scoring are next. The source/test correction and native evidence are documented in `tasks/login-focus-polish/README.md`. The score table below remains the latest completed review.
+
 ## Start and latest completed category scores
 
 | Category | R1 Sol | R7 Sol | R1 Astra | R7 Astra | R3 Opus | R5 Opus |

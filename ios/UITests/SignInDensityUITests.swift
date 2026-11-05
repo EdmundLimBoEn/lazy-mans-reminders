@@ -77,9 +77,8 @@ final class SignInDensityUITests: XCTestCase {
                     try frame("actionGroup").minY - frame("passwordGroup").maxY, 20, accuracy: 0.5)
                 XCTAssertGreaterThanOrEqual(try frame("passwordField").height, 48)
                 XCTAssertGreaterThanOrEqual(try frame("emailField").height, 48)
-                XCTAssertEqual(
-                    try frame("emailHeading").minY - app.buttons["Sign in with Google"].frame.maxY, 24,
-                    accuracy: 1)
+                XCTAssertGreaterThanOrEqual(
+                    app.buttons["signin.apple"].frame.minY - (try frame("actionGroup")).maxY, 24)
                 for copy in [
                     "Email", "Use the same address as the web board.",
                     "For an existing account with a password. You can also use a sign-in link.",

@@ -1,0 +1,64 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "deviceName" : "Hillclimb iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 1,
+      "passedTests" : 323,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "LazyMansReminders · Built with macOS 27.2",
+  "expectedFailures" : 0,
+  "failedTests" : 1,
+  "finishTime" : 1793904502.812,
+  "passedTests" : 323,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793901048.707,
+  "statistics" : [
+    {
+      "subtitle" : "3 test runs",
+      "title" : "3 tests collected performance metrics"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Test exceeded execution time allowance of 4 minutes",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 265,
+      "testIdentifierString" : "AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix",
+      "testName" : "testCombinedActualSettingsKeyboardMatrix()"
+    }
+  ],
+  "title" : "Test - LazyMansReminders",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "7% of duration",
+      "text" : "1 longest test run with outlier durations exceeding 191.04s (three standard deviations)"
+    },
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "34% of duration",
+      "text" : "3 longest test runs with outlier durations exceeding 0.06s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 324
+}

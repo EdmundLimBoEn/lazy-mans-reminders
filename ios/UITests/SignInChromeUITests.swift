@@ -15,7 +15,7 @@ final class SignInChromeUITests: XCTestCase {
     func testCombinedSettingsPopulatedPasswordKeepsVisualName() throws {
         try configure(restoring: false)
         settings.terminate()
-        verifyPopulatedPassword(prefix: "combined")
+        try verifyPopulatedPassword(prefix: "combined")
     }
 
     private func configure(restoring: Bool) throws {
@@ -95,11 +95,11 @@ final class SignInChromeUITests: XCTestCase {
         }.count
     }
 
-    func testPopulatedPasswordKeepsVisualNameAndOneSecureField() {
-        verifyPopulatedPassword(prefix: "normal")
+    func testPopulatedPasswordKeepsVisualNameAndOneSecureField() throws {
+        try verifyPopulatedPassword(prefix: "normal")
     }
 
-    private func verifyPopulatedPassword(prefix: String) {
+    private func verifyPopulatedPassword(prefix: String) throws {
         for style in ["light", "dark"] {
             for size in ["default", "XXXL"] {
                 launch(style, size, "password-keyboard")
@@ -113,24 +113,64 @@ final class SignInChromeUITests: XCTestCase {
                 let done = app.buttons["Done"]
                 XCTAssertGreaterThanOrEqual(done.frame.height, 48)
                 XCTAssertLessThanOrEqual(field.frame.maxY, app.keyboards.firstMatch.frame.minY)
-                assertPasswordInk(field: field, style: style, size: size, state: prefix + "-focused")
+                try assertPasswordInk(field: field, style: style, size: size, state: prefix + "-focused")
                 done.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
                 XCTAssertTrue(app.keyboards.firstMatch.waitForNonExistence(timeout: 5))
-                assertPasswordInk(field: field, style: style, size: size, state: prefix + "-dismissed")
+                try assertPasswordInk(field: field, style: style, size: size, state: prefix + "-dismissed")
             }
         }
     }
 
-    private func assertPasswordInk(field: XCUIElement, style: String, size: String, state: String) {
-        let target = app.otherElements["signin.passwordTarget"].frame
-        let height: CGFloat = size == "XXXL" ? 28 : 22
-        let label = CGRect(x: target.minX, y: target.minY - 12 - height,
-                           width: 150, height: height)
-        XCTAssertGreaterThanOrEqual(label.minY, app.navigationBars.firstMatch.frame.maxY)
+    func testEmptyPasswordFirstFocusAndRefocusKeepsHeading() throws {
+        try verifyEmptyPasswordFocus(prefix: "normal")
+    }
+
+    func testCombinedEmptyPasswordFirstFocusAndRefocusKeepsHeading() throws {
+        try configure(restoring: false)
+        settings.terminate()
+        try verifyEmptyPasswordFocus(prefix: "combined")
+    }
+
+    private func verifyEmptyPasswordFocus(prefix: String) throws {
+        for style in ["light", "dark"] {
+            for size in ["default", "XXXL"] {
+                launch(style, size, "password-keyboard")
+                for cycle in 0..<2 {
+                    XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 8))
+                    let field = app.secureTextFields["Password"]
+                    let raw = try XCTUnwrap(app.otherElements["signin.densityFrames"].value as? String)
+                    let frames = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(raw.utf8)) as? [String: [Double]])
+                    let v = try XCTUnwrap(frames["passwordHeading"])
+                    let heading = CGRect(x: v[0], y: v[1], width: v[2], height: v[3])
+                    let nav = app.navigationBars.firstMatch.frame
+                    capture("first-focus-\(prefix)-\(style)-\(size)-\(cycle)", details: raw)
+                    XCTAssertGreaterThanOrEqual(heading.minY + 1.0 / 3, nav.maxY)
+                    XCTAssertLessThanOrEqual(heading.maxY, field.frame.minY)
+                    XCTAssertGreaterThan(ink(heading, style: style), 100)
+                    XCTAssertLessThanOrEqual(field.frame.maxY, app.buttons["Done"].frame.minY)
+                    XCTAssertGreaterThanOrEqual(field.frame.height, 44)
+                    app.buttons["Done"].tap()
+                    XCTAssertTrue(app.keyboards.firstMatch.waitForNonExistence(timeout: 5))
+                    if cycle == 0 { field.tap() }
+                }
+            }
+        }
+    }
+
+    private func assertPasswordInk(field: XCUIElement, style: String, size: String, state: String) throws {
+        let raw = try XCTUnwrap(app.otherElements["signin.densityFrames"].value as? String)
+        let frames = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(raw.utf8)) as? [String: [Double]])
+        let v = try XCTUnwrap(frames["passwordHeading"])
+        XCTAssertEqual(v.count, 4)
+        let label = CGRect(x: v[0], y: v[1], width: v[2], height: v[3])
+        capture("chrome-password-\(style)-\(size)-\(state)", details: raw)
+        // Measured CGRect conversion can differ by machine precision at the navigation edge.
+        XCTAssertGreaterThanOrEqual(label.minY + 1e-9, app.navigationBars.firstMatch.frame.maxY)
+        XCTAssertLessThanOrEqual(label.maxY, field.frame.minY)
         if state.hasSuffix("focused") { assertTitleBand(style: style) }
         let count = ink(label, style: style)
         XCTAssertGreaterThan(count, 100, "Persistent Password ink")
-        capture("chrome-password-\(style)-\(size)-\(state)", details: "field=\(field.frame) label=\(label) ink=\(count)")
+        capture("chrome-password-\(style)-\(size)-\(state)-ink", details: "field=\(field.frame) label=\(label) ink=\(count)")
     }
 
     private func assertTitleBand(style: String) {
