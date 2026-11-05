@@ -1,0 +1,129 @@
+{
+  "interpretation": "Apply the requested three-round plateau stop as hill-climb patience:three successive complete rounds without either Codex grader exceeding its previous best overall. This means lack of new high-water improvement,not numerically flat scores. Coverage/judgment changed,so it is not proof every unchanged category regressed.",
+  "models": [
+    {
+      "model": "gpt-6.1-sol",
+      "best": 9.06,
+      "current": 8.57,
+      "consecutiveRoundsWithoutNewBest": 3,
+      "history": [
+        {
+          "round": 1,
+          "overall": 6.88,
+          "bestSoFar": 6.88,
+          "roundsWithoutNewBest": 0
+        },
+        {
+          "round": 2,
+          "overall": 8.11,
+          "bestSoFar": 8.11,
+          "roundsWithoutNewBest": 0
+        },
+        {
+          "round": 3,
+          "overall": 8.78,
+          "bestSoFar": 8.78,
+          "roundsWithoutNewBest": 0
+        },
+        {
+          "round": 4,
+          "overall": 8.97,
+          "bestSoFar": 8.97,
+          "roundsWithoutNewBest": 0
+        },
+        {
+          "round": 5,
+          "overall": 9.06,
+          "bestSoFar": 9.06,
+          "roundsWithoutNewBest": 0
+        },
+        {
+          "round": 6,
+          "overall": 8.83,
+          "bestSoFar": 9.06,
+          "roundsWithoutNewBest": 1
+        },
+        {
+          "round": 7,
+          "overall": 8.5,
+          "bestSoFar": 9.06,
+          "roundsWithoutNewBest": 2
+        },
+        {
+          "round": 8,
+          "overall": 8.57,
+          "bestSoFar": 9.06,
+          "roundsWithoutNewBest": 3
+        }
+      ]
+    },
+    {
+      "model": "gpt-6-astra",
+      "best": 9.15,
+      "current": 8.4,
+      "consecutiveRoundsWithoutNewBest": 3,
+      "history": [
+        {
+          "round": 1,
+          "overall": 6.7,
+          "bestSoFar": 6.7,
+          "roundsWithoutNewBest": 0
+        },
+        {
+          "round": 2,
+          "overall": 8.16,
+          "bestSoFar": 8.16,
+          "roundsWithoutNewBest": 0
+        },
+        {
+          "round": 3,
+          "overall": 8.76,
+          "bestSoFar": 8.76,
+          "roundsWithoutNewBest": 0
+        },
+        {
+          "round": 4,
+          "overall": 8.95,
+          "bestSoFar": 8.95,
+          "roundsWithoutNewBest": 0
+        },
+        {
+          "round": 5,
+          "overall": 9.15,
+          "bestSoFar": 9.15,
+          "roundsWithoutNewBest": 0
+        },
+        {
+          "round": 6,
+          "overall": 8.92,
+          "bestSoFar": 9.15,
+          "roundsWithoutNewBest": 1
+        },
+        {
+          "round": 7,
+          "overall": 8.13,
+          "bestSoFar": 9.15,
+          "roundsWithoutNewBest": 2
+        },
+        {
+          "round": 8,
+          "overall": 8.4,
+          "bestSoFar": 9.15,
+          "roundsWithoutNewBest": 3
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    6,
+    7,
+    8
+  ],
+  "plateauStop": true,
+  "allThreeAtNine": false,
+  "opusRound8Eligible": false,
+  "opusReason": "Astra8.40<8.5;no ClaudeAPI or Cursor used this round",
+  "goalStatus": "Stopped under user plateau rule,target unmet",
+  "quotaReason": "Not a quota stop;latest35percent weekly used;fresh post-round check recorded separately",
+  "remainingPrimaryIssue": "Login still has competing bands/controls;better functional geometry does not establish native aesthetic polish"
+}

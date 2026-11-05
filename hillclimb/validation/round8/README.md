@@ -1,6 +1,6 @@
 # Round8 combined validation
 
-**325/325 passed:263unit+62UI,zero failures/skips.** All317round7 named IDs remain, including transitive308/307/304/293baselines. Required checks pass in `../../rounds/8/checks.json`; independent screenshot/source grading remains pending.
+**325/325 passed:263unit+62UI,zero failures/skips.** All317round7 named IDs remain, including transitive308/307/304/293baselines. Required checks pass in `../../rounds/8/checks.json`; independent screenshot/source grading is complete at Sol8.57/Astra8.40. Opus is ineligible;the target is unmet and the plateau audit stops further source work.
 
 Graded app/test revision: `20ae77e29019444a499e9e47c98d6b656ef56819`. Production revision: `46c1a5b7ebd9ad29be3f2ffb754b8e8f347c45b4`. Source identity: `sha256:a2449d961c428fc781cea0c751f3406e3e0e499350000d32bc4eca2fbfa0d76f`. All94tracked+2generated inputs match. Only SignInView and BoardPersistenceSection change production. Every original string, icon, branding and authentication guard is retained.
 
