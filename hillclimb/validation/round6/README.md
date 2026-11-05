@@ -48,3 +48,7 @@ Required native PNGs and short recordings are committed, with no file>=50MB (lar
 [handback.json](handback.json) records actual originals0/1/0/0 restored, Light/Large, six owned Activity IDs ended with remainingOwnedIDs=[], own app/Settings closed, SpringBoard screenshot inspected, own panel/session closed with shutdown:false, original17 still booted. Other sessions/devices were untouched. A redundant post-close command found the removed pinned executable and was not retried. No production app/backend/branding/icon/wording change, live auth/service/store write, external message, push, PR, merge or deployment occurred.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Contract recheck supplement
+
+The historical report above is preserved. Parent diagnosis establishes that the enabled appearance root intentionally rejects gestures. See [recheck/README.md](recheck/README.md) for the required ordinary-fixture actual-gesture proof, current graded revision, full-suite recheck and distinct historical/new provenance. Current acceptance is determined by updated checks, not the historical opening paragraph. User crowding priority remains for parent design review.

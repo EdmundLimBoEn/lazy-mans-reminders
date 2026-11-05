@@ -11,3 +11,7 @@ This is an observed reachability validation failure, with app-versus-input-harne
 No production fix or wording change was made. Parent should assess this concrete failure before declaring the round complete or commissioning final grading.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Subsequent parent diagnosis and recheck
+
+Historical finding above remains unchanged. Parent identified `.allowsHitTesting(!appearanceFixture)` as the exact intentional source cause: enabled paint fixtures are noninteractive. This is a validation-contract error, not a diagnosed production defect. See [recheck/README.md](recheck/README.md) for ordinary actual-gesture proof and the replacement required gate. User crowding priority remains explicit for later design review; no UI edit is part of this recheck.
