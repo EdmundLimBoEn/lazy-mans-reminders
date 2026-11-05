@@ -70,7 +70,7 @@ struct SignInView: View {
                 VStack(alignment: .leading, spacing: 24) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Notepad")
-                            .font(.subheadline.weight(.semibold))
+                            .font(.title2.weight(.semibold))
                             .foregroundStyle(.primary)
                         Text("Your board on this iPhone, the web, and the Lock Screen.")
                             .font(.body)
@@ -115,7 +115,7 @@ struct SignInView: View {
             }
             }
             .navigationTitle("Sign In")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .safeAreaInset(edge: .bottom, spacing: 8) {
                 if emailFocused || passwordFocused {
                     HStack {
@@ -140,6 +140,10 @@ struct SignInView: View {
         .task {
             if fixtureVariant == "password" || fixtureVariant == "password-keyboard" {
                 usesPassword = true
+            }
+            if appearanceFixture && HillclimbDemo.argument("--hillclimb-signin-filled") == "yes" {
+                email = "you@example.com"
+                if usesPassword { password = "Demo-password" }
             }
             if fixtureVariant == "loading" { pending = .magicLink }
             if fixtureVariant == "keyboard" || fixtureVariant == "password-keyboard" {
@@ -245,11 +249,12 @@ struct SignInView: View {
                     showsProgress: pending == .google
                 )
             }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.roundedRectangle)
-            .controlSize(.large)
+            .buttonStyle(.plain)
+            .foregroundStyle(.primary)
             .frame(maxWidth: .infinity)
             .frame(minHeight: max(44, signInButtonHeight))
+            .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 6))
+            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.primary, lineWidth: 1))
             .disabled(busy || disablesDemoControls)
             .accessibilityHint("Opens Google sign-in in a secure browser sheet")
         }
@@ -288,7 +293,7 @@ struct SignInView: View {
                         .modifier(SignInDensityProbe(key: "emailHeading"))
                     Text("Use the same address as the web board.")
                         .font(.footnote)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(.primary.opacity(0.75))
                         .fixedSize(horizontal: false, vertical: true)
                         .modifier(SignInDensityProbe(key: "emailHelper"))
                     emailField
@@ -311,7 +316,7 @@ struct SignInView: View {
                             .modifier(SignInDensityProbe(key: "passwordField"))
                         Text("For an existing account with a password. You can also use a sign-in link.")
                             .font(.footnote)
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(.primary.opacity(0.75))
                             .fixedSize(horizontal: false, vertical: true)
                             .modifier(SignInDensityProbe(key: "passwordHelper"))
                     }
@@ -362,13 +367,13 @@ struct SignInView: View {
 
     private var emailField: some View {
         HStack(spacing: 0) {
-            TextField("you@example.com", text: $email)
+            TextField("you@example.com", text: $email, prompt: Text("you@example.com").foregroundStyle(.secondary))
                 .textContentType(usesPassword ? .username : .emailAddress)
                 .keyboardType(.emailAddress)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .font(.body)
-                .frame(minHeight: 44)
+                .frame(minHeight: 48)
                 .contentShape(Rectangle())
                 .focused($emailFocused)
                 .submitLabel(usesPassword ? .next : .send)
@@ -398,7 +403,7 @@ struct SignInView: View {
         }
         .padding(.leading, 12)
         .padding(.trailing, email.isEmpty ? 12 : 0)
-        .frame(minHeight: 44)
+        .frame(minHeight: 48)
         .background(Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
         .contentShape(Rectangle())
         .onTapGesture { if !busy { emailFocused = true } }

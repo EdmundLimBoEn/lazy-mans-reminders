@@ -76,6 +76,7 @@ final class SignInDensityUITests: XCTestCase {
                 XCTAssertEqual(
                     try frame("actionGroup").minY - frame("passwordGroup").maxY, 20, accuracy: 0.5)
                 XCTAssertGreaterThanOrEqual(try frame("passwordField").height, 48)
+                XCTAssertGreaterThanOrEqual(try frame("emailField").height, 48)
                 XCTAssertEqual(
                     try frame("emailHeading").minY - app.buttons["Sign in with Google"].frame.maxY, 24,
                     accuracy: 1)
