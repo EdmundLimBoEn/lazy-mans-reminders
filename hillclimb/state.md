@@ -1,14 +1,17 @@
 # Hill climb state
 
-Integration branch: `hillclimb/ui`. All accepted application work is merged here; remote sync is recorded after each push. Never merge to main, force push, deploy, or upload to App Store/TestFlight. Original user untracked files remain untouched.
+**Stopped after round 8 under the requested three-round plateau rule. The 9/10 target is unmet.** The explicit interpretation is three successive completed rounds without either Codex reviewer exceeding its previous best overall. Rounds 6–8 remain below round 5's Sol 9.06/Astra 9.15. Scores varied rather than being numerically flat; coverage and judgment changed too. See `rounds/8/plateau-audit.json`.
 
-## Current plan
+Integration: `hillclimb/ui`, verified source/evidence merge `4783ce10396f5bab467b22f6479d515ab89b94de`, pushed. Final reviews/report metadata are synchronized separately. No main merge, PR, force push, deployment or App Store/TestFlight operation. Original user untracked files remain untouched.
 
-1. Round 7 source `e9f7ace58b493dd4aa3acb27325eaea7cf0ed352` and combined evidence are merged. Independent reviews are complete: Sol8.50/min7 and Astra8.13/min7. Both say login is materially clearer but identify remaining hierarchy/loading/focus polish. Opus is ineligible because Astra<8.5. Next: isolated PM fix pass and fresh round8 validation.
-2. Validate both independent 30-category reports. Only run Opus 5.5/medium if both same-round Codex overall scores are at least 8.5. Use Cursor Opus 5.5/medium if Claude API tokens run out; that exact provider/model/effort is confirmed available.
-3. Primary PM owns the bounded round8 login and Account-prefix fixes in hillclimb/login-focus-polish. No new implementation delegates. Run one serial heavy validation/capture window, retain prior named tests and review actual native results before integration.
-4. Revalidate and re-shoot the integrated source before the next grading round. Preserve every user-facing word, branding and icon. No nested cards or decorative red/orange palette.
-5. Stop only when all three graders are at least 9 with no category below 7, actual Codex quota is nearly exhausted, or scores plateau for three rounds. No final success or plateau is established. Latest observed usage snapshot: 35% of the current weekly window used (`validation/round8/pregrade-usage-snapshots.json`); not near exhaustion. A fresh check is required after the next reviews.
+## Completed plan
+
+1. PM directly implemented the bounded login loading/focus/composition and Account-prefix changes; no new implementation delegates.
+2. Frozen source passed the serial unfiltered suite and every required programmatic gate, fresh Release/offline checks, settings restoration and installed hashes.
+3. Repeatable native evidence covers all screen families in light/dark, default/XXXL and actual combined settings. Apple reference gaps remain explicit.
+4. Independent Sol/high and Astra/high reviews completed:8.57/min7.5 and8.40/min7.3. Exact30categories,332canonical paths,17refs and arithmetic validate. Opus is ineligible because Astra<8.5;no Claude API/Cursor used in round8.
+5. Plateau audit stops the loop. Remaining proposals are deferred in `rounds/8/followups.md`;no ungraded source edits follow the final reviews. Current weekly usage is38%,not nearly exhausted and not the stop reason.
+6. Final report contains first/latest category scores, screenshot pairs, merged changes, limitations and phone-install instructions. After final remote sync,remove only the exact parent-owned keep-awake process;record actual status in `/tmp/hillclimb-awake-20261105.json`.
 
 ## Scores
 
@@ -31,44 +34,22 @@ Integration branch: `hillclimb/ui`. All accepted application work is merged here
 | 6 | gpt-6-astra | 8.92 | 8.0 |
 | 7 | gpt-6.1-sol | 8.50 | 7.0 |
 | 7 | gpt-6-astra | 8.13 | 7.0 |
+| 8 | gpt-6.1-sol | 8.57 | 7.5 |
+| 8 | gpt-6-astra | 8.40 | 7.3 |
 
-Each report uses the exact 30 rubric categories and arithmetic mean rounded to two decimals. Rounds 1–2 were not Opus eligible. Round 6 Codex reports validate. Opus is eligible but deferred until after the crowding batch to conserve limited Claude tokens. Round 5 remains the latest three-grader round. Reports and machine-readable aggregates are under `rounds/<n>/`.
 
-## Round 8 current verification
+All reports use the exact30rubric categories and rounded arithmetic mean. Round6 Opus was eligible but deferred during density work to conserve Claude tokens. Rounds7–8 are ineligible;round5 remains the latest actual Opus score8.69/min7.8. No missing score is invented. Final aggregate has only the expected missing/ineligible Opus report error and `gate_passed:false`.
 
-PM production candidate `46c1a5b` changes only SignInView and BoardPersistenceSection. Current app/test revision `20ae77e` is frozen with94tracked+2generated inputs. Email is the contiguous first work area; Apple then Google form a secondary block. Loading uses a non-sizing native spinner, focus settlement preserves the measured heading/field, and Account emphasizes existing instruction prefixes. Every original word remains.
+## Final source and validation
 
-Unfiltered325/325passed:263unit+62UI,zero failures/skips,all317baseline IDs retained. All five Settings methods independently started/restored0/1/0/0. Source acceptance, fresh Release, Python23, cached Deno52+4, Debug restoration and installed identities passed. All required checks pass; parent integration and independent grades are next. Historical322/2synthetic-heading failures and323/1keyboard timeout remain failed. Explicit recovery restored recorded switch originals0/1/0/0; the exact eight-case keyboard matrix is now split by appearance with unchanged assertions/240-300second limits, focused2/2passed. Five Settings methods must independently prove restoration in the complete run. No round8 merge, push or independent grade yet;technical acceptance passes.
+- App/test source `20ae77e29019444a499e9e47c98d6b656ef56819`;production revision `46c1a5b7ebd9ad29be3f2ffb754b8e8f347c45b4`;source identity `sha256:a2449d961c428fc781cea0c751f3406e3e0e499350000d32bc4eca2fbfa0d76f`. All94tracked+2generated inputs match.
+- **325/325 passed:263 unit+62 UI,zero failures/skips.** All317prior named IDs and transitive308/307/304/293baselines retained. Original generated arm64 xctestrun,serial,diagnosticsnever,unchanged240/300second limits.
+- Fresh Debug/Release,Python23,cached Deno52+4,byte-identical Debug restoration and all six installed app/widget executable hashes pass. All five Settings-changing methods independently start/restore actual originals0/1/0/0.
+- Only SignInView and BoardPersistenceSection change production this pass. Every original word, native Apple asset/provider order,auth guard,branding/icon/name remains. Loading footprint and focused heading/field clearance improve;login aesthetic acceptance remains unresolved.
+-332canonical native review pictures selected from522indexed acquisitions;12unit renders separate. Sixteen native movie excerpts,16complete keyboard movie frames,8unmodified2sIsland frames,60same-state login pairs and17Reminders references. Protected secure-keyboard stills remain labeled partial. Counts do not imply distinct states or extra score credit.
+- Historical322/2heading-estimate failures and323/1keyboard timeout remain failed. The timeout bypassed Settings teardown;explicit native recovery restored captured originals. Measured-heading assertions and the same eight cases split by appearance preserve requirements. No app-hang or host-load cause is invented.
 
-Native review selection contains332canonical images,16movie excerpts,60matched login pairs and17Apple references. All indexed acquisition sheets and native motion samples were inspected; tests and candidate selection do not establish visual9/10. Source/binary bindings and gaps remain explicit. See `tasks/login-focus-polish/README.md` and `validation/round8/`.
-
-## Round 7 accepted verification
-
-- Combined source `e9f7ace58b493dd4aa3acb27325eaea7cf0ed352`; source identity `sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434`. All 93 frozen inputs match; 91 tracked files match the commit and two generated configuration/package inputs remain explicitly hashed.
-- **317/317 passed:** 263 unit +54 UI, zero failures/skips. Every 308/307/304/293 baseline named ID is retained. Strict SignInSurface44pt remains unchanged; legitimate48pt fields pass it. Circle comparisons tolerate only1e-9pt CGRect roundoff. All three Settings-changing methods restore all four originals at teardown.
-- Fresh Debug/Release, Python23, cached Deno52+4, byte-identical Debug restoration and installed six app/widget hashes pass. No frame-pacing or physical-performance claim.
-- 808 native matrix PNGs, 52 separate login after originals, 44 matched login pairs,17 usable Apple references and9 recordings.80 protected XCTest frames are labeled partial; clean full-device keyboard supplements remain separate. Eight filled enabled previews have no exact S-before; the additional ordinary fully-filled supplement stopped with0captures after preserved driver failures.
-- R Account native gaps35/23.67pt and explanatory contrast>=8.51:1; T capacity footer status-first/shared18pt gutter/6pt gap,16pt shorter; S8/20pt grouping; U inline Sign In/title2Notepad, neutral outlined provider controls,48pt fields and filled primary contrast>=6.29:1. Exact wording/providers/branding remain.
-- U V1 passed tests but failed actual dark filled-action contrast2.697:1; rejected evidence remains. V2 adds a native4.5:1 regression gate and the corrected ink. Earlier R/S/T failures remain historical failures, superseded by the serial combined pass rather than relabeled.
-- Shared Git pack became readable again through iCloud hydration. Parent committed the exact frozen corrected source and verified clean evidence; old handoff flags remain historical. See `validation/round7/PARENT-REVIEW.md` and `source-binding.json`. Required normalized checks pass.
-- Parent accepts the clearer native login composition for independent grading; this is not Edmund’s visual acceptance or a score. Root merge `f096e2a` includes the exact R/T/S/U candidates. Each candidate PARENT-STATUS is updated to point to the combined validation.
-
-The Mac has a parent-owned temporary `caffeinate -disu -t43200` assertion at Edmund’s request, PID33824 recorded in `/tmp/hillclimb-awake-20261105.json`. It prevents idle display/system sleep, expires after12hours and must be terminated when overall work ends. Manual lock/lid closure are not overridden; no global power/security setting changed.
-
-## Round 6 accepted verification
-
-Graded app/test revision: **b846a9155dd4b1dd773482f6cc4169a73441ba25**. Accepted recheck evidence: `67fb800`. Historical screenshot acquisition revision: `6333a32734fffab457e100777f3515de831effae`. All 54 production files are byte-identical across these revisions and assigned `d0a1985`; new test revision and binary identities are separately recorded.
-
-- **308/308 passed:** 263 unit + 45 UI; zero failures/skips and all 307/304/293 prior named IDs retained.
-- All three Settings-changing methods independently restore Reduce Motion, Auto-Play Message Effects, Reduce Transparency and Increase Contrast to their original values at each teardown.
-- Fresh Debug build/full suite passed. Earlier fresh Release, Python 23 and Deno 52+4 results are explicitly reused only with matching production/backend/package hashes.
-- 537 historical qualifying PNGs plus 20 new native supplements; counts include repeated samples. Nine short recordings and 17 usable Apple Reminders references. Parent verified every historical image/reference hash, all 20 new image hashes/dimensions, and integrated production hashes. Notes is unavailable; semantic/configuration reference gaps remain explicit.
-- Actual ordinary-fixture gestures pass all four style/size variants. XXXL content moves 127pt and the footer clears the safe bottom by 50.33pt. Separate enabled-appearance tests preserve geometry, visible ink and inertness.
-- The original appearance-fixture gesture failure remains recorded as `contract_invalid`, required:false. Its root deliberately disables hit testing. No production defect or fix is invented; the corrected actual-gesture check is required and passed.
-- Test timeout/interruption and a 1389.957s keyboard-method runner-duration outlier remain disclosed. A passing test is not responsiveness proof. Runtime invalid-frame events are zero; other diagnostic events remain retained.
-- Public five-sample simulator Debug launch, scroll elapsed and scrolling-signpost duration metrics establish a baseline. They do not establish frame pacing, hardware feel or a before/after improvement. See both original and recheck metric samples and host-load observations.
-
-Evidence: `validation/round6/README.md`, `validation/round6/recheck/README.md`, `rounds/6/checks.json`, `rounds/6/inventory.json`, `rounds/6/usage.json`. Unit-rendered rasters remain separate from native captures. Protected XCTest secure-keyboard images are partial; full-device supplements provide complete keyboard views.
+Evidence: `rounds/8/checks.json`, `rounds/8/inventory.json`, `validation/round8/README.md`, `validation/round8/source-binding.json`, `tasks/login-focus-polish/acceptance.json`, `rounds/8/usage.json`. Earlier interim pending/no-plateau snapshots are historical and superseded by this final state;their raw evidence and decisions remain retained.
 
 ## Accepted tasks
 
@@ -93,113 +74,23 @@ Evidence: `validation/round6/README.md`, `validation/round6/recheck/README.md`, 
 | Round 6 independent Codex reviews | Complete; density findings accepted | `rounds/6/` |
 | R/S/T density candidates and U login composition | Merged after serial317/317 and parent native review | `tasks/login-composition/`, `validation/round7/` |
 | Round 7 independent Codex reviews | Complete; both30categories valid; Opus ineligible | `rounds/7/` |
+| Round8 PM loading/focus/composition and instruction prefixes | Merged;325/325technical pass;independent aesthetic target unmet | `tasks/login-focus-polish/`, `validation/round8/` |
+| Round8 independent Codex reviews | Complete;Opus ineligible;plateau stop | `rounds/8/` |
 
-## Edmund’s crowding priority
+## Remaining tasks and constraints
 
-Direct feedback: “looks croweded as fuck”; check it on the next pass. Account and sign-in were the recently displayed states. Assess breathing room, dense text blocks, section rhythm, repetitive chrome and competing controls at default and XXXL, against Apple references. Distinguish synthetic long stress content from actual layout problems. High screenshot scores and passing geometry checks do not supersede this concern. Preserve wording and Dynamic Type; do not manufacture calm by shrinking text or removing information. Reviewers must propose concrete source-owned changes and measurable checks where supported.
+`rounds/8/followups.md` consolidates six deferred proposals:login hierarchy,provider boundary under Done,error association,spinner prominence,expanded guidance density and board upper-fade integration. They are not implemented or claimed passing. No active worker or reviewer remains.
 
-## Devices and ownership
+Edmund's login/crowding feedback takes precedence over earlier high scores. No nested cards or decorative red/orange. Raw network-error wording explicitly stays unchanged;that question is closed. No product question is pending. Exact Cursor Opus5.5/medium remains only the authorized API-quota fallback on an eligible future round.
 
-All implementation workers have released their sessions. Round7 graders are complete and own no device. The next PM pass will acquire its own new session for original17. Original17 is running light/Large, original switches restored, no owned Activities, and own app/Settings/session/panel closed.
+Physical haptics,spoken VoiceOver,true lock/wallpapers,AX1–AX5,live auth/account/AutoFill and hardware frame pacing remain unobserved. Notes and exact Apple auth/Activity/capacity/medium/combined references are missing. Public five-sample metrics are simulator/host/XCTest observations only.
 
-| Device | Host | ID |
-| --- | --- | --- |
-| Original17 | local | `78F5A64F-7B2E-4562-8EF9-10F3312CC694` |
-| Private Board17 | local | `066ECE57-46B4-414A-B53E-523775329360` |
-| Private Auth17 | local | `8E8380DE-364D-4899-99B8-D15ED0494FFD` |
+## Device and host handback
 
-All are regular iPhone 17 Pro/iOS 26.2; no Duo. New device work requires a new owned `device_open` session and its pinned command. Never reuse or close another worker’s session.
+Original17:host`local`,regular iPhone17Pro/iOS26.2,UDID`78F5A64F-7B2E-4562-8EF9-10F3312CC694`. Booted,light/Large,four switches0/1/0/0,owned demo Activity IDs empty. Own app/Settings terminated by native teardown;only own Device panel closed with shutdownfalse. Manual driver remained stopped on a stale prior-owner claim;no takeover or other-session closure. No Duo used.
 
-## Constraints and remaining limits
+Parent-owned Mac awake PID33824 is `/usr/bin/caffeinate -disu -t43200`,recorded in `/tmp/hillclimb-awake-20261105.json`. End it only after final sync,checking exact identity first. No global power/security settings changed;manual lock/lid closure are not overridden.
 
-Edmund confirmed “Keep existing wording.” The raw network-error copy is intentional and the optional question is closed. No product question is pending. Claude usage remains moderate and eligibility-gated; Cursor fallback is authorized only when API tokens run out.
-
-Physical haptics, spoken VoiceOver, true locked-device behavior/wallpapers, AX1–AX5, live authentication/AutoFill and hardware frame performance remain unobserved. Very long Activity lines still truncate natively; compact/minimal content remains intentionally empty. The board’s 24pt top mask and 6pt opaque accessibility boundary are custom treatments, not a claim of Apple’s native blur.
-
-Detailed historical actions and rejected attempts remain in `decisions.md`, task evidence and Git history. A root Git read stall was repaired by restoring only committed sign-in evidence to byte-identical HEAD content; no application or user files changed.
+26unrelated detached automatic maintenance/pack jobs filled the disk and exited before the stop attempt.27temporary outputs/6.62GiB remain preserved;no Git object/pack file deleted,reset or repacked by PM. Repository-only `gc.auto=0` and `maintenance.auto=false` prevent recurrence;original absent values are recorded in `validation/round8/automatic-maintenance-recovery.json`. Do not re-enable while it risks the forbidden repack. No global Git config changed. Disk remains limited.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
-
-## Density pass starts in parallel with frozen round 6 reviews
-
-Account is the clearest source-supported crowding task: AccountView explicitly uses compact section spacing and the full guidance is primary ink. One isolated worker will compare native default grouped spacing and quieter accessible explanatory ink, preserving every word and all controls. It owns only AccountView, BoardPersistenceSection, a new AccountDensity UI test and task evidence on original17. Round6 reviewers continue against unchanged root/frozen production; no worker code is merged during their review. Candidate acceptance requires native before/after improvement, >=7:1 guidance contrast, full reachability and all308baseline tests plus new checks.
-
-## Density batch ownership and reviewer routing
-
-Both round 6 reports validate all30categories,557screenshot paths,17refs and exact means. The lower ratings explicitly reflect crowding/hierarchy findings, not failed safety gates. No three-round plateau is established.
-
-- R Account is active: native section rhythm, passive identity chrome, quieter explanatory ink with >=7:1 guidance contrast and distinct semantic boundaries.
-- S Sign-in is next: unpainted field/helper/action groups with 6–8pt internal and 16–20pt between-field spacing, preserving all methods, words and targets.
-- T capacity footer is next: status first, unchanged hint second, shared leading edge and no taller footer; preserve final-row clearance and normal composer behavior. Prefer this bounded reviewer-supported layout over moving content into a new list footer.
-
-Opus eligibility is true, but defer this round’s optional Opus run until the revised density batch; Claude API tokens are limited and the direct user concern is already actionable. This does not change the numeric eligibility or final stop rules, and no missing Opus score is invented. R7 must use fresh combined validation/captures and independent Codex reports before another Opus call. Exact Cursor Opus5.5/medium remains the authorized quota fallback.
-
-## Density-batch validation scheduling
-
-R reported an unchanged BoardEdge gesture timeout during shared-host load above200. Parent observed concurrent R/S/T full-suite xcodebuild processes; this is a plausible environmental confound, not a proven product diagnosis. All workers must finish current runs safely, restore each Settings teardown, retain failures and avoid new full-suite/rebuild attempts. Source/evidence analysis may continue. Any failed candidate hands back explicitly pending validation; parent will commission one serialized quiet recheck after current suites finish. No merge or passing claim without a real full-suite pass. No test weakening or retry-until-pass.
-
-## Latest user priority: login composition
-
-Edmund clarified that the “home screen” he finds ugly means **the login screen**, not the board. Prioritize default Sign In’s overall composition as well as XXXL density. Parent observed the large Sign In navigation title competing with the Notepad/intro group and similar filled provider/input/submit surfaces with inconsistent emphasis. These are visual hierarchy hypotheses, not an authentication defect. A spacing-only candidate must not be declared sufficient from passing tests; inspect matched default light/dark enabled-style before/after shots. Consider native title scale/placement and coherent control treatments in a subsequent bounded refinement if needed, preserving every word, branding, provider order and native Apple rendering. No current frozen test binary is changed midrun; serialized validation scheduling remains active.
-
-## R and T handbacks retained; candidates not accepted
-
-R Account candidate `6eaf884`/evidence `8fa1c22`: native gaps12→35pt, guidance-to-Sign Out12→23.67pt, helper contrast>=8.51:1 and guidance9.72:1, exact copy/6pt paragraphs retained. 308/310 passed; BoardEdge timeout and DarkXXXL ErrorContrast termination remain failures. Parent verified all101inventory image hashes/dimensions (100primary+1cleanup supplement).
-
-T board candidate `49e3c9f`/evidence `80aec016`: status-first/shared18ptgutter/6ptgap, footer16ptshorter at bothsizes, all8capacitymethods and16matched comparisons pass. Full312methods:308passed/4failed,0skips; unchanged BoardMultiline screenshot/event timeouts, signalTERM and a43.99999999999994vs44 frame assertion. Parent verified all32before/after image hashes/dimensions and inspected default bottom.
-
-Only R/T task evidence and immutable source patches are retained on integration, explicitly marked PARENT-STATUS pending; application candidate code is **not merged**. Both devices were restored and released. S sign-in still has its current suite; no new heavyweight suite is allowed until it finishes. Then run isolated serialized rechecks before accepting candidates.
-
-Parent repaired only circle width/height comparisons in BoardMultilineUITests with a1e-9pt roundoff allowance, vastly below a physical pixel. The44pt target requirement and all other assertions remain. This test-only correction is not yet runtime-verified; quiet recheck must execute it and retain all initial failures. Do not attribute timeouts to host load as proven causation.
-
-## S handback; login composition and combined serial validation next
-
-S frozen source `c8da740`/evidence `5d00a906`:8pt within groups,20pt between, ordinary XXXLfooter50.33ptclearance. Parent verified all384nativeimage hashes/dimensions and inspected enabled default light after-original. Default composition changes only modestly; large Sign In title/Notepad competition and inconsistent provider/input/submit treatments remain. **S is not visually accepted as the finished login, and no app source is merged.** Evidence and immutable patch are retained only.
-
-Awake fullsuite309/310passed,0skips,all308priorIDs; the sole failure is SignInSurfaceUITests lightXXXL emailTarget43.99999999999994<44. This differs from T’s circle-frame roundoff, already repaired test-only on integration. A coherent48pt email field matching Password is a legitimate composition candidate that preserves the unchanged >=44 test, rather than waiving its gate. Earlier sleep/runner failures remain retained. All workers now returned devices and no heavyweight task suite remains active; sampled load is5.46/5.35/7.97.
-
-Next U runs in ONE isolated worktree: apply exact R/T/S frozen source patches (with no extra edits to Account/board), refine SignIn’s default overall composition, then perform one serial full-suite validation covering all candidates and new checks. Existing R2+T4+S2 methods imply316baseline methods before U additions; actual named counts authoritative. Use a process-scoped idle-sleep assertion for the run and retain any clamshell sleep/wake events; do not claim it prevents deliberate lid closure. Merge only the passing combined candidate after native before/after review. This validates the source combination without three simultaneous resource-confounded reruns.
-
-## Historical density handbacks superseded by combined round 7
-
-The pending R/S/T/U handoff snapshots above remain historical records. The exact corrected combined source is now committed, validated, and merged. The current plan and Round7 accepted-verification section take precedence.
-
-## Round 7 findings and direct PM pass
-
-Sol8.50 and Astra8.13 are honest new independent ratings; both describe the default login as materially improved. Lower aggregates reflect fresh judgment and additional observed issues, not a measured regression in every unchanged category. Do not inflate scores, discard the lower report or treat programmatic success as visual acceptance. Both reports validate30exactcategories,860images/17refs and arithmetic. Opus is skipped because Astra<8.5; no tokens spent. No three-round plateau is established.
-
-PM handles bounded review fixes directly on a fresh isolated branch rather than spawning another implementation delegate. Priorities: native loading button grows52→67pt/default (~21ptXXXL); focus scroll can place the empty Password heading under navigation; default login still lacks a strong first task; custom Google outline weight; unchanged Account Home/Lock prefixes need scanability. Prototype a clear email work area with secondary provider block while retaining Apple→Google order, every word, native Apple branding, all auth/fixture guards and Dynamic Type. Inspect whole empty/filled default screens before choosing. No change to wording, branding, shipping, or inactive submit semantics.
-
-Add native loading-footprint and first-focus/refocus heading+field regression gates. Preserve existing test IDs, touch/contrast/keyboard/last-row/settings-restoration gates; only update assertions that encode deliberately superseded layout order, with explicit rationale. Fresh full scheme/build and repeatable round8 capture must pass before integration. Existing sourcee9f7 and round7 evidence remain frozen.
-
-## Round8 PM implementation underway
-
-Isolated branch hillclimb/login-focus-polish. Prototype moves the email work area before a separated secondary Apple/Google group, retaining provider order and every word. A regular progress overlay preserves text-derived button height; focus scroll targets the active field group instead of the alternate action. Home/Lock instruction prefixes gain semantic emphasis without changing complete strings. New native loading geometry and first-empty-focus/refocus tests are added, including combined-settings restoration through the existing helper. Only deliberately obsolete provider/email order assertions changed; strict target/contrast checks remain.
-
-Two unsigned Debug build-for-testing invocations succeeded. Runtime/visual acceptance and the full regression suite remain pending. Fresh derived data /tmp/hillclimb-focus-PM-DD. Owned original17 session t3-ce030ecac872ebe3cf548598; original switches/lightLarge restoration still required at handback. Parent awake PID33824 remains active. No merge/push or round8 score claimed.
-
-Manual capture is stopped on DEVICE_IN_USE from the old U session; its advised status command is unsupported. The previous owner has been asked only to release its own exact session without UI/settings changes or shutdown. No new implementation delegation or test/review assignment. No test runner is active during cleanup. Continue native review and focused tests after ownership release.
-
-Previous owner reported supported device_close success, but a fresh parent device_open then CLIopen again returned DEVICE_IN_USE for the same old owner. The prescribed status advice was already unsupported. Stop manual capture; retain the error rather than taking over or closing another session. Project XCTest runner is independent and its focused loading/focus methods now run. No fresh manual screenshots or new tests are yet claimed passing.
-
-Focused first round8 check passed2/2 with native screenshots: loading footprint stable and empty Password first-focus/refocus heading clear at bothsizes/styles. Parent inspected light/dark filled and XXXLheading originals. Combined-settings and existing layout checks now run; fullsuite and finalcaptures stillpending. Manual claim remains stale after owner CLIcloseSESSION_NOT_FOUND; use sanctioned projectXCTest, label protectedkeyboardpartial, do not take over claim.
-
-Focused combined/layout run:7passed/1failed of8. Combined empty-password firstfocus/refocus, grouping/copy, targets, disabled semantics and contrast pass; existing keyboard user-scroll test finds active field minY69.67 above navigation bottom116. This is a source behavior failure, not a44pt target problem or permitted test waiver. Preserve the raw run. PM adds measured focused-group/viewport bounds and restores the group only when scrolling settles with it outside the viewport; interactive keyboard dismissal stays enabled. New build/focused verification pending.
-
-Corrected focus source passes3/3focusedmethods, including previously failing keyboard user-scroll matrix and both normal/combined firstfocus. Current source46c1a5b. New capture methods are explicitly running; no coverage granted for the two previously omitted methods. Capture argument type errors corrected; failed builds retained. Fullsuite/Release/Python/Deno/round8grading remain pending. Canonical capture methods use projectXCTest, and native Activity captures use actual system appearance/text-size settings with restoration; protected keyboard and recording gaps stay explicit.
-
-Canonical explicit capture run passes4/4, zero failures/skips, runtimeWarnings empty: native short/long Activity bothstyles/defaultXXXL via real OSappearance/Settings textsize with restoration, plus canonical account/signin and board/composer top/bottom/keyboard states. Parent inspected short darkXXXLIsland2+8completewords, lightdefaultbanner5+5, email-first default and truebottom darkXXXL. These are direct XCTest native screenshots, not video-derived2sframes; protectedkeyboardframes remain partial. Fullunfilteredsuite and round8scores stillpending.
-
-Full unfiltered expected324test suite now running serially against frozen candidate. Finalbuild passed and all96inputs match. Generated xctestrun copy differs only in UI SystemAttachmentLifetime=keepAlways, documented hash/diff proof; binaries/selectors equal. Explicit test timeouts enabled240/300, diagnosticsnever. No fullpass claim until actual summary/IDs verified. Retain fullrawstdout compressed and xcresultlocal.
-
-Full unfiltered run progress: unit suite passed; AccessibilitySettings, AccountChrome, AccountDensity, AccountPresentation, ActivityCapture, ActivityNativeLayout, BoardCapacityDensity and BoardCapacityPresentation suites passed so far. BoardEdge checks are now running. Whole suite remains pending; no partial pass is an integration gate.
-
-Round8 historical unfiltered run:322passed/2failed/0skip. Both failures used an obsolete synthetic Password heading rectangle; native recording and measured geometry show its full heading. Test-only correction fc08b41 reads the actual heading and retains navigation, field, ink and title-band checks. Recorded app binaries are byte-identical; Widget source/cache reuse is separately recorded. Corrected focused recheck is running; full acceptance remains pending.
-
-Round8 evidence selection:332canonical native review captures from522acquisitions;12unit renders separate. All42raw contact sheets,24native movie witnesses and16movies sampled at3points were inspected. Sixty exact named login pairs and all17Apple reference pairings are recorded. Latest actual Codex usage snapshot:35%weekly used at2026-11-05T18:25:37Z; no quota stop. Corrected full validation is still running, with no acceptance/merge/score yet.
-
-Corrected round8 full run remains FAILED:323passed/1timeout/0skip. The8case combined keyboard method had two60s XCTest animation-notification waits, and forced timeout bypassed its Settings teardown. Later methods inherited1/1/1/1. Recovery is running through native project XCTest with the captured0/1/0/0originals. Test-only20ae77e splits the exact8cases between light/dark methods, preserving all assertions and240/300limits; new expected full count325. All13recorded app/widget packaged hashes match the prior build. No new production change, merge, push or score.
-
-Native recorded-original recovery passed1/1 and verified all4switches restored0/1/0/0. The bounded light/dark focus run uses the original generatedxctestrun without recovery overrides. Full325 remains pending.
-
-Bounded matrix focused2/2passed with all8cases and exact four-switch originals restored independently by both methods. Fresh unfiltered325is running on source20ae77e using the unchanged generatedxctestrun, no recovery override, serial240/300limits and diagnosticsnever. Final acceptance requires this complete pass, Release/offline/Debug restoration and fresh grading.

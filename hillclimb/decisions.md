@@ -168,3 +168,13 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 Frozen20ae77e passed325/325(263unit+62UI),all317prior IDs retained,zero failures/skips. All five Settings methods independently started/restored0/1/0/0. Fresh Release/Python23/cachedDeno52+4,Debug byte restoration and six installed executable hashes pass. Light/Large and no owned Activities are confirmed;only own Device panel closed without shutdown. All required checks pass. Historical322/2and323/1failures remain failed with explicit recovery and bounded-matrix rationale. Parent accepts the candidate for independent review,not as Edmund's visual acceptance or a score. No Opus call until both same-round Codex grades>=8.5.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Round8 final reviews and plateau stop
+
+Independent Sol8.57/min7.5 and Astra8.40/min7.3validate all30categories,332canonical paths and17references. Astra's reference array received path-base normalization only;ratings/findings unchanged. Opus is ineligible;no ClaudeAPI/Cursor used. Both reviewers support functional focus/loading improvements but identify the same unresolved login hierarchy. No9/10claim or new ungraded source change.
+
+Apply the user three-round plateau rule as hill-climb patience:three completed rounds without either Codex reviewer exceeding its previous best overall. Rounds6–8are below round5Sol9.06/Astra9.15. Scores are not numerically flat;coverage/judgment also changed. The explicit audit records this interpretation and stops the loop with the target unmet. Quota is not exhausted. Final report preserves remaining findings and checks instead of launching another small-gap pass.
+
+26unrelated detached automatic maintenance/pack jobs filled disk and exited before the stop attempt. No PM repack/reset/deletion occurred;27temporary outputs/6.62GiB remain preserved. Repository-only automatic maintenance is disabled to respect the no-repack constraint and prevent recurrence;original absent config values are recorded. Do not remove shared Git files. Final synchronization and exact-owned awake-process cleanup remain.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund

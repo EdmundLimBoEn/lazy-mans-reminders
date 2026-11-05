@@ -1,6 +1,6 @@
 # Login focus and composition
 
-Primary PM owns this bounded pass on `hillclimb/login-focus-polish`. Production revision: `46c1a5b7ebd9ad29be3f2ffb754b8e8f347c45b4`. Current app/test revision: `20ae77e29019444a499e9e47c98d6b656ef56819`. Integration remains `hillclimb/ui` at `21029ed`; this candidate has not merged or been pushed.
+Primary PM owns this bounded pass on `hillclimb/login-focus-polish`. Production revision: `46c1a5b7ebd9ad29be3f2ffb754b8e8f347c45b4`. Current app/test revision: `20ae77e29019444a499e9e47c98d6b656ef56819`. Integration `hillclimb/ui` merged this verified candidate as `4783ce10396f5bab467b22f6479d515ab89b94de`; push completed successfully. Independent reviews are underway.
 
 The login presents a contiguous Email/helper/field/action area before a separated Apple-then-Google provider block. The native Apple asset and every original word remain. Google's custom outline is quieter. A regular native spinner overlays the title-derived button footprint, preventing loading from moving following controls. Measured viewport and focus-group bounds restore heading/field clearance once scrolling settles while retaining interactive keyboard dismissal. Account emphasizes only the existing Home Screen: and Lock Screen: prefixes.
 
@@ -8,7 +8,7 @@ Only `SignInView.swift` and `BoardPersistenceSection.swift` are production chang
 
 ## Validation status
 
-The unfiltered serial suite **passed325/325:263unit+62UI,zero failures/skips** against the original generated `.xctestrun`, with no recovery override. All317 round7 named IDs and transitive308/307/304/293 baselines are retained. All five Settings-changing methods independently started and restored0/1/0/0; see `bounded-matrix-full-restoration.json`. Diagnostics are `never`; execution limits remain240/300seconds. Source/ID acceptance, fresh Release, Python23, cached Deno52+4, Debug byte restoration and all six installed executable identities passed. Required checks pass;independent grades remain pending. No independent round8 score exists.
+The unfiltered serial suite **passed325/325:263unit+62UI,zero failures/skips** against the original generated `.xctestrun`, with no recovery override. All317 round7 named IDs and transitive308/307/304/293 baselines are retained. All five Settings-changing methods independently started and restored0/1/0/0; see `bounded-matrix-full-restoration.json`. Diagnostics are `never`; execution limits remain240/300seconds. Source/ID acceptance, fresh Release, Python23, cached Deno52+4, Debug byte restoration and all six installed executable identities passed. Required checks pass;independent reviews are complete and retain unresolved composition findings. Independent round8 reviews are complete:Sol8.57/min7.5,Astra8.40/min7.3. Opus is ineligible. The climb stops under the documented three-round non-improvement interpretation of the plateau rule;the9/10target remains unmet.
 
 The frozen96inputs comprise94tracked sources and two generated configuration/package files. See `bounded-matrix-freeze.json`. All13recorded app/widget packaged-file hashes match the preceding test revision; acquisition and graded test-source revisions remain distinct. Earlier Widget cache-reuse evidence is separately qualified in `../../validation/round8/widget-reuse-binding.json`.
 
