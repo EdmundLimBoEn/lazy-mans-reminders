@@ -189,6 +189,77 @@ final class SignInChromeUITests: XCTestCase {
         }
     }
 
+    func testOrdinaryLegalFooterReachableByActualGesture() throws {
+        for style in ["light", "dark"] {
+            for size in ["default", "XXXL"] {
+                launch(style, size, "password")
+                XCTAssertFalse(app.keyboards.firstMatch.exists)
+                let visibleScrollView = app.scrollViews.firstMatch
+                XCTAssertTrue(visibleScrollView.isHittable)
+                let names = ["Privacy", "Terms", "Support"]
+                let initial = names.map { app.buttons[$0].frame }
+                let witness = app.otherElements["signin.passwordTarget"]
+                let initialWitness = witness.frame
+                let value = try XCTUnwrap(app.otherElements["hillclimb.geometry"].value as? String)
+                let json = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(value.utf8)) as? [String: [Double]])
+                let safe = try XCTUnwrap(json["safeArea"])
+                let safeBottom = safe[1] + safe[3]
+                if size == "XXXL" {
+                    XCTAssertTrue(initial.contains { $0.maxY > safeBottom }, "Footer must initially extend outside viewport")
+                }
+                capture("gesture-\(style)-\(size)-initial", details: "safeBottom=\(safeBottom) links=\(initial) witness=\(initialWitness)")
+                // Coordinates stay inside the observed ScrollView and avoid tapping a field.
+                let start = visibleScrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.85))
+                let end = visibleScrollView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.15))
+                start.press(forDuration: 0.1, thenDragTo: end)
+                start.press(forDuration: 0.1, thenDragTo: end)
+                XCTAssertFalse(app.keyboards.firstMatch.exists)
+                let bottomFrames = names.map { app.buttons[$0].frame }
+                if size == "XXXL" {
+                    XCTAssertGreaterThan(initialWitness.minY - witness.frame.minY, 20, "Actual content displacement")
+                    XCTAssertGreaterThan(initial[0].minY - bottomFrames[0].minY, 20)
+                }
+                for name in names {
+                    let link = app.buttons[name]
+                    XCTAssertFalse(link.isEnabled)
+                    XCTAssertGreaterThanOrEqual(link.frame.minY, app.navigationBars.firstMatch.frame.maxY)
+                    XCTAssertLessThanOrEqual(link.frame.maxY + 8, safeBottom)
+                    XCTAssertGreaterThan(legalInk(link.frame, style: style), 20, "Disabled legal text remains visible")
+                    link.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+                    XCTAssertEqual(app.state, .runningForeground)
+                    XCTAssertTrue(app.navigationBars["Sign In"].exists)
+                    XCTAssertEqual(app.buttons[name].frame, link.frame)
+                }
+                capture("gesture-\(style)-\(size)-bottom", details: "safeBottom=\(safeBottom) initial=\(initial) links=\(bottomFrames) initialWitness=\(initialWitness) witness=\(witness.frame)")
+                launch(style, size, "password", enabled: true, bottom: true)
+                let paintFrames = names.map { app.buttons[$0].frame }
+                for index in names.indices {
+                    XCTAssertEqual(bottomFrames[index].width, paintFrames[index].width, accuracy: 1)
+                    XCTAssertEqual(bottomFrames[index].height, paintFrames[index].height, accuracy: 1)
+                    XCTAssertEqual(bottomFrames[index].minY - bottomFrames[0].minY,
+                                   paintFrames[index].minY - paintFrames[0].minY, accuracy: 1)
+                }
+                capture("gesture-\(style)-\(size)-paint-comparison", details: "ordinary=\(bottomFrames) enabledPaint=\(paintFrames); compare dimensions and relative layout; color differs")
+            }
+        }
+    }
+
+    private func legalInk(_ frame: CGRect, style: String) -> Int {
+        let image = app.screenshot().image.cgImage!
+        let scale = CGFloat(image.width) / app.frame.width
+        guard let crop = image.cropping(to: CGRect(x: frame.minX * scale, y: frame.minY * scale,
+            width: frame.width * scale, height: frame.height * scale)) else { XCTFail("Missing legal raster"); return 0 }
+        var bytes = [UInt8](repeating: 0, count: crop.width * crop.height * 4)
+        let context = CGContext(data: &bytes, width: crop.width, height: crop.height, bitsPerComponent: 8,
+            bytesPerRow: crop.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+        context.draw(crop, in: CGRect(x: 0, y: 0, width: crop.width, height: crop.height))
+        return stride(from: 0, to: bytes.count, by: 4).filter { i in
+            let rgb = bytes[i..<i+3]
+            return style == "light" ? rgb.allSatisfy { $0 < 210 } : rgb.allSatisfy { $0 > 45 }
+        }.count
+    }
+
     func testNativeAppleLoadingLabelAcrossThreeFreshProcessesPerStyleAndSize() {
         for style in ["light", "dark"] {
             for size in ["default", "XXXL"] {
