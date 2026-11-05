@@ -50,15 +50,15 @@ struct BoardPersistenceSection: View {
                 Text("Home Screen: touch and hold an empty area, choose Edit → Add Widget, then Notepad → Board.")
                     .accountMeasure("home.helper")
                     .font(.footnote)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(.primary.opacity(0.75))
                 Text("Lock Screen: touch and hold it, choose Customize → Lock Screen → Add Widgets, then Notepad.")
                     .accountMeasure("lock.helper")
                     .font(.footnote)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(.primary.opacity(0.75))
                 Text("Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.")
                     .accountMeasure("widget.helper")
                     .font(.footnote)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(.primary.opacity(0.75))
             } label: {
                 Text("Add a lasting widget")
                     .accountMeasure("disclosure.title")
@@ -77,7 +77,7 @@ struct BoardPersistenceSection: View {
                     .accessibilityIdentifier("account.guidance.background")
             }
             .accountMeasure("persistence.footer")
-            .foregroundStyle(.primary)
+            .foregroundStyle(.primary.opacity(0.75))
         }
         .onChange(of: result, initial: true) { _, message in
             if let announcement = announcements.announcement(for: message) {
