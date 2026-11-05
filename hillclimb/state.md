@@ -1,14 +1,14 @@
 # Hill climb state
 
-Integration branch: `hillclimb/ui`. All accepted work is merged and pushed here. Never merge to main, force push, deploy, or upload to App Store/TestFlight. Original user untracked files remain untouched.
+Integration branch: `hillclimb/ui`. All accepted application work is merged here; remote sync is recorded after each push. Never merge to main, force push, deploy, or upload to App Store/TestFlight. Original user untracked files remain untouched.
 
 ## Current plan
 
-1. Round 6 reviews are complete: Sol **8.83/minimum 7.8**, Astra **8.92/minimum 8.0**. Both identify Account/sign-in/capacity-footer density. Fix that feedback in the next isolated batch.
+1. Round 7 source `e9f7ace58b493dd4aa3acb27325eaea7cf0ed352` and combined evidence are merged. Independent Sol/high and Astra/high reviews are running on 808 native matrix images plus 52 login originals, 44 login before/after pairs and 17 Apple references. No round 7 score is claimed yet.
 2. Validate both independent 30-category reports. Only run Opus 5.5/medium if both same-round Codex overall scores are at least 8.5. Use Cursor Opus 5.5/medium if Claude API tokens run out; that exact provider/model/effort is confirmed available.
 3. Turn actionable findings, including the crowding concern, into small isolated tasks with non-overlapping source ownership. Each task builds, passes the existing suite and meaningful new checks, then captures affected native states before acceptance.
 4. Revalidate and re-shoot the integrated source before the next grading round. Preserve every user-facing word, branding and icon. No nested cards or decorative red/orange palette.
-5. Stop only when all three graders are at least 9 with no category below 7, actual Codex quota is nearly exhausted, or scores plateau for three rounds. No final success or plateau is established. Latest usage snapshot: 23% of the current weekly window used.
+5. Stop only when all three graders are at least 9 with no category below 7, actual Codex quota is nearly exhausted, or scores plateau for three rounds. No final success or plateau is established. Latest usage snapshot: 31% of the current weekly window used (`rounds/7/usage.json`); not near exhaustion.
 
 ## Scores
 
@@ -31,6 +31,19 @@ Integration branch: `hillclimb/ui`. All accepted work is merged and pushed here.
 | 6 | gpt-6-astra | 8.92 | 8.0 |
 
 Each report uses the exact 30 rubric categories and arithmetic mean rounded to two decimals. Rounds 1–2 were not Opus eligible. Round 6 Codex reports validate. Opus is eligible but deferred until after the crowding batch to conserve limited Claude tokens. Round 5 remains the latest three-grader round. Reports and machine-readable aggregates are under `rounds/<n>/`.
+
+## Round 7 accepted verification
+
+- Combined source `e9f7ace58b493dd4aa3acb27325eaea7cf0ed352`; source identity `sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434`. All 93 frozen inputs match; 91 tracked files match the commit and two generated configuration/package inputs remain explicitly hashed.
+- **317/317 passed:** 263 unit +54 UI, zero failures/skips. Every 308/307/304/293 baseline named ID is retained. Strict SignInSurface44pt remains unchanged; legitimate48pt fields pass it. Circle comparisons tolerate only1e-9pt CGRect roundoff. All three Settings-changing methods restore all four originals at teardown.
+- Fresh Debug/Release, Python23, cached Deno52+4, byte-identical Debug restoration and installed six app/widget hashes pass. No frame-pacing or physical-performance claim.
+- 808 native matrix PNGs, 52 separate login after originals, 44 matched login pairs,17 usable Apple references and9 recordings.80 protected XCTest frames are labeled partial; clean full-device keyboard supplements remain separate. Eight filled enabled previews have no exact S-before; the additional ordinary fully-filled supplement stopped with0captures after preserved driver failures.
+- R Account native gaps35/23.67pt and explanatory contrast>=8.51:1; T capacity footer status-first/shared18pt gutter/6pt gap,16pt shorter; S8/20pt grouping; U inline Sign In/title2Notepad, neutral outlined provider controls,48pt fields and filled primary contrast>=6.29:1. Exact wording/providers/branding remain.
+- U V1 passed tests but failed actual dark filled-action contrast2.697:1; rejected evidence remains. V2 adds a native4.5:1 regression gate and the corrected ink. Earlier R/S/T failures remain historical failures, superseded by the serial combined pass rather than relabeled.
+- Shared Git pack became readable again through iCloud hydration. Parent committed the exact frozen corrected source and verified clean evidence; old handoff flags remain historical. See `validation/round7/PARENT-REVIEW.md` and `source-binding.json`. Required normalized checks pass.
+- Parent accepts the clearer native login composition for independent grading; this is not Edmund’s visual acceptance or a score. Root merge `f096e2a` includes the exact R/T/S/U candidates. Each candidate PARENT-STATUS is updated to point to the combined validation.
+
+The Mac has a parent-owned temporary `caffeinate -disu -t43200` assertion at Edmund’s request, PID33824 recorded in `/tmp/hillclimb-awake-20261105.json`. It prevents idle display/system sleep, expires after12hours and must be terminated when overall work ends. Manual lock/lid closure are not overridden; no global power/security setting changed.
 
 ## Round 6 accepted verification
 
@@ -68,6 +81,8 @@ Evidence: `validation/round6/README.md`, `validation/round6/recheck/README.md`, 
 | Q Account hard edge, paragraph spacing and Done size | Merged; exact wording, 6pt spacing, 44pt on-screen target | `tasks/account-chrome/` |
 | Combined round 6 and corrected gesture proof | Merged; all required gates pass | `validation/round6/`, `validation/round6/recheck/` |
 | Round 6 independent Codex reviews | Complete; density findings accepted | `rounds/6/` |
+| R/S/T density candidates and U login composition | Merged after serial317/317 and parent native review | `tasks/login-composition/`, `validation/round7/` |
+| Round 7 independent Codex reviews | Running; no scores claimed | `rounds/7/` |
 
 ## Edmund’s crowding priority
 
@@ -75,7 +90,7 @@ Direct feedback: “looks croweded as fuck”; check it on the next pass. Accoun
 
 ## Devices and ownership
 
-All workers have released their sessions. Account density worker R owns original17 in a new isolated session; upcoming S sign-in and T capacity-footer workers use separate private devices. Review agents are complete. Original17 is running light/Large, original switches restored, no owned Activities, and own app/Settings/session/panel closed.
+All implementation workers have released their sessions. Round 7 native graders are read-only and own no device. Original17 is running light/Large, original switches restored, no owned Activities, and own app/Settings/session/panel closed.
 
 | Device | Host | ID |
 | --- | --- | --- |
@@ -134,3 +149,7 @@ S frozen source `c8da740`/evidence `5d00a906`:8pt within groups,20pt between, or
 Awake fullsuite309/310passed,0skips,all308priorIDs; the sole failure is SignInSurfaceUITests lightXXXL emailTarget43.99999999999994<44. This differs from T’s circle-frame roundoff, already repaired test-only on integration. A coherent48pt email field matching Password is a legitimate composition candidate that preserves the unchanged >=44 test, rather than waiving its gate. Earlier sleep/runner failures remain retained. All workers now returned devices and no heavyweight task suite remains active; sampled load is5.46/5.35/7.97.
 
 Next U runs in ONE isolated worktree: apply exact R/T/S frozen source patches (with no extra edits to Account/board), refine SignIn’s default overall composition, then perform one serial full-suite validation covering all candidates and new checks. Existing R2+T4+S2 methods imply316baseline methods before U additions; actual named counts authoritative. Use a process-scoped idle-sleep assertion for the run and retain any clamshell sleep/wake events; do not claim it prevents deliberate lid closure. Merge only the passing combined candidate after native before/after review. This validates the source combination without three simultaneous resource-confounded reruns.
+
+## Historical density handbacks superseded by combined round 7
+
+The pending R/S/T/U handoff snapshots above remain historical records. The exact corrected combined source is now committed, validated, and merged. The current plan and Round7 accepted-verification section take precedence.

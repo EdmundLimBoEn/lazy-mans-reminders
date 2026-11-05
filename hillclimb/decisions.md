@@ -116,3 +116,17 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 - Retain R/T evidence and candidate patches without merging unvalidated app code. Their full-suite failures remain unresolved. Parent fixes only the demonstrated circle CGRect floating-point comparison with1e-9pt allowance (44pt contract unchanged), pending execution in serial rechecks. Wait for S’s current suite to return before starting any new full suite. Login composition remains the user’s highest visual priority.
 
 - S grouping evidence retained, not accepted as a finished login. Parent matched default screenshot confirms limited composition change; user specifically dislikes login. U will combine exact frozen R/T/S patches in an isolated worktree, refine only SignIn title/brand/control hierarchy and validate all candidate code serially before any app merge. Prefer a coherent48pt email field over changing SignInSurface’s strict44pt minimum; no blanket tolerance or assertion relaxation. Preserve every initial failed run and the root’s separate circle-only1e-9pt roundoff correction.
+
+## Round 7 combined acceptance and awake assertion — 2026-11-05
+
+Prioritize Edmund’s default login complaint. Integrate exact R/T/S candidate patches in U’s isolated worktree, then improve the whole Sign In composition while retaining all wording, official Apple branding and provider behavior. Inline Sign In and title2 Notepad remove competing large headings; coherent outlined providers, neutral48pt fields and8/20/24pt grouping distinguish choices, input and action. Parent native before/after review accepts this candidate for independent grading, not as user approval.
+
+Reject V1 despite317test passes because actual dark filled-submit contrast was2.697:1. V2 fixes label ink and adds a native>=4.5 contrast check; final measured minimum6.29. The serial combined317/317 pass, fresh builds/backend/Python and all Settings restorations supersede earlier failed candidate runs without rewriting them. Source byte identity, native acquisition identity and metadata-only commit identity are recorded separately.
+
+A shared iCloud-managed Git pack had become unreadable; it hydrated again without deletion/reset/repack. Parent verified all93frozen inputs and committed exact tested V2 as e9f7ace, then merged only the validated combined candidate into hillclimb/ui. Historical handoff block flags remain intact; normalized round7 checks and source-binding establish current acceptance.
+
+At Edmund’s request start parent-owned caffeinate -disu -t43200; verify display/system/user-active assertions. Record PID33824 in /tmp/hillclimb-awake-20261105.json; stop only that process when the overall work ends or renew before its12-hour expiration if still needed. It does not bypass manual locking or lid closure and changes no global security/power preferences.
+
+Fresh independent Sol/high and Astra/high reviews use808native matrix images,52final login originals,44matched login pairs and17references. Opus remains eligibility-gated>=8.5both; limited API and Cursor fallback instructions persist. Round6Opus stays transparently deferred. Latest actual Codex weekly usage31%, so no usage stop.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
