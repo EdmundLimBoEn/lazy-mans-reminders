@@ -54,6 +54,8 @@ struct AccountView: View {
                                 .frame(width: 40, height: 40)
                                 .background(Circle().fill(Color.primary))
                         }
+                        .listRowBackground(Color.clear)
+                        .accountMeasure("identity.row")
                         .accessibilityElement(children: .combine)
                         .accessibilityLabel(accountAccessibilityLabel)
                     }
@@ -63,7 +65,7 @@ struct AccountView: View {
                     } footer: {
                         Text(NotificationAccessPolicy.footer(notificationAccess))
                             .accountMeasure("notifications.footer")
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(.primary.opacity(0.75))
                     }
 
                     BoardPersistenceSection(registration: auth.pushRegistration, fixtureRecovery: {
@@ -110,7 +112,7 @@ struct AccountView: View {
                     } footer: {
                         Text("Or email \(FeedbackMail.address)")
                             .accountMeasure("feedback.footer")
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(.primary.opacity(0.75))
                             .textSelection(.enabled)
                     }
 
@@ -147,7 +149,6 @@ struct AccountView: View {
             .contentMargins(.top, 8, for: .scrollContent)
             // Neutral rows; colour is reserved for state and destructive actions.
             .tint(.primary)
-            .listSectionSpacing(.compact)
             .navigationTitle("Account")
             .navigationBarTitleDisplayMode(.inline)
             .interactiveDismissDisabled(isDeletingAccount)

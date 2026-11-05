@@ -1,0 +1,254 @@
+{
+  "source_sha": "e9f7ace58b493dd4aa3acb27325eaea7cf0ed352",
+  "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+  "checks": [
+    {
+      "name": "Frozen93source/config inputs",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/freeze.json"
+    },
+    {
+      "name": "R/T production and test bytes exact",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/frozen-RT.json"
+    },
+    {
+      "name": "All54production files match frozen scope",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/production54.json"
+    },
+    {
+      "name": "Strict SignInSurface and root circle source retained",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/freeze.json"
+    },
+    {
+      "name": "317named methods passed,263unit+54UI,0failed/skip",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/acceptance.json"
+    },
+    {
+      "name": "308/307/304/293named IDs retained",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/acceptance.json"
+    },
+    {
+      "name": "Unfiltered serial exact xctestrun, diagnostics never,240/300",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/full-v2-process.json"
+    },
+    {
+      "name": "build-v2-frozen",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/build-v2-frozen-process.json"
+    },
+    {
+      "name": "build-v2-release",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/build-v2-release-process.json"
+    },
+    {
+      "name": "build-v2-debug-restore",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/build-v2-debug-restore-process.json"
+    },
+    {
+      "name": "V2auth-focused8/8",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/v2-focused-summary.json"
+    },
+    {
+      "name": "python-ios offline",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/python-ios.json"
+    },
+    {
+      "name": "deno offline",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/deno.json"
+    },
+    {
+      "name": "deno-overflow offline",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/deno-overflow.json"
+    },
+    {
+      "name": "Debug artifact restoration byte-identical",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/debug-restore-artifacts.json"
+    },
+    {
+      "name": "Final installed tested app/widget six hashes",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/final-installed-identity.json"
+    },
+    {
+      "name": "All3Settings tests individually restore all4",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/full-v2-restoration-proof.json"
+    },
+    {
+      "name": "composition-native-gates",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/composition-native-gates.json"
+    },
+    {
+      "name": "provider-native-gates",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/provider-native-gates.json"
+    },
+    {
+      "name": "paint-native-gates",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/paint-native-gates.json"
+    },
+    {
+      "name": "combined-account-gates",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/combined-account-gates.json"
+    },
+    {
+      "name": "R Account native paragraph/tone assertions",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/account-raster-results.json"
+    },
+    {
+      "name": "R/T/S density geometry",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/density-native-gates.json"
+    },
+    {
+      "name": "Board final row/ink",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/pixel-geometry-results.json"
+    },
+    {
+      "name": "Normal+combined edge raster/AX",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/rounds/7/edge/raster-results.json"
+    },
+    {
+      "name": "16native secure-field spans144px",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/secure-field-pixel-proof.json"
+    },
+    {
+      "name": "Activity native8short+4long OCR/ink/count gates",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/activity-native-gates.json"
+    },
+    {
+      "name": "9recordings,3samples each,6unmodified2s frames",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/video-artifacts.json"
+    },
+    {
+      "name": "808final native PNG hash/dimension/source identity",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/rounds/7/inventory.json"
+    },
+    {
+      "name": "44matched login before/after pairs",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/login-pairings.json"
+    },
+    {
+      "name": "All17usable references paired",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/reference-coverage.json"
+    },
+    {
+      "name": "All21final capture protocols finish",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/capture.py"
+    },
+    {
+      "name": "All80main contact sheets inspected",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/inspection.json"
+    },
+    {
+      "name": "Device restored/closed without shutdown",
+      "required": true,
+      "status": "passed",
+      "proof": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/validation/round7/final-device-state.json"
+    },
+    {
+      "name": "Original strings retained",
+      "required": true,
+      "status": "passed",
+      "proof": "hillclimb/tasks/login-composition/copy-integrity.json"
+    },
+    {
+      "name": "Additional ordinary fully-filled comparison supplement",
+      "required": false,
+      "status": "failed",
+      "proof": "hillclimb/tasks/login-composition/optional-filled-pair-status.json"
+    },
+    {
+      "name": "Parent/user visual review",
+      "required": false,
+      "status": "passed",
+      "proof": "../../validation/round7/PARENT-REVIEW.md; parent acceptance for independent grading only"
+    },
+    {
+      "name": "Exact frozen source committed",
+      "required": true,
+      "status": "passed",
+      "proof": "../../validation/round7/source-binding.json"
+    },
+    {
+      "name": "Evidence worktree clean after evidence commit",
+      "required": true,
+      "status": "passed",
+      "proof": "../../validation/round7/source-binding.json",
+      "verifiedEvidenceCommit": "d449b72bb0c854b8dec6dae5571a1c00b2f1ec9d"
+    }
+  ],
+  "allExecutedImplementationAndNativeGatesPassed": true,
+  "allRequiredChecksPassed": true,
+  "fullSuite": {
+    "passed": 317,
+    "unit": 263,
+    "ui": 54,
+    "failed": 0,
+    "skipped": 0
+  },
+  "remainingGaps": [
+    "No exact auth, Activity, capacity, medium, combined-system-configuration or Notes reference"
+  ],
+  "historicalFailureEvidence": "../../validation/round7/round-checks-at-handoff.json"
+}

@@ -40,9 +40,9 @@ final class BoardCapacityPresentationUITests: XCTestCase {
         XCTAssertGreaterThanOrEqual(status.frame.height, 44)
         let g = try geometry()
         let composer = try XCTUnwrap(g["composer"])
-        // Existing 16pt outer gutters and 14/5pt inner insets leave 351pt on regular17.
-        XCTAssertEqual(status.frame.minX, composer.minX + 30, accuracy: 1)
-        XCTAssertEqual(status.frame.maxX, composer.maxX - 21, accuracy: 1)
+        // The static capacity group shares the native 18pt gutter on both sides.
+        XCTAssertEqual(status.frame.minX, composer.minX + 18, accuracy: 1)
+        XCTAssertEqual(status.frame.maxX, composer.maxX - 18, accuracy: 1)
         let actual = try XCTUnwrap(g["capacity"])
         XCTAssertGreaterThan(actual.height, xxxl ? 26 : 20)
         if xxxl {

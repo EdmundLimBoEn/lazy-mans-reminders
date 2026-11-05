@@ -1,0 +1,22 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "scripts/tests",
+    "-p",
+    "test_ios*.py"
+  ],
+  "exit": 0,
+  "expectedCount": 23,
+  "observedCount": 23,
+  "startedUTC": "2026-11-05T12:24:02.452794+00:00",
+  "endedUTC": "2026-11-05T12:24:04.519320+00:00",
+  "stdout": "",
+  "stderr": ".......................\n----------------------------------------------------------------------\nRan 23 tests in 1.982s\n\nOK\n",
+  "sourceIdentity": "sha256:c987bc663609afe8682bf87eb481c0eca604dee9c28b69356bad3551917c01d2",
+  "frozenInputsMatch": true
+}

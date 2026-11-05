@@ -241,17 +241,7 @@ struct ReminderListView: View {
     private var composer: some View {
         VStack(alignment: .leading, spacing: 8) {
             if atCapacity {
-                Text(ReminderBoardLimits.postItHint)
-                    .modifier(HillclimbFrameProbe(key: "capacityHint"))
-                    .font(.caption)
-                    .foregroundStyle(.primary.opacity(0.75))
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal, 2)
-                    .accessibilityAddTraits(.isStaticText)
-            }
-
-            HStack(alignment: .center, spacing: 8) {
-                if atCapacity {
+                VStack(alignment: .leading, spacing: 6) {
                     Text("Board full — combine lines instead")
                         .font(.body)
                         .foregroundStyle(.primary)
@@ -264,88 +254,96 @@ struct ReminderListView: View {
                         .accessibilityAddTraits(.isStaticText)
                         .accessibilityIdentifier("board.capacity")
                         .accessibilityHint("Board is full. Complete a reminder or combine lines.")
-                } else {
-                TextField(
-                    "New reminder",
-                    text: Binding(get: { draft.text }, set: { draft.edit($0) }),
-                    axis: .vertical
-                )
-                .font(.body)
-                .frame(minHeight: 44)
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    if !atCapacity && !isReordering && !isDragging && !draft.isSubmitting {
-                        composerFocused = true
+                    Text(ReminderBoardLimits.postItHint)
+                        .modifier(HillclimbFrameProbe(key: "capacityHint"))
+                        .font(.caption)
+                        .foregroundStyle(.primary.opacity(0.75))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isStaticText)
+                }
+                .padding(.horizontal, 2)
+            } else {
+                HStack(alignment: .center, spacing: 8) {
+                    TextField(
+                        "New reminder",
+                        text: Binding(get: { draft.text }, set: { draft.edit($0) }),
+                        axis: .vertical
+                    )
+                    .font(.body)
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        if !atCapacity && !isReordering && !isDragging && !draft.isSubmitting {
+                            composerFocused = true
+                        }
                     }
-                }
-                .accessibilityElement(children: .combine)
-                .tint(.primary)
-                .lineLimit(1...4)
-                .textInputAutocapitalization(.sentences)
-                .focused($composerFocused)
-                .disabled(atCapacity || isReordering || isDragging || draft.isSubmitting)
-                .submitLabel(.return)
-                .accessibilityLabel("New reminder")
-                .accessibilityHint(
-                    atCapacity
-                        ? "Board is full. Complete a reminder or combine lines."
-                        : "Adds a reminder to your board and Lock Screen"
-                )
-                .onSubmit { Task { await addReminder() } }
+                    .accessibilityElement(children: .combine)
+                    .tint(.primary)
+                    .lineLimit(1...4)
+                    .textInputAutocapitalization(.sentences)
+                    .focused($composerFocused)
+                    .disabled(atCapacity || isReordering || isDragging || draft.isSubmitting)
+                    .submitLabel(.return)
+                    .accessibilityLabel("New reminder")
+                    .accessibilityHint(
+                        atCapacity
+                            ? "Board is full. Complete a reminder or combine lines."
+                            : "Adds a reminder to your board and Lock Screen"
+                    )
+                    .onSubmit { Task { await addReminder() } }
 
-                }
-
-                if composerFocused {
-                    Button { composerFocused = false } label: {
-                        Image(systemName: "keyboard.chevron.compact.down")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .frame(width: 44, height: 44)
-                            .contentShape(Rectangle())
+                    if composerFocused {
+                        Button { composerFocused = false } label: {
+                            Image(systemName: "keyboard.chevron.compact.down")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .frame(width: 44, height: 44)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Done")
+                        .accessibilityHint("Dismisses the keyboard")
+                        .transition(.opacity)
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Done")
-                    .accessibilityHint("Dismisses the keyboard")
-                    .transition(.opacity)
-                }
 
-                if !atCapacity {
-                    Button {
-                        Task { await addReminder() }
-                    } label: {
-                        Group {
-                            if draft.isSubmitting {
-                                ProgressView()
-                                    .controlSize(.small)
-                                    .accessibilityHidden(true)
-                            } else {
-                                Image(systemName: "arrow.up")
-                                    .font(.subheadline.weight(.semibold))
-                                    .foregroundStyle(canAdd ? Color(.systemBackground) : Color(.tertiaryLabel))
-                                    .accessibilityHidden(true)
+                    if !atCapacity {
+                        Button {
+                            Task { await addReminder() }
+                        } label: {
+                            Group {
+                                if draft.isSubmitting {
+                                    ProgressView()
+                                        .controlSize(.small)
+                                        .accessibilityHidden(true)
+                                } else {
+                                    Image(systemName: "arrow.up")
+                                        .font(.subheadline.weight(.semibold))
+                                        .foregroundStyle(canAdd ? Color(.systemBackground) : Color(.tertiaryLabel))
+                                        .accessibilityHidden(true)
+                                }
                             }
+                            .frame(width: addVisualSize, height: addVisualSize)
+                            .background {
+                                Circle()
+                                    .fill(canAdd ? Color.primary : Color(.quaternarySystemFill))
+                            }
+                            .frame(width: addHitSize, height: addHitSize)
+                            .contentShape(Rectangle())
                         }
-                        .frame(width: addVisualSize, height: addVisualSize)
-                        .background {
-                            Circle()
-                                .fill(canAdd ? Color.primary : Color(.quaternarySystemFill))
-                        }
-                        .frame(width: addHitSize, height: addHitSize)
-                        .contentShape(Rectangle())
+                        .buttonStyle(.plain)
+                        .disabled(!canAdd)
+                        .accessibilityLabel(draft.isSubmitting ? "Adding reminder" : "Add reminder")
+                        .accessibilityHint("Saves the text as a new reminder")
                     }
-                    .buttonStyle(.plain)
-                    .disabled(!canAdd)
-                    .accessibilityLabel(draft.isSubmitting ? "Adding reminder" : "Add reminder")
-                    .accessibilityHint("Saves the text as a new reminder")
                 }
+                .padding(.leading, 14)
+                .padding(.trailing, 5)
+                .padding(.vertical, 7)
+                .background {
+                    if !atCapacity { composerFieldBackground }
+                }
+                .accessibilityElement(children: .contain)
             }
-            .padding(.leading, 14)
-            .padding(.trailing, 5)
-            .padding(.vertical, 7)
-            .background {
-                if !atCapacity { composerFieldBackground }
-            }
-            .accessibilityElement(children: .contain)
         }
         .padding(.horizontal, 16)
         .padding(.top, 6)

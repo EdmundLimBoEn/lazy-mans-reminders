@@ -5,7 +5,7 @@ import UIKit
 struct SignInView: View {
     @EnvironmentObject private var auth: AuthManager
     @Environment(\.colorScheme) private var colorScheme
-    @ScaledMetric(relativeTo: .body) private var signInButtonHeight: CGFloat = 44
+    @ScaledMetric(relativeTo: .body) private var signInButtonHeight: CGFloat = 48
     @State private var email = ""
     @State private var password = ""
     @State private var usesPassword = false
@@ -70,7 +70,7 @@ struct SignInView: View {
                 VStack(alignment: .leading, spacing: 24) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Notepad")
-                            .font(.subheadline.weight(.semibold))
+                            .font(.title2.weight(.semibold))
                             .foregroundStyle(.primary)
                         Text("Your board on this iPhone, the web, and the Lock Screen.")
                             .font(.body)
@@ -115,7 +115,7 @@ struct SignInView: View {
             }
             }
             .navigationTitle("Sign In")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .safeAreaInset(edge: .bottom, spacing: 8) {
                 if emailFocused || passwordFocused {
                     HStack {
@@ -141,6 +141,10 @@ struct SignInView: View {
             if fixtureVariant == "password" || fixtureVariant == "password-keyboard" {
                 usesPassword = true
             }
+            if appearanceFixture && HillclimbDemo.argument("--hillclimb-signin-filled") == "yes" {
+                email = "you@example.com"
+                if usesPassword { password = "Demo-password" }
+            }
             if fixtureVariant == "loading" { pending = .magicLink }
             if fixtureVariant == "keyboard" || fixtureVariant == "password-keyboard" {
                 try? await Task.sleep(for: .milliseconds(300))
@@ -153,6 +157,13 @@ struct SignInView: View {
             guard !blocksExternalActions else { return .discarded }
             return .systemAction(url)
         })
+#if DEBUG
+        .overlay(alignment: .topLeading) {
+            if HillclimbDemo.mode == .signin {
+                SignInDensityExport().frame(width: 1, height: 1).allowsHitTesting(false)
+            }
+        }
+#endif
         .allowsHitTesting(!appearanceFixture)
         .onChange(of: displayedNotice, initial: true) { _, notice in
             if let message = errorAnnouncements.announcement(for: notice) {
@@ -204,6 +215,10 @@ struct SignInView: View {
         SignInEmail.isPlausible(normalizedEmail)
     }
 
+    private var submitIsDisabled: Bool {
+        disablesDemoControls || !emailIsPlausible || busy || (usesPassword && password.isEmpty)
+    }
+
     private var providerSection: some View {
         SignInSection {
             SignInWithAppleButton(.signIn) { request in
@@ -238,11 +253,12 @@ struct SignInView: View {
                     showsProgress: pending == .google
                 )
             }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.roundedRectangle)
-            .controlSize(.large)
+            .buttonStyle(.plain)
+            .foregroundStyle(.primary)
             .frame(maxWidth: .infinity)
             .frame(minHeight: max(44, signInButtonHeight))
+            .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 6))
+            .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.primary, lineWidth: 1))
             .disabled(busy || disablesDemoControls)
             .accessibilityHint("Opens Google sign-in in a secure browser sheet")
         }
@@ -273,79 +289,95 @@ struct SignInView: View {
                 .frame(maxWidth: .infinity)
             }
         } else {
-            SignInSection {
-                Text("Email")
-                    .font(.headline)
-                    .accessibilityAddTraits(.isHeader)
-                Text("Use the same address as the web board.")
-                    .font(.footnote)
-                    .foregroundStyle(.primary)
-                    .fixedSize(horizontal: false, vertical: true)
-                emailField
-                if !normalizedEmail.isEmpty && !emailIsPlausible {
-                    Text("Enter a valid email address.")
-                        .font(.footnote)
-                        .foregroundStyle(.primary)
-                        .accessibilityAddTraits(.updatesFrequently)
-                }
-                if usesPassword {
-                    Text("Password")
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Email")
                         .font(.headline)
-                        .accessibilityHidden(true)
-                    passwordField
-                    Text("For an existing account with a password. You can also use a sign-in link.")
+                        .accessibilityAddTraits(.isHeader)
+                        .modifier(SignInDensityProbe(key: "emailHeading"))
+                    Text("Use the same address as the web board.")
                         .font(.footnote)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(.primary.opacity(0.75))
                         .fixedSize(horizontal: false, vertical: true)
-                }
-                Button {
-                    if usesPassword {
-                        startPasswordSignIn()
-                    } else {
-                        Task { await sendMagicLink() }
+                        .modifier(SignInDensityProbe(key: "emailHelper"))
+                    emailField
+                        .modifier(SignInDensityProbe(key: "emailField"))
+                    if !normalizedEmail.isEmpty && !emailIsPlausible {
+                        Text("Enter a valid email address.")
+                            .font(.footnote)
+                            .foregroundStyle(.primary)
+                            .accessibilityAddTraits(.updatesFrequently)
                     }
-                } label: {
-                    signInButtonLabel(
-                        title: usesPassword ? "Sign In with Password" : "Send Sign-In Link",
-                        showsProgress: pending == .magicLink || pending == .password
-                    )
                 }
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.roundedRectangle)
-                .controlSize(.large)
-                .frame(maxWidth: .infinity)
-                .disabled(disablesDemoControls || !emailIsPlausible || busy || (usesPassword && password.isEmpty))
-                Button {
-                    usesPassword.toggle()
-                    password = ""
-                    passwordFocused = false
-                    clearNotice()
-                } label: {
-                    Text(usesPassword ? "Use a Sign-In Link Instead" : "Use an Existing Password")
-                        .fixedSize(horizontal: false, vertical: true)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity, minHeight: 48)
-                        .contentShape(Rectangle())
+                .modifier(SignInDensityProbe(key: "emailGroup"))
+                if usesPassword {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Password")
+                            .font(.headline)
+                            .accessibilityHidden(true)
+                            .modifier(SignInDensityProbe(key: "passwordHeading"))
+                        passwordField
+                            .modifier(SignInDensityProbe(key: "passwordField"))
+                        Text("For an existing account with a password. You can also use a sign-in link.")
+                            .font(.footnote)
+                            .foregroundStyle(.primary.opacity(0.75))
+                            .fixedSize(horizontal: false, vertical: true)
+                            .modifier(SignInDensityProbe(key: "passwordHelper"))
+                    }
+                    .modifier(SignInDensityProbe(key: "passwordGroup"))
                 }
-                .buttonStyle(.plain)
-                .foregroundStyle(.tint)
-                .controlSize(.large)
-                .frame(maxWidth: .infinity, minHeight: 48)
-                .disabled(busy)
-                .id("signin.alternateTarget")
+                VStack(alignment: .leading, spacing: 8) {
+                    Button {
+                        if usesPassword {
+                            startPasswordSignIn()
+                        } else {
+                            Task { await sendMagicLink() }
+                        }
+                    } label: {
+                        signInButtonLabel(
+                            title: usesPassword ? "Sign In with Password" : "Send Sign-In Link",
+                            showsProgress: pending == .magicLink || pending == .password
+                        )
+                        .foregroundColor(colorScheme == .dark && !submitIsDisabled ? Color(.systemBackground) : nil)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.roundedRectangle)
+                    .controlSize(.large)
+                    .frame(maxWidth: .infinity)
+                    .disabled(submitIsDisabled)
+                    Button {
+                        usesPassword.toggle()
+                        password = ""
+                        passwordFocused = false
+                        clearNotice()
+                    } label: {
+                        Text(usesPassword ? "Use a Sign-In Link Instead" : "Use an Existing Password")
+                            .fixedSize(horizontal: false, vertical: true)
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity, minHeight: 48)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.tint)
+                    .controlSize(.large)
+                    .frame(maxWidth: .infinity, minHeight: 48)
+                    .disabled(busy)
+                    .id("signin.alternateTarget")
+                }
+                .modifier(SignInDensityProbe(key: "actionGroup"))
             }
         }
     }
 
     private var emailField: some View {
         HStack(spacing: 0) {
-            TextField("you@example.com", text: $email)
+            TextField("you@example.com", text: $email, prompt: Text(verbatim: "you@example.com").foregroundColor(Color(.secondaryLabel)))
                 .textContentType(usesPassword ? .username : .emailAddress)
                 .keyboardType(.emailAddress)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .font(.body)
-                .frame(minHeight: 44)
+                .frame(minHeight: 48)
                 .contentShape(Rectangle())
                 .focused($emailFocused)
                 .submitLabel(usesPassword ? .next : .send)
@@ -375,7 +407,7 @@ struct SignInView: View {
         }
         .padding(.leading, 12)
         .padding(.trailing, email.isEmpty ? 12 : 0)
-        .frame(minHeight: 44)
+        .frame(minHeight: 48)
         .background(Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
         .contentShape(Rectangle())
         .onTapGesture { if !busy { emailFocused = true } }
@@ -521,3 +553,53 @@ private extension View {
         }
     }
 }
+
+private struct SignInDensityProbe: ViewModifier {
+    let key: String
+    func body(content: Content) -> some View {
+        #if DEBUG
+            if HillclimbDemo.mode == .signin {
+                content.background(
+                    GeometryReader { geometry in
+                        Color.clear.onAppear { SignInDensityFrames.values[key] = geometry.frame(in: .global) }
+                            .onChange(of: geometry.frame(in: .global)) { _, frame in
+                                SignInDensityFrames.values[key] = frame
+                            }
+                    })
+            } else {
+                content
+            }
+        #else
+            content
+        #endif
+    }
+}
+#if DEBUG
+    @MainActor private enum SignInDensityFrames {
+        static var values: [String: CGRect] = [:]
+    }
+    private struct SignInDensityExport: UIViewRepresentable {
+        func makeUIView(context: Context) -> ExportView { ExportView() }
+        func updateUIView(_ uiView: ExportView, context: Context) {}
+        final class ExportView: UIView {
+            override init(frame: CGRect) {
+                super.init(frame: frame)
+                isAccessibilityElement = true
+                accessibilityIdentifier = "signin.densityFrames"
+            }
+            required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+            override var accessibilityValue: String? {
+                get {
+                    let frames = SignInDensityFrames.values.mapValues {
+                        [$0.minX, $0.minY, $0.width, $0.height]
+                    }
+                    guard
+                        let data = try? JSONSerialization.data(withJSONObject: frames, options: [.sortedKeys])
+                    else { return nil }
+                    return String(data: data, encoding: .utf8)
+                }
+                set {}
+            }
+        }
+    }
+#endif
