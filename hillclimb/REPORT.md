@@ -78,7 +78,7 @@ Task histories and exact commits are in `tasks/`, `decisions.md` and Git history
 
 ## Remaining limits and next step
 
-Independent round7 Sol/high and Astra/high reviews validate at8.50/8.13. Opus5.5/medium is skipped because Astra<8.5; the authorized Cursor fallback remains available only if API tokens run out on an eligible round. Final stop requires all3>=9 with no category<7 and real regression gates passing.31% of the current weekly Codex window was used at the latest snapshot; [usage](rounds/7/usage.json). No three-round plateau or usage stop is established.
+Independent round7 Sol/high and Astra/high reviews validate at8.50/8.13. Opus5.5/medium is skipped because Astra<8.5; the authorized Cursor fallback remains available only if API tokens run out on an eligible round. Final stop requires all3>=9 with no category<7 and real regression gates passing.33% of the current weekly Codex window was used at the latest snapshot; [usage](rounds/7/usage.json). No three-round plateau or usage stop is established.
 
 True locked-device geometry/wallpapers, physical haptics, spoken VoiceOver, AX1–AX5, live authentication/AutoFill and hardware frame pacing remain unobserved. Actual normal and combined Reduce Motion/Transparency/Contrast keyboard cases pass only the tested default/XXXL matrix. Five-sample simulator Debug metrics establish a host/XCTest baseline: launch mean0.979656s, scroll protocol4.860044s and scrolling signpost duration2.343825s. They prove neither hardware feel nor improvement.
 
