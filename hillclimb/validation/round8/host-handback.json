@@ -1,0 +1,35 @@
+{
+  "awake": {
+    "pid": 33824,
+    "command": [
+      "/usr/bin/caffeinate",
+      "-disu",
+      "-t",
+      "43200"
+    ],
+    "started_at": "2026-11-05T15:14:46.794493+00:00",
+    "timeout_seconds": 43200,
+    "cleanup": "Terminate only this recorded caffeinate process when the hill climb ends; verify command identity first.",
+    "stopped_at": "2026-11-05T20:38:13.848304+00:00",
+    "status": "stopped",
+    "verified_command": "/usr/bin/caffeinate -disu -t 43200",
+    "verified_process_start": "Thu Nov  5 23:14:46 2026",
+    "signal": "SIGTERM",
+    "reason": "Hill climb stopped under requested three-round plateau rule;source,evidence,reviews and report pushed to hillclimb/ui",
+    "final_integration_commit": "aa6488a74f31d7ad11b3224d94c015b15e7848e6",
+    "global_power_or_security_settings_changed": false
+  },
+  "verifiedReviewReportSync": {
+    "finalIntegration": "aa6488a74f31d7ad11b3224d94c015b15e7848e6",
+    "pushed": true,
+    "ownTrackedClean": true,
+    "originalTrackedClean": true,
+    "awakeStatus": "stopped",
+    "awakeRecord": "/tmp/hillclimb-awake-20261105.json",
+    "simulator": "Booted/restored;own Activities empty and own panel closed",
+    "targetMet": false,
+    "stopReason": "Three successive rounds without either Codex grader beating its previous best;see committed plateau audit",
+    "completedUTC": "2026-11-05T20:38:13.848304+00:00"
+  },
+  "scope": "This handback metadata follows verified report synchronization;no app/test/source change"
+}
