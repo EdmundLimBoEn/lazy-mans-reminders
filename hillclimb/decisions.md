@@ -152,3 +152,19 @@ Retain the7pass/1failure focused layout run: an active field could settle at69.6
 The same invocation omitted two requested new capture methods; do not count them. Binary symbol inspection and fresh test enumeration list them. Explicit capture method execution counts are required before acceptance. Add canonical core screenshots and Activity system-surface captures through projectXCTest, since manual driver remains stopped on a stale claim despite owner close attempts. System appearance uses public XCUIDevice.appearance; text-size changes go through Settings UI and restore original slider value, with assertions. Initial new capture build had Float/CGFloat slider-argument errors, corrected with explicit conversions; retain failed build evidence. No new capture run has passed yet.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Round8 bounded PM pass,2026-11-06
+
+Primary PM implements the small review fixes directly. Retain the email-first contiguous work area and secondary Apple-then-Google block after comparing actual default light/dark empty/filled states. All original words, branding and native Apple assets remain. Use a non-sizing regular native spinner and measured focus/viewport restoration; keep48pt fields/Done and existing minimum/contrast gates. Existing Account prefixes receive semibold emphasis only.
+
+The old synthetic Password heading rectangle is an invalid test contract after grouping changes. Correct only that helper to actual measured geometry; retain its navigation, field, title-band and ink assertions, and preserve the322/2historical failure. Recorded app binaries are identical; Widget source/cache reuse is separately recorded. Require a corrected full pass before integration.
+
+Select332distinct review captures from522native acquisitions; preserve all raw acquisitions and12unit rasters separately. Recorded2s Activity witnesses retain identical decoded pixels after timestamp-only stream-copy normalization. Faint board scroll-edge fragments remain a disclosed visual concern. Raw network wording remains unchanged by Edmund’s decision. No new product question.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Round8 complete technical acceptance
+
+Frozen20ae77e passed325/325(263unit+62UI),all317prior IDs retained,zero failures/skips. All five Settings methods independently started/restored0/1/0/0. Fresh Release/Python23/cachedDeno52+4,Debug byte restoration and six installed executable hashes pass. Light/Large and no owned Activities are confirmed;only own Device panel closed without shutdown. All required checks pass. Historical322/2and323/1failures remain failed with explicit recovery and bounded-matrix rationale. Parent accepts the candidate for independent review,not as Edmund's visual acceptance or a score. No Opus call until both same-round Codex grades>=8.5.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund

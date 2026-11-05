@@ -16,5 +16,6 @@
     "Increase Contrast": false
   },
   "correction": "Keep existing test ID for four light cases; add one dark-method ID for the other four cases, using identical helper assertions/actions. Default240/max300 remain unchanged; no quiescence bypass. Explicit recovery environment carries the captured original values into native Settings UI before a focused run. No production change.",
-  "status": "source fix ready; recovery/build/focused/full validation pending"
+  "status": "Debug build and recovery1/1passed; bounded matrix focused2/2passed with all8original cases and independent exact four-switch restoration. Unfiltered full325running; still no acceptance.",
+  "recoveryProof": "recorded-settings-recovery-proof.json"
 }

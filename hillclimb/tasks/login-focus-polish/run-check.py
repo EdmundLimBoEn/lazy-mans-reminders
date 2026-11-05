@@ -1,3 +1,4 @@
+"""Retain command evidence. Written by gpt-6.1-sol in Codex on behalf of Edmund."""
 import datetime, gzip, hashlib, json, os, pathlib, subprocess, sys, time
 label=sys.argv[1]; command=sys.argv[2:]; out=pathlib.Path(__file__).parent
 record={"command":command,"startUTC":datetime.datetime.now(datetime.timezone.utc).isoformat(),"hostStartLoad":os.getloadavg(),"sourceSHA":subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip()}
@@ -8,7 +9,7 @@ try:
  with gzip.open(out/(label+"-output.txt.gz"),"wt") as log:
   for line in process.stdout:
    log.write(line)
-   if any(x in line for x in ["Test Case '","Test Suite '","error:","failed", "Executed ","** TEST"]):print(line.rstrip(),flush=True)
+   if line.startswith("Test Suite ") or "** TEST" in line or ": error:" in line or (line.startswith("Test Case ") and ("failed" in line or ("started" in line and "[HillclimbUITests." in line))):print(line.rstrip(),flush=True)
  record["exit"]=process.wait()
 finally:awake.terminate();awake.wait()
 record["endUTC"]=datetime.datetime.now(datetime.timezone.utc).isoformat();record["hostEndLoad"]=os.getloadavg()
