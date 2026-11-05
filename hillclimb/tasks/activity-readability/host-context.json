@@ -1,0 +1,8 @@
+{
+  "disk": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   460Gi   397Gi    11Gi    98%    4.3M  119M    3%   /System/Volumes/Data\n",
+  "concurrency": "Three simultaneous worker test/build workloads observed. Only this worker uses original17.",
+  "initialBuildResult": "/tmp/activity-readability-build1.xcresult",
+  "finalBuildRecord": "build2.json",
+  "packageSetup": "scripts/hillclimb/setup.sh then resolvePackageDependencies; subsequent builds use disableAutomaticPackageResolution/skipPackageUpdates",
+  "privateConfig": "Only own example-derived config read by setup. No parent configuration or user untracked files accessed."
+}

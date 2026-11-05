@@ -1,0 +1,85 @@
+{
+  "branch": "hillclimb/keyboard-recovery",
+  "implementation_sha": "399311330d77f90f53966bc3dfe6fe419ff9dfa9",
+  "base": "10fb05e",
+  "files": [
+    "ios/App/SignInView.swift",
+    "ios/App/HillclimbDemo.swift (sign-in root line only)",
+    "ios/App/SignInErrorAnnouncementPolicy.swift",
+    "ios/Tests/SignInErrorAnnouncementPolicyTests.swift",
+    "ios/UITests/SignInSurfaceUITests.swift"
+  ],
+  "build": "Debug build-for-testing succeeded, assigned arm64 simulator destination, CODE_SIGNING_ALLOWED=NO",
+  "tests": {
+    "existing_units": 249,
+    "new_units": 5,
+    "existing_UI": 12,
+    "new_UI": 1,
+    "combined_passed": 267,
+    "combined_failures": 0,
+    "combined_skips": 0,
+    "latest_strengthened_UI_recheck_passed": 2,
+    "latest_recheck_failures": 0,
+    "latest_recheck_skips": 0,
+    "production_hashes_identical_across_all_pass_runs": true,
+    "note": "Combined suite preceded two test-only strengthening changes, which were rebuilt and rerun as 2 exact three-part method filters. No production code changed between passing runs."
+  },
+  "invalid_frame": {
+    "baseline_unified_log_faults": 8,
+    "origin": "SwiftUI.InputAccessoryBar.body -> SwiftUICore._FrameLayout.init; UUID-matched LLDB symbolization of unified-log backtrace",
+    "post_fix_structured_runtime_warnings": 0,
+    "post_fix_unified_log_faults": 0,
+    "window_start_local": "2026-11-04 22:57:00 +0800",
+    "suppressed": false
+  },
+  "captures": {
+    "qualifying_manifest": "settled/manifest.json",
+    "qualifying_count": 20,
+    "dimensions": [
+      1206,
+      2622
+    ],
+    "initial_preserved_count": 20,
+    "initial_limits": "At least light XXXL email keyboard is an unsettled transition; use settled pass.",
+    "settled_failure": "One xcrun inventory timeout retained; instructed --debug retry succeeded and all 20 states completed.",
+    "states": [
+      "email keyboard",
+      "password keyboard",
+      "magicLink loading",
+      "inbox",
+      "error"
+    ],
+    "sizes": [
+      "default",
+      "XXXL"
+    ],
+    "appearances": [
+      "light",
+      "dark"
+    ],
+    "capture_source_sha": "399311330d77f90f53966bc3dfe6fe419ff9dfa9",
+    "binary_sha256": "60b78ba4f3d6916cea2f5227edb87161c02ebf741c60a2af95489a0c999e6ae2"
+  },
+  "device": {
+    "hostId": "local",
+    "id": "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+    "name": "Hillclimb Auth iPhone 17 Pro",
+    "model": "iPhone 17 Pro",
+    "runtime": "iOS 26.2",
+    "runtimeBuild": "23C54",
+    "physical": false,
+    "session": "t3-400cf86c1a8a9a773f0d3cc1",
+    "command": "/Users/limboenedmund/.t3/userdata/device/targets/t3-400cf86c1a8a9a773f0d3cc1/agent-device"
+  },
+  "cleanup": "Own app/session closed; system light/large restored; no shutdown command sent, assigned simulator left running.",
+  "limitations": [
+    "Spoken VoiceOver and actual VoiceOver traversal not observed. Announcement state policy and keyboard recovery tested.",
+    "Synthetic offline fixtures only; no provider requests, real sign-in or external links exercised.",
+    "Simulator only; no physical haptics/hardware/motion certification.",
+    "Parent must re-shoot integrated source on original17.",
+    "Initial compile warnings and unit-host/Xcode diagnostics remain; not globally warning-free.",
+    "No new Release build: parent supplied fresh arm64 Release confirmation; this task built Debug for actual fixtures/tests."
+  ],
+  "prohibited_actions_performed": [],
+  "attribution": "Written by gpt-6.1-sol in Codex on behalf of Edmund"
+}

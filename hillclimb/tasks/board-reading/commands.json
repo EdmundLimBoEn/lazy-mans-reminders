@@ -1,0 +1,21 @@
+{
+  "sourceSHA": "ef82a67b5628698eaa227610e1b3589acabc7323",
+  "setup": [
+    "scripts/hillclimb/setup.sh"
+  ],
+  "fullSuite": [
+    "bash hillclimb/tasks/board-reading/test.sh /tmp/hillclimb-board-final-guard.xcresult"
+  ],
+  "repeat": [
+    "bash hillclimb/tasks/board-reading/test.sh /tmp/hillclimb-board-repeat.xcresult -only-testing:HillclimbUITests/HillclimbUITests/testFullBoardBottomAboveComposerAfterPullAndScroll -test-iterations 3 -test-repetition-relaunch-enabled YES"
+  ],
+  "capture": [
+    "python3 hillclimb/tasks/board-reading/capture.py"
+  ],
+  "install": {
+    "method": "xcodebuild test installed the built app on assigned simulator",
+    "additionalAttempt": "simctl install after repeated tests failed because xcodebuild had shut down its simulator; pinned open subsequently booted it and launched the test-installed app"
+  },
+  "author": "Written by gpt-6.1-sol in Codex on behalf of Edmund",
+  "repeatSourceSHA": "7084fc55ae6c1c7167d01470f93a00fd8e905b82"
+}

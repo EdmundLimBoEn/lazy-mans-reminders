@@ -1,0 +1,169 @@
+{
+  "source_sha": "8dbf6a8e07a5b88dd6748b77a5c8030740eb5309",
+  "checks": [
+    {
+      "name": "existing unit suite",
+      "status": "passed",
+      "count": 249,
+      "command": [
+        "xcodebuild",
+        "test-without-building",
+        "-xctestrun",
+        "/tmp/notepad-round2-dd/Build/Products/LazyMansReminders_iphonesimulator27.1-arm64.xctestrun",
+        "-destination",
+        "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "-parallel-testing-enabled",
+        "NO",
+        "-test-timeouts-enabled",
+        "YES",
+        "-default-test-execution-time-allowance",
+        "120",
+        "-maximum-test-execution-time-allowance",
+        "180",
+        "-collect-test-diagnostics",
+        "never",
+        "-disableAutomaticPackageResolution",
+        "-skipPackageUpdates",
+        "-resultBundlePath",
+        "/tmp/notepad-round2-combined.xcresult",
+        "CODE_SIGNING_ALLOWED=NO"
+      ],
+      "evidence": "combined-tests.json",
+      "validation_base": "../../validation/round2/"
+    },
+    {
+      "name": "all existing UI gates including native footer and board pixel ink",
+      "status": "passed",
+      "count": 12,
+      "command": [
+        "xcodebuild",
+        "test-without-building",
+        "-xctestrun",
+        "/tmp/notepad-round2-dd/Build/Products/LazyMansReminders_iphonesimulator27.1-arm64.xctestrun",
+        "-destination",
+        "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "-parallel-testing-enabled",
+        "NO",
+        "-test-timeouts-enabled",
+        "YES",
+        "-default-test-execution-time-allowance",
+        "120",
+        "-maximum-test-execution-time-allowance",
+        "180",
+        "-collect-test-diagnostics",
+        "never",
+        "-disableAutomaticPackageResolution",
+        "-skipPackageUpdates",
+        "-resultBundlePath",
+        "/tmp/notepad-round2-combined.xcresult",
+        "CODE_SIGNING_ALLOWED=NO"
+      ],
+      "evidence": "combined-tests.json",
+      "validation_base": "../../validation/round2/"
+    },
+    {
+      "name": "combined suite; no skipped tests",
+      "status": "passed",
+      "count": 261,
+      "command": [
+        "xcodebuild",
+        "test-without-building",
+        "-xctestrun",
+        "/tmp/notepad-round2-dd/Build/Products/LazyMansReminders_iphonesimulator27.1-arm64.xctestrun",
+        "-destination",
+        "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "-parallel-testing-enabled",
+        "NO",
+        "-test-timeouts-enabled",
+        "YES",
+        "-default-test-execution-time-allowance",
+        "120",
+        "-maximum-test-execution-time-allowance",
+        "180",
+        "-collect-test-diagnostics",
+        "never",
+        "-disableAutomaticPackageResolution",
+        "-skipPackageUpdates",
+        "-resultBundlePath",
+        "/tmp/notepad-round2-combined.xcresult",
+        "CODE_SIGNING_ALLOWED=NO"
+      ],
+      "evidence": "combined-summary.json",
+      "validation_base": "../../validation/round2/"
+    },
+    {
+      "name": "Release simulator build",
+      "status": "passed",
+      "count": 1,
+      "command": [
+        "xcodebuild",
+        "build",
+        "-project",
+        "ios/LazyMansReminders.xcodeproj",
+        "-scheme",
+        "LazyMansReminders",
+        "-configuration",
+        "Release",
+        "-destination",
+        "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "-derivedDataPath",
+        "/tmp/notepad-round2-dd",
+        "-disableAutomaticPackageResolution",
+        "-skipPackageUpdates",
+        "CODE_SIGNING_ALLOWED=NO",
+        "-quiet"
+      ],
+      "evidence": "../../validation/round2/release-arm64-confirmation.json",
+      "validation_base": "../../validation/round2/",
+      "confirmation": "Fresh arm64 derived-data build exit0/BUILD SUCCEEDED/new binary; prior unusual diagnostics did not recur. Existing AuthManager warnings retained."
+    },
+    {
+      "name": "native round2 capture matrix",
+      "status": "passed",
+      "count": 48,
+      "command": "shots.sh --round 2 + capture-extras.py + activity-evidence.py --out hillclimb/rounds/2/activity",
+      "evidence": "../../rounds/2/inventory.json; 18 main +20 focused +10 native Activity PNGs; all1206x2622 and hashes verified",
+      "validation_base": "../../validation/round2/"
+    },
+    {
+      "name": "fresh settled missing Reminders references",
+      "status": "passed",
+      "count": 4,
+      "command": "pinned agent-device; operations in reference/round2/manifest.json",
+      "evidence": "../../reference/round2/manifest.json",
+      "validation_base": "../../validation/round2/"
+    },
+    {
+      "name": "true locked-device Activity capture",
+      "status": "pending",
+      "count": 0,
+      "command": "pinned help hardware-button",
+      "evidence": "iOS Simulator refuses sleep/power; actual Notification Center captured instead",
+      "required": false,
+      "validation_base": "../../validation/round2/"
+    },
+    {
+      "name": "demo Activity cleanup",
+      "status": "passed",
+      "count": 0,
+      "command": "explicit --hillclimb-demo activity --hillclimb-activity end; read isolated app preference",
+      "evidence": "activity-cleanup.json shows []",
+      "validation_base": "../../validation/round2/"
+    }
+  ],
+  "runtime_warnings": [
+    {
+      "message": "Invalid frame dimension (negative or non-finite).",
+      "count": 1,
+      "test": "SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances()",
+      "test_result": "passed",
+      "evidence": "combined-summary.json; signin-keyboard-details.json; test-process.json",
+      "resolution": "unresolved; observation separate from pass/fail gates"
+    }
+  ],
+  "limitations": [
+    "No true locked-device Activity state via supported simulator controls.",
+    "Known floating keyboard Done crowds lower secondary sign-in action at XXXL.",
+    "No complete exported console log; structured runtime warning retained."
+  ]
+}

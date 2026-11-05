@@ -1,0 +1,40 @@
+{
+  "commonFailureInsights" : [
+
+  ],
+  "failureDistributionInsights" : [
+
+  ],
+  "longestTestRunsInsights" : [
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances"
+      ],
+      "deviceName" : "Hillclimb iPhone 17 Pro",
+      "durationOfSlowTests" : 1389.9571610689163,
+      "impact" : "(39%)",
+      "meanTime" : "1m 19s across 45 test runs",
+      "osNameAndVersion" : "iOS Simulator 26.2",
+      "targetName" : "HillclimbUITests",
+      "testPlanConfigurationName" : "Test Scheme Action",
+      "title" : "1 longest test run with outlier durations exceeding 683.39s (three standard deviations)"
+    },
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testAuthorizedAndTransferredPreserveSession",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityLayoutTests/testRenderedLastLineFitsBothNativeSurfaceBudgets",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionClientTests/testConstructingClientDoesNotStartAnSDKInitialRefreshOutsideGate",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testAppleAmongLinkedIdentitiesUsesSubjectRatherThanSupabaseIDs",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testCreateAndEditReject501CodePointsBeforeRequest"
+      ],
+      "deviceName" : "Hillclimb iPhone 17 Pro",
+      "durationOfSlowTests" : 0.8019580841064453,
+      "impact" : "(46%)",
+      "meanTime" : "0.0065s across 263 test runs",
+      "osNameAndVersion" : "iOS Simulator 26.2",
+      "targetName" : "LazyMansRemindersTests",
+      "testPlanConfigurationName" : "Test Scheme Action",
+      "title" : "5 longest test runs with outlier durations exceeding 0.08s (three standard deviations)"
+    }
+  ]
+}

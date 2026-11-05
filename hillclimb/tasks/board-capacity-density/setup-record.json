@@ -1,0 +1,21 @@
+{
+  "config": "example-derived; created only after confirming absence; NotepadHillclimb bundle and group",
+  "xcodegen": [
+    "xcodegen",
+    "generate",
+    "--spec",
+    "ios/project.yml"
+  ],
+  "resolve": [
+    "xcodebuild",
+    "-resolvePackageDependencies",
+    "-project",
+    "ios/LazyMansReminders.xcodeproj",
+    "-scheme",
+    "LazyMansReminders",
+    "-derivedDataPath",
+    "/tmp/hillclimb-capacity-density-T-DD"
+  ],
+  "resolveExit": 0,
+  "publicIP": "182.19.138.61"
+}

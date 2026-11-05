@@ -1,0 +1,60 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+        "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 1,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "LazyMansReminders · Built with macOS 27.2",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1793820185.943,
+  "passedTests" : 1,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793820101.268,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "XCTAssertEqual failed: (\"Optional(\"0\")\") is not equal to (\"Optional(\"1\")\") - Reduce Motion",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix",
+      "testName" : "testCombinedActualSettingsKeyboardMatrix()"
+    },
+    {
+      "failureText" : "XCTAssertGreaterThanOrEqual failed: (\"1.2252724589999937\") is less than (\"4.5\") - account-refresh-error-light-default-initial",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 2,
+      "testIdentifierString" : "ErrorContrastUITests/testNativeErrorsAndDestructiveLabelContrast()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ErrorContrastUITests/testNativeErrorsAndDestructiveLabelContrast",
+      "testName" : "testNativeErrorsAndDestructiveLabelContrast()"
+    }
+  ],
+  "title" : "Test - LazyMansReminders",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 3
+}

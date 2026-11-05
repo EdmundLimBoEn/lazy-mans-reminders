@@ -1,0 +1,114 @@
+{
+  "runs": {
+    "focused": [
+      {
+        "id": "AccountDensityUITests/testAdjacentSectionRhythm()",
+        "result": "Passed"
+      },
+      {
+        "id": "AccountDensityUITests/testExplanatoryInkAndPassiveIdentity()",
+        "result": "Passed"
+      },
+      {
+        "id": "BoardCapacityDensityUITests/testDarkDefaultCapacityDensity()",
+        "result": "Passed"
+      },
+      {
+        "id": "BoardCapacityDensityUITests/testDarkXXXLTitleAndFinalInkCapacityDensity()",
+        "result": "Passed"
+      },
+      {
+        "id": "BoardCapacityDensityUITests/testLightDefaultCapacityDensity()",
+        "result": "Passed"
+      },
+      {
+        "id": "BoardCapacityDensityUITests/testLightXXXLTitleAndFinalInkCapacityDensity()",
+        "result": "Passed"
+      },
+      {
+        "id": "LoginCompositionUITests/testNativeInlineHierarchyAndFilledPrimaryActionMatrix()",
+        "result": "Failed"
+      },
+      {
+        "id": "SignInChromeUITests/testOrdinaryLegalFooterReachableByActualGesture()",
+        "result": "Passed"
+      },
+      {
+        "id": "SignInDensityUITests/testMatchedNativeStateMatrix()",
+        "result": "Passed"
+      },
+      {
+        "id": "SignInDensityUITests/testNativeFieldGroupingAndExactCopy()",
+        "result": "Passed"
+      },
+      {
+        "id": "SignInSurfaceUITests/testDefaultAndXXXLControlsAndTextInBothAppearances()",
+        "result": "Passed"
+      },
+      {
+        "id": "SignInSurfaceUITests/testEnabledAppearanceIsInertAndAppleBoundaryIsVisible()",
+        "result": "Failed"
+      }
+    ],
+    "corrected-focused": [
+      {
+        "id": "LoginCompositionUITests/testNativeInlineHierarchyAndFilledPrimaryActionMatrix()",
+        "result": "Failed"
+      },
+      {
+        "id": "SignInChromeUITests/testOrdinaryLegalFooterReachableByActualGesture()",
+        "result": "Passed"
+      },
+      {
+        "id": "SignInDensityUITests/testNativeFieldGroupingAndExactCopy()",
+        "result": "Passed"
+      },
+      {
+        "id": "SignInSurfaceUITests/testEnabledAppearanceIsInertAndAppleBoundaryIsVisible()",
+        "result": "Passed"
+      }
+    ],
+    "composition-measurement": [
+      {
+        "id": "LoginCompositionUITests/testNativeInlineHierarchyAndFilledPrimaryActionMatrix()",
+        "result": "Passed"
+      }
+    ],
+    "v2-focused": [
+      {
+        "id": "LoginCompositionUITests/testNativeInlineHierarchyAndFilledPrimaryActionMatrix()",
+        "result": "Passed"
+      },
+      {
+        "id": "SignInChromeUITests/testOrdinaryLegalFooterReachableByActualGesture()",
+        "result": "Passed"
+      },
+      {
+        "id": "SignInDensityUITests/testNativeFieldGroupingAndExactCopy()",
+        "result": "Passed"
+      },
+      {
+        "id": "SignInSurfaceUITests/testDefaultAndXXXLControlsAndTextInBothAppearances()",
+        "result": "Passed"
+      },
+      {
+        "id": "SignInSurfaceUITests/testDemoBlocksExternalActionsAndAllowsLocalRecovery()",
+        "result": "Passed"
+      },
+      {
+        "id": "SignInSurfaceUITests/testEnabledAppearanceIsInertAndAppleBoundaryIsVisible()",
+        "result": "Passed"
+      },
+      {
+        "id": "SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances()",
+        "result": "Passed"
+      },
+      {
+        "id": "SignInSurfaceUITests/testPasswordInboxAndErrorWrapInBothAppearancesAndSizes()",
+        "result": "Passed"
+      }
+    ]
+  },
+  "scope": "Initial focused run covered all8 R/T/S added methods and all passed, while U/Surface issues failed concretely. R/T files remain byte-identical. V2 auth-focused8/8 passes the corrected app/test source before final unfiltered317/317. Initial app states are not mislabeled as V2 source proof.",
+  "finalSourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434"
+}

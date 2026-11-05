@@ -6,6 +6,20 @@ struct ContentView: View {
 
     var body: some View {
         Group {
+#if DEBUG
+            if HillclimbDemo.isActive {
+                HillclimbRoot()
+            } else {
+                productionContent
+            }
+#else
+            productionContent
+#endif
+        }
+    }
+
+    private var productionContent: some View {
+        Group {
             if auth.isRestoringSession {
                 ProgressView("Restoring session")
                     .controlSize(.large)

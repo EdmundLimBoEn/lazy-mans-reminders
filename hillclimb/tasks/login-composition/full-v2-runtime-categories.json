@@ -1,0 +1,25 @@
+{
+  "totalEvents": 24049,
+  "groups": {
+    "AX automation type mismatch": 20145,
+    "Unknown client": 122,
+    "Keyboard focus caching": 56,
+    "Simulator haptic library missing": 3402,
+    "RTI input session diagnostic": 17,
+    "AX invalid element request": 200,
+    "Other retained diagnostics": 107
+  },
+  "examples": {
+    "AX automation type mismatch": "Automation type mismatch; legacy system derived element type 9 from class SwiftUI.AccessibilityNode:UIResponder, traits 8589934851, but AXAutomationType returned 42 which maps to 42",
+    "Unknown client": "Unknown client: LazyMansReminders",
+    "Keyboard focus caching": "UIKeyboardLayoutStar implements focusItemsInRect: - caching for linear focus movement is limited as long as this view is on screen.",
+    "Simulator haptic library missing": "       CHHapticPattern.mm:487   +[CHHapticPattern patternForKey:error:]: Failed to read pattern library data: Error Domain=NSCocoaErrorDomain Code=260 \"The file \u201chapticpatternlibrary.plist\u201d couldn\u2019t be opened because there is no such file.\" UserInfo={NSFilePath=/Library/Audio/Tunings/Generic/Haptics/Library/hapticpatternlibrary.plist, NSURL=file:///Library/Audio/Tunings/Generic/Haptics/Library/hapticpatternlibrary.plist, NSUnderlyingError=0x600000c66d30 {Error Domain=NSPOSIXErrorDomain Code=2 \"N",
+    "RTI input session diagnostic": "-[RTIInputSystemClient remoteTextInputSessionWithID:performInputOperation:]  perform input operation requires a valid sessionID. inputModality = Keyboard, inputOperation = <null selector>, customInfoType = UIEmojiSearchOperations",
+    "AX invalid element request": "XCTAS Error: XCTAutomationSupportErrorWrappedAccessibilityError: Accessibility error kAXErrorInvalidUIElement from AXUIElementCopyMultipleAttributeValues for 2006",
+    "Other retained diagnostics": "Could not find cached accumulator for token=3B78CD2B type:0 in -[TUIKeyboardCandidateMultiplexer receiveExternalAutocorrectionUpdate:requestToken:]_block_invoke"
+  },
+  "raw": "full-v2-runtime-log.json.gz",
+  "invalidFrameEvents": 0,
+  "xctestRuntimeWarnings": [],
+  "scope": "Simulator app process error/fault stream; not a claim of an error-free system log. Haptic output cannot be assessed on Simulator."
+}

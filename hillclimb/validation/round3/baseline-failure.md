@@ -1,0 +1,5 @@
+Combined unchanged-source run: 275 passed, 1 failed, zero skipped (260 units +16 UI selected). The keyboard matrix failed in light/default password mode after the first swipe-up: keyboard existed initially; the subsequent keyboard frame query found no Keyboard. SignInView.swift uses scrollDismissesKeyboard(.interactively). This is consistent with interactive dismissal; no application or test edits are authorized or applied. The first email iteration passed its capture and focus/dismiss/alternate checks; remaining keyboard cases were not reached after continueAfterFailure=false. Do not infer their success. All other15 UI methods passed, including the strengthened demo/local-recovery method. Runtime warnings and invalid-frame log events are zero, while other scoped error/fault events remain retained.
+
+Attachment export initially used a method identifier without parentheses and failed to find it; the corrected exact () identifier exported18 attachments. No prior evidence was overwritten.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund

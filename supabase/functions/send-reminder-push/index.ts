@@ -279,6 +279,7 @@ async function sendLiveActivityEvent(input: {
   bundleId: string;
   event: "start" | "update" | "end";
   lines: string[];
+  hiddenLineCount?: number;
   alertBody?: string;
   destination: "push-to-start" | "activity" | "retiring";
   token: string | null;
@@ -309,6 +310,7 @@ async function sendLiveActivityEvent(input: {
     body: buildLiveActivityPayload({
       event: input.event,
       lines: input.lines,
+      hiddenLineCount: input.hiddenLineCount,
       timestamp: nowUnix,
       alertBody: input.alertBody,
       staleDate: liveActivityStaleDateUnix(nowUnix),
@@ -331,6 +333,7 @@ async function syncLiveActivity(input: {
   device: DeviceRow;
   bundleId: string;
   lines: string[];
+  hiddenLineCount?: number;
   alertBody?: string;
   quiet?: boolean;
 }): Promise<{ results: DeviceSendResult[]; deliveredAlert: boolean }> {
@@ -513,6 +516,7 @@ async function syncDevices(input: {
         device,
         bundleId: input.bundleId,
         lines: content.lines,
+        hiddenLineCount: content.hiddenLineCount,
         alertBody: replay?.alertSent ? undefined : content.alertRecord?.text,
         quiet: input.quiet,
         assertCurrent,

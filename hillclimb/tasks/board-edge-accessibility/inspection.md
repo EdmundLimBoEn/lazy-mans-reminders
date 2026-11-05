@@ -1,0 +1,19 @@
+# Board edge investigation
+
+Read the rubric, state and all three round4 reports. Worktree started at 3b1eb2bdafed24274ff29c70131499ac303a52aa on t3/board-accessibility-contrast, with a clean tracked tree. setup.sh generated this worktree's own Config.xcconfig from Config.example.xcconfig, using systems.edmundlim.NotepadHillclimb and its group. No parent/private config was read.
+
+The native binding probe uses the first UIViewController in the collection view responder chain and the public setContentScrollView(_:for: .top). Apple documentation describes it as assigning the scroll view observed by bars for a specific edge. Native-binding-bottom.png was captured after real pull and repeated upward scroll using the owned pinned device command. Its list viewport starts at 116pt. The first14px text-column band contains1260 pixels below RGB150; the hard fragment remains visually identical to round4. Binding alone is rejected as a visual fix. Inputs and build diagnostics are retained separately.
+
+The fallback adds a mask only to the collection view's top24pt while content is scrolled. It follows viewport bounds during scrolling, performs no offset correction, and is absent at fresh top/pull. The remaining viewport, including the bottom, is opaque. With Reduce Transparency or Increase Contrast the transition becomes a6pt opaque boundary, preserving solid body ink. No row snapping or bottom fade is introduced.
+
+Original references inspected: reference/round3/reminders-bottom-light-XXXL.png and reference/reminders-bottom-dark.png, plus rounds/4/full-light-default-bottom-after-pull.png. Apple's content passes beneath softened native chrome; our viewport sits below the safe-area inset. Reference paragraphs and chrome differ, so comparison concerns the edge treatment rather than identical geometry. Notes, loading and error counterparts are unavailable.
+
+Completion keeps the full paragraph label, Active/Completing value, hint and Complete action on the existing circle, with the existing Reorder leaf/actions. Visible paragraph Text is hidden only from accessibility. The original static-text existence assertion remains: XCUITest retains a hidden backing node. Added checks require that node to be non-hittable, one full-label button, stronger rendered geometry, paragraph ink extent and contrast. Native AX snapshots separately reject static paragraph leaves. Text-center noncompletion and circle-edge single completion assertions remain.
+
+Loading label and full-screen error description use explicit primary ink. All literal production wording is preserved; added string literals are debug geometry keys only. The raw error message, retry and announcement paths remain unchanged.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+First full run: 287 selected, 286 passed, 1 failed, zero skips. All263 unit tests passed;23 of24 UI tests passed. The new strict no-static-text assertion failed in the local long-text completion fixture. XCUITest debugDescription retained a StaticText node at the measured paragraph rectangle even though the interactive snapshot omitted it. In this debug build, the geometry-probe background is attached after the initial hiding modifier. Moving accessibilityHidden(true) outside the entire measured/padded text subtree alone did not resolve the focused gate. Removing the row .contain wrapper then eliminated the hittable static-text stop in all four focused variants. The retained node still exists in the XCUITest backing hierarchy but is non-hittable; the native AX tree has no static paragraph leaf. The original positive existence assertion is retained alongside stronger raster/geometry and separate native AX gates. A focused matrix validates the correction before a fresh full suite. First-run source/binary/xctestrun hashes and native attachments remain under attempt1; its xcresult remains at /tmp/notepad-board-edge-L-attempt1.xcresult.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund

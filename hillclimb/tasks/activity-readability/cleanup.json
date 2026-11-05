@@ -1,0 +1,59 @@
+[
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-a2968ef72b3a4ba7bf695a92/agent-device",
+      "settings",
+      "appearance",
+      "light"
+    ],
+    "exit": 0,
+    "stdout": "Updated setting: appearance\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-a2968ef72b3a4ba7bf695a92/agent-device",
+      "settings",
+      "text-size",
+      "large"
+    ],
+    "exit": 0,
+    "stdout": "Text size set to large\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-a2968ef72b3a4ba7bf695a92/agent-device",
+      "open",
+      "systems.edmundlim.NotepadHillclimb",
+      "--relaunch",
+      "--launch-args=--hillclimb-demo",
+      "--launch-args=activity",
+      "--launch-args=--hillclimb-activity",
+      "--launch-args=end"
+    ],
+    "exit": 0,
+    "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-a2968ef72b3a4ba7bf695a92\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-a2968ef72b3a4ba7bf695a92/agent-device",
+      "settings",
+      "text-size"
+    ],
+    "exit": 0,
+    "stdout": "Text size is large\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-a2968ef72b3a4ba7bf695a92/agent-device",
+      "close",
+      "systems.edmundlim.NotepadHillclimb"
+    ],
+    "exit": 0,
+    "stdout": "Closed: t3-a2968ef72b3a4ba7bf695a92\n",
+    "stderr": ""
+  }
+]

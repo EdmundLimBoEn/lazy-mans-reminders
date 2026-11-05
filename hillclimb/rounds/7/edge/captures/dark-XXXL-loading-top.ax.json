@@ -1,0 +1,293 @@
+{
+  "success": true,
+  "data": {
+    "nodes": [
+      {
+        "index": 0,
+        "type": "Other",
+        "role": "_TtC7SwiftUIP33_ACC2C5639A7D76F611E170E831FCA49118SwiftUIApplication",
+        "subrole": "UIApplication",
+        "label": "Notepad",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 402,
+          "height": 874
+        },
+        "enabled": true,
+        "depth": 0,
+        "pid": 14203,
+        "hittable": false,
+        "ref": "e1",
+        "kind": "other"
+      },
+      {
+        "index": 1,
+        "parentIndex": 0,
+        "type": "NavigationBar",
+        "role": "SwiftUI.UIKitNavigationBar",
+        "subrole": "UINavigationBar",
+        "identifier": "Your Board",
+        "rect": {
+          "x": 0,
+          "y": 62,
+          "width": 402,
+          "height": 54
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 14203,
+        "hittable": true,
+        "ref": "e2",
+        "kind": "navigation-bar"
+      },
+      {
+        "index": 2,
+        "parentIndex": 1,
+        "type": "StaticText",
+        "role": "UILabel",
+        "label": "Your Board",
+        "rect": {
+          "x": 152.33333333333334,
+          "y": 65.33333333333333,
+          "width": 97.33333333333334,
+          "height": 23.33333333333333
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 14203,
+        "hittable": true,
+        "ref": "e3",
+        "kind": "text"
+      },
+      {
+        "index": 3,
+        "parentIndex": 1,
+        "type": "Other",
+        "role": "_TtGC7SwiftUI16UIKitBarItemHostVS_11BarItemView_",
+        "subrole": "UIView",
+        "label": "Account",
+        "rect": {
+          "x": 338,
+          "y": 66,
+          "width": 44,
+          "height": 36
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 14203,
+        "hittable": true,
+        "ref": "e4",
+        "kind": "other"
+      },
+      {
+        "index": 4,
+        "parentIndex": 3,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Account",
+        "rect": {
+          "x": 338,
+          "y": 62,
+          "width": 44,
+          "height": 44
+        },
+        "enabled": true,
+        "depth": 3,
+        "pid": 14203,
+        "hittable": true,
+        "ref": "e5",
+        "kind": "button"
+      },
+      {
+        "index": 5,
+        "parentIndex": 1,
+        "type": "StaticText",
+        "role": "UILabel",
+        "label": "0 of 7",
+        "rect": {
+          "x": 185.66666666666666,
+          "y": 88.33333333333334,
+          "width": 30.666666666666686,
+          "height": 14.333333333333329
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 14203,
+        "hittable": true,
+        "ref": "e6",
+        "kind": "text"
+      },
+      {
+        "index": 6,
+        "parentIndex": 0,
+        "type": "ActivityIndicator",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Loading reminders",
+        "value": "1",
+        "identifier": "board.loading",
+        "rect": {
+          "x": 108.83333587646484,
+          "y": 395,
+          "width": 184.49996948242188,
+          "height": 85
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 14203,
+        "hittable": true,
+        "ref": "e7",
+        "kind": "activity-indicator"
+      },
+      {
+        "index": 7,
+        "parentIndex": 6,
+        "type": "ActivityIndicator",
+        "role": "SwiftUIActivityIndicatorView",
+        "subrole": "UIActivityIndicatorView",
+        "value": "1",
+        "rect": {
+          "x": 176.66666666666666,
+          "y": 395,
+          "width": 48.66666666666666,
+          "height": 48.666666666666686
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 14203,
+        "hittable": true,
+        "ref": "e8",
+        "kind": "activity-indicator"
+      },
+      {
+        "index": 8,
+        "parentIndex": 6,
+        "type": "StaticText",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Loading reminders",
+        "enabled": true,
+        "depth": 2,
+        "pid": 14203,
+        "hittable": false,
+        "ref": "e9",
+        "kind": "text"
+      },
+      {
+        "index": 9,
+        "parentIndex": 0,
+        "type": "Other",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "New reminder",
+        "value": "New reminder",
+        "rect": {
+          "x": 30,
+          "y": 776.6666666666666,
+          "width": 290,
+          "height": 44
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 14203,
+        "hittable": true,
+        "ref": "e10",
+        "kind": "other"
+      },
+      {
+        "index": 10,
+        "parentIndex": 9,
+        "type": "TextView",
+        "role": "SwiftUI.VerticalTextView",
+        "subrole": "UITextView",
+        "value": "New reminder",
+        "placeholder": "New reminder",
+        "rect": {
+          "x": 30,
+          "y": 784,
+          "width": 290,
+          "height": 29
+        },
+        "enabled": true,
+        "depth": 2,
+        "password": false,
+        "editable": true,
+        "pid": 14203,
+        "hittable": true,
+        "ref": "e11",
+        "kind": "text-view"
+      },
+      {
+        "index": 11,
+        "parentIndex": 0,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Add reminder",
+        "rect": {
+          "x": 328,
+          "y": 772,
+          "width": 53,
+          "height": 53
+        },
+        "enabled": false,
+        "depth": 1,
+        "pid": 14203,
+        "hittable": false,
+        "ref": "e12",
+        "kind": "button"
+      },
+      {
+        "index": 12,
+        "parentIndex": 0,
+        "type": "Other",
+        "role": "_TtCV17LazyMansReminders23HillclimbGeometryExport10ExportView",
+        "subrole": "UIView",
+        "value": "{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"composer\":[0,759,402,81],\"fixtureCount\":[0,0,0,0],\"loadingLabel\":[108.83333333333334,452.27392578125,184.33333333333329,27.666666666666686],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}",
+        "identifier": "hillclimb.geometry",
+        "rect": {
+          "x": 0,
+          "y": 62,
+          "width": 1,
+          "height": 1
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 14203,
+        "hittable": true,
+        "ref": "e13",
+        "kind": "other"
+      }
+    ],
+    "truncated": false,
+    "appName": "systems.edmundlim.NotepadHillclimb",
+    "appBundleId": "systems.edmundlim.NotepadHillclimb",
+    "visibility": {
+      "partial": false,
+      "visibleNodeCount": 13,
+      "totalNodeCount": 13,
+      "reasons": []
+    },
+    "viewport": {
+      "width": 402,
+      "height": 874
+    },
+    "presentedSurface": "absent",
+    "snapshotDiagnostics": {
+      "stats": {
+        "count": 2939,
+        "p50Ms": 73,
+        "p95Ms": 127,
+        "maxMs": 1034,
+        "slowThresholdMs": 1500,
+        "platform": "ios",
+        "backends": {
+          "xctest": 2939
+        }
+      }
+    },
+    "refsGeneration": 738966
+  }
+}

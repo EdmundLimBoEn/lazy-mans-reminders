@@ -1,0 +1,27 @@
+{
+  "branch": "t3/signin-density-grouping",
+  "sourceSHA": "c8da74021a7d66d95d040817405044bbb3af3f9f",
+  "baselineSHA": "b861a3706a529d14f9f18f71aa209a47c126c6ae",
+  "implementationCommit": "c8da74021a7d66d95d040817405044bbb3af3f9f",
+  "beforeBinary": "before-installed.json",
+  "afterBinary": "tested-artifacts.json",
+  "installedMatch": "installed-identity.json",
+  "configAndPins": "freeze.json",
+  "imageInventory": "native-inventory.json",
+  "referenceHashes": "reference-integrity.json",
+  "runInputs": [
+    "before-matrix-inputs.json",
+    "focused-inputs.json",
+    "full-inputs.json",
+    "awake-inputs.json"
+  ],
+  "currentResult": "acceptance.json",
+  "validationPending": true,
+  "rootProductionUnchanged": true,
+  "noPushPRMergeDeploy": true,
+  "ownership": [
+    "ios/App/SignInView.swift",
+    "ios/UITests/SignInDensityUITests.swift",
+    "hillclimb/tasks/signin-density/**"
+  ]
+}

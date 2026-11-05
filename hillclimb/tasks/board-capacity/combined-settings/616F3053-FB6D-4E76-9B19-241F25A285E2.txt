@@ -1,0 +1,128 @@
+page=Display & Text Size stage=restored originals=["Reduce Motion": false, "Reduce Transparency": false, "Increase Contrast": false, "Auto-Play Message Effects": true]
+On/Off Labels=0
+Bold Text=0
+Show Borders=0
+Reduce Transparency=0
+Increase Contrast=0
+Differentiate Without Color=0
+Prefer Horizontal Text=0
+Smart Invert=0
+=0
+=0
+=0
+=0
+=0
+=0
+=0
+Attributes: Application, 0x109a5a8a0, pid: 90601, label: 'Settings'
+Element subtree:
+ →Application, 0x109a5a8a0, pid: 90601, label: 'Settings'
+    Window (Main), 0x109a46780, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x109a654b0, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x109a655d0, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x109a65b70, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x109a65210, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x109a65330, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x109a656f0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x109a65810, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x109a65930, {{0.0, 0.0}, {402.0, 874.0}}
+                      NavigationBar, 0x109a65a50, {{0.0, 62.0}, {402.0, 54.0}}, identifier: 'Display & Text Size'
+                        Button, 0x109a66990, {{16.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Accessibility'
+                        StaticText, 0x109a66ab0, {{126.0, 73.7}, {150.0, 20.7}}, label: 'Display & Text Size'
+                      Other, 0x109a66bd0, {{0.0, 0.0}, {402.0, 874.0}}
+                        Other, 0x109a66cf0, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x109a66e10, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x109a66f30, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x109a67050, {{0.0, 116.0}, {402.0, 724.0}}
+                                Table, 0x109a67170, {{0.0, 0.0}, {402.0, 874.0}}
+                                  Other, 0x109a67290, {{0.0, 116.0}, {402.0, 17.7}}
+                                  Cell, 0x109a673b0, {{20.0, 133.7}, {362.0, 53.0}}, identifier: 'ENHANCE_TEXT_LEGIBILITY'
+                                    Other, 0x109a674d0, {{20.0, 133.7}, {362.0, 53.0}}
+                                      Other, 0x109a675f0, {{20.0, 133.7}, {362.0, 53.0}}
+                                        Switch, 0x109a67710, {{36.0, 146.3}, {330.0, 28.0}}, identifier: 'ENHANCE_TEXT_LEGIBILITY', label: 'Bold Text', value: 0
+                                          Button, 0x109a67830, {{36.0, 150.0}, {70.7, 20.3}}, identifier: 'ENHANCE_TEXT_LEGIBILITY', label: 'Bold Text'
+                                          Switch, 0x109a67950, {{305.0, 146.3}, {63.0, 28.0}}, value: 0
+                                  Cell, 0x109a67a70, {{20.0, 186.7}, {362.0, 53.0}}, identifier: 'LARGER_TEXT', label: 'Larger Text, Off'
+                                    Other, 0x109a67b90, {{20.0, 186.7}, {331.7, 53.0}}
+                                      Other, 0x109a67cb0, {{20.0, 186.7}, {331.7, 53.0}}
+                                        Button, 0x109a67dd0, {{36.0, 203.0}, {307.7, 20.3}}, identifier: 'LARGER_TEXT', label: 'Larger Text, Off'
+                                          StaticText, 0x109a67ef0, {{36.0, 203.0}, {85.7, 20.3}}, label: 'Larger Text'
+                                          StaticText, 0x109a68010, {{319.3, 203.0}, {24.3, 20.3}}, label: 'Off'
+                                    Other, 0x109a68130, {{20.0, 186.7}, {362.0, 53.0}}
+                                      Other, 0x109a68250, {{20.0, 186.7}, {362.0, 53.0}}
+                                    Other, 0x109a68370, {{36.0, 238.7}, {330.0, 1.0}}
+                                    Button, 0x109a68490, {{351.7, 206.0}, {10.3, 14.0}}, label: 'chevron', Disabled
+                                  Cell, 0x109a685b0, {{20.0, 239.7}, {362.0, 53.0}}, identifier: 'BUTTON_SHAPES'
+                                    Other, 0x109a686d0, {{20.0, 239.7}, {362.0, 53.0}}
+                                      Other, 0x109a687f0, {{20.0, 239.7}, {362.0, 53.0}}
+                                        Switch, 0x109a68910, {{36.0, 252.3}, {330.0, 28.0}}, identifier: 'BUTTON_SHAPES', label: 'Show Borders', value: 0
+                                          Button, 0x109a68a30, {{36.0, 256.0}, {106.3, 20.3}}, identifier: 'BUTTON_SHAPES', label: 'Show Borders'
+                                          Switch, 0x109a68b50, {{305.0, 252.3}, {63.0, 28.0}}, value: 0
+                                  Cell, 0x109a68c70, {{20.0, 292.7}, {362.0, 52.0}}, identifier: 'ON_OFF_LABELS', label: 'On/Off Labels', value: 0
+                                    StaticText, 0x109a68d90, {{36.0, 308.7}, {105.3, 20.3}}, identifier: 'ON_OFF_LABELS', label: 'On/Off Labels'
+                                    Switch, 0x109a68eb0, {{299.0, 304.7}, {63.0, 28.0}}, identifier: 'ON_OFF_LABELS', label: 'On/Off Labels', value: 0
+                                  Other, 0x109a68fd0, {{0.0, 344.7}, {402.0, 44.0}}
+                                    Link, 0x109a690f0, {{35.0, 349.7}, {214.0, 34.0}}, label: 'What's new in Display & Text Size…'
+                                      Link, 0x109a69210, {{35.0, 356.7}, {213.7, 19.7}}, label: 'What's new in Display & Text Size…'
+                                      Other, 0x109a69330, {{35.0, 363.7}, {214.0, 17.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                                        Other, 0x109a69450, {{38.0, 377.7}, {208.0, 3.0}}
+                                  Other, 0x109a69570, {{0.0, 388.7}, {402.0, 17.7}}
+                                  Cell, 0x109a69690, {{20.0, 406.3}, {362.0, 53.0}}, identifier: 'REDUCE_TRANSPARENCY'
+                                    Other, 0x109a697b0, {{20.0, 406.3}, {362.0, 53.0}}
+                                      Other, 0x109a698d0, {{20.0, 406.3}, {362.0, 53.0}}
+                                        Switch, 0x109a699f0, {{36.0, 419.0}, {330.0, 28.0}}, identifier: 'REDUCE_TRANSPARENCY', label: 'Reduce Transparency', value: 0
+                                          Button, 0x109a69b10, {{36.0, 422.7}, {165.3, 20.3}}, identifier: 'REDUCE_TRANSPARENCY', label: 'Reduce Transparency'
+                                          Switch, 0x109a69c30, {{305.0, 419.0}, {63.0, 28.0}}, value: 0
+                                  Other, 0x109a69d50, {{0.0, 459.3}, {402.0, 46.0}}, identifier: 'Improve contrast by reducing transparency and blurs on some backgrounds to increase legibility.'
+                                    Other, 0x109a69e70, {{20.0, 459.3}, {362.0, 46.0}}, label: 'Improve contrast by reducing transparency and blurs on some backgrounds to increase legibility.'
+                                  Other, 0x109a69f90, {{0.0, 505.3}, {402.0, 17.7}}
+                                  Cell, 0x109a6a0b0, {{20.0, 523.0}, {362.0, 53.0}}, identifier: 'TEXT_COLORS_DARKEN'
+                                    Other, 0x109a6a1d0, {{20.0, 523.0}, {362.0, 53.0}}
+                                      Other, 0x109a6a2f0, {{20.0, 523.0}, {362.0, 53.0}}
+                                        Switch, 0x109a6a410, {{36.0, 535.7}, {330.0, 28.0}}, identifier: 'TEXT_COLORS_DARKEN', label: 'Increase Contrast', value: 0
+                                          Button, 0x109a6a530, {{36.0, 539.3}, {134.7, 20.3}}, identifier: 'TEXT_COLORS_DARKEN', label: 'Increase Contrast'
+                                          Switch, 0x109a6a650, {{305.0, 535.7}, {63.0, 28.0}}, value: 0
+                                  Other, 0x109a6a770, {{0.0, 576.0}, {402.0, 46.0}}, identifier: 'Increase color contrast between app foreground and background colors.'
+                                    Other, 0x109a6a890, {{20.0, 576.0}, {362.0, 46.0}}, label: 'Increase color contrast between app foreground and background colors.'
+                                  Other, 0x109a6a9b0, {{0.0, 622.0}, {402.0, 17.7}}
+                                  Cell, 0x109a6aad0, {{20.0, 639.7}, {362.0, 53.0}}, identifier: 'DIFFERENTIATE_WITHOUT_COLOR'
+                                    Other, 0x109a6abf0, {{20.0, 639.7}, {362.0, 53.0}}
+                                      Other, 0x109a6ad10, {{20.0, 639.7}, {362.0, 53.0}}
+                                        Switch, 0x109a6ae30, {{36.0, 652.3}, {330.0, 28.0}}, identifier: 'DIFFERENTIATE_WITHOUT_COLOR', label: 'Differentiate Without Color', value: 0
+                                          Button, 0x109a6af50, {{36.0, 656.0}, {203.7, 20.3}}, identifier: 'DIFFERENTIATE_WITHOUT_COLOR', label: 'Differentiate Without Color'
+                                          Switch, 0x109a6b070, {{305.0, 652.3}, {63.0, 28.0}}, value: 0
+                                  Other, 0x109a6b190, {{0.0, 692.7}, {402.0, 46.0}}, identifier: 'Replaces user interface items that rely solely on color to convey information with alternatives.'
+                                    Other, 0x109a6b2b0, {{20.0, 692.7}, {362.0, 46.0}}, label: 'Replaces user interface items that rely solely on color to convey information with alternatives.'
+                                  Other, 0x109a6b3d0, {{0.0, 738.7}, {402.0, 17.7}}
+                                  Cell, 0x109a6b4f0, {{20.0, 756.3}, {362.0, 53.0}}, identifier: 'PREFER_HORIZONTAL_TEXT'
+                                    Other, 0x109a6b610, {{20.0, 756.3}, {362.0, 53.0}}
+                                      Other, 0x109a6b730, {{20.0, 756.3}, {362.0, 53.0}}
+                                        Switch, 0x109a6b850, {{36.0, 769.0}, {330.0, 28.0}}, identifier: 'PREFER_HORIZONTAL_TEXT', label: 'Prefer Horizontal Text', value: 0
+                                          Button, 0x109a6b970, {{36.0, 772.7}, {164.7, 20.3}}, identifier: 'PREFER_HORIZONTAL_TEXT', label: 'Prefer Horizontal Text'
+                                          Switch, 0x109a6ba90, {{305.0, 769.0}, {63.0, 28.0}}, value: 0
+                                  Other, 0x109a6bbb0, {{0.0, 794.0}, {402.0, 46.0}}, identifier: 'Prefer horizontal text in languages that support vertical text.'
+                                    Other, 0x109a6bcd0, {{20.0, 809.3}, {362.0, 46.0}}, label: 'Prefer horizontal text in languages that support vertical text.'
+                                  Other, 0x109a6bdf0, {{0.0, 855.3}, {402.0, 17.7}}
+                                  Cell, 0x109a6bf10, {{20.0, 873.0}, {362.0, 53.0}}, identifier: 'SMART_INVERT'
+                                    Other, 0x109a6c030, {{20.0, 873.0}, {362.0, 53.0}}
+                                      Other, 0x109a6c150, {{20.0, 873.0}, {362.0, 53.0}}
+                                        Switch, 0x109a6c270, {{36.0, 885.7}, {330.0, 28.0}}, identifier: 'SMART_INVERT', label: 'Smart Invert', value: 0
+                                          Button, 0x109a6c390, {{36.0, 889.3}, {93.0, 20.3}}, identifier: 'SMART_INVERT', label: 'Smart Invert'
+                                          Switch, 0x109a6c4b0, {{305.0, 885.7}, {63.0, 28.0}}, value: 0
+                                  Other, 0x109a6c5d0, {{0.0, 873.0}, {402.0, 62.0}}
+                                    StaticText, 0x109a6c6f0, {{0.0, 873.0}, {402.0, 62.0}}, label: 'Smart Invert reverses the colors of the display, except for images, media and some apps that use dark color styles.'
+                                  Other, 0x109a6c810, {{369.0, 116.0}, {30.0, 696.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                    Other, 0x109a6c930, {{396.0, 119.0}, {3.0, 578.7}}
+                                  Other, 0x109a6ca50, {{62.0, 841.0}, {278.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                                    Other, 0x109a6cb70, {{65.0, 868.0}, {272.0, 3.0}}
+                      Other, 0x109a6cc90, {{0.0, 0.0}, {402.0, 874.0}}
+                        Other, 0x109a6cdb0, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x109a6ced0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x109a6cff0, {{0.0, 0.0}, {402.0, 874.0}}
+Path to element:
+ →Application, 0x109a5a8a0, pid: 90601, label: 'Settings'
+Query chain:
+ →Find: Application 'com.apple.Preferences'
+  Output: {
+    Application, 0x10275ede0, pid: 90601, label: 'Settings'
+  }

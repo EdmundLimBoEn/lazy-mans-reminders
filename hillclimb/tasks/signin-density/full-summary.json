@@ -1,0 +1,76 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+        "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 3,
+      "passedTests" : 285,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "LazyMansReminders · Built with macOS 27.2",
+  "expectedFailures" : 0,
+  "failedTests" : 3,
+  "finishTime" : 1793873038.503,
+  "passedTests" : 285,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793866443.76,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Failed to install or launch the test runner. (Underlying Error: The operation couldn’t be completed. (Mach error -308 - (ipc/mig) server died))",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 288,
+      "testIdentifierString" : "HillclimbUITests-Runner (14866) encountered an error",
+      "testName" : "HillclimbUITests-Runner (14866) encountered an error"
+    },
+    {
+      "failureText" : "Test crashed with signal term.",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 287,
+      "testIdentifierString" : "ErrorContrastUITests/testDarkXXXLErrors()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ErrorContrastUITests/testDarkXXXLErrors",
+      "testName" : "testDarkXXXLErrors()"
+    },
+    {
+      "failureText" : "Test exceeded execution time allowance of 4 minutes",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 285,
+      "testIdentifierString" : "BoardMultilineUITests/testPopulatedRetryRecoversLocallyOnceWithoutFocusOrDuplicateAnnouncement()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests/testPopulatedRetryRecoversLocallyOnceWithoutFocusOrDuplicateAnnouncement",
+      "testName" : "testPopulatedRetryRecoversLocallyOnceWithoutFocusOrDuplicateAnnouncement()"
+    }
+  ],
+  "title" : "Test - LazyMansReminders",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "26% of duration",
+      "text" : "1 longest test run with outlier durations exceeding 1010.07s (three standard deviations)"
+    },
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "26% of duration",
+      "text" : "2 longest test runs with outlier durations exceeding 0.06s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 288
+}

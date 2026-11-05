@@ -1,0 +1,1484 @@
+{
+  "device": {
+    "hostId": "local",
+    "id": "78F5A64F-7B2E-4562-8EF9-10F3312CC694"
+  },
+  "command": "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+  "sourceInputs": "c60288dae3173383442723e70f7874b8878d891d",
+  "operations": [
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": "",
+      "time": 1793826896.931747
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": "",
+      "time": 1793826897.212435
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=account",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-account-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-49f05c5d73f02a2e8a20b585\n",
+      "stderr": "",
+      "time": 1793826898.6644108
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "gesture",
+        "pan",
+        "201",
+        "69",
+        "0",
+        "377",
+        "700"
+      ],
+      "exit": 0,
+      "stdout": "Panned (201, 69) by (0, 377)\n",
+      "stderr": "",
+      "time": 1793826900.098793
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826901.441195
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 31 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    @e9 [cell]\n      @e10 [text] \"Account, signed in\"\n        @e11 [text] \"S\"\n        @e12 [text] \"Signed In\"\n    @e13 [cell]\n      @e14 [button] \"Allow Notifications\"\n    @e15 [cell]\n      @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e17 [cell]\n      @e18 [text] \"Keep Your Board Visible\"\n    @e19 [cell]\n      @e20 [text] \"Live Activities\"\n      @e21 [text] \"Live Activities, Allowed\"\n    @e22 [cell]\n      @e23 [text] \"Background App Refresh\"\n      @e24 [text] \"Background App Refresh, Available\"\n    @e25 [cell]\n      @e26 [button] \"Refresh Board Now\"\n    @e27 [cell]\n      @e28 [button] \"Open App Settings\"\n    @e29 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    @e30 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    [content below collection hidden]\n  @e31 [other] \"{\"notifications.footer\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\"refresh.title\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\"\n",
+      "stderr": "",
+      "time": 1793826901.70634
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 30,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\\\"refresh.title\\\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 93591,\n  \"hittable\": true,\n  \"ref\": \"e31\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826901.867622
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-default-normal-medium-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-default-normal-medium-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826902.5167649
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "scroll",
+        "bottom",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled to bottom with 1 down passes\nsettled after 2286ms: +21 -23 (~8 unchanged)\n- @e9 [cell]\n- @e10 [text] \"Account, signed in\"\n- @e11 [text] \"S\"\n- @e12 [text] \"Signed In\"\n- @e13 [cell]\n- @e14 [button] \"Allow Notifications\"\n- @e15 [cell]\n- @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n- @e17 [cell]\n- @e18 [text] \"Keep Your Board Visible\"\n- @e19 [cell]\n- @e20 [text] \"Live Activities\"\n- @e21 [text] \"Live Activities, Allowed\"\n- @e22 [cell]\n- @e23 [text] \"Background App Refresh\"\n- @e24 [text] \"Background App Refresh, Available\"\n- @e25 [cell]\n- @e26 [button] \"Refresh Board Now\"\n- @e27 [cell]\n- @e28 [button] \"Open App Settings\"\n- @e29 [other] \"Vertical scroll bar, 3 pages\"\n- @e30 [other] \"Vertical scroll bar, 3 pages\"\n- @e31 [other] \"{\"notifications.footer\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\"refresh.title\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\"\n+ @e9~s125823 [image] \"AdditionalDimmingOverlay\"\n+ @e10~s125823 [cell] \"Terms\"\n+ @e11~s125823 [link] \"Terms\"\n+ @e12~s125823 [image] \"Plain Text\"\n+ @e13~s125823 [image] \"arrow.up.right\"\n+ @e14~s125823 [cell] \"Support\"\n+ @e15~s125823 [link] \"Support\"\n+ @e16~s125823 [image] \"questionmark.circle\"\n+ @e17~s125823 [image] \"arrow.up.right\"\n+ @e18~s125823 [cell] \"Download My Data\"\n+ @e19~s125823 [link] \"Download My Data\"\n+ @e20~s125823 [image] \"Download\"\n+ @e21~s125823 [image] \"arrow.up.right\"\n+ @e22~s125823 [cell] \"Send Feedback\"\n+ @e23~s125823 [link] \"Send Feedback\"\n+ @e24~s125823 [image] \"Get Mail\"\n+ @e25~s125823 [image] \"arrow.up.right\"\n+ @e26~s125823 [cell] \"Or email hello@edmundlim.systems\"\n+ @e27~s125823 [cell] \"Delete Account\u2026\"\n+ @e28~s125823 [cell] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n+ @e29~s125823 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\"Delete Account\u2026.title\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\"delete.footer\":[38.726368159203979,770.62023217247088,306.62354892205639,30.406301824212278],\"Download My Data.icon\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\"Download My Data.title\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\"feedback.footer\":[38.726368159203979,687.40298507462671,207.08291873963515,15.043117744610299],\"Privacy.icon\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\"Privacy.title\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\"Send Feedback.icon\":[38.726368159203979,647.71475953565493,23.044776119402989,15.683250414593658],\"Send Feedback.title\":[75.2139303482587,645.79436152570463,113.62354892205637,19.524046434494267],\"Support.icon\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\"Support.title\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\"Terms.icon\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\"Terms.title\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\"version.footer\":[38.726368159203979,812.54892205638464,87.378109452736339,15.043117744610299]}\"\n",
+      "stderr": "",
+      "time": 1793826907.095142
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826908.481478
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 46 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e9 [image] \"AdditionalDimmingOverlay\"\n    @e10 [cell]\n      @e11 [link] \"Privacy\"\n        @e12 [image] \"Block\"\n        @e13 [text] \"Privacy\"\n        @e14 [image] \"arrow.up.right\"\n    @e15 [cell]\n      @e16 [link] \"Terms\"\n        @e17 [image] \"Plain Text\"\n        @e18 [text] \"Terms\"\n        @e19 [image] \"arrow.up.right\"\n    @e20 [cell]\n      @e21 [link] \"Support\"\n        @e22 [image] \"questionmark.circle\"\n        @e23 [text] \"Support\"\n        @e24 [image] \"arrow.up.right\"\n    @e25 [cell]\n      @e26 [link] \"Download My Data\"\n        @e27 [image] \"Download\"\n        @e28 [text] \"Download My Data\"\n        @e29 [image] \"arrow.up.right\"\n    @e30 [cell]\n      @e31 [link] \"Send Feedback\"\n        @e32 [image] \"Get Mail\"\n        @e33 [text] \"Send Feedback\"\n        @e34 [image] \"arrow.up.right\"\n    @e35 [cell]\n      @e36 [text] \"Or email hello@edmundlim.systems\"\n    @e37 [cell]\n      @e38 [button] \"Delete Account\u2026\"\n        @e39 [image] \"Trash\"\n        @e40 [text] \"Delete Account\u2026\"\n    @e41 [cell]\n      @e42 [text] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n      @e43 [text] \"App Version 1.0 (11)\"\n    @e44 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    @e45 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n  @e46 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\"Delete Account\u2026.title\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\"delete.footer\":[38.726368159203979,770.62023217247088,306.62354892205639,30.406301824212278],\"Download My Data.icon\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\"Download My Data.title\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\"feedback.footer\":[38.726368159203979,687.40298507462671,207.08291873963515,15.043117744610299],\"Privacy.icon\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\"Privacy.title\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\"Send Feedback.icon\":[38.726368159203979,647.71475953565493,23.044776119402989,15.683250414593658],\"Send Feedback.title\":[75.2139303482587,645.79436152570463,113.62354892205637,19.524046434494267],\"Support.icon\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\"Support.title\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\"Terms.icon\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\"Terms.title\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\"version.footer\":[38.726368159203979,812.54892205638464,87.378109452736339,15.043117744610299]}\"\n",
+      "stderr": "",
+      "time": 1793826908.7307541
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 45,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\\\"Delete Account\u2026.title\\\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\\\"delete.footer\\\":[38.726368159203979,770.62023217247088,306.62354892205639,30.406301824212278],\\\"Download My Data.icon\\\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\\\"Download My Data.title\\\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\\\"feedback.footer\\\":[38.726368159203979,687.40298507462671,207.08291873963515,15.043117744610299],\\\"Privacy.icon\\\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\\\"Privacy.title\\\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\\\"Send Feedback.icon\\\":[38.726368159203979,647.71475953565493,23.044776119402989,15.683250414593658],\\\"Send Feedback.title\\\":[75.2139303482587,645.79436152570463,113.62354892205637,19.524046434494267],\\\"Support.icon\\\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\\\"Support.title\\\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\\\"Terms.icon\\\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\\\"Terms.title\\\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\\\"version.footer\\\":[38.726368159203979,812.54892205638464,87.378109452736339,15.043117744610299]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 93591,\n  \"hittable\": true,\n  \"ref\": \"e46\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826908.88638
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-default-normal-medium-lower.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-default-normal-medium-lower.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826909.5231
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": "",
+      "time": 1793826909.8728142
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": "",
+      "time": 1793826910.119309
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=account",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-account-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-49f05c5d73f02a2e8a20b585\n",
+      "stderr": "",
+      "time": 1793826911.527307
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "press",
+        "role=button label=\"Add a lasting widget\"",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Tapped role=button label=\"Add a lasting widget\" (201, 565)\nsettled after 970ms: +4 -6 (~27 unchanged)\n+ @e27~s125832 [cell] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n+ @e28~s125832 [cell] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n+ @e29~s125832 [cell] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n- @e28 [cell] \"Sign Out\"\n- @e29 [cell] \"Privacy\"\n- @e30 [link] \"Privacy\"\n- @e31 [image] \"Block\"\n- @e32 [image] \"arrow.up.right\"\n- @e33 [other] \"{\"disclosure.title\":[32,555,154.33333333333331,20.333333333333371],\"notifications.footer\":[32,260.66666666666669,296,31.666666666666686],\"persistence.footer\":[32,598.33333333333326,338,95.666666666666629],\"Privacy.icon\":[32,783.33333333333337,24,20.333333333333371],\"Privacy.title\":[70,783.33333333333337,55.666666666666657,20.333333333333371],\"refresh.title\":[32,454.33333333333331,146.66666666666666,20.333333333333314],\"Sign Out.icon\":[32,721.16666666666663,24,20],\"Sign Out.title\":[70,721,66,20.333333333333371],\"Support.icon\":[32,884.66666666666663,24,19],\"Support.title\":[70,884,61.666666666666657,20.333333333333371],\"Terms.icon\":[32,833.83333333333326,24,20],\"Terms.title\":[70,833.66666666666663,47,20.333333333333371]}\"\n+ @e31~s125832 [other] \"{\"disclosure.title\":[32,555,154.33333333333331,20.333333333333371],\"home.helper\":[52,605.33333333333326,309.33333333333331,33.666666666666629],\"lock.helper\":[52,669,306.66666666666663,33.666666666666629],\"notifications.footer\":[32,260.66666666666669,296,31.666666666666686],\"persistence.footer\":[32,807.33333333333337,338,95.666666666666629],\"refresh.title\":[32,454.33333333333331,146.66666666666666,20.333333333333314],\"widget.helper\":[52,732.66666666666663,298.33333333333331,51.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793826913.35814
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "gesture",
+        "pan",
+        "201",
+        "69",
+        "0",
+        "377",
+        "700"
+      ],
+      "exit": 0,
+      "stdout": "Panned (201, 69) by (0, 377)\n",
+      "stderr": "",
+      "time": 1793826914.688703
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826916.070719
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 31 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    @e9 [cell]\n      @e10 [text] \"Account, signed in\"\n        @e11 [text] \"S\"\n        @e12 [text] \"Signed In\"\n    @e13 [cell]\n      @e14 [button] \"Allow Notifications\"\n    @e15 [cell]\n      @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e17 [cell]\n      @e18 [text] \"Keep Your Board Visible\"\n    @e19 [cell]\n      @e20 [text] \"Live Activities\"\n      @e21 [text] \"Live Activities, Allowed\"\n    @e22 [cell]\n      @e23 [text] \"Background App Refresh\"\n      @e24 [text] \"Background App Refresh, Available\"\n    @e25 [cell]\n      @e26 [button] \"Refresh Board Now\"\n    @e27 [cell]\n      @e28 [button] \"Open App Settings\"\n    @e29 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n    @e30 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n    [content below collection hidden]\n  @e31 [other] \"{\"notifications.footer\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\"refresh.title\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\"\n",
+      "stderr": "",
+      "time": 1793826916.328141
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 30,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\\\"refresh.title\\\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 95485,\n  \"hittable\": true,\n  \"ref\": \"e31\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826916.478486
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-default-expanded-medium-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-default-expanded-medium-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826917.08615
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "scroll",
+        "bottom",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled to bottom with 1 down passes\nsettled after 2315ms: +21 -23 (~8 unchanged)\n- @e9 [cell]\n- @e10 [text] \"Account, signed in\"\n- @e11 [text] \"S\"\n- @e12 [text] \"Signed In\"\n- @e13 [cell]\n- @e14 [button] \"Allow Notifications\"\n- @e15 [cell]\n- @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n- @e17 [cell]\n- @e18 [text] \"Keep Your Board Visible\"\n- @e19 [cell]\n- @e20 [text] \"Live Activities\"\n- @e21 [text] \"Live Activities, Allowed\"\n- @e22 [cell]\n- @e23 [text] \"Background App Refresh\"\n- @e24 [text] \"Background App Refresh, Available\"\n- @e25 [cell]\n- @e26 [button] \"Refresh Board Now\"\n- @e27 [cell]\n- @e28 [button] \"Open App Settings\"\n- @e29 [other] \"Vertical scroll bar, 4 pages\"\n- @e30 [other] \"Vertical scroll bar, 4 pages\"\n- @e31 [other] \"{\"notifications.footer\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\"refresh.title\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\"\n+ @e9~s125842 [image] \"AdditionalDimmingOverlay\"\n+ @e10~s125842 [cell] \"Terms\"\n+ @e11~s125842 [link] \"Terms\"\n+ @e12~s125842 [image] \"Plain Text\"\n+ @e13~s125842 [image] \"arrow.up.right\"\n+ @e14~s125842 [cell] \"Support\"\n+ @e15~s125842 [link] \"Support\"\n+ @e16~s125842 [image] \"questionmark.circle\"\n+ @e17~s125842 [image] \"arrow.up.right\"\n+ @e18~s125842 [cell] \"Download My Data\"\n+ @e19~s125842 [link] \"Download My Data\"\n+ @e20~s125842 [image] \"Download\"\n+ @e21~s125842 [image] \"arrow.up.right\"\n+ @e22~s125842 [cell] \"Send Feedback\"\n+ @e23~s125842 [link] \"Send Feedback\"\n+ @e24~s125842 [image] \"Get Mail\"\n+ @e25~s125842 [image] \"arrow.up.right\"\n+ @e26~s125842 [cell] \"Or email hello@edmundlim.systems\"\n+ @e27~s125842 [cell] \"Delete Account\u2026\"\n+ @e28~s125842 [cell] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n+ @e29~s125842 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\"Delete Account\u2026.title\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\"delete.footer\":[38.726368159203979,770.62023217247111,306.62354892205639,30.406301824212278],\"Download My Data.icon\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\"Download My Data.title\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\"feedback.footer\":[38.726368159203979,687.40298507462694,207.08291873963515,15.043117744610299],\"Privacy.icon\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\"Privacy.title\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\"Send Feedback.icon\":[38.726368159203979,647.71475953565516,23.044776119402989,15.683250414593658],\"Send Feedback.title\":[75.2139303482587,645.79436152570486,113.62354892205637,19.524046434494267],\"Support.icon\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\"Support.title\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\"Terms.icon\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\"Terms.title\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\"version.footer\":[38.726368159203979,812.54892205638487,87.378109452736339,15.043117744610299]}\"\n",
+      "stderr": "",
+      "time": 1793826921.920012
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826923.306304
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 46 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e9 [image] \"AdditionalDimmingOverlay\"\n    @e10 [cell]\n      @e11 [link] \"Privacy\"\n        @e12 [image] \"Block\"\n        @e13 [text] \"Privacy\"\n        @e14 [image] \"arrow.up.right\"\n    @e15 [cell]\n      @e16 [link] \"Terms\"\n        @e17 [image] \"Plain Text\"\n        @e18 [text] \"Terms\"\n        @e19 [image] \"arrow.up.right\"\n    @e20 [cell]\n      @e21 [link] \"Support\"\n        @e22 [image] \"questionmark.circle\"\n        @e23 [text] \"Support\"\n        @e24 [image] \"arrow.up.right\"\n    @e25 [cell]\n      @e26 [link] \"Download My Data\"\n        @e27 [image] \"Download\"\n        @e28 [text] \"Download My Data\"\n        @e29 [image] \"arrow.up.right\"\n    @e30 [cell]\n      @e31 [link] \"Send Feedback\"\n        @e32 [image] \"Get Mail\"\n        @e33 [text] \"Send Feedback\"\n        @e34 [image] \"arrow.up.right\"\n    @e35 [cell]\n      @e36 [text] \"Or email hello@edmundlim.systems\"\n    @e37 [cell]\n      @e38 [button] \"Delete Account\u2026\"\n        @e39 [image] \"Trash\"\n        @e40 [text] \"Delete Account\u2026\"\n    @e41 [cell]\n      @e42 [text] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n      @e43 [text] \"App Version 1.0 (11)\"\n    @e44 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n    @e45 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n  @e46 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\"Delete Account\u2026.title\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\"delete.footer\":[38.726368159203979,770.62023217247111,306.62354892205639,30.406301824212278],\"Download My Data.icon\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\"Download My Data.title\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\"feedback.footer\":[38.726368159203979,687.40298507462694,207.08291873963515,15.043117744610299],\"Privacy.icon\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\"Privacy.title\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\"Send Feedback.icon\":[38.726368159203979,647.71475953565516,23.044776119402989,15.683250414593658],\"Send Feedback.title\":[75.2139303482587,645.79436152570486,113.62354892205637,19.524046434494267],\"Support.icon\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\"Support.title\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\"Terms.icon\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\"Terms.title\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\"version.footer\":[38.726368159203979,812.54892205638487,87.378109452736339,15.043117744610299]}\"\n",
+      "stderr": "",
+      "time": 1793826923.570581
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 45,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\\\"Delete Account\u2026.title\\\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\\\"delete.footer\\\":[38.726368159203979,770.62023217247111,306.62354892205639,30.406301824212278],\\\"Download My Data.icon\\\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\\\"Download My Data.title\\\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\\\"feedback.footer\\\":[38.726368159203979,687.40298507462694,207.08291873963515,15.043117744610299],\\\"Privacy.icon\\\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\\\"Privacy.title\\\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\\\"Send Feedback.icon\\\":[38.726368159203979,647.71475953565516,23.044776119402989,15.683250414593658],\\\"Send Feedback.title\\\":[75.2139303482587,645.79436152570486,113.62354892205637,19.524046434494267],\\\"Support.icon\\\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\\\"Support.title\\\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\\\"Terms.icon\\\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\\\"Terms.title\\\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\\\"version.footer\\\":[38.726368159203979,812.54892205638487,87.378109452736339,15.043117744610299]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 95485,\n  \"hittable\": true,\n  \"ref\": \"e46\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826923.722111
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-default-expanded-medium-lower.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-default-expanded-medium-lower.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826924.357718
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": "",
+      "time": 1793826924.693701
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "text-size",
+        "extra-extra-extra-large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to extra-extra-extra-large\n",
+      "stderr": "",
+      "time": 1793826924.934551
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=account",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-account-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-49f05c5d73f02a2e8a20b585\n",
+      "stderr": "",
+      "time": 1793826926.276549
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "gesture",
+        "pan",
+        "201",
+        "69",
+        "0",
+        "377",
+        "700"
+      ],
+      "exit": 0,
+      "stdout": "Panned (201, 69) by (0, 377)\n",
+      "stderr": "",
+      "time": 1793826927.618569
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826928.98795
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 29 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    @e9 [cell]\n      @e10 [text] \"Account, signed in\"\n        @e11 [text] \"S\"\n        @e12 [text] \"Signed In\"\n    @e13 [cell]\n      @e14 [button] \"Allow Notifications\"\n    @e15 [cell]\n      @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e17 [cell]\n      @e18 [text] \"Keep Your Board Visible\"\n    @e19 [cell]\n      @e20 [text] \"Live Activities\"\n      @e21 [text] \"Live Activities, Allowed\"\n    @e22 [cell]\n      @e23 [text] \"Background App Refresh\"\n      @e24 [text] \"Background App Refresh, Available\"\n    @e25 [cell]\n      @e26 [button] \"Refresh Board Now\"\n    @e27 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n    @e28 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n    [content below collection hidden]\n  @e29 [other] \"{\"notifications.footer\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\"refresh.title\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\"\n",
+      "stderr": "",
+      "time": 1793826929.241514
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 28,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\\\"refresh.title\\\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 97972,\n  \"hittable\": true,\n  \"ref\": \"e29\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826929.3921769
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-XXXL-normal-medium-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-XXXL-normal-medium-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826930.0186088
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "scroll",
+        "bottom",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled to bottom with 1 down passes\nsettled after 2576ms: +17 -21 (~8 unchanged)\n- @e9 [cell]\n- @e10 [text] \"Account, signed in\"\n- @e11 [text] \"S\"\n- @e12 [text] \"Signed In\"\n- @e13 [cell]\n- @e14 [button] \"Allow Notifications\"\n- @e15 [cell]\n- @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n- @e17 [cell]\n- @e18 [text] \"Keep Your Board Visible\"\n- @e19 [cell]\n- @e20 [text] \"Live Activities\"\n- @e21 [text] \"Live Activities, Allowed\"\n- @e22 [cell]\n- @e23 [text] \"Background App Refresh\"\n- @e24 [text] \"Background App Refresh, Available\"\n- @e25 [cell]\n- @e26 [button] \"Refresh Board Now\"\n- @e27 [other] \"Vertical scroll bar, 4 pages\"\n- @e28 [other] \"Vertical scroll bar, 4 pages\"\n- @e29 [other] \"{\"notifications.footer\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\"refresh.title\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\"\n+ @e9~s125857 [image] \"AdditionalDimmingOverlay\"\n+ @e10~s125857 [cell] \"Support\"\n+ @e11~s125857 [link] \"Support\"\n+ @e12~s125857 [image] \"questionmark.circle\"\n+ @e13~s125857 [cell] \"Download My Data\"\n+ @e14~s125857 [link] \"Download My Data\"\n+ @e15~s125857 [image] \"Download\"\n+ @e16~s125857 [image] \"arrow.up.right\"\n+ @e17~s125857 [cell] \"Send Feedback\"\n+ @e18~s125857 [link] \"Send Feedback\"\n+ @e19~s125857 [image] \"Get Mail\"\n+ @e20~s125857 [image] \"arrow.up.right\"\n+ @e21~s125857 [cell] \"Or email hello@edmundlim.systems\"\n+ @e22~s125857 [cell] \"Delete Account\u2026\"\n+ @e23~s125857 [cell] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n+ @e24~s125857 [text] \"App Version 1.0 (11)\"\n+ @e25~s125857 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\"Delete Account\u2026.title\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\"delete.footer\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\"Download My Data.icon\":[38.726368159203979,514.08706467661693,23.044776119402989,28.485903814261974],\"Download My Data.title\":[75.213930348258714,515.04726368159209,180.51741293532339,26.565505804311783],\"feedback.footer\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\"Send Feedback.icon\":[38.726368159203979,585.30182421227198,23.044776119402989,22.084577114427816],\"Send Feedback.title\":[75.2139303482587,583.06135986733,148.51077943615252,26.565505804311783],\"Support.icon\":[38.726368159203979,459.19568822553896,23.044776119402989,25.285240464344952],\"Support.title\":[75.2139303482587,458.55555555555554,77.135986733001644,26.565505804311783],\"Terms.icon\":[38.726368159203979,403.02404643449415,23.044776119402989,26.565505804311783],\"Terms.title\":[75.213930348258714,403.02404643449415,58.252072968490864,26.565505804311783],\"version.footer\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\"\n",
+      "stderr": "",
+      "time": 1793826935.150461
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826936.508532
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 41 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e9 [cell]\n      @e10 [link] \"Terms\"\n        @e11 [image] \"Plain Text\"\n        @e12 [text] \"Terms\"\n        @e13 [image] \"arrow.up.right\"\n    @e14 [image] \"AdditionalDimmingOverlay\"\n    @e15 [cell]\n      @e16 [link] \"Support\"\n        @e17 [image] \"questionmark.circle\"\n        @e18 [text] \"Support\"\n        @e19 [image] \"arrow.up.right\"\n    @e20 [cell]\n      @e21 [link] \"Download My Data\"\n        @e22 [image] \"Download\"\n        @e23 [text] \"Download My Data\"\n        @e24 [image] \"arrow.up.right\"\n    @e25 [cell]\n      @e26 [link] \"Send Feedback\"\n        @e27 [image] \"Get Mail\"\n        @e28 [text] \"Send Feedback\"\n        @e29 [image] \"arrow.up.right\"\n    @e30 [cell]\n      @e31 [text] \"Or email hello@edmundlim.systems\"\n    @e32 [cell]\n      @e33 [button] \"Delete Account\u2026\"\n        @e34 [image] \"Trash\"\n        @e35 [text] \"Delete Account\u2026\"\n    @e36 [cell]\n      @e37 [text] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n      @e38 [text] \"App Version 1.0 (11)\"\n    @e39 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n    @e40 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n  @e41 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\"Delete Account\u2026.title\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\"delete.footer\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\"Download My Data.icon\":[38.726368159203979,514.08706467661693,23.044776119402989,28.485903814261974],\"Download My Data.title\":[75.213930348258714,515.04726368159209,180.51741293532339,26.565505804311783],\"feedback.footer\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\"Send Feedback.icon\":[38.726368159203979,585.30182421227198,23.044776119402989,22.084577114427816],\"Send Feedback.title\":[75.2139303482587,583.06135986733,148.51077943615252,26.565505804311783],\"Support.icon\":[38.726368159203979,459.19568822553896,23.044776119402989,25.285240464344952],\"Support.title\":[75.2139303482587,458.55555555555554,77.135986733001644,26.565505804311783],\"Terms.icon\":[38.726368159203979,403.02404643449415,23.044776119402989,26.565505804311783],\"Terms.title\":[75.213930348258714,403.02404643449415,58.252072968490864,26.565505804311783],\"version.footer\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\"\n",
+      "stderr": "",
+      "time": 1793826936.7496479
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 40,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\\\"Delete Account\u2026.title\\\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\\\"delete.footer\\\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\\\"Download My Data.icon\\\":[38.726368159203979,514.08706467661693,23.044776119402989,28.485903814261974],\\\"Download My Data.title\\\":[75.213930348258714,515.04726368159209,180.51741293532339,26.565505804311783],\\\"feedback.footer\\\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\\\"Send Feedback.icon\\\":[38.726368159203979,585.30182421227198,23.044776119402989,22.084577114427816],\\\"Send Feedback.title\\\":[75.2139303482587,583.06135986733,148.51077943615252,26.565505804311783],\\\"Support.icon\\\":[38.726368159203979,459.19568822553896,23.044776119402989,25.285240464344952],\\\"Support.title\\\":[75.2139303482587,458.55555555555554,77.135986733001644,26.565505804311783],\\\"Terms.icon\\\":[38.726368159203979,403.02404643449415,23.044776119402989,26.565505804311783],\\\"Terms.title\\\":[75.213930348258714,403.02404643449415,58.252072968490864,26.565505804311783],\\\"version.footer\\\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 97972,\n  \"hittable\": true,\n  \"ref\": \"e41\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826936.902861
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-XXXL-normal-medium-lower.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-XXXL-normal-medium-lower.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826937.5521028
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": "",
+      "time": 1793826937.896003
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "text-size",
+        "extra-extra-extra-large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to extra-extra-extra-large\n",
+      "stderr": "",
+      "time": 1793826938.1384268
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=account",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-account-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-49f05c5d73f02a2e8a20b585\n",
+      "stderr": "",
+      "time": 1793826939.472605
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "press",
+        "role=button label=\"Add a lasting widget\"",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Tapped role=button label=\"Add a lasting widget\" (201, 665)\nsettled after 946ms: +3 -2 (~26 unchanged)\n- @e27 [cell] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed. Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n- @e28 [other] \"{\"disclosure.title\":[32,651.33333333333326,201,27.666666666666629],\"notifications.footer\":[32,275.33333333333337,312.66666666666663,45],\"persistence.footer\":[32,702,331.33333333333331,199],\"refresh.title\":[32,536,191,27.666666666666629]}\"\n+ @e27~s125866 [cell] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n+ @e28~s125866 [cell] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n+ @e29~s125866 [other] \"{\"disclosure.title\":[32,651.33333333333326,201,27.666666666666629],\"home.helper\":[52,709,280.66666666666663,71],\"lock.helper\":[52,810,313.33333333333331,71],\"notifications.footer\":[32,275.33333333333337,312.66666666666663,45],\"refresh.title\":[32,536,191,27.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793826941.229548
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "gesture",
+        "pan",
+        "201",
+        "69",
+        "0",
+        "377",
+        "700"
+      ],
+      "exit": 0,
+      "stdout": "Panned (201, 69) by (0, 377)\n",
+      "stderr": "",
+      "time": 1793826942.544003
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826943.8754601
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 29 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    @e9 [cell]\n      @e10 [text] \"Account, signed in\"\n        @e11 [text] \"S\"\n        @e12 [text] \"Signed In\"\n    @e13 [cell]\n      @e14 [button] \"Allow Notifications\"\n    @e15 [cell]\n      @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e17 [cell]\n      @e18 [text] \"Keep Your Board Visible\"\n    @e19 [cell]\n      @e20 [text] \"Live Activities\"\n      @e21 [text] \"Live Activities, Allowed\"\n    @e22 [cell]\n      @e23 [text] \"Background App Refresh\"\n      @e24 [text] \"Background App Refresh, Available\"\n    @e25 [cell]\n      @e26 [button] \"Refresh Board Now\"\n    @e27 [other] \"Vertical scroll bar, 5 pages\" [scrollable]\n    @e28 [other] \"Vertical scroll bar, 5 pages\" [scrollable]\n    [content below collection hidden]\n  @e29 [other] \"{\"notifications.footer\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\"refresh.title\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\"\n",
+      "stderr": "",
+      "time": 1793826944.120834
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 28,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\\\"refresh.title\\\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 99870,\n  \"hittable\": true,\n  \"ref\": \"e29\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826944.270319
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-XXXL-expanded-medium-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-XXXL-expanded-medium-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826944.8859022
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "scroll",
+        "bottom",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled to bottom with 2 down passes\nsettled after 2267ms: +17 -21 (~8 unchanged)\n- @e9 [cell]\n- @e10 [text] \"Account, signed in\"\n- @e11 [text] \"S\"\n- @e12 [text] \"Signed In\"\n- @e13 [cell]\n- @e14 [button] \"Allow Notifications\"\n- @e15 [cell]\n- @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n- @e17 [cell]\n- @e18 [text] \"Keep Your Board Visible\"\n- @e19 [cell]\n- @e20 [text] \"Live Activities\"\n- @e21 [text] \"Live Activities, Allowed\"\n- @e22 [cell]\n- @e23 [text] \"Background App Refresh\"\n- @e24 [text] \"Background App Refresh, Available\"\n- @e25 [cell]\n- @e26 [button] \"Refresh Board Now\"\n- @e27 [other] \"Vertical scroll bar, 5 pages\"\n- @e28 [other] \"Vertical scroll bar, 5 pages\"\n- @e29 [other] \"{\"notifications.footer\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\"refresh.title\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\"\n+ @e9~s125876 [image] \"AdditionalDimmingOverlay\"\n+ @e10~s125876 [cell] \"Support\"\n+ @e11~s125876 [link] \"Support\"\n+ @e12~s125876 [image] \"questionmark.circle\"\n+ @e13~s125876 [cell] \"Download My Data\"\n+ @e14~s125876 [link] \"Download My Data\"\n+ @e15~s125876 [image] \"Download\"\n+ @e16~s125876 [image] \"arrow.up.right\"\n+ @e17~s125876 [cell] \"Send Feedback\"\n+ @e18~s125876 [link] \"Send Feedback\"\n+ @e19~s125876 [image] \"Get Mail\"\n+ @e20~s125876 [image] \"arrow.up.right\"\n+ @e21~s125876 [cell] \"Or email hello@edmundlim.systems\"\n+ @e22~s125876 [cell] \"Delete Account\u2026\"\n+ @e23~s125876 [cell] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n+ @e24~s125876 [text] \"App Version 1.0 (11)\"\n+ @e25~s125876 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\"Delete Account\u2026.title\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\"delete.footer\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\"Download My Data.icon\":[38.726368159203979,514.08706467661671,23.044776119402989,28.485903814261974],\"Download My Data.title\":[75.213930348258714,515.04726368159186,180.51741293532339,26.565505804311783],\"feedback.footer\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\"Send Feedback.icon\":[38.726368159203979,585.30182421227175,23.044776119402989,22.084577114427816],\"Send Feedback.title\":[75.2139303482587,583.06135986732977,148.51077943615252,26.565505804311783],\"Support.icon\":[38.726368159203979,459.19568822553879,23.044776119402989,25.285240464344952],\"Support.title\":[75.2139303482587,458.55555555555537,77.135986733001644,26.565505804311726],\"Terms.icon\":[38.726368159203979,403.02404643449398,23.044776119402989,26.565505804311783],\"Terms.title\":[75.213930348258714,403.02404643449398,58.252072968490864,26.565505804311783],\"version.footer\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\"\n",
+      "stderr": "",
+      "time": 1793826951.5420349
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826952.90162
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 41 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e9 [cell]\n      @e10 [link] \"Terms\"\n        @e11 [image] \"Plain Text\"\n        @e12 [text] \"Terms\"\n        @e13 [image] \"arrow.up.right\"\n    @e14 [image] \"AdditionalDimmingOverlay\"\n    @e15 [cell]\n      @e16 [link] \"Support\"\n        @e17 [image] \"questionmark.circle\"\n        @e18 [text] \"Support\"\n        @e19 [image] \"arrow.up.right\"\n    @e20 [cell]\n      @e21 [link] \"Download My Data\"\n        @e22 [image] \"Download\"\n        @e23 [text] \"Download My Data\"\n        @e24 [image] \"arrow.up.right\"\n    @e25 [cell]\n      @e26 [link] \"Send Feedback\"\n        @e27 [image] \"Get Mail\"\n        @e28 [text] \"Send Feedback\"\n        @e29 [image] \"arrow.up.right\"\n    @e30 [cell]\n      @e31 [text] \"Or email hello@edmundlim.systems\"\n    @e32 [cell]\n      @e33 [button] \"Delete Account\u2026\"\n        @e34 [image] \"Trash\"\n        @e35 [text] \"Delete Account\u2026\"\n    @e36 [cell]\n      @e37 [text] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n      @e38 [text] \"App Version 1.0 (11)\"\n    @e39 [other] \"Vertical scroll bar, 5 pages\" [scrollable]\n    @e40 [other] \"Vertical scroll bar, 5 pages\" [scrollable]\n  @e41 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\"Delete Account\u2026.title\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\"delete.footer\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\"Download My Data.icon\":[38.726368159203979,514.08706467661671,23.044776119402989,28.485903814261974],\"Download My Data.title\":[75.213930348258714,515.04726368159186,180.51741293532339,26.565505804311783],\"feedback.footer\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\"Send Feedback.icon\":[38.726368159203979,585.30182421227175,23.044776119402989,22.084577114427816],\"Send Feedback.title\":[75.2139303482587,583.06135986732977,148.51077943615252,26.565505804311783],\"Support.icon\":[38.726368159203979,459.19568822553879,23.044776119402989,25.285240464344952],\"Support.title\":[75.2139303482587,458.55555555555537,77.135986733001644,26.565505804311726],\"Terms.icon\":[38.726368159203979,403.02404643449398,23.044776119402989,26.565505804311783],\"Terms.title\":[75.213930348258714,403.02404643449398,58.252072968490864,26.565505804311783],\"version.footer\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\"\n",
+      "stderr": "",
+      "time": 1793826953.1301079
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 40,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\\\"Delete Account\u2026.title\\\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\\\"delete.footer\\\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\\\"Download My Data.icon\\\":[38.726368159203979,514.08706467661671,23.044776119402989,28.485903814261974],\\\"Download My Data.title\\\":[75.213930348258714,515.04726368159186,180.51741293532339,26.565505804311783],\\\"feedback.footer\\\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\\\"Send Feedback.icon\\\":[38.726368159203979,585.30182421227175,23.044776119402989,22.084577114427816],\\\"Send Feedback.title\\\":[75.2139303482587,583.06135986732977,148.51077943615252,26.565505804311783],\\\"Support.icon\\\":[38.726368159203979,459.19568822553879,23.044776119402989,25.285240464344952],\\\"Support.title\\\":[75.2139303482587,458.55555555555537,77.135986733001644,26.565505804311726],\\\"Terms.icon\\\":[38.726368159203979,403.02404643449398,23.044776119402989,26.565505804311783],\\\"Terms.title\\\":[75.213930348258714,403.02404643449398,58.252072968490864,26.565505804311783],\\\"version.footer\\\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 99870,\n  \"hittable\": true,\n  \"ref\": \"e41\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826953.284323
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-XXXL-expanded-medium-lower.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-light-XXXL-expanded-medium-lower.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826953.9294798
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "appearance",
+        "dark"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": "",
+      "time": 1793826954.281566
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": "",
+      "time": 1793826954.5593169
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=account",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-account-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-49f05c5d73f02a2e8a20b585\n",
+      "stderr": "",
+      "time": 1793826956.041975
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "gesture",
+        "pan",
+        "201",
+        "69",
+        "0",
+        "377",
+        "700"
+      ],
+      "exit": 0,
+      "stdout": "Panned (201, 69) by (0, 377)\n",
+      "stderr": "",
+      "time": 1793826957.471097
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826958.789352
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 31 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    @e9 [cell]\n      @e10 [text] \"Account, signed in\"\n        @e11 [text] \"S\"\n        @e12 [text] \"Signed In\"\n    @e13 [cell]\n      @e14 [button] \"Allow Notifications\"\n    @e15 [cell]\n      @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e17 [cell]\n      @e18 [text] \"Keep Your Board Visible\"\n    @e19 [cell]\n      @e20 [text] \"Live Activities\"\n      @e21 [text] \"Live Activities, Allowed\"\n    @e22 [cell]\n      @e23 [text] \"Background App Refresh\"\n      @e24 [text] \"Background App Refresh, Available\"\n    @e25 [cell]\n      @e26 [button] \"Refresh Board Now\"\n    @e27 [cell]\n      @e28 [button] \"Open App Settings\"\n    @e29 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    @e30 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    [content below collection hidden]\n  @e31 [other] \"{\"notifications.footer\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\"refresh.title\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\"\n",
+      "stderr": "",
+      "time": 1793826959.025781
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 30,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\\\"refresh.title\\\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 2671,\n  \"hittable\": true,\n  \"ref\": \"e31\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826959.182953
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-default-normal-medium-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-default-normal-medium-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826959.832433
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "scroll",
+        "bottom",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled to bottom with 1 down passes\nsettled after 2285ms: +21 -23 (~8 unchanged)\n- @e9 [cell]\n- @e10 [text] \"Account, signed in\"\n- @e11 [text] \"S\"\n- @e12 [text] \"Signed In\"\n- @e13 [cell]\n- @e14 [button] \"Allow Notifications\"\n- @e15 [cell]\n- @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n- @e17 [cell]\n- @e18 [text] \"Keep Your Board Visible\"\n- @e19 [cell]\n- @e20 [text] \"Live Activities\"\n- @e21 [text] \"Live Activities, Allowed\"\n- @e22 [cell]\n- @e23 [text] \"Background App Refresh\"\n- @e24 [text] \"Background App Refresh, Available\"\n- @e25 [cell]\n- @e26 [button] \"Refresh Board Now\"\n- @e27 [cell]\n- @e28 [button] \"Open App Settings\"\n- @e29 [other] \"Vertical scroll bar, 3 pages\"\n- @e30 [other] \"Vertical scroll bar, 3 pages\"\n- @e31 [other] \"{\"notifications.footer\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\"refresh.title\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\"\n+ @e9~s125891 [image] \"AdditionalDimmingOverlay\"\n+ @e10~s125891 [cell] \"Terms\"\n+ @e11~s125891 [link] \"Terms\"\n+ @e12~s125891 [image] \"Plain Text\"\n+ @e13~s125891 [image] \"arrow.up.right\"\n+ @e14~s125891 [cell] \"Support\"\n+ @e15~s125891 [link] \"Support\"\n+ @e16~s125891 [image] \"questionmark.circle\"\n+ @e17~s125891 [image] \"arrow.up.right\"\n+ @e18~s125891 [cell] \"Download My Data\"\n+ @e19~s125891 [link] \"Download My Data\"\n+ @e20~s125891 [image] \"Download\"\n+ @e21~s125891 [image] \"arrow.up.right\"\n+ @e22~s125891 [cell] \"Send Feedback\"\n+ @e23~s125891 [link] \"Send Feedback\"\n+ @e24~s125891 [image] \"Get Mail\"\n+ @e25~s125891 [image] \"arrow.up.right\"\n+ @e26~s125891 [cell] \"Or email hello@edmundlim.systems\"\n+ @e27~s125891 [cell] \"Delete Account\u2026\"\n+ @e28~s125891 [cell] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n+ @e29~s125891 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\"Delete Account\u2026.title\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\"delete.footer\":[38.726368159203979,770.62023217247088,306.62354892205639,30.406301824212278],\"Download My Data.icon\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\"Download My Data.title\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\"feedback.footer\":[38.726368159203979,687.40298507462671,207.08291873963515,15.043117744610299],\"Privacy.icon\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\"Privacy.title\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\"Send Feedback.icon\":[38.726368159203979,647.71475953565493,23.044776119402989,15.683250414593658],\"Send Feedback.title\":[75.2139303482587,645.79436152570463,113.62354892205637,19.524046434494267],\"Support.icon\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\"Support.title\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\"Terms.icon\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\"Terms.title\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\"version.footer\":[38.726368159203979,812.54892205638464,87.378109452736339,15.043117744610299]}\"\n",
+      "stderr": "",
+      "time": 1793826964.3632379
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826965.739514
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 46 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e9 [image] \"AdditionalDimmingOverlay\"\n    @e10 [cell]\n      @e11 [link] \"Privacy\"\n        @e12 [image] \"Block\"\n        @e13 [text] \"Privacy\"\n        @e14 [image] \"arrow.up.right\"\n    @e15 [cell]\n      @e16 [link] \"Terms\"\n        @e17 [image] \"Plain Text\"\n        @e18 [text] \"Terms\"\n        @e19 [image] \"arrow.up.right\"\n    @e20 [cell]\n      @e21 [link] \"Support\"\n        @e22 [image] \"questionmark.circle\"\n        @e23 [text] \"Support\"\n        @e24 [image] \"arrow.up.right\"\n    @e25 [cell]\n      @e26 [link] \"Download My Data\"\n        @e27 [image] \"Download\"\n        @e28 [text] \"Download My Data\"\n        @e29 [image] \"arrow.up.right\"\n    @e30 [cell]\n      @e31 [link] \"Send Feedback\"\n        @e32 [image] \"Get Mail\"\n        @e33 [text] \"Send Feedback\"\n        @e34 [image] \"arrow.up.right\"\n    @e35 [cell]\n      @e36 [text] \"Or email hello@edmundlim.systems\"\n    @e37 [cell]\n      @e38 [button] \"Delete Account\u2026\"\n        @e39 [image] \"Trash\"\n        @e40 [text] \"Delete Account\u2026\"\n    @e41 [cell]\n      @e42 [text] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n      @e43 [text] \"App Version 1.0 (11)\"\n    @e44 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    @e45 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n  @e46 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\"Delete Account\u2026.title\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\"delete.footer\":[38.726368159203979,770.62023217247088,306.62354892205639,30.406301824212278],\"Download My Data.icon\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\"Download My Data.title\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\"feedback.footer\":[38.726368159203979,687.40298507462671,207.08291873963515,15.043117744610299],\"Privacy.icon\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\"Privacy.title\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\"Send Feedback.icon\":[38.726368159203979,647.71475953565493,23.044776119402989,15.683250414593658],\"Send Feedback.title\":[75.2139303482587,645.79436152570463,113.62354892205637,19.524046434494267],\"Support.icon\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\"Support.title\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\"Terms.icon\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\"Terms.title\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\"version.footer\":[38.726368159203979,812.54892205638464,87.378109452736339,15.043117744610299]}\"\n",
+      "stderr": "",
+      "time": 1793826965.9802969
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 45,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\\\"Delete Account\u2026.title\\\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\\\"delete.footer\\\":[38.726368159203979,770.62023217247088,306.62354892205639,30.406301824212278],\\\"Download My Data.icon\\\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\\\"Download My Data.title\\\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\\\"feedback.footer\\\":[38.726368159203979,687.40298507462671,207.08291873963515,15.043117744610299],\\\"Privacy.icon\\\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\\\"Privacy.title\\\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\\\"Send Feedback.icon\\\":[38.726368159203979,647.71475953565493,23.044776119402989,15.683250414593658],\\\"Send Feedback.title\\\":[75.2139303482587,645.79436152570463,113.62354892205637,19.524046434494267],\\\"Support.icon\\\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\\\"Support.title\\\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\\\"Terms.icon\\\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\\\"Terms.title\\\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\\\"version.footer\\\":[38.726368159203979,812.54892205638464,87.378109452736339,15.043117744610299]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 2671,\n  \"hittable\": true,\n  \"ref\": \"e46\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826966.135179
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-default-normal-medium-lower.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-default-normal-medium-lower.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826966.768534
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "appearance",
+        "dark"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": "",
+      "time": 1793826967.11539
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": "",
+      "time": 1793826967.363432
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=account",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-account-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-49f05c5d73f02a2e8a20b585\n",
+      "stderr": "",
+      "time": 1793826968.744148
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "press",
+        "role=button label=\"Add a lasting widget\"",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Tapped role=button label=\"Add a lasting widget\" (201, 565)\nsettled after 954ms: +4 -6 (~27 unchanged)\n+ @e27~s125900 [cell] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n+ @e28~s125900 [cell] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n+ @e29~s125900 [cell] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n- @e28 [cell] \"Sign Out\"\n- @e29 [cell] \"Privacy\"\n- @e30 [link] \"Privacy\"\n- @e31 [image] \"Block\"\n- @e32 [image] \"arrow.up.right\"\n- @e33 [other] \"{\"disclosure.title\":[32,555,154.33333333333331,20.333333333333371],\"notifications.footer\":[32,260.66666666666669,296,31.666666666666686],\"persistence.footer\":[32,598.33333333333326,338,95.666666666666629],\"Privacy.icon\":[32,783.33333333333337,24,20.333333333333371],\"Privacy.title\":[70,783.33333333333337,55.666666666666657,20.333333333333371],\"refresh.title\":[32,454.33333333333331,146.66666666666666,20.333333333333314],\"Sign Out.icon\":[32,721.16666666666663,24,20],\"Sign Out.title\":[70,721,66,20.333333333333371],\"Support.icon\":[32,884.66666666666663,24,19],\"Support.title\":[70,884,61.666666666666657,20.333333333333371],\"Terms.icon\":[32,833.83333333333326,24,20],\"Terms.title\":[70,833.66666666666663,47,20.333333333333371]}\"\n+ @e31~s125900 [other] \"{\"disclosure.title\":[32,555,154.33333333333331,20.333333333333371],\"home.helper\":[52,605.33333333333326,309.33333333333331,33.666666666666629],\"lock.helper\":[52,669,306.66666666666663,33.666666666666629],\"notifications.footer\":[32,260.66666666666669,296,31.666666666666686],\"persistence.footer\":[32,807.33333333333337,338,95.666666666666629],\"refresh.title\":[32,454.33333333333331,146.66666666666666,20.333333333333314],\"widget.helper\":[52,732.66666666666663,298.33333333333331,51.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793826970.556332
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "gesture",
+        "pan",
+        "201",
+        "69",
+        "0",
+        "377",
+        "700"
+      ],
+      "exit": 0,
+      "stdout": "Panned (201, 69) by (0, 377)\n",
+      "stderr": "",
+      "time": 1793826971.901786
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826973.288625
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 31 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    @e9 [cell]\n      @e10 [text] \"Account, signed in\"\n        @e11 [text] \"S\"\n        @e12 [text] \"Signed In\"\n    @e13 [cell]\n      @e14 [button] \"Allow Notifications\"\n    @e15 [cell]\n      @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e17 [cell]\n      @e18 [text] \"Keep Your Board Visible\"\n    @e19 [cell]\n      @e20 [text] \"Live Activities\"\n      @e21 [text] \"Live Activities, Allowed\"\n    @e22 [cell]\n      @e23 [text] \"Background App Refresh\"\n      @e24 [text] \"Background App Refresh, Available\"\n    @e25 [cell]\n      @e26 [button] \"Refresh Board Now\"\n    @e27 [cell]\n      @e28 [button] \"Open App Settings\"\n    @e29 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n    @e30 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n    [content below collection hidden]\n  @e31 [other] \"{\"notifications.footer\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\"refresh.title\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\"\n",
+      "stderr": "",
+      "time": 1793826973.539404
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 30,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\\\"refresh.title\\\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 4476,\n  \"hittable\": true,\n  \"ref\": \"e31\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826973.691572
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-default-expanded-medium-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-default-expanded-medium-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826974.310949
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "scroll",
+        "bottom",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled to bottom with 1 down passes\nsettled after 2364ms: +21 -23 (~8 unchanged)\n- @e9 [cell]\n- @e10 [text] \"Account, signed in\"\n- @e11 [text] \"S\"\n- @e12 [text] \"Signed In\"\n- @e13 [cell]\n- @e14 [button] \"Allow Notifications\"\n- @e15 [cell]\n- @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n- @e17 [cell]\n- @e18 [text] \"Keep Your Board Visible\"\n- @e19 [cell]\n- @e20 [text] \"Live Activities\"\n- @e21 [text] \"Live Activities, Allowed\"\n- @e22 [cell]\n- @e23 [text] \"Background App Refresh\"\n- @e24 [text] \"Background App Refresh, Available\"\n- @e25 [cell]\n- @e26 [button] \"Refresh Board Now\"\n- @e27 [cell]\n- @e28 [button] \"Open App Settings\"\n- @e29 [other] \"Vertical scroll bar, 4 pages\"\n- @e30 [other] \"Vertical scroll bar, 4 pages\"\n- @e31 [other] \"{\"notifications.footer\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\"refresh.title\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\"\n+ @e9~s125910 [image] \"AdditionalDimmingOverlay\"\n+ @e10~s125910 [cell] \"Terms\"\n+ @e11~s125910 [link] \"Terms\"\n+ @e12~s125910 [image] \"Plain Text\"\n+ @e13~s125910 [image] \"arrow.up.right\"\n+ @e14~s125910 [cell] \"Support\"\n+ @e15~s125910 [link] \"Support\"\n+ @e16~s125910 [image] \"questionmark.circle\"\n+ @e17~s125910 [image] \"arrow.up.right\"\n+ @e18~s125910 [cell] \"Download My Data\"\n+ @e19~s125910 [link] \"Download My Data\"\n+ @e20~s125910 [image] \"Download\"\n+ @e21~s125910 [image] \"arrow.up.right\"\n+ @e22~s125910 [cell] \"Send Feedback\"\n+ @e23~s125910 [link] \"Send Feedback\"\n+ @e24~s125910 [image] \"Get Mail\"\n+ @e25~s125910 [image] \"arrow.up.right\"\n+ @e26~s125910 [cell] \"Or email hello@edmundlim.systems\"\n+ @e27~s125910 [cell] \"Delete Account\u2026\"\n+ @e28~s125910 [cell] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n+ @e29~s125910 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\"Delete Account\u2026.title\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\"delete.footer\":[38.726368159203979,770.62023217247111,306.62354892205639,30.406301824212278],\"Download My Data.icon\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\"Download My Data.title\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\"feedback.footer\":[38.726368159203979,687.40298507462694,207.08291873963515,15.043117744610299],\"Privacy.icon\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\"Privacy.title\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\"Send Feedback.icon\":[38.726368159203979,647.71475953565516,23.044776119402989,15.683250414593658],\"Send Feedback.title\":[75.2139303482587,645.79436152570486,113.62354892205637,19.524046434494267],\"Support.icon\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\"Support.title\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\"Terms.icon\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\"Terms.title\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\"version.footer\":[38.726368159203979,812.54892205638487,87.378109452736339,15.043117744610299]}\"\n",
+      "stderr": "",
+      "time": 1793826979.294467
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826980.685428
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 46 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e9 [image] \"AdditionalDimmingOverlay\"\n    @e10 [cell]\n      @e11 [link] \"Privacy\"\n        @e12 [image] \"Block\"\n        @e13 [text] \"Privacy\"\n        @e14 [image] \"arrow.up.right\"\n    @e15 [cell]\n      @e16 [link] \"Terms\"\n        @e17 [image] \"Plain Text\"\n        @e18 [text] \"Terms\"\n        @e19 [image] \"arrow.up.right\"\n    @e20 [cell]\n      @e21 [link] \"Support\"\n        @e22 [image] \"questionmark.circle\"\n        @e23 [text] \"Support\"\n        @e24 [image] \"arrow.up.right\"\n    @e25 [cell]\n      @e26 [link] \"Download My Data\"\n        @e27 [image] \"Download\"\n        @e28 [text] \"Download My Data\"\n        @e29 [image] \"arrow.up.right\"\n    @e30 [cell]\n      @e31 [link] \"Send Feedback\"\n        @e32 [image] \"Get Mail\"\n        @e33 [text] \"Send Feedback\"\n        @e34 [image] \"arrow.up.right\"\n    @e35 [cell]\n      @e36 [text] \"Or email hello@edmundlim.systems\"\n    @e37 [cell]\n      @e38 [button] \"Delete Account\u2026\"\n        @e39 [image] \"Trash\"\n        @e40 [text] \"Delete Account\u2026\"\n    @e41 [cell]\n      @e42 [text] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n      @e43 [text] \"App Version 1.0 (11)\"\n    @e44 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n    @e45 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n  @e46 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\"Delete Account\u2026.title\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\"delete.footer\":[38.726368159203979,770.62023217247111,306.62354892205639,30.406301824212278],\"Download My Data.icon\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\"Download My Data.title\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\"feedback.footer\":[38.726368159203979,687.40298507462694,207.08291873963515,15.043117744610299],\"Privacy.icon\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\"Privacy.title\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\"Send Feedback.icon\":[38.726368159203979,647.71475953565516,23.044776119402989,15.683250414593658],\"Send Feedback.title\":[75.2139303482587,645.79436152570486,113.62354892205637,19.524046434494267],\"Support.icon\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\"Support.title\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\"Terms.icon\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\"Terms.title\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\"version.footer\":[38.726368159203979,812.54892205638487,87.378109452736339,15.043117744610299]}\"\n",
+      "stderr": "",
+      "time": 1793826980.927092
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 45,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\\\"Delete Account\u2026.title\\\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\\\"delete.footer\\\":[38.726368159203979,770.62023217247111,306.62354892205639,30.406301824212278],\\\"Download My Data.icon\\\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\\\"Download My Data.title\\\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\\\"feedback.footer\\\":[38.726368159203979,687.40298507462694,207.08291873963515,15.043117744610299],\\\"Privacy.icon\\\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\\\"Privacy.title\\\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\\\"Send Feedback.icon\\\":[38.726368159203979,647.71475953565516,23.044776119402989,15.683250414593658],\\\"Send Feedback.title\\\":[75.2139303482587,645.79436152570486,113.62354892205637,19.524046434494267],\\\"Support.icon\\\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\\\"Support.title\\\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\\\"Terms.icon\\\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\\\"Terms.title\\\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\\\"version.footer\\\":[38.726368159203979,812.54892205638487,87.378109452736339,15.043117744610299]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 4476,\n  \"hittable\": true,\n  \"ref\": \"e46\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826981.074757
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-default-expanded-medium-lower.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-default-expanded-medium-lower.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826981.7129998
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "appearance",
+        "dark"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": "",
+      "time": 1793826982.07297
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "text-size",
+        "extra-extra-extra-large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to extra-extra-extra-large\n",
+      "stderr": "",
+      "time": 1793826982.315208
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=account",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-account-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-49f05c5d73f02a2e8a20b585\n",
+      "stderr": "",
+      "time": 1793826983.6840909
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "gesture",
+        "pan",
+        "201",
+        "69",
+        "0",
+        "377",
+        "700"
+      ],
+      "exit": 0,
+      "stdout": "Panned (201, 69) by (0, 377)\n",
+      "stderr": "",
+      "time": 1793826985.064631
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826986.430731
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 29 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    @e9 [cell]\n      @e10 [text] \"Account, signed in\"\n        @e11 [text] \"S\"\n        @e12 [text] \"Signed In\"\n    @e13 [cell]\n      @e14 [button] \"Allow Notifications\"\n    @e15 [cell]\n      @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e17 [cell]\n      @e18 [text] \"Keep Your Board Visible\"\n    @e19 [cell]\n      @e20 [text] \"Live Activities\"\n      @e21 [text] \"Live Activities, Allowed\"\n    @e22 [cell]\n      @e23 [text] \"Background App Refresh\"\n      @e24 [text] \"Background App Refresh, Available\"\n    @e25 [cell]\n      @e26 [button] \"Refresh Board Now\"\n    @e27 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n    @e28 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n    [content below collection hidden]\n  @e29 [other] \"{\"notifications.footer\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\"refresh.title\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\"\n",
+      "stderr": "",
+      "time": 1793826986.666336
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 28,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\\\"refresh.title\\\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 6584,\n  \"hittable\": true,\n  \"ref\": \"e29\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826986.816682
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-XXXL-normal-medium-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-XXXL-normal-medium-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826987.4614642
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "scroll",
+        "bottom",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled to bottom with 1 down passes\nsettled after 2546ms: +17 -21 (~8 unchanged)\n- @e9 [cell]\n- @e10 [text] \"Account, signed in\"\n- @e11 [text] \"S\"\n- @e12 [text] \"Signed In\"\n- @e13 [cell]\n- @e14 [button] \"Allow Notifications\"\n- @e15 [cell]\n- @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n- @e17 [cell]\n- @e18 [text] \"Keep Your Board Visible\"\n- @e19 [cell]\n- @e20 [text] \"Live Activities\"\n- @e21 [text] \"Live Activities, Allowed\"\n- @e22 [cell]\n- @e23 [text] \"Background App Refresh\"\n- @e24 [text] \"Background App Refresh, Available\"\n- @e25 [cell]\n- @e26 [button] \"Refresh Board Now\"\n- @e27 [other] \"Vertical scroll bar, 4 pages\"\n- @e28 [other] \"Vertical scroll bar, 4 pages\"\n- @e29 [other] \"{\"notifications.footer\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\"refresh.title\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\"\n+ @e9~s125925 [image] \"AdditionalDimmingOverlay\"\n+ @e10~s125925 [cell] \"Support\"\n+ @e11~s125925 [link] \"Support\"\n+ @e12~s125925 [image] \"questionmark.circle\"\n+ @e13~s125925 [cell] \"Download My Data\"\n+ @e14~s125925 [link] \"Download My Data\"\n+ @e15~s125925 [image] \"Download\"\n+ @e16~s125925 [image] \"arrow.up.right\"\n+ @e17~s125925 [cell] \"Send Feedback\"\n+ @e18~s125925 [link] \"Send Feedback\"\n+ @e19~s125925 [image] \"Get Mail\"\n+ @e20~s125925 [image] \"arrow.up.right\"\n+ @e21~s125925 [cell] \"Or email hello@edmundlim.systems\"\n+ @e22~s125925 [cell] \"Delete Account\u2026\"\n+ @e23~s125925 [cell] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n+ @e24~s125925 [text] \"App Version 1.0 (11)\"\n+ @e25~s125925 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\"Delete Account\u2026.title\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\"delete.footer\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\"Download My Data.icon\":[38.726368159203979,514.08706467661693,23.044776119402989,28.485903814261974],\"Download My Data.title\":[75.213930348258714,515.04726368159209,180.51741293532339,26.565505804311783],\"feedback.footer\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\"Send Feedback.icon\":[38.726368159203979,585.30182421227198,23.044776119402989,22.084577114427816],\"Send Feedback.title\":[75.2139303482587,583.06135986733,148.51077943615252,26.565505804311783],\"Support.icon\":[38.726368159203979,459.19568822553896,23.044776119402989,25.285240464344952],\"Support.title\":[75.2139303482587,458.55555555555554,77.135986733001644,26.565505804311783],\"Terms.icon\":[38.726368159203979,403.02404643449415,23.044776119402989,26.565505804311783],\"Terms.title\":[75.213930348258714,403.02404643449415,58.252072968490864,26.565505804311783],\"version.footer\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\"\n",
+      "stderr": "",
+      "time": 1793826992.5518012
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793826993.9272609
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 41 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e9 [cell]\n      @e10 [link] \"Terms\"\n        @e11 [image] \"Plain Text\"\n        @e12 [text] \"Terms\"\n        @e13 [image] \"arrow.up.right\"\n    @e14 [image] \"AdditionalDimmingOverlay\"\n    @e15 [cell]\n      @e16 [link] \"Support\"\n        @e17 [image] \"questionmark.circle\"\n        @e18 [text] \"Support\"\n        @e19 [image] \"arrow.up.right\"\n    @e20 [cell]\n      @e21 [link] \"Download My Data\"\n        @e22 [image] \"Download\"\n        @e23 [text] \"Download My Data\"\n        @e24 [image] \"arrow.up.right\"\n    @e25 [cell]\n      @e26 [link] \"Send Feedback\"\n        @e27 [image] \"Get Mail\"\n        @e28 [text] \"Send Feedback\"\n        @e29 [image] \"arrow.up.right\"\n    @e30 [cell]\n      @e31 [text] \"Or email hello@edmundlim.systems\"\n    @e32 [cell]\n      @e33 [button] \"Delete Account\u2026\"\n        @e34 [image] \"Trash\"\n        @e35 [text] \"Delete Account\u2026\"\n    @e36 [cell]\n      @e37 [text] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n      @e38 [text] \"App Version 1.0 (11)\"\n    @e39 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n    @e40 [other] \"Vertical scroll bar, 4 pages\" [scrollable]\n  @e41 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\"Delete Account\u2026.title\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\"delete.footer\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\"Download My Data.icon\":[38.726368159203979,514.08706467661693,23.044776119402989,28.485903814261974],\"Download My Data.title\":[75.213930348258714,515.04726368159209,180.51741293532339,26.565505804311783],\"feedback.footer\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\"Send Feedback.icon\":[38.726368159203979,585.30182421227198,23.044776119402989,22.084577114427816],\"Send Feedback.title\":[75.2139303482587,583.06135986733,148.51077943615252,26.565505804311783],\"Support.icon\":[38.726368159203979,459.19568822553896,23.044776119402989,25.285240464344952],\"Support.title\":[75.2139303482587,458.55555555555554,77.135986733001644,26.565505804311783],\"Terms.icon\":[38.726368159203979,403.02404643449415,23.044776119402989,26.565505804311783],\"Terms.title\":[75.213930348258714,403.02404643449415,58.252072968490864,26.565505804311783],\"version.footer\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\"\n",
+      "stderr": "",
+      "time": 1793826994.179334
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 40,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\\\"Delete Account\u2026.title\\\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\\\"delete.footer\\\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\\\"Download My Data.icon\\\":[38.726368159203979,514.08706467661693,23.044776119402989,28.485903814261974],\\\"Download My Data.title\\\":[75.213930348258714,515.04726368159209,180.51741293532339,26.565505804311783],\\\"feedback.footer\\\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\\\"Send Feedback.icon\\\":[38.726368159203979,585.30182421227198,23.044776119402989,22.084577114427816],\\\"Send Feedback.title\\\":[75.2139303482587,583.06135986733,148.51077943615252,26.565505804311783],\\\"Support.icon\\\":[38.726368159203979,459.19568822553896,23.044776119402989,25.285240464344952],\\\"Support.title\\\":[75.2139303482587,458.55555555555554,77.135986733001644,26.565505804311783],\\\"Terms.icon\\\":[38.726368159203979,403.02404643449415,23.044776119402989,26.565505804311783],\\\"Terms.title\\\":[75.213930348258714,403.02404643449415,58.252072968490864,26.565505804311783],\\\"version.footer\\\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 6584,\n  \"hittable\": true,\n  \"ref\": \"e41\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793826994.331
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-XXXL-normal-medium-lower.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-XXXL-normal-medium-lower.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793826994.9509099
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "appearance",
+        "dark"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": "",
+      "time": 1793826995.296649
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "settings",
+        "text-size",
+        "extra-extra-extra-large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to extra-extra-extra-large\n",
+      "stderr": "",
+      "time": 1793826995.541472
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=account",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-account-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-49f05c5d73f02a2e8a20b585\n",
+      "stderr": "",
+      "time": 1793826996.899755
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "press",
+        "role=button label=\"Add a lasting widget\"",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Tapped role=button label=\"Add a lasting widget\" (201, 665)\nsettled after 935ms: +3 -2 (~26 unchanged)\n- @e27 [cell] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed. Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n- @e28 [other] \"{\"disclosure.title\":[32,651.33333333333326,201,27.666666666666629],\"notifications.footer\":[32,275.33333333333337,312.66666666666663,45],\"persistence.footer\":[32,702,331.33333333333331,199],\"refresh.title\":[32,536,191,27.666666666666629]}\"\n+ @e27~s125934 [cell] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n+ @e28~s125934 [cell] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n+ @e29~s125934 [other] \"{\"disclosure.title\":[32,651.33333333333326,201,27.666666666666629],\"home.helper\":[52,709,280.66666666666663,71],\"lock.helper\":[52,810,313.33333333333331,71],\"notifications.footer\":[32,275.33333333333337,312.66666666666663,45],\"refresh.title\":[32,536,191,27.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793826998.6556082
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "gesture",
+        "pan",
+        "201",
+        "69",
+        "0",
+        "377",
+        "700"
+      ],
+      "exit": 0,
+      "stdout": "Panned (201, 69) by (0, 377)\n",
+      "stderr": "",
+      "time": 1793826999.980992
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793827001.3353999
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 29 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    @e9 [cell]\n      @e10 [text] \"Account, signed in\"\n        @e11 [text] \"S\"\n        @e12 [text] \"Signed In\"\n    @e13 [cell]\n      @e14 [button] \"Allow Notifications\"\n    @e15 [cell]\n      @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e17 [cell]\n      @e18 [text] \"Keep Your Board Visible\"\n    @e19 [cell]\n      @e20 [text] \"Live Activities\"\n      @e21 [text] \"Live Activities, Allowed\"\n    @e22 [cell]\n      @e23 [text] \"Background App Refresh\"\n      @e24 [text] \"Background App Refresh, Available\"\n    @e25 [cell]\n      @e26 [button] \"Refresh Board Now\"\n    @e27 [other] \"Vertical scroll bar, 5 pages\" [scrollable]\n    @e28 [other] \"Vertical scroll bar, 5 pages\" [scrollable]\n    [content below collection hidden]\n  @e29 [other] \"{\"notifications.footer\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\"refresh.title\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\"\n",
+      "stderr": "",
+      "time": 1793827001.5817332
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 28,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\\\"refresh.title\\\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 8485,\n  \"hittable\": true,\n  \"ref\": \"e29\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793827001.734905
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-XXXL-expanded-medium-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-XXXL-expanded-medium-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793827002.365249
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "scroll",
+        "bottom",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled to bottom with 2 down passes\nsettled after 2322ms: +17 -21 (~8 unchanged)\n- @e9 [cell]\n- @e10 [text] \"Account, signed in\"\n- @e11 [text] \"S\"\n- @e12 [text] \"Signed In\"\n- @e13 [cell]\n- @e14 [button] \"Allow Notifications\"\n- @e15 [cell]\n- @e16 [text] \"Allow notifications so new reminders can appear as banners.\"\n- @e17 [cell]\n- @e18 [text] \"Keep Your Board Visible\"\n- @e19 [cell]\n- @e20 [text] \"Live Activities\"\n- @e21 [text] \"Live Activities, Allowed\"\n- @e22 [cell]\n- @e23 [text] \"Background App Refresh\"\n- @e24 [text] \"Background App Refresh, Available\"\n- @e25 [cell]\n- @e26 [button] \"Refresh Board Now\"\n- @e27 [other] \"Vertical scroll bar, 5 pages\"\n- @e28 [other] \"Vertical scroll bar, 5 pages\"\n- @e29 [other] \"{\"notifications.footer\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\"refresh.title\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\"\n+ @e9~s125944 [image] \"AdditionalDimmingOverlay\"\n+ @e10~s125944 [cell] \"Support\"\n+ @e11~s125944 [link] \"Support\"\n+ @e12~s125944 [image] \"questionmark.circle\"\n+ @e13~s125944 [cell] \"Download My Data\"\n+ @e14~s125944 [link] \"Download My Data\"\n+ @e15~s125944 [image] \"Download\"\n+ @e16~s125944 [image] \"arrow.up.right\"\n+ @e17~s125944 [cell] \"Send Feedback\"\n+ @e18~s125944 [link] \"Send Feedback\"\n+ @e19~s125944 [image] \"Get Mail\"\n+ @e20~s125944 [image] \"arrow.up.right\"\n+ @e21~s125944 [cell] \"Or email hello@edmundlim.systems\"\n+ @e22~s125944 [cell] \"Delete Account\u2026\"\n+ @e23~s125944 [cell] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n+ @e24~s125944 [text] \"App Version 1.0 (11)\"\n+ @e25~s125944 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\"Delete Account\u2026.title\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\"delete.footer\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\"Download My Data.icon\":[38.726368159203979,514.08706467661671,23.044776119402989,28.485903814261974],\"Download My Data.title\":[75.213930348258714,515.04726368159186,180.51741293532339,26.565505804311783],\"feedback.footer\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\"Send Feedback.icon\":[38.726368159203979,585.30182421227175,23.044776119402989,22.084577114427816],\"Send Feedback.title\":[75.2139303482587,583.06135986732977,148.51077943615252,26.565505804311783],\"Support.icon\":[38.726368159203979,459.19568822553879,23.044776119402989,25.285240464344952],\"Support.title\":[75.2139303482587,458.55555555555537,77.135986733001644,26.565505804311726],\"Terms.icon\":[38.726368159203979,403.02404643449398,23.044776119402989,26.565505804311783],\"Terms.title\":[75.213930348258714,403.02404643449398,58.252072968490864,26.565505804311783],\"version.footer\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\"\n",
+      "stderr": "",
+      "time": 1793827009.079735
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793827010.4302678
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 41 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [other] \"dismiss popup\" [covered]\n  @e3 [button] \"Sheet Grabber\"\n  @e4 [navigation-bar] \"Account\"\n    @e5 [text] \"Account\"\n    @e6 [other] \"Done\"\n      @e7 [button] \"Done\"\n  @e8 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e9 [cell]\n      @e10 [link] \"Terms\"\n        @e11 [image] \"Plain Text\"\n        @e12 [text] \"Terms\"\n        @e13 [image] \"arrow.up.right\"\n    @e14 [image] \"AdditionalDimmingOverlay\"\n    @e15 [cell]\n      @e16 [link] \"Support\"\n        @e17 [image] \"questionmark.circle\"\n        @e18 [text] \"Support\"\n        @e19 [image] \"arrow.up.right\"\n    @e20 [cell]\n      @e21 [link] \"Download My Data\"\n        @e22 [image] \"Download\"\n        @e23 [text] \"Download My Data\"\n        @e24 [image] \"arrow.up.right\"\n    @e25 [cell]\n      @e26 [link] \"Send Feedback\"\n        @e27 [image] \"Get Mail\"\n        @e28 [text] \"Send Feedback\"\n        @e29 [image] \"arrow.up.right\"\n    @e30 [cell]\n      @e31 [text] \"Or email hello@edmundlim.systems\"\n    @e32 [cell]\n      @e33 [button] \"Delete Account\u2026\"\n        @e34 [image] \"Trash\"\n        @e35 [text] \"Delete Account\u2026\"\n    @e36 [cell]\n      @e37 [text] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n      @e38 [text] \"App Version 1.0 (11)\"\n    @e39 [other] \"Vertical scroll bar, 5 pages\" [scrollable]\n    @e40 [other] \"Vertical scroll bar, 5 pages\" [scrollable]\n  @e41 [other] \"{\"Delete Account\u2026.icon\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\"Delete Account\u2026.title\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\"delete.footer\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\"Download My Data.icon\":[38.726368159203979,514.08706467661671,23.044776119402989,28.485903814261974],\"Download My Data.title\":[75.213930348258714,515.04726368159186,180.51741293532339,26.565505804311783],\"feedback.footer\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\"Send Feedback.icon\":[38.726368159203979,585.30182421227175,23.044776119402989,22.084577114427816],\"Send Feedback.title\":[75.2139303482587,583.06135986732977,148.51077943615252,26.565505804311783],\"Support.icon\":[38.726368159203979,459.19568822553879,23.044776119402989,25.285240464344952],\"Support.title\":[75.2139303482587,458.55555555555537,77.135986733001644,26.565505804311726],\"Terms.icon\":[38.726368159203979,403.02404643449398,23.044776119402989,26.565505804311783],\"Terms.title\":[75.213930348258714,403.02404643449398,58.252072968490864,26.565505804311783],\"version.footer\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\"\n",
+      "stderr": "",
+      "time": 1793827010.671417
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 40,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\\\"Delete Account\u2026.title\\\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\\\"delete.footer\\\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\\\"Download My Data.icon\\\":[38.726368159203979,514.08706467661671,23.044776119402989,28.485903814261974],\\\"Download My Data.title\\\":[75.213930348258714,515.04726368159186,180.51741293532339,26.565505804311783],\\\"feedback.footer\\\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\\\"Send Feedback.icon\\\":[38.726368159203979,585.30182421227175,23.044776119402989,22.084577114427816],\\\"Send Feedback.title\\\":[75.2139303482587,583.06135986732977,148.51077943615252,26.565505804311783],\\\"Support.icon\\\":[38.726368159203979,459.19568822553879,23.044776119402989,25.285240464344952],\\\"Support.title\\\":[75.2139303482587,458.55555555555537,77.135986733001644,26.565505804311726],\\\"Terms.icon\\\":[38.726368159203979,403.02404643449398,23.044776119402989,26.565505804311783],\\\"Terms.title\\\":[75.213930348258714,403.02404643449398,58.252072968490864,26.565505804311783],\\\"version.footer\\\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 8485,\n  \"hittable\": true,\n  \"ref\": \"e41\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793827010.8218591
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-XXXL-expanded-medium-lower.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/account-enabled/screens/detents-dark-XXXL-expanded-medium-lower.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793827011.455953
+    }
+  ],
+  "images": [
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-light-default-normal-medium-top.png",
+      "geometry": "{\n  \"index\": 30,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\\\"refresh.title\\\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 93591,\n  \"hittable\": true,\n  \"ref\": \"e31\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "b9891385302c676d3c84b1ce80fc52aafc381d6dacc567b908a35dcae5554265"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-light-default-normal-medium-lower.png",
+      "geometry": "{\n  \"index\": 45,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\\\"Delete Account\u2026.title\\\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\\\"delete.footer\\\":[38.726368159203979,770.62023217247088,306.62354892205639,30.406301824212278],\\\"Download My Data.icon\\\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\\\"Download My Data.title\\\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\\\"feedback.footer\\\":[38.726368159203979,687.40298507462671,207.08291873963515,15.043117744610299],\\\"Privacy.icon\\\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\\\"Privacy.title\\\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\\\"Send Feedback.icon\\\":[38.726368159203979,647.71475953565493,23.044776119402989,15.683250414593658],\\\"Send Feedback.title\\\":[75.2139303482587,645.79436152570463,113.62354892205637,19.524046434494267],\\\"Support.icon\\\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\\\"Support.title\\\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\\\"Terms.icon\\\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\\\"Terms.title\\\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\\\"version.footer\\\":[38.726368159203979,812.54892205638464,87.378109452736339,15.043117744610299]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 93591,\n  \"hittable\": true,\n  \"ref\": \"e46\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "4921799536bf0ab0aba2eaa31606c72c857d2bf79fc707d553ebca7c6249288e"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-light-default-expanded-medium-top.png",
+      "geometry": "{\n  \"index\": 30,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\\\"refresh.title\\\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 95485,\n  \"hittable\": true,\n  \"ref\": \"e31\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "8c01d5c7c91e1500c755c863192f0074bd5263620897f4739df0cc817bf22bbb"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-light-default-expanded-medium-lower.png",
+      "geometry": "{\n  \"index\": 45,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\\\"Delete Account\u2026.title\\\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\\\"delete.footer\\\":[38.726368159203979,770.62023217247111,306.62354892205639,30.406301824212278],\\\"Download My Data.icon\\\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\\\"Download My Data.title\\\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\\\"feedback.footer\\\":[38.726368159203979,687.40298507462694,207.08291873963515,15.043117744610299],\\\"Privacy.icon\\\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\\\"Privacy.title\\\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\\\"Send Feedback.icon\\\":[38.726368159203979,647.71475953565516,23.044776119402989,15.683250414593658],\\\"Send Feedback.title\\\":[75.2139303482587,645.79436152570486,113.62354892205637,19.524046434494267],\\\"Support.icon\\\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\\\"Support.title\\\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\\\"Terms.icon\\\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\\\"Terms.title\\\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\\\"version.footer\\\":[38.726368159203979,812.54892205638487,87.378109452736339,15.043117744610299]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 95485,\n  \"hittable\": true,\n  \"ref\": \"e46\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "92f5c1774487fa29ff3c34287e9b325ac4f3b0d0f6fb3ed786e37835ddde8c34"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-light-XXXL-normal-medium-top.png",
+      "geometry": "{\n  \"index\": 28,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\\\"refresh.title\\\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 97972,\n  \"hittable\": true,\n  \"ref\": \"e29\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "63d86ec68d2cda2a5b6dcdf26283b7bee4d19b7c23138bf37cdf97b8e5cfa178"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-light-XXXL-normal-medium-lower.png",
+      "geometry": "{\n  \"index\": 40,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\\\"Delete Account\u2026.title\\\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\\\"delete.footer\\\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\\\"Download My Data.icon\\\":[38.726368159203979,514.08706467661693,23.044776119402989,28.485903814261974],\\\"Download My Data.title\\\":[75.213930348258714,515.04726368159209,180.51741293532339,26.565505804311783],\\\"feedback.footer\\\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\\\"Send Feedback.icon\\\":[38.726368159203979,585.30182421227198,23.044776119402989,22.084577114427816],\\\"Send Feedback.title\\\":[75.2139303482587,583.06135986733,148.51077943615252,26.565505804311783],\\\"Support.icon\\\":[38.726368159203979,459.19568822553896,23.044776119402989,25.285240464344952],\\\"Support.title\\\":[75.2139303482587,458.55555555555554,77.135986733001644,26.565505804311783],\\\"Terms.icon\\\":[38.726368159203979,403.02404643449415,23.044776119402989,26.565505804311783],\\\"Terms.title\\\":[75.213930348258714,403.02404643449415,58.252072968490864,26.565505804311783],\\\"version.footer\\\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 97972,\n  \"hittable\": true,\n  \"ref\": \"e41\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "4b6a320c23552ae303566f9e45e4e915d745be364029ab2c6f4f4232623ed59e"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-light-XXXL-expanded-medium-top.png",
+      "geometry": "{\n  \"index\": 28,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\\\"refresh.title\\\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 99870,\n  \"hittable\": true,\n  \"ref\": \"e29\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "38ec304bccabdad117de71ba123d87f2ad9a3665cd88df1988a18fcf10ccc9e4"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-light-XXXL-expanded-medium-lower.png",
+      "geometry": "{\n  \"index\": 40,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\\\"Delete Account\u2026.title\\\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\\\"delete.footer\\\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\\\"Download My Data.icon\\\":[38.726368159203979,514.08706467661671,23.044776119402989,28.485903814261974],\\\"Download My Data.title\\\":[75.213930348258714,515.04726368159186,180.51741293532339,26.565505804311783],\\\"feedback.footer\\\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\\\"Send Feedback.icon\\\":[38.726368159203979,585.30182421227175,23.044776119402989,22.084577114427816],\\\"Send Feedback.title\\\":[75.2139303482587,583.06135986732977,148.51077943615252,26.565505804311783],\\\"Support.icon\\\":[38.726368159203979,459.19568822553879,23.044776119402989,25.285240464344952],\\\"Support.title\\\":[75.2139303482587,458.55555555555537,77.135986733001644,26.565505804311726],\\\"Terms.icon\\\":[38.726368159203979,403.02404643449398,23.044776119402989,26.565505804311783],\\\"Terms.title\\\":[75.213930348258714,403.02404643449398,58.252072968490864,26.565505804311783],\\\"version.footer\\\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 99870,\n  \"hittable\": true,\n  \"ref\": \"e41\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "5b724e2d2e983496c925ab68ac79299fb0da18a5af336785802a49c5792bfb6d"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-dark-default-normal-medium-top.png",
+      "geometry": "{\n  \"index\": 30,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\\\"refresh.title\\\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 2671,\n  \"hittable\": true,\n  \"ref\": \"e31\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "18bcee1100af1f44fe2c9e0c7139522cc2c4a38167bd27a5aec279132af742b5"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-dark-default-normal-medium-lower.png",
+      "geometry": "{\n  \"index\": 45,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\\\"Delete Account\u2026.title\\\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\\\"delete.footer\\\":[38.726368159203979,770.62023217247088,306.62354892205639,30.406301824212278],\\\"Download My Data.icon\\\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\\\"Download My Data.title\\\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\\\"feedback.footer\\\":[38.726368159203979,687.40298507462671,207.08291873963515,15.043117744610299],\\\"Privacy.icon\\\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\\\"Privacy.title\\\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\\\"Send Feedback.icon\\\":[38.726368159203979,647.71475953565493,23.044776119402989,15.683250414593658],\\\"Send Feedback.title\\\":[75.2139303482587,645.79436152570463,113.62354892205637,19.524046434494267],\\\"Support.icon\\\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\\\"Support.title\\\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\\\"Terms.icon\\\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\\\"Terms.title\\\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\\\"version.footer\\\":[38.726368159203979,812.54892205638464,87.378109452736339,15.043117744610299]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 2671,\n  \"hittable\": true,\n  \"ref\": \"e46\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "168ed0d07fd8bdc55d2de7786602a352701b7b2f1e43b2f3cda835117de83d65"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-dark-default-expanded-medium-top.png",
+      "geometry": "{\n  \"index\": 30,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,605.78606965174129,284.21890547263683,30.406301824212278],\\\"refresh.title\\\":[38.726368159203979,791.74461028192366,140.82918739635156,19.524046434494267]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 4476,\n  \"hittable\": true,\n  \"ref\": \"e31\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "afffbeb307ab4203a76c3429bc3ce8f4c044b49ddff932ca6419f6051f3e1e03"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-dark-default-expanded-medium-lower.png",
+      "geometry": "{\n  \"index\": 45,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,728.53150912106128,23.044776119402989,19.844112769485946],\\\"Delete Account\u2026.title\\\":[75.213930348258714,728.69154228855723,124.82587064676616,19.524046434494153],\\\"delete.footer\\\":[38.726368159203979,770.62023217247111,306.62354892205639,30.406301824212278],\\\"Download My Data.icon\\\":[38.726368159203979,584.98175787728007,23.044776119402989,20.484245439469305],\\\"Download My Data.title\\\":[75.213930348258714,585.46185737976771,137.94859038142619,19.524046434494153],\\\"feedback.footer\\\":[38.726368159203979,687.40298507462694,207.08291873963515,15.043117744610299],\\\"Privacy.icon\\\":[38.726368159203979,439.99170812603643,23.044776119402989,19.524046434494153],\\\"Privacy.title\\\":[75.213930348258714,439.99170812603643,53.451077943615246,19.524046434494153],\\\"Send Feedback.icon\\\":[38.726368159203979,647.71475953565516,23.044776119402989,15.683250414593658],\\\"Send Feedback.title\\\":[75.2139303482587,645.79436152570486,113.62354892205637,19.524046434494267],\\\"Support.icon\\\":[38.726368159203979,537.29187396351563,23.044776119402989,18.243781094527321],\\\"Support.title\\\":[75.213930348258714,536.65174129353215,59.212271973465988,19.524046434494267],\\\"Terms.icon\\\":[38.726368159203979,488.48175787728019,23.044776119402989,19.203980099502473],\\\"Terms.title\\\":[75.213930348258714,488.32172470978435,45.129353233830855,19.524046434494153],\\\"version.footer\\\":[38.726368159203979,812.54892205638487,87.378109452736339,15.043117744610299]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 4476,\n  \"hittable\": true,\n  \"ref\": \"e46\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "7ed1cae4dc24a0d6026f8db00bed5780e367ba9ef77d652024f0c066a64ee444"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-dark-XXXL-normal-medium-top.png",
+      "geometry": "{\n  \"index\": 28,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\\\"refresh.title\\\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 6584,\n  \"hittable\": true,\n  \"ref\": \"e29\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "c6cf364f39d95bb081ee15c38b506d675b39dc6fd09f83b28390f7841efbc070"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-dark-XXXL-normal-medium-lower.png",
+      "geometry": "{\n  \"index\": 40,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\\\"Delete Account\u2026.title\\\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\\\"delete.footer\\\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\\\"Download My Data.icon\\\":[38.726368159203979,514.08706467661693,23.044776119402989,28.485903814261974],\\\"Download My Data.title\\\":[75.213930348258714,515.04726368159209,180.51741293532339,26.565505804311783],\\\"feedback.footer\\\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\\\"Send Feedback.icon\\\":[38.726368159203979,585.30182421227198,23.044776119402989,22.084577114427816],\\\"Send Feedback.title\\\":[75.2139303482587,583.06135986733,148.51077943615252,26.565505804311783],\\\"Support.icon\\\":[38.726368159203979,459.19568822553896,23.044776119402989,25.285240464344952],\\\"Support.title\\\":[75.2139303482587,458.55555555555554,77.135986733001644,26.565505804311783],\\\"Terms.icon\\\":[38.726368159203979,403.02404643449415,23.044776119402989,26.565505804311783],\\\"Terms.title\\\":[75.213930348258714,403.02404643449415,58.252072968490864,26.565505804311783],\\\"version.footer\\\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 6584,\n  \"hittable\": true,\n  \"ref\": \"e41\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "4c5ea3a7cd7cf04087026535224b59dbdd14622426fa257265d0ddc5ef9b41a9"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-dark-XXXL-expanded-medium-top.png",
+      "geometry": "{\n  \"index\": 28,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"notifications.footer\\\":[38.726368159203979,619.86898839137643,300.22222222222223,43.208955223880594],\\\"refresh.title\\\":[38.726368159203979,870.16086235489217,183.39800995024876,26.565505804311783]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 8485,\n  \"hittable\": true,\n  \"ref\": \"e29\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "86ea58b07b3dda49791a8a9568fcb6ddc91ac4a68e91a4d5605e7fe61a5cb431"
+    },
+    {
+      "path": "hillclimb/rounds/5/account-enabled/screens/detents-dark-XXXL-expanded-medium-lower.png",
+      "geometry": "{\n  \"index\": 40,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[38.726368159203979,679.88142620232145,23.044776119402989,27.525704809286935],\\\"Delete Account\u2026.title\\\":[75.2139303482587,680.36152570480908,160.99336650082915,26.565505804311783],\\\"delete.footer\\\":[38.726368159203979,729.65174129353204,324.54726368159209,64.333333333333371],\\\"Download My Data.icon\\\":[38.726368159203979,514.08706467661671,23.044776119402989,28.485903814261974],\\\"Download My Data.title\\\":[75.213930348258714,515.04726368159186,180.51741293532339,26.565505804311783],\\\"feedback.footer\\\":[38.726368159203979,631.71144278606948,289.33996683250416,22.084577114427816],\\\"Send Feedback.icon\\\":[38.726368159203979,585.30182421227175,23.044776119402989,22.084577114427816],\\\"Send Feedback.title\\\":[75.2139303482587,583.06135986732977,148.51077943615252,26.565505804311783],\\\"Support.icon\\\":[38.726368159203979,459.19568822553879,23.044776119402989,25.285240464344952],\\\"Support.title\\\":[75.2139303482587,458.55555555555537,77.135986733001644,26.565505804311726],\\\"Terms.icon\\\":[38.726368159203979,403.02404643449398,23.044776119402989,26.565505804311783],\\\"Terms.title\\\":[75.213930348258714,403.02404643449398,58.252072968490864,26.565505804311783],\\\"version.footer\\\":[38.726368159203972,805.5074626865669,121.30514096185736,22.084577114427816]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 8,\n    \"y\": 415.0265339966832,\n    \"width\": 0.9601990049751237,\n    \"height\": 0.9601990049751521\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 8485,\n  \"hittable\": true,\n  \"ref\": \"e41\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "092ebbf60c7ac795b5ed90e6e8674bcf2666a1d4ae72d264398ceed40aceee65"
+    }
+  ]
+}

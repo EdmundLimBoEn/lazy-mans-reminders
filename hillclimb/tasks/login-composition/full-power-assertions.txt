@@ -1,0 +1,63 @@
+2026-11-05 19:37:15 +0800 
+Assertion status system-wide:
+   BackgroundTask                 0
+   ApplePushServiceTask           0
+   UserIsActive                   1
+   PreventUserIdleDisplaySleep    0
+   SoftwareUpdateTask             0
+   PreventSystemSleep             0
+   PreventSystemSleepSecurityIndicator 0
+   ExternalMedia                  0
+   InternalPreventDisplaySleep    1
+   PreventUserIdleSystemSleep     1
+   NetworkClientActive            0
+Listed by owning process:
+   pid 620(WindowServer): [0x0001e02500098c33] 00:00:01 UserIsActive named: "com.apple.iohideventsystem.queue.tickle serviceID:100000cca service:AppleMultitouchDevice product:Apple Internal Keyboard / Trackpad eventType:11"  
+	Timeout will fire in 598 secs Action=TimeoutActionRelease
+   pid 85302(mds_stores): [0x0001f6ae000b8e82] 00:00:07 BackgroundTask named: "com.apple.metadata.mds_stores.power"  
+   pid 1058(cloudd): [0x0001f6b2000c8e92] 00:00:02 SystemIsActive named: "NSURLSessionTask 4B22120A-BAF7-4829-A3AD-3016BF7DC3F3"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x0001f6b3000c8e93] 00:00:02 SystemIsActive named: "NSURLSessionTask 8BA965D3-79B4-424D-B5B1-F478DD2A2674"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x0001f6b3000c8e94] 00:00:02 SystemIsActive named: "NSURLSessionTask 82FB15F1-2F21-42C7-B4B2-DFF25E1C9365"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x0001f6b3000c8e95] 00:00:02 SystemIsActive named: "NSURLSessionTask 5F27B867-F302-47C3-9EBD-7790CC87085F"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x0001f6b3000c8e96] 00:00:02 SystemIsActive named: "NSURLSessionTask 2A1BF57B-7B4B-4398-9922-7B2AC9F1E516"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x0001f6b3000c8e97] 00:00:01 SystemIsActive named: "NSURLSessionTask 3DDCDA47-C899-4BB2-A611-B7B5B63DA9A7"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x0001f6b3000c8e98] 00:00:01 SystemIsActive named: "NSURLSessionTask 823709FA-0CA9-4555-8164-3503467A34EA"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x0001f6b4000c8e99] 00:00:01 SystemIsActive named: "NSURLSessionTask C5030BCC-53FB-45A9-941B-C64FA6879800"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x0001f6b4000c8e9a] 00:00:01 SystemIsActive named: "NSURLSessionTask 5BDF8B66-A5F5-452F-B019-115995A1D8CF"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x0001f6b5000c8e9b] 00:00:00 SystemIsActive named: "NSURLSessionTask 718F27E0-B894-4309-9958-6B0385E7B6EA"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x0001f6b5000c8e9c] 00:00:00 SystemIsActive named: "NSURLSessionTask 8CE2AFD4-9A1E-419E-923D-FDB0EA5A6CE6"  
+	Timeout will fire in 10800 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x0001f6b5000c8e9d] 00:00:00 SystemIsActive named: "NSURLSessionTask 6ABBA278-2711-44AA-A991-05A97524FD78"  
+	Timeout will fire in 10800 secs Action=TimeoutActionTurnOff
+   pid 19315(rcd): [0x0001f13600099958] 00:01:49 UserIsActive named: "com.apple.rcdevent"  
+	Timeout will fire in 490 secs Action=TimeoutActionRelease
+   pid 11195(xcodebuild): [0x0001f67f00018d7b] 00:00:53 PreventUserIdleSystemSleep named: "Xcode running tests."  
+   pid 1064(sharingd): [0x0001f5fb00018b5f] 00:03:06 PreventUserIdleSystemSleep named: "Handoff"  
+   pid 778(coreaudiod): [0x0001e62100018685] 01:10:44 PreventUserIdleSystemSleep named: "com.apple.audio.AudioTap-4D598A77-730C-4324-BB30-8227E3577A0A.context.preventuseridlesleep"  
+	Created for PID: 1151. 
+	Resources: audio-in B25154D7-7C83-4D31-85A4-FE7350F968EE 
+   pid 778(coreaudiod): [0x0001e621000181ad] 01:10:44 PreventUserIdleSystemSleep named: "com.apple.audio.BuiltInSpeakerDevice.context.preventuseridlesleep"  
+	Created for PID: 48882. 
+	Resources: audio-out BuiltInSpeakerDevice 
+   pid 11196(caffeinate): [0x0001f67e00018d76] 00:00:55 PreventUserIdleSystemSleep named: "caffeinate command-line tool"  
+	Details: caffeinate asserting on behalf of 'xcodebuild' (pid 11195)
+	Localized=THE CAFFEINATE TOOL IS PREVENTING SLEEP.
+   pid 562(powerd): [0x0001e02500018c37] 01:36:16 PreventUserIdleSystemSleep named: "Powerd - Prevent sleep while display is on"  
+   pid 562(powerd): [0x0001edd000098c54] 00:00:08 UserIsActive named: "com.apple.powermanagement.kernel.useractive AppleHIDTransportHIDDevice:kIOHIDSystemActivityTickle nxEvent: 0"  
+	Timeout will fire in 591 secs Action=TimeoutActionRelease
+   pid 562(powerd): [0x0001f3e300109beb] 00:01:49 InternalPreventDisplaySleep named: "com.apple.powermanagement.delayDisplayOff"  
+	Timeout will fire in 190 secs Action=TimeoutActionTurnOff
+   pid 5012(mdsync): [0x0001f57d000b898c] 00:05:12 BackgroundTask named: "com.apple.metadata.mds.scan"  
+   pid 576(mds): [0x0001f2e8000ba1ca] 00:16:13 BackgroundTask named: "com.apple.metadata.mds.power"  
+Kernel Assertions: 0x100=MAGICWAKE
+   id=556  level=255 0x100=MAGICWAKE creat=3/11/26, 02:23  mod=5/11/26, 17:59 description=en0 owner=IOSkywalkNetworkBSDClient

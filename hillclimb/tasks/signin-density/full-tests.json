@@ -1,0 +1,2960 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+      "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+      "modelName" : "iPhone 17 Pro",
+      "osBuildNumber" : "23C54",
+      "osVersion" : "26.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "0.00062s",
+                  "durationInSeconds" : 0.0006159543991088867,
+                  "name" : "testChangedMessageAndSuccessfulRefreshReset()",
+                  "nodeIdentifier" : "AccountErrorAnnouncementPolicyTests/testChangedMessageAndSuccessfulRefreshReset()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AccountErrorAnnouncementPolicyTests/testChangedMessageAndSuccessfulRefreshReset",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00052s",
+                  "durationInSeconds" : 0.0005240440368652344,
+                  "name" : "testClearingBeforeAnyFailureIsSilent()",
+                  "nodeIdentifier" : "AccountErrorAnnouncementPolicyTests/testClearingBeforeAnyFailureIsSilent()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AccountErrorAnnouncementPolicyTests/testClearingBeforeAnyFailureIsSilent",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00036s",
+                  "durationInSeconds" : 0.0003559589385986328,
+                  "name" : "testExactErrorAnnouncesOncePerPresentation()",
+                  "nodeIdentifier" : "AccountErrorAnnouncementPolicyTests/testExactErrorAnnouncesOncePerPresentation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AccountErrorAnnouncementPolicyTests/testExactErrorAnnouncesOncePerPresentation",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "AccountErrorAnnouncementPolicyTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AccountErrorAnnouncementPolicyTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.14s",
+                  "durationInSeconds" : 0.13685894012451172,
+                  "name" : "testRenderedLastLineFitsBothNativeSurfaceBudgets()",
+                  "nodeIdentifier" : "ActivityLayoutTests/testRenderedLastLineFitsBothNativeSurfaceBudgets()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityLayoutTests/testRenderedLastLineFitsBothNativeSurfaceBudgets",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00045s",
+                  "durationInSeconds" : 0.0004500150680541992,
+                  "name" : "testSurfaceOverflowRetainsExistingCopy()",
+                  "nodeIdentifier" : "ActivityLayoutTests/testSurfaceOverflowRetainsExistingCopy()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityLayoutTests/testSurfaceOverflowRetainsExistingCopy",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ActivityLayoutTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityLayoutTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.036s",
+                  "durationInSeconds" : 0.036267995834350586,
+                  "name" : "testAppleAmongLinkedIdentitiesUsesSubjectRatherThanSupabaseIDs()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testAppleAmongLinkedIdentitiesUsesSubjectRatherThanSupabaseIDs()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testAppleAmongLinkedIdentitiesUsesSubjectRatherThanSupabaseIDs",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.052s",
+                  "durationInSeconds" : 0.05216109752655029,
+                  "name" : "testAppleResultInvalidatedByAlternateLoginOnSameLinkedAccount()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testAppleResultInvalidatedByAlternateLoginOnSameLinkedAccount()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testAppleResultInvalidatedByAlternateLoginOnSameLinkedAccount",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0017s",
+                  "durationInSeconds" : 0.0016589164733886719,
+                  "name" : "testAuthorizedAndTransferredPreserveSession()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testAuthorizedAndTransferredPreserveSession()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testAuthorizedAndTransferredPreserveSession",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0038s",
+                  "durationInSeconds" : 0.0038260221481323242,
+                  "name" : "testDecodesSupabaseAppleSubjectAsJSONstring()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testDecodesSupabaseAppleSubjectAsJSONstring()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testDecodesSupabaseAppleSubjectAsJSONstring",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.002s",
+                  "durationInSeconds" : 0.0019769668579101562,
+                  "name" : "testDelayedRevocationCannotClearReplacementSessionWithIdenticalUserMetadata()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testDelayedRevocationCannotClearReplacementSessionWithIdenticalUserMetadata()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testDelayedRevocationCannotClearReplacementSessionWithIdenticalUserMetadata",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00097s",
+                  "durationInSeconds" : 0.0009669065475463867,
+                  "name" : "testDelayedRevocationCannotClearSwitchedAccountOrReturningAccount()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testDelayedRevocationCannotClearSwitchedAccountOrReturningAccount()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testDelayedRevocationCannotClearSwitchedAccountOrReturningAccount",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00061s",
+                  "durationInSeconds" : 0.0006139278411865234,
+                  "name" : "testKnownProviderContextSurvivesRotationButNotAnotherSession()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testKnownProviderContextSurvivesRotationButNotAnotherSession()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testKnownProviderContextSurvivesRotationButNotAnotherSession",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0066s",
+                  "durationInSeconds" : 0.006601929664611816,
+                  "name" : "testLinkedGoogleEmailAndAmbiguousRestorationPreserveAlternateLogin()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testLinkedGoogleEmailAndAmbiguousRestorationPreserveAlternateLogin()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testLinkedGoogleEmailAndAmbiguousRestorationPreserveAlternateLogin",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00063s",
+                  "durationInSeconds" : 0.0006270408630371094,
+                  "name" : "testMissingSessionIDNeverQueriesAndInvalidatesExistingCheck()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testMissingSessionIDNeverQueriesAndInvalidatesExistingCheck()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testMissingSessionIDNeverQueriesAndInvalidatesExistingCheck",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00064s",
+                  "durationInSeconds" : 0.0006409883499145508,
+                  "name" : "testNonAppleMissingAndMalformedSubjectsNeverQueryApple()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testNonAppleMissingAndMalformedSubjectsNeverQueryApple()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testNonAppleMissingAndMalformedSubjectsNeverQueryApple",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00077s",
+                  "durationInSeconds" : 0.0007709264755249023,
+                  "name" : "testTokenRotationWithSameSessionIDKeepsCheckValid()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testTokenRotationWithSameSessionIDKeepsCheckValid()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testTokenRotationWithSameSessionIDKeepsCheckValid",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0012s",
+                  "durationInSeconds" : 0.0011850595474243164,
+                  "name" : "testTransientErrorPreservesSessionAndAllowsRetry()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testTransientErrorPreservesSessionAndAllowsRetry()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testTransientErrorPreservesSessionAndAllowsRetry",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00066s",
+                  "durationInSeconds" : 0.0006619691848754883,
+                  "name" : "testVerifiedResultIsInvalidatedBeforeCleanupIfAccountChanges()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testVerifiedResultIsInvalidatedBeforeCleanupIfAccountChanges()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testVerifiedResultIsInvalidatedBeforeCleanupIfAccountChanges",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00066s",
+                  "durationInSeconds" : 0.0006589889526367188,
+                  "name" : "testVerifiedRevocationRejectsNewSDKSessionBeforePublishedUpdate()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testVerifiedRevocationRejectsNewSDKSessionBeforePublishedUpdate()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testVerifiedRevocationRejectsNewSDKSessionBeforePublishedUpdate",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00072s",
+                  "durationInSeconds" : 0.0007230043411254883,
+                  "name" : "testVerifiedRevokedAndNotFoundPermitCurrentAccountCleanup()",
+                  "nodeIdentifier" : "AppleCredentialMonitorTests/testVerifiedRevokedAndNotFoundPermitCurrentAccountCleanup()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests/testVerifiedRevokedAndNotFoundPermitCurrentAccountCleanup",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "AppleCredentialMonitorTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleCredentialMonitorTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0022s",
+                  "durationInSeconds" : 0.0022339820861816406,
+                  "name" : "testAccountChangeDuringAuthorizationNeverDeletesReplacement()",
+                  "nodeIdentifier" : "AppleRevocationTests/testAccountChangeDuringAuthorizationNeverDeletesReplacement()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleRevocationTests/testAccountChangeDuringAuthorizationNeverDeletesReplacement",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00064s",
+                  "durationInSeconds" : 0.0006440877914428711,
+                  "name" : "testAuthorizationCodeIsAvailableOnlyDuringDeletion()",
+                  "nodeIdentifier" : "AppleRevocationTests/testAuthorizationCodeIsAvailableOnlyDuringDeletion()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleRevocationTests/testAuthorizationCodeIsAvailableOnlyDuringDeletion",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0015s",
+                  "durationInSeconds" : 0.0015200376510620117,
+                  "name" : "testCancellationDoesNotDeleteAccount()",
+                  "nodeIdentifier" : "AppleRevocationTests/testCancellationDoesNotDeleteAccount()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleRevocationTests/testCancellationDoesNotDeleteAccount",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0014s",
+                  "durationInSeconds" : 0.0014190673828125,
+                  "name" : "testDeleteAccountBodyUsesAuthorizationCodeKey()",
+                  "nodeIdentifier" : "AppleRevocationTests/testDeleteAccountBodyUsesAuthorizationCodeKey()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleRevocationTests/testDeleteAccountBodyUsesAuthorizationCodeKey",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00047s",
+                  "durationInSeconds" : 0.0004730224609375,
+                  "name" : "testDetectsAppleAmongLinkedIdentities()",
+                  "nodeIdentifier" : "AppleRevocationTests/testDetectsAppleAmongLinkedIdentities()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleRevocationTests/testDetectsAppleAmongLinkedIdentities",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0015s",
+                  "durationInSeconds" : 0.001466989517211914,
+                  "name" : "testFallbackNoticeAndLegacyResponseCompatibility()",
+                  "nodeIdentifier" : "AppleRevocationTests/testFallbackNoticeAndLegacyResponseCompatibility()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleRevocationTests/testFallbackNoticeAndLegacyResponseCompatibility",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00082s",
+                  "durationInSeconds" : 0.0008159875869750977,
+                  "name" : "testLegacySessionRequiresExactTokenInsideGate()",
+                  "nodeIdentifier" : "AppleRevocationTests/testLegacySessionRequiresExactTokenInsideGate()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleRevocationTests/testLegacySessionRequiresExactTokenInsideGate",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00058s",
+                  "durationInSeconds" : 0.0005829334259033203,
+                  "name" : "testMissingVisibleSessionDoesNotAuthorizeInvokeOrCleanUp()",
+                  "nodeIdentifier" : "AppleRevocationTests/testMissingVisibleSessionDoesNotAuthorizeInvokeOrCleanUp()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleRevocationTests/testMissingVisibleSessionDoesNotAuthorizeInvokeOrCleanUp",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00061s",
+                  "durationInSeconds" : 0.0006110668182373047,
+                  "name" : "testNonAppleDeletionDoesNotRequestAppleAuthorization()",
+                  "nodeIdentifier" : "AppleRevocationTests/testNonAppleDeletionDoesNotRequestAppleAuthorization()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleRevocationTests/testNonAppleDeletionDoesNotRequestAppleAuthorization",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0007s",
+                  "durationInSeconds" : 0.0007020235061645508,
+                  "name" : "testSameLoginTokenRotationAndUnavailableAppleCredentialsAllowIntendedDeletion()",
+                  "nodeIdentifier" : "AppleRevocationTests/testSameLoginTokenRotationAndUnavailableAppleCredentialsAllowIntendedDeletion()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleRevocationTests/testSameLoginTokenRotationAndUnavailableAppleCredentialsAllowIntendedDeletion",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00051s",
+                  "durationInSeconds" : 0.0005140304565429688,
+                  "name" : "testUnavailableAppleCredentialsStillAllowDeletion()",
+                  "nodeIdentifier" : "AppleRevocationTests/testUnavailableAppleCredentialsStillAllowDeletion()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleRevocationTests/testUnavailableAppleCredentialsStillAllowDeletion",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "AppleRevocationTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AppleRevocationTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.27s",
+                  "durationInSeconds" : 0.269989013671875,
+                  "name" : "testConstructingClientDoesNotStartAnSDKInitialRefreshOutsideGate()",
+                  "nodeIdentifier" : "AuthSessionClientTests/testConstructingClientDoesNotStartAnSDKInitialRefreshOutsideGate()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionClientTests/testConstructingClientDoesNotStartAnSDKInitialRefreshOutsideGate",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0096s",
+                  "durationInSeconds" : 0.009596109390258789,
+                  "name" : "testPinnedSDKInitialRefreshFinishesBeforeCleanupAndSuccessfulBSignIn()",
+                  "nodeIdentifier" : "AuthSessionClientTests/testPinnedSDKInitialRefreshFinishesBeforeCleanupAndSuccessfulBSignIn()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionClientTests/testPinnedSDKInitialRefreshFinishesBeforeCleanupAndSuccessfulBSignIn",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "AuthSessionClientTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionClientTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.012s",
+                  "durationInSeconds" : 0.012341022491455078,
+                  "name" : "testAbortedSignOutPreservesPendingTokensAndAcceptsUpdatesDuringDeletion()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testAbortedSignOutPreservesPendingTokensAndAcceptsUpdatesDuringDeletion()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testAbortedSignOutPreservesPendingTokensAndAcceptsUpdatesDuringDeletion",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0049s",
+                  "durationInSeconds" : 0.004904985427856445,
+                  "name" : "testAccountSwitchRequiresVerifiedRemovalWithPreviousCredentials()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testAccountSwitchRequiresVerifiedRemovalWithPreviousCredentials()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testAccountSwitchRequiresVerifiedRemovalWithPreviousCredentials",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.035s",
+                  "durationInSeconds" : 0.03507494926452637,
+                  "name" : "testAuthenticationRestoresAcknowledgedActivityOnlyForOriginalAccount()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testAuthenticationRestoresAcknowledgedActivityOnlyForOriginalAccount()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testAuthenticationRestoresAcknowledgedActivityOnlyForOriginalAccount",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.001s",
+                  "durationInSeconds" : 0.00102996826171875,
+                  "name" : "testBoardReadinessWaitsForEverySharedSessionSetupStage()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testBoardReadinessWaitsForEverySharedSessionSetupStage()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testBoardReadinessWaitsForEverySharedSessionSetupStage",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0013s",
+                  "durationInSeconds" : 0.0013450384140014648,
+                  "name" : "testCallbackBInstallsOnlyAfterSuspendedCleanupCompletes()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testCallbackBInstallsOnlyAfterSuspendedCleanupCompletes()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testCallbackBInstallsOnlyAfterSuspendedCleanupCompletes",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0007s",
+                  "durationInSeconds" : 0.0007040500640869141,
+                  "name" : "testCancelledWaiterReleasesGateBeforeNextValidCallback()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testCancelledWaiterReleasesGateBeforeNextValidCallback()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testCancelledWaiterReleasesGateBeforeNextValidCallback",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00042s",
+                  "durationInSeconds" : 0.0004210472106933594,
+                  "name" : "testCurrentEventAcceptedAndStaleTokenRefreshSkipped()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testCurrentEventAcceptedAndStaleTokenRefreshSkipped()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testCurrentEventAcceptedAndStaleTokenRefreshSkipped",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00045s",
+                  "durationInSeconds" : 0.00045096874237060547,
+                  "name" : "testDeletionVerificationRequiresAbsence()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testDeletionVerificationRequiresAbsence()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testDeletionVerificationRequiresAbsence",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00052s",
+                  "durationInSeconds" : 0.0005159378051757812,
+                  "name" : "testFailedAuthenticationResumesOldRegistrationAndReleasesGate()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testFailedAuthenticationResumesOldRegistrationAndReleasesGate()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testFailedAuthenticationResumesOldRegistrationAndReleasesGate",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0051s",
+                  "durationInSeconds" : 0.005051970481872559,
+                  "name" : "testFailedDeregistrationKeepsDeviceTokenAcrossRelaunchForRetry()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testFailedDeregistrationKeepsDeviceTokenAcrossRelaunchForRetry()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testFailedDeregistrationKeepsDeviceTokenAcrossRelaunchForRetry",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0019s",
+                  "durationInSeconds" : 0.0019110441207885742,
+                  "name" : "testFailedDeregistrationPreservesSessionUntilRetrySucceeds()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testFailedDeregistrationPreservesSessionUntilRetrySucceeds()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testFailedDeregistrationPreservesSessionUntilRetrySucceeds",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00056s",
+                  "durationInSeconds" : 0.0005550384521484375,
+                  "name" : "testFailedPersistenceRetriesBeforePublishingReadiness()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testFailedPersistenceRetriesBeforePublishingReadiness()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testFailedPersistenceRetriesBeforePublishingReadiness",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00067s",
+                  "durationInSeconds" : 0.0006659030914306641,
+                  "name" : "testIdentityReplacementWaitsForCleanupBeforeSharing()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testIdentityReplacementWaitsForCleanupBeforeSharing()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testIdentityReplacementWaitsForCleanupBeforeSharing",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0038s",
+                  "durationInSeconds" : 0.0038160085678100586,
+                  "name" : "testPauseDrainsInFlightUploadAndRetainsNewActivityToken()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testPauseDrainsInFlightUploadAndRetainsNewActivityToken()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testPauseDrainsInFlightUploadAndRetainsNewActivityToken",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00057s",
+                  "durationInSeconds" : 0.0005669593811035156,
+                  "name" : "testPersistentStorageFailureIsBoundedAndNeverPublishesReadiness()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testPersistentStorageFailureIsBoundedAndNeverPublishesReadiness()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testPersistentStorageFailureIsBoundedAndNeverPublishesReadiness",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00074s",
+                  "durationInSeconds" : 0.0007410049438476562,
+                  "name" : "testQueuedSignedOutEventDoesNotClearCompletedCallbackB()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testQueuedSignedOutEventDoesNotClearCompletedCallbackB()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testQueuedSignedOutEventDoesNotClearCompletedCallbackB",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0046s",
+                  "durationInSeconds" : 0.004559993743896484,
+                  "name" : "testRemovedRegistrationRestorationSurvivesRelaunch()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testRemovedRegistrationRestorationSurvivesRelaunch()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testRemovedRegistrationRestorationSurvivesRelaunch",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00082s",
+                  "durationInSeconds" : 0.0008161067962646484,
+                  "name" : "testRevocationChecksIdentityAfterAcquiringCleanupGate()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testRevocationChecksIdentityAfterAcquiringCleanupGate()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testRevocationChecksIdentityAfterAcquiringCleanupGate",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00059s",
+                  "durationInSeconds" : 0.0005899667739868164,
+                  "name" : "testSharingSameIdentityPreservesOfflineBoard()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testSharingSameIdentityPreservesOfflineBoard()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testSharingSameIdentityPreservesOfflineBoard",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00046s",
+                  "durationInSeconds" : 0.0004570484161376953,
+                  "name" : "testSignOutRetriesAfterLostDeletionResponseOrMissingRegistration()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testSignOutRetriesAfterLostDeletionResponseOrMissingRegistration()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testSignOutRetriesAfterLostDeletionResponseOrMissingRegistration",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00066s",
+                  "durationInSeconds" : 0.0006579160690307617,
+                  "name" : "testSuspendedSDKRefreshFinishesBeforeCleanupAndCallbackB()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testSuspendedSDKRefreshFinishesBeforeCleanupAndCallbackB()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testSuspendedSDKRefreshFinishesBeforeCleanupAndCallbackB",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0014s",
+                  "durationInSeconds" : 0.0014199018478393555,
+                  "name" : "testThrowingReplacementReleasesGateForRecovery()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testThrowingReplacementReleasesGateForRecovery()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testThrowingReplacementReleasesGateForRecovery",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00063s",
+                  "durationInSeconds" : 0.0006250143051147461,
+                  "name" : "testVerifiedRevocationClearsLocalStateDespiteDeregistrationFailure()",
+                  "nodeIdentifier" : "AuthSessionGateTests/testVerifiedRevocationClearsLocalStateDespiteDeregistrationFailure()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests/testVerifiedRevocationClearsLocalStateDespiteDeregistrationFailure",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "AuthSessionGateTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionGateTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0063s",
+                  "durationInSeconds" : 0.006301999092102051,
+                  "name" : "testAnnouncementTransitions()",
+                  "nodeIdentifier" : "BoardErrorPolicyTests/testAnnouncementTransitions()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/BoardErrorPolicyTests/testAnnouncementTransitions",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "BoardErrorPolicyTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/BoardErrorPolicyTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0026s",
+                  "durationInSeconds" : 0.0026199817657470703,
+                  "name" : "testDismissalPersistsAcrossAppStorageInstances()",
+                  "nodeIdentifier" : "BoardSetupTipTests/testDismissalPersistsAcrossAppStorageInstances()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/BoardSetupTipTests/testDismissalPersistsAcrossAppStorageInstances",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0004s",
+                  "durationInSeconds" : 0.00039505958557128906,
+                  "name" : "testHiddenWhileLoadingOnErrorOrWithReminders()",
+                  "nodeIdentifier" : "BoardSetupTipTests/testHiddenWhileLoadingOnErrorOrWithReminders()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/BoardSetupTipTests/testHiddenWhileLoadingOnErrorOrWithReminders",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00047s",
+                  "durationInSeconds" : 0.0004690885543823242,
+                  "name" : "testOnlyOneCombinationShows()",
+                  "nodeIdentifier" : "BoardSetupTipTests/testOnlyOneCombinationShows()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/BoardSetupTipTests/testOnlyOneCombinationShows",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00035s",
+                  "durationInSeconds" : 0.0003490447998046875,
+                  "name" : "testShowsOnLoadedEmptyBoardUntilDismissed()",
+                  "nodeIdentifier" : "BoardSetupTipTests/testShowsOnLoadedEmptyBoardUntilDismissed()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/BoardSetupTipTests/testShowsOnLoadedEmptyBoardUntilDismissed",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00049s",
+                  "durationInSeconds" : 0.0004889965057373047,
+                  "name" : "testStepsCoverWidgetLiveActivitiesAndNotifications()",
+                  "nodeIdentifier" : "BoardSetupTipTests/testStepsCoverWidgetLiveActivitiesAndNotifications()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/BoardSetupTipTests/testStepsCoverWidgetLiveActivitiesAndNotifications",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "BoardSetupTipTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/BoardSetupTipTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.00073s",
+                  "durationInSeconds" : 0.0007259845733642578,
+                  "name" : "testAppInfoFallsBackWhenKeysMissingOrBlank()",
+                  "nodeIdentifier" : "FeedbackMailTests/testAppInfoFallsBackWhenKeysMissingOrBlank()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/FeedbackMailTests/testAppInfoFallsBackWhenKeysMissingOrBlank",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00043s",
+                  "durationInSeconds" : 0.0004349946975708008,
+                  "name" : "testAppInfoReadsBundleKeys()",
+                  "nodeIdentifier" : "FeedbackMailTests/testAppInfoReadsBundleKeys()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/FeedbackMailTests/testAppInfoReadsBundleKeys",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00044s",
+                  "durationInSeconds" : 0.00043702125549316406,
+                  "name" : "testCurrentReadsThisBuildsVersionAndBuild()",
+                  "nodeIdentifier" : "FeedbackMailTests/testCurrentReadsThisBuildsVersionAndBuild()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/FeedbackMailTests/testCurrentReadsThisBuildsVersionAndBuild",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00037s",
+                  "durationInSeconds" : 0.00036704540252685547,
+                  "name" : "testMailtoURLForConcreteVersionBuildAndOS()",
+                  "nodeIdentifier" : "FeedbackMailTests/testMailtoURLForConcreteVersionBuildAndOS()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/FeedbackMailTests/testMailtoURLForConcreteVersionBuildAndOS",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00043s",
+                  "durationInSeconds" : 0.0004259347915649414,
+                  "name" : "testMailtoURLRoundTripsThroughURLComponents()",
+                  "nodeIdentifier" : "FeedbackMailTests/testMailtoURLRoundTripsThroughURLComponents()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/FeedbackMailTests/testMailtoURLRoundTripsThroughURLComponents",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00048s",
+                  "durationInSeconds" : 0.0004780292510986328,
+                  "name" : "testOSVersionStringMatchesSystemVersionFormat()",
+                  "nodeIdentifier" : "FeedbackMailTests/testOSVersionStringMatchesSystemVersionFormat()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/FeedbackMailTests/testOSVersionStringMatchesSystemVersionFormat",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00062s",
+                  "durationInSeconds" : 0.0006220340728759766,
+                  "name" : "testQueryDelimitersInValuesAreEscaped()",
+                  "nodeIdentifier" : "FeedbackMailTests/testQueryDelimitersInValuesAreEscaped()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/FeedbackMailTests/testQueryDelimitersInValuesAreEscaped",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "FeedbackMailTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/FeedbackMailTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.00048s",
+                  "durationInSeconds" : 0.00048100948333740234,
+                  "name" : "testAccountCaptionPrefersApple()",
+                  "nodeIdentifier" : "LMRChromeTests/testAccountCaptionPrefersApple()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LMRChromeTests/testAccountCaptionPrefersApple",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0004s",
+                  "durationInSeconds" : 0.00040400028228759766,
+                  "name" : "testAppleFillHasVisibleNativeOutlineInDarkMode()",
+                  "nodeIdentifier" : "LMRChromeTests/testAppleFillHasVisibleNativeOutlineInDarkMode()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LMRChromeTests/testAppleFillHasVisibleNativeOutlineInDarkMode",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0004s",
+                  "durationInSeconds" : 0.0003979206085205078,
+                  "name" : "testAppleFillIsWhiteOutlineInLightMode()",
+                  "nodeIdentifier" : "LMRChromeTests/testAppleFillIsWhiteOutlineInLightMode()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LMRChromeTests/testAppleFillIsWhiteOutlineInLightMode",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00035s",
+                  "durationInSeconds" : 0.0003459453582763672,
+                  "name" : "testAuthNoticeEquality()",
+                  "nodeIdentifier" : "LMRChromeTests/testAuthNoticeEquality()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LMRChromeTests/testAuthNoticeEquality",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00047s",
+                  "durationInSeconds" : 0.0004709959030151367,
+                  "name" : "testInAppLinksUseCanonicalHost()",
+                  "nodeIdentifier" : "LMRChromeTests/testInAppLinksUseCanonicalHost()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LMRChromeTests/testInAppLinksUseCanonicalHost",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00035s",
+                  "durationInSeconds" : 0.00034999847412109375,
+                  "name" : "testLegalPageURLs()",
+                  "nodeIdentifier" : "LMRChromeTests/testLegalPageURLs()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LMRChromeTests/testLegalPageURLs",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00046s",
+                  "durationInSeconds" : 0.00046193599700927734,
+                  "name" : "testMagicLinkLandsOnCanonicalHost()",
+                  "nodeIdentifier" : "LMRChromeTests/testMagicLinkLandsOnCanonicalHost()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LMRChromeTests/testMagicLinkLandsOnCanonicalHost",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00041s",
+                  "durationInSeconds" : 0.0004069805145263672,
+                  "name" : "testSignInEmailRequiresBothSidesOfAtSign()",
+                  "nodeIdentifier" : "LMRChromeTests/testSignInEmailRequiresBothSidesOfAtSign()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LMRChromeTests/testSignInEmailRequiresBothSidesOfAtSign",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "LMRChromeTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LMRChromeTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.00041s",
+                  "durationInSeconds" : 0.0004140138626098633,
+                  "name" : "testEndsWhenTheLastReminderGoesAway()",
+                  "nodeIdentifier" : "LiveActivityPolicyTests/testEndsWhenTheLastReminderGoesAway()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LiveActivityPolicyTests/testEndsWhenTheLastReminderGoesAway",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00032s",
+                  "durationInSeconds" : 0.0003180503845214844,
+                  "name" : "testKeepsAcknowledgedReplacementWhenOldActivityIsFirst()",
+                  "nodeIdentifier" : "LiveActivityPolicyTests/testKeepsAcknowledgedReplacementWhenOldActivityIsFirst()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LiveActivityPolicyTests/testKeepsAcknowledgedReplacementWhenOldActivityIsFirst",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00043s",
+                  "durationInSeconds" : 0.0004309415817260742,
+                  "name" : "testMissingActivityDoesNotKeepAStaleSelection()",
+                  "nodeIdentifier" : "LiveActivityPolicyTests/testMissingActivityDoesNotKeepAStaleSelection()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LiveActivityPolicyTests/testMissingActivityDoesNotKeepAStaleSelection",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00041s",
+                  "durationInSeconds" : 0.00040900707244873047,
+                  "name" : "testSelectsNewReplacementOnBackgroundRelaunchRegardlessOfListOrder()",
+                  "nodeIdentifier" : "LiveActivityPolicyTests/testSelectsNewReplacementOnBackgroundRelaunchRegardlessOfListOrder()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LiveActivityPolicyTests/testSelectsNewReplacementOnBackgroundRelaunchRegardlessOfListOrder",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0005s",
+                  "durationInSeconds" : 0.0004990100860595703,
+                  "name" : "testStartsWhenRemindersExistAndTheBannerIsGone()",
+                  "nodeIdentifier" : "LiveActivityPolicyTests/testStartsWhenRemindersExistAndTheBannerIsGone()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LiveActivityPolicyTests/testStartsWhenRemindersExistAndTheBannerIsGone",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00039s",
+                  "durationInSeconds" : 0.00039196014404296875,
+                  "name" : "testStaysHiddenWhenTheBoardIsEmpty()",
+                  "nodeIdentifier" : "LiveActivityPolicyTests/testStaysHiddenWhenTheBoardIsEmpty()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LiveActivityPolicyTests/testStaysHiddenWhenTheBoardIsEmpty",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00032s",
+                  "durationInSeconds" : 0.0003160238265991211,
+                  "name" : "testUpdatesWhileRemindersRemain()",
+                  "nodeIdentifier" : "LiveActivityPolicyTests/testUpdatesWhileRemindersRemain()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LiveActivityPolicyTests/testUpdatesWhileRemindersRemain",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "LiveActivityPolicyTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/LiveActivityPolicyTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0042s",
+                  "durationInSeconds" : 0.004172086715698242,
+                  "name" : "testAcceptsPKCEQueryAndFragmentCallbacks()",
+                  "nodeIdentifier" : "NativeAuthCallbackTests/testAcceptsPKCEQueryAndFragmentCallbacks()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/NativeAuthCallbackTests/testAcceptsPKCEQueryAndFragmentCallbacks",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00053s",
+                  "durationInSeconds" : 0.0005340576171875,
+                  "name" : "testErrorsAreClassifiedSeparatelyFromAuthentication()",
+                  "nodeIdentifier" : "NativeAuthCallbackTests/testErrorsAreClassifiedSeparatelyFromAuthentication()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/NativeAuthCallbackTests/testErrorsAreClassifiedSeparatelyFromAuthentication",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00046s",
+                  "durationInSeconds" : 0.0004639625549316406,
+                  "name" : "testRejectsMissingEmptyAmbiguousAndUnsupportedParameters()",
+                  "nodeIdentifier" : "NativeAuthCallbackTests/testRejectsMissingEmptyAmbiguousAndUnsupportedParameters()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/NativeAuthCallbackTests/testRejectsMissingEmptyAmbiguousAndUnsupportedParameters",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00037s",
+                  "durationInSeconds" : 0.00037300586700439453,
+                  "name" : "testRejectsUnrelatedOrMalformedCallbackAddresses()",
+                  "nodeIdentifier" : "NativeAuthCallbackTests/testRejectsUnrelatedOrMalformedCallbackAddresses()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/NativeAuthCallbackTests/testRejectsUnrelatedOrMalformedCallbackAddresses",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "NativeAuthCallbackTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/NativeAuthCallbackTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.00045s",
+                  "durationInSeconds" : 0.0004469156265258789,
+                  "name" : "testAccessMapsSystemStatus()",
+                  "nodeIdentifier" : "NotificationAccessPolicyTests/testAccessMapsSystemStatus()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/NotificationAccessPolicyTests/testAccessMapsSystemStatus",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00043s",
+                  "durationInSeconds" : 0.00042688846588134766,
+                  "name" : "testAuthorizationOmitsBadgeAndKeepsAlerts()",
+                  "nodeIdentifier" : "NotificationAccessPolicyTests/testAuthorizationOmitsBadgeAndKeepsAlerts()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/NotificationAccessPolicyTests/testAuthorizationOmitsBadgeAndKeepsAlerts",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00051s",
+                  "durationInSeconds" : 0.0005110502243041992,
+                  "name" : "testDeniedAccessOpensSettings()",
+                  "nodeIdentifier" : "NotificationAccessPolicyTests/testDeniedAccessOpensSettings()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/NotificationAccessPolicyTests/testDeniedAccessOpensSettings",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00039s",
+                  "durationInSeconds" : 0.0003889799118041992,
+                  "name" : "testForegroundPresentationDoesNotBanner()",
+                  "nodeIdentifier" : "NotificationAccessPolicyTests/testForegroundPresentationDoesNotBanner()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/NotificationAccessPolicyTests/testForegroundPresentationDoesNotBanner",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0004s",
+                  "durationInSeconds" : 0.0004019737243652344,
+                  "name" : "testPromptWaitsUntilSessionRestoreFinishes()",
+                  "nodeIdentifier" : "NotificationAccessPolicyTests/testPromptWaitsUntilSessionRestoreFinishes()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/NotificationAccessPolicyTests/testPromptWaitsUntilSessionRestoreFinishes",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00039s",
+                  "durationInSeconds" : 0.00038802623748779297,
+                  "name" : "testReminderCategoryMatchesPushPayload()",
+                  "nodeIdentifier" : "NotificationAccessPolicyTests/testReminderCategoryMatchesPushPayload()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/NotificationAccessPolicyTests/testReminderCategoryMatchesPushPayload",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "NotificationAccessPolicyTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/NotificationAccessPolicyTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0029s",
+                  "durationInSeconds" : 0.0029200315475463867,
+                  "name" : "testDoesNotApplySignupPasswordRulesToExistingAccounts()",
+                  "nodeIdentifier" : "PasswordSignInCredentialsTests/testDoesNotApplySignupPasswordRulesToExistingAccounts()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PasswordSignInCredentialsTests/testDoesNotApplySignupPasswordRulesToExistingAccounts",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00049s",
+                  "durationInSeconds" : 0.0004940032958984375,
+                  "name" : "testRejectsMissingCredentials()",
+                  "nodeIdentifier" : "PasswordSignInCredentialsTests/testRejectsMissingCredentials()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PasswordSignInCredentialsTests/testRejectsMissingCredentials",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00042s",
+                  "durationInSeconds" : 0.00041997432708740234,
+                  "name" : "testTrimsEmailWithoutChangingPassword()",
+                  "nodeIdentifier" : "PasswordSignInCredentialsTests/testTrimsEmailWithoutChangingPassword()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PasswordSignInCredentialsTests/testTrimsEmailWithoutChangingPassword",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "PasswordSignInCredentialsTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PasswordSignInCredentialsTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0042s",
+                  "durationInSeconds" : 0.004227995872497559,
+                  "name" : "testAccountSwitchDiscardsActivityRequeuedByDeviceTokenChange()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testAccountSwitchDiscardsActivityRequeuedByDeviceTokenChange()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testAccountSwitchDiscardsActivityRequeuedByDeviceTokenChange",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0034s",
+                  "durationInSeconds" : 0.003432035446166992,
+                  "name" : "testAccountSwitchDoesNotAttachPreviousUsersActivity()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testAccountSwitchDoesNotAttachPreviousUsersActivity()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testAccountSwitchDoesNotAttachPreviousUsersActivity",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0057s",
+                  "durationInSeconds" : 0.005714058876037598,
+                  "name" : "testAcknowledgedTokenIsNotReplayedOverServerRenewalState()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testAcknowledgedTokenIsNotReplayedOverServerRenewalState()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testAcknowledgedTokenIsNotReplayedOverServerRenewalState",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0046s",
+                  "durationInSeconds" : 0.004630923271179199,
+                  "name" : "testBackgroundRelaunchUploadsPendingActivityWithoutAViewOrNewDeviceCallback()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testBackgroundRelaunchUploadsPendingActivityWithoutAViewOrNewDeviceCallback()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testBackgroundRelaunchUploadsPendingActivityWithoutAViewOrNewDeviceCallback",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0045s",
+                  "durationInSeconds" : 0.004503011703491211,
+                  "name" : "testCurrentTokenSnapshotIsNotReplayedAfterForegroundOrRelaunch()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testCurrentTokenSnapshotIsNotReplayedAfterForegroundOrRelaunch()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testCurrentTokenSnapshotIsNotReplayedAfterForegroundOrRelaunch",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0037s",
+                  "durationInSeconds" : 0.003733038902282715,
+                  "name" : "testDeviceTokenChangeDuringUploadCannotAcknowledgeTheNewDevice()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testDeviceTokenChangeDuringUploadCannotAcknowledgeTheNewDevice()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testDeviceTokenChangeDuringUploadCannotAcknowledgeTheNewDevice",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.004s",
+                  "durationInSeconds" : 0.0039969682693481445,
+                  "name" : "testDeviceTokenChangePreservesNewerPendingActivityClock()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testDeviceTokenChangePreservesNewerPendingActivityClock()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testDeviceTokenChangePreservesNewerPendingActivityClock",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0044s",
+                  "durationInSeconds" : 0.004443049430847168,
+                  "name" : "testDeviceTokenChangeReregistersAcknowledgedActivityAndClock()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testDeviceTokenChangeReregistersAcknowledgedActivityAndClock()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testDeviceTokenChangeReregistersAcknowledgedActivityAndClock",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0042s",
+                  "durationInSeconds" : 0.004150986671447754,
+                  "name" : "testDeviceTokenChangeSurvivesFailedUploadAndRelaunch()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testDeviceTokenChangeSurvivesFailedUploadAndRelaunch()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testDeviceTokenChangeSurvivesFailedUploadAndRelaunch",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00042s",
+                  "durationInSeconds" : 0.00042498111724853516,
+                  "name" : "testExpirationAndLateCompletionOnlyFinishBackgroundTaskOnce()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testExpirationAndLateCompletionOnlyFinishBackgroundTaskOnce()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testExpirationAndLateCompletionOnlyFinishBackgroundTaskOnce",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0041s",
+                  "durationInSeconds" : 0.004050016403198242,
+                  "name" : "testFailedRotationAndRelaunchCannotResetAnInFlightRenewalClock()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testFailedRotationAndRelaunchCannotResetAnInFlightRenewalClock()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testFailedRotationAndRelaunchCannotResetAnInFlightRenewalClock",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0051s",
+                  "durationInSeconds" : 0.005144000053405762,
+                  "name" : "testLocallyRestoredActivityRegistersItsClockOnceAcrossTokenRotation()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testLocallyRestoredActivityRegistersItsClockOnceAcrossTokenRotation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testLocallyRestoredActivityRegistersItsClockOnceAcrossTokenRotation",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0033s",
+                  "durationInSeconds" : 0.003347039222717285,
+                  "name" : "testNewTokenArrivingDuringUploadIsNotAcknowledgedByOldResponse()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testNewTokenArrivingDuringUploadIsNotAcknowledgedByOldResponse()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testNewTokenArrivingDuringUploadIsNotAcknowledgedByOldResponse",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0032s",
+                  "durationInSeconds" : 0.0032470226287841797,
+                  "name" : "testRemoteActivityAcknowledgementKeepsTheServersStartClock()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testRemoteActivityAcknowledgementKeepsTheServersStartClock()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testRemoteActivityAcknowledgementKeepsTheServersStartClock",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0032s",
+                  "durationInSeconds" : 0.0031659603118896484,
+                  "name" : "testRepeatedSnapshotDuringUploadDoesNotCauseAnotherTokenUpload()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testRepeatedSnapshotDuringUploadDoesNotCauseAnotherTokenUpload()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testRepeatedSnapshotDuringUploadDoesNotCauseAnotherTokenUpload",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0029s",
+                  "durationInSeconds" : 0.0028949975967407227,
+                  "name" : "testTokenBeforeInitialSessionRestorationIsRetained()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testTokenBeforeInitialSessionRestorationIsRetained()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testTokenBeforeInitialSessionRestorationIsRetained",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0034s",
+                  "durationInSeconds" : 0.003381967544555664,
+                  "name" : "testUnacknowledgedSnapshotRetriesWithoutANewTokenEvent()",
+                  "nodeIdentifier" : "PushTokenRegistrarTests/testUnacknowledgedSnapshotRetriesWithoutANewTokenEvent()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests/testUnacknowledgedSnapshotRetriesWithoutANewTokenEvent",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "PushTokenRegistrarTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/PushTokenRegistrarTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0031s",
+                  "durationInSeconds" : 0.003059983253479004,
+                  "name" : "testDecodesReminderArrayForCacheShape()",
+                  "nodeIdentifier" : "ReminderDecodingTests/testDecodesReminderArrayForCacheShape()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDecodingTests/testDecodesReminderArrayForCacheShape",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00084s",
+                  "durationInSeconds" : 0.0008360147476196289,
+                  "name" : "testDecodesSupabaseSnakeCasePayloadWithFractionalSeconds()",
+                  "nodeIdentifier" : "ReminderDecodingTests/testDecodesSupabaseSnakeCasePayloadWithFractionalSeconds()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDecodingTests/testDecodesSupabaseSnakeCasePayloadWithFractionalSeconds",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00086s",
+                  "durationInSeconds" : 0.0008630752563476562,
+                  "name" : "testDecodesTimestampWithoutFractionalSeconds()",
+                  "nodeIdentifier" : "ReminderDecodingTests/testDecodesTimestampWithoutFractionalSeconds()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDecodingTests/testDecodesTimestampWithoutFractionalSeconds",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00061s",
+                  "durationInSeconds" : 0.000613093376159668,
+                  "name" : "testRejectsInvalidCreatedAt()",
+                  "nodeIdentifier" : "ReminderDecodingTests/testRejectsInvalidCreatedAt()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDecodingTests/testRejectsInvalidCreatedAt",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0017s",
+                  "durationInSeconds" : 0.0016590356826782227,
+                  "name" : "testRoundTripsThroughReminderJSONEncoder()",
+                  "nodeIdentifier" : "ReminderDecodingTests/testRoundTripsThroughReminderJSONEncoder()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDecodingTests/testRoundTripsThroughReminderJSONEncoder",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ReminderDecodingTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDecodingTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.00038s",
+                  "durationInSeconds" : 0.0003800392150878906,
+                  "name" : "testEditsFromPreviousSubmissionDoNotSuppressLaterRestoration()",
+                  "nodeIdentifier" : "ReminderDraftTests/testEditsFromPreviousSubmissionDoNotSuppressLaterRestoration()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDraftTests/testEditsFromPreviousSubmissionDoNotSuppressLaterRestoration",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0004s",
+                  "durationInSeconds" : 0.0004010200500488281,
+                  "name" : "testEmptyAndWhitespaceDraftsCannotSubmit()",
+                  "nodeIdentifier" : "ReminderDraftTests/testEmptyAndWhitespaceDraftsCannotSubmit()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDraftTests/testEmptyAndWhitespaceDraftsCannotSubmit",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00041s",
+                  "durationInSeconds" : 0.00040793418884277344,
+                  "name" : "testFailurePreservesIntentionalClearAfterTyping()",
+                  "nodeIdentifier" : "ReminderDraftTests/testFailurePreservesIntentionalClearAfterTyping()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDraftTests/testFailurePreservesIntentionalClearAfterTyping",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00038s",
+                  "durationInSeconds" : 0.0003770589828491211,
+                  "name" : "testFailurePreservesNewDraftTypedDuringSubmission()",
+                  "nodeIdentifier" : "ReminderDraftTests/testFailurePreservesNewDraftTypedDuringSubmission()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDraftTests/testFailurePreservesNewDraftTypedDuringSubmission",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00042s",
+                  "durationInSeconds" : 0.00041794776916503906,
+                  "name" : "testFailureRestoresSubmittedTextWhenComposerWasNotEdited()",
+                  "nodeIdentifier" : "ReminderDraftTests/testFailureRestoresSubmittedTextWhenComposerWasNotEdited()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDraftTests/testFailureRestoresSubmittedTextWhenComposerWasNotEdited",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00043s",
+                  "durationInSeconds" : 0.0004260540008544922,
+                  "name" : "testRepeatedSubmissionCannotReplacePendingReminderOrNewDraft()",
+                  "nodeIdentifier" : "ReminderDraftTests/testRepeatedSubmissionCannotReplacePendingReminderOrNewDraft()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDraftTests/testRepeatedSubmissionCannotReplacePendingReminderOrNewDraft",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00033s",
+                  "durationInSeconds" : 0.00032699108123779297,
+                  "name" : "testSuccessLeavesUneditedComposerEmpty()",
+                  "nodeIdentifier" : "ReminderDraftTests/testSuccessLeavesUneditedComposerEmpty()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDraftTests/testSuccessLeavesUneditedComposerEmpty",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00032s",
+                  "durationInSeconds" : 0.0003160238265991211,
+                  "name" : "testSuccessPreservesNewDraftTypedDuringSubmission()",
+                  "nodeIdentifier" : "ReminderDraftTests/testSuccessPreservesNewDraftTypedDuringSubmission()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDraftTests/testSuccessPreservesNewDraftTypedDuringSubmission",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ReminderDraftTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderDraftTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.00066s",
+                  "durationInSeconds" : 0.000661015510559082,
+                  "name" : "testJWTExtractsSubAsUUID()",
+                  "nodeIdentifier" : "ReminderIntentSupportTests/testJWTExtractsSubAsUUID()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentSupportTests/testJWTExtractsSubAsUUID",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00037s",
+                  "durationInSeconds" : 0.00037097930908203125,
+                  "name" : "testJWTRejectsMalformedTokens()",
+                  "nodeIdentifier" : "ReminderIntentSupportTests/testJWTRejectsMalformedTokens()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentSupportTests/testJWTRejectsMalformedTokens",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00043s",
+                  "durationInSeconds" : 0.000431060791015625,
+                  "name" : "testJWTRejectsNonUUIDSub()",
+                  "nodeIdentifier" : "ReminderIntentSupportTests/testJWTRejectsNonUUIDSub()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentSupportTests/testJWTRejectsNonUUIDSub",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0018s",
+                  "durationInSeconds" : 0.0017729997634887695,
+                  "name" : "testLegacySessionWithoutUserIDStillDecodes()",
+                  "nodeIdentifier" : "ReminderIntentSupportTests/testLegacySessionWithoutUserIDStillDecodes()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentSupportTests/testLegacySessionWithoutUserIDStillDecodes",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00046s",
+                  "durationInSeconds" : 0.0004620552062988281,
+                  "name" : "testSharedSessionResolvesUserIDFromJWT()",
+                  "nodeIdentifier" : "ReminderIntentSupportTests/testSharedSessionResolvesUserIDFromJWT()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentSupportTests/testSharedSessionResolvesUserIDFromJWT",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00035s",
+                  "durationInSeconds" : 0.0003459453582763672,
+                  "name" : "testSpokenDialogForEmptyOneTwoAndMany()",
+                  "nodeIdentifier" : "ReminderIntentSupportTests/testSpokenDialogForEmptyOneTwoAndMany()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentSupportTests/testSpokenDialogForEmptyOneTwoAndMany",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00039s",
+                  "durationInSeconds" : 0.0003930330276489258,
+                  "name" : "testSpokenDialogIgnoresCompletedRows()",
+                  "nodeIdentifier" : "ReminderIntentSupportTests/testSpokenDialogIgnoresCompletedRows()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentSupportTests/testSpokenDialogIgnoresCompletedRows",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00076s",
+                  "durationInSeconds" : 0.0007569789886474609,
+                  "name" : "testTitleMatcherExactThenSubstringThenPrefix()",
+                  "nodeIdentifier" : "ReminderIntentSupportTests/testTitleMatcherExactThenSubstringThenPrefix()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentSupportTests/testTitleMatcherExactThenSubstringThenPrefix",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0016s",
+                  "durationInSeconds" : 0.0016449689865112305,
+                  "name" : "testTokenRefreshResponseDecodesUserIDFromAccessToken()",
+                  "nodeIdentifier" : "ReminderIntentSupportTests/testTokenRefreshResponseDecodesUserIDFromAccessToken()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentSupportTests/testTokenRefreshResponseDecodesUserIDFromAccessToken",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ReminderIntentSupportTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentSupportTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.014s",
+                  "durationInSeconds" : 0.014374971389770508,
+                  "name" : "testCombinedUpdateRejectsUnacknowledgedFieldsWithoutPublishingOrChangingCache()",
+                  "nodeIdentifier" : "ReminderIntentUpdateTests/testCombinedUpdateRejectsUnacknowledgedFieldsWithoutPublishingOrChangingCache()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentUpdateTests/testCombinedUpdateRejectsUnacknowledgedFieldsWithoutPublishingOrChangingCache",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0042s",
+                  "durationInSeconds" : 0.00418400764465332,
+                  "name" : "testEmptyUpdateReturnsCacheButCannotProduceAnAcknowledgedRow()",
+                  "nodeIdentifier" : "ReminderIntentUpdateTests/testEmptyUpdateReturnsCacheButCannotProduceAnAcknowledgedRow()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentUpdateTests/testEmptyUpdateReturnsCacheButCannotProduceAnAcknowledgedRow",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0044s",
+                  "durationInSeconds" : 0.004376053810119629,
+                  "name" : "testResolvingCachedOrEmptyTargetsDoesNotFetch()",
+                  "nodeIdentifier" : "ReminderIntentUpdateTests/testResolvingCachedOrEmptyTargetsDoesNotFetch()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentUpdateTests/testResolvingCachedOrEmptyTargetsDoesNotFetch",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.007s",
+                  "durationInSeconds" : 0.006965994834899902,
+                  "name" : "testSavedTargetResolvesCompletedReminderThenReopensWithoutCachingCompletedRows()",
+                  "nodeIdentifier" : "ReminderIntentUpdateTests/testSavedTargetResolvesCompletedReminderThenReopensWithoutCachingCompletedRows()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentUpdateTests/testSavedTargetResolvesCompletedReminderThenReopensWithoutCachingCompletedRows",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.022s",
+                  "durationInSeconds" : 0.021705985069274902,
+                  "name" : "testUpdatesReturnAcknowledgedRowAndPublishOnlyActiveReminders()",
+                  "nodeIdentifier" : "ReminderIntentUpdateTests/testUpdatesReturnAcknowledgedRowAndPublishOnlyActiveReminders()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentUpdateTests/testUpdatesReturnAcknowledgedRowAndPublishOnlyActiveReminders",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ReminderIntentUpdateTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderIntentUpdateTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.00062s",
+                  "durationInSeconds" : 0.0006170272827148438,
+                  "name" : "testAccessibilityMovesRespectEdgesAndUseCurrentIdentity()",
+                  "nodeIdentifier" : "ReminderListReorderingTests/testAccessibilityMovesRespectEdgesAndUseCurrentIdentity()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderListReorderingTests/testAccessibilityMovesRespectEdgesAndUseCurrentIdentity",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.017s",
+                  "durationInSeconds" : 0.017058968544006348,
+                  "name" : "testDisabledBoardCannotMoveByTouchOrAccessibility()",
+                  "nodeIdentifier" : "ReminderListReorderingTests/testDisabledBoardCannotMoveByTouchOrAccessibility()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderListReorderingTests/testDisabledBoardCannotMoveByTouchOrAccessibility",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0088s",
+                  "durationInSeconds" : 0.008818984031677246,
+                  "name" : "testNativeMoveDownMatchesSwiftUIRemovalSemantics()",
+                  "nodeIdentifier" : "ReminderListReorderingTests/testNativeMoveDownMatchesSwiftUIRemovalSemantics()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderListReorderingTests/testNativeMoveDownMatchesSwiftUIRemovalSemantics",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0068s",
+                  "durationInSeconds" : 0.006830096244812012,
+                  "name" : "testNativeMoveUpMatchesSwiftUIRemovalSemantics()",
+                  "nodeIdentifier" : "ReminderListReorderingTests/testNativeMoveUpMatchesSwiftUIRemovalSemantics()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderListReorderingTests/testNativeMoveUpMatchesSwiftUIRemovalSemantics",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.007s",
+                  "durationInSeconds" : 0.006972074508666992,
+                  "name" : "testOnlyTheDottedGripStartsDragging()",
+                  "nodeIdentifier" : "ReminderListReorderingTests/testOnlyTheDottedGripStartsDragging()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderListReorderingTests/testOnlyTheDottedGripStartsDragging",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.007s",
+                  "durationInSeconds" : 0.006999015808105469,
+                  "name" : "testUnchangedDropDoesNotSave()",
+                  "nodeIdentifier" : "ReminderListReorderingTests/testUnchangedDropDoesNotSave()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderListReorderingTests/testUnchangedDropDoesNotSave",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ReminderListReorderingTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderListReorderingTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.00061s",
+                  "durationInSeconds" : 0.0006079673767089844,
+                  "name" : "testDisplayLinesHonorCustomLimit()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testDisplayLinesHonorCustomLimit()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testDisplayLinesHonorCustomLimit",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00051s",
+                  "durationInSeconds" : 0.000514984130859375,
+                  "name" : "testDisplayLinesIncludeEmptyPlaceholder()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testDisplayLinesIncludeEmptyPlaceholder()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testDisplayLinesIncludeEmptyPlaceholder",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00053s",
+                  "durationInSeconds" : 0.0005320310592651367,
+                  "name" : "testEmptyBoardProducesNoLiveActivityLines()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testEmptyBoardProducesNoLiveActivityLines()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testEmptyBoardProducesNoLiveActivityLines",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00047s",
+                  "durationInSeconds" : 0.0004709959030151367,
+                  "name" : "testEmptyWhitespaceAndAllDoneStatesHaveNoHiddenOriginals()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testEmptyWhitespaceAndAllDoneStatesHaveNoHiddenOriginals()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testEmptyWhitespaceAndAllDoneStatesHaveNoHiddenOriginals",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.023s",
+                  "durationInSeconds" : 0.02287006378173828,
+                  "name" : "testHugeUnicodeStateCountsMetadataAndConservesOriginals()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testHugeUnicodeStateCountsMetadataAndConservesOriginals()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testHugeUnicodeStateCountsMetadataAndConservesOriginals",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.005s",
+                  "durationInSeconds" : 0.005042076110839844,
+                  "name" : "testLegacyDecodeAndBackwardCompatibleEncode()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testLegacyDecodeAndBackwardCompatibleEncode()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testLegacyDecodeAndBackwardCompatibleEncode",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00051s",
+                  "durationInSeconds" : 0.0005080699920654297,
+                  "name" : "testLineBudgetClampsExtremes()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testLineBudgetClampsExtremes()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testLineBudgetClampsExtremes",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00039s",
+                  "durationInSeconds" : 0.00038504600524902344,
+                  "name" : "testLineBudgetScalesWithTallerScreens()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testLineBudgetScalesWithTallerScreens()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testLineBudgetScalesWithTallerScreens",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00038s",
+                  "durationInSeconds" : 0.0003809928894042969,
+                  "name" : "testLiteralSummaryTextIsNeverInterpretedAsMetadata()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testLiteralSummaryTextIsNeverInterpretedAsMetadata()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testLiteralSummaryTextIsNeverInterpretedAsMetadata",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00044s",
+                  "durationInSeconds" : 0.00043904781341552734,
+                  "name" : "testMarqueeStopsWhenReduceMotionIsOn()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testMarqueeStopsWhenReduceMotionIsOn()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testMarqueeStopsWhenReduceMotionIsOn",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00053s",
+                  "durationInSeconds" : 0.0005331039428710938,
+                  "name" : "testNewlinesBecomeSeparateLinesThenCap()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testNewlinesBecomeSeparateLinesThenCap()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testNewlinesBecomeSeparateLinesThenCap",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00047s",
+                  "durationInSeconds" : 0.0004709959030151367,
+                  "name" : "testPresentedLinesClipToTheLockScreenBudgetWithoutAnOverflowFooter()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testPresentedLinesClipToTheLockScreenBudgetWithoutAnOverflowFooter()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testPresentedLinesClipToTheLockScreenBudgetWithoutAnOverflowFooter",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00042s",
+                  "durationInSeconds" : 0.00042307376861572266,
+                  "name" : "testPresentedLinesKeepAShortBoardInOrder()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testPresentedLinesKeepAShortBoardInOrder()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testPresentedLinesKeepAShortBoardInOrder",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0004s",
+                  "durationInSeconds" : 0.00039696693420410156,
+                  "name" : "testPresentedLinesUseTheEmptyBoardPlaceholder()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testPresentedLinesUseTheEmptyBoardPlaceholder()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testPresentedLinesUseTheEmptyBoardPlaceholder",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00046s",
+                  "durationInSeconds" : 0.0004590749740600586,
+                  "name" : "testPreviewLinesCapLikeTheLockScreenOverflow()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testPreviewLinesCapLikeTheLockScreenOverflow()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testPreviewLinesCapLikeTheLockScreenOverflow",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00059s",
+                  "durationInSeconds" : 0.0005880594253540039,
+                  "name" : "testProductionMultilinePipelineConservesOriginalCountAcrossCaps()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testProductionMultilinePipelineConservesOriginalCountAcrossCaps()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testProductionMultilinePipelineConservesOriginalCountAcrossCaps",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0018s",
+                  "durationInSeconds" : 0.0017679929733276367,
+                  "name" : "testSavedUnicodeBoardFitsLocallyRequestedActivityContent()",
+                  "nodeIdentifier" : "ReminderPresentationTests/testSavedUnicodeBoardFitsLocallyRequestedActivityContent()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests/testSavedUnicodeBoardFitsLocallyRequestedActivityContent",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ReminderPresentationTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPresentationTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0037s",
+                  "durationInSeconds" : 0.003679037094116211,
+                  "name" : "testAccountReplacementClearsBothSurfacesBeforeFailedOrCancelledFetch()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testAccountReplacementClearsBothSurfacesBeforeFailedOrCancelledFetch()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testAccountReplacementClearsBothSurfacesBeforeFailedOrCancelledFetch",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00093s",
+                  "durationInSeconds" : 0.0009260177612304688,
+                  "name" : "testCancelledRefreshCannotRestoreAnActivity()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testCancelledRefreshCannotRestoreAnActivity()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testCancelledRefreshCannotRestoreAnActivity",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00071s",
+                  "durationInSeconds" : 0.0007120370864868164,
+                  "name" : "testChangedContentAndOwnerReplaceSpotlight()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testChangedContentAndOwnerReplaceSpotlight()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testChangedContentAndOwnerReplaceSpotlight",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00078s",
+                  "durationInSeconds" : 0.0007760524749755859,
+                  "name" : "testCleanupWaitsForOldPublicationPausedBeforeLiveActivityStart()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testCleanupWaitsForOldPublicationPausedBeforeLiveActivityStart()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testCleanupWaitsForOldPublicationPausedBeforeLiveActivityStart",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00076s",
+                  "durationInSeconds" : 0.0007610321044921875,
+                  "name" : "testCleanupWaitsForOldPublicationPausedBeforeSpotlightIndex()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testCleanupWaitsForOldPublicationPausedBeforeSpotlightIndex()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testCleanupWaitsForOldPublicationPausedBeforeSpotlightIndex",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00055s",
+                  "durationInSeconds" : 0.0005489587783813477,
+                  "name" : "testColdForegroundIndexesIdenticalCachedAndFetchedBoardOnce()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testColdForegroundIndexesIdenticalCachedAndFetchedBoardOnce()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testColdForegroundIndexesIdenticalCachedAndFetchedBoardOnce",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00064s",
+                  "durationInSeconds" : 0.000637054443359375,
+                  "name" : "testExplicitCleanupAndReindexBypassSnapshot()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testExplicitCleanupAndReindexBypassSnapshot()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testExplicitCleanupAndReindexBypassSnapshot",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0016s",
+                  "durationInSeconds" : 0.001550912857055664,
+                  "name" : "testFailedRefreshWithAnEmptyCacheDoesNotEndAnActivity()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testFailedRefreshWithAnEmptyCacheDoesNotEndAnActivity()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testFailedRefreshWithAnEmptyCacheDoesNotEndAnActivity",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00064s",
+                  "durationInSeconds" : 0.000635981559753418,
+                  "name" : "testFailedReplacementRetriesEvenWhenReturningToPreviousSnapshot()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testFailedReplacementRetriesEvenWhenReturningToPreviousSnapshot()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testFailedReplacementRetriesEvenWhenReturningToPreviousSnapshot",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00063s",
+                  "durationInSeconds" : 0.0006250143051147461,
+                  "name" : "testForegroundRefreshCannotPublishOldResultAfterAccountCleanup()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testForegroundRefreshCannotPublishOldResultAfterAccountCleanup()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testForegroundRefreshCannotPublishOldResultAfterAccountCleanup",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00074s",
+                  "durationInSeconds" : 0.0007399320602416992,
+                  "name" : "testIdentifierReindexPreservesUnrelatedItemsAndDoesNotReplaceAll()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testIdentifierReindexPreservesUnrelatedItemsAndDoesNotReplaceAll()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testIdentifierReindexPreservesUnrelatedItemsAndDoesNotReplaceAll",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00056s",
+                  "durationInSeconds" : 0.0005550384521484375,
+                  "name" : "testOfflineColdLaunchRestoresTheSavedBoard()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testOfflineColdLaunchRestoresTheSavedBoard()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testOfflineColdLaunchRestoresTheSavedBoard",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00088s",
+                  "durationInSeconds" : 0.0008770227432250977,
+                  "name" : "testQueuedCleanupThenApplyLoadsReplacementAccountsCache()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testQueuedCleanupThenApplyLoadsReplacementAccountsCache()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testQueuedCleanupThenApplyLoadsReplacementAccountsCache",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00083s",
+                  "durationInSeconds" : 0.0008260011672973633,
+                  "name" : "testReindexPathsShareCleanupGateAndReadCurrentCache()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testReindexPathsShareCleanupGateAndReadCurrentCache()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testReindexPathsShareCleanupGateAndReadCurrentCache",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00057s",
+                  "durationInSeconds" : 0.0005669593811035156,
+                  "name" : "testStaleApplyAfterCompletedCleanupCannotRestoreOldReminders()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testStaleApplyAfterCompletedCleanupCannotRestoreOldReminders()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testStaleApplyAfterCompletedCleanupCannotRestoreOldReminders",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00055s",
+                  "durationInSeconds" : 0.0005459785461425781,
+                  "name" : "testSuccessfulEmptyRefreshClearsTheSavedActivity()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testSuccessfulEmptyRefreshClearsTheSavedActivity()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testSuccessfulEmptyRefreshClearsTheSavedActivity",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00065s",
+                  "durationInSeconds" : 0.0006500482559204102,
+                  "name" : "testThrowingReindexReleasesGateForQueuedCleanup()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testThrowingReindexReleasesGateForQueuedCleanup()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testThrowingReindexReleasesGateForQueuedCleanup",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00056s",
+                  "durationInSeconds" : 0.0005570650100708008,
+                  "name" : "testWarmForegroundRestoresExpiredActivityBeforeFetching()",
+                  "nodeIdentifier" : "ReminderPublicationCoordinatorTests/testWarmForegroundRestoresExpiredActivityBeforeFetching()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests/testWarmForegroundRestoresExpiredActivityBeforeFetching",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ReminderPublicationCoordinatorTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderPublicationCoordinatorTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.015s",
+                  "durationInSeconds" : 0.01495206356048584,
+                  "name" : "testCompletionEditAndReopenApplyReturnedRowWithoutFollowupFetch()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testCompletionEditAndReopenApplyReturnedRowWithoutFollowupFetch()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testCompletionEditAndReopenApplyReturnedRowWithoutFollowupFetch",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.02s",
+                  "durationInSeconds" : 0.01960599422454834,
+                  "name" : "testCreateAndEditAccept500UnicodeCodePoints()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testCreateAndEditAccept500UnicodeCodePoints()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testCreateAndEditAccept500UnicodeCodePoints",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.022s",
+                  "durationInSeconds" : 0.021757960319519043,
+                  "name" : "testCreateAndEditReject501CodePointsBeforeRequest()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testCreateAndEditReject501CodePointsBeforeRequest()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testCreateAndEditReject501CodePointsBeforeRequest",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0043s",
+                  "durationInSeconds" : 0.004272937774658203,
+                  "name" : "testCreateCannotUseAnotherOwnerEvenWithAValidResponse()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testCreateCannotUseAnotherOwnerEvenWithAValidResponse()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testCreateCannotUseAnotherOwnerEvenWithAValidResponse",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0075s",
+                  "durationInSeconds" : 0.0074770450592041016,
+                  "name" : "testCreateIntentReturnsItsAcknowledgedRowWhenDuplicateCreationFinishesFirst()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testCreateIntentReturnsItsAcknowledgedRowWhenDuplicateCreationFinishesFirst()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testCreateIntentReturnsItsAcknowledgedRowWhenDuplicateCreationFinishesFirst",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0089s",
+                  "durationInSeconds" : 0.008885979652404785,
+                  "name" : "testCreateRejectsMalformedResponseWithoutChangingCache()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testCreateRejectsMalformedResponseWithoutChangingCache()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testCreateRejectsMalformedResponseWithoutChangingCache",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.022s",
+                  "durationInSeconds" : 0.02212703227996826,
+                  "name" : "testCreateRequiresOneValidOwnedRowAndUsesServerValues()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testCreateRequiresOneValidOwnedRowAndUsesServerValues()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testCreateRequiresOneValidOwnedRowAndUsesServerValues",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0046s",
+                  "durationInSeconds" : 0.004565000534057617,
+                  "name" : "testHTTPFailureKeepsCache()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testHTTPFailureKeepsCache()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testHTTPFailureKeepsCache",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.018s",
+                  "durationInSeconds" : 0.018460988998413086,
+                  "name" : "testIgnoredRequestedFieldsRejectCompletionEditReopenAndCombinedUpdate()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testIgnoredRequestedFieldsRejectCompletionEditReopenAndCombinedUpdate()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testIgnoredRequestedFieldsRejectCompletionEditReopenAndCombinedUpdate",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.022s",
+                  "durationInSeconds" : 0.021782994270324707,
+                  "name" : "testMalformedOrIncompleteRepresentationRejectsWithoutChangingCache()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testMalformedOrIncompleteRepresentationRejectsWithoutChangingCache()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testMalformedOrIncompleteRepresentationRejectsWithoutChangingCache",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0012s",
+                  "durationInSeconds" : 0.0012050867080688477,
+                  "name" : "testOverlapFixtureBuffersResponsesBeforeRequestsStart()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testOverlapFixtureBuffersResponsesBeforeRequestsStart()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testOverlapFixtureBuffersResponsesBeforeRequestsStart",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0059s",
+                  "durationInSeconds" : 0.005941033363342285,
+                  "name" : "testOverlappingUpdatesForDifferentIDsBothSucceed()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testOverlappingUpdatesForDifferentIDsBothSucceed()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testOverlappingUpdatesForDifferentIDsBothSucceed",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0082s",
+                  "durationInSeconds" : 0.008198976516723633,
+                  "name" : "testReopenUsesOwnerLockedRPCWithOptionalText()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testReopenUsesOwnerLockedRPCWithOptionalText()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testReopenUsesOwnerLockedRPCWithOptionalText",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.012s",
+                  "durationInSeconds" : 0.012488007545471191,
+                  "name" : "testSameIDUpdatesAreRejectedBeforeTransportAndCanRetryAfterSuccessOrFailure()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testSameIDUpdatesAreRejectedBeforeTransportAndCanRetryAfterSuccessOrFailure()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testSameIDUpdatesAreRejectedBeforeTransportAndCanRetryAfterSuccessOrFailure",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0043s",
+                  "durationInSeconds" : 0.004277944564819336,
+                  "name" : "testTransportFailureKeepsCache()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testTransportFailureKeepsCache()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testTransportFailureKeepsCache",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.03s",
+                  "durationInSeconds" : 0.030313968658447266,
+                  "name" : "testWrongIDOwnerAndMultipleRowsRejectWithoutChangingCache()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testWrongIDOwnerAndMultipleRowsRejectWithoutChangingCache()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testWrongIDOwnerAndMultipleRowsRejectWithoutChangingCache",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.012s",
+                  "durationInSeconds" : 0.011783003807067871,
+                  "name" : "testZeroRowsRejectCompletionEditAndReopenWithoutChangingCache()",
+                  "nodeIdentifier" : "ReminderStoreAcknowledgementTests/testZeroRowsRejectCompletionEditAndReopenWithoutChangingCache()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests/testZeroRowsRejectCompletionEditAndReopenWithoutChangingCache",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ReminderStoreAcknowledgementTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreAcknowledgementTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0063s",
+                  "durationInSeconds" : 0.006265044212341309,
+                  "name" : "testAccountSwitchClearsForeignCacheWithoutSignOutAndRejectsLateCreate()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testAccountSwitchClearsForeignCacheWithoutSignOutAndRejectsLateCreate()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testAccountSwitchClearsForeignCacheWithoutSignOutAndRejectsLateCreate",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0062s",
+                  "durationInSeconds" : 0.006214022636413574,
+                  "name" : "testDelayedCompletionCannotRemoveCacheAfterSameAccountSignsInAgain()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testDelayedCompletionCannotRemoveCacheAfterSameAccountSignsInAgain()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testDelayedCompletionCannotRemoveCacheAfterSameAccountSignsInAgain",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0051s",
+                  "durationInSeconds" : 0.0051310062408447266,
+                  "name" : "testDelayedCompletionCannotReturnSuccessAfterSignOut()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testDelayedCompletionCannotReturnSuccessAfterSignOut()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testDelayedCompletionCannotReturnSuccessAfterSignOut",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0076s",
+                  "durationInSeconds" : 0.007552027702331543,
+                  "name" : "testDelayedCreateCannotAppendToAnotherAccountsCache()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testDelayedCreateCannotAppendToAnotherAccountsCache()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testDelayedCreateCannotAppendToAnotherAccountsCache",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0067s",
+                  "durationInSeconds" : 0.0067490339279174805,
+                  "name" : "testDelayedCreateCannotRestoreCacheAfterSameAccountSignsInAgain()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testDelayedCreateCannotRestoreCacheAfterSameAccountSignsInAgain()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testDelayedCreateCannotRestoreCacheAfterSameAccountSignsInAgain",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0054s",
+                  "durationInSeconds" : 0.005429983139038086,
+                  "name" : "testDelayedCreateCannotRestoreCacheAfterSignOut()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testDelayedCreateCannotRestoreCacheAfterSignOut()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testDelayedCreateCannotRestoreCacheAfterSignOut",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0066s",
+                  "durationInSeconds" : 0.006564021110534668,
+                  "name" : "testDelayedEditCannotChangeCacheAfterAccountSwitch()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testDelayedEditCannotChangeCacheAfterAccountSwitch()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testDelayedEditCannotChangeCacheAfterAccountSwitch",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0052s",
+                  "durationInSeconds" : 0.0051860809326171875,
+                  "name" : "testDelayedRefreshStillCannotRestoreCacheAfterSignOut()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testDelayedRefreshStillCannotRestoreCacheAfterSignOut()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testDelayedRefreshStillCannotRestoreCacheAfterSignOut",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0064s",
+                  "durationInSeconds" : 0.0064160823822021484,
+                  "name" : "testDelayedRestoreCannotRefreshAnotherAccountsBoard()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testDelayedRestoreCannotRefreshAnotherAccountsBoard()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testDelayedRestoreCannotRefreshAnotherAccountsBoard",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0054s",
+                  "durationInSeconds" : 0.005372047424316406,
+                  "name" : "testDelayedSuccessfulAuthRefreshCannotOverwriteFreshSameSessionRotation()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testDelayedSuccessfulAuthRefreshCannotOverwriteFreshSameSessionRotation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testDelayedSuccessfulAuthRefreshCannotOverwriteFreshSameSessionRotation",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0042s",
+                  "durationInSeconds" : 0.004241943359375,
+                  "name" : "testFailedAuthRefreshDoesNotFallBackToOriginalAfterRotationToExpiredTokens()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testFailedAuthRefreshDoesNotFallBackToOriginalAfterRotationToExpiredTokens()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testFailedAuthRefreshDoesNotFallBackToOriginalAfterRotationToExpiredTokens",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0046s",
+                  "durationInSeconds" : 0.0045539140701293945,
+                  "name" : "testFailedAuthRefreshRejectsFreshNewJWTSessionWithoutSignOut()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testFailedAuthRefreshRejectsFreshNewJWTSessionWithoutSignOut()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testFailedAuthRefreshRejectsFreshNewJWTSessionWithoutSignOut",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.018s",
+                  "durationInSeconds" : 0.0178220272064209,
+                  "name" : "testFailedAuthRefreshUsesFreshSameSessionAfterRefreshTokenRotation()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testFailedAuthRefreshUsesFreshSameSessionAfterRefreshTokenRotation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testFailedAuthRefreshUsesFreshSameSessionAfterRefreshTokenRotation",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0064s",
+                  "durationInSeconds" : 0.006373047828674316,
+                  "name" : "testFailedNearExpiryRefreshRejectsBoardRefreshAfterSameAccountSignsInAgain()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testFailedNearExpiryRefreshRejectsBoardRefreshAfterSameAccountSignsInAgain()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testFailedNearExpiryRefreshRejectsBoardRefreshAfterSameAccountSignsInAgain",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0072s",
+                  "durationInSeconds" : 0.007236003875732422,
+                  "name" : "testFailedNearExpiryRefreshRejectsCreateAfterSameAccountSignsInAgain()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testFailedNearExpiryRefreshRejectsCreateAfterSameAccountSignsInAgain()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testFailedNearExpiryRefreshRejectsCreateAfterSameAccountSignsInAgain",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.019s",
+                  "durationInSeconds" : 0.018898963928222656,
+                  "name" : "testFailedNearExpiryRefreshRejectsUpdatesAfterSameAccountSignsInAgain()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testFailedNearExpiryRefreshRejectsUpdatesAfterSameAccountSignsInAgain()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testFailedNearExpiryRefreshRejectsUpdatesAfterSameAccountSignsInAgain",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00086s",
+                  "durationInSeconds" : 0.0008590221405029297,
+                  "name" : "testFixtureBuffersCompletionUntilLateRequestStarts()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testFixtureBuffersCompletionUntilLateRequestStarts()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testFixtureBuffersCompletionUntilLateRequestStarts",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0046s",
+                  "durationInSeconds" : 0.004603981971740723,
+                  "name" : "testLegacySessionWithoutSessionIDStillDecodesAndAllowsMutation()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testLegacySessionWithoutSessionIDStillDecodesAndAllowsMutation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testLegacySessionWithoutSessionIDStillDecodesAndAllowsMutation",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.022s",
+                  "durationInSeconds" : 0.02245008945465088,
+                  "name" : "testMutationsStillSucceedWhenOnlyTheAccessTokenChanges()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testMutationsStillSucceedWhenOnlyTheAccessTokenChanges()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testMutationsStillSucceedWhenOnlyTheAccessTokenChanges",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.017s",
+                  "durationInSeconds" : 0.016755104064941406,
+                  "name" : "testSameJWTSessionAllowsTokenRotationDuringMutation()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testSameJWTSessionAllowsTokenRotationDuringMutation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testSameJWTSessionAllowsTokenRotationDuringMutation",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0051s",
+                  "durationInSeconds" : 0.0050809383392333984,
+                  "name" : "testSameUserNewJWTSessionRejectsOutstandingBoardRefresh()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testSameUserNewJWTSessionRejectsOutstandingBoardRefresh()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testSameUserNewJWTSessionRejectsOutstandingBoardRefresh",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.018s",
+                  "durationInSeconds" : 0.017863035202026367,
+                  "name" : "testSameUserNewJWTSessionRejectsOutstandingMutationsWithoutClearingData()",
+                  "nodeIdentifier" : "ReminderStoreIdentityTests/testSameUserNewJWTSessionRejectsOutstandingMutationsWithoutClearingData()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testSameUserNewJWTSessionRejectsOutstandingMutationsWithoutClearingData",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ReminderStoreIdentityTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0095s",
+                  "durationInSeconds" : 0.009475946426391602,
+                  "name" : "testAccountSwitchInvalidatesSuccessfulWidgetSnapshot()",
+                  "nodeIdentifier" : "ReminderStoreRefreshTests/testAccountSwitchInvalidatesSuccessfulWidgetSnapshot()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreRefreshTests/testAccountSwitchInvalidatesSuccessfulWidgetSnapshot",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.019s",
+                  "durationInSeconds" : 0.018664002418518066,
+                  "name" : "testDelayedRefreshCannotOverwriteAcknowledgedMutations()",
+                  "nodeIdentifier" : "ReminderStoreRefreshTests/testDelayedRefreshCannotOverwriteAcknowledgedMutations()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreRefreshTests/testDelayedRefreshCannotOverwriteAcknowledgedMutations",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.015s",
+                  "durationInSeconds" : 0.015246987342834473,
+                  "name" : "testDelayedWidgetRefreshCannotOverwriteAnotherStoresAcknowledgedMutation()",
+                  "nodeIdentifier" : "ReminderStoreRefreshTests/testDelayedWidgetRefreshCannotOverwriteAnotherStoresAcknowledgedMutation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreRefreshTests/testDelayedWidgetRefreshCannotOverwriteAnotherStoresAcknowledgedMutation",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0039s",
+                  "durationInSeconds" : 0.003929018974304199,
+                  "name" : "testFailedWidgetRefreshFallsBackToAppCache()",
+                  "nodeIdentifier" : "ReminderStoreRefreshTests/testFailedWidgetRefreshFallsBackToAppCache()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreRefreshTests/testFailedWidgetRefreshFallsBackToAppCache",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0044s",
+                  "durationInSeconds" : 0.004381895065307617,
+                  "name" : "testFailedWidgetRefreshWithCachedEmptyBoardShowsEmptyState()",
+                  "nodeIdentifier" : "ReminderStoreRefreshTests/testFailedWidgetRefreshWithCachedEmptyBoardShowsEmptyState()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreRefreshTests/testFailedWidgetRefreshWithCachedEmptyBoardShowsEmptyState",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0077s",
+                  "durationInSeconds" : 0.0077359676361083984,
+                  "name" : "testFailedWidgetRefreshWithoutUsableCacheShowsBoardError()",
+                  "nodeIdentifier" : "ReminderStoreRefreshTests/testFailedWidgetRefreshWithoutUsableCacheShowsBoardError()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreRefreshTests/testFailedWidgetRefreshWithoutUsableCacheShowsBoardError",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0046s",
+                  "durationInSeconds" : 0.0045909881591796875,
+                  "name" : "testHTTPFailureWithoutCacheShowsBoardError()",
+                  "nodeIdentifier" : "ReminderStoreRefreshTests/testHTTPFailureWithoutCacheShowsBoardError()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreRefreshTests/testHTTPFailureWithoutCacheShowsBoardError",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0049s",
+                  "durationInSeconds" : 0.004917025566101074,
+                  "name" : "testNewerAppMutationSupersedesWidgetSnapshot()",
+                  "nodeIdentifier" : "ReminderStoreRefreshTests/testNewerAppMutationSupersedesWidgetSnapshot()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreRefreshTests/testNewerAppMutationSupersedesWidgetSnapshot",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0088s",
+                  "durationInSeconds" : 0.00875699520111084,
+                  "name" : "testOlderRefreshCannotOverwriteNewerRefreshInEitherResponseOrder()",
+                  "nodeIdentifier" : "ReminderStoreRefreshTests/testOlderRefreshCannotOverwriteNewerRefreshInEitherResponseOrder()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreRefreshTests/testOlderRefreshCannotOverwriteNewerRefreshInEitherResponseOrder",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0048s",
+                  "durationInSeconds" : 0.00478208065032959,
+                  "name" : "testSuccessfulEmptyWidgetRefreshWithoutCacheShowsEmptyState()",
+                  "nodeIdentifier" : "ReminderStoreRefreshTests/testSuccessfulEmptyWidgetRefreshWithoutCacheShowsEmptyState()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreRefreshTests/testSuccessfulEmptyWidgetRefreshWithoutCacheShowsEmptyState",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.013s",
+                  "durationInSeconds" : 0.01302802562713623,
+                  "name" : "testSuccessfulWidgetSnapshotSurvivesFailureAndProcessRestart()",
+                  "nodeIdentifier" : "ReminderStoreRefreshTests/testSuccessfulWidgetSnapshotSurvivesFailureAndProcessRestart()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreRefreshTests/testSuccessfulWidgetSnapshotSurvivesFailureAndProcessRestart",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0046s",
+                  "durationInSeconds" : 0.0046329498291015625,
+                  "name" : "testWidgetRefreshReturnsFetchedTimelineWithoutUpdatingCache()",
+                  "nodeIdentifier" : "ReminderStoreRefreshTests/testWidgetRefreshReturnsFetchedTimelineWithoutUpdatingCache()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreRefreshTests/testWidgetRefreshReturnsFetchedTimelineWithoutUpdatingCache",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ReminderStoreRefreshTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreRefreshTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0091s",
+                  "durationInSeconds" : 0.009086966514587402,
+                  "name" : "testCreateBlocksReorderWhileRefreshingAuthenticationAndReleasesAfterAuthFailure()",
+                  "nodeIdentifier" : "ReminderStoreReorderTests/testCreateBlocksReorderWhileRefreshingAuthenticationAndReleasesAfterAuthFailure()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreReorderTests/testCreateBlocksReorderWhileRefreshingAuthenticationAndReleasesAfterAuthFailure",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0049s",
+                  "durationInSeconds" : 0.004932999610900879,
+                  "name" : "testDelayedRefreshCannotOverwriteSavedOrder()",
+                  "nodeIdentifier" : "ReminderStoreReorderTests/testDelayedRefreshCannotOverwriteSavedOrder()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreReorderTests/testDelayedRefreshCannotOverwriteSavedOrder",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0055s",
+                  "durationInSeconds" : 0.0054999589920043945,
+                  "name" : "testDelayedReorderDoesNotRepopulateCacheAfterSignOut()",
+                  "nodeIdentifier" : "ReminderStoreReorderTests/testDelayedReorderDoesNotRepopulateCacheAfterSignOut()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreReorderTests/testDelayedReorderDoesNotRepopulateCacheAfterSignOut",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0037s",
+                  "durationInSeconds" : 0.003731966018676758,
+                  "name" : "testDuplicateMissingAndUnknownIDsAreRejectedWithoutRequest()",
+                  "nodeIdentifier" : "ReminderStoreReorderTests/testDuplicateMissingAndUnknownIDsAreRejectedWithoutRequest()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreReorderTests/testDuplicateMissingAndUnknownIDsAreRejectedWithoutRequest",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.013s",
+                  "durationInSeconds" : 0.012688040733337402,
+                  "name" : "testInvalidResponsesAndFailuresLeaveOriginalCacheUntouched()",
+                  "nodeIdentifier" : "ReminderStoreReorderTests/testInvalidResponsesAndFailuresLeaveOriginalCacheUntouched()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreReorderTests/testInvalidResponsesAndFailuresLeaveOriginalCacheUntouched",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0054s",
+                  "durationInSeconds" : 0.005378007888793945,
+                  "name" : "testReorderSavesAndCachesAcknowledgedOrderInOneRequest()",
+                  "nodeIdentifier" : "ReminderStoreReorderTests/testReorderSavesAndCachesAcknowledgedOrderInOneRequest()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreReorderTests/testReorderSavesAndCachesAcknowledgedOrderInOneRequest",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.021s",
+                  "durationInSeconds" : 0.020994067192077637,
+                  "name" : "testReorderWaitsForEveryCreateAndRecoversAfterSuccessFailureAndCancellation()",
+                  "nodeIdentifier" : "ReminderStoreReorderTests/testReorderWaitsForEveryCreateAndRecoversAfterSuccessFailureAndCancellation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreReorderTests/testReorderWaitsForEveryCreateAndRecoversAfterSuccessFailureAndCancellation",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ReminderStoreReorderTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreReorderTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0028s",
+                  "durationInSeconds" : 0.002786993980407715,
+                  "name" : "testConcurrentSaveWinsOverMigrationSnapshot()",
+                  "nodeIdentifier" : "SharedSessionStorageTests/testConcurrentSaveWinsOverMigrationSnapshot()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionStorageTests/testConcurrentSaveWinsOverMigrationSnapshot",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0024s",
+                  "durationInSeconds" : 0.0023620128631591797,
+                  "name" : "testExistingKeychainWinsOverLegacyCopy()",
+                  "nodeIdentifier" : "SharedSessionStorageTests/testExistingKeychainWinsOverLegacyCopy()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionStorageTests/testExistingKeychainWinsOverLegacyCopy",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0048s",
+                  "durationInSeconds" : 0.004840970039367676,
+                  "name" : "testFailedDeletionCannotResurrectSessionAfterRestart()",
+                  "nodeIdentifier" : "SharedSessionStorageTests/testFailedDeletionCannotResurrectSessionAfterRestart()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionStorageTests/testFailedDeletionCannotResurrectSessionAfterRestart",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0026s",
+                  "durationInSeconds" : 0.0026129484176635742,
+                  "name" : "testLegacyMigrationSurvivesRecreationAndRemovesPreferencesCopy()",
+                  "nodeIdentifier" : "SharedSessionStorageTests/testLegacyMigrationSurvivesRecreationAndRemovesPreferencesCopy()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionStorageTests/testLegacyMigrationSurvivesRecreationAndRemovesPreferencesCopy",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0021s",
+                  "durationInSeconds" : 0.0021320581436157227,
+                  "name" : "testMigrationWriteFailurePreservesOnlyCopy()",
+                  "nodeIdentifier" : "SharedSessionStorageTests/testMigrationWriteFailurePreservesOnlyCopy()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionStorageTests/testMigrationWriteFailurePreservesOnlyCopy",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0051s",
+                  "durationInSeconds" : 0.005118012428283691,
+                  "name" : "testStoreSavesRotatesAndClearsWithoutPreferencesCredentials()",
+                  "nodeIdentifier" : "SharedSessionStorageTests/testStoreSavesRotatesAndClearsWithoutPreferencesCredentials()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionStorageTests/testStoreSavesRotatesAndClearsWithoutPreferencesCredentials",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.003s",
+                  "durationInSeconds" : 0.0029789209365844727,
+                  "name" : "testUnavailableKeychainDoesNotReturnOrLoseLegacyCredentials()",
+                  "nodeIdentifier" : "SharedSessionStorageTests/testUnavailableKeychainDoesNotReturnOrLoseLegacyCredentials()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionStorageTests/testUnavailableKeychainDoesNotReturnOrLoseLegacyCredentials",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0043s",
+                  "durationInSeconds" : 0.004289984703063965,
+                  "name" : "testWidgetReadCannotDeleteSessionSavedAfterObservingSignOut()",
+                  "nodeIdentifier" : "SharedSessionStorageTests/testWidgetReadCannotDeleteSessionSavedAfterObservingSignOut()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionStorageTests/testWidgetReadCannotDeleteSessionSavedAfterObservingSignOut",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "SharedSessionStorageTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionStorageTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0004s",
+                  "durationInSeconds" : 0.0003980398178100586,
+                  "name" : "testDecodesLegacySessionWithoutRefreshToken()",
+                  "nodeIdentifier" : "SharedSessionTests/testDecodesLegacySessionWithoutRefreshToken()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionTests/testDecodesLegacySessionWithoutRefreshToken",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00039s",
+                  "durationInSeconds" : 0.0003889799118041992,
+                  "name" : "testIsFreshUsesLeeway()",
+                  "nodeIdentifier" : "SharedSessionTests/testIsFreshUsesLeeway()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionTests/testIsFreshUsesLeeway",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00038s",
+                  "durationInSeconds" : 0.0003809928894042969,
+                  "name" : "testTokenRefreshResponseFallsBackToExpiresInAndOldRefreshToken()",
+                  "nodeIdentifier" : "SharedSessionTests/testTokenRefreshResponseFallsBackToExpiresInAndOldRefreshToken()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionTests/testTokenRefreshResponseFallsBackToExpiresInAndOldRefreshToken",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00045s",
+                  "durationInSeconds" : 0.00044596195220947266,
+                  "name" : "testTokenRefreshResponsePrefersExpiresAtUnix()",
+                  "nodeIdentifier" : "SharedSessionTests/testTokenRefreshResponsePrefersExpiresAtUnix()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionTests/testTokenRefreshResponsePrefersExpiresAtUnix",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "SharedSessionTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SharedSessionTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.00037s",
+                  "durationInSeconds" : 0.0003650188446044922,
+                  "name" : "testChangedErrorIsAnnounced()",
+                  "nodeIdentifier" : "SignInErrorAnnouncementPolicyTests/testChangedErrorIsAnnounced()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SignInErrorAnnouncementPolicyTests/testChangedErrorIsAnnounced",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00035s",
+                  "durationInSeconds" : 0.00034797191619873047,
+                  "name" : "testClearingAllowsSameErrorToReappear()",
+                  "nodeIdentifier" : "SignInErrorAnnouncementPolicyTests/testClearingAllowsSameErrorToReappear()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SignInErrorAnnouncementPolicyTests/testClearingAllowsSameErrorToReappear",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00038s",
+                  "durationInSeconds" : 0.0003750324249267578,
+                  "name" : "testInboxResetsErrorPresentationWithoutErrorAnnouncement()",
+                  "nodeIdentifier" : "SignInErrorAnnouncementPolicyTests/testInboxResetsErrorPresentationWithoutErrorAnnouncement()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SignInErrorAnnouncementPolicyTests/testInboxResetsErrorPresentationWithoutErrorAnnouncement",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00038s",
+                  "durationInSeconds" : 0.00037598609924316406,
+                  "name" : "testNewErrorUsesExactExistingText()",
+                  "nodeIdentifier" : "SignInErrorAnnouncementPolicyTests/testNewErrorUsesExactExistingText()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SignInErrorAnnouncementPolicyTests/testNewErrorUsesExactExistingText",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00037s",
+                  "durationInSeconds" : 0.0003739595413208008,
+                  "name" : "testRepeatedErrorIsNotAnnouncedAgain()",
+                  "nodeIdentifier" : "SignInErrorAnnouncementPolicyTests/testRepeatedErrorIsNotAnnouncedAgain()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SignInErrorAnnouncementPolicyTests/testRepeatedErrorIsNotAnnouncedAgain",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "SignInErrorAnnouncementPolicyTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SignInErrorAnnouncementPolicyTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "0.0052s",
+                  "durationInSeconds" : 0.005237102508544922,
+                  "name" : "testDeadlineAlsoBoundsPublicationAndIgnoresItsLateCompletion()",
+                  "nodeIdentifier" : "SilentPushRefreshTests/testDeadlineAlsoBoundsPublicationAndIgnoresItsLateCompletion()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SilentPushRefreshTests/testDeadlineAlsoBoundsPublicationAndIgnoresItsLateCompletion",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0038s",
+                  "durationInSeconds" : 0.003811955451965332,
+                  "name" : "testDeadlineCompletesBeforeStalledFetchReturnsAndRejectsLateSnapshot()",
+                  "nodeIdentifier" : "SilentPushRefreshTests/testDeadlineCompletesBeforeStalledFetchReturnsAndRejectsLateSnapshot()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SilentPushRefreshTests/testDeadlineCompletesBeforeStalledFetchReturnsAndRejectsLateSnapshot",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0034s",
+                  "durationInSeconds" : 0.0034099817276000977,
+                  "name" : "testFixtureKeepsCredentialsInMemoryAndIsolatedBetweenStores()",
+                  "nodeIdentifier" : "SilentPushRefreshTests/testFixtureKeepsCredentialsInMemoryAndIsolatedBetweenStores()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SilentPushRefreshTests/testFixtureKeepsCredentialsInMemoryAndIsolatedBetweenStores",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0034s",
+                  "durationInSeconds" : 0.003392934799194336,
+                  "name" : "testNetworkFailureCompletesOnceWithoutPublishing()",
+                  "nodeIdentifier" : "SilentPushRefreshTests/testNetworkFailureCompletesOnceWithoutPublishing()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SilentPushRefreshTests/testNetworkFailureCompletesOnceWithoutPublishing",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0076s",
+                  "durationInSeconds" : 0.007645010948181152,
+                  "name" : "testRefreshSkipsCleanupAndReportsChangedAndUnchangedBoards()",
+                  "nodeIdentifier" : "SilentPushRefreshTests/testRefreshSkipsCleanupAndReportsChangedAndUnchangedBoards()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SilentPushRefreshTests/testRefreshSkipsCleanupAndReportsChangedAndUnchangedBoards",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.0068s",
+                  "durationInSeconds" : 0.006772041320800781,
+                  "name" : "testRepeatedFractionalTimestampRefreshReportsNoDataAfterFirstFetch()",
+                  "nodeIdentifier" : "SilentPushRefreshTests/testRepeatedFractionalTimestampRefreshReportsNoDataAfterFirstFetch()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SilentPushRefreshTests/testRepeatedFractionalTimestampRefreshReportsNoDataAfterFirstFetch",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "SilentPushRefreshTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/SilentPushRefreshTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "LazyMansRemindersTests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests",
+          "nodeType" : "Unit test bundle",
+          "result" : "Passed"
+        },
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "1m 43s",
+                  "durationInSeconds" : 103.74989199638367,
+                  "name" : "testCombinedActualSettingsErrorContrast()",
+                  "nodeIdentifier" : "AccessibilitySettingsUITests/testCombinedActualSettingsErrorContrast()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests/testCombinedActualSettingsErrorContrast",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "3m 50s",
+                  "durationInSeconds" : 230.8211349248886,
+                  "name" : "testCombinedActualSettingsKeyboardMatrix()",
+                  "nodeIdentifier" : "AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "AccessibilitySettingsUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "59s",
+                  "durationInSeconds" : 59.80718207359314,
+                  "name" : "testGuidanceContentGeometryAndInk()",
+                  "nodeIdentifier" : "AccountChromeUITests/testGuidanceContentGeometryAndInk()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountChromeUITests/testGuidanceContentGeometryAndInk",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "44s",
+                  "durationInSeconds" : 44.01748204231262,
+                  "name" : "testNativeRecoveryRemainsInert()",
+                  "nodeIdentifier" : "AccountChromeUITests/testNativeRecoveryRemainsInert()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountChromeUITests/testNativeRecoveryRemainsInert",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "1m 19s",
+                  "durationInSeconds" : 79.83183896541595,
+                  "name" : "testNativeTitleBands()",
+                  "nodeIdentifier" : "AccountChromeUITests/testNativeTitleBands()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountChromeUITests/testNativeTitleBands",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "AccountChromeUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountChromeUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "1m 11s",
+                  "durationInSeconds" : 71.02807307243347,
+                  "name" : "testDarkDefaultErrors()",
+                  "nodeIdentifier" : "ErrorContrastUITests/testDarkDefaultErrors()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ErrorContrastUITests/testDarkDefaultErrors",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "name" : "Test crashed with signal term.",
+                      "nodeType" : "Failure Message"
+                    }
+                  ],
+                  "name" : "testDarkXXXLErrors()",
+                  "nodeIdentifier" : "ErrorContrastUITests/testDarkXXXLErrors()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ErrorContrastUITests/testDarkXXXLErrors",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "ErrorContrastUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ErrorContrastUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "58s",
+                  "durationInSeconds" : 58.900285959243774,
+                  "name" : "testDefaultAccountPresentation()",
+                  "nodeIdentifier" : "AccountPresentationTests/testDefaultAccountPresentation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountPresentationTests/testDefaultAccountPresentation",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "1m 4s",
+                  "durationInSeconds" : 64.5098729133606,
+                  "name" : "testEnabledAccountTypographyAndAlignment()",
+                  "nodeIdentifier" : "AccountPresentationTests/testEnabledAccountTypographyAndAlignment()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountPresentationTests/testEnabledAccountTypographyAndAlignment",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "19s",
+                  "durationInSeconds" : 19.09959304332733,
+                  "name" : "testSafeAccountErrorsClearAndReappear()",
+                  "nodeIdentifier" : "AccountPresentationTests/testSafeAccountErrorsClearAndReappear()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountPresentationTests/testSafeAccountErrorsClearAndReappear",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "59s",
+                  "durationInSeconds" : 59.15729796886444,
+                  "name" : "testXXXLAccountPresentation()",
+                  "nodeIdentifier" : "AccountPresentationTests/testXXXLAccountPresentation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountPresentationTests/testXXXLAccountPresentation",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "AccountPresentationTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountPresentationTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "name" : "Failed to install or launch the test runner. (Underlying Error: The operation couldn’t be completed. (Mach error -308 - (ipc/mig) server died))",
+                      "nodeType" : "Failure Message"
+                    }
+                  ],
+                  "name" : "HillclimbUITests-Runner (14866) encountered an error",
+                  "nodeIdentifier" : "HillclimbUITests-Runner (14866) encountered an error",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "System Failures",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "13s",
+                  "durationInSeconds" : 13.364748001098633,
+                  "name" : "testExpandedIslandLastLineClearsRoundedCorners()",
+                  "nodeIdentifier" : "ActivityNativeLayoutTests/testExpandedIslandLastLineClearsRoundedCorners()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ActivityNativeLayoutTests/testExpandedIslandLastLineClearsRoundedCorners",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ActivityNativeLayoutTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ActivityNativeLayoutTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "19s",
+                  "durationInSeconds" : 19.337265014648438,
+                  "name" : "testDarkDefaultCapacityTransition()",
+                  "nodeIdentifier" : "BoardCapacityPresentationUITests/testDarkDefaultCapacityTransition()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityPresentationUITests/testDarkDefaultCapacityTransition",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "25s",
+                  "durationInSeconds" : 25.39002501964569,
+                  "name" : "testDarkXXXLTitleAndFinalInkCapacityTransition()",
+                  "nodeIdentifier" : "BoardCapacityPresentationUITests/testDarkXXXLTitleAndFinalInkCapacityTransition()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityPresentationUITests/testDarkXXXLTitleAndFinalInkCapacityTransition",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "19s",
+                  "durationInSeconds" : 19.160014033317566,
+                  "name" : "testLightDefaultCapacityTransition()",
+                  "nodeIdentifier" : "BoardCapacityPresentationUITests/testLightDefaultCapacityTransition()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityPresentationUITests/testLightDefaultCapacityTransition",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "22s",
+                  "durationInSeconds" : 22.07138705253601,
+                  "name" : "testLightXXXLTitleAndFinalInkCapacityTransition()",
+                  "nodeIdentifier" : "BoardCapacityPresentationUITests/testLightXXXLTitleAndFinalInkCapacityTransition()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityPresentationUITests/testLightXXXLTitleAndFinalInkCapacityTransition",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "BoardCapacityPresentationUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityPresentationUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "35s",
+                  "durationInSeconds" : 35.2644020318985,
+                  "name" : "testDiagnosticNormalTextContrastMatrix()",
+                  "nodeIdentifier" : "BoardEdgeAccessibilityUITests/testDiagnosticNormalTextContrastMatrix()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardEdgeAccessibilityUITests/testDiagnosticNormalTextContrastMatrix",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "1m 52s",
+                  "durationInSeconds" : 112.87195801734924,
+                  "name" : "testTopBandAfterRealPullAndPartialScrollMatrix()",
+                  "nodeIdentifier" : "BoardEdgeAccessibilityUITests/testTopBandAfterRealPullAndPartialScrollMatrix()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardEdgeAccessibilityUITests/testTopBandAfterRealPullAndPartialScrollMatrix",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "BoardEdgeAccessibilityUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardEdgeAccessibilityUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "20s",
+                  "durationInSeconds" : 20.523450016975403,
+                  "name" : "testCapacityAndFirstLineOpticalAlignmentMatrix()",
+                  "nodeIdentifier" : "BoardMultilineUITests/testCapacityAndFirstLineOpticalAlignmentMatrix()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests/testCapacityAndFirstLineOpticalAlignmentMatrix",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "12m",
+                  "durationInSeconds" : 766.4828860759735,
+                  "name" : "testGuideHidesRestoresAndDismissalPersistsWhileEditing()",
+                  "nodeIdentifier" : "BoardMultilineUITests/testGuideHidesRestoresAndDismissalPersistsWhileEditing()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests/testGuideHidesRestoresAndDismissalPersistsWhileEditing",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "11m",
+                  "durationInSeconds" : 691.8658890724182,
+                  "name" : "testNonemptyDraftDonePreservesTextAndRefocusMatrix()",
+                  "nodeIdentifier" : "BoardMultilineUITests/testNonemptyDraftDonePreservesTextAndRefocusMatrix()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests/testNonemptyDraftDonePreservesTextAndRefocusMatrix",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "7m 1s",
+                  "durationInSeconds" : 421.15759694576263,
+                  "name" : "testOfflineLoadingAndErrorsMatrix()",
+                  "nodeIdentifier" : "BoardMultilineUITests/testOfflineLoadingAndErrorsMatrix()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests/testOfflineLoadingAndErrorsMatrix",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "18m",
+                  "durationInSeconds" : 1132.3488790988922,
+                  "name" : "testOnlyCircleCompletesLocalFixtureAndGripStillReordersMatrix()",
+                  "nodeIdentifier" : "BoardMultilineUITests/testOnlyCircleCompletesLocalFixtureAndGripStillReordersMatrix()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests/testOnlyCircleCompletesLocalFixtureAndGripStillReordersMatrix",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "name" : "Test exceeded execution time allowance of 4 minutes",
+                      "nodeType" : "Failure Message"
+                    }
+                  ],
+                  "duration" : "4m",
+                  "durationInSeconds" : 240,
+                  "name" : "testPopulatedRetryRecoversLocallyOnceWithoutFocusOrDuplicateAnnouncement()",
+                  "nodeIdentifier" : "BoardMultilineUITests/testPopulatedRetryRecoversLocallyOnceWithoutFocusOrDuplicateAnnouncement()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests/testPopulatedRetryRecoversLocallyOnceWithoutFocusOrDuplicateAnnouncement",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "BoardMultilineUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "HillclimbUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "LazyMansReminders",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}

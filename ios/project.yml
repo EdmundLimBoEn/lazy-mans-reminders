@@ -60,6 +60,7 @@ targets:
     scheme:
       testTargets:
         - LazyMansRemindersTests
+        - HillclimbUITests
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: "$(PRODUCT_BUNDLE_IDENTIFIER)"
@@ -168,3 +169,16 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: systems.edmundlim.LazyMansRemindersTests
         GENERATE_INFOPLIST_FILE: YES
         CODE_SIGN_STYLE: Automatic
+
+  HillclimbUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: UITests
+    dependencies:
+      - target: LazyMansReminders
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: systems.edmundlim.NotepadHillclimb.UITests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: LazyMansReminders

@@ -1,0 +1,7 @@
+{
+  "baseSHA": "6899d2c3b08d4e8f5121c1305bfcab316533b3a3",
+  "original": "iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed. Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.",
+  "sha256": "e1bccaf1d4a568085add54bd4e43fe54736d264bf4e97f33b82c19a9c9898490",
+  "nativeTestExpectedStringIsVerbatimBase": true,
+  "nativeTest": "AccountChromeUITests/testGuidanceContentGeometryAndInk()"
+}

@@ -1,0 +1,97 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+      "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+      "modelName" : "iPhone 17 Pro",
+      "osBuildNumber" : "23C54",
+      "osVersion" : "26.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "2m 50s",
+                  "durationInSeconds" : 170.7901759147644,
+                  "name" : "testCombinedActualSettingsKeyboardMatrix()",
+                  "nodeIdentifier" : "AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "AccessibilitySettingsUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            },
+            {
+              "children" : [
+                {
+                  "duration" : "1m 5s",
+                  "durationInSeconds" : 65.9118789434433,
+                  "name" : "testCombinedSettingsPopulatedPasswordKeepsVisualName()",
+                  "nodeIdentifier" : "SignInChromeUITests/testCombinedSettingsPopulatedPasswordKeepsVisualName()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInChromeUITests/testCombinedSettingsPopulatedPasswordKeepsVisualName",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "42s",
+                  "durationInSeconds" : 42.41245198249817,
+                  "name" : "testLegalFooterRestingAndBottomReachabilityWithEnabledInertAppearance()",
+                  "nodeIdentifier" : "SignInChromeUITests/testLegalFooterRestingAndBottomReachabilityWithEnabledInertAppearance()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInChromeUITests/testLegalFooterRestingAndBottomReachabilityWithEnabledInertAppearance",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "1m 25s",
+                  "durationInSeconds" : 85.8082709312439,
+                  "name" : "testNativeAppleLoadingLabelAcrossThreeFreshProcessesPerStyleAndSize()",
+                  "nodeIdentifier" : "SignInChromeUITests/testNativeAppleLoadingLabelAcrossThreeFreshProcessesPerStyleAndSize()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInChromeUITests/testNativeAppleLoadingLabelAcrossThreeFreshProcessesPerStyleAndSize",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "34s",
+                  "durationInSeconds" : 34.077674984931946,
+                  "name" : "testPopulatedPasswordKeepsVisualNameAndOneSecureField()",
+                  "nodeIdentifier" : "SignInChromeUITests/testPopulatedPasswordKeepsVisualNameAndOneSecureField()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInChromeUITests/testPopulatedPasswordKeepsVisualNameAndOneSecureField",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "SignInChromeUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInChromeUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "HillclimbUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "LazyMansReminders",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}
