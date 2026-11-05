@@ -108,3 +108,7 @@ Both round 6 reports validate all30categories,557screenshot paths,17refs and exa
 - T capacity footer is next: status first, unchanged hint second, shared leading edge and no taller footer; preserve final-row clearance and normal composer behavior. Prefer this bounded reviewer-supported layout over moving content into a new list footer.
 
 Opus eligibility is true, but defer this round’s optional Opus run until the revised density batch; Claude API tokens are limited and the direct user concern is already actionable. This does not change the numeric eligibility or final stop rules, and no missing Opus score is invented. R7 must use fresh combined validation/captures and independent Codex reports before another Opus call. Exact Cursor Opus5.5/medium remains the authorized quota fallback.
+
+## Density-batch validation scheduling
+
+R reported an unchanged BoardEdge gesture timeout during shared-host load above200. Parent observed concurrent R/S/T full-suite xcodebuild processes; this is a plausible environmental confound, not a proven product diagnosis. All workers must finish current runs safely, restore each Settings teardown, retain failures and avoid new full-suite/rebuild attempts. Source/evidence analysis may continue. Any failed candidate hands back explicitly pending validation; parent will commission one serialized quiet recheck after current suites finish. No merge or passing claim without a real full-suite pass. No test weakening or retry-until-pass.
