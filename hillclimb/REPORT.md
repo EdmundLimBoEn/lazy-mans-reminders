@@ -169,3 +169,9 @@ Account’s native hard top edge clears departing text beside the title. The exi
 **307/307 tests pass**, retaining all304 prior IDs, with per-method four-setting restoration and fresh Debug/Release/Python23/Deno52+4. Parent verified537 native PNG/reference pairs; these include repeated samples. Five public simulator Debug samples establish launch mean1.0319s, scroll clock4.6921s and scroll signpost duration2.3505s. They do not establish hardware feel, frame pacing or a before/after improvement.
 
 One extra required gesture check failed on the deliberately noninteractive enabled-appearance fixture. Its root has hit testing disabled. The historical failure remains intact; a focused recheck must prove actual footer gestures on the gesture-enabled fixture before required gates can be accepted. [Exact failure](validation/round6/parent-findings.md) · [Full evidence and metric samples](validation/round6/README.md). Crowding remains an explicit user priority for the next design pass.
+
+## Round 6 gesture proof accepted
+
+The new focused method proves allfour real-gesture variants: XXXL content moves127pt and the footer clears the safe bottom by50.33pt. **308/308 tests pass**, retaining all307prior IDs, with per-method restoration. No production change was needed. Historicalfailure/provenance remain intact; required checks now pair actualordinarygestures with separate enabled-appearance geometry/inertness.
+
+[Proof and retained limitations](validation/round6/recheck/README.md). Both Codex/high reviews are running against the same537historical+20supplemental native images and byte-identical production source. They explicitly audit the crowding Edmund flagged; no final acceptance or new score is claimed.
