@@ -11,7 +11,7 @@ Integration: `hillclimb/ui`, verified source/evidence merge `4783ce10396f5bab467
 3. Repeatable native evidence covers all screen families in light/dark, default/XXXL and actual combined settings. Apple reference gaps remain explicit.
 4. Independent Sol/high and Astra/high reviews completed:8.57/min7.5 and8.40/min7.3. Exact30categories,332canonical paths,17refs and arithmetic validate. Opus is ineligible because Astra<8.5;no Claude API/Cursor used in round8.
 5. Plateau audit stops the loop. Remaining proposals are deferred in `rounds/8/followups.md`;no ungraded source edits follow the final reviews. Current weekly usage is38%,not nearly exhausted and not the stop reason.
-6. Final report contains first/latest category scores, screenshot pairs, merged changes, limitations and phone-install instructions. After final remote sync,remove only the exact parent-owned keep-awake process;record actual status in `/tmp/hillclimb-awake-20261105.json`.
+6. Final report contains first/latest category scores, screenshot pairs, merged changes, limitations and phone-install instructions. Final review/report remote sync is verified. The exact parent-owned keep-awake process was stopped;actual status is recorded in `/tmp/hillclimb-awake-20261105.json` and `validation/round8/host-handback.json`.
 
 ## Scores
 
@@ -89,7 +89,7 @@ Physical haptics,spoken VoiceOver,true lock/wallpapers,AX1–AX5,live auth/accou
 
 Original17:host`local`,regular iPhone17Pro/iOS26.2,UDID`78F5A64F-7B2E-4562-8EF9-10F3312CC694`. Booted,light/Large,four switches0/1/0/0,owned demo Activity IDs empty. Own app/Settings terminated by native teardown;only own Device panel closed with shutdownfalse. Manual driver remained stopped on a stale prior-owner claim;no takeover or other-session closure. No Duo used.
 
-Parent-owned Mac awake PID33824 is `/usr/bin/caffeinate -disu -t43200`,recorded in `/tmp/hillclimb-awake-20261105.json`. End it only after final sync,checking exact identity first. No global power/security settings changed;manual lock/lid closure are not overridden.
+Parent-owned Mac awake PID33824 (`/usr/bin/caffeinate -disu -t43200`) was stopped after final report sync,with exact command/start/UID verified first. Actual handback is recorded in `/tmp/hillclimb-awake-20261105.json` and `validation/round8/host-handback.json`. No global power/security settings changed;manual lock/lid closure are not overridden.
 
 26unrelated detached automatic maintenance/pack jobs filled the disk and exited before the stop attempt.27temporary outputs/6.62GiB remain preserved;no Git object/pack file deleted,reset or repacked by PM. Repository-only `gc.auto=0` and `maintenance.auto=false` prevent recurrence;original absent values are recorded in `validation/round8/automatic-maintenance-recovery.json`. Do not re-enable while it risks the forbidden repack. No global Git config changed. Disk remains limited.
 
