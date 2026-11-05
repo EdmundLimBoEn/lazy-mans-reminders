@@ -5,7 +5,7 @@ import UIKit
 struct SignInView: View {
     @EnvironmentObject private var auth: AuthManager
     @Environment(\.colorScheme) private var colorScheme
-    @ScaledMetric(relativeTo: .body) private var signInButtonHeight: CGFloat = 44
+    @ScaledMetric(relativeTo: .body) private var signInButtonHeight: CGFloat = 48
     @State private var email = ""
     @State private var password = ""
     @State private var usesPassword = false
@@ -215,6 +215,10 @@ struct SignInView: View {
         SignInEmail.isPlausible(normalizedEmail)
     }
 
+    private var submitIsDisabled: Bool {
+        disablesDemoControls || !emailIsPlausible || busy || (usesPassword && password.isEmpty)
+    }
+
     private var providerSection: some View {
         SignInSection {
             SignInWithAppleButton(.signIn) { request in
@@ -254,7 +258,7 @@ struct SignInView: View {
             .frame(maxWidth: .infinity)
             .frame(minHeight: max(44, signInButtonHeight))
             .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 6))
-            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.primary, lineWidth: 1))
+            .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.primary, lineWidth: 1))
             .disabled(busy || disablesDemoControls)
             .accessibilityHint("Opens Google sign-in in a secure browser sheet")
         }
@@ -334,13 +338,13 @@ struct SignInView: View {
                             title: usesPassword ? "Sign In with Password" : "Send Sign-In Link",
                             showsProgress: pending == .magicLink || pending == .password
                         )
+                        .foregroundColor(colorScheme == .dark && !submitIsDisabled ? Color(.systemBackground) : nil)
                     }
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.roundedRectangle)
                     .controlSize(.large)
                     .frame(maxWidth: .infinity)
-                    .disabled(
-                        disablesDemoControls || !emailIsPlausible || busy || (usesPassword && password.isEmpty))
+                    .disabled(submitIsDisabled)
                     Button {
                         usesPassword.toggle()
                         password = ""
@@ -367,7 +371,7 @@ struct SignInView: View {
 
     private var emailField: some View {
         HStack(spacing: 0) {
-            TextField("you@example.com", text: $email, prompt: Text("you@example.com").foregroundStyle(.secondary))
+            TextField("you@example.com", text: $email, prompt: Text(verbatim: "you@example.com").foregroundColor(Color(.secondaryLabel)))
                 .textContentType(usesPassword ? .username : .emailAddress)
                 .keyboardType(.emailAddress)
                 .textInputAutocapitalization(.never)

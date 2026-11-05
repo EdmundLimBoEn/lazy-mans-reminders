@@ -4,7 +4,7 @@ set -euo pipefail
 root="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$root"
 python3 - "$@" <<'PY'
-import argparse, datetime, hashlib, json, pathlib, shlex, subprocess, time, struct
+import argparse, datetime, hashlib, json, pathlib, shlex, subprocess, time, struct, os
 p=argparse.ArgumentParser(description='Capture actual demo UI using a T3 pinned agent-device session')
 p.add_argument('--round', required=True, type=int)
 p.add_argument('--resume', action='store_true', help='Preserve successful captures and retain failed attempts')
@@ -33,8 +33,10 @@ out=pathlib.Path('hillclimb/rounds')/str(a.round)
 if not a.resume and (out/'manifest.json').exists():
     p.error('Core manifest already exists; use --resume to preserve its history')
 out.mkdir(parents=True,exist_ok=True)
-sha=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
-manifest={'sourceSHA':sha,'dirty':bool(subprocess.check_output(['git','status','--porcelain'])),
+freeze_path=os.environ.get('HILLCLIMB_SOURCE_FREEZE')
+freeze=json.loads(pathlib.Path(freeze_path).read_text()) if freeze_path else None
+sha=(None if freeze.get('uncommittedProductionCorrection') else freeze['sourceSHA']) if freeze else subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+manifest={'sourceSHA':sha,'dirty':bool(freeze.get('uncommittedProductionCorrection')) if freeze else bool(subprocess.check_output(['git','status','--porcelain'])), 'sourceFreeze':freeze_path, 'sourceIdentity':freeze.get('sourceIdentity') if freeze else None, 'parentSourceSHA':freeze.get('sourceSHA') if freeze else None,
  'device':d,'startedUTC':datetime.datetime.now(datetime.timezone.utc).isoformat(),
  'liveActivity':{'status':'unavailable','reason':'Offline fixture does not start ActivityKit or mutate shared board storage'},
  'captures':[],'operations':ops}

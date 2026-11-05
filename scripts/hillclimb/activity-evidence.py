@@ -3,6 +3,7 @@
 Written by gpt-6.1-sol in Codex on behalf of Edmund
 """
 import argparse
+import os
 import datetime
 import hashlib
 import json
@@ -25,9 +26,11 @@ out = a.out.resolve()
 out.mkdir(parents=True, exist_ok=True)
 manifest_path = out / 'manifest.json'
 manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {'captures': [], 'operations': []}
-manifest.update(deviceID='78F5A64F-7B2E-4562-8EF9-10F3312CC694', hostID='local',
-                sourceSHA=subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
-                dirty=bool(subprocess.check_output(['git', 'status', '--porcelain'])))
+freeze_path=os.environ.get('HILLCLIMB_SOURCE_FREEZE')
+freeze=json.loads(pathlib.Path(freeze_path).read_text()) if freeze_path else None
+manifest.update(sourceFreeze=freeze_path, sourceIdentity=freeze.get('sourceIdentity') if freeze else None, parentSourceSHA=freeze.get('sourceSHA') if freeze else None, deviceID='78F5A64F-7B2E-4562-8EF9-10F3312CC694', hostID='local',
+                sourceSHA=(None if freeze.get('uncommittedProductionCorrection') else freeze['sourceSHA']) if freeze else subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+                dirty=bool(freeze.get('uncommittedProductionCorrection')) if freeze else bool(subprocess.check_output(['git', 'status', '--porcelain'])))
 def save():
     manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
 def run(*args):
