@@ -1,0 +1,79 @@
+{
+  "sourceSHA": "6eaf884abb61a95c2c7e56e9efa338071574140c",
+  "configuration": "Unsigned arm64 Debug, seeded long-text/light/default, original17 iOS26.2/23C54",
+  "protocol": "../../validation/round6/performance-protocol.json",
+  "hostObservations": "host-load.json",
+  "toolchain": "setup.json",
+  "framePacingObserved": false,
+  "hitchMetricMeasured": false,
+  "scrollSignpostReported": "Duration only; no frame/hitch data returned by this chosen metric",
+  "metrics": [
+    {
+      "test": "PerformanceUITests/testSeededLaunchMetric()",
+      "name": "Duration (AppLaunch)",
+      "unit": "s",
+      "samples": [
+        1.0889587920000001,
+        0.9947737080000001,
+        1.033882709,
+        1.0087227090000002,
+        1.0115483330000001
+      ],
+      "mean": 1.0275772502,
+      "sampleSD": 0.037067319756619095,
+      "populationSD": 0.033154018687808505,
+      "populationRSDPercent": 3.2264259140960596,
+      "minimum": 0.9947737080000001,
+      "maximum": 1.0889587920000001,
+      "device": {
+        "deviceId": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "deviceName": "Hillclimb iPhone 17 Pro"
+      }
+    },
+    {
+      "test": "PerformanceUITests/testSeededScrollElapsedMetric()",
+      "name": "Clock Monotonic Time",
+      "unit": "s",
+      "samples": [
+        4.492281563000001,
+        4.852407318,
+        4.268576092,
+        4.857433877,
+        4.841304108
+      ],
+      "mean": 4.6624005916,
+      "sampleSD": 0.2693442161289366,
+      "populationSD": 0.240908790644279,
+      "populationRSDPercent": 5.167054737388108,
+      "minimum": 4.268576092,
+      "maximum": 4.857433877,
+      "device": {
+        "deviceId": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "deviceName": "Hillclimb iPhone 17 Pro"
+      }
+    },
+    {
+      "test": "PerformanceUITests/testSeededScrollSignpostMetric()",
+      "name": "Duration (Scroll_DraggingAndDeceleration)",
+      "unit": "s",
+      "samples": [
+        2.350103458,
+        2.3336285830000003,
+        2.333169791,
+        2.333117709,
+        2.35087125
+      ],
+      "mean": 2.3401781582,
+      "sampleSD": 0.009416977718187662,
+      "populationSD": 0.008422800928187387,
+      "populationRSDPercent": 0.3599213546487406,
+      "minimum": 2.333117709,
+      "maximum": 2.35087125,
+      "device": {
+        "deviceId": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "deviceName": "Hillclimb iPhone 17 Pro"
+      }
+    }
+  ],
+  "scope": "Simulator baseline; elapsed transaction metric includes XCTest overhead and quiescence. No invented before baseline, speed threshold or hardware feel claim."
+}

@@ -1,0 +1,72 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "deviceName" : "Hillclimb iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 308,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "LazyMansReminders · Built with macOS 27.2",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1793873960.644,
+  "passedTests" : 308,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793866503.917,
+  "statistics" : [
+    {
+      "subtitle" : "3 test runs",
+      "title" : "3 tests collected performance metrics"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Test crashed with signal term.",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 289,
+      "testIdentifierString" : "ErrorContrastUITests/testDarkXXXLErrors()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ErrorContrastUITests/testDarkXXXLErrors",
+      "testName" : "testDarkXXXLErrors()"
+    },
+    {
+      "failureText" : "Failed to swipe down CollectionView (First Match): Timed out while synthesizing event.",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 281,
+      "testIdentifierString" : "BoardEdgeAccessibilityUITests/testTopBandAfterRealPullAndPartialScrollMatrix()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardEdgeAccessibilityUITests/testTopBandAfterRealPullAndPartialScrollMatrix",
+      "testName" : "testTopBandAfterRealPullAndPartialScrollMatrix()"
+    }
+  ],
+  "title" : "Test - LazyMansReminders",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "48% of duration",
+      "text" : "2 longest test runs with outlier durations exceeding 1307.94s (three standard deviations)"
+    },
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "32% of duration",
+      "text" : "3 longest test runs with outlier durations exceeding 0.07s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 310
+}

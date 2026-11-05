@@ -1,0 +1,81 @@
+[
+  {
+    "action": "before test dispatch",
+    "error": "StopIteration",
+    "cause": "Copied task runner selected an unused before DD; no XCTest or device action started",
+    "correction": "Use own built DD"
+  },
+  {
+    "action": "baseline evidence export",
+    "error": "Failed to find test with the provided identifier or identifier URL: AccountDensityUITests",
+    "cause": "Only Chrome class ran in this result",
+    "correction": "Retain successful Chrome export and export Density from its separate result"
+  },
+  {
+    "action": "candidate-density native tests",
+    "result": "2 failed / 2 executed, exit65",
+    "errors": [
+      "Timed out while synthesizing event during collection swipe in dark XXXL",
+      "NSInternalInconsistencyException: point.x != INFINITY && point.y != INFINITY during version footer positioning"
+    ],
+    "retained": "/tmp/account-r-candidate-density.xcresult; ignored raw exported attachments; compressed activity trees",
+    "correction": "New-file-only window-relative bounded scroll gestures and settling; no original assertions changed or skipped",
+    "partialMeasurementsNotAcceptance": {
+      "sectionGap": 35,
+      "persistenceBoundary": 23.6666666667,
+      "lightDefaultHelperMinimumContrast": 9.72337931094636
+    }
+  },
+  {
+    "action": "density2",
+    "result": "1 passed, 1 failed",
+    "failure": "Version footer bottom834pt exceeds conservatively borrowed guidance threshold832pt at natural list end",
+    "correction": "Use original AccountPresentation native safe-bottom threshold840pt for explanatory rows/version. Persistence guidance retains unchanged stricter832pt Chrome gate. No production padding change."
+  },
+  {
+    "action": "density3",
+    "result": "1 passed, 1 failed",
+    "failure": "Version-footer native ink contrast2.330956:1, below7",
+    "decision": "Reject quieter version-footer styling; restore original explicit label color. Other helper measurements exceed7. Keep strengthened native test for version."
+  },
+  {
+    "action": "unfiltered full suite",
+    "status": "running at observation; final outcome will be in full.json",
+    "observedFailure": "BoardEdgeAccessibilityUITests/testTopBandAfterRealPullAndPartialScrollMatrix: Failed to swipe down CollectionView (First Match): Timed out while synthesizing event.",
+    "methodDurationReportedSeconds": 952.328,
+    "ownership": "Unchanged Board source and original baseline test; no modification or suppression authorized/performed",
+    "context": "Coarse host loads rose above179 then229; concurrent other-device runners observed. Cause unproven.",
+    "acceptance": "This run cannot satisfy all310-pass requirement"
+  },
+  {
+    "action": "post-full finalization/log read",
+    "error": "Unable to lookup in current state: Shutdown (CoreSimulator.SimError405), exit149",
+    "recovery": "Own device_open returned same owned pinned session and booted original17; rerun read-only provenance/log extraction",
+    "noManualShutdownPerformed": true
+  },
+  {
+    "action": "authoritative unfiltered summary",
+    "passed": 308,
+    "failed": 2,
+    "skipped": 0,
+    "failures": [
+      {
+        "failureText": "Test crashed with signal term.",
+        "targetName": "HillclimbUITests",
+        "testIdentifier": 289,
+        "testIdentifierString": "ErrorContrastUITests/testDarkXXXLErrors()",
+        "testIdentifierURL": "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ErrorContrastUITests/testDarkXXXLErrors",
+        "testName": "testDarkXXXLErrors()"
+      },
+      {
+        "failureText": "Failed to swipe down CollectionView (First Match): Timed out while synthesizing event.",
+        "targetName": "HillclimbUITests",
+        "testIdentifier": 281,
+        "testIdentifierString": "BoardEdgeAccessibilityUITests/testTopBandAfterRealPullAndPartialScrollMatrix()",
+        "testIdentifierURL": "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardEdgeAccessibilityUITests/testTopBandAfterRealPullAndPartialScrollMatrix",
+        "testName": "testTopBandAfterRealPullAndPartialScrollMatrix()"
+      }
+    ],
+    "status": "pending parent serialized recheck; no local rerun"
+  }
+]

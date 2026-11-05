@@ -177,3 +177,9 @@ The new focused method proves allfour real-gesture variants: XXXL content moves1
 [Proof and retained limitations](validation/round6/recheck/README.md). Both Codex/high reviews are running against the same537historical+20supplemental native images and byte-identical production source. They explicitly audit the crowding Edmund flagged; no final acceptance or new score is claimed.
 
 Round 6 Codex density audits validate at **8.83 / 8.92**. Account guidance/action hierarchy, sign-in field grouping and full-capacity status/help alignment drive the next three isolated tasks. Safety checks remain passing; visual crowding remains unresolved. [Sol review](rounds/6/scores-gpt-6.1-sol.md) · [Astra review](rounds/6/scores-gpt-6-astra.md).
+
+## Density candidates awaiting serialized validation
+
+Account R demonstrates larger section gaps and quieter readable guidance; board T places status before its aligned hint and saves16pt. Their dedicated native checks pass, but full suites retain failures. **Neither candidate app change is merged.** Evidence and frozen source patches are retained for review/recheck. R passed308/310; T passed308/312, with no skips. No new scores or final acceptance are claimed.
+
+The circle target’s43.99999999999994pt representation is handled by a1e-9pt test comparison allowance; that test-only correction still requires runtime validation. Other timeouts/terminations remain unresolved. Serialized rechecks follow the current sign-in suite, and the login’s overall composition remains the visual priority.

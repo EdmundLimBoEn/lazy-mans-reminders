@@ -201,8 +201,9 @@ final class BoardMultilineUITests: XCTestCase {
                 start.press(forDuration: 0.15, thenDragTo: start.withOffset(CGVector(dx: 0, dy: rect.height + 40)))
                 XCTAssertEqual(try geometry()["boardMoves"]?.minX, 1)
                 let circle = app.buttons.matching(NSPredicate(format: "label == %@", label)).firstMatch
-                XCTAssertGreaterThanOrEqual(circle.frame.width, 44)
-                XCTAssertGreaterThanOrEqual(circle.frame.height, 44)
+                // CGRect subtraction can report 44pt as 43.99999999999994pt.
+                XCTAssertGreaterThanOrEqual(circle.frame.width + 1e-9, 44)
+                XCTAssertGreaterThanOrEqual(circle.frame.height + 1e-9, 44)
                 circle.coordinate(withNormalizedOffset: CGVector(dx: 0.03, dy: 0.5)).tap()
                 XCTAssertFalse(app.buttons.matching(NSPredicate(format: "label == %@", label)).firstMatch.exists)
                 XCTAssertEqual(try geometry()["boardCompletions"]?.minX, 1)

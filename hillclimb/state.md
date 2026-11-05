@@ -116,3 +116,13 @@ R reported an unchanged BoardEdge gesture timeout during shared-host load above2
 ## Latest user priority: login composition
 
 Edmund clarified that the “home screen” he finds ugly means **the login screen**, not the board. Prioritize default Sign In’s overall composition as well as XXXL density. Parent observed the large Sign In navigation title competing with the Notepad/intro group and similar filled provider/input/submit surfaces with inconsistent emphasis. These are visual hierarchy hypotheses, not an authentication defect. A spacing-only candidate must not be declared sufficient from passing tests; inspect matched default light/dark enabled-style before/after shots. Consider native title scale/placement and coherent control treatments in a subsequent bounded refinement if needed, preserving every word, branding, provider order and native Apple rendering. No current frozen test binary is changed midrun; serialized validation scheduling remains active.
+
+## R and T handbacks retained; candidates not accepted
+
+R Account candidate `6eaf884`/evidence `8fa1c22`: native gaps12→35pt, guidance-to-Sign Out12→23.67pt, helper contrast>=8.51:1 and guidance9.72:1, exact copy/6pt paragraphs retained. 308/310 passed; BoardEdge timeout and DarkXXXL ErrorContrast termination remain failures. Parent verified all101inventory image hashes/dimensions (100primary+1cleanup supplement).
+
+T board candidate `49e3c9f`/evidence `80aec016`: status-first/shared18ptgutter/6ptgap, footer16ptshorter at bothsizes, all8capacitymethods and16matched comparisons pass. Full312methods:308passed/4failed,0skips; unchanged BoardMultiline screenshot/event timeouts, signalTERM and a43.99999999999994vs44 frame assertion. Parent verified all32before/after image hashes/dimensions and inspected default bottom.
+
+Only R/T task evidence and immutable source patches are retained on integration, explicitly marked PARENT-STATUS pending; application candidate code is **not merged**. Both devices were restored and released. S sign-in still has its current suite; no new heavyweight suite is allowed until it finishes. Then run isolated serialized rechecks before accepting candidates.
+
+Parent repaired only circle width/height comparisons in BoardMultilineUITests with a1e-9pt roundoff allowance, vastly below a physical pixel. The44pt target requirement and all other assertions remain. This test-only correction is not yet runtime-verified; quiet recheck must execute it and retain all initial failures. Do not attribute timeouts to host load as proven causation.
