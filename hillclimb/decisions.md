@@ -130,3 +130,11 @@ At Edmund’s request start parent-owned caffeinate -disu -t43200; verify displa
 Fresh independent Sol/high and Astra/high reviews use808native matrix images,52final login originals,44matched login pairs and17references. Opus remains eligibility-gated>=8.5both; limited API and Cursor fallback instructions persist. Round6Opus stays transparently deferred. Latest actual Codex weekly usage31%, so no usage stop.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Round 7 review outcome — 2026-11-05
+
+Retain both independent ratings exactly: Sol8.50/min7 and Astra8.13/min7, all30categories valid. Both observe a materially clearer default login, yet loading causes52→67ptbutton expansion and XXXL empty-password focus can clip its heading. Sol asks for substantive hierarchy rather than repeated slabs; Astra also flags outline weight and Account instruction scanability. No category<7, but finalmeanrulefails. Opus is ineligible because Astra<8.5, so spend no Claude tokens. Do not dismiss lower scores as a product regression measurement or game reviewer calibration.
+
+Address these bounded findings directly as PM on a new isolated branch; no new implementation delegate for small review fixes. Prototype and inspect a clear email work area and secondary provider block, preserve every word/branding/Apple→Google order and guards, then prove stable native loading/focus geometry and rerun the full iOS suite. Preserve named tests and explain any layout-order assertion updates. Round8 requires fresh full-matrix evidence and both Codex reviews before Opus eligibility is reconsidered.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund

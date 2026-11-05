@@ -4,7 +4,7 @@ Integration branch: `hillclimb/ui`. All accepted application work is merged here
 
 ## Current plan
 
-1. Round 7 source `e9f7ace58b493dd4aa3acb27325eaea7cf0ed352` and combined evidence are merged. Independent Sol/high and Astra/high reviews are running on 808 native matrix images plus 52 login originals, 44 login before/after pairs and 17 Apple references. No round 7 score is claimed yet.
+1. Round 7 source `e9f7ace58b493dd4aa3acb27325eaea7cf0ed352` and combined evidence are merged. Independent reviews are complete: Sol8.50/min7 and Astra8.13/min7. Both say login is materially clearer but identify remaining hierarchy/loading/focus polish. Opus is ineligible because Astra<8.5. Next: isolated PM fix pass and fresh round8 validation.
 2. Validate both independent 30-category reports. Only run Opus 5.5/medium if both same-round Codex overall scores are at least 8.5. Use Cursor Opus 5.5/medium if Claude API tokens run out; that exact provider/model/effort is confirmed available.
 3. Turn actionable findings, including the crowding concern, into small isolated tasks with non-overlapping source ownership. Each task builds, passes the existing suite and meaningful new checks, then captures affected native states before acceptance.
 4. Revalidate and re-shoot the integrated source before the next grading round. Preserve every user-facing word, branding and icon. No nested cards or decorative red/orange palette.
@@ -29,6 +29,8 @@ Integration branch: `hillclimb/ui`. All accepted application work is merged here
 | 5 | Claude Opus 5.5 | 8.69 | 7.8 |
 | 6 | gpt-6.1-sol | 8.83 | 7.8 |
 | 6 | gpt-6-astra | 8.92 | 8.0 |
+| 7 | gpt-6.1-sol | 8.50 | 7.0 |
+| 7 | gpt-6-astra | 8.13 | 7.0 |
 
 Each report uses the exact 30 rubric categories and arithmetic mean rounded to two decimals. Rounds 1–2 were not Opus eligible. Round 6 Codex reports validate. Opus is eligible but deferred until after the crowding batch to conserve limited Claude tokens. Round 5 remains the latest three-grader round. Reports and machine-readable aggregates are under `rounds/<n>/`.
 
@@ -82,7 +84,7 @@ Evidence: `validation/round6/README.md`, `validation/round6/recheck/README.md`, 
 | Combined round 6 and corrected gesture proof | Merged; all required gates pass | `validation/round6/`, `validation/round6/recheck/` |
 | Round 6 independent Codex reviews | Complete; density findings accepted | `rounds/6/` |
 | R/S/T density candidates and U login composition | Merged after serial317/317 and parent native review | `tasks/login-composition/`, `validation/round7/` |
-| Round 7 independent Codex reviews | Running; no scores claimed | `rounds/7/` |
+| Round 7 independent Codex reviews | Complete; both30categories valid; Opus ineligible | `rounds/7/` |
 
 ## Edmund’s crowding priority
 
@@ -90,7 +92,7 @@ Direct feedback: “looks croweded as fuck”; check it on the next pass. Accoun
 
 ## Devices and ownership
 
-All implementation workers have released their sessions. Round 7 native graders are read-only and own no device. Original17 is running light/Large, original switches restored, no owned Activities, and own app/Settings/session/panel closed.
+All implementation workers have released their sessions. Round7 graders are complete and own no device. The next PM pass will acquire its own new session for original17. Original17 is running light/Large, original switches restored, no owned Activities, and own app/Settings/session/panel closed.
 
 | Device | Host | ID |
 | --- | --- | --- |
@@ -153,3 +155,11 @@ Next U runs in ONE isolated worktree: apply exact R/T/S frozen source patches (w
 ## Historical density handbacks superseded by combined round 7
 
 The pending R/S/T/U handoff snapshots above remain historical records. The exact corrected combined source is now committed, validated, and merged. The current plan and Round7 accepted-verification section take precedence.
+
+## Round 7 findings and direct PM pass
+
+Sol8.50 and Astra8.13 are honest new independent ratings; both describe the default login as materially improved. Lower aggregates reflect fresh judgment and additional observed issues, not a measured regression in every unchanged category. Do not inflate scores, discard the lower report or treat programmatic success as visual acceptance. Both reports validate30exactcategories,860images/17refs and arithmetic. Opus is skipped because Astra<8.5; no tokens spent. No three-round plateau is established.
+
+PM handles bounded review fixes directly on a fresh isolated branch rather than spawning another implementation delegate. Priorities: native loading button grows52→67pt/default (~21ptXXXL); focus scroll can place the empty Password heading under navigation; default login still lacks a strong first task; custom Google outline weight; unchanged Account Home/Lock prefixes need scanability. Prototype a clear email work area with secondary provider block while retaining Apple→Google order, every word, native Apple branding, all auth/fixture guards and Dynamic Type. Inspect whole empty/filled default screens before choosing. No change to wording, branding, shipping, or inactive submit semantics.
+
+Add native loading-footprint and first-focus/refocus heading+field regression gates. Preserve existing test IDs, touch/contrast/keyboard/last-row/settings-restoration gates; only update assertions that encode deliberately superseded layout order, with explicit rationale. Fresh full scheme/build and repeatable round8 capture must pass before integration. Existing sourcee9f7 and round7 evidence remain frozen.

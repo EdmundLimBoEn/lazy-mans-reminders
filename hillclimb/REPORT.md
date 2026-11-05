@@ -1,41 +1,41 @@
 # Notepad UI hill climb: progress report
 
-The verified combined login and density improvements are merged into `hillclimb/ui`. **Round7 passed317/317 tests**; its independent Codex reviews are running. Latest completed ratings are Round6 Sol8.83/minimum7.8 and Astra8.92/minimum8.0; latest Opus is Round5 8.69/minimum7.8. Round6 Opus was deferred to conserve Claude tokens while addressing Edmund’s login/crowding feedback. The final all-three>=9/minimum7 goal remains unmet.
+The verified combined login and density improvements are merged into `hillclimb/ui`. **Round7 passed317/317 tests**; independent ratings are **Sol8.50/minimum7 and Astra8.13/minimum7**. Latest Opus is Round5 8.69/minimum7.8. Round7Opus is ineligible because Astra<8.5. Round6 Opus was deferred to conserve Claude tokens while addressing Edmund’s login/crowding feedback. The final all-three>=9/minimum7 goal remains unmet. Both graders see a clearer default login but still flag hierarchy, loading reflow and first-focus polish. The next bounded PM pass addresses those findings; the lower aggregate is retained, without claiming a regression in every unchanged category.
 
 ## Start and latest completed category scores
 
-| Category | R1 Sol | R6 Sol | R1 Astra | R6 Astra | R3 Opus | R5 Opus |
+| Category | R1 Sol | R7 Sol | R1 Astra | R7 Astra | R3 Opus | R5 Opus |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Visual hierarchy | 7.5 | 8 | 7 | 8.3 | 8.5 | 8.9 |
-| Spacing/grid | 7.0 | 8 | 7 | 8.2 | 8.3 | 8.8 |
-| Typography scale | 8.5 | 9.1 | 8 | 8.9 | 8.2 | 8.8 |
-| Dynamic Type | 7.5 | 9 | 7 | 9.3 | 8.6 | 8.8 |
-| Light contrast | 7.0 | 9.4 | 7 | 9.3 | 8.4 | 8.9 |
-| Dark contrast | 6.5 | 9.4 | 6.5 | 9.3 | 8.0 | 8.9 |
-| Iconography | 8.0 | 9.3 | 8 | 9.2 | 8.6 | 8.8 |
-| Safe area / Dynamic Island | 8.0 | 9.2 | 8 | 9.3 | 8.8 | 8.9 |
-| Scroll/pull-down / last row | 4.0 | 9.4 | 4 | 9.5 | 8.4 | 8.9 |
-| List rows | 6.5 | 8.7 | 6.5 | 8.9 | 7.8 | 8.9 |
-| Empty states | 7.0 | 8.4 | 7.5 | 8.8 | 8.8 | 8.9 |
-| Composer ergonomics | 6.0 | 9.1 | 6 | 9.1 | 8.6 | 8.7 |
-| Keyboard handling | 7.0 | 9.2 | 7.5 | 9.3 | 8.5 | 8.8 |
-| Sheet presentation/detents | 7.0 | 9.1 | 6 | 9.3 | 8.5 | 8.7 |
-| Navigation clarity | 7.5 | 9.1 | 7 | 9.2 | 8.7 | 8.9 |
-| Touch targets | 4.5 | 9.4 | 4.5 | 9.5 | 8.4 | 9.1 |
-| Haptics | 7.0 | 8.2 | 7 | 8.2 | 7.5 | 7.8 |
-| Animation/transitions | 6.5 | 8.5 | 6.5 | 8.7 | 7.6 | 8.2 |
-| Loading states | 7.5 | 9.2 | 7 | 9.2 | 8.5 | 8.7 |
-| Error states | 7.5 | 9.2 | 7 | 9 | 7.6 | 8.7 |
-| VoiceOver/labels | 7.5 | 8.9 | 7.5 | 8.8 | 8.2 | 8.6 |
-| iOS HIG consistency | 7.5 | 8.8 | 7 | 9 | 8.1 | 8.8 |
-| Lock Screen / Live Activity | 6.0 | 8.9 | 6 | 8.8 | 7.8 | 8.1 |
-| Sign-in/onboarding | 6.5 | 8.4 | 6.5 | 8.5 | 8.0 | 8.8 |
-| Settings/account | 7.0 | 7.8 | 6 | 8 | 8.1 | 8.7 |
-| Performance feel | 6.5 | 8.3 | 6.5 | 8.2 | 7.6 | 7.9 |
-| Delight | 6.5 | 8 | 6.5 | 8.4 | 7.8 | 8.1 |
-| Long text | 7.0 | 8.4 | 7 | 9 | 8.7 | 8.8 |
-| Reduced Motion / Transparency | 7.0 | 9.2 | 6 | 9.3 | 8.0 | 8.7 |
-| Palette / minimalism | 7.0 | 9.3 | 7 | 9 | 9.0 | 9.1 |
+| Visual hierarchy | 7.5 | 8.2 | 7 | 8 | 8.5 | 8.9 |
+| Spacing/grid | 7.0 | 8.6 | 7 | 8 | 8.3 | 8.8 |
+| Typography scale | 8.5 | 8.5 | 8 | 8.5 | 8.2 | 8.8 |
+| Dynamic Type | 7.5 | 8.8 | 7 | 8 | 8.6 | 8.8 |
+| Light contrast | 7.0 | 9 | 7 | 8.5 | 8.4 | 8.9 |
+| Dark contrast | 6.5 | 9 | 6.5 | 8.5 | 8.0 | 8.9 |
+| Iconography | 8.0 | 8.8 | 8 | 8.5 | 8.6 | 8.8 |
+| Safe area / Dynamic Island | 8.0 | 9 | 8 | 8.5 | 8.8 | 8.9 |
+| Scroll/pull-down / last row | 4.0 | 9.1 | 4 | 8.5 | 8.4 | 8.9 |
+| List rows | 6.5 | 8.6 | 6.5 | 8.5 | 7.8 | 8.9 |
+| Empty states | 7.0 | 8.3 | 7.5 | 8 | 8.8 | 8.9 |
+| Composer ergonomics | 6.0 | 8.8 | 6 | 8.5 | 8.6 | 8.7 |
+| Keyboard handling | 7.0 | 8.6 | 7.5 | 7.5 | 8.5 | 8.8 |
+| Sheet presentation/detents | 7.0 | 8.9 | 6 | 8.5 | 8.5 | 8.7 |
+| Navigation clarity | 7.5 | 8.6 | 7 | 8.5 | 8.7 | 8.9 |
+| Touch targets | 4.5 | 9.1 | 4.5 | 8.5 | 8.4 | 9.1 |
+| Haptics | 7.0 | 7 | 7 | 7 | 7.5 | 7.8 |
+| Animation/transitions | 6.5 | 8 | 6.5 | 7.5 | 7.6 | 8.2 |
+| Loading states | 7.5 | 7.8 | 7 | 7.5 | 8.5 | 8.7 |
+| Error states | 7.5 | 8.7 | 7 | 8.5 | 7.6 | 8.7 |
+| VoiceOver/labels | 7.5 | 8 | 7.5 | 8 | 8.2 | 8.6 |
+| iOS HIG consistency | 7.5 | 8.6 | 7 | 8 | 8.1 | 8.8 |
+| Lock Screen / Live Activity | 6.0 | 8.1 | 6 | 8 | 7.8 | 8.1 |
+| Sign-in/onboarding | 6.5 | 8 | 6.5 | 8 | 8.0 | 8.8 |
+| Settings/account | 7.0 | 8.7 | 6 | 8 | 8.1 | 8.7 |
+| Performance feel | 6.5 | 7.5 | 6.5 | 7.5 | 7.6 | 7.9 |
+| Delight | 6.5 | 7.8 | 6.5 | 7.5 | 7.8 | 8.1 |
+| Long text | 7.0 | 9 | 7 | 8.5 | 8.7 | 8.8 |
+| Reduced Motion / Transparency | 7.0 | 8.8 | 6 | 8.5 | 8.0 | 8.7 |
+| Palette / minimalism | 7.0 | 9 | 7 | 8.5 | 9.0 | 9.1 |
 
 These columns use each grader’s actual first and latest completed round; Opus did not review rounds1–2 or6. No missing score is inferred. Full histories and machine-readable aggregates are under `rounds/`.
 
@@ -78,7 +78,7 @@ Task histories and exact commits are in `tasks/`, `decisions.md` and Git history
 
 ## Remaining limits and next step
 
-Independent round7 Sol/high and Astra/high reviews are running against the exact corrected source. Run Opus5.5/medium only if both score>=8.5; use the authorized Cursor Opus5.5 route if Claude API tokens run out. Final stop requires all3>=9 with no category<7 and real regression gates passing.31% of the current weekly Codex window was used at the latest snapshot; [usage](rounds/7/usage.json). No three-round plateau or usage stop is established.
+Independent round7 Sol/high and Astra/high reviews validate at8.50/8.13. Opus5.5/medium is skipped because Astra<8.5; the authorized Cursor fallback remains available only if API tokens run out on an eligible round. Final stop requires all3>=9 with no category<7 and real regression gates passing.31% of the current weekly Codex window was used at the latest snapshot; [usage](rounds/7/usage.json). No three-round plateau or usage stop is established.
 
 True locked-device geometry/wallpapers, physical haptics, spoken VoiceOver, AX1–AX5, live authentication/AutoFill and hardware frame pacing remain unobserved. Actual normal and combined Reduce Motion/Transparency/Contrast keyboard cases pass only the tested default/XXXL matrix. Five-sample simulator Debug metrics establish a host/XCTest baseline: launch mean0.979656s, scroll protocol4.860044s and scrolling signpost duration2.343825s. They prove neither hardware feel nor improvement.
 
