@@ -1,12 +1,16 @@
 {
   "sourceBeforeNewCaptureHarness": "49b11da",
-  "expectedTestsAfterCaptureHarness": 322,
+  "expectedTestsAfterCaptureHarness": 324,
   "baseline317Required": true,
   "focusedFirst": {
     "passed": 2,
     "failed": 0
   },
-  "focusedLayoutCombined": "running",
+  "focusedLayoutCombined": {
+    "passed": 7,
+    "failed": 1,
+    "reason": "User scroll leaves activefield69.67<116 navigation edge"
+  },
   "fullSuite": "not started",
   "manualCapture": "stopped on stale prior-owner claim; no forced takeover",
   "nativeCaptureFallback": "Project XCTest canonical board/composer/account/signin sweep plus existing stress/Activity checks; protected keyboard frames partial",
@@ -19,5 +23,17 @@
     "Close only own session/panel, keep simulator booted",
     "Merge passing branch into hillclimb/ui and regrade independently"
   ],
-  "scoreGate": "not met; no round8 scores"
+  "scoreGate": "not met; no round8 scores",
+  "focusSettlingRecheck": {
+    "passed": 3,
+    "failed": 0,
+    "newCaptureMethodsNotExecuted": 2,
+    "discovery": "Build binary contains methods; fresh unfiltered enumeration lists them. Require explicit execution count before capture claim.",
+    "passingMethods": [
+      "combined emptyfirstfocus/refocus",
+      "normal emptyfirstfocus/refocus",
+      "existing keyboard user scroll matrix"
+    ]
+  },
+  "nativeActivityCapture": "New project XCTest captures actual system light/dark and text-size settings, with restoration; unrun pending compile"
 }

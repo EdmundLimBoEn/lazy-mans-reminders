@@ -144,3 +144,11 @@ Written by gpt-6.1-sol in Codex on behalf of Edmund
 Email-first hierarchy and secondary provider block are provisional, not visually accepted. Native spinner is a non-sizing regular overlay; focus scrolling targets the active field group; existing instruction prefixes gain semibold emphasis. Existing source-order assertions are updated for the deliberate composition change while target/contrast requirements remain. Two Debug builds pass; new runtime tests/full suite remain unrun. Device open fails DEVICE_IN_USE for the previous U owner, and prescribed status recovery is unsupported. Stop manual UI and request only exact owner-session release; never close another session. Preserve the failure in tasks/login-focus-polish/device-ownership-error.json.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+## Round8 runtime checks and native capture fallback
+
+Retain the7pass/1failure focused layout run: an active field could settle at69.67pt above the116pt navigation edge after a real form scroll. Fix source with measured viewport/group bounds and correction only after scrolling settles out of bounds; keep interactive dismissal and existing assertions. The subsequent exact three focus methods pass, including the former failure and normal/combined firstfocus/refocus.
+
+The same invocation omitted two requested new capture methods; do not count them. Binary symbol inspection and fresh test enumeration list them. Explicit capture method execution counts are required before acceptance. Add canonical core screenshots and Activity system-surface captures through projectXCTest, since manual driver remains stopped on a stale claim despite owner close attempts. System appearance uses public XCUIDevice.appearance; text-size changes go through Settings UI and restore original slider value, with assertions. Initial new capture build had Float/CGFloat slider-argument errors, corrected with explicit conversions; retain failed build evidence. No new capture run has passed yet.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund
