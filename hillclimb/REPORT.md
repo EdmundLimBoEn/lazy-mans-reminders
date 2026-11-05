@@ -183,3 +183,9 @@ Round 6 Codex density audits validate at **8.83 / 8.92**. Account guidance/actio
 Account R demonstrates larger section gaps and quieter readable guidance; board T places status before its aligned hint and saves16pt. Their dedicated native checks pass, but full suites retain failures. **Neither candidate app change is merged.** Evidence and frozen source patches are retained for review/recheck. R passed308/310; T passed308/312, with no skips. No new scores or final acceptance are claimed.
 
 The circle target’s43.99999999999994pt representation is handled by a1e-9pt test comparison allowance; that test-only correction still requires runtime validation. Other timeouts/terminations remain unresolved. Serialized rechecks follow the current sign-in suite, and the login’s overall composition remains the visual priority.
+
+## Login grouping alone is not accepted
+
+S’s field grouping preserves all words and native controls, but the matched default login changes only modestly. The large Sign In title still competes with Notepad, and control treatments remain inconsistent. The latest awake run passed309/310, with one strict email-target frame assertion failing; earlier sleep/runner failures remain explicit. Evidence is retained, app changes are unmerged.
+
+[Matched enabled-style default](tasks/signin-density/after-complete/light-default-enabled-default.png) · [Full handback](tasks/signin-density/README.md). A dedicated overall-composition refinement and one combined serial validation of R/T/S follow before acceptance or new grading.
