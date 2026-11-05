@@ -1,0 +1,16 @@
+[
+  {
+    "action": "First full scheme",
+    "result": "Interrupted exit75 during non-Settings AccountChrome test after both Settings methods had completed or timed out",
+    "reason": "Incorrect 120/180 allowances selected by agent; timeout observed, not a product failure or passing run",
+    "evidence": "attempt-short-process.json",
+    "correction": "Restore requested 240/300 allowances, same frozen sources/binaries. No test assertions changed."
+  },
+  {
+    "action": "Manual restoration Increase Contrast",
+    "error": "Ref @e27 was minted from a superseded snapshot generation",
+    "advice": "re-run snapshot -i",
+    "followup": "Fresh snapshot then press @e27 --settle succeeded; checked -> unchecked",
+    "evidence": "manual-operations.jsonl"
+  }
+]

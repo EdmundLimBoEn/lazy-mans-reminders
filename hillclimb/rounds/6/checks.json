@@ -1,10 +1,11 @@
 {
-  "sourceSHA": "6333a32734fffab457e100777f3515de831effae",
-  "assignedProductionSHA": "d0a198506096e30b2d0176e4723a7779c998ae71",
-  "testRevision": "6333a32734fffab457e100777f3515de831effae",
-  "validationRevision": "Evidence commit; git log -- hillclimb/validation/round6",
-  "generatedUTC": "2026-11-05T03:45:27.724843+00:00",
-  "requiredProgrammaticGatesPassed": false,
+  "source_sha": "b846a9155dd4b1dd773482f6cc4169a73441ba25",
+  "sourceSHA": "b846a9155dd4b1dd773482f6cc4169a73441ba25",
+  "testRevision": "b846a9155dd4b1dd773482f6cc4169a73441ba25",
+  "historicalCaptureSHA": "6333a32734fffab457e100777f3515de831effae",
+  "historicalChecks": "../finalchecks.json in parent b89b43c; failure files unchanged",
+  "requiredProgrammaticGatesPassed": true,
+  "scoreGatePassed": false,
   "checks": [
     {
       "name": "Frozen production and tests",
@@ -12,14 +13,18 @@
       "status": "passed",
       "evidence": "freeze.json",
       "productionFiles": 54,
-      "productionSwiftFiles": 45
+      "productionSwiftFiles": 45,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Owned pinned manual capture command manifests",
       "required": true,
       "status": "passed",
       "evidence": "pinned-command-audit.json",
-      "recordedCommands": 2370
+      "recordedCommands": 2370,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Unfiltered complete scheme and named baseline retention",
@@ -31,60 +36,78 @@
       "ui": 44,
       "retained": 304,
       "failed": 0,
-      "skipped": 0
+      "skipped": 0,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "final-focused-settings per-method all4 restoration",
       "required": true,
       "status": "passed",
       "evidence": "final-focused-settings-restoration-proof.json",
-      "methods": 2
+      "methods": 2,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "combined per-method all4 restoration",
       "required": true,
       "status": "passed",
       "evidence": "combined-restoration-proof.json",
-      "methods": 3
+      "methods": 3,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "build-debug-final",
       "required": true,
       "status": "passed",
-      "evidence": "build-debug-final-process.json"
+      "evidence": "build-debug-final-process.json",
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "build-release",
       "required": true,
       "status": "passed",
-      "evidence": "build-release-process.json"
+      "evidence": "build-release-process.json",
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "build-debug-restore",
       "required": true,
       "status": "passed",
-      "evidence": "build-debug-restore-process.json"
+      "evidence": "build-debug-restore-process.json",
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "python-ios",
       "required": true,
       "status": "passed",
       "evidence": "python-ios.json",
-      "passedCount": 23
+      "passedCount": 23,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "deno",
       "required": true,
       "status": "passed",
       "evidence": "deno.json",
-      "passedCount": 52
+      "passedCount": 52,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "deno-overflow",
       "required": true,
       "status": "passed",
       "evidence": "deno-overflow.json",
-      "passedCount": 4
+      "passedCount": 4,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Exact tested and installed Debug artifact identity",
@@ -92,13 +115,17 @@
       "status": "passed",
       "evidence": "installed-identity.json",
       "testedArtifacts": 9,
-      "installedFiles": 8
+      "installedFiles": 8,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Config and package pins unchanged",
       "required": true,
       "status": "passed",
-      "evidence": "setup.json"
+      "evidence": "setup.json",
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Public launch and seeded scroll actual samples valid",
@@ -107,7 +134,9 @@
       "evidence": "performance-results.json",
       "samplesPerMetric": 5,
       "speedThreshold": false,
-      "framePacingObserved": false
+      "framePacingObserved": false,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Native matrix image hashes dimensions and families",
@@ -135,7 +164,9 @@
         "signin-chrome-manual": 24,
         "signin-enabled": 28,
         "signin-legal-pan": 1
-      }
+      },
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "normal-keyboard-geometry",
@@ -143,7 +174,9 @@
       "status": "passed",
       "evidence": "normal-keyboard-geometry.json",
       "cases": 8,
-      "minimumClearance": 116
+      "minimumClearance": 116,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "manual-keyboard-geometry",
@@ -151,21 +184,27 @@
       "status": "passed",
       "evidence": "manual-keyboard-geometry.json",
       "cases": 8,
-      "minimumClearance": 116
+      "minimumClearance": 116,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Native board edge raster-results",
       "required": true,
       "status": "passed",
       "evidence": "../../rounds/6/edge/raster-results.json",
-      "cases": 60
+      "cases": 60,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Native board edge ax-results",
       "required": true,
       "status": "passed",
       "evidence": "../../rounds/6/edge/ax-results.json",
-      "cases": 60
+      "cases": 60,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Native Account title paragraphs and scaled Done",
@@ -174,14 +213,18 @@
       "evidence": "account-native-gates.json",
       "paragraphChecks": 8,
       "paragraphInkChecks": 16,
-      "minimumDoneDimension": 44.2
+      "minimumDoneDimension": 44.2,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Native populated password and enabled launch-bottom assertions",
       "required": true,
       "status": "passed",
       "evidence": "signin-native-gates.json",
-      "scope": "Launch-bottom fixture is distinct from required real-gesture footer coverage"
+      "scope": "Launch-bottom fixture is distinct from required real-gesture footer coverage",
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Native Activity visible counts ink and footer bounds",
@@ -189,7 +232,9 @@
       "status": "passed",
       "evidence": "activity-native-gates.json",
       "basicVisibleSurfaces": 8,
-      "longVisibleSurfaces": 4
+      "longVisibleSurfaces": 4,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Native motion recordings and unmodified Activity2s frames",
@@ -197,7 +242,9 @@
       "status": "passed",
       "evidence": "video-artifacts.json",
       "videos": 9,
-      "encodedFPSIsDisplayFPS": false
+      "encodedFPSIsDisplayFPS": false,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Original17 reference hashes and explicit appearance pairings",
@@ -205,7 +252,9 @@
       "status": "passed",
       "evidence": "reference-integrity.json",
       "references": 17,
-      "exactSemanticReferenceGaps": true
+      "exactSemanticReferenceGaps": true,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "All matrix and video contact sheets inspected",
@@ -213,18 +262,22 @@
       "status": "passed",
       "evidence": "inspection.json",
       "matrixSheets": 51,
-      "videoSheets": 3
+      "videoSheets": 3,
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Original17 handback restored booted and panel closed",
       "required": true,
       "status": "passed",
-      "evidence": "handback.json"
+      "evidence": "handback.json",
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Enabled-inert legal footer real-gesture matrix",
-      "required": true,
-      "status": "failed",
+      "required": false,
+      "status": "contract_invalid",
       "evidence": "parent-findings.md",
       "completedVisibleCase": "lightdefault",
       "failedCase": "lightXXXL",
@@ -232,19 +285,68 @@
         "darkdefault",
         "darkXXXL"
       ],
-      "cause": "App-versus-input-harness unresolved; stopped after advised follow-up and second selector failure"
+      "cause": "App-versus-input-harness unresolved; stopped after advised follow-up and second selector failure",
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "disposition": "Historical failure retained unchanged; enabled appearance root intentionally noninteractive. Parent diagnosis. Required ordinary actual-gesture gate replaces this contract.",
+      "recheckEvidence": "recheck/README.md"
     },
     {
       "name": "Fresh reviewer score final gate",
       "required": false,
       "status": "informational_not_met",
-      "evidence": "Parent commissions fresh reviews after actual validation; no scores produced here"
+      "evidence": "Parent commissions fresh reviews after actual validation; no scores produced here",
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
     },
     {
       "name": "Physical device haptics spoken VoiceOver true Lock Screen frame pacing",
       "required": false,
       "status": "informational_unobserved",
-      "evidence": "Simulator scope; not a blanket programmatic blocker"
+      "evidence": "Simulator scope; not a blanket programmatic blocker",
+      "historicalEvidenceSourceSHA": "6333a32734fffab457e100777f3515de831effae",
+      "reuse": "Historical evidence retained; production54 byte-equivalent. Current full-suite assertions independently rerun where applicable."
+    },
+    {
+      "name": "Current unfiltered 308 scheme retains all 307 named IDs",
+      "required": true,
+      "status": "passed",
+      "evidence": "recheck/test-acceptance.json"
+    },
+    {
+      "name": "REQUIRED ordinary fixture actual gesture light dark default XXXL",
+      "required": true,
+      "status": "passed",
+      "evidence": "recheck/gesture-native-gates.json"
+    },
+    {
+      "name": "Current all3 Settings methods restore all4 values at teardown",
+      "required": true,
+      "status": "passed",
+      "evidence": "recheck/combined-restoration-proof.json"
+    },
+    {
+      "name": "Fresh unsigned Debug exact frozen test source",
+      "required": true,
+      "status": "passed",
+      "evidence": "recheck/tested-artifacts.json"
+    },
+    {
+      "name": "Fresh public simulator five-sample metrics",
+      "required": true,
+      "status": "passed",
+      "evidence": "recheck/performance-results.json"
+    },
+    {
+      "name": "New unretouched native gesture originals inspected",
+      "required": true,
+      "status": "passed",
+      "evidence": "recheck/inspection.json"
+    },
+    {
+      "name": "Current scoped runtime diagnostics",
+      "required": true,
+      "status": "passed",
+      "evidence": "recheck/combined-runtime-summary.json"
     }
   ]
 }
