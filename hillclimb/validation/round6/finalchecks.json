@@ -1,0 +1,250 @@
+{
+  "sourceSHA": "6333a32734fffab457e100777f3515de831effae",
+  "assignedProductionSHA": "d0a198506096e30b2d0176e4723a7779c998ae71",
+  "testRevision": "6333a32734fffab457e100777f3515de831effae",
+  "validationRevision": "Evidence commit; git log -- hillclimb/validation/round6",
+  "generatedUTC": "2026-11-05T03:45:27.724843+00:00",
+  "requiredProgrammaticGatesPassed": false,
+  "checks": [
+    {
+      "name": "Frozen production and tests",
+      "required": true,
+      "status": "passed",
+      "evidence": "freeze.json",
+      "productionFiles": 54,
+      "productionSwiftFiles": 45
+    },
+    {
+      "name": "Owned pinned manual capture command manifests",
+      "required": true,
+      "status": "passed",
+      "evidence": "pinned-command-audit.json",
+      "recordedCommands": 2370
+    },
+    {
+      "name": "Unfiltered complete scheme and named baseline retention",
+      "required": true,
+      "status": "passed",
+      "evidence": "test-acceptance.json",
+      "total": 307,
+      "unit": 263,
+      "ui": 44,
+      "retained": 304,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "final-focused-settings per-method all4 restoration",
+      "required": true,
+      "status": "passed",
+      "evidence": "final-focused-settings-restoration-proof.json",
+      "methods": 2
+    },
+    {
+      "name": "combined per-method all4 restoration",
+      "required": true,
+      "status": "passed",
+      "evidence": "combined-restoration-proof.json",
+      "methods": 3
+    },
+    {
+      "name": "build-debug-final",
+      "required": true,
+      "status": "passed",
+      "evidence": "build-debug-final-process.json"
+    },
+    {
+      "name": "build-release",
+      "required": true,
+      "status": "passed",
+      "evidence": "build-release-process.json"
+    },
+    {
+      "name": "build-debug-restore",
+      "required": true,
+      "status": "passed",
+      "evidence": "build-debug-restore-process.json"
+    },
+    {
+      "name": "python-ios",
+      "required": true,
+      "status": "passed",
+      "evidence": "python-ios.json",
+      "passedCount": 23
+    },
+    {
+      "name": "deno",
+      "required": true,
+      "status": "passed",
+      "evidence": "deno.json",
+      "passedCount": 52
+    },
+    {
+      "name": "deno-overflow",
+      "required": true,
+      "status": "passed",
+      "evidence": "deno-overflow.json",
+      "passedCount": 4
+    },
+    {
+      "name": "Exact tested and installed Debug artifact identity",
+      "required": true,
+      "status": "passed",
+      "evidence": "installed-identity.json",
+      "testedArtifacts": 9,
+      "installedFiles": 8
+    },
+    {
+      "name": "Config and package pins unchanged",
+      "required": true,
+      "status": "passed",
+      "evidence": "setup.json"
+    },
+    {
+      "name": "Public launch and seeded scroll actual samples valid",
+      "required": true,
+      "status": "passed",
+      "evidence": "performance-results.json",
+      "samplesPerMetric": 5,
+      "speedThreshold": false,
+      "framePacingObserved": false
+    },
+    {
+      "name": "Native matrix image hashes dimensions and families",
+      "required": true,
+      "status": "passed",
+      "evidence": "../../rounds/6/inventory.json",
+      "count": 537,
+      "countMeaning": "Native image count includes repeated loading samples and app/full-screen attachments; it is not a count of distinct UI states",
+      "families": {
+        "accessibility": 42,
+        "core": 18,
+        "account-enabled": 84,
+        "activity": 12,
+        "activity-long": 6,
+        "board": 48,
+        "combined-keyboards": 8,
+        "edge": 60,
+        "extras": 76,
+        "keyboards": 8,
+        "motion": 4,
+        "new-AccountChromeUITests": 36,
+        "new-BoardCapacityPresentationUITests": 16,
+        "new-SignInChromeUITests": 60,
+        "settings": 6,
+        "signin-chrome-manual": 24,
+        "signin-enabled": 28,
+        "signin-legal-pan": 1
+      }
+    },
+    {
+      "name": "normal-keyboard-geometry",
+      "required": true,
+      "status": "passed",
+      "evidence": "normal-keyboard-geometry.json",
+      "cases": 8,
+      "minimumClearance": 116
+    },
+    {
+      "name": "manual-keyboard-geometry",
+      "required": true,
+      "status": "passed",
+      "evidence": "manual-keyboard-geometry.json",
+      "cases": 8,
+      "minimumClearance": 116
+    },
+    {
+      "name": "Native board edge raster-results",
+      "required": true,
+      "status": "passed",
+      "evidence": "../../rounds/6/edge/raster-results.json",
+      "cases": 60
+    },
+    {
+      "name": "Native board edge ax-results",
+      "required": true,
+      "status": "passed",
+      "evidence": "../../rounds/6/edge/ax-results.json",
+      "cases": 60
+    },
+    {
+      "name": "Native Account title paragraphs and scaled Done",
+      "required": true,
+      "status": "passed",
+      "evidence": "account-native-gates.json",
+      "paragraphChecks": 8,
+      "paragraphInkChecks": 16,
+      "minimumDoneDimension": 44.2
+    },
+    {
+      "name": "Native populated password and enabled launch-bottom assertions",
+      "required": true,
+      "status": "passed",
+      "evidence": "signin-native-gates.json",
+      "scope": "Launch-bottom fixture is distinct from required real-gesture footer coverage"
+    },
+    {
+      "name": "Native Activity visible counts ink and footer bounds",
+      "required": true,
+      "status": "passed",
+      "evidence": "activity-native-gates.json",
+      "basicVisibleSurfaces": 8,
+      "longVisibleSurfaces": 4
+    },
+    {
+      "name": "Native motion recordings and unmodified Activity2s frames",
+      "required": true,
+      "status": "passed",
+      "evidence": "video-artifacts.json",
+      "videos": 9,
+      "encodedFPSIsDisplayFPS": false
+    },
+    {
+      "name": "Original17 reference hashes and explicit appearance pairings",
+      "required": true,
+      "status": "passed",
+      "evidence": "reference-integrity.json",
+      "references": 17,
+      "exactSemanticReferenceGaps": true
+    },
+    {
+      "name": "All matrix and video contact sheets inspected",
+      "required": true,
+      "status": "passed",
+      "evidence": "inspection.json",
+      "matrixSheets": 51,
+      "videoSheets": 3
+    },
+    {
+      "name": "Original17 handback restored booted and panel closed",
+      "required": true,
+      "status": "passed",
+      "evidence": "handback.json"
+    },
+    {
+      "name": "Enabled-inert legal footer real-gesture matrix",
+      "required": true,
+      "status": "failed",
+      "evidence": "parent-findings.md",
+      "completedVisibleCase": "lightdefault",
+      "failedCase": "lightXXXL",
+      "unattempted": [
+        "darkdefault",
+        "darkXXXL"
+      ],
+      "cause": "App-versus-input-harness unresolved; stopped after advised follow-up and second selector failure"
+    },
+    {
+      "name": "Fresh reviewer score final gate",
+      "required": false,
+      "status": "informational_not_met",
+      "evidence": "Parent commissions fresh reviews after actual validation; no scores produced here"
+    },
+    {
+      "name": "Physical device haptics spoken VoiceOver true Lock Screen frame pacing",
+      "required": false,
+      "status": "informational_unobserved",
+      "evidence": "Simulator scope; not a blanket programmatic blocker"
+    }
+  ]
+}

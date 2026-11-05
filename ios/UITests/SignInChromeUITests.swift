@@ -31,6 +31,10 @@ final class SignInChromeUITests: XCTestCase {
             if !restoring && page == "Motion" {
                 originals["Auto-Play Message Effects"] = try XCTUnwrap(settings.switches["Auto-Play Message Effects"].value as? String) == "1"
             }
+            let beforeValues = settings.switches.allElementsBoundByIndex.map { "\($0.label)=\($0.value ?? "nil")" }.joined(separator: "\n")
+            let beforeProof = XCTAttachment(string: "page=\(page) stage=\(restoring ? "before-restore" : "original")\n" + beforeValues)
+            beforeProof.name = "settings-values-\(page)-\(restoring ? "before-restore" : "original")"
+            beforeProof.lifetime = .keepAlways; add(beforeProof)
             for label in labels {
                 let toggle = settings.switches[label]
                 XCTAssertTrue(toggle.waitForExistence(timeout: 5))
@@ -46,6 +50,10 @@ final class SignInChromeUITests: XCTestCase {
                 if (effects.value as? String == "1") != desired { effects.switches.firstMatch.tap() }
                 XCTAssertEqual(effects.value as? String, desired ? "1" : "0")
             }
+            let afterValues = settings.switches.allElementsBoundByIndex.map { "\($0.label)=\($0.value ?? "nil")" }.joined(separator: "\n")
+            let afterProof = XCTAttachment(string: "page=\(page) stage=\(restoring ? "restored" : "enabled")\n" + afterValues)
+            afterProof.name = "settings-values-\(page)-\(restoring ? "restored" : "enabled")"
+            afterProof.lifetime = .keepAlways; add(afterProof)
             let proof = XCTAttachment(string: "originals=\(originals) restoring=\(restoring)\n" + settings.debugDescription)
             proof.name = "chrome-settings-\(page)-\(restoring ? "restored" : "enabled")"
             proof.lifetime = .keepAlways; add(proof)
