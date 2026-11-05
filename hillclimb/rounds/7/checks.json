@@ -221,8 +221,8 @@
     {
       "name": "Parent/user visual review",
       "required": false,
-      "status": "pending",
-      "proof": "Informational; pending actual review, scores remain parent-owned; review is required before any parent app merge"
+      "status": "passed",
+      "proof": "../../validation/round7/PARENT-REVIEW.md; parent acceptance for independent grading only"
     },
     {
       "name": "Exact frozen source committed",
@@ -233,12 +233,13 @@
     {
       "name": "Evidence worktree clean after evidence commit",
       "required": true,
-      "status": "pending",
-      "proof": "../../validation/round7/source-binding.json"
+      "status": "passed",
+      "proof": "../../validation/round7/source-binding.json",
+      "verifiedEvidenceCommit": "d449b72bb0c854b8dec6dae5571a1c00b2f1ec9d"
     }
   ],
   "allExecutedImplementationAndNativeGatesPassed": true,
-  "allRequiredChecksPassed": false,
+  "allRequiredChecksPassed": true,
   "fullSuite": {
     "passed": 317,
     "unit": 263,
