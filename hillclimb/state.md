@@ -197,3 +197,5 @@ Next isolated combined validation owns original17: expected **304 existing tests
 ## Edmund’s next-pass priority: crowding
 
 Edmund’s direct visual feedback: “looks croweded as fuck”; explicitly requests checking it on the next pass. Treat perceived crowding as a priority even where numerical contrast/geometry checks pass. Start with the recently displayed Account guidance and sign-in form, then inspect board/composer density. Evaluate breathing room, text-block density, section rhythm, competing controls and default/XXXL viewports against Apple references. Preserve every word, branding, type scaling and reachability; do not solve crowding by shrinking text, hiding guidance or adding nested cards. Current round 6 validation remains in progress; use its fresh evidence for a focused density pass before deciding the next design tasks.
+
+Claude reviewer routing: use the existing Opus 5.5/medium API route while available, conservatively. Edmund authorizes Cursor Opus 5.5/medium if API tokens run out. The same-round both-Codex >=8.5 eligibility rule and final all-three >=9/minimum7 rule remain unchanged. No Claude reviewer is currently active.
