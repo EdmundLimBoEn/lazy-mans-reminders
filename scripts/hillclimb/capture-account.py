@@ -1,4 +1,4 @@
-import pathlib, subprocess, json, hashlib, time, sys, argparse
+import pathlib, subprocess, json, hashlib, time, sys, argparse, re
 parser=argparse.ArgumentParser();parser.add_argument("--command",required=True);parser.add_argument("--out",required=True,type=pathlib.Path);parser.add_argument("mode",choices=["normal","detents","guidance","errors"]);a=parser.parse_args()
 root=pathlib.Path(__file__).resolve().parents[2]
 out=a.out.resolve();out.mkdir(parents=True,exist_ok=True)
@@ -12,6 +12,18 @@ def op(*args):
     manifestpath.write_text(json.dumps(manifest,indent=2))
     if p.returncode: raise RuntimeError(p.stdout+p.stderr)
     return p.stdout
+def refresh_visible_row():
+    op('scroll','top','--settle')
+    for _ in range(12):
+        snapshot=op('snapshot','-i')
+        refs=re.findall(r'^(@e\d+(?:~s\d+)?) \[[^]]+\] "Refresh Board Now"',snapshot,re.M)
+        for ref in refs:
+            attrs=json.loads(op('get','attrs',ref))
+            if attrs.get('hittable'):
+                op('press',ref,'--settle')
+                return
+        op('scroll','down','0.15','--settle')
+    raise RuntimeError('Refresh Board Now not hittable after bounded settled scrolling')
 def open_fixture(style,size,state=None):
     op('settings','appearance',style)
     op('settings','text-size','large' if size=='default' else 'extra-extra-extra-large')
@@ -67,17 +79,13 @@ elif a.mode=='errors':
                 if (out/'screens'/f'{prefix}-medium-lower.png').exists(): continue
                 print(open_fixture(style,size,state),flush=True)
                 shot(prefix+'-initial')
-                op('scroll','top','--settle')
-                op('scroll','down','--until','label="Refresh Board Now"','--settle')
-                op('press','label="Refresh Board Now"','--settle')
+                refresh_visible_row()
                 shot(prefix+'-recovered')
                 op('press','label="Refresh Board Now"','--settle')
                 shot(prefix+'-reappeared')
                 op('gesture','pan','201','69','0','377','700')
                 shot(prefix+'-medium-reappeared')
-                op('scroll','top','--settle')
-                op('scroll','down','--until','label="Refresh Board Now"','--settle')
-                op('press','label="Refresh Board Now"','--settle')
+                refresh_visible_row()
                 shot(prefix+'-medium-recovered')
                 op('scroll','bottom','--settle')
                 shot(prefix+'-medium-lower')
