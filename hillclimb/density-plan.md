@@ -13,3 +13,5 @@ Do not shrink Dynamic Type, remove copy, add nested cards or manufacture contras
 Independent reviewer findings may reject or refine these candidates. Claude review remains eligibility-gated and should be used conservatively; no new Claude call is needed while the Codex density audit is still in progress.
 
 Written by gpt-6.1-sol in Codex on behalf of Edmund
+
+Latest clarification: Edmund means the **login** when he says the home screen looks ugly. Make its default-size composition the first visual review target. Grouping measurements are necessary support, not sufficient acceptance; assess title/brand hierarchy and control surface consistency in matched enabled-style light/dark originals. Preserve all copy and native provider branding.
