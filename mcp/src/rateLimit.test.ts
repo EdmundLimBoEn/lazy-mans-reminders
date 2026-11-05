@@ -3,6 +3,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { enforceRateLimit, rateLimitBucket } from './rateLimit'
+import { handleWorkerFetch } from './index'
 
 describe('rateLimitBucket', () => {
   it.each(['/mcp', '/mcp/', '/mcp/anything', '/mcp/nested/path/', '/mcpx', '/mcpx/anything', '/mcp%2Fx'])('covers the MCP prefix %s', (path) => {
@@ -26,6 +27,22 @@ describe('rateLimitBucket', () => {
 })
 
 describe('enforceRateLimit', () => {
+  it.each([429, 503])('returns %s before initializing OAuth storage', async (status) => {
+    // Rejected requests must not require OAuth bindings or reach the provider.
+    const env = (status === 429
+      ? { MCP_RATE_LIMIT: { limit: async () => ({ success: false }) } }
+      : {}) as unknown as Env
+    const response = await handleWorkerFetch(
+      new Request('https://lmr-mcp.edmundlim.systems/mcp', { method: 'POST' }),
+      env,
+      {} as ExecutionContext,
+    )
+    expect(response.status).toBe(status)
+    expect(await response.json()).toEqual({
+      error: status === 429 ? 'rate_limited' : 'server_misconfigured',
+    })
+  })
+
   it.each(['/mcp/anything', '/mcp/nested/path/', '/mcpx', '/mcpx/anything', '/mcp%2Fx'])('limits bogus tokens on %s', async (path) => {
     const keys: string[] = []
     const response = await enforceRateLimit(
