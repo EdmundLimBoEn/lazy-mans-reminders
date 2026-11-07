@@ -57,7 +57,7 @@ jobs:
         working-directory: ios
         run: |
           cp Config.example.xcconfig Config.xcconfig
-          xcodegen generate --spec project.yml
+          ../scripts/ios-generate-project.sh
       - name: Run persistence unit tests
         env:
           RESULT_BUNDLE_PATH: ${{ runner.temp }}/ios-tests.xcresult

@@ -14,7 +14,7 @@ for runtime, devices in inventory['devices'].items():
 sys.exit('Requested device unavailable')
 PY
 cd "$root"
-xcodegen generate --spec ios/project.yml
+"$root/scripts/ios-generate-project.sh"
 xcodebuild test -project ios/LazyMansReminders.xcodeproj -scheme LazyMansReminders \
   -configuration Debug -destination "platform=iOS Simulator,id=$HILLCLIMB_UDID" \
   -test-timeouts-enabled YES -default-test-execution-time-allowance 120 -maximum-test-execution-time-allowance 180 \

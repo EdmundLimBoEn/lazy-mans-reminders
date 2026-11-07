@@ -110,7 +110,7 @@ jobs:
 
       - name: Generate Xcode project
         working-directory: ios
-        run: xcodegen generate --spec project.yml
+        run: ../scripts/ios-generate-project.sh
 
       - name: Import Apple Distribution certificate
         uses: apple-actions/import-codesign-certs@77ba2a2a8f5cfc8c405ebf3159f767c323e238f9 # v7
