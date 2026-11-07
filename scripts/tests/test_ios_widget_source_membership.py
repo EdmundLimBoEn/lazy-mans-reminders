@@ -1,4 +1,3 @@
-"""Reject widget/app source lists that omit shared session credential files."""
 import importlib.util
 import subprocess
 import sys

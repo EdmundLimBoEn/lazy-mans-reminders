@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""Check that app and widget XcodeGen sources compile the shared session files."""
 
 from __future__ import annotations
 

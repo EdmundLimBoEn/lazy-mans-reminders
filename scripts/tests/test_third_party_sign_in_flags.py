@@ -1,4 +1,3 @@
-"""Third-party sign-in flag scan must survive tracked binary archive plists."""
 import importlib.util
 import plistlib
 import subprocess

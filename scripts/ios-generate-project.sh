@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# Generate LazyMansReminders.xcodeproj from ios/project.yml and check
-# that app and widget Compile Sources include the shared session files.
-# Requires ios/Config.xcconfig. Device and simulator builds both use this project.
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$root/ios"
