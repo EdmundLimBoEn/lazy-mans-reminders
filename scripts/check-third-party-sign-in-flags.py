@@ -12,6 +12,7 @@ turn a flag on for a device build without tripping CI.
 
 from __future__ import annotations
 
+import plistlib
 import re
 import subprocess
 import sys
@@ -137,6 +138,18 @@ def check_yaml(relpath: str, text: str) -> list[str]:
     return hits
 
 
+def read_source(path: Path) -> str | None:
+    raw = path.read_bytes()
+    try:
+        return raw.decode("utf-8")
+    except UnicodeDecodeError:
+        try:
+            parsed = plistlib.loads(raw)
+        except Exception:
+            return None
+        return plistlib.dumps(parsed, fmt=plistlib.FMT_XML).decode("utf-8")
+
+
 def check_file(relpath: str, text: str) -> list[str]:
     suffix = Path(relpath).suffix.lower()
     name = Path(relpath).name
@@ -157,8 +170,11 @@ def main() -> int:
         path = root / relpath
         if not path.is_file():
             continue
+        text = read_source(path)
+        if text is None:
+            continue
         scanned += 1
-        hits.extend(check_file(relpath, path.read_text(encoding="utf-8")))
+        hits.extend(check_file(relpath, text))
 
     if hits:
         print(

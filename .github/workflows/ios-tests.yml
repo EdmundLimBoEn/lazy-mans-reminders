@@ -33,6 +33,9 @@ jobs:
       - name: Fail if Grok or ChatGPT sign-in would ship enabled
         run: python3 scripts/check-third-party-sign-in-flags.py
 
+      - name: Check app and widget shared session sources
+        run: python3 scripts/check-ios-target-membership.py
+
   test:
     name: Simulator unit tests
     needs: sign-in-flags
@@ -67,7 +70,7 @@ jobs:
         run: |
           set -euo pipefail
           cp Config.example.xcconfig Config.xcconfig
-          xcodegen generate --spec project.yml
+          ../scripts/ios-generate-project.sh
 
       - name: Build Release app and embedded widget for devices
         run: ./scripts/ios-release-build.sh

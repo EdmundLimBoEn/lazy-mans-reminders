@@ -74,7 +74,7 @@ jobs:
       - run: |
           export PATH="$(pg_config --bindir):$PATH"
           python3 -B -m unittest discover -s scripts/tests -v
-      - run: bash -n scripts/check-ios-toolchain.sh scripts/ios-release-build.sh scripts/ios-simulator-unit-tests.sh
+      - run: bash -n scripts/check-ios-toolchain.sh scripts/ios-release-build.sh scripts/ios-simulator-unit-tests.sh scripts/ios-generate-project.sh
 
   routines:
     name: Routine database and push tests
