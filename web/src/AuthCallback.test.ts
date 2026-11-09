@@ -3,7 +3,6 @@ import type { ReactElement, ReactNode } from 'react'
 import { AuthCallback } from './AuthCallback'
 import { rememberReturnTo, RETURN_TO_KEY } from './mcp'
 
-// Keep hook state across renders and replay the effect as StrictMode does.
 const hooks = vi.hoisted(() => ({
   states: [] as unknown[], cursor: 0,
   effect: undefined as undefined | (() => void | (() => void)),
@@ -72,6 +71,14 @@ beforeEach(() => {
   })
 })
 afterEach(() => vi.unstubAllGlobals())
+
+it('shows an exchange rejection instead of the splash', async () => {
+  auth.exchangeCodeForSession.mockRejectedValue(
+    new DOMException('The quota has been exceeded.', 'QuotaExceededError'),
+  )
+  callback('/auth/callback?code=account-b')
+  await vi.waitFor(() => expectError('The quota has been exceeded.', '/'))
+})
 
 it.each([
   ['/', 'Sign-in code expired', 'Sign-in code expired'],
