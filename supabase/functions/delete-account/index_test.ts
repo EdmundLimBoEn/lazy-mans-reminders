@@ -15,6 +15,7 @@ import {
   type DeleteAccountDeps,
   type DeleteAccountUser,
   handleDeleteAccount,
+  MAX_DELETION_BODY_BYTES,
 } from "./handler.ts";
 
 const TEST_P256_PKCS8 = `-----BEGIN PRIVATE KEY-----
@@ -105,7 +106,7 @@ function form(body: string): Record<string, string> {
 async function runDelete(input: {
   user: DeleteAccountUser | null;
   body?: unknown;
-  rawBody?: string;
+  rawBody?: BodyInit;
   env?: Record<string, string | undefined>;
   token?: Response | ((body: string) => Response);
   revoke?: Response | ((body: string) => Response);
@@ -707,4 +708,24 @@ Deno.test("intentionally empty native deletion requests remain supported", async
     await assertDeleted(result, googleUser.id);
     assertEquals(result.grantCleanupCalls, 1);
   }
+});
+
+Deno.test("a deletion JSON body exactly at the byte limit still deletes", async () => {
+  const padding = "a".repeat(MAX_DELETION_BODY_BYTES - '{"padding":""}'.length);
+  const rawBody = JSON.stringify({ padding });
+  assertEquals(new TextEncoder().encode(rawBody).length, MAX_DELETION_BODY_BYTES);
+  const result = await runDelete({ user: googleUser, rawBody });
+  await assertDeleted(result, googleUser.id);
+});
+
+Deno.test("oversized deletion JSON is rejected before grant cleanup", async () => {
+  const padding = "a".repeat(MAX_DELETION_BODY_BYTES);
+  const result = await runDelete({
+    user: googleUser,
+    rawBody: JSON.stringify({ padding }),
+  });
+  assertEquals(result.response.status, 400);
+  assertEquals(await result.response.text(), "Invalid deletion request body");
+  assertEquals(result.grantCleanupCalls, 0);
+  assertEquals(result.deletedUserId, null);
 });
