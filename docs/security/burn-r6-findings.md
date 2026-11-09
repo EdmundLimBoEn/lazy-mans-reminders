@@ -28,7 +28,7 @@ User tables `reminders`, `device_tokens`, and `lock_screen_prefs` still have def
 
 ## `delete-account` CORS `*`
 
-`supabase/functions/delete-account/handler.ts` sends `Access-Control-Allow-Origin: *`. `verify_jwt` is true and the handler still requires a Bearer user JWT. Tightening to the web origins would need an edge-function redeploy and a check that iOS sends `Origin`. Not changed here.
+`supabase/functions/delete-account/handler.ts` sends `Access-Control-Allow-Origin: *` and does not set `Access-Control-Allow-Credentials`. `verify_jwt` is true and the handler still requires a Bearer user JWT, so a foreign origin cannot use the user’s cookies. Tightening to the web origins would still need an edge-function redeploy and a check that iOS sends `Origin`. Not changed here.
 
 ## `send-reminder-push` still buffers JSON after the webhook secret
 
@@ -65,6 +65,12 @@ The handoff page builds `lazymansreminders://auth/callback` from the current `wi
 ## Official GitHub Actions stay floating
 
 `actions/checkout@v4` and `actions/setup-node@v4` are unpinned. Third-party actions in this repo are SHA-pinned. Same residual as #79. Not redone.
+
+## TestFlight installs unpinned `asc` and Homebrew `xcodegen` next to signing secrets
+
+`.github/workflows/ios-testflight.yml` puts `ASC_PRIVATE_KEY_B64` and the distribution `.p12` password in the **job** environment. `rudrankriyam/setup-asc` is SHA-pinned, but the step does not pass `version` or `sha`, so the action downloads `rudrankriyam/App-Store-Connect-CLI` `releases/latest` and checks it against that release’s own checksum. `brew install xcodegen` in the same job is also unpinned.
+
+`ASC_NO_UPDATE=1` only stops the binary from self-updating after install. A new or compromised `latest` release would still see the API key and the cert. Pinning which `asc` version (and whether to checksum a Homebrew bottle) is a deploy-time choice for the signing job. Not changed here. The other iOS workflows install `xcodegen` the same way but do not hold those secrets.
 
 ## Dev-only npm advisories
 
