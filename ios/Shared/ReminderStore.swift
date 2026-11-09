@@ -44,6 +44,7 @@ actor ReminderStore {
     private var isReordering = false
     private var contentRevision = 0
     private var refreshSequence = 0
+    private var acceptedRefreshSequence = 0
     private let requestData: (URLRequest) async throws -> (Data, URLResponse)
 
     init(
@@ -246,8 +247,8 @@ actor ReminderStore {
 
         let reminders = try ReminderJSON.decoder.decode([Reminder].self, from: responseData)
         try requireCurrentIdentity(session, revision: identityRevision)
-        // An acknowledged mutation or a newer refresh makes this snapshot obsolete.
-        if revision != contentRevision || sequence != refreshSequence || isReordering { return cached() }
+        // Only an acknowledged mutation or a newer accepted refresh makes this snapshot obsolete.
+        if revision != contentRevision || sequence < acceptedRefreshSequence || isReordering { return cached() }
         // Widget fetches cannot use process-local revisions to guard the app's cache.
         if updateCache {
             try cache(reminders)
@@ -258,6 +259,7 @@ actor ReminderStore {
             )
             defaults.set(try ReminderJSON.encoder.encode(snapshot), forKey: widgetSnapshotKey)
         }
+        acceptedRefreshSequence = sequence
         return reminders
     }
 
