@@ -165,6 +165,31 @@ it.each(['empty', 'error', 'populated'] as const)('gates the empty routine copy 
   expect(view.alert).toBe(outcome === 'error' ? 'offline' : undefined)
 })
 
+it('shows the empty routine copy after a failed load recovers', async () => {
+  hooks.states = []
+  db.from.mockReturnValue({
+    select: () => ({
+      eq: () => ({
+        order: async () => ({ data: null, error: { message: 'offline' } }),
+      }),
+    }),
+  })
+  await hooks.load!()
+  expect(render().tree.some(node => node.props.children === 'No routines yet.')).toBe(false)
+  expect(render().alert).toBe('offline')
+  db.from.mockReturnValue({
+    select: () => ({
+      eq: () => ({
+        order: async () => ({ data: [], error: null }),
+      }),
+    }),
+  })
+  await hooks.load!()
+  const view = render()
+  expect(view.alert).toBeUndefined()
+  expect(view.tree.some(node => node.props.children === 'No routines yet.')).toBe(true)
+})
+
 it.each(['insert', 'update'] as const)('uses the selected timezone for weekly %s start dates', async (operation) => {
   vi.useFakeTimers()
   vi.setSystemTime(new Date('2026-10-26T01:00:00Z'))

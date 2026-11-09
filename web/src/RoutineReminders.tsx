@@ -46,7 +46,10 @@ export function RoutineReminders({ userId }: { userId: string }) {
         .eq('user_id', userId).order('created_at')
       if (generation !== readGeneration.current) return
       if (error) setError(error.message)
-      else setRoutines(data ?? [])
+      else {
+        setError('')
+        setRoutines(data ?? [])
+      }
       setLoading(false)
     } catch (error) {
       if (generation === readGeneration.current) throw error
