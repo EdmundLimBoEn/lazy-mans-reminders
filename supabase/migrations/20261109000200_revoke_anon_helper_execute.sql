@@ -8,7 +8,6 @@ revoke execute on function public.next_routine_run(date, time, text, integer, ti
 revoke execute on function public.prepare_routine_schedule() from public, anon;
 revoke execute on function public.set_completed_at() from public, anon;
 revoke execute on function public.set_updated_at() from public, anon;
-revoke execute on function public.track_live_activity_start() from public, anon;
 grant execute on function public.delete_old_completed_reminders() to authenticated, service_role;
 grant execute on function public.next_routine_run(date, time, text, integer, timestamptz)
   to authenticated, service_role;

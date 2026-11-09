@@ -19,7 +19,5 @@ do $$ begin
     'anon', 'public.prepare_routine_schedule()', 'execute');
   assert not has_function_privilege('anon', 'public.set_completed_at()', 'execute');
   assert not has_function_privilege('anon', 'public.set_updated_at()', 'execute');
-  assert not has_function_privilege(
-    'anon', 'public.track_live_activity_start()', 'execute');
 end $$;
 rollback;
