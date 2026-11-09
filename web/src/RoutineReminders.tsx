@@ -220,14 +220,16 @@ export function RoutineReminders({ userId }: { userId: string }) {
         {editingId && <Button type="button" variant="outline" onClick={reset} disabled={busy}>Cancel edit</Button>}</div>
     </form>
     {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-    {loading ? <p role="status" className="text-sm">Loading routines…</p> : routines.length === 0 ? <p className="text-sm text-muted-foreground">No routines yet.</p> :
-      <ul className="grid gap-3" aria-label="Routine reminders">{routineRows.map(({ routine, content }) => <li key={routine.id} className="grid gap-2 rounded-lg border p-4">
+    {loading ? <p role="status" className="text-sm">Loading routines…</p>
+      : routines.length > 0 ? <ul className="grid gap-3" aria-label="Routine reminders">{routineRows.map(({ routine, content }) => <li key={routine.id} className="grid gap-2 rounded-lg border p-4">
         {content}
         <div className="flex flex-wrap gap-2">
           <Button size="sm" variant="outline" disabled={busy} onClick={() => edit(routine)}>Edit</Button>
           <Button size="sm" variant="outline" disabled={busy} onClick={() => void change(routine, false)}>{routine.enabled ? 'Pause' : 'Resume'}</Button>
           <Button size="sm" variant="ghost" disabled={busy} onClick={() => void change(routine, true)}>Delete routine</Button>
         </div>
-      </li>)}</ul>}
+      </li>)}</ul>
+      : error ? null
+      : <p className="text-sm text-muted-foreground">No routines yet.</p>}
   </section>
 }

@@ -145,6 +145,26 @@ it('reuses saved routine content while typing and refreshes it when routine data
   }
 })
 
+it.each(['empty', 'error', 'populated'] as const)('gates the empty routine copy on a %s first load', async outcome => {
+  hooks.states = []
+  db.from.mockReturnValue({
+    select: () => ({
+      eq: () => ({
+        order: async () => outcome === 'error'
+          ? { data: null, error: { message: 'offline' } }
+          : { data: outcome === 'populated' ? [routine] : [], error: null },
+      }),
+    }),
+  })
+  expect(render().tree.some(node => node.props.children === 'No routines yet.')).toBe(false)
+  expect(render().tree.some(node => node.props.children === 'Loading routines…')).toBe(true)
+  await hooks.load!()
+  const view = render()
+  expect(view.tree.some(node => node.props.children === 'Loading routines…')).toBe(false)
+  expect(view.tree.some(node => node.props.children === 'No routines yet.')).toBe(outcome === 'empty')
+  expect(view.alert).toBe(outcome === 'error' ? 'offline' : undefined)
+})
+
 it.each(['insert', 'update'] as const)('uses the selected timezone for weekly %s start dates', async (operation) => {
   vi.useFakeTimers()
   vi.setSystemTime(new Date('2026-10-26T01:00:00Z'))
