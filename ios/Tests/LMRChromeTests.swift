@@ -68,4 +68,9 @@ final class LMRChromeTests: XCTestCase {
         XCTAssertTrue(SignInEmail.isPlausible("you@example.com"))
         XCTAssertTrue(SignInEmail.isPlausible("  you@example.com  "))
     }
+
+    func testComposerKeyboardDismissStaysVisibleWhileTyping() {
+        XCTAssertFalse(ComposerKeyboardDismiss.isVisible(focused: false))
+        XCTAssertTrue(ComposerKeyboardDismiss.isVisible(focused: true))
+    }
 }

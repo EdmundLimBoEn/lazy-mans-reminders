@@ -47,3 +47,9 @@ enum SignInEmail {
         return !parts[0].isEmpty && !parts[1].isEmpty
     }
 }
+
+enum ComposerKeyboardDismiss {
+    static func isVisible(focused: Bool) -> Bool {
+        focused
+    }
+}
