@@ -42,30 +42,40 @@ export function AuthCallback({ onNavigate }: { onNavigate: (path: string) => voi
     }
 
     void (async () => {
-      const code = pkceCodeFromCallbackUrl(href)
-      const flowId = pkceFlowIdFromCallbackUrl(href)
+      try {
+        const code = pkceCodeFromCallbackUrl(href)
+        const flowId = pkceFlowIdFromCallbackUrl(href)
 
-      if (!code) {
-        setError('Missing sign-in code. Start sign-in again from the board or connect link.')
-        setRetryHref(returnTo)
-        return
-      }
+        if (!code) {
+          setError('Missing sign-in code. Start sign-in again from the board or connect link.')
+          setRetryHref(returnTo)
+          return
+        }
 
-      const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(
-        code,
-        flowId ? { flowId } : undefined,
-      )
-      if (exchangeError) {
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(
+          code,
+          flowId ? { flowId } : undefined,
+        )
+        if (exchangeError) {
+          setError(
+            isFlowStateError(exchangeError.message)
+              ? `${exchangeError.message} Start sign-in again so this callback gets a fresh verification code.`
+              : exchangeError.message,
+          )
+          setRetryHref(returnTo)
+          return
+        }
+        // Full navigation keeps /connect?state=…; client navigate() would drop the query.
+        window.location.replace(returnTo)
+      } catch (caught) {
+        if (!(caught instanceof Error)) return
         setError(
-          isFlowStateError(exchangeError.message)
-            ? `${exchangeError.message} Start sign-in again so this callback gets a fresh verification code.`
-            : exchangeError.message,
+          isFlowStateError(caught.message)
+            ? `${caught.message} Start sign-in again so this callback gets a fresh verification code.`
+            : caught.message,
         )
         setRetryHref(returnTo)
-        return
       }
-      // Full navigation keeps /connect?state=…; client navigate() would drop the query.
-      window.location.replace(returnTo)
     })()
   }, [])
 

@@ -46,7 +46,7 @@ function usePathname(): [AppRoute, (path: string) => void] {
   return [path, navigate]
 }
 
-function SignIn({
+export function SignIn({
   onNavigate,
   connectingAgent = false,
 }: {
@@ -66,15 +66,20 @@ function SignIn({
     setLoading(true)
     setError('')
     rememberReturnTo()
-    const { error: authError } = await supabase.auth.signInWithOtp({
-      email: normalizedEmail,
-      options: { emailRedirectTo: authCallbackUrl() },
-    })
-    setLoading(false)
-    if (authError) setError(authError.message)
-    else {
-      setEmail(normalizedEmail)
-      setSent(true)
+    try {
+      const { error: authError } = await supabase.auth.signInWithOtp({
+        email: normalizedEmail,
+        options: { emailRedirectTo: authCallbackUrl() },
+      })
+      if (authError) setError(authError.message)
+      else {
+        setEmail(normalizedEmail)
+        setSent(true)
+      }
+    } catch (caught) {
+      if (caught instanceof Error) setError(caught.message)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -82,18 +87,21 @@ function SignIn({
     setOauthLoading(provider)
     setError('')
     rememberReturnTo()
-    const { error: authError } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: authCallbackUrl(),
-        queryParams: provider === 'google'
-          ? { prompt: 'select_account', access_type: 'online' }
-          : undefined,
-        scopes: provider === 'apple' ? 'name email' : undefined,
-      },
-    })
-    if (authError) {
-      setError(authError.message)
+    try {
+      const { error: authError } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: authCallbackUrl(),
+          queryParams: provider === 'google'
+            ? { prompt: 'select_account', access_type: 'online' }
+            : undefined,
+          scopes: provider === 'apple' ? 'name email' : undefined,
+        },
+      })
+      if (authError) setError(authError.message)
+    } catch (caught) {
+      if (caught instanceof Error) setError(caught.message)
+    } finally {
       setOauthLoading(null)
     }
   }

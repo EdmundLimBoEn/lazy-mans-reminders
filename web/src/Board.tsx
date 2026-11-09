@@ -385,36 +385,41 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
     const expectedUserId = confirmDelete
     setDeletingAccount(true)
     setError('')
-    const { data: current, error: sessionError } = await supabase.auth.getSession()
-    if (sessionError || current.session?.user.id !== expectedUserId) {
-      setError('Your signed-in account changed. Please reopen account deletion and try again.')
+    try {
+      const { data: current, error: sessionError } = await supabase.auth.getSession()
+      if (sessionError || current.session?.user.id !== expectedUserId) {
+        setError('Your signed-in account changed. Please reopen account deletion and try again.')
+        setConfirmDelete(null)
+        setDeletingAccount(false)
+        return
+      }
+      const { data, error: invokeError } = await supabase.functions.invoke('delete-account', {
+        method: 'POST',
+        body: { expectedUserId },
+      })
+      // Another tab may have replaced the account while deletion was pending.
+      const { data: latest, error: latestSessionError } = await supabase.auth.getSession()
+      if (latestSessionError || latest.session?.user.id !== expectedUserId) {
+        setConfirmDelete(null)
+        setDeletingAccount(false)
+        return
+      }
+      if (invokeError || data?.ok !== true) {
+        setError(
+          invokeError?.message
+            ?? 'Could not delete your account. Stay signed in and try again, or email support from the Support page.',
+        )
+        setDeletingAccount(false)
+        return
+      }
+      onAccountDeleted(data?.appleRevocation === 'manual_required')
+      await supabase.auth.signOut({ scope: 'local' })
       setConfirmDelete(null)
       setDeletingAccount(false)
-      return
-    }
-    const { data, error: invokeError } = await supabase.functions.invoke('delete-account', {
-      method: 'POST',
-      body: { expectedUserId },
-    })
-    // Another tab may have replaced the account while deletion was pending.
-    const { data: latest, error: latestSessionError } = await supabase.auth.getSession()
-    if (latestSessionError || latest.session?.user.id !== expectedUserId) {
-      setConfirmDelete(null)
+    } catch {
+      setError('Could not delete your account. Stay signed in and try again, or email support from the Support page.')
       setDeletingAccount(false)
-      return
     }
-    if (invokeError || data?.ok !== true) {
-      setError(
-        invokeError?.message
-          ?? 'Could not delete your account. Stay signed in and try again, or email support from the Support page.',
-      )
-      setDeletingAccount(false)
-      return
-    }
-    onAccountDeleted(data?.appleRevocation === 'manual_required')
-    await supabase.auth.signOut({ scope: 'local' })
-    setConfirmDelete(null)
-    setDeletingAccount(false)
   }
 
   return (
