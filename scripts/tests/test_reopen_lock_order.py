@@ -42,11 +42,11 @@ class ReopenLockOrderTests(unittest.TestCase):
                      '202608060002_create_device_tokens.sql', '202608080002_lock_screen_prefs.sql',
                      '202608260001_agent_tokens.sql',
                      '202610120001_routine_reminders.sql', '202610220001_routine_ownership_and_overflow.sql',
-                     '202610220003_reminder_quotas.sql', '202610280002_reminder_quota_capacity.sql',
-                     '202610280002_preserve_pending_routine_firings.sql',
-                     '202610280002_reopen_reminder_lock_order.sql',
+                     '202610220003_reminder_quotas.sql', '202610280006_reminder_quota_capacity.sql',
+                     '202610280005_preserve_pending_routine_firings.sql',
+                     '202610280009_reopen_reminder_lock_order.sql',
                      '20261101000300_reopen_reminder_noop.sql',
-                     '202610280001_write_budgets.sql',
+                     '202610280002_write_budgets.sql',
                      '20261101000100_agent_token_revocation_budget.sql',
                      '20261109000100_scheduler_reminder_nowait.sql'):
             source = (ROOT / 'supabase/migrations' / name).read_text()
