@@ -20,6 +20,8 @@ Supabase default privileges grant `EXECUTE` / `ALL` to `anon` as a **role** gran
 
 Production still has `anon=X` on `delete_old_completed_reminders`, `next_routine_run`, `prepare_routine_schedule`, `set_completed_at`, `set_updated_at`, `track_live_activity_start`, and `ALL` on `agent_token_clients`. Those functions are `SECURITY INVOKER`; RLS on `reminders` would still deny anon DML. The token view is `security_invoker` over a revoked table, so unauthenticated `SELECT` already fails. That is defense in depth, not a live hash leak.
 
+`track_live_activity_start` is created in `202609080001_live_activity_refresh`, which the focused CI migration list does not load (vault / pg_net / cron). A revoke for it would fail that job, so it stays a production leftover until a full `db push` includes a `REVOKE … FROM public, anon` that runs after that migration.
+
 Follow-up repo migrations revoke those leftovers from `public, anon`. They do nothing in production until `supabase db push`. Later unapplied migrations that only `REVOKE FROM PUBLIC` would not have cleared `anon` by themselves.
 
 User tables `reminders`, `device_tokens`, and `lock_screen_prefs` still have default `ALL` for `anon`. Policies are `TO authenticated` plus FORCE RLS, so anon DML is denied. Revoking table grants would change PostgREST from an RLS denial to a permission error. Left as-is.
