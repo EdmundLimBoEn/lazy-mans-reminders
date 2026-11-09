@@ -13,7 +13,7 @@ describe('iosHandoffFromLocation', () => {
     })
   })
 
-  it('keeps extra query params and the hash fragment', () => {
+  it('forwards only the names the app callback accepts', () => {
     const result = iosHandoffFromLocation(
       'https://lmr.sillyapps.co/auth/ios?code=abc&type=magiclink#sb=',
     )
@@ -21,6 +21,28 @@ describe('iosHandoffFromLocation', () => {
       status: 'open',
       href: `${IOS_APP_CALLBACK}?code=abc&type=magiclink#sb=`,
     })
+  })
+
+  it('does not copy implicit tokens onto the app callback', () => {
+    expect(
+      iosHandoffFromLocation(
+        'https://lmr.sillyapps.co/auth/ios?code=abc&access_token=stolen#refresh_token=stolen',
+      ),
+    ).toEqual({
+      status: 'open',
+      href: `${IOS_APP_CALLBACK}?code=abc`,
+    })
+    expect(
+      iosHandoffFromLocation(
+        'https://lmr.sillyapps.co/auth/ios#access_token=stolen&refresh_token=stolen&expires_in=3600&token_type=bearer',
+      ),
+    ).toEqual({ status: 'empty' })
+  })
+
+  it('does not open the app when an allowed name is duplicated', () => {
+    expect(
+      iosHandoffFromLocation('https://lmr.sillyapps.co/auth/ios?code=one#code=two'),
+    ).toEqual({ status: 'empty' })
   })
 
   it('surfaces GoTrue error_description instead of opening the app', () => {
