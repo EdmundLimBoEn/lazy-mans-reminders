@@ -82,7 +82,10 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         didReceiveRemoteNotification userInfo: [AnyHashable: Any],
         fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
     ) {
-        SilentPushRefresh.start(completion: completionHandler)
+        SilentPushRefresh.start(
+            waitForSession: { await AuthManager.shared.waitForRestoration() },
+            completion: completionHandler
+        )
     }
 
     func userNotificationCenter(
@@ -91,6 +94,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
     ) async -> UNNotificationPresentationOptions {
         Task {
             do {
+                await AuthManager.shared.waitForRestoration()
                 let refreshed = try await ReminderStore.shared.refresh()
                 await ReminderBoardSync.apply(refreshed)
             } catch {
@@ -105,6 +109,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         didReceive response: UNNotificationResponse
     ) async {
         do {
+            await AuthManager.shared.waitForRestoration()
             let refreshed = try await ReminderStore.shared.refresh()
             await ReminderBoardSync.apply(refreshed)
         } catch {

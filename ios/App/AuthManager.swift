@@ -420,25 +420,44 @@ final class AuthManager: ObservableObject {
 
     private func shareSession(clearWhenSignedOut: Bool = false) async {
         guard !isEndingSession else { return }
-        guard let session else {
+        guard var shared = session else {
             guard clearWhenSignedOut else { return }
             pushRegistration.bind(userID: nil)
             await ReminderStore.shared.clearUserData()
             await ReminderBoardSync.clear()
             return
         }
+        let incoming = SharedSession(
+            accessToken: shared.accessToken,
+            expiresAt: Date(timeIntervalSince1970: shared.expiresAt),
+            refreshToken: shared.refreshToken,
+            userID: shared.user.id
+        )
+        if let stored = await ReminderStore.shared.freshSession(for: shared.user.id),
+           stored.refreshToken != incoming.refreshToken,
+           !incoming.isFresh(),
+           let refreshToken = stored.refreshToken {
+            _ = try? await client.auth.setSession(
+                accessToken: stored.accessToken, refreshToken: refreshToken
+            )
+            if let adopted = client.auth.currentSession {
+                shared = adopted
+                session = adopted
+            }
+        }
+        let published = shared
         do {
             try await authSessionGate.shareIdentity(
                 previousUserID: await ReminderStore.shared.storedUserID(),
-                nextUserID: session.user.id,
+                nextUserID: published.user.id,
                 clearUserData: { await ReminderStore.shared.clearUserData() },
                 clearBoard: { await ReminderBoardSync.clear() },
                 share: {
                     try await ReminderStore.shared.saveSession(
-                        accessToken: session.accessToken,
-                        refreshToken: session.refreshToken,
-                        expiresAt: Date(timeIntervalSince1970: session.expiresAt),
-                        userID: session.user.id
+                        accessToken: published.accessToken,
+                        refreshToken: published.refreshToken,
+                        expiresAt: Date(timeIntervalSince1970: published.expiresAt),
+                        userID: published.user.id
                     )
                 },
                 didShare: { self.isSharedSessionReady = true }
@@ -447,7 +466,7 @@ final class AuthManager: ObservableObject {
             // Keep the board gated when shared credentials could not be persisted.
             return
         }
-        pushRegistration.bind(userID: session.user.id)
+        pushRegistration.bind(userID: published.user.id)
         await pushRegistration.flush()
         await syncLockScreenPrefsWhileLocked()
     }
