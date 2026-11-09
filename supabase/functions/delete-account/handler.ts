@@ -32,8 +32,35 @@ export type DeleteAccountDeps = {
   deleteAuthUser: (userId: string) => Promise<{ error: unknown }>;
 };
 
+export const MAX_DELETION_BODY_BYTES = 16 * 1024;
+
 function jsonHeaders(): Record<string, string> {
   return corsHeaders;
+}
+
+async function readLimitedText(
+  request: Request,
+  maxBytes: number,
+): Promise<string | null> {
+  const reader = request.body?.getReader();
+  if (!reader) return "";
+  const bytes = new Uint8Array(maxBytes);
+  let length = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (length + value.byteLength > maxBytes) {
+        void reader.cancel().catch(() => {});
+        return null;
+      }
+      bytes.set(value, length);
+      length += value.byteLength;
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  return new TextDecoder().decode(bytes.subarray(0, length));
 }
 
 async function readDeletionBody(
@@ -42,7 +69,8 @@ async function readDeletionBody(
   { appleAuthorizationCode?: string; expectedUserId?: string } | null
 > {
   try {
-    const text = await request.text();
+    const text = await readLimitedText(request, MAX_DELETION_BODY_BYTES);
+    if (text === null) return null;
     // Native clients intentionally send no body when no Apple code is needed.
     if (text === "") return {};
     const body = JSON.parse(text);

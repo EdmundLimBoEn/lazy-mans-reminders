@@ -74,10 +74,12 @@ jobs:
       - run: |
           export PATH="$(pg_config --bindir):$PATH"
           python3 -B -m unittest discover -s scripts/tests -v
+      - run: python3 scripts/check_migration_versions.py
       - run: bash -n scripts/check-ios-toolchain.sh scripts/ios-release-build.sh scripts/ios-simulator-unit-tests.sh
 
   routines:
     name: Routine database and push tests
+    needs: release-scripts
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -133,21 +135,21 @@ jobs:
             supabase/migrations/202610220002_reminder_text_and_token_lock.sql \
             supabase/migrations/202610220003_reminder_quotas.sql \
             supabase/migrations/202610250001_routine_owner_index.sql \
-            supabase/migrations/202610280001_write_budgets.sql \
-            supabase/migrations/202610280002_reminder_quota_capacity.sql \
-            supabase/migrations/202610280002_preserve_pending_routine_firings.sql \
-            supabase/migrations/202610280003_agent_append_order.sql \
+            supabase/migrations/202610280002_write_budgets.sql \
+            supabase/migrations/202610280006_reminder_quota_capacity.sql \
+            supabase/migrations/202610280005_preserve_pending_routine_firings.sql \
+            supabase/migrations/202610280007_agent_append_order.sql \
             supabase/tests/agent_append_order.sql \
             supabase/tests/routine_owner_index.sql \
             supabase/tests/reminder_text_and_token_lock.sql \
             supabase/tests/routine_reminders.sql \
             supabase/tests/reminder_quotas.sql \
             supabase/tests/write_budgets.sql \
-            supabase/migrations/202610280002_budgeted_retention_cleanup.sql \
+            supabase/migrations/202610280003_budgeted_retention_cleanup.sql \
             supabase/tests/budgeted_retention_cleanup.sql \
             supabase/migrations/202610280001_reminder_push_replay.sql \
             supabase/tests/reminder_push_replay.sql \
-            supabase/migrations/202610280002_normalize_legacy_reminder_text.sql \
+            supabase/migrations/202610280004_normalize_legacy_reminder_text.sql \
             supabase/tests/normalize_legacy_reminder_text.sql \
             supabase/migrations/20261101000000_device_token_quota.sql \
             supabase/tests/device_token_quota.sql \
@@ -161,13 +163,20 @@ jobs:
             supabase/migrations/20261101000400_retention_skip_locked.sql \
             supabase/tests/budgeted_retention_cleanup.sql \
             supabase/tests/retention_skip_locked.sql \
+            supabase/migrations/20261109000200_revoke_anon_helper_execute.sql \
+            supabase/tests/anon_helper_execute.sql \
             supabase/tests/write_budgets.sql \
-            supabase/migrations/202610280002_reopen_reminder_lock_order.sql \
+            supabase/migrations/202610280009_reopen_reminder_lock_order.sql \
             supabase/migrations/20261101000300_reopen_reminder_noop.sql \
             supabase/tests/reopen_noop_budget.sql \
             supabase/migrations/20261102000100_live_activity_completion_lock.sql \
             supabase/tests/live_activity_start_lease.sql \
-            supabase/tests/live_activity_completion_lock.sql; do
+            supabase/tests/live_activity_completion_lock.sql \
+            supabase/migrations/20261109000100_scheduler_reminder_nowait.sql \
+            supabase/tests/routine_reminders.sql \
+            supabase/tests/reminder_quotas.sql \
+            supabase/migrations/20261109000300_revoke_anon_agent_token_clients.sql \
+            supabase/tests/agent_token_clients_grants.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
           # Exercise the initial write assertions with a deterministic minute rollover.

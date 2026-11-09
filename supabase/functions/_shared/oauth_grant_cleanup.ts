@@ -1,6 +1,7 @@
 export const DEFAULT_GRANT_CLEANUP_URL =
   "https://np-mcp.sillyapps.co/account/grants/cleanup";
 export const DEFAULT_GRANT_CLEANUP_TIMEOUT_MS = 5_000;
+export const MAX_GRANT_CLEANUP_BODY_BYTES = 16 * 1024;
 
 export type GrantCleanupResult =
   | { ok: true }
@@ -70,6 +71,7 @@ export async function revokeUserOauthGrants(input: {
       reader = response.body?.getReader();
       const decoder = new TextDecoder();
       let text = "";
+      let bytes = 0;
       while (reader) {
         // Ready chunks can starve the timer by keeping execution in microtasks.
         if (expired()) return { ok: false, reason: "unreachable" };
@@ -78,6 +80,11 @@ export async function revokeUserOauthGrants(input: {
           return { ok: false, reason: "unreachable" };
         }
         if (done) break;
+        if (bytes + value.byteLength > MAX_GRANT_CLEANUP_BODY_BYTES) {
+          void reader.cancel().catch(() => {});
+          return { ok: false, reason: "incomplete" };
+        }
+        bytes += value.byteLength;
         text += decoder.decode(value, { stream: true });
       }
       text += decoder.decode();

@@ -39,11 +39,16 @@ class ReopenLockOrderTests(unittest.TestCase):
           create publication supabase_realtime;
         """)
         for name in ('202608060001_create_reminders.sql', '202608080001_completed_at_and_cleanup.sql',
+                     '202608060002_create_device_tokens.sql', '202608080002_lock_screen_prefs.sql',
+                     '202608260001_agent_tokens.sql',
                      '202610120001_routine_reminders.sql', '202610220001_routine_ownership_and_overflow.sql',
-                     '202610220003_reminder_quotas.sql', '202610280002_reminder_quota_capacity.sql',
-                     '202610280002_preserve_pending_routine_firings.sql',
-                     '202610280002_reopen_reminder_lock_order.sql',
-                     '20261101000300_reopen_reminder_noop.sql'):
+                     '202610220003_reminder_quotas.sql', '202610280006_reminder_quota_capacity.sql',
+                     '202610280005_preserve_pending_routine_firings.sql',
+                     '202610280009_reopen_reminder_lock_order.sql',
+                     '20261101000300_reopen_reminder_noop.sql',
+                     '202610280002_write_budgets.sql',
+                     '20261101000100_agent_token_revocation_budget.sql',
+                     '20261109000100_scheduler_reminder_nowait.sql'):
             source = (ROOT / 'supabase/migrations' / name).read_text()
             # This isolated vanilla PostgreSQL cluster has no Supabase cron or crypto extensions.
             source = '\n'.join(line for line in source.splitlines()
@@ -131,6 +136,78 @@ class ReopenLockOrderTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, 'at most 16 active reminders'):
             self.sql(f"set role authenticated; set request.jwt.claim.sub='{OWNER}'; select * from public.reopen_reminder('{OWNER}','{REMINDER}')")
         self.assertEqual(self.sql(f"select is_done from reminders where id='{REMINDER}'"), 't')
+
+    def test_scheduler_skips_concurrent_completion_and_retries(self):
+        blocked_routine = '00000000-0000-0000-0000-000000000022'
+        later_routine = '00000000-0000-0000-0000-000000000023'
+        self.sql(f"""
+          insert into routine_reminders(id,user_id,text,interval_days,start_date,local_time,timezone)
+            values ('{blocked_routine}','{OWNER}','Completing',1,current_date,'09:00','UTC'),
+                   ('{later_routine}','{OWNER}','Later',1,current_date,'09:00','UTC');
+          update routine_reminders set next_run_at = now() - interval '3 minutes' where id='{ROUTINE}';
+          update routine_reminders set next_run_at = now() - interval '2 minutes' where id='{blocked_routine}';
+          update routine_reminders set next_run_at = now() - interval '1 minute' where id='{later_routine}';
+          insert into reminders(user_id,text,routine_id)
+            values ('{OWNER}','Completing','{blocked_routine}');
+          -- Pause the actual batch after A has fired and retained the budget lock.
+          create function public.pause_scheduler_test() returns trigger language plpgsql as $$
+          begin
+            if new.id = '{ROUTINE}' then perform pg_advisory_xact_lock(71001); end if;
+            return null;
+          end $$;
+          create trigger zzz_pause_scheduler_test after update on routine_reminders
+            for each row execute function public.pause_scheduler_test();
+        """)
+        due_before = self.sql(f"select next_run_at from routine_reminders where id='{blocked_routine}'")
+        gate, scheduler, completion = self.process(), self.process(), self.process()
+
+        def wait_for(query, message):
+            deadline = time.monotonic() + 5
+            while self.sql(query) != 't':
+                self.assertLess(time.monotonic(), deadline, message)
+                time.sleep(.02)
+
+        try:
+            gate.stdin.write("select pg_advisory_lock(71001);\n\\echo LOCKED\n")
+            gate.stdin.flush()
+            while gate.stdout.readline().strip() != 'LOCKED':
+                self.assertIsNone(gate.poll())
+            scheduler.stdin.write("set application_name='scheduler-budget-regression'; "
+                                  "select public.fire_due_routines();\n")
+            scheduler.stdin.flush()
+            wait_for("select exists (select 1 from pg_stat_activity where "
+                     "application_name='scheduler-budget-regression' and wait_event='advisory')",
+                     'Scheduler never reached the first firing')
+            completion.stdin.write(f"set application_name='completion-budget-regression'; "
+                                   "set deadlock_timeout='10s'; set role authenticated; "
+                                   f"set request.jwt.claim.sub='{OWNER}'; "
+                                   f"update reminders set is_done=true where routine_id='{blocked_routine}';\n")
+            completion.stdin.flush()
+            wait_for("select exists (select 1 from pg_stat_activity c, pg_stat_activity s where "
+                     "c.application_name='completion-budget-regression' and "
+                     "s.application_name='scheduler-budget-regression' and "
+                     "c.wait_event='transactionid' and s.pid=any(pg_blocking_pids(c.pid)))",
+                     'Completion never held B while waiting for the scheduler budget')
+            gate.communicate('select pg_advisory_unlock(71001);\n', timeout=10)
+            out, err = scheduler.communicate(timeout=10)
+            self.assertEqual(scheduler.returncode, 0, err)
+            # Without NOWAIT the batch warns with SQLSTATE 40P01, or completion aborts.
+            self.assertEqual(err.strip(), '', err)
+            self.assertEqual(out.strip(), '2', 'A and the later routine must fire; B must stay due')
+            out, err = completion.communicate(timeout=10)
+            self.assertEqual(completion.returncode, 0, err)
+            self.assertEqual(self.sql(f"select next_run_at from routine_reminders where id='{blocked_routine}'"), due_before)
+            self.assertEqual(self.sql(f"select is_done and routine_fired_at is null from reminders where routine_id='{blocked_routine}'"), 't')
+            self.assertEqual(self.sql('select public.fire_due_routines()'), '1')
+            self.assertEqual(self.sql(f"select not is_done and completed_at is null and routine_fired_at is not null from reminders where routine_id='{blocked_routine}'"), 't')
+            self.assertEqual(self.sql(f"select next_run_at > now() from routine_reminders where id='{blocked_routine}'"), 't')
+            self.assertEqual(self.sql('select public.fire_due_routines()'), '0')
+        finally:
+            for process in (gate, scheduler, completion):
+                if process.poll() is None:
+                    process.kill()
+                    process.communicate()
+            self.sql('drop trigger zzz_pause_scheduler_test on routine_reminders; drop function public.pause_scheduler_test()')
 
 
 class ReopenFixtureIsolationTests(unittest.TestCase):

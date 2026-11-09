@@ -4,8 +4,6 @@ import type { Session } from '@supabase/supabase-js'
 import App from './App'
 import Board from './Board'
 
-// Follow the component-handler harness used by RoutineReminders.test.ts.
-// Keep separate hook state for App and its account subtree, respecting React keys.
 const hooks = vi.hoisted(() => ({ states: [] as unknown[], cursor: 0 }))
 const db = vi.hoisted(() => ({
   auth: { getSession: vi.fn(), signOut: vi.fn() },
@@ -31,7 +29,7 @@ vi.mock('react', async (original) => ({
   useEffect: () => {},
 }))
 
-type Props = { children?: ReactNode; open?: boolean; onClick?: () => void; session?: Session }
+type Props = { children?: ReactNode; open?: boolean; onClick?: () => void; session?: Session; onOpenChange?: (open: boolean) => void }
 function nodes(node: ReactNode): ReactElement<Props>[] {
   if (Array.isArray(node)) return node.flatMap(nodes)
   if (!node || typeof node !== 'object' || !('props' in node)) return []
@@ -56,6 +54,7 @@ function render(userId: string) {
     click: (label: string) => tree.find(node => node.props.onClick && nodes(node).some(child =>
       child.props.children === label || (Array.isArray(child.props.children) && child.props.children.includes(label)),
     ))!.props.onClick!(),
+    dismiss: () => tree.find(node => typeof node.props.open === 'boolean')!.props.onOpenChange!(false),
     text: tree.map(node => node.props.children).filter(child => typeof child === 'string'),
   }
 }
@@ -73,6 +72,23 @@ it('resets the open deletion confirmation on an account identity change', () => 
   render('A').click('Delete account')
   expect(render('A').open).toBe(true)
   expect(render('B').open).toBe(false)
+})
+
+it('releases deletion busy state when getSession rejects', async () => {
+  db.auth.getSession.mockRejectedValue(
+    new DOMException('The quota has been exceeded.', 'QuotaExceededError'),
+  )
+  render('A').click('Delete account')
+  render('A').click('Delete forever')
+  await vi.waitFor(() => expect(render('A').text).toContain(
+    'Could not delete your account. Stay signed in and try again, or email support from the Support page.',
+  ))
+  expect(db.functions.invoke).not.toHaveBeenCalled()
+  expect(db.auth.signOut).not.toHaveBeenCalled()
+  const view = render('A')
+  expect(view.open).toBe(true)
+  view.dismiss()
+  expect(render('A').open).toBe(false)
 })
 
 it('aborts with a plain message when the session changes before confirmation', async () => {
@@ -116,7 +132,6 @@ it.each([false, true])('completes deletion for the initiating account (manual Ap
   db.functions.invoke.mockResolvedValue({
     data: { ok: true, appleRevocation: manual ? 'manual_required' : 'revoked' }, error: null,
   })
-  // A routine token refresh must not invalidate deletion for the same account.
   db.auth.getSession.mockResolvedValueOnce({ data: { session: session('A') }, error: null })
     .mockResolvedValue({ data: { session: { ...session('A'), access_token: 'refreshed-A' } }, error: null })
   render('A').click('Delete account')

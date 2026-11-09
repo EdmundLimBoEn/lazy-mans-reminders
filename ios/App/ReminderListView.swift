@@ -86,6 +86,7 @@ struct ReminderListView: View {
                     .presentationDragIndicator(.visible)
                     .presentationContentInteraction(.scrolls)
             }
+            .scrollDismissesKeyboard(.interactively)
         }
     }
 
@@ -221,7 +222,7 @@ struct ReminderListView: View {
                 )
                 .onSubmit { Task { await addReminder() } }
 
-                if composerFocused && draft.text.isEmpty {
+                if ComposerKeyboardDismiss.isVisible(focused: composerFocused) {
                     Button { composerFocused = false } label: {
                         Image(systemName: "keyboard.chevron.compact.down")
                             .font(.subheadline)

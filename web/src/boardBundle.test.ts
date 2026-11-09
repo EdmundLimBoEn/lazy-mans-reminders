@@ -3,7 +3,7 @@ import { build } from 'vite'
 import type { OutputChunk } from 'rollup'
 import { expect, it } from 'vitest'
 
-it('keeps board code and drag-and-drop packages behind a dynamic import', async () => {
+it('keeps board, legal, and connect code behind dynamic imports', async () => {
   // Inspect the actual production chunk graph, including transitive static imports.
   const result = await build({
     root: fileURLToPath(new URL('..', import.meta.url)),
@@ -35,6 +35,7 @@ it('keeps board code and drag-and-drop packages behind a dynamic import', async 
     '/node_modules/@dnd-kit/core/', '/node_modules/@dnd-kit/sortable/', '/node_modules/@dnd-kit/utilities/',
     '/src/Board.tsx', '/src/RoutineReminders.tsx', '/src/ConnectedAgents.tsx',
     '/src/components/SortableReminder.tsx', '/src/lib/accountExport.ts',
+    '/src/LegalPages.tsx', '/src/Connect.tsx',
   ]) {
     expect(initialModules.filter(id => id.includes(module)), module).toEqual([])
     expect(allModules.some(id => id.includes(module)), module).toBe(true)

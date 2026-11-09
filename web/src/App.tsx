@@ -13,14 +13,17 @@ import { Splash } from '@/components/Splash'
 import { StatusShell, StatusText } from '@/components/StatusShell'
 import { AuthCallback } from './AuthCallback'
 import { IosAuthHandoff } from './IosAuthHandoff'
-import { Connect } from './Connect'
-import { LegalFooterLinks, PrivacyPage, SupportPage, TermsPage } from './LegalPages'
+import { LegalFooterLinks } from './legalFooter'
 import { authCallbackUrl, rememberReturnTo } from './mcp'
 import { normalizePath, type AppRoute } from './routing'
 import { supabase } from './supabase'
 import { ThemeToggle } from './ThemeToggle'
 
 const Board = lazy(() => import('./Board'))
+const Connect = lazy(() => import('./Connect').then(module => ({ default: module.Connect })))
+const PrivacyPage = lazy(() => import('./LegalPages').then(module => ({ default: module.PrivacyPage })))
+const TermsPage = lazy(() => import('./LegalPages').then(module => ({ default: module.TermsPage })))
+const SupportPage = lazy(() => import('./LegalPages').then(module => ({ default: module.SupportPage })))
 
 function usePathname(): [AppRoute, (path: string) => void] {
   const [path, setPath] = useState<AppRoute>(() => normalizePath(window.location.pathname))
@@ -43,7 +46,7 @@ function usePathname(): [AppRoute, (path: string) => void] {
   return [path, navigate]
 }
 
-function SignIn({
+export function SignIn({
   onNavigate,
   connectingAgent = false,
 }: {
@@ -63,15 +66,20 @@ function SignIn({
     setLoading(true)
     setError('')
     rememberReturnTo()
-    const { error: authError } = await supabase.auth.signInWithOtp({
-      email: normalizedEmail,
-      options: { emailRedirectTo: authCallbackUrl() },
-    })
-    setLoading(false)
-    if (authError) setError(authError.message)
-    else {
-      setEmail(normalizedEmail)
-      setSent(true)
+    try {
+      const { error: authError } = await supabase.auth.signInWithOtp({
+        email: normalizedEmail,
+        options: { emailRedirectTo: authCallbackUrl() },
+      })
+      if (authError) setError(authError.message)
+      else {
+        setEmail(normalizedEmail)
+        setSent(true)
+      }
+    } catch (caught) {
+      if (caught instanceof Error) setError(caught.message)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -79,18 +87,21 @@ function SignIn({
     setOauthLoading(provider)
     setError('')
     rememberReturnTo()
-    const { error: authError } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: authCallbackUrl(),
-        queryParams: provider === 'google'
-          ? { prompt: 'select_account', access_type: 'online' }
-          : undefined,
-        scopes: provider === 'apple' ? 'name email' : undefined,
-      },
-    })
-    if (authError) {
-      setError(authError.message)
+    try {
+      const { error: authError } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: authCallbackUrl(),
+          queryParams: provider === 'google'
+            ? { prompt: 'select_account', access_type: 'online' }
+            : undefined,
+          scopes: provider === 'apple' ? 'name email' : undefined,
+        },
+      })
+      if (authError) setError(authError.message)
+    } catch (caught) {
+      if (caught instanceof Error) setError(caught.message)
+    } finally {
       setOauthLoading(null)
     }
   }
@@ -247,9 +258,9 @@ export default function App() {
 
   if (path === '/auth/callback') return <AuthCallback onNavigate={navigate} />
   if (path === '/auth/ios') return <IosAuthHandoff onNavigate={navigate} />
-  if (path === '/privacy') return <PrivacyPage onNavigate={navigate} />
-  if (path === '/terms') return <TermsPage onNavigate={navigate} />
-  if (path === '/support') return <SupportPage onNavigate={navigate} />
+  if (path === '/privacy') return <Suspense fallback={<Splash label="Loading" />}><PrivacyPage onNavigate={navigate} /></Suspense>
+  if (path === '/terms') return <Suspense fallback={<Splash label="Loading" />}><TermsPage onNavigate={navigate} /></Suspense>
+  if (path === '/support') return <Suspense fallback={<Splash label="Loading" />}><SupportPage onNavigate={navigate} /></Suspense>
   if (path === 'not-found') {
     return (
       <StatusShell title="Page not found" onNavigate={navigate}>
@@ -272,7 +283,11 @@ export default function App() {
   }
   if (path === '/connect') {
     return session
-      ? <Connect key={session.user.id} session={session} onNavigate={navigate} />
+      ? (
+        <Suspense fallback={<Splash label="Loading" />}>
+          <Connect key={session.user.id} session={session} onNavigate={navigate} />
+        </Suspense>
+      )
       : <SignIn onNavigate={navigate} connectingAgent />
   }
 

@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils'
 import { accountExportFilename, buildAccountExport, serializeAccountExport, type AccountExportAgentKey, type AccountExportReminder } from './lib/accountExport'
 import { nextSortOrder, sortReminders, isAtCapacity, effectiveMaximum, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
 import { ConnectedAgents } from './ConnectedAgents'
-import { LegalFooterLinks } from './LegalPages'
+import { LegalFooterLinks } from './legalFooter'
 import { AGENT_TOKEN_PLACEHOLDER, LMR_AGENT_TOKEN_VAR, MCP_URL, claudeMcpConfig, cursorMcpConfig, grokConnectorConfig, lmrAgentTokenHeaderTemplate } from './mcp'
 import { supabase } from './supabase'
 import { RoutineReminders } from './RoutineReminders'
@@ -385,36 +385,41 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
     const expectedUserId = confirmDelete
     setDeletingAccount(true)
     setError('')
-    const { data: current, error: sessionError } = await supabase.auth.getSession()
-    if (sessionError || current.session?.user.id !== expectedUserId) {
-      setError('Your signed-in account changed. Please reopen account deletion and try again.')
+    try {
+      const { data: current, error: sessionError } = await supabase.auth.getSession()
+      if (sessionError || current.session?.user.id !== expectedUserId) {
+        setError('Your signed-in account changed. Please reopen account deletion and try again.')
+        setConfirmDelete(null)
+        setDeletingAccount(false)
+        return
+      }
+      const { data, error: invokeError } = await supabase.functions.invoke('delete-account', {
+        method: 'POST',
+        body: { expectedUserId },
+      })
+      // Another tab may have replaced the account while deletion was pending.
+      const { data: latest, error: latestSessionError } = await supabase.auth.getSession()
+      if (latestSessionError || latest.session?.user.id !== expectedUserId) {
+        setConfirmDelete(null)
+        setDeletingAccount(false)
+        return
+      }
+      if (invokeError || data?.ok !== true) {
+        setError(
+          invokeError?.message
+            ?? 'Could not delete your account. Stay signed in and try again, or email support from the Support page.',
+        )
+        setDeletingAccount(false)
+        return
+      }
+      onAccountDeleted(data?.appleRevocation === 'manual_required')
+      await supabase.auth.signOut({ scope: 'local' })
       setConfirmDelete(null)
       setDeletingAccount(false)
-      return
-    }
-    const { data, error: invokeError } = await supabase.functions.invoke('delete-account', {
-      method: 'POST',
-      body: { expectedUserId },
-    })
-    // Another tab may have replaced the account while deletion was pending.
-    const { data: latest, error: latestSessionError } = await supabase.auth.getSession()
-    if (latestSessionError || latest.session?.user.id !== expectedUserId) {
-      setConfirmDelete(null)
+    } catch {
+      setError('Could not delete your account. Stay signed in and try again, or email support from the Support page.')
       setDeletingAccount(false)
-      return
     }
-    if (invokeError || data?.ok !== true) {
-      setError(
-        invokeError?.message
-          ?? 'Could not delete your account. Stay signed in and try again, or email support from the Support page.',
-      )
-      setDeletingAccount(false)
-      return
-    }
-    onAccountDeleted(data?.appleRevocation === 'manual_required')
-    await supabase.auth.signOut({ scope: 'local' })
-    setConfirmDelete(null)
-    setDeletingAccount(false)
   }
 
   return (
@@ -476,6 +481,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
               </Button>
             </Alert>
           )}
+          {(loading || sorted.length > 0 || !error) && (
           <div className="rounded-lg border">
             {loading ? (
               <div className="empty px-4 py-12 text-center text-sm text-muted-foreground" role="status">Loading your board…</div>
@@ -568,6 +574,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
               </DndContext>
             )}
           </div>
+          )}
         </section>
 
         <RoutineReminders userId={session.user.id} />

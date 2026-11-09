@@ -137,6 +137,13 @@ def check_yaml(relpath: str, text: str) -> list[str]:
     return hits
 
 
+def read_utf8_text(path: Path) -> str | None:
+    try:
+        return path.read_bytes().decode("utf-8")
+    except UnicodeDecodeError:
+        return None
+
+
 def check_file(relpath: str, text: str) -> list[str]:
     suffix = Path(relpath).suffix.lower()
     name = Path(relpath).name
@@ -157,8 +164,11 @@ def main() -> int:
         path = root / relpath
         if not path.is_file():
             continue
+        text = read_utf8_text(path)
+        if text is None:
+            continue
         scanned += 1
-        hits.extend(check_file(relpath, path.read_text(encoding="utf-8")))
+        hits.extend(check_file(relpath, text))
 
     if hits:
         print(

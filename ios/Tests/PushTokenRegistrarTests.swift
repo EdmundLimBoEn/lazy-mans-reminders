@@ -7,6 +7,98 @@ final class PushTokenRegistrarTests: XCTestCase {
         UserDefaults(suiteName: "PushTokenRegistrarTests-\(UUID().uuidString)")!
     }
 
+    func testRotationRemovesOnlyThisDevicesOldRegistration() async throws {
+        let user = UUID()
+        var rows = ["other-device": user]
+        let registrar = PushTokenRegistrar(defaults: defaults(), remove: { token, owner in
+            if rows[token] == owner { rows.removeValue(forKey: token) }
+        }) { rows[$0.token] = $0.userID }
+        registrar.bind(userID: user)
+        registrar.recordDeviceToken("old")
+        registrar.recordPushToStartToken("still-valid-start")
+        await registrar.flush()
+        registrar.recordDeviceToken("new")
+        await registrar.flush()
+        XCTAssertEqual(rows, ["other-device": user, "new": user])
+        await registrar.pause()
+        try await registrar.removeRegistrations(userID: user)
+        XCTAssertEqual(rows, ["other-device": user])
+    }
+
+    func testFailedCleanupPersistsAcrossRelaunchAndBlocksAccountSwitch() async throws {
+        let storage = defaults()
+        let user = UUID()
+        var rows = ["other-device": user]
+        let first = PushTokenRegistrar(defaults: storage, remove: { _, _ in
+            throw URLError(.notConnectedToInternet)
+        }) { rows[$0.token] = $0.userID }
+        first.bind(userID: user)
+        first.recordDeviceToken("old")
+        await first.flush()
+        first.recordDeviceToken("middle")
+        first.recordDeviceToken("new")
+        await first.flush()
+        XCTAssertTrue(first.needsRetry)
+        XCTAssertNotNil(rows["old"])
+        let gate = AuthSessionGate()
+        var signedOut = false
+        let didSignOut = await gate.cleanUp(operations: .init(
+            setEndingSession: { _ in },
+            pauseRegistration: { await first.pause() },
+            resumeRegistration: { first.resume() },
+            unbind: { await first.unbind() },
+            removeDeviceToken: { try await first.removeRegistrations(userID: user) },
+            signOutSDK: { signedOut = true },
+            clearPublishedSession: {}, clearUserData: {}, clearBoard: {}
+        ))
+        XCTAssertFalse(didSignOut)
+        XCTAssertFalse(signedOut)
+        var authenticated = false
+        await gate.acquire()
+        do {
+            try await gate.authenticate(
+                pauseRegistration: { await first.pause() },
+                resumeRegistration: { first.resume() },
+                removeDeviceToken: { try await first.removeRegistrations(userID: user) },
+                operation: { authenticated = true }
+            )
+            XCTFail("Account switching must wait for confirmed cleanup")
+        } catch {}
+        gate.release()
+        XCTAssertFalse(authenticated)
+
+        var removed: [String] = []
+        let relaunched = PushTokenRegistrar(defaults: storage, remove: { token, owner in
+            removed.append(token)
+            if rows[token] == owner { rows.removeValue(forKey: token) }
+        }) { rows[$0.token] = $0.userID }
+        await relaunched.pause()
+        try await relaunched.removeRegistrations(userID: user)
+        XCTAssertEqual(Set(removed), Set(["old", "middle", "new"]))
+        XCTAssertEqual(rows, ["other-device": user])
+    }
+
+    func testRotationDuringUploadIsCleanedBeforeSignOutCompletes() async throws {
+        let user = UUID()
+        var rows: [String: UUID] = [:]
+        var registrar: PushTokenRegistrar!
+        registrar = PushTokenRegistrar(defaults: defaults(), remove: { token, owner in
+            if rows[token] == owner { rows.removeValue(forKey: token) }
+        }) { registration in
+            rows[registration.token] = registration.userID
+            if registration.token == "old" { registrar.recordDeviceToken("new") }
+        }
+        registrar.bind(userID: user)
+        registrar.recordDeviceToken("old")
+        await registrar.flush()
+        XCTAssertEqual(rows, ["new": user])
+        await registrar.pause()
+        // APNs can call back while authentication has paused registration.
+        registrar.recordDeviceToken("newest")
+        try await registrar.removeRegistrations(userID: user)
+        XCTAssertTrue(rows.isEmpty)
+    }
+
     func testExpirationAndLateCompletionOnlyFinishBackgroundTaskOnce() {
         var completions: [Bool] = []
         let completion = BackgroundRefreshCompletion { completions.append($0) }
@@ -18,7 +110,7 @@ final class PushTokenRegistrarTests: XCTestCase {
     func testBackgroundRelaunchUploadsPendingActivityWithoutAViewOrNewDeviceCallback() async {
         let storage = defaults()
         let user = UUID()
-        let first = PushTokenRegistrar(defaults: storage, retryDelay: {}) { _ in
+        let first = PushTokenRegistrar(defaults: storage, retryDelay: {}, remove: { _, _ in }) { _ in
             throw URLError(.notConnectedToInternet)
         }
         first.bind(userID: user)
@@ -29,7 +121,7 @@ final class PushTokenRegistrarTests: XCTestCase {
         XCTAssertTrue(first.needsRetry)
 
         var sent: [PushTokenRegistrar.Registration] = []
-        let relaunched = PushTokenRegistrar(defaults: storage) { sent.append($0) }
+        let relaunched = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { sent.append($0) }
         relaunched.bind(userID: user)
         await relaunched.flush()
         XCTAssertEqual(sent.count, 1)
@@ -42,7 +134,7 @@ final class PushTokenRegistrarTests: XCTestCase {
     func testAcknowledgedTokenIsNotReplayedOverServerRenewalState() async throws {
         let storage = defaults()
         let user = UUID()
-        let first = PushTokenRegistrar(defaults: storage) { _ in }
+        let first = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { _ in }
         first.bind(userID: user)
         first.recordDeviceToken("device")
         first.recordPushToStartToken("start")
@@ -50,7 +142,7 @@ final class PushTokenRegistrarTests: XCTestCase {
         await first.flush()
 
         var encoded: [String: Any] = [:]
-        let relaunched = PushTokenRegistrar(defaults: storage) { registration in
+        let relaunched = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { registration in
             encoded = try JSONSerialization.jsonObject(with: JSONEncoder().encode(registration)) as! [String: Any]
         }
         relaunched.bind(userID: user)
@@ -64,7 +156,7 @@ final class PushTokenRegistrarTests: XCTestCase {
         let storage = defaults()
         let user = UUID()
         var sent: [String?] = []
-        let first = PushTokenRegistrar(defaults: storage) { sent.append($0.activityPushToken) }
+        let first = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { sent.append($0.activityPushToken) }
         first.bind(userID: user)
         first.recordDeviceToken("device")
         first.recordActivityToken("old")
@@ -72,7 +164,7 @@ final class PushTokenRegistrarTests: XCTestCase {
         first.recordActivityToken("old")
         await first.flush()
 
-        let relaunched = PushTokenRegistrar(defaults: storage) { sent.append($0.activityPushToken) }
+        let relaunched = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { sent.append($0.activityPushToken) }
         relaunched.bind(userID: user)
         relaunched.recordActivityToken("old")
         await relaunched.flush()
@@ -84,7 +176,7 @@ final class PushTokenRegistrarTests: XCTestCase {
     func testUnacknowledgedSnapshotRetriesWithoutANewTokenEvent() async {
         let storage = defaults()
         let user = UUID()
-        let first = PushTokenRegistrar(defaults: storage, retryDelay: {}) { _ in
+        let first = PushTokenRegistrar(defaults: storage, retryDelay: {}, remove: { _, _ in }) { _ in
             throw URLError(.notConnectedToInternet)
         }
         first.bind(userID: user)
@@ -92,7 +184,7 @@ final class PushTokenRegistrarTests: XCTestCase {
         first.recordActivityToken("replacement")
         await first.flush()
         var sent: [String?] = []
-        let relaunched = PushTokenRegistrar(defaults: storage) { sent.append($0.activityPushToken) }
+        let relaunched = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { sent.append($0.activityPushToken) }
         relaunched.bind(userID: user)
         relaunched.recordActivityToken("replacement")
         await relaunched.flush()
@@ -101,7 +193,7 @@ final class PushTokenRegistrarTests: XCTestCase {
 
     func testDeviceTokenChangeReregistersAcknowledgedActivityAndClock() async {
         var sent: [PushTokenRegistrar.Registration] = []
-        let registrar = PushTokenRegistrar(defaults: defaults()) { sent.append($0) }
+        let registrar = PushTokenRegistrar(defaults: defaults(), remove: { _, _ in }) { sent.append($0) }
         let user = UUID()
         let startedAt = Date(timeIntervalSince1970: 1_800_000_000)
         registrar.bind(userID: user)
@@ -129,7 +221,7 @@ final class PushTokenRegistrarTests: XCTestCase {
 
     func testDeviceTokenChangePreservesNewerPendingActivityClock() async {
         var sent: [PushTokenRegistrar.Registration] = []
-        let registrar = PushTokenRegistrar(defaults: defaults()) { sent.append($0) }
+        let registrar = PushTokenRegistrar(defaults: defaults(), remove: { _, _ in }) { sent.append($0) }
         let startedAt = Date(timeIntervalSince1970: 1_800_000_000)
         registrar.bind(userID: UUID())
         registrar.recordDeviceToken("device")
@@ -148,7 +240,7 @@ final class PushTokenRegistrarTests: XCTestCase {
     func testDeviceTokenChangeSurvivesFailedUploadAndRelaunch() async {
         let storage = defaults()
         let user = UUID()
-        let first = PushTokenRegistrar(defaults: storage, retryDelay: {}) {
+        let first = PushTokenRegistrar(defaults: storage, retryDelay: {}, remove: { _, _ in }) {
             if $0.token == "changed-device" { throw URLError(.notConnectedToInternet) }
         }
         first.bind(userID: user)
@@ -160,7 +252,7 @@ final class PushTokenRegistrarTests: XCTestCase {
         XCTAssertTrue(first.needsRetry)
 
         var sent: [PushTokenRegistrar.Registration] = []
-        let relaunched = PushTokenRegistrar(defaults: storage) { sent.append($0) }
+        let relaunched = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { sent.append($0) }
         relaunched.bind(userID: user)
         XCTAssertTrue(relaunched.needsRetry)
         await relaunched.flush()
@@ -173,7 +265,7 @@ final class PushTokenRegistrarTests: XCTestCase {
     func testDeviceTokenChangeDuringUploadCannotAcknowledgeTheNewDevice() async {
         var registrar: PushTokenRegistrar!
         var sent: [PushTokenRegistrar.Registration] = []
-        registrar = PushTokenRegistrar(defaults: defaults()) { registration in
+        registrar = PushTokenRegistrar(defaults: defaults(), remove: { _, _ in }) { registration in
             sent.append(registration)
             if sent.count == 2 { registrar.recordDeviceToken("changed-device") }
         }
@@ -190,7 +282,7 @@ final class PushTokenRegistrarTests: XCTestCase {
 
     func testAccountSwitchDiscardsActivityRequeuedByDeviceTokenChange() async {
         var sent: [PushTokenRegistrar.Registration] = []
-        let registrar = PushTokenRegistrar(defaults: defaults()) { sent.append($0) }
+        let registrar = PushTokenRegistrar(defaults: defaults(), remove: { _, _ in }) { sent.append($0) }
         registrar.bind(userID: UUID())
         registrar.recordDeviceToken("device")
         registrar.recordActivityToken("previous-account")
@@ -207,7 +299,7 @@ final class PushTokenRegistrarTests: XCTestCase {
     func testRepeatedSnapshotDuringUploadDoesNotCauseAnotherTokenUpload() async {
         var registrar: PushTokenRegistrar!
         var sent: [String?] = []
-        registrar = PushTokenRegistrar(defaults: defaults()) { registration in
+        registrar = PushTokenRegistrar(defaults: defaults(), remove: { _, _ in }) { registration in
             sent.append(registration.activityPushToken)
             if sent.count == 1 { registrar.recordActivityToken("replacement") }
         }
@@ -220,7 +312,7 @@ final class PushTokenRegistrarTests: XCTestCase {
 
     func testLocallyRestoredActivityRegistersItsClockOnceAcrossTokenRotation() async throws {
         var sent: [PushTokenRegistrar.Registration] = []
-        let registrar = PushTokenRegistrar(defaults: defaults()) { sent.append($0) }
+        let registrar = PushTokenRegistrar(defaults: defaults(), remove: { _, _ in }) { sent.append($0) }
         registrar.bind(userID: UUID())
         registrar.recordDeviceToken("device")
         let startedAt = Date(timeIntervalSince1970: 1_800_000_000)
@@ -245,7 +337,7 @@ final class PushTokenRegistrarTests: XCTestCase {
         let user = UUID()
         var renewing = false
         var serverClock = "old"
-        let first = PushTokenRegistrar(defaults: storage, retryDelay: {}) { registration in
+        let first = PushTokenRegistrar(defaults: storage, retryDelay: {}, remove: { _, _ in }) { registration in
             if renewing { throw URLError(.notConnectedToInternet) }
             serverClock = registration.activityStartedAt ?? serverClock
         }
@@ -259,7 +351,7 @@ final class PushTokenRegistrarTests: XCTestCase {
         serverClock = "replacement-requested"
         first.recordActivityToken("rotated-original", startedAt: startedAt)
         await first.flush()
-        let relaunched = PushTokenRegistrar(defaults: storage) { registration in
+        let relaunched = PushTokenRegistrar(defaults: storage, remove: { _, _ in }) { registration in
             serverClock = registration.activityStartedAt ?? serverClock
         }
         relaunched.bind(userID: user)
@@ -269,7 +361,7 @@ final class PushTokenRegistrarTests: XCTestCase {
 
     func testRemoteActivityAcknowledgementKeepsTheServersStartClock() async throws {
         var encoded: [String: Any] = [:]
-        let registrar = PushTokenRegistrar(defaults: defaults()) {
+        let registrar = PushTokenRegistrar(defaults: defaults(), remove: { _, _ in }) {
             encoded = try JSONSerialization.jsonObject(with: JSONEncoder().encode($0)) as! [String: Any]
         }
         registrar.bind(userID: UUID())
@@ -282,7 +374,7 @@ final class PushTokenRegistrarTests: XCTestCase {
     func testNewTokenArrivingDuringUploadIsNotAcknowledgedByOldResponse() async {
         var registrar: PushTokenRegistrar!
         var sent: [String?] = []
-        registrar = PushTokenRegistrar(defaults: defaults()) { registration in
+        registrar = PushTokenRegistrar(defaults: defaults(), remove: { _, _ in }) { registration in
             sent.append(registration.activityPushToken)
             if sent.count == 1 { registrar.recordActivityToken("new") }
         }
@@ -295,7 +387,7 @@ final class PushTokenRegistrarTests: XCTestCase {
 
     func testTokenBeforeInitialSessionRestorationIsRetained() async {
         var sent: [String?] = []
-        let registrar = PushTokenRegistrar(defaults: defaults()) { sent.append($0.activityPushToken) }
+        let registrar = PushTokenRegistrar(defaults: defaults(), remove: { _, _ in }) { sent.append($0.activityPushToken) }
         registrar.recordDeviceToken("device")
         registrar.recordActivityToken("new")
         await registrar.flush()
@@ -307,7 +399,7 @@ final class PushTokenRegistrarTests: XCTestCase {
 
     func testAccountSwitchDoesNotAttachPreviousUsersActivity() async {
         var sent: [PushTokenRegistrar.Registration] = []
-        let registrar = PushTokenRegistrar(defaults: defaults()) { sent.append($0) }
+        let registrar = PushTokenRegistrar(defaults: defaults(), remove: { _, _ in }) { sent.append($0) }
         registrar.bind(userID: UUID())
         registrar.recordDeviceToken("device")
         registrar.recordActivityToken("private-old-board")
