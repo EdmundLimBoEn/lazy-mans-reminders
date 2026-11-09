@@ -1,5 +1,5 @@
 import type { AriaRole, ReactNode } from 'react'
-import { LegalFooterLinks } from '@/LegalPages'
+import { LegalFooterLinks } from '@/legalFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { ThemeToggle } from '@/ThemeToggle'
 
