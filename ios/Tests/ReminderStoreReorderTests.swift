@@ -169,9 +169,7 @@ final class ReminderStoreReorderTests: XCTestCase {
         let started = expectation(description: "Create authentication suspended")
         let network = HeldCreates(started: [started])
         let store = fixture.makeStore { try await network.send($0) }
-        try await fixture.seed(store)
-        try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
-                                    expiresAt: Date().addingTimeInterval(-60), userID: fixture.reminders[0].userID)
+        try await fixture.seed(store, expiresAt: Date().addingTimeInterval(-60))
         let create = Task { try await store.create(text: "First") }
         await fulfillment(of: [started], timeout: 3)
         await assertReorderBlocked(store)
@@ -298,9 +296,9 @@ final class ReminderStoreReorderTests: XCTestCase {
             ReminderStore(defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
                           anonKey: "test-key", requestData: send)
         }
-        func seed(_ store: ReminderStore) async throws {
+        func seed(_ store: ReminderStore, expiresAt: Date = Date().addingTimeInterval(3600)) async throws {
             try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
-                                        expiresAt: Date().addingTimeInterval(3600), userID: reminders[0].userID)
+                                        expiresAt: expiresAt, userID: reminders[0].userID)
             defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: "cached-reminders")
         }
         func response(_ data: Data, request: URLRequest, status: Int = 200) -> (Data, URLResponse) {
