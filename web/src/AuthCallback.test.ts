@@ -145,6 +145,19 @@ it('clears abandoned consent state when a homepage sign-in starts', async () => 
   expect(replace).toHaveBeenCalledWith('/')
 })
 
+it('does not send a missing-code retry to a protocol-relative return_to', () => {
+  callback('/auth/callback?return_to=' + encodeURIComponent('/.//evil.example/phish'))
+  expectError(
+    'Missing sign-in code. Start sign-in again from the board or connect link.',
+    '/',
+  )
+})
+
+it('does not location.replace a protocol-relative return_to after exchange', async () => {
+  callback('/auth/callback?code=account-b&return_to=' + encodeURIComponent('/.//evil.example/phish'))
+  await vi.waitFor(() => expect(replace).toHaveBeenCalledExactlyOnceWith('/'))
+})
+
 it('preserves the stored fallback for a consent callback without return_to', async () => {
   visit('/connect?state=current')
   rememberReturnTo()
