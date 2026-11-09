@@ -86,7 +86,7 @@ None of these ship in the Pages or Worker bundles except via the Vite build tool
 
 ## XSS / open redirects (re-checked, no extra change)
 
-No `dangerouslySetInnerHTML` / `innerHTML`. Pages CSP is `script-src 'self'`; Pages `Access-Control-Allow-Origin` is stripped in `_headers`. `safeReturnPath` still rejects `https:`, `//`, backslash, and encoded slash. `/auth/ios` renders GoTrue `error_description` as React text (escaped).
+No `dangerouslySetInnerHTML` / `innerHTML`. Pages CSP is `script-src 'self'`; Pages `Access-Control-Allow-Origin` is stripped in `_headers`. `safeReturnPath` still rejects `https:`, `//`, backslash, and encoded slash. `/auth/ios` renders GoTrue `error_description` as React text (escaped). `isSafeOauthRedirect` still allows custom schemes after the `javascript:` / `data:` denylist; an `intent://` URL with a script fallback was not shown to execute in this origin, so it was left as-is.
 
 ## Prior burns not repeated
 
