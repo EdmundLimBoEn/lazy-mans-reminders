@@ -12,17 +12,15 @@ The repo has later migrations that create `live_activity_start_leases`, `device_
 
 Do not `supabase db push` the whole tail as a security hotfix. `normalize_legacy_reminder_text` rewrites reminder text. Push jobs and leases change how APNs delivery runs. Apply with a planned deploy, in version order, after reading each file.
 
-Until that push happens, additive grant revokes in the repo (including the r6 migrations) also do not affect production.
+Until that push happens, additive grant revokes in the repo also do not affect production.
 
-## `REVOKE FROM PUBLIC` does not drop `anon`
+## `REVOKE FROM PUBLIC` does not drop `anon` (production until db push)
 
 Supabase default privileges grant `EXECUTE` / `ALL` to `anon` as a **role** grant. `REVOKE … FROM PUBLIC` leaves `anon=X` in `proacl`. That is why #47 had to name `anon` on `mint_agent_token` / `revoke_agent_token`.
 
-The same leftover is still visible in production on `delete_old_completed_reminders`, `next_routine_run`, `prepare_routine_schedule`, `set_completed_at`, `set_updated_at`, and `track_live_activity_start`. Those functions are `SECURITY INVOKER`; RLS on `reminders` would still deny anon DML. PostgREST still lists them.
+Production still has `anon=X` on `delete_old_completed_reminders`, `next_routine_run`, `prepare_routine_schedule`, `set_completed_at`, `set_updated_at`, `track_live_activity_start`, and `ALL` on `agent_token_clients`. Those functions are `SECURITY INVOKER`; RLS on `reminders` would still deny anon DML. The token view is `security_invoker` over a revoked table, so unauthenticated `SELECT` already fails. That is defense in depth, not a live hash leak.
 
-Later unapplied migrations repeat `REVOKE FROM PUBLIC` and would **not** clear `anon` either. Any production apply should revoke from `public, anon` explicitly.
-
-`anon` also still has `ALL` on `agent_token_clients`. The base table `agent_tokens` is already revoked and the view is `security_invoker`, so unauthenticated `SELECT` fails today. That is defense in depth, not a live hash leak.
+Follow-up repo migrations revoke those leftovers from `public, anon`. They do nothing in production until `supabase db push`. Later unapplied migrations that only `REVOKE FROM PUBLIC` would not have cleared `anon` by themselves.
 
 User tables `reminders`, `device_tokens`, and `lock_screen_prefs` still have default `ALL` for `anon`. Policies are `TO authenticated` plus FORCE RLS, so anon DML is denied. Revoking table grants would change PostgREST from an RLS denial to a permission error. Left as-is.
 
