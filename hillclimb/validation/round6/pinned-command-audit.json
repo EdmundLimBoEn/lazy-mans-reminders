@@ -1,0 +1,156 @@
+{
+  "pinnedCommand": "/Users/limboenedmund/.t3/userdata/device/targets/t3-016b7667478b6f251b147cff/agent-device",
+  "session": "t3-016b7667478b6f251b147cff",
+  "recordedCommands": 2370,
+  "allUseOwnedPinnedCommand": true,
+  "recordedNonzeroExits": [
+    {
+      "manifest": "hillclimb/validation/round6/manual-operations.json",
+      "command": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-016b7667478b6f251b147cff/agent-device",
+        "fill",
+        "role=securetextfield label=\"Password\"",
+        "offline-only"
+      ],
+      "exit": 1,
+      "commandKey": "command"
+    },
+    {
+      "manifest": "hillclimb/validation/round6/manual-operations.json",
+      "command": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-016b7667478b6f251b147cff/agent-device",
+        "get",
+        "attrs",
+        "label=\"Privacy\""
+      ],
+      "exit": 1,
+      "commandKey": "command"
+    },
+    {
+      "manifest": "hillclimb/validation/round6/manual-operations.json",
+      "command": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-016b7667478b6f251b147cff/agent-device",
+        "scroll",
+        "bottom",
+        "--settle"
+      ],
+      "exit": 1,
+      "commandKey": "command"
+    },
+    {
+      "manifest": "hillclimb/validation/round6/manual-operations.json",
+      "command": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-016b7667478b6f251b147cff/agent-device",
+        "get",
+        "attrs",
+        "label=\"Privacy\""
+      ],
+      "exit": 1,
+      "commandKey": "command"
+    },
+    {
+      "manifest": "hillclimb/rounds/6/account-enabled/captures-errors.json",
+      "command": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-016b7667478b6f251b147cff/agent-device",
+        "press",
+        "label=\"Refresh Board Now\"",
+        "--settle"
+      ],
+      "exit": 1,
+      "commandKey": "argv"
+    }
+  ],
+  "manifestCountsAndHashes": [
+    {
+      "file": "hillclimb/rounds/6/account-enabled/captures-detents.json",
+      "count": 108,
+      "sha256": "48c7892afcecd3094d9a435b11da4dc39f19ba7fc4e9059d7e3de285911de929"
+    },
+    {
+      "file": "hillclimb/rounds/6/account-enabled/captures-errors.json",
+      "count": 327,
+      "sha256": "a287406a95cd872e0984fb52e36baf05ce1b63037a047915d69344d73ea531df"
+    },
+    {
+      "file": "hillclimb/rounds/6/account-enabled/captures-guidance.json",
+      "count": 32,
+      "sha256": "172464e27cd73a7fc39213d8cccf6c20780de3192587fc9bb7be13c93522fdef"
+    },
+    {
+      "file": "hillclimb/rounds/6/account-enabled/captures-normal.json",
+      "count": 88,
+      "sha256": "8fc85870858f6e5dfff3e04ba09121bb39484cea55588952964ec8050cb573b3"
+    },
+    {
+      "file": "hillclimb/rounds/6/activity-long/manifest.json",
+      "count": 24,
+      "sha256": "0bb7b0433c6840ea047f5f68692153712e6386eabfdd310b6e93d881a9133f55"
+    },
+    {
+      "file": "hillclimb/rounds/6/activity-long/navigation.json",
+      "count": 14,
+      "sha256": "91843c330f84d1d3d3b48a2b4da61458511ba4fbf4fd47383378fb9eb36625b6"
+    },
+    {
+      "file": "hillclimb/rounds/6/activity/manifest.json",
+      "count": 48,
+      "sha256": "daa340a2937ffa68ce8347d8c7f0bd9fe3bfe133d55d076c777c61df2eb69565"
+    },
+    {
+      "file": "hillclimb/rounds/6/activity/navigation.json",
+      "count": 26,
+      "sha256": "28d8fcb1f05c6c365baf7eab49cbdf427bfc93a33378d3f104ebe0cb83e58b2d"
+    },
+    {
+      "file": "hillclimb/rounds/6/board/manifest.json",
+      "count": 328,
+      "sha256": "d50b6ab01e82fbb05c0a40716069e9ee7cc2ea45549ba6e8ecd3d411000d77bf"
+    },
+    {
+      "file": "hillclimb/rounds/6/bottom-recapture-operations.json",
+      "count": 20,
+      "sha256": "a5905e692bfe67e4f9200606d2fb0fa02a6267f4ebe51372822979311a847ee6"
+    },
+    {
+      "file": "hillclimb/rounds/6/edge/capture-operations-solid.json",
+      "count": 104,
+      "sha256": "617ef126eabb23396e534f7a3fc5ae7d9c561841b917f87014b472b653726b15"
+    },
+    {
+      "file": "hillclimb/rounds/6/edge/capture-operations.json",
+      "count": 152,
+      "sha256": "ad08fa1b4a86681c1a45ffaec014cab9516875c093addeac265eb013dd3fa1ca"
+    },
+    {
+      "file": "hillclimb/rounds/6/extras/manifest.json",
+      "count": 388,
+      "sha256": "2d7f6d0ac6d7835f84ddc5aff9f6556dadd59dc349536748b785684833d5cc21"
+    },
+    {
+      "file": "hillclimb/rounds/6/keyboards/manifest.json",
+      "count": 88,
+      "sha256": "9c67d750410a0dd8b27c5e54eb914b5a52655e51b62b85f3f2c534743ab39d09"
+    },
+    {
+      "file": "hillclimb/rounds/6/manifest.json",
+      "count": 83,
+      "sha256": "bc3d155ff90bde6e2877364a310ce89cbc53e627ea356e7459396acf0a7be609"
+    },
+    {
+      "file": "hillclimb/rounds/6/motion/manifest.json",
+      "count": 35,
+      "sha256": "54a0ee3457c365256cf9033050c02bd8a4a29c4b66e80f5cede73550d9ed69e5"
+    },
+    {
+      "file": "hillclimb/rounds/6/signin-enabled/manifest.json",
+      "count": 164,
+      "sha256": "3d3e20151d26dd80b258d2420df039ae9f523e2536fec1677fc3d59b9b54304b"
+    },
+    {
+      "file": "hillclimb/validation/round6/manual-operations.json",
+      "count": 341,
+      "sha256": "a5bf46d34e22a170961e9b9562489cdf6315a081098dc3d8e876ba11e97f9ba2"
+    }
+  ],
+  "commandSequenceSHA256": "6a07de362217ff7cddf2f33881fef6e711b793834b650fe8678af6bee22f8986"
+}

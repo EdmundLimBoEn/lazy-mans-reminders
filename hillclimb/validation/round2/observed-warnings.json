@@ -1,0 +1,6 @@
+{
+  "source_sha": "8dbf6a8e07a5b88dd6748b77a5c8030740eb5309",
+  "build_warnings": ["AuthManager.swift:90 weak capture differs from outer implicit strong capture", "AuthManager.swift:242,428 unused try? result", "AuthSessionGateTests.swift:655 unused Bool", "AuthSessionGateTests.swift:362 unreachable conditional branch"],
+  "test_runner_observations": ["Unit test host emitted APNs registration failed: no valid aps-environment entitlement string found for application", "IOSurfaceClientSetSurfaceNotify failed e00002c7", "IDELaunchParametersSnapshot debugger version lookup failed for path '<nil>': noURL"],
+  "note": "These are warnings/diagnostic observations, not assertions or evidence that a test failed. Structured test results determine pass/fail. Full console export availability must be reported separately."
+}

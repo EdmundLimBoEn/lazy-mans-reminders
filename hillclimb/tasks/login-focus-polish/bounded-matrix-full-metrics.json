@@ -1,0 +1,113 @@
+[
+  {
+    "testIdentifier" : "PerformanceUITests/testSeededLaunchMetric()",
+    "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/PerformanceUITests/testSeededLaunchMetric",
+    "testRuns" : [
+      {
+        "device" : {
+          "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+          "deviceName" : "Hillclimb iPhone 17 Pro"
+        },
+        "metrics" : [
+          {
+            "baselineAverage" : 0,
+            "baselineName" : "",
+            "displayName" : "Duration (AppLaunch)",
+            "identifier" : "com.apple.dt.XCTMetric_ApplicationLaunch-AppLaunch.duration",
+            "maxPercentRegression" : 10,
+            "maxPercentRelativeStandardDeviation" : 10,
+            "maxRegression" : 0,
+            "maxStandardDeviation" : 10,
+            "measurements" : [
+              1.047473458,
+              0.964831583,
+              0.9532653750000001,
+              0.952178834,
+              1.021096709
+            ],
+            "polarity" : "prefers smaller",
+            "unitOfMeasurement" : "s"
+          }
+        ],
+        "testPlanConfiguration" : {
+          "configurationId" : "1",
+          "configurationName" : "Test Scheme Action"
+        }
+      }
+    ]
+  },
+  {
+    "testIdentifier" : "PerformanceUITests/testSeededScrollElapsedMetric()",
+    "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/PerformanceUITests/testSeededScrollElapsedMetric",
+    "testRuns" : [
+      {
+        "device" : {
+          "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+          "deviceName" : "Hillclimb iPhone 17 Pro"
+        },
+        "metrics" : [
+          {
+            "baselineAverage" : 0,
+            "baselineName" : "",
+            "displayName" : "Clock Monotonic Time",
+            "identifier" : "com.apple.dt.XCTMetric_Clock.time.monotonic",
+            "maxPercentRegression" : 10,
+            "maxPercentRelativeStandardDeviation" : 10,
+            "maxRegression" : 0,
+            "maxStandardDeviation" : 10,
+            "measurements" : [
+              4.878208782000001,
+              4.515793013000001,
+              4.866899383000001,
+              4.866800573,
+              4.842064207
+            ],
+            "polarity" : "prefers smaller",
+            "unitOfMeasurement" : "s"
+          }
+        ],
+        "testPlanConfiguration" : {
+          "configurationId" : "1",
+          "configurationName" : "Test Scheme Action"
+        }
+      }
+    ]
+  },
+  {
+    "testIdentifier" : "PerformanceUITests/testSeededScrollSignpostMetric()",
+    "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/PerformanceUITests/testSeededScrollSignpostMetric",
+    "testRuns" : [
+      {
+        "device" : {
+          "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+          "deviceName" : "Hillclimb iPhone 17 Pro"
+        },
+        "metrics" : [
+          {
+            "baselineAverage" : 0,
+            "baselineName" : "",
+            "displayName" : "Duration (Scroll_DraggingAndDeceleration)",
+            "identifier" : "com.apple.dt.XCTMetric_OSSignpost-Scroll_DraggingAndDeceleration.duration",
+            "maxPercentRegression" : 10,
+            "maxPercentRelativeStandardDeviation" : 10,
+            "maxRegression" : 0,
+            "maxStandardDeviation" : 10,
+            "measurements" : [
+              2.3512805830000003,
+              2.350730334,
+              2.3333395830000003,
+              2.351280667,
+              2.35085225
+            ],
+            "polarity" : "prefers smaller",
+            "unitOfMeasurement" : "s"
+          }
+        ],
+        "testPlanConfiguration" : {
+          "configurationId" : "1",
+          "configurationName" : "Test Scheme Action"
+        }
+      }
+    ]
+  }
+]

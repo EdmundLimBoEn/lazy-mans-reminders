@@ -1,0 +1,1684 @@
+{
+  "testIdentifier" : "ErrorContrastUITests/testDarkDefaultErrors()",
+  "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/ErrorContrastUITests/testDarkDefaultErrors",
+  "testName" : "testDarkDefaultErrors()",
+  "testRuns" : [
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821469.301,
+          "title" : "Start Test at 2026-11-05 03:44:29.301"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821469.323,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821469.325,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:78710"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821470.594,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821471.263,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821469.325,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821469.324,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821473.548,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821473.548,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821472.53,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821473.614,
+          "title" : "Find the \"Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821473.636,
+          "title" : "Find the \"Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821473.653,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821473.724,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821473.734,
+          "title" : "Find the \"Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821473.746,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821473.753,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-dark-default-error-raster_0_3104DEFE-7539-4F4A-977A-C8E2EC803011.txt",
+              "payloadId" : "0~7q0lQgGa3kIhrMGRM8IktepADXcJYOO4LPE9HO9BBbhcWAzdHmogxmCKM9n4kDC0-xTyVDNKPLxVzElzMxjF0g==",
+              "timestamp" : 1793821473.81,
+              "uuid" : "930C6989-B5D6-4941-8604-C988F451AC8A"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821473.81,
+              "title" : "signin-dark-default-error-raster"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821473.81,
+          "title" : "Added attachment named 'signin-dark-default-error-raster'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821473.81,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-dark-default-error_0_A1358011-23C5-4BE8-B183-F86AC8FBF4F8.png",
+              "payloadId" : "0~CZM0HLkkoSeorUEgEZ8uLaSdFTavPH6sWthoiRaaoXYGWbenCtXO62-b2PMO2nTJDmBsMDAV2bM1p4Nz2G2oBw==",
+              "timestamp" : 1793821473.883,
+              "uuid" : "5765BEFF-7D9E-4829-A741-C0ACA72767FA"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821473.883,
+              "title" : "signin-dark-default-error"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821473.883,
+          "title" : "Added attachment named 'signin-dark-default-error'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821473.884,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821473.886,
+              "title" : "Find the \"Email address\" TextField"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821473.897,
+              "title" : "Check for interrupting elements affecting \"you@example.com\" TextField"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821473.909,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821474.199,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821473.884,
+          "title" : "Tap \"Email address\" TextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821474.374,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821474.752,
+              "title" : "Find the \"Email address\" TextField"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821474.78,
+              "title" : "Check for interrupting elements affecting \"you@example.com\" TextField"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821474.802,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821475.019,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821474.373,
+          "title" : "Type 'x' into \"Email address\" TextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821475.023,
+          "title" : "Checking existence of `\"Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821475.045,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821475.047,
+              "title" : "Find the \"Done\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821475.069,
+              "title" : "Check for interrupting elements affecting \"Done\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821475.088,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821475.379,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821475.045,
+          "title" : "Tap \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821475.586,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-dark-default-cleared_0_00DFCCF5-5ADB-4002-A126-3B0EB2BEC4D7.png",
+              "payloadId" : "0~Fn7JjqcnfHM4eDDH37D63D5Bcy2Hd9zKWuj56mWZmv7L9Dz4mTrNOLH-HtyyHj2wszEp571Lxaq7i2c8jTzOsw==",
+              "timestamp" : 1793821475.664,
+              "uuid" : "CC05A0B4-6DBF-40AD-B2D5-8D575B806500"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821475.664,
+              "title" : "signin-dark-default-cleared"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821475.664,
+          "title" : "Added attachment named 'signin-dark-default-cleared'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821475.665,
+          "title" : "Terminate systems.edmundlim.NotepadHillclimb:81433"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821476.947,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821477.617,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821476.734,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821476.732,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821479.928,
+                  "title" : "Checking existence of `\"Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.\" StaticText`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821479.927,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821478.865,
+          "title" : "Waiting 10.0s for \"Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821479.976,
+          "title" : "Find the \"Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821479.996,
+          "title" : "Find the \"Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821480.013,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821480.085,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821480.095,
+          "title" : "Find the \"Couldn’t sign in. Check your email and password, or use a sign-in link. If you’re offline, reconnect and try again.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821480.108,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821480.115,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-dark-default-reappeared-raster_0_940EA74C-3FC0-44DF-A479-BD5FA50987D0.txt",
+              "payloadId" : "0~KwentTz5wgk93wIKG1zDS-7MQJLeQu6Gl8CFj6Y78M3lhQtbe7PmUGd92TM4Eruf5_T66tYtH2jz6hQFCqsOYA==",
+              "timestamp" : 1793821480.173,
+              "uuid" : "4B9AE6F3-E9D5-4DE6-882B-C5C7010DADC3"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821480.173,
+              "title" : "signin-dark-default-reappeared-raster"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821480.173,
+          "title" : "Added attachment named 'signin-dark-default-reappeared-raster'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821480.173,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-dark-default-reappeared_0_CEEE4516-03A1-4433-9EB8-85FC9D7C0535.png",
+              "payloadId" : "0~CZM0HLkkoSeorUEgEZ8uLaSdFTavPH6sWthoiRaaoXYGWbenCtXO62-b2PMO2nTJDmBsMDAV2bM1p4Nz2G2oBw==",
+              "timestamp" : 1793821480.244,
+              "uuid" : "442BADF9-2B7C-47F8-ABBD-D4E2DBBAAF70"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821480.244,
+              "title" : "signin-dark-default-reappeared"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821480.244,
+          "title" : "Added attachment named 'signin-dark-default-reappeared'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821480.246,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:81982"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821481.518,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821482.089,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821480.245,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821480.244,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821484.728,
+                  "title" : "Checking existence of `\"Account\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821484.727,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Account\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821483.659,
+          "title" : "Waiting 10.0s for \"Account\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821484.85,
+          "title" : "Find the \"account.error\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821484.904,
+          "title" : "Find the \"account.error\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821484.946,
+          "title" : "Find the \"account.error\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821484.988,
+          "title" : "Find the \"account.error\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821485.034,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821485.13,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821485.16,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821485.171,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-error-dark-default-initial-raster_0_D426496C-041F-4297-AE0D-C33CDB4339D2.txt",
+              "payloadId" : "0~FXd9R-VpbjsdM95IrcjZAFfOKss2gE8n-hP_WsSGMPdYEmlGna0hIvlBCs1W1OE4UN3jJ-CeHujSx7Ql9HZymQ==",
+              "timestamp" : 1793821485.273,
+              "uuid" : "C9ED9C9D-8D2F-4029-8D0D-EC8043404972"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821485.273,
+              "title" : "account-error-dark-default-initial-raster"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821485.273,
+          "title" : "Added attachment named 'account-error-dark-default-initial-raster'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821485.273,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-error-dark-default-initial_0_5D4EFFB7-7B23-4CF9-AAE5-B96099540BBB.png",
+              "payloadId" : "0~wLnSbvkCuWI6TPr82CBwVNMcxxcPpN8rBRibnFiffE1z6Z0Ix_7eDc_kmre2G33SEgebzJtydpimc_IhDNHkiw==",
+              "timestamp" : 1793821485.374,
+              "uuid" : "ECD537DF-704A-45B4-B5A5-0AA4C9C72310"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821485.374,
+              "title" : "account-error-dark-default-initial"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821485.374,
+          "title" : "Added attachment named 'account-error-dark-default-initial'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821485.375,
+          "title" : "Find the \"Refresh Board Now\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821485.426,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821485.428,
+              "title" : "Find the \"Refresh Board Now\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821485.47,
+              "title" : "Check for interrupting elements affecting \"Refresh Board Now\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821485.511,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821485.806,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821485.426,
+          "title" : "Tap \"Refresh Board Now\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821486.062,
+          "title" : "Checking existence of `\"account.error\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821486.126,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-error-dark-default-cleared_0_CCD78F7E-0009-4898-A7FE-5EC5A2D4BFC6.png",
+              "payloadId" : "0~EQK810QCZ8-f4NcsyFcMXloqwVTuhBlxnI2nL8TyWjIhi4Y8QBgEsWonUZJ3gV4zsIbnSDHGnQ5nUW0z_LdLnw==",
+              "timestamp" : 1793821486.244,
+              "uuid" : "E9D48C46-1210-497F-9E62-74178BBB9A89"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821486.244,
+              "title" : "account-error-dark-default-cleared"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821486.244,
+          "title" : "Added attachment named 'account-error-dark-default-cleared'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821486.245,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821486.247,
+              "title" : "Find the \"Refresh Board Now\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821486.303,
+              "title" : "Check for interrupting elements affecting \"Refresh Board Now\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821486.347,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821486.649,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821486.245,
+          "title" : "Tap \"Refresh Board Now\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821487.953,
+                  "title" : "Checking existence of `\"account.error\" StaticText`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821487.953,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"account.error\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821486.888,
+          "title" : "Waiting 3.0s for \"account.error\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821488.007,
+          "title" : "Find the \"account.error\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821488.051,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821488.063,
+          "title" : "Find the \"account.error\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821488.105,
+          "title" : "Find the \"account.error\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821488.153,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821488.254,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821488.284,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821488.294,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-error-dark-default-reappeared-raster_0_D49A1DA2-9FB8-4E2B-BC10-E4AC750FE350.txt",
+              "payloadId" : "0~ibloYs333e_oj7RzMAAtDtuh2PCHDw6IIVyv_4HQ_xAqa1tUWe3dCgZJ_UHUHGoGWIyQ5hjQPWQlQa2AZ7-nDw==",
+              "timestamp" : 1793821488.393,
+              "uuid" : "DD3F3A49-FC4D-4D2E-91CE-9C979FB23231"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821488.393,
+              "title" : "account-error-dark-default-reappeared-raster"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821488.393,
+          "title" : "Added attachment named 'account-error-dark-default-reappeared-raster'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821488.394,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-error-dark-default-reappeared_0_648779B8-E953-458C-AAB8-4A32F4746233.png",
+              "payloadId" : "0~NRw68H7ZOCxWw3pycAecwvRY5UnCX4zDxSYIlpDlVLmZgK_vVyuzwMKyScC1YGNeNUv051v3bv-rAzIIgSJPfg==",
+              "timestamp" : 1793821488.489,
+              "uuid" : "CA5648C7-567E-4EF7-AE81-35E1181A4455"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821488.489,
+              "title" : "account-error-dark-default-reappeared"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821488.489,
+          "title" : "Added attachment named 'account-error-dark-default-reappeared'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821489.538,
+              "title" : "Find the \"Delete Account…\" Button (retry 1)"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821490.599,
+              "title" : "Find the \"Delete Account…\" Button (retry 2)"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821488.49,
+          "title" : "Find the \"Delete Account…\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821490.663,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821490.665,
+              "title" : "Find the \"account.settings\" CollectionView"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821490.707,
+              "title" : "Check for interrupting elements affecting \"account.settings\" CollectionView"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821490.744,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821491.246,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821490.663,
+          "title" : "Swipe up \"account.settings\" CollectionView"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.144,
+          "title" : "Find the \"Delete Account…\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.198,
+          "title" : "Find the \"Delete Account…\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.244,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.277,
+          "title" : "Find the \"Delete Account…\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.319,
+          "title" : "Find the \"account.geometry\" Any"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.367,
+          "title" : "Find the \"Delete Account…\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.423,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.527,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.56,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.571,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-delete-error-dark-default-raster_0_2C2F8FB7-6829-4760-A7BF-CE00053C8FF6.txt",
+              "payloadId" : "0~QSbuhpiwP8Az2tyKOWuRUV8wywENiw5qYOfh4Ox7zw76F24j4oiEYliLE5DgKyeq9L8IgJKnyhQWDmXaPWUYIg==",
+              "timestamp" : 1793821492.624,
+              "uuid" : "E987374C-7519-4456-947D-44489C568BA7"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821492.624,
+              "title" : "account-delete-error-dark-default-raster"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.624,
+          "title" : "Added attachment named 'account-delete-error-dark-default-raster'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.624,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-delete-error-dark-default_0_C9497249-6829-4CE1-8A15-3AEBBCDB76C7.png",
+              "payloadId" : "0~Or37SwwBR0rrU37Z0YqSGVTTxmsIB21QFHlq_YAdDnq-xnmJy_8hcZrNH1Np21LMgq7tWNw9E4K10GVH9TDVdQ==",
+              "timestamp" : 1793821492.727,
+              "uuid" : "BFC606F3-51C7-479C-98DF-91CC8CF91519"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821492.727,
+              "title" : "account-delete-error-dark-default"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.727,
+          "title" : "Added attachment named 'account-delete-error-dark-default'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821492.73,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821492.732,
+              "title" : "Find the \"Delete Account…\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821492.777,
+              "title" : "Check for interrupting elements affecting \"Delete Account…\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821492.819,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821493.112,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821492.729,
+          "title" : "Tap \"Delete Account…\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821493.353,
+          "title" : "Checking existence of `\"Delete Account?\" Alert`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821493.398,
+          "title" : "Terminate systems.edmundlim.NotepadHillclimb:82757"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821494.661,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821495.304,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821494.456,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821494.455,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821497.749,
+                  "title" : "Checking existence of `\"Account\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821497.748,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Account\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821496.724,
+          "title" : "Waiting 10.0s for \"Account\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821497.87,
+          "title" : "Find the \"account.refreshResult\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821497.93,
+          "title" : "Find the \"account.refreshResult\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821497.978,
+          "title" : "Find the \"account.refreshResult\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821498.026,
+          "title" : "Find the \"account.refreshResult\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821498.077,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821498.174,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821498.205,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821498.215,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-refresh-error-dark-default-initial-raster_0_E76EA268-AF60-4434-94A7-A0FCB36E0BC5.txt",
+              "payloadId" : "0~cMo7TyaQp7CbA0Z8S1fmysKV-vbMHErFhCvBZ6EPWl7hFambjq9BH2HuIvCPka6nyU7P99VI6fvFpKr4rhdWeA==",
+              "timestamp" : 1793821498.288,
+              "uuid" : "6DB3C555-2C37-4880-B314-29016FAED900"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821498.288,
+              "title" : "account-refresh-error-dark-default-initial-raster"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821498.288,
+          "title" : "Added attachment named 'account-refresh-error-dark-default-initial-raster'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821498.289,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-refresh-error-dark-default-initial_0_2AC757C5-302C-48F3-A7C9-4D0263AE0596.png",
+              "payloadId" : "0~lGFVLY2pS80iGjnukyaUCp83neF6ZEsmCnAAbMGa-REPPtWf--7tU29zZyTO7fXfRcn200YAfR5gk7rSpr5u3A==",
+              "timestamp" : 1793821498.386,
+              "uuid" : "94603A78-3DE5-4E7A-827F-A84FAA38E5F5"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821498.386,
+              "title" : "account-refresh-error-dark-default-initial"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821498.386,
+          "title" : "Added attachment named 'account-refresh-error-dark-default-initial'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821498.386,
+          "title" : "Find the \"Refresh Board Now\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821498.435,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821498.437,
+              "title" : "Find the \"Refresh Board Now\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821498.478,
+              "title" : "Check for interrupting elements affecting \"Refresh Board Now\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821498.518,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821498.812,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821498.435,
+          "title" : "Tap \"Refresh Board Now\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821499.06,
+          "title" : "Checking existence of `\"account.refreshResult\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821499.114,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-refresh-error-dark-default-cleared_0_2CFAB49A-757D-49BF-AAAF-94987673477E.png",
+              "payloadId" : "0~EQK810QCZ8-f4NcsyFcMXloqwVTuhBlxnI2nL8TyWjIhi4Y8QBgEsWonUZJ3gV4zsIbnSDHGnQ5nUW0z_LdLnw==",
+              "timestamp" : 1793821499.215,
+              "uuid" : "63662931-0F88-4E4F-9BFC-ABE08860C76B"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821499.215,
+              "title" : "account-refresh-error-dark-default-cleared"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821499.215,
+          "title" : "Added attachment named 'account-refresh-error-dark-default-cleared'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821499.215,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821499.221,
+              "title" : "Find the \"Refresh Board Now\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821499.264,
+              "title" : "Check for interrupting elements affecting \"Refresh Board Now\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821499.303,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821499.597,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821499.215,
+          "title" : "Tap \"Refresh Board Now\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821500.879,
+                  "title" : "Checking existence of `\"account.refreshResult\" StaticText`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821500.877,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"account.refreshResult\" StaticText`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821499.838,
+          "title" : "Waiting 3.0s for \"account.refreshResult\" StaticText to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821500.942,
+          "title" : "Find the \"account.refreshResult\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821500.989,
+          "title" : "Find the \"account.refreshResult\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821501.036,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821501.134,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821501.167,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821501.178,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-refresh-error-dark-default-reappeared-raster_0_120D9C7B-7108-43F0-BDAB-064A05B95B3B.txt",
+              "payloadId" : "0~9Sta7cC2Gflnn6QGEI_jEINcbg1W75aIVDiuttqG18S-Miy_ZssFhDK3UfXnne_5GeBc0-nUlgc6LKWpUULCRA==",
+              "timestamp" : 1793821501.25,
+              "uuid" : "63B63249-0D57-4287-96F0-87C0763329BA"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821501.25,
+              "title" : "account-refresh-error-dark-default-reappeared-raster"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821501.25,
+          "title" : "Added attachment named 'account-refresh-error-dark-default-reappeared-raster'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821501.25,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-refresh-error-dark-default-reappeared_0_EDD6DB21-F2C0-4D77-AC16-2400BA1E2FED.png",
+              "payloadId" : "0~ob3asmaEz0UeOkEAwN50hng7XEPIwmjG4PKuJ9vL--XzaLSJZoGjbuub_FtHso8DOCtkrk7LLuDbQyMrsRZ8fw==",
+              "timestamp" : 1793821501.351,
+              "uuid" : "6BA62C58-FFD2-49EE-9B44-7BEDDBD19C6B"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821501.351,
+              "title" : "account-refresh-error-dark-default-reappeared"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821501.351,
+          "title" : "Added attachment named 'account-refresh-error-dark-default-reappeared'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821502.399,
+              "title" : "Find the \"Delete Account…\" Button (retry 1)"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821503.469,
+              "title" : "Find the \"Delete Account…\" Button (retry 2)"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821501.352,
+          "title" : "Find the \"Delete Account…\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821503.515,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821503.517,
+              "title" : "Find the \"account.settings\" CollectionView"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821503.559,
+              "title" : "Check for interrupting elements affecting \"account.settings\" CollectionView"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821503.599,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821504.107,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821503.515,
+          "title" : "Swipe up \"account.settings\" CollectionView"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821504.911,
+          "title" : "Find the \"Delete Account…\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821504.986,
+          "title" : "Find the \"Delete Account…\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821505.037,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821505.072,
+          "title" : "Find the \"Delete Account…\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821505.121,
+          "title" : "Find the \"account.geometry\" Any"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821505.171,
+          "title" : "Find the \"Delete Account…\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821505.226,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821505.329,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821505.362,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821505.373,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-delete-refresh-error-dark-default-raster_0_99EA0A39-A181-4146-B384-A1B782035055.txt",
+              "payloadId" : "0~W1sgjZg7iRP2ftMSN_BKN6Wkty39HEp4ztI-1Py2trhwLDSxRFf8QbXwkTNcANtOIFzzHJ3Cz3DD5nT1tJu_NA==",
+              "timestamp" : 1793821505.426,
+              "uuid" : "D705D19F-71AF-480C-87DE-B9ABA6727B9A"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821505.426,
+              "title" : "account-delete-refresh-error-dark-default-raster"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821505.426,
+          "title" : "Added attachment named 'account-delete-refresh-error-dark-default-raster'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821505.426,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "account-delete-refresh-error-dark-default_0_2534AEA8-3531-41EC-A08F-E7441696E770.png",
+              "payloadId" : "0~wHzYL6NJzn_YfuvWHyr_J34TKbYvGMSv_YyXUcKBLkQM3qZgrwHpITjcFyuYsz9rvHyC5TuWOMimb8d0dYulyw==",
+              "timestamp" : 1793821505.528,
+              "uuid" : "A24F933F-CD26-4E0C-A314-A836FE5D6371"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821505.528,
+              "title" : "account-delete-refresh-error-dark-default"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821505.528,
+          "title" : "Added attachment named 'account-delete-refresh-error-dark-default'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821505.531,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821505.533,
+              "title" : "Find the \"Delete Account…\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821505.577,
+              "title" : "Check for interrupting elements affecting \"Delete Account…\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821505.618,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821505.91,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821505.53,
+          "title" : "Tap \"Delete Account…\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821506.154,
+          "title" : "Checking existence of `\"Delete Account?\" Alert`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821506.198,
+          "title" : "Terminate systems.edmundlim.NotepadHillclimb:83668"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821507.281,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+        "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ]
+}

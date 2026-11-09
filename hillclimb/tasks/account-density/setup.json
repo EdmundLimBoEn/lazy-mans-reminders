@@ -1,0 +1,44 @@
+{
+  "base": "02fcee4bed50940679e10698ed8620aa08005ebc",
+  "device": {
+    "hostId": "local",
+    "id": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+    "runtime": "iOS26.2/23C54",
+    "points": [
+      402,
+      874
+    ]
+  },
+  "DD": "/tmp/account-r-800c5513-DD",
+  "initialResolveCount": 1,
+  "configuration": "example-derived NotepadHillclimb/group, no private file",
+  "xcode": "Xcode 27.1\nBuild version 27A9269\n",
+  "limitations": [
+    "Apple Details has different content and no medium reference",
+    "Physical haptics, spoken VoiceOver, true lock and AX1\u20135 unobserved"
+  ],
+  "generationCommands": [
+    [
+      "xcodegen",
+      "generate",
+      "--spec",
+      "ios/project.yml"
+    ],
+    [
+      "xcodegen",
+      "generate",
+      "--spec",
+      "ios/project.yml"
+    ]
+  ],
+  "initialResolveCommand": [
+    "xcodebuild",
+    "-resolvePackageDependencies",
+    "-project",
+    "ios/LazyMansReminders.xcodeproj",
+    "-scheme",
+    "LazyMansReminders",
+    "-derivedDataPath",
+    "/tmp/account-r-800c5513-DD"
+  ]
+}

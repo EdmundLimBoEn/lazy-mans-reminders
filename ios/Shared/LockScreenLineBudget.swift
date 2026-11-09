@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import SwiftUI
 
 /// Measures how many compact reminder lines fit in the Lock Screen Live Activity
 /// glass on this phone, caches the result in the App Group, and syncs to Supabase
@@ -64,5 +65,49 @@ enum LockScreenMarqueePolicy {
 
     static func shouldScroll(overflow: CGFloat, reduceMotion: Bool) -> Bool {
         overflow > overflowThreshold && !reduceMotion
+    }
+}
+
+/// Presentation budgets are independent of the persisted board capacity.
+/// ActivityKit may truncate surfaces taller than 160pt; the Island also reserves
+/// space for the sensor region and its rounded bottom edge.
+enum ReminderActivityLayout {
+    enum Surface { case lockScreen, island }
+    static func availableHeight(_ surface: Surface) -> CGFloat {
+        surface == .lockScreen ? 134 : 96
+    }
+    static func rowHeight(pointSize: CGFloat) -> CGFloat {
+        ceil(UIFont.systemFont(ofSize: pointSize, weight: .semibold).lineHeight)
+    }
+    static func lineLimit(pointSize: CGFloat, surface: Surface) -> Int {
+        max(1, Int((availableHeight(surface) + LockScreenLineBudget.lineSpacing)
+            / (rowHeight(pointSize: pointSize) + LockScreenLineBudget.lineSpacing)))
+    }
+}
+
+/// Shared by the native widget and rendered-layout regression checks.
+struct ReminderActivityLinesView: View {
+    let lines: [String]
+    var hiddenLineCount: Int? = nil
+    let surface: ReminderActivityLayout.Surface
+    @ScaledMetric(relativeTo: .subheadline) private var pointSize = LockScreenLineBudget.pointSize
+
+    var body: some View {
+        let limit = ReminderActivityLayout.lineLimit(pointSize: pointSize, surface: surface)
+        let display = ReminderActivityPresentation.surfaceLines(
+            ReminderAttributes.ContentState(lines: lines, hiddenLineCount: hiddenLineCount), limit: limit)
+        VStack(alignment: .leading, spacing: LockScreenLineBudget.lineSpacing) {
+            ForEach(Array(display.enumerated()), id: \.offset) { _, line in
+                Text(line)
+                    .font(.system(size: pointSize, weight: .semibold))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .allowsTightening(surface == .island)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(height: ReminderActivityLayout.rowHeight(pointSize: pointSize))
+            }
+        }
+        .padding(.horizontal, surface == .island ? 14 : 0)
     }
 }

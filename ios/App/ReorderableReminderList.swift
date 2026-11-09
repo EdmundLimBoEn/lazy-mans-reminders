@@ -37,12 +37,19 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
             action.backgroundColor = .systemGreen
             return UISwipeActionsConfiguration(actions: [action])
         }
-        let list = UICollectionView(
+        let list = BoardCollectionView(
             frame: .zero,
             collectionViewLayout: UICollectionViewCompositionalLayout.list(using: configuration)
         )
         list.backgroundColor = .systemBackground
         list.alwaysBounceVertical = true
+        if #available(iOS 26.0, *) {
+            list.bottomEdgeEffect.isHidden = true
+            list.topEdgeEffect.style = .soft
+        }
+#if DEBUG
+        if HillclimbDemo.isActive { HillclimbGeometry.shared.list = list }
+#endif
         list.keyboardDismissMode = .interactive
         list.dataSource = coordinator
         list.register(UICollectionViewListCell.self, forCellWithReuseIdentifier: "reminder")
@@ -57,6 +64,11 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
         refresh.addTarget(coordinator, action: #selector(Coordinator.refresh), for: .valueChanged)
         list.refreshControl = refresh
         return list
+    }
+
+    static func dismantleUIView(_ list: UICollectionView, coordinator: Coordinator) {
+        coordinator.refreshTask?.cancel()
+        list.refreshControl?.endRefreshing()
     }
 
     func updateUIView(_ list: UICollectionView, context: Context) {
@@ -82,6 +94,7 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
         weak var dragGesture: UIPanGestureRecognizer?
         private(set) var isDragging = false
         private var dragOffset = CGPoint.zero
+        var refreshTask: Task<Void, Never>?
 
         init(parent: ReorderableReminderList) {
             self.parent = parent
@@ -98,9 +111,10 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "reminder", for: indexPath)
             let reminder = items[indexPath.item]
             cell.contentConfiguration = UIHostingConfiguration {
-                HStack(spacing: 0) {
+                HStack(alignment: .top, spacing: 0) {
                     parent.row(reminder)
                     ReminderDragGrip(isEnabled: parent.isEnabled && items.count > 1)
+                        .modifier(HillclimbFrameProbe(key: "grip-" + reminder.id.uuidString))
                         .accessibilityLabel("Reorder \(reminder.text)")
                         .accessibilityValue("Position \(indexPath.item + 1) of \(items.count)")
                         .accessibilityAction(named: "Move up") { [weak self] in
@@ -192,9 +206,19 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
         }
 
         @objc func refresh() {
-            Task { @MainActor in
+            guard refreshTask == nil else { return }
+            refreshTask = Task { @MainActor in
+                defer {
+                    UIView.performWithoutAnimation {
+                        list?.refreshControl?.endRefreshing()
+                        list?.layoutIfNeeded()
+                    }
+                    refreshTask = nil
+                }
                 await parent.onRefresh()
-                list?.refreshControl?.endRefreshing()
+                while list?.isDragging == true && !Task.isCancelled {
+                    try? await Task.sleep(for: .milliseconds(16))
+                }
             }
         }
     }
@@ -208,7 +232,7 @@ private struct ReminderDragGrip: View {
             dots
             dots
         }
-        .foregroundStyle(.tertiary)
+        .foregroundStyle(.secondary)
         .opacity(isEnabled ? 1 : 0.3)
         .frame(width: 44, height: 44)
         .contentShape(Rectangle())
@@ -219,6 +243,44 @@ private struct ReminderDragGrip: View {
     private var dots: some View {
         VStack(spacing: 3) {
             ForEach(0..<3) { _ in Circle().frame(width: 3, height: 3) }
+        }
+    }
+}
+
+private final class BoardCollectionView: UICollectionView {
+    private let topMask = CAGradientLayer()
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // The safe-area inset places the viewport below the bar's native effect.
+        // Soften only departing content; never change the offset or bottom ink.
+        guard contentOffset.y + adjustedContentInset.top > 0.5, bounds.height > 24 else {
+            layer.mask = nil
+            return
+        }
+        let solid = UIAccessibility.isReduceTransparencyEnabled || UIAccessibility.isDarkerSystemColorsEnabled
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        topMask.frame = bounds
+        topMask.startPoint = CGPoint(x: 0.5, y: 0)
+        topMask.endPoint = CGPoint(x: 0.5, y: 1)
+        topMask.colors = [UIColor.clear.cgColor, UIColor.black.cgColor, UIColor.black.cgColor]
+        let edge = (solid ? 6.0 : 24.0) / bounds.height
+        topMask.locations = solid ? [NSNumber(value: edge), NSNumber(value: edge), 1] : [0, NSNumber(value: edge), 1]
+        layer.mask = topMask
+        CATransaction.commit()
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        guard window != nil else { return }
+        var responder: UIResponder? = next
+        while let current = responder {
+            if let controller = current as? UIViewController {
+                controller.setContentScrollView(self, for: .top)
+                break
+            }
+            responder = current.next
         }
     }
 }

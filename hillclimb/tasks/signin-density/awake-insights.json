@@ -1,0 +1,39 @@
+{
+  "commonFailureInsights" : [
+
+  ],
+  "failureDistributionInsights" : [
+
+  ],
+  "longestTestRunsInsights" : [
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests/testPopulatedRetryRecoversLocallyOnceWithoutFocusOrDuplicateAnnouncement"
+      ],
+      "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+      "durationOfSlowTests" : 175.53833496570587,
+      "impact" : "(7%)",
+      "meanTime" : "50s across 47 test runs",
+      "osNameAndVersion" : "iOS Simulator 26.2",
+      "targetName" : "HillclimbUITests",
+      "testPlanConfigurationName" : "Test Scheme Action",
+      "title" : "1 longest test run with outlier durations exceeding 170.80s (three standard deviations)"
+    },
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testDelayedCompletionCannotReturnSuccessAfterSignOut",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testAccountSwitchClearsForeignCacheWithoutSignOutAndRejectsLateCreate",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionClientTests/testConstructingClientDoesNotStartAnSDKInitialRefreshOutsideGate",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityLayoutTests/testRenderedLastLineFitsBothNativeSurfaceBudgets"
+      ],
+      "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+      "durationOfSlowTests" : 0.6027109622955322,
+      "impact" : "(38%)",
+      "meanTime" : "0.0059s across 263 test runs",
+      "osNameAndVersion" : "iOS Simulator 26.2",
+      "targetName" : "LazyMansRemindersTests",
+      "testPlanConfigurationName" : "Test Scheme Action",
+      "title" : "4 longest test runs with outlier durations exceeding 0.07s (three standard deviations)"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "command": [
+      "xcodebuild",
+      "-version"
+    ],
+    "exit": 0,
+    "stdout": "Xcode 27.1\nBuild version 27A9269\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "xcodegen",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "Version: 2.46.0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "Python 3.14.7\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "deno",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "deno 2.8.1 (stable, release, aarch64-apple-darwin)\nv8 14.9.207.2-rusty\ntypescript 6.0.3\n",
+    "stderr": ""
+  }
+]

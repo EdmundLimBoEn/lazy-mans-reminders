@@ -1,0 +1,202 @@
+{
+  "_type": {
+    "_name": "ResultIssueSummaries"
+  },
+  "analyzerWarningSummaries": {
+    "_type": {
+      "_name": "Array"
+    }
+  },
+  "errorSummaries": {
+    "_type": {
+      "_name": "Array"
+    }
+  },
+  "testFailureSummaries": {
+    "_type": {
+      "_name": "Array"
+    }
+  },
+  "testWarningSummaries": {
+    "_type": {
+      "_name": "Array"
+    }
+  },
+  "warningSummaries": {
+    "_type": {
+      "_name": "Array"
+    },
+    "_values": [
+      {
+        "_type": {
+          "_name": "IssueSummary"
+        },
+        "documentLocationInCreatingWorkspace": {
+          "_type": {
+            "_name": "DocumentLocation"
+          },
+          "concreteTypeName": {
+            "_type": {
+              "_name": "String"
+            },
+            "_value": "DVTTextDocumentLocation"
+          },
+          "url": {
+            "_type": {
+              "_name": "String"
+            },
+            "_value": "file:///Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-917d931c/ios/App/AuthManager.swift#EndingColumnNumber=80&EndingLineNumber=89&StartingColumnNumber=80&StartingLineNumber=89&Timestamp=815512750.588532"
+          }
+        },
+        "issueType": {
+          "_type": {
+            "_name": "String"
+          },
+          "_value": "ImplicitStrongCapture"
+        },
+        "message": {
+          "_type": {
+            "_name": "String"
+          },
+          "_value": "'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope"
+        }
+      },
+      {
+        "_type": {
+          "_name": "IssueSummary"
+        },
+        "documentLocationInCreatingWorkspace": {
+          "_type": {
+            "_name": "DocumentLocation"
+          },
+          "concreteTypeName": {
+            "_type": {
+              "_name": "String"
+            },
+            "_value": "DVTTextDocumentLocation"
+          },
+          "url": {
+            "_type": {
+              "_name": "String"
+            },
+            "_value": "file:///Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-917d931c/ios/App/AuthManager.swift#EndingColumnNumber=24&EndingLineNumber=241&StartingColumnNumber=24&StartingLineNumber=241&Timestamp=815512750.588532"
+          }
+        },
+        "issueType": {
+          "_type": {
+            "_name": "String"
+          },
+          "_value": "NoUsage"
+        },
+        "message": {
+          "_type": {
+            "_name": "String"
+          },
+          "_value": "Result of 'try?' is unused"
+        }
+      },
+      {
+        "_type": {
+          "_name": "IssueSummary"
+        },
+        "documentLocationInCreatingWorkspace": {
+          "_type": {
+            "_name": "DocumentLocation"
+          },
+          "concreteTypeName": {
+            "_type": {
+              "_name": "String"
+            },
+            "_value": "DVTTextDocumentLocation"
+          },
+          "url": {
+            "_type": {
+              "_name": "String"
+            },
+            "_value": "file:///Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-917d931c/ios/App/AuthManager.swift#EndingColumnNumber=8&EndingLineNumber=427&StartingColumnNumber=8&StartingLineNumber=427&Timestamp=815512750.588532"
+          }
+        },
+        "issueType": {
+          "_type": {
+            "_name": "String"
+          },
+          "_value": "NoUsage"
+        },
+        "message": {
+          "_type": {
+            "_name": "String"
+          },
+          "_value": "Result of 'try?' is unused"
+        }
+      },
+      {
+        "_type": {
+          "_name": "IssueSummary"
+        },
+        "documentLocationInCreatingWorkspace": {
+          "_type": {
+            "_name": "DocumentLocation"
+          },
+          "concreteTypeName": {
+            "_type": {
+              "_name": "String"
+            },
+            "_value": "DVTTextDocumentLocation"
+          },
+          "url": {
+            "_type": {
+              "_name": "String"
+            },
+            "_value": "file:///Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-917d931c/ios/Tests/AuthSessionGateTests.swift#EndingColumnNumber=30&EndingLineNumber=654&StartingColumnNumber=30&StartingLineNumber=654&Timestamp=815512750.588532"
+          }
+        },
+        "issueType": {
+          "_type": {
+            "_name": "String"
+          },
+          "_value": "NoUsage"
+        },
+        "message": {
+          "_type": {
+            "_name": "String"
+          },
+          "_value": "Expression of type 'Bool' is unused"
+        }
+      },
+      {
+        "_type": {
+          "_name": "IssueSummary"
+        },
+        "documentLocationInCreatingWorkspace": {
+          "_type": {
+            "_name": "DocumentLocation"
+          },
+          "concreteTypeName": {
+            "_type": {
+              "_name": "String"
+            },
+            "_value": "DVTTextDocumentLocation"
+          },
+          "url": {
+            "_type": {
+              "_name": "String"
+            },
+            "_value": "file:///Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-917d931c/ios/Tests/AuthSessionGateTests.swift#EndingColumnNumber=67&EndingLineNumber=361&StartingColumnNumber=67&StartingLineNumber=361&Timestamp=815512750.588532"
+          }
+        },
+        "issueType": {
+          "_type": {
+            "_name": "String"
+          },
+          "_value": "Swift Compiler Warning"
+        },
+        "message": {
+          "_type": {
+            "_name": "String"
+          },
+          "_value": "Will never be executed"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "original": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-7e805644/hillclimb/tasks/account-chrome/guidance-AccountChromeUITests/D115384D-DFA6-4F5C-A4A5-EDFDCF455F19.mp4",
+    "sha256": "2662f44b272b76c16093f529efc820a1f3da44a65cf81537f19fafebb7198fc5",
+    "bytes": 122132732,
+    "reason": "Original failed XCTest recording exceeds100MB; retained locally and in /tmp/account-q-guidance.xcresult. Committed review transcode is not native pixel evidence.",
+    "reviewCopy": "guidance-failure-review.mp4",
+    "transcodeCommand": [
+      "ffmpeg",
+      "-y",
+      "-i",
+      "hillclimb/tasks/account-chrome/guidance-AccountChromeUITests/D115384D-DFA6-4F5C-A4A5-EDFDCF455F19.mp4",
+      "-vf",
+      "scale=600:-2",
+      "-c:v",
+      "libx264",
+      "-preset",
+      "veryfast",
+      "-crf",
+      "28",
+      "-an",
+      "hillclimb/tasks/account-chrome/guidance-failure-review.mp4"
+    ],
+    "exit": 0
+  }
+]

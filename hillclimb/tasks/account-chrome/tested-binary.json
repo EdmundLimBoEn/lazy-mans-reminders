@@ -1,0 +1,35 @@
+{
+  "sourceSHA": "e9ec0dd68cd93de6b919e1a97b45bc5cabaf72db",
+  "compiledInputsEqualFreeze": true,
+  "xctestrunSHA256": "b7987a593438f96e6b49a823cc29004706492422cbd8747ebbeb03c8de2e6764",
+  "artifacts": {
+    "/tmp/account-q-7e805644-DD/Build/Products/LazyMansReminders_iphonesimulator27.1-arm64.xctestrun": "b7987a593438f96e6b49a823cc29004706492422cbd8747ebbeb03c8de2e6764",
+    "/tmp/account-q-7e805644-DD/Build/Products/Debug-iphonesimulator/LazyMansReminders.app/LazyMansReminders": "f95c6c3e1d1fedcfabd3d9d36ac8c4d3533b0810c4d5f64a6b1e7a2e15aff618",
+    "/tmp/account-q-7e805644-DD/Build/Products/Debug-iphonesimulator/LazyMansReminders.app/LazyMansReminders.debug.dylib": "70421613b25b20df9439323dacef260e22fc603157fba26f684d155894c85939",
+    "/tmp/account-q-7e805644-DD/Build/Products/Debug-iphonesimulator/LazyMansReminders.app/__preview.dylib": "47e66997c477974ba3bf1f88338c05568f0ff85f5493f0f2818dec54b95693ef",
+    "/tmp/account-q-7e805644-DD/Build/Products/Debug-iphonesimulator/ReminderWidgetExtension.appex/ReminderWidgetExtension.debug.dylib": "66c20d62468ed75112b252db58b1325725f861828ac5f4d776cb0c518b480d0d",
+    "/tmp/account-q-7e805644-DD/Build/Products/Debug-iphonesimulator/ReminderWidgetExtension.appex/__preview.dylib": "cd5073236325785150e6aa800c9050f3eafd1fb5d52d9cdb19ec85985dfd12dd",
+    "/tmp/account-q-7e805644-DD/Build/Products/Debug-iphonesimulator/HillclimbUITests-Runner.app/PlugIns/HillclimbUITests.xctest/HillclimbUITests": "a9564ff8b23b26c7bd8be58a234b4fa247205891341db9ca3a18bbb99abe8f10",
+    "/tmp/account-q-7e805644-DD/Build/Products/Debug-iphonesimulator/LazyMansReminders.app/PlugIns/LazyMansRemindersTests.xctest/LazyMansRemindersTests": "5de71e9d3b455d240aeac7b814b224a15f12aa14b961c128fc02f38986360677",
+    "/tmp/account-q-7e805644-DD/Build/Products/Debug-iphonesimulator/LazyMansReminders.app/PlugIns/ReminderWidgetExtension.appex/ReminderWidgetExtension.debug.dylib": "66c20d62468ed75112b252db58b1325725f861828ac5f4d776cb0c518b480d0d",
+    "/tmp/account-q-7e805644-DD/Build/Products/Debug-iphonesimulator/LazyMansReminders.app/PlugIns/ReminderWidgetExtension.appex/__preview.dylib": "cd5073236325785150e6aa800c9050f3eafd1fb5d52d9cdb19ec85985dfd12dd"
+  },
+  "buildCommand": [
+    "xcodebuild",
+    "build-for-testing",
+    "-project",
+    "ios/LazyMansReminders.xcodeproj",
+    "-scheme",
+    "LazyMansReminders",
+    "-configuration",
+    "Debug",
+    "-derivedDataPath",
+    "/tmp/account-q-7e805644-DD",
+    "-destination",
+    "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694,arch=arm64",
+    "-disableAutomaticPackageResolution",
+    "-skipPackageUpdates",
+    "CODE_SIGNING_ALLOWED=NO"
+  ],
+  "buildExit": 0
+}

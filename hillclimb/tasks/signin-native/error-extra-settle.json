@@ -1,0 +1,11 @@
+{
+  "file": "error-extra-settle.png",
+  "sha256": "3cb97696a6e43f588061a631456dd44a0250bea80511027bce3c5c1d23e1b765",
+  "reason": "Fresh native recheck after initial image display appeared to omit upper content; original raster histograms confirm upper text/fill pixels exist.",
+  "operations": [
+    "open signin dark XXXL error",
+    "device_screenshot",
+    "wait stable 2000 10000",
+    "screenshot --pixel-density 3"
+  ]
+}

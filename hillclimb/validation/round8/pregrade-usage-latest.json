@@ -1,0 +1,27 @@
+{
+  "observedUTC": "2026-11-05T20:01:20.419011+00:00",
+  "latest": {
+    "timestamp": "2026-11-05T20:00:58.154Z",
+    "rate_limits": {
+      "limit_id": "codex",
+      "limit_name": null,
+      "primary": {
+        "used_percent": 35.0,
+        "window_minutes": 10080,
+        "resets_at": 1794381959
+      },
+      "secondary": null,
+      "credits": {
+        "has_credits": false,
+        "unlimited": false,
+        "balance": "0"
+      },
+      "individual_limit": null,
+      "spend_control_reached": null,
+      "plan_type": "prolite",
+      "rate_limit_reached_type": null
+    }
+  },
+  "nearExhaustion": false,
+  "decision": "Continue;35percent used in current weekly window, no score or plateau stop"
+}

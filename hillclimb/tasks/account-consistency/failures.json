@@ -1,0 +1,27 @@
+[
+  {
+    "kind": "build invocation",
+    "error": "xcodebuild: error: destination implies architecture, architecture must not also be specified.",
+    "evidence": ["build-initial.json", "build-initial.txt"],
+    "correction": "Removed -arch and placed arch=arm64 in the explicit destination. Subsequent build-for-testing succeeded."
+  },
+  {
+    "kind": "device command help",
+    "error": "Error (INVALID_ARGS): Unknown command: drag",
+    "advice": "Check command arguments and run --help for usage examples.",
+    "correction": "Read --help and help gesture. Used the documented gesture pan syntax."
+  },
+  {
+    "kind": "native capture selector",
+    "error": "Error (AMBIGUOUS_MATCH): Selector matched 2 distinct actionable elements: label=\"Add a lasting widget\"",
+    "advice": "Multiple candidates matched. Narrow the query or pass an exact identifier.",
+    "evidence": ["captures-normal.json"],
+    "correction": "Used role=button with the exact existing label. Preserved the first attempt and used new image names for subsequent captures."
+  },
+  {
+    "kind": "native contrast gate",
+    "error": "Delete explanatory footer measured 3.2871497452478997:1 in light/default and light/XXXL, below the required 4.5:1.",
+    "evidence": ["precontrast-raster-results.json", "screens/normal2-light-default-expanded-lower.png", "screens/normal2-light-XXXL-expanded-lower.png"],
+    "correction": "Used explicit semantic UIColor.label on the delete and version footer inside the footer VStack. Rebuilt, installed and recaptured final source."
+  }
+]

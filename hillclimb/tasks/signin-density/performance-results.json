@@ -1,0 +1,79 @@
+{
+  "sourceSHA": "c8da74021a7d66d95d040817405044bbb3af3f9f",
+  "configuration": "Unsigned arm64 Debug, seeded long-text/light/default, private Auth17 iOS26.2/23C54",
+  "hostObservations": "awake-process.json",
+  "framePacingObserved": false,
+  "hitchMetricMeasured": false,
+  "scrollSignpostReported": "Duration only; no frame/hitch data returned by this chosen metric",
+  "metrics": [
+    {
+      "test": "PerformanceUITests/testSeededLaunchMetric()",
+      "name": "Duration (AppLaunch)",
+      "unit": "s",
+      "samples": [
+        1.078623458,
+        1.080191917,
+        1.0314376250000001,
+        1.0789742500000001,
+        1.026293916
+      ],
+      "mean": 1.0591042332,
+      "sampleSD": 0.02766977699824723,
+      "populationSD": 0.024748600916136357,
+      "populationRSDPercent": 2.336748370966322,
+      "minimum": 1.026293916,
+      "maximum": 1.080191917,
+      "device": {
+        "deviceId": "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+        "deviceName": "Hillclimb Auth iPhone 17 Pro"
+      }
+    },
+    {
+      "test": "PerformanceUITests/testSeededScrollElapsedMetric()",
+      "name": "Clock Monotonic Time",
+      "unit": "s",
+      "samples": [
+        4.493385611,
+        4.861817761,
+        4.834944311,
+        4.874938786,
+        4.499519088
+      ],
+      "mean": 4.7129211114,
+      "sampleSD": 0.1981450604434859,
+      "populationSD": 0.17722632982297565,
+      "populationRSDPercent": 3.7604348902485567,
+      "minimum": 4.493385611,
+      "maximum": 4.874938786,
+      "device": {
+        "deviceId": "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+        "deviceName": "Hillclimb Auth iPhone 17 Pro"
+      }
+    },
+    {
+      "test": "PerformanceUITests/testSeededScrollSignpostMetric()",
+      "name": "Duration (Scroll_DraggingAndDeceleration)",
+      "unit": "s",
+      "samples": [
+        2.350610125,
+        2.349972,
+        2.3669057920000003,
+        2.349599209,
+        2.349601792
+      ],
+      "mean": 2.3533377836000002,
+      "sampleSD": 0.00759595362508379,
+      "populationSD": 0.006794027463849323,
+      "populationRSDPercent": 0.28869750493089913,
+      "minimum": 2.349599209,
+      "maximum": 2.3669057920000003,
+      "device": {
+        "deviceId": "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+        "deviceName": "Hillclimb Auth iPhone 17 Pro"
+      }
+    }
+  ],
+  "scope": "Simulator baseline; elapsed transaction metric includes XCTest overhead and quiescence. No invented before baseline, speed threshold or hardware feel claim.",
+  "concurrentCPUObservations": "awake-concurrent-host-load.json",
+  "comparison": "No before/after improvement claim; concurrent shared-host simulator workload recorded."
+}

@@ -3,7 +3,7 @@ import SwiftUI
 import WidgetKit
 
 /// Full-width Lock Screen banner — notification-style clear glass.
-/// Compact type so the phone-measured line budget can actually fit.
+/// Scaled type with a separate height budget for each native surface.
 ///
 /// Compact leading, compact trailing, and minimal stay `EmptyView`. Any
 /// compact text widens the collapsed Dynamic Island over status icons.
@@ -13,16 +13,16 @@ import WidgetKit
 struct ReminderLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: ReminderAttributes.self) { context in
-            lockScreenBanner(lines: context.state.lines)
+            lockScreenBanner(state: context.state)
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.bottom) {
-                    expandedIsland(lines: context.state.lines)
+                    expandedIsland(state: context.state)
                 }
                 // The expanded pill's bottom corner starts curving while the
                 // last line is still drawing. Extra bottom margin keeps that
                 // curve below the text.
-                .contentMargins(.bottom, 14)
+                .contentMargins(.bottom, 20)
             } compactLeading: {
                 EmptyView()
             } compactTrailing: {
@@ -34,11 +34,8 @@ struct ReminderLiveActivity: Widget {
     }
 
     @ViewBuilder
-    private func lockScreenBanner(lines: [String]) -> some View {
-        reminderLineStack(
-            lines: lines,
-            font: .system(size: LockScreenLineBudget.pointSize, weight: .semibold)
-        )
+    private func lockScreenBanner(state: ReminderAttributes.ContentState) -> some View {
+        ReminderActivityLinesView(lines: state.lines, hiddenLineCount: state.hiddenLineCount, surface: .lockScreen)
         .padding(.top, 14)
         .padding(.bottom, 12)
         .padding(.horizontal, 16)
@@ -49,11 +46,8 @@ struct ReminderLiveActivity: Widget {
     }
 
     @ViewBuilder
-    private func expandedIsland(lines: [String]) -> some View {
-        reminderLineStack(
-            lines: lines,
-            font: .subheadline.weight(.semibold)
-        )
+    private func expandedIsland(state: ReminderAttributes.ContentState) -> some View {
+        ReminderActivityLinesView(lines: state.lines, hiddenLineCount: state.hiddenLineCount, surface: .island)
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
         .frame(maxWidth: .infinity, alignment: .leading)
         // The island background is always black. Force dark so `.primary`
@@ -61,18 +55,4 @@ struct ReminderLiveActivity: Widget {
         .environment(\.colorScheme, .dark)
     }
 
-    @ViewBuilder
-    private func reminderLineStack(lines: [String], font: Font) -> some View {
-        let display = ReminderActivityPresentation.presentedLines(lines)
-        VStack(alignment: .leading, spacing: LockScreenLineBudget.lineSpacing) {
-            ForEach(Array(display.enumerated()), id: \.offset) { _, line in
-                Text(line)
-                    .font(font)
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-        }
-    }
 }

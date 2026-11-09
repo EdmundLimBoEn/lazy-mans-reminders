@@ -1,0 +1,21 @@
+{
+  "command": [
+    "xcrun",
+    "simctl",
+    "spawn",
+    "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+    "log",
+    "show",
+    "--start",
+    "2026-11-05 09:12:09",
+    "--end",
+    "2026-11-05 09:16:54",
+    "--style",
+    "json",
+    "--predicate",
+    "process == \"LazyMansReminders\" AND (messageType == fault OR messageType == error OR eventMessage CONTAINS[c] \"Invalid frame\")"
+  ],
+  "runtimeWarnings": [],
+  "invalidFrameEvents": 0,
+  "allErrorFaultEvents": 3944
+}

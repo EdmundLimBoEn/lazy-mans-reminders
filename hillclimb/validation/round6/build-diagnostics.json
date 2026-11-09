@@ -1,0 +1,55 @@
+[
+  {
+    "file": "build-debug-final-process.json",
+    "exit": 0,
+    "warningLines": [
+      "2026-11-05 09:11:49.276 appintentsmetadataprocessor[58523:5752746] warning: Metadata extraction skipped, no AppIntents.framework dependency found"
+    ],
+    "errorLines": [],
+    "warningLineCount": 1,
+    "errorLineCount": 0
+  },
+  {
+    "file": "build-debug-process.json",
+    "exit": 0,
+    "warningLines": [
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-65d9521e/ios/App/AuthManager.swift:90:81: warning: 'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]",
+      "|                                                                                 |- warning: 'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]",
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-65d9521e/ios/App/AuthManager.swift:242:25: warning: result of 'try?' is unused [#NoUsage]",
+      "|                         `- warning: result of 'try?' is unused [#NoUsage]",
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-65d9521e/ios/App/AuthManager.swift:428:9: warning: result of 'try?' is unused [#NoUsage]",
+      "|         `- warning: result of 'try?' is unused [#NoUsage]",
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-65d9521e/ios/Tests/AuthSessionGateTests.swift:655:31: warning: expression of type 'Bool' is unused [#NoUsage]",
+      "|                               `- warning: expression of type 'Bool' is unused [#NoUsage]",
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-65d9521e/ios/Tests/AuthSessionGateTests.swift:362:68: warning: will never be executed",
+      "|                                                       |            `- warning: will never be executed",
+      "2026-11-05 07:39:54.769 appintentsmetadataprocessor[66557:5487822] warning: Metadata extraction skipped, no AppIntents.framework dependency found"
+    ],
+    "errorLines": [],
+    "warningLineCount": 11,
+    "errorLineCount": 0
+  },
+  {
+    "file": "build-debug-restore-process.json",
+    "exit": 0,
+    "warningLines": [],
+    "errorLines": [],
+    "warningLineCount": 0,
+    "errorLineCount": 0
+  },
+  {
+    "file": "build-release-process.json",
+    "exit": 0,
+    "warningLines": [
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-65d9521e/ios/App/AuthManager.swift:90:81: warning: 'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]",
+      "|                                                                                 |- warning: 'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]",
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-65d9521e/ios/App/AuthManager.swift:242:25: warning: result of 'try?' is unused [#NoUsage]",
+      "|                         `- warning: result of 'try?' is unused [#NoUsage]",
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-65d9521e/ios/App/AuthManager.swift:428:9: warning: result of 'try?' is unused [#NoUsage]",
+      "|         `- warning: result of 'try?' is unused [#NoUsage]"
+    ],
+    "errorLines": [],
+    "warningLineCount": 6,
+    "errorLineCount": 0
+  }
+]

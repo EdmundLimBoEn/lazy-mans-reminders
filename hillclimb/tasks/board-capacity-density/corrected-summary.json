@@ -1,0 +1,80 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "066ECE57-46B4-414A-B53E-523775329360",
+        "deviceName" : "Hillclimb Board iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 4,
+      "passedTests" : 0,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "LazyMansReminders · Built with macOS 27.2",
+  "expectedFailures" : 0,
+  "failedTests" : 4,
+  "finishTime" : 1793866404.465,
+  "passedTests" : 0,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793866383.893,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "XCTAssertEqual failed: (\"2\") is not equal to (\"1\")",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "BoardCapacityDensityUITests/testDarkDefaultCapacityDensity()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityDensityUITests/testDarkDefaultCapacityDensity",
+      "testName" : "testDarkDefaultCapacityDensity()"
+    },
+    {
+      "failureText" : "XCTAssertEqual failed: (\"2\") is not equal to (\"1\")",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 2,
+      "testIdentifierString" : "BoardCapacityDensityUITests/testDarkXXXLTitleAndFinalInkCapacityDensity()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityDensityUITests/testDarkXXXLTitleAndFinalInkCapacityDensity",
+      "testName" : "testDarkXXXLTitleAndFinalInkCapacityDensity()"
+    },
+    {
+      "failureText" : "XCTAssertEqual failed: (\"2\") is not equal to (\"1\")",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 3,
+      "testIdentifierString" : "BoardCapacityDensityUITests/testLightDefaultCapacityDensity()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityDensityUITests/testLightDefaultCapacityDensity",
+      "testName" : "testLightDefaultCapacityDensity()"
+    },
+    {
+      "failureText" : "XCTAssertEqual failed: (\"2\") is not equal to (\"1\")",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 4,
+      "testIdentifierString" : "BoardCapacityDensityUITests/testLightXXXLTitleAndFinalInkCapacityDensity()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityDensityUITests/testLightXXXLTitleAndFinalInkCapacityDensity",
+      "testName" : "testLightXXXLTitleAndFinalInkCapacityDensity()"
+    }
+  ],
+  "title" : "Test - LazyMansReminders",
+  "topInsights" : [
+    {
+      "category" : "Common Failures",
+      "impact" : "100% of failures",
+      "text" : "4 runs of 4 tests failed with XCTAssertEqual failed: (\"2\") is not equal to (\"1\")"
+    }
+  ],
+  "totalTestCount" : 4
+}

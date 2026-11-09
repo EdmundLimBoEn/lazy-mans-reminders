@@ -1,0 +1,93 @@
+{
+  "hostStatuses": {
+    "local": {
+      "status": "ready"
+    }
+  },
+  "hosts": [
+    {
+      "id": "local",
+      "label": "This machine",
+      "platforms": [
+        {
+          "platform": "ios",
+          "available": true
+        },
+        {
+          "platform": "android",
+          "available": false,
+          "reason": "Android SDK Command-line Tools (latest) are missing from /Users/limboenedmund/Library/Android/sdk. Install them in Android Studio's SDK Manager."
+        }
+      ],
+      "tools": {
+        "hub": {
+          "requiredVersion": "0.19.1",
+          "installedVersions": [
+            "0.15.3",
+            "0.19.1"
+          ],
+          "runningVersion": "0.19.1"
+        },
+        "agent": {
+          "requiredVersion": "0.21.31",
+          "installedVersions": [
+            "0.21.25",
+            "0.21.31"
+          ],
+          "runningVersion": "0.21.31"
+        }
+      },
+      "hubInstalled": true,
+      "agentDeviceInstalled": true,
+      "kind": "local"
+    }
+  ],
+  "devices": [
+    {
+      "hostId": "local",
+      "id": "B3E5C18E-689C-4A95-8655-4784F227B152",
+      "platform": "ios",
+      "name": "iPhone Duo",
+      "version": "iOS 27.1",
+      "booted": false,
+      "physical": false
+    },
+    {
+      "hostId": "local",
+      "id": "191C6F80-2A9F-4A49-891D-B54FDD36B08B",
+      "platform": "ios",
+      "name": "TAVA iPhone Duo",
+      "version": "iOS 27.1",
+      "booted": false,
+      "physical": false
+    },
+    {
+      "hostId": "local",
+      "id": "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+      "platform": "ios",
+      "name": "Hillclimb Auth iPhone 17 Pro",
+      "version": "iOS 26.2",
+      "booted": true,
+      "physical": false
+    },
+    {
+      "hostId": "local",
+      "id": "066ECE57-46B4-414A-B53E-523775329360",
+      "platform": "ios",
+      "name": "Hillclimb Board iPhone 17 Pro",
+      "version": "iOS 26.2",
+      "booted": true,
+      "physical": false
+    },
+    {
+      "hostId": "local",
+      "id": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+      "platform": "ios",
+      "name": "Hillclimb iPhone 17 Pro",
+      "version": "iOS 26.2",
+      "booted": true,
+      "physical": false
+    }
+  ],
+  "open": []
+}

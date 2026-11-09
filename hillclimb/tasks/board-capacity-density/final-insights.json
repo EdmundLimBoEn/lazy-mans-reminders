@@ -1,0 +1,38 @@
+{
+  "commonFailureInsights" : [
+
+  ],
+  "failureDistributionInsights" : [
+
+  ],
+  "longestTestRunsInsights" : [
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardEdgeAccessibilityUITests/testTopBandAfterRealPullAndPartialScrollMatrix",
+        "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests/testCapacityAndFirstLineOpticalAlignmentMatrix"
+      ],
+      "deviceName" : "Hillclimb Board iPhone 17 Pro",
+      "durationOfSlowTests" : 2616.0657650232315,
+      "impact" : "(49%)",
+      "meanTime" : "1m 48s across 49 test runs",
+      "osNameAndVersion" : "iOS Simulator 26.2",
+      "targetName" : "HillclimbUITests",
+      "testPlanConfigurationName" : "Test Scheme Action",
+      "title" : "2 longest test runs with outlier durations exceeding 882.23s (three standard deviations)"
+    },
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityLayoutTests/testRenderedLastLineFitsBothNativeSurfaceBudgets",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionClientTests/testConstructingClientDoesNotStartAnSDKInitialRefreshOutsideGate"
+      ],
+      "deviceName" : "Hillclimb Board iPhone 17 Pro",
+      "durationOfSlowTests" : 0.3977469205856323,
+      "impact" : "(27%)",
+      "meanTime" : "0.0056s across 263 test runs",
+      "osNameAndVersion" : "iOS Simulator 26.2",
+      "targetName" : "LazyMansRemindersTests",
+      "testPlanConfigurationName" : "Test Scheme Action",
+      "title" : "2 longest test runs with outlier durations exceeding 0.06s (three standard deviations)"
+    }
+  ]
+}

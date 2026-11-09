@@ -1,0 +1,54 @@
+[
+  {
+    "cmd": "/Users/limboenedmund/.t3/userdata/device/targets/t3-104e0d47e8177c4ad991b813/agent-device open systems.edmundlim.NotepadHillclimb --relaunch --launch-args=--hillclimb-demo --launch-args=activity --launch-args=--hillclimb-activity --launch-args=end",
+    "chunk_id": "480e99",
+    "wall_time_seconds": 1.00146125,
+    "session_id": 53154,
+    "original_token_count": 0,
+    "output": "",
+    "finalExit": 0,
+    "finalStdout": "Opened: systems.edmundlim.NotepadHillclimb; own pinned session t3-104e0d47e8177c4ad991b813"
+  },
+  {
+    "cmd": "/Users/limboenedmund/.t3/userdata/device/targets/t3-104e0d47e8177c4ad991b813/agent-device settings text-size",
+    "chunk_id": "055d79",
+    "wall_time_seconds": 0.644165625,
+    "exit_code": 0,
+    "original_token_count": 5,
+    "output": "Text size is large\n"
+  },
+  {
+    "cmd": "/Users/limboenedmund/.t3/userdata/device/targets/t3-104e0d47e8177c4ad991b813/agent-device settings appearance light",
+    "chunk_id": "000062",
+    "wall_time_seconds": 0.383217208,
+    "exit_code": 0,
+    "original_token_count": 7,
+    "output": "Updated setting: appearance\n"
+  },
+  {
+    "cmd": "/Users/limboenedmund/.t3/userdata/device/targets/t3-104e0d47e8177c4ad991b813/agent-device open systems.edmundlim.NotepadHillclimb --relaunch --launch-args=--hillclimb-demo --launch-args=full --launch-args=--hillclimb-style --launch-args=light --launch-args=--hillclimb-size --launch-args=default",
+    "chunk_id": "f17af3",
+    "wall_time_seconds": 1.002209292,
+    "session_id": 57020,
+    "original_token_count": 0,
+    "output": "",
+    "finalExit": 0,
+    "finalStdout": "Opened: systems.edmundlim.NotepadHillclimb; own pinned session t3-104e0d47e8177c4ad991b813"
+  },
+  {
+    "cmd": "/Users/limboenedmund/.t3/userdata/device/targets/t3-104e0d47e8177c4ad991b813/agent-device close com.apple.Preferences",
+    "chunk_id": "b4cb04",
+    "wall_time_seconds": 0.702733917,
+    "exit_code": 0,
+    "original_token_count": 9,
+    "output": "Closed: t3-104e0d47e8177c4ad991b813\n"
+  },
+  {
+    "cmd": "/Users/limboenedmund/.t3/userdata/device/targets/t3-104e0d47e8177c4ad991b813/agent-device close systems.edmundlim.NotepadHillclimb",
+    "chunk_id": "993e64",
+    "wall_time_seconds": 0.581959625,
+    "exit_code": 0,
+    "original_token_count": 9,
+    "output": "Closed: t3-104e0d47e8177c4ad991b813\n"
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "command": [
+    "xcodebuild",
+    "build-for-testing",
+    "-project",
+    "ios/LazyMansReminders.xcodeproj",
+    "-scheme",
+    "LazyMansReminders",
+    "-destination",
+    "platform=iOS Simulator,id=8E8380DE-364D-4899-99B8-D15ED0494FFD",
+    "-derivedDataPath",
+    "/tmp/notepad-signin-native-90ae0aca-dd",
+    "ARCHS=arm64",
+    "ONLY_ACTIVE_ARCH=YES",
+    "CODE_SIGNING_ALLOWED=NO",
+    "-disableAutomaticPackageResolution",
+    "-skipPackageUpdates",
+    "-configuration",
+    "Debug"
+  ],
+  "exit": 0,
+  "startedUTC": "2026-11-04T16:59:50.771990+00:00",
+  "endedUTC": "2026-11-04T17:00:11.137183+00:00",
+  "observations": [
+    "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-90ae0aca/ios/App/AuthManager.swift:90:81: warning: 'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]",
+    "|                                                                                 |- warning: 'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]",
+    "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-90ae0aca/ios/App/AuthManager.swift:242:25: warning: result of 'try?' is unused [#NoUsage]",
+    "|                         `- warning: result of 'try?' is unused [#NoUsage]",
+    "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-90ae0aca/ios/App/AuthManager.swift:428:9: warning: result of 'try?' is unused [#NoUsage]",
+    "|         `- warning: result of 'try?' is unused [#NoUsage]",
+    "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-90ae0aca/ios/Tests/AuthSessionGateTests.swift:655:31: warning: expression of type 'Bool' is unused [#NoUsage]",
+    "|                               `- warning: expression of type 'Bool' is unused [#NoUsage]",
+    "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-90ae0aca/ios/Tests/AuthSessionGateTests.swift:362:68: warning: will never be executed",
+    "|                                                       |            `- warning: will never be executed",
+    "2026-11-05 01:00:11.006 appintentsmetadataprocessor[25408:2974287] warning: Metadata extraction skipped, no AppIntents.framework dependency found",
+    "** TEST BUILD SUCCEEDED **"
+  ]
+}
