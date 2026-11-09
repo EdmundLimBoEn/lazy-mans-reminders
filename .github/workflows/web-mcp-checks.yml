@@ -163,6 +163,8 @@ jobs:
             supabase/migrations/20261101000400_retention_skip_locked.sql \
             supabase/tests/budgeted_retention_cleanup.sql \
             supabase/tests/retention_skip_locked.sql \
+            supabase/migrations/20261109000200_revoke_anon_helper_execute.sql \
+            supabase/tests/anon_helper_execute.sql \
             supabase/tests/write_budgets.sql \
             supabase/migrations/202610280009_reopen_reminder_lock_order.sql \
             supabase/migrations/20261101000300_reopen_reminder_noop.sql \
