@@ -174,7 +174,9 @@ jobs:
             supabase/tests/live_activity_completion_lock.sql \
             supabase/migrations/20261109000100_scheduler_reminder_nowait.sql \
             supabase/tests/routine_reminders.sql \
-            supabase/tests/reminder_quotas.sql; do
+            supabase/tests/reminder_quotas.sql \
+            supabase/migrations/20261109000300_revoke_anon_agent_token_clients.sql \
+            supabase/tests/agent_token_clients_grants.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
           # Exercise the initial write assertions with a deterministic minute rollover.
