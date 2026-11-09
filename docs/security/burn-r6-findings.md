@@ -34,6 +34,18 @@ User tables `reminders`, `device_tokens`, and `lock_screen_prefs` still have def
 
 Once `x-webhook-secret` matches (constant-time hash compare), `request.json()` has no byte cap. Database webhooks send small payloads. A leaked `WEBHOOK_SECRET` could stall the function with a large body. Capping it needs an edge-function redeploy. Not changed here.
 
+## Legacy webhook bodies can still select devices
+
+With a valid webhook secret, a body that is not `{job_id}` can still load devices for `record.user_id` or run `{type:"live_activity_refresh"}` across every Live Activity token. Production dispatch sends `{job_id}` and reloads tokens from the database; alert text is not taken from the webhook. Closing the legacy branch changes who can push: the README still documents a raw Database Webhook, and tests post a raw refresh. Not changed here.
+
+## Live Activity token columns have no upper bound in the database
+
+`push_to_start_token`, `activity_push_token`, and `retiring_activity_push_token` allow `^[0-9A-Fa-f]{64,}$`. The sender refuses anything outside `^[0-9a-f]{64,512}$` before building an APNs URL, so this is not SSRF. Capping the column is a data migration. Not changed here.
+
+## `APPLE_CLIENT_ID` and `MCP_GRANT_CLEANUP_URL` are deploy-time
+
+Delete-account revocation uses env `APPLE_CLIENT_ID` as the Apple audience. If that secret is the Services ID while native codes are issued for the bundle id (or the reverse), native revoke fails closed and deletion still succeeds. `MCP_GRANT_CLEANUP_URL` is fetched with the user JWT and has no host allowlist (default `https://np-mcp.sillyapps.co/account/grants/cleanup`). Confirm both secrets at deploy time. Not changed here.
+
 ## GHSA-jm63 (`@modelcontextprotocol/server` 2.0.0)
 
 Affected versions are 2.0.0–2.2.0 (shared transport / shared `McpServer`). This worker calls `createMcpHandler(() => createServer(session, env))`, a per-request factory, which the advisory marks as **not affected**.
