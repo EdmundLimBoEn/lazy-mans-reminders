@@ -7,6 +7,97 @@ final class PushTokenRegistrarTests: XCTestCase {
         UserDefaults(suiteName: "PushTokenRegistrarTests-\(UUID().uuidString)")!
     }
 
+    func testRotationRemovesOnlyThisDevicesOldRegistration() async throws {
+        let user = UUID()
+        var rows = ["other-device": user]
+        let registrar = PushTokenRegistrar(defaults: defaults(), remove: { token, owner in
+            if rows[token] == owner { rows.removeValue(forKey: token) }
+        }) { rows[$0.token] = $0.userID }
+        registrar.bind(userID: user)
+        registrar.recordDeviceToken("old")
+        registrar.recordPushToStartToken("still-valid-start")
+        await registrar.flush()
+        registrar.recordDeviceToken("new")
+        await registrar.flush()
+        XCTAssertEqual(rows, ["other-device": user, "new": user])
+        await registrar.pause()
+        try await registrar.removeRegistrations(userID: user)
+        XCTAssertEqual(rows, ["other-device": user])
+    }
+
+    func testFailedCleanupPersistsAcrossRelaunchAndBlocksAccountSwitch() async throws {
+        let storage = defaults()
+        let user = UUID()
+        var rows = ["other-device": user]
+        let first = PushTokenRegistrar(defaults: storage, remove: { _, _ in
+            throw URLError(.notConnectedToInternet)
+        }) { rows[$0.token] = $0.userID }
+        first.bind(userID: user)
+        first.recordDeviceToken("old")
+        await first.flush()
+        first.recordDeviceToken("middle")
+        first.recordDeviceToken("new")
+        await first.flush()
+        XCTAssertTrue(first.needsRetry)
+        XCTAssertNotNil(rows["old"])
+        let gate = AuthSessionGate()
+        var signedOut = false
+        let didSignOut = await gate.cleanUp(operations: .init(
+            setEndingSession: { _ in },
+            pauseRegistration: { await first.pause() },
+            resumeRegistration: { first.resume() },
+            unbind: { await first.unbind() },
+            removeDeviceToken: { try await first.removeRegistrations(userID: user) },
+            signOutSDK: { signedOut = true },
+            clearPublishedSession: {}, clearUserData: {}, clearBoard: {}
+        ))
+        XCTAssertFalse(didSignOut)
+        XCTAssertFalse(signedOut)
+        var authenticated = false
+        await gate.acquire()
+        do {
+            try await gate.authenticate(
+                pauseRegistration: { await first.pause() },
+                resumeRegistration: { first.resume() },
+                removeDeviceToken: { try await first.removeRegistrations(userID: user) },
+                operation: { authenticated = true }
+            )
+            XCTFail("Account switching must wait for confirmed cleanup")
+        } catch {}
+        gate.release()
+        XCTAssertFalse(authenticated)
+
+        var removed: [String] = []
+        let relaunched = PushTokenRegistrar(defaults: storage, remove: { token, owner in
+            removed.append(token)
+            if rows[token] == owner { rows.removeValue(forKey: token) }
+        }) { rows[$0.token] = $0.userID }
+        await relaunched.pause()
+        try await relaunched.removeRegistrations(userID: user)
+        XCTAssertEqual(Set(removed), Set(["old", "middle", "new"]))
+        XCTAssertEqual(rows, ["other-device": user])
+    }
+
+    func testRotationDuringUploadIsCleanedBeforeSignOutCompletes() async throws {
+        let user = UUID()
+        var rows: [String: UUID] = [:]
+        var registrar: PushTokenRegistrar!
+        registrar = PushTokenRegistrar(defaults: defaults(), remove: { token, owner in
+            if rows[token] == owner { rows.removeValue(forKey: token) }
+        }) { registration in
+            rows[registration.token] = registration.userID
+            if registration.token == "old" { registrar.recordDeviceToken("new") }
+        }
+        registrar.bind(userID: user)
+        registrar.recordDeviceToken("old")
+        await registrar.flush()
+        XCTAssertEqual(rows, ["new": user])
+        await registrar.pause()
+        registrar.recordDeviceToken("newest")
+        try await registrar.removeRegistrations(userID: user)
+        XCTAssertTrue(rows.isEmpty)
+    }
+
     func testExpirationAndLateCompletionOnlyFinishBackgroundTaskOnce() {
         var completions: [Bool] = []
         let completion = BackgroundRefreshCompletion { completions.append($0) }
