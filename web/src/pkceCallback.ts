@@ -44,5 +44,14 @@ export function safeReturnPath(
   }
   if (resolved.origin !== base.origin) return fallback
   if (!resolved.pathname.startsWith('/') || resolved.username || resolved.password) return fallback
-  return `${resolved.pathname}${resolved.search}${resolved.hash}`
+  const returned = `${resolved.pathname}${resolved.search}${resolved.hash}`
+  // Dot-segment normalization can turn `/.//evil.example` into `//evil.example`,
+  // which location.replace and <a href> treat as a protocol-relative URL.
+  if (!returned.startsWith('/') || returned.startsWith('//')) return fallback
+  try {
+    if (new URL(returned, base).origin !== base.origin) return fallback
+  } catch {
+    return fallback
+  }
+  return returned
 }
