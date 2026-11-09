@@ -275,6 +275,38 @@ final class ReminderStoreRefreshTests: XCTestCase {
         }
     }
 
+    func testFailedNewerRefreshDoesNotDiscardOlderSuccessfulResponse() async throws {
+        for emptyCache in [true, false] {
+            let fixture = Fixture()
+            defer { fixture.cleanUp() }
+            let first = expectation(description: "Older refresh suspended")
+            let second = expectation(description: "Newer refresh suspended")
+            let network = Network(started: [first, second], mutation: fixture.original)
+            let store = fixture.makeStore(network)
+            try await fixture.seed(store, rows: emptyCache ? [] : [fixture.original])
+
+            let older = Task { try await store.refresh(performMaintenance: false) }
+            await fulfillment(of: [first], timeout: 3)
+            let newer = Task { try await store.refresh(performMaintenance: false) }
+            await fulfillment(of: [second], timeout: 3)
+            await network.fail(1)
+            do {
+                _ = try await newer.value
+                XCTFail("Expected the newer refresh to fail")
+            } catch {
+                XCTAssertEqual((error as? URLError)?.code, .notConnectedToInternet)
+            }
+
+            var updated = fixture.original
+            updated.text = "Successful remote edit"
+            await network.finish(0, rows: [updated])
+            let result = try await older.value
+            let cache = await store.cached()
+            XCTAssertEqual(result, [updated])
+            XCTAssertEqual(cache, [updated])
+        }
+    }
+
     func testOlderRefreshCannotOverwriteNewerRefreshInEitherResponseOrder() async throws {
         for newestFirst in [true, false] {
             let fixture = Fixture()
@@ -300,7 +332,7 @@ final class ReminderStoreRefreshTests: XCTestCase {
             } else {
                 await network.finish(0, rows: [])
                 let oldResult = try await older.value
-                XCTAssertEqual(oldResult, [fixture.original])
+                XCTAssertEqual(oldResult, [], "A pending newer refresh must not discard a successful response")
                 await network.finish(1, rows: [updated])
                 let result = try await newer.value
                 XCTAssertEqual(result, [updated])
@@ -340,6 +372,14 @@ final class ReminderStoreRefreshTests: XCTestCase {
         }
 
         func failRequests() { failsRequests = true }
+
+        func fail(_ index: Int) {
+            guard let continuation = pending.removeValue(forKey: index) else {
+                XCTFail("Expected suspended refresh")
+                return
+            }
+            continuation.resume(throwing: URLError(.notConnectedToInternet))
+        }
 
         func finish(_ index: Int, rows: [Reminder]) {
             guard let continuation = pending.removeValue(forKey: index) else {
