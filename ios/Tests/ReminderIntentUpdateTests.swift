@@ -25,6 +25,11 @@ final class ReminderIntentUpdateTests: XCTestCase {
                 anonKey: "test-anon-key",
                 requestData: { request in
                     await requestCount.increment()
+                    if request.httpMethod == "GET" {
+                        return (try ReminderJSON.encoder.encode(original.isDone ? [] : [original]),
+                                HTTPURLResponse(url: request.url!, statusCode: 200,
+                                                httpVersion: nil, headerFields: nil)!)
+                    }
                     XCTAssertEqual(request.value(forHTTPHeaderField: "Prefer"), "return=representation")
                     let data = try XCTUnwrap(request.httpBody)
                     let body = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
@@ -61,9 +66,99 @@ final class ReminderIntentUpdateTests: XCTestCase {
             XCTAssertEqual(cache, expectedBoard)
             let requests = await requestCount.value
             let publications = await publicationCount.value
-            XCTAssertEqual(requests, 1, "Title and completion must be saved together")
+            XCTAssertEqual(requests, 2, "Refresh the board, then save title and completion together")
             XCTAssertEqual(publications, 1)
         }
+    }
+
+    func testCompletingCachedTargetPreservesRemindersAddedByAnotherClient() async throws {
+        let original = sample()
+        let other = sample(userID: original.userID)
+        var acknowledged = original
+        acknowledged.isDone = true
+        let suite = "ReminderIntentUpdateTests.\(UUID())"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let requests = Counter()
+        let publications = Counter()
+        let store = ReminderStore(
+            defaults: defaults, credentials: MemorySessionCredentials(),
+            serviceURL: URL(string: "https://reminders.invalid")!, anonKey: "test-anon-key",
+            requestData: { request in
+                await requests.increment()
+                let count = await requests.value
+                XCTAssertEqual(request.url?.path, "/rest/v1/reminders")
+                let rows: [Reminder]
+                if request.httpMethod == "GET" {
+                    XCTAssertEqual(count, 1, "Reconcile before mutating")
+                    let query = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!.queryItems!
+                    XCTAssertEqual(query.first { $0.name == "is_done" }?.value, "eq.false")
+                    XCTAssertNil(query.first { $0.name == "id" }, "Fetch the full board")
+                    rows = [original, other]
+                } else {
+                    XCTAssertEqual(count, 2)
+                    XCTAssertEqual(request.httpMethod, "PATCH")
+                    rows = [acknowledged]
+                }
+                return (try ReminderJSON.encoder.encode(rows),
+                        HTTPURLResponse(url: request.url!, statusCode: 200,
+                                        httpVersion: nil, headerFields: nil)!)
+            }
+        )
+        try await seed(store, defaults: defaults, reminder: original)
+        let resolved = try await store.resolve(identifiers: [original.id])
+        XCTAssertEqual(resolved, [original])
+        let result = try await ReminderIntentActions.update(
+            id: original.id, title: nil, isCompleted: true, store: store,
+            publish: { board in
+                await publications.increment()
+                XCTAssertEqual(board, [other])
+                XCTAssertEqual(LiveActivityPolicy.action(
+                    lineCount: ReminderActivityPresentation.lines(from: board).count,
+                    activityExists: true
+                ), .update)
+            }
+        )
+        XCTAssertEqual(result, acknowledged)
+        let cache = await store.cached()
+        XCTAssertEqual(cache, [other])
+        let requestCount = await requests.value
+        let publicationCount = await publications.value
+        XCTAssertEqual(requestCount, 2)
+        XCTAssertEqual(publicationCount, 1)
+    }
+
+    func testFailedBoardRefreshDoesNotMutateOrPublishCachedBoard() async throws {
+        let original = sample()
+        let suite = "ReminderIntentUpdateTests.\(UUID())"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let requests = Counter()
+        let store = ReminderStore(
+            defaults: defaults, credentials: MemorySessionCredentials(),
+            serviceURL: URL(string: "https://reminders.invalid")!, anonKey: "test-anon-key",
+            requestData: { request in
+                await requests.increment()
+                XCTAssertEqual(request.httpMethod, "GET", "A failed prerequisite must prevent mutation")
+                throw URLError(.notConnectedToInternet)
+            }
+        )
+        try await seed(store, defaults: defaults, reminder: original)
+        do {
+            _ = try await ReminderIntentActions.update(
+                id: original.id, title: nil, isCompleted: true, store: store,
+                publish: { _ in XCTFail("A failed refresh must not publish the incomplete cache") }
+            )
+            XCTFail("A failed prerequisite refresh must propagate")
+        } catch {
+            guard case ReminderIntentError.service = error else {
+                return XCTFail("Expected the existing service error")
+            }
+        }
+        let cache = await store.cached()
+        XCTAssertEqual(cache, [original])
+        let count = await requests.value
+        XCTAssertEqual(count, 1)
     }
 
     func testCombinedUpdateRejectsUnacknowledgedFieldsWithoutPublishingOrChangingCache() async throws {
@@ -79,7 +174,7 @@ final class ReminderIntentUpdateTests: XCTestCase {
                 defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
                 anonKey: "test-anon-key",
                 requestData: { request in
-                    return (try ReminderJSON.encoder.encode([returned]),
+                    return (try ReminderJSON.encoder.encode(request.httpMethod == "GET" ? [original] : [returned]),
                             HTTPURLResponse(url: request.url!, statusCode: 200,
                                             httpVersion: nil, headerFields: nil)!)
                 }
@@ -147,6 +242,12 @@ final class ReminderIntentUpdateTests: XCTestCase {
                 if request.httpMethod == "GET" {
                     XCTAssertEqual(request.url?.path, "/rest/v1/reminders")
                     let query = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!.queryItems!
+                    if query.first(where: { $0.name == "is_done" })?.value == "eq.false" {
+                        XCTAssertNil(query.first { $0.name == "id" })
+                        return (try ReminderJSON.encoder.encode([active]),
+                                HTTPURLResponse(url: request.url!, statusCode: 200,
+                                                httpVersion: nil, headerFields: nil)!)
+                    }
                     XCTAssertNil(query.first { $0.name == "is_done" })
                     XCTAssertEqual(query.first { $0.name == "user_id" }?.value, "eq.\(active.userID.uuidString)")
                     XCTAssertEqual(query.first { $0.name == "id" }?.value,
@@ -177,7 +278,7 @@ final class ReminderIntentUpdateTests: XCTestCase {
         )
         XCTAssertEqual(result, reopened)
         let count = await requests.value
-        XCTAssertEqual(count, 2)
+        XCTAssertEqual(count, 3)
     }
 
     func testResolvingCachedOrEmptyTargetsDoesNotFetch() async throws {
