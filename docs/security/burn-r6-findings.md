@@ -96,9 +96,15 @@ None of these ship in the Pages or Worker bundles except via the Vite build tool
 
 `createMcpHandler` is called with `corsOptions: { origin: '*' }` and `allowedOriginHostnames: '*'`. The OAuth consent/JSON helpers already allowlist `WEB_ORIGINS`. The wildcard is on the JSON-RPC route for non-browser hosts. Changing it can break those hosts and needs a Worker redeploy.
 
-## XSS / open redirects (re-checked, no extra change)
+## Hosted GoTrue redirect allowlist and implicit grants
 
-No `dangerouslySetInnerHTML` / `innerHTML`. Pages CSP is `script-src 'self'`; Pages `Access-Control-Allow-Origin` is stripped in `_headers`. `safeReturnPath` still rejects `https:`, `//`, backslash, and encoded slash. `/auth/ios` renders GoTrue `error_description` as React text (escaped). `isSafeOauthRedirect` still allows custom schemes after the `javascript:` / `data:` denylist; an `intent://` URL with a script fallback was not shown to execute in this origin, so it was left as-is.
+`supabase/config.toml` `additional_redirect_urls` includes `https://app.notepads.dev/**` and `http://localhost:5173`. Exact globs such as `https://lmr.sillyapps.co/auth/callback` do not match `?return_to=`; GoTrue still host-matches `site_url` (`https://np.sillyapps.co`). Alias-host connect sign-in may drop the PKCE code on `/` instead of `/auth/callback`. Confirm the live dashboard list before narrowing it. Removing localhost or the Pages wildcard needs a config push and can lock out sign-in.
+
+Public OTP without `code_challenge` is still an implicit grant. Disabling implicit grants in hosted Auth would stop fragment tokens at the source. That is dashboard config, not a repo patch. The `/auth/ios` handoff no longer copies those tokens onto `lazymansreminders://` (#221).
+
+## XSS / open redirects (re-checked)
+
+No `dangerouslySetInnerHTML` / `innerHTML`. Pages CSP is `script-src 'self'`; Pages `Access-Control-Allow-Origin` is stripped in `_headers`. `/auth/ios` renders GoTrue `error_description` as React text (escaped). `isSafeOauthRedirect` still allows custom schemes after the `javascript:` / `data:` denylist; an `intent://` URL with a script fallback was not shown to execute in this origin, so it was left as-is. The `safeReturnPath` protocol-relative case after dot-segment normalization is a separate code PR, not this file.
 
 ## Prior burns not repeated
 
