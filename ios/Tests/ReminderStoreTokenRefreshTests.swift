@@ -22,11 +22,14 @@ final class ReminderStoreTokenRefreshTests: XCTestCase {
         await fulfillment(of: [extraGrant], timeout: 0.3)
         try await network.finishFirst(accessToken: "new-access", refreshToken: "R2")
 
-        XCTAssertTrue(await first.value)
-        XCTAssertTrue(await second.value)
+        let firstSignedIn = await first.value
+        let secondSignedIn = await second.value
+        XCTAssertTrue(firstSignedIn)
+        XCTAssertTrue(secondSignedIn)
         let grants = await network.grantTokens
         XCTAssertEqual(grants, ["R1"])
-        XCTAssertTrue(await store.containsSession(accessToken: "new-access", refreshToken: "R2"))
+        let rotated = await store.containsSession(accessToken: "new-access", refreshToken: "R2")
+        XCTAssertTrue(rotated)
     }
 
     func testStaleHostSessionCannotReplaceAFreshRotatedRefreshToken() async throws {
@@ -46,8 +49,10 @@ final class ReminderStoreTokenRefreshTests: XCTestCase {
             accessToken: "old-access", refreshToken: "R1",
             expiresAt: Date().addingTimeInterval(-60), userID: userID
         )
-        XCTAssertTrue(await store.containsSession(accessToken: "new-access", refreshToken: "R2"))
-        XCTAssertEqual(await store.freshSession(for: userID)?.refreshToken, "R2")
+        let keptRotated = await store.containsSession(accessToken: "new-access", refreshToken: "R2")
+        XCTAssertTrue(keptRotated)
+        let keptRefresh = await store.freshSession(for: userID)?.refreshToken
+        XCTAssertEqual(keptRefresh, "R2")
     }
 
     private actor GrantNetwork {
