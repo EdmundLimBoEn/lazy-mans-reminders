@@ -88,6 +88,7 @@ enum ReminderIntentActions {
             throw ReminderIntentError.nothingToUpdate
         }
         do {
+            _ = try await store.refresh(performMaintenance: false)
             let updated = try await store.updateAcknowledged(
                 id: id,
                 text: title,
