@@ -1,5 +1,3 @@
-"""Prove the flags-off checker survives binary files and still flags enabled text."""
-
 from __future__ import annotations
 
 import subprocess
@@ -11,8 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "scripts/check-third-party-sign-in-flags.py"
 
-# Same signature as the hillclimb/ui CI crash: binary plist magic, then 0xdf.
-BINARY_PLIST = b"bplist00" + bytes([0xDF]) + b"\x00\x01\x02\x03"
+BPLIST00_DF = b"bplist00" + bytes([0xDF]) + b"\x00\x01\x02\x03"
 
 
 def init_repo(directory: Path) -> None:
@@ -73,7 +70,7 @@ class ThirdPartySignInFlagsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             init_repo(root)
-            commit_file(root, "Info.plist", BINARY_PLIST)
+            commit_file(root, "Info.plist", BPLIST00_DF)
             result = run_checker(root)
             combined = result.stderr + result.stdout
             self.assertNotIn("UnicodeDecodeError", combined, combined)
