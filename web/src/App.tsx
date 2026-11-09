@@ -235,11 +235,17 @@ export default function App() {
   }, [path])
 
   useEffect(() => {
-    void supabase.auth.getSession().then(({ data, error }) => {
-      if (error) setAuthError(error.message)
-      setSession(data.session)
-      setReady(true)
-    })
+    void (async () => {
+      try {
+        const { data, error } = await supabase.auth.getSession()
+        if (error) setAuthError(error.message)
+        setSession(data.session)
+      } catch (caught) {
+        if (caught instanceof Error) setAuthError(caught.message)
+      } finally {
+        setReady(true)
+      }
+    })()
     const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       setAuthError('')
       setSession(nextSession)
