@@ -690,3 +690,27 @@ it('does not restore Edit focus when saving fails and the editor stays open', as
   expect(control('Edit reminder: Original').value).toBe('Updated')
   expect(attachEditButtons().size).toBe(0)
 })
+
+function hasCopy(text: string) {
+  return render().some(node => node.props.children === text)
+}
+
+it.each(['empty', 'error', 'populated'] as const)('gates the empty board copy on a %s first load', async outcome => {
+  hooks.states = []
+  stored = outcome === 'populated' ? [{ ...original }] : []
+  const pending = deferred<Result>()
+  reads = [pending]
+  expect(hasCopy('Nothing to remember.')).toBe(false)
+  expect(hasCopy('Loading your board…')).toBe(true)
+  const loading = hooks.load!()
+  pending.resolve(
+    outcome === 'error'
+      ? { data: null, error: { message: 'offline' } }
+      : { data: stored.map(row => ({ ...row })), error: null },
+  )
+  await loading
+  expect(hasCopy('Loading your board…')).toBe(false)
+  expect(hasCopy('Nothing to remember.')).toBe(outcome === 'empty')
+  expect(hasCopy('offline')).toBe(outcome === 'error')
+  expect(displayed()).toEqual(outcome === 'populated' ? ['Original'] : [])
+})

@@ -476,6 +476,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
               </Button>
             </Alert>
           )}
+          {(loading || sorted.length > 0 || !error) && (
           <div className="rounded-lg border">
             {loading ? (
               <div className="empty px-4 py-12 text-center text-sm text-muted-foreground" role="status">Loading your board…</div>
@@ -568,6 +569,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
               </DndContext>
             )}
           </div>
+          )}
         </section>
 
         <RoutineReminders userId={session.user.id} />
