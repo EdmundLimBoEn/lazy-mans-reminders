@@ -59,6 +59,9 @@ jobs:
       - name: Test deferred board updates
         run: python3 -B -m unittest discover -s scripts/tests -p test_ios_deferred_board_updates.py -v
 
+      - name: Test overlapping create sort order
+        run: python3 -B -m unittest discover -s scripts/tests -p test_ios_overlapping_create_order.py -v
+
       - name: Install XcodeGen
         run: HOMEBREW_NO_AUTO_UPDATE=1 brew install xcodegen
 
