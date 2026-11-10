@@ -151,6 +151,12 @@ async function consumeAuthorizationState(env: Env, state: string): Promise<boole
   return consumed === true
 }
 
+async function restoreAuthorizationState(env: Env, state: string): Promise<void> {
+  const id = env.AUTHORIZATION_STATE.idFromName(state)
+  const result = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/restore', { method: 'POST' })
+  if (!result.ok) throw new Error('Authorization state unavailable')
+}
+
 async function startAuthorize(request: Request, env: Env): Promise<Response> {
   const oauth = oauthHelpers(env)
   if (!oauth) return json({ error: 'server_misconfigured' }, 500)
@@ -280,6 +286,11 @@ async function bindAuthorization(
     return json({ redirectTo }, 200, cors)
   } catch (error) {
     console.error('authorization completion failed', error instanceof Error ? error.name : 'error')
+    try {
+      await restoreAuthorizationState(env, state)
+    } catch (restoreError) {
+      console.error('authorization restore failed', restoreError instanceof Error ? restoreError.name : 'error')
+    }
     return json({ error: 'authorization_failed' }, 400, cors)
   }
 }
