@@ -12,14 +12,14 @@ final class LMRChromeTests: XCTestCase {
     }
 
     func testLegalPageURLs() {
-        XCTAssertEqual(LMRWeb.privacy.absoluteString, "https://np.sillyapps.co/privacy")
-        XCTAssertEqual(LMRWeb.terms.absoluteString, "https://np.sillyapps.co/terms")
-        XCTAssertEqual(LMRWeb.support.absoluteString, "https://np.sillyapps.co/support")
-        XCTAssertEqual(LMRWeb.dataExport.absoluteString, "https://np.sillyapps.co")
+        XCTAssertEqual(LMRWeb.privacy.absoluteString, "https://app.notepads.dev/privacy")
+        XCTAssertEqual(LMRWeb.terms.absoluteString, "https://app.notepads.dev/terms")
+        XCTAssertEqual(LMRWeb.support.absoluteString, "https://app.notepads.dev/support")
+        XCTAssertEqual(LMRWeb.dataExport.absoluteString, "https://app.notepads.dev")
     }
 
     func testMagicLinkLandsOnCanonicalHost() {
-        XCTAssertEqual(LMRWeb.iosAuthRedirect.absoluteString, "https://np.sillyapps.co/auth/ios")
+        XCTAssertEqual(LMRWeb.iosAuthRedirect.absoluteString, "https://app.notepads.dev/auth/ios")
     }
 
     func testInAppLinksUseCanonicalHost() {
@@ -29,7 +29,7 @@ final class LMRChromeTests: XCTestCase {
         ]
         for url in urls {
             XCTAssertEqual(url.scheme, "https", url.absoluteString)
-            XCTAssertEqual(url.host, "np.sillyapps.co", url.absoluteString)
+            XCTAssertEqual(url.host, "app.notepads.dev", url.absoluteString)
         }
     }
 
