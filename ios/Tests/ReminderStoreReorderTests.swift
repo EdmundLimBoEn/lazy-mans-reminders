@@ -147,9 +147,11 @@ final class ReminderStoreReorderTests: XCTestCase {
                                createdAt: fixture.reminders[0].createdAt)
         let secondCreated = Reminder(id: UUID(), userID: created.userID, text: "Second",
                                      sortOrder: 8, isDone: false, createdAt: created.createdAt)
+        // Resume one held create at a time: resuming both back to back lets either
+        // task re-enter the store actor first, which made this assertion order-dependent.
         await network.finish(index: 0, data: try ReminderJSON.encoder.encode([created]))
-        await network.finish(index: 1, data: try ReminderJSON.encoder.encode([secondCreated]))
         let firstBoard = try await first.value
+        await network.finish(index: 1, data: try ReminderJSON.encoder.encode([secondCreated]))
         let secondBoard = try await second.value
         XCTAssertEqual(firstBoard, fixture.reminders + [created])
         XCTAssertEqual(secondBoard, fixture.reminders + [created, secondCreated])
