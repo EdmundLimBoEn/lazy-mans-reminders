@@ -14,6 +14,7 @@ final class SilentPushRefresh {
     @discardableResult
     static func start(
         store: ReminderStore = .shared,
+        waitForSession: @escaping () async -> Void = {},
         waitForDeadline: @escaping () async throws -> Void = {
             try await Task.sleep(nanoseconds: 25_000_000_000)
         },
@@ -23,6 +24,8 @@ final class SilentPushRefresh {
         let refresh = SilentPushRefresh(completion: completion)
         let work = Task { @MainActor in
             do {
+                try Task.checkCancellation()
+                await waitForSession()
                 try Task.checkCancellation()
                 let previous = await store.cached()
                 try Task.checkCancellation()

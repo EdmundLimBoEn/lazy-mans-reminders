@@ -77,6 +77,38 @@ final class SilentPushRefreshTests: XCTestCase {
         XCTAssertEqual(published, [rows, rows, rows])
     }
 
+    func testRefreshWaitsForSessionRestorationBeforeFetching() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let session = Gate()
+        let fetch = Gate()
+        let deadline = Gate()
+        let network = Network(rows: [fixture.reminder], gate: fetch)
+        let store = fixture.store(network)
+        try await fixture.signIn(store)
+        var results: [UIBackgroundFetchResult] = []
+        var published: [[Reminder]] = []
+        let work = SilentPushRefresh.start(
+            store: store,
+            waitForSession: { await session.wait() },
+            waitForDeadline: { await deadline.wait() },
+            publish: { published.append($0) },
+            completion: { results.append($0) }
+        )
+        await fulfillment(of: [session.started, deadline.started], timeout: 3)
+        let pathsBefore = await network.paths
+        XCTAssertEqual(pathsBefore, [])
+        await session.release()
+        await fulfillment(of: [fetch.started], timeout: 3)
+        await fetch.release()
+        await work.value
+        await deadline.release()
+        XCTAssertEqual(results, [.newData])
+        XCTAssertEqual(published, [[fixture.reminder]])
+        let paths = await network.paths
+        XCTAssertEqual(paths, ["/rest/v1/reminders"])
+    }
+
     func testNetworkFailureCompletesOnceWithoutPublishing() async throws {
         let fixture = Fixture()
         defer { fixture.cleanUp() }

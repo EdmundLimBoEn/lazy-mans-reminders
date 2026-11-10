@@ -45,6 +45,7 @@ actor ReminderStore {
     private var contentRevision = 0
     private var refreshSequence = 0
     private var acceptedRefreshSequence = 0
+    private var inFlightRefresh: Task<SharedSession?, Never>?
     private let requestData: (URLRequest) async throws -> (Data, URLResponse)
 
     init(
@@ -92,6 +93,13 @@ actor ReminderStore {
         return stored.accessToken == accessToken && stored.refreshToken == refreshToken
     }
 
+    func freshSession(for userID: UUID) -> SharedSession? {
+        guard let session = storedSession(), session.userID == userID, session.isFresh() else {
+            return nil
+        }
+        return session
+    }
+
     private var defaults: UserDefaults {
         if let injectedDefaults { return injectedDefaults }
         guard let defaults = UserDefaults(suiteName: AppConfig.appGroupID) else {
@@ -112,6 +120,9 @@ actor ReminderStore {
             refreshToken: refreshToken,
             userID: userID ?? JWTUserID.uuid(fromAccessToken: accessToken)
         )
+        if let userID = session.userID, freshSession(for: userID) != nil, !session.isFresh() {
+            return
+        }
         let previous = storedSession()
         if previous?.userID != session.userID {
             defaults.removeObject(forKey: cacheKey)
@@ -395,6 +406,25 @@ actor ReminderStore {
         guard let refreshToken = resolved.refreshToken, !refreshToken.isEmpty else {
             return resolved.expiresAt > Date() ? resolved : nil
         }
+        if let inFlightRefresh {
+            return await inFlightRefresh.value
+        }
+        let task = Task {
+            await self.completeSharedSessionRefresh(
+                from: resolved, refreshToken: refreshToken, identityRevision: identityRevision
+            )
+        }
+        inFlightRefresh = task
+        let completed = await task.value
+        inFlightRefresh = nil
+        return completed
+    }
+
+    private func completeSharedSessionRefresh(
+        from resolved: SharedSession,
+        refreshToken: String,
+        identityRevision: String?
+    ) async -> SharedSession? {
         let refreshed = await refreshAccessToken(refreshToken, userID: resolved.userID)
         do {
             try requireCurrentIdentity(resolved, revision: identityRevision)

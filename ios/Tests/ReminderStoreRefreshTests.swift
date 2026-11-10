@@ -185,8 +185,12 @@ final class ReminderStoreRefreshTests: XCTestCase {
             let appCache = await restarted.cached()
             XCTAssertEqual(appCache, [fixture.original])
 
-            try await restarted.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
-                                            expiresAt: .distantPast, userID: fixture.original.userID)
+            try credentials.write(JSONEncoder().encode(SharedSession(
+                accessToken: "test-token",
+                expiresAt: .distantPast,
+                refreshToken: "test-refresh",
+                userID: fixture.original.userID
+            )))
             let expired = await restarted.refreshOrCachedSnapshot(refreshAuthentication: false, updateCache: false)
             XCTAssertEqual(expired, expected)
             let requests = await network.requestCount
