@@ -356,6 +356,19 @@ describe('single-use authorization', () => {
     expect(deletePending).not.toHaveBeenCalled()
   })
 
+  it('allows a later bind after authorization completion throws', async () => {
+    const { oauth, bind } = await setup()
+    oauth.completeAuthorization.mockRejectedValueOnce(new Error('grant store unavailable'))
+    const failed = await bind()
+    expect(failed.status).toBe(400)
+    expect(await failed.json()).toEqual({ error: 'authorization_failed' })
+    expect(oauth.completeAuthorization).toHaveBeenCalledTimes(1)
+    const retry = await bind()
+    expect(retry.status).toBe(200)
+    expect(await retry.json()).toEqual({ redirectTo: 'https://grok.example/callback?code=one' })
+    expect(oauth.completeAuthorization).toHaveBeenCalledTimes(2)
+  })
+
   it('creates exactly one grant when both authenticated binds read the same pending state', async () => {
     const { oauth, bind } = await setup()
     const lookup = oauth.lookupClient
