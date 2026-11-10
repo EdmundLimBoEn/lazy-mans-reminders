@@ -676,6 +676,7 @@ export function AgentAccess({ userId, accessToken }: { userId: string; accessTok
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const loadSequence = useRef(0)
+  const busyRef = useRef(false)
 
   const load = useCallback(async () => {
     const sequence = ++loadSequence.current
@@ -695,10 +696,12 @@ export function AgentAccess({ userId, accessToken }: { userId: string; accessTok
   async function mint(event: FormEvent) {
     event.preventDefault()
     const trimmed = name.trim()
-    if (!trimmed || busy) return
+    if (!trimmed || busy || busyRef.current) return
+    busyRef.current = true
     setBusy(true)
     setError('')
     const { data, error: rpcError } = await supabase.rpc('mint_agent_token', { p_name: trimmed })
+    busyRef.current = false
     setBusy(false)
     if (rpcError || typeof data !== 'string') {
       setError(rpcError?.message ?? 'Could not create key')
@@ -710,10 +713,12 @@ export function AgentAccess({ userId, accessToken }: { userId: string; accessTok
   }
 
   async function revoke(id: string) {
-    if (busy) return
+    if (busy || busyRef.current) return
+    busyRef.current = true
     setBusy(true)
     setError('')
     const { error: rpcError } = await supabase.rpc('revoke_agent_token', { p_id: id })
+    busyRef.current = false
     setBusy(false)
     if (rpcError) setError(rpcError.message)
     else await load()
