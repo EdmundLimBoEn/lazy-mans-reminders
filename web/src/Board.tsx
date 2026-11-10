@@ -57,6 +57,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
   const loadSequence = useRef(0)
   const cleanupRef = useRef({ pending: false, nextAttemptAt: 0 })
   const reorderingRef = useRef(false)
+  const addingRef = useRef(false)
   const deferredRefreshRef = useRef<(() => void) | null>(null)
   const pendingMutationsRef = useRef(new Set<string>())
   const [pendingMutations, setPendingMutations] = useState(new Set<string>())
@@ -184,25 +185,30 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
   async function add(event: FormEvent) {
     event.preventDefault()
     const value = text.trim()
-    if (!value || adding || reorderingRef.current) return
+    if (!value || adding || addingRef.current || reorderingRef.current) return
     if (isAtCapacity(active.length, maxLines)) {
       setError(POST_IT_HINT)
       return
     }
+    addingRef.current = true
     ++loadSequence.current
     setAdding(true)
     setText('')
     setError('')
-    const nextOrder = nextSortOrder(reminders)
-    const { error: insertError } = await supabase
-      .from('reminders')
-      .insert({ text: value, user_id: session.user.id, sort_order: nextOrder })
-    if (insertError) {
-      setText(value)
-      setError(insertError.message)
+    try {
+      const nextOrder = nextSortOrder(reminders)
+      const { error: insertError } = await supabase
+        .from('reminders')
+        .insert({ text: value, user_id: session.user.id, sort_order: nextOrder })
+      if (insertError) {
+        setText(value)
+        setError(insertError.message)
+      }
+      await load()
+    } finally {
+      addingRef.current = false
+      setAdding(false)
     }
-    await load()
-    setAdding(false)
   }
 
   async function patch(id: string, changes: Partial<ReminderChanges>) {

@@ -7,7 +7,7 @@ import Board from './Board'
 
 // Run the real Board handlers with retained hooks and controllable database reads.
 const hooks = vi.hoisted(() => ({ effects: [] as (() => void | (() => void))[], states: [] as unknown[], cursor: 0, load: undefined as undefined | (() => Promise<void>) }))
-const db = vi.hoisted(() => ({ auth: { onAuthStateChange: () => ({ data: { subscription: { unsubscribe: vi.fn() } } }) }, from: vi.fn(), rpc: vi.fn(), update: vi.fn(), delete: vi.fn(), channel: vi.fn(), removeChannel: vi.fn() }))
+const db = vi.hoisted(() => ({ auth: { onAuthStateChange: () => ({ data: { subscription: { unsubscribe: vi.fn() } } }) }, from: vi.fn(), rpc: vi.fn(), update: vi.fn(), delete: vi.fn(), insert: vi.fn(), channel: vi.fn(), removeChannel: vi.fn() }))
 vi.mock('./supabase', () => ({ supabase: db }))
 vi.mock('@dnd-kit/core', async (original) => ({
   ...await original<typeof import('@dnd-kit/core')>(),
@@ -90,7 +90,8 @@ beforeEach(async () => {
         return (pending ? pending.promise : Promise.resolve({ data: stored.map(row => ({ ...row })), error: null })).then(resolve)
       },
       update: (changes: unknown) => { db.update(changes); return mutation },
-      delete: () => { db.delete(); return mutation }, insert: () => write.promise,
+      delete: () => { db.delete(); return mutation },
+      insert: (row: unknown) => { db.insert(row); return write.promise },
     }
     const mutation = { eq: () => mutation, select: () => mutation, single: () => write.promise, then: write.promise.then.bind(write.promise) }
     expect(['reminders', 'lock_screen_prefs']).toContain(table)
@@ -713,4 +714,16 @@ it.each(['empty', 'error', 'populated'] as const)('gates the empty board copy on
   expect(hasCopy('Nothing to remember.')).toBe(outcome === 'empty')
   expect(hasCopy('offline')).toBe(outcome === 'error')
   expect(displayed()).toEqual(outcome === 'populated' ? ['Original'] : [])
+})
+
+it('drops a second add while the first insert is in flight', async () => {
+  control('New reminder').onChange!({ target: { value: 'New' } })
+  const submit = render().find(node => node.type === 'form')!.props.onSubmit!
+  submit({ preventDefault() {} })
+  submit({ preventDefault() {} })
+  expect(db.insert).toHaveBeenCalledTimes(1)
+  expect(db.insert).toHaveBeenCalledWith({ text: 'New', user_id: 'user', sort_order: 1 })
+  stored = [original, { ...original, id: 'new', text: 'New', sort_order: 1 }]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(displayed()).toEqual(['Original', 'New']))
 })
