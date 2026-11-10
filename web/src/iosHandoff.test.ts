@@ -3,6 +3,7 @@ import { IOS_APP_CALLBACK, iosHandoffFromLocation } from './iosHandoff'
 
 describe('iosHandoffFromLocation', () => {
   it.each([
+    'https://app.notepads.dev/auth/ios?code=abc123',
     'https://np.sillyapps.co/auth/ios?code=abc123',
     'https://lmr.sillyapps.co/auth/ios?code=abc123',
   ])('forwards a PKCE code from %s onto the app callback', (href) => {

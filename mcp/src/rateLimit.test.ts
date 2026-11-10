@@ -81,10 +81,11 @@ describe('worker config', () => {
     expect(source).toContain('"preview_urls": false')
     const origins = source.match(/"WEB_ORIGINS":\s*"([^"]+)"/)?.[1]
     expect(origins).toBe(
-      'https://np.sillyapps.co,https://lmr.sillyapps.co,https://app.notepads.dev,https://lmr.edmundlim.systems,https://lazy-mans-reminders.pages.dev',
+      'https://app.notepads.dev,https://np.sillyapps.co,https://lmr.sillyapps.co,https://lmr.edmundlim.systems,https://lazy-mans-reminders.pages.dev',
     )
     // /authorize sends the browser to the FIRST origin's /connect page, so it must be the canonical domain.
-    expect(origins?.split(',')[0]).toBe('https://np.sillyapps.co')
+    expect(origins?.split(',')[0]).toBe('https://app.notepads.dev')
+    expect(origins).toContain('https://np.sillyapps.co')
     expect(origins).toContain('https://lmr.sillyapps.co')
     expect(source).toContain('"pattern": "np-mcp.sillyapps.co"')
     expect(source).toContain('"pattern": "lmr-mcp.edmundlim.systems"')
