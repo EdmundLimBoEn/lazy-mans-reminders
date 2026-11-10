@@ -382,7 +382,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
     link.href = url
     link.download = accountExportFilename()
     link.click()
-    URL.revokeObjectURL(url)
+    setTimeout(() => URL.revokeObjectURL(url), 0)
     setExporting(false)
   }
 
