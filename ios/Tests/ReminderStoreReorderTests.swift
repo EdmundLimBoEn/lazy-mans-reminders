@@ -149,8 +149,10 @@ final class ReminderStoreReorderTests: XCTestCase {
                                      sortOrder: 8, isDone: false, createdAt: created.createdAt)
         await network.finish(index: 0, data: try ReminderJSON.encoder.encode([created]))
         await network.finish(index: 1, data: try ReminderJSON.encoder.encode([secondCreated]))
-        XCTAssertEqual(try await first.value, fixture.reminders + [created])
-        XCTAssertEqual(try await second.value, fixture.reminders + [created, secondCreated])
+        let firstBoard = try await first.value
+        let secondBoard = try await second.value
+        XCTAssertEqual(firstBoard, fixture.reminders + [created])
+        XCTAssertEqual(secondBoard, fixture.reminders + [created, secondCreated])
     }
 
     func testReorderWaitsForEveryCreateAndRecoversAfterSuccessFailureAndCancellation() async throws {

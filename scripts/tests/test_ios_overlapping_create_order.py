@@ -17,6 +17,8 @@ class OverlappingCreateSortOrderTests(unittest.TestCase):
         proof = member(tests, "func testOverlappingCreatesReserveDistinctSortOrders(")
         self.assertIn("postedSortOrders", proof)
         self.assertIn("[7, 8]", proof)
+        self.assertNotIn("XCTAssertEqual(try await", proof)
+        self.assertIn("let firstBoard", proof)
 
 
 if __name__ == "__main__":
