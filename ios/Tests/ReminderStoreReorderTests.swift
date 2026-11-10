@@ -126,6 +126,35 @@ final class ReminderStoreReorderTests: XCTestCase {
         XCTAssertEqual(cache, reordered)
     }
 
+    func testOverlappingCreatesReserveDistinctSortOrders() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let firstStarted = expectation(description: "First create suspended")
+        let secondStarted = expectation(description: "Second create suspended")
+        let network = HeldCreates(started: [firstStarted, secondStarted])
+        let store = fixture.makeStore { try await network.send($0) }
+        try await fixture.seed(store)
+        let first = Task { try await store.create(text: "First") }
+        await fulfillment(of: [firstStarted], timeout: 3)
+        let second = Task { try await store.create(text: "Second") }
+        await fulfillment(of: [secondStarted], timeout: 3)
+        let orders = try await network.postedSortOrders()
+        XCTAssertEqual(orders, [7, 8])
+        XCTAssertEqual(Set(orders).count, orders.count)
+
+        let created = Reminder(id: UUID(), userID: fixture.reminders[0].userID,
+                               text: "First", sortOrder: 7, isDone: false,
+                               createdAt: fixture.reminders[0].createdAt)
+        let secondCreated = Reminder(id: UUID(), userID: created.userID, text: "Second",
+                                     sortOrder: 8, isDone: false, createdAt: created.createdAt)
+        await network.finish(index: 0, data: try ReminderJSON.encoder.encode([created]))
+        await network.finish(index: 1, data: try ReminderJSON.encoder.encode([secondCreated]))
+        let firstBoard = try await first.value
+        let secondBoard = try await second.value
+        XCTAssertEqual(firstBoard, fixture.reminders + [created])
+        XCTAssertEqual(secondBoard, fixture.reminders + [created, secondCreated])
+    }
+
     func testReorderWaitsForEveryCreateAndRecoversAfterSuccessFailureAndCancellation() async throws {
         let failures: [Error?] = [nil, URLError(.timedOut), CancellationError()]
         for failure in failures {
@@ -236,6 +265,16 @@ final class ReminderStoreReorderTests: XCTestCase {
             return try await withCheckedThrowingContinuation { continuation in
                 pending[index] = continuation
                 started[index].fulfill()
+            }
+        }
+
+        func postedSortOrders() throws -> [Int] {
+            struct Body: Decodable {
+                let sortOrder: Int
+                enum CodingKeys: String, CodingKey { case sortOrder = "sort_order" }
+            }
+            return try requests.map { request in
+                try ReminderJSON.decoder.decode(Body.self, from: XCTUnwrap(request.httpBody)).sortOrder
             }
         }
 

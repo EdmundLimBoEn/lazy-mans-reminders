@@ -502,6 +502,7 @@ actor ReminderStore {
         // Exclude reorder before authentication or transport can suspend the actor.
         pendingCreates += 1
         defer { pendingCreates -= 1 }
+        let nextOrder = (cached().map(\.sortOrder).max() ?? -1) + pendingCreates
         let identityRevision = defaults.string(forKey: identityRevisionKey)
         guard let session = await loadFreshSession() else {
             throw StoreError.signedOut
@@ -511,8 +512,6 @@ actor ReminderStore {
               userID == nil || userID == ownerID else {
             throw StoreError.signedOut
         }
-
-        let nextOrder = (cached().map(\.sortOrder).max() ?? -1) + 1
         struct CreateBody: Encodable {
             let text: String
             let userID: UUID
