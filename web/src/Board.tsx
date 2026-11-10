@@ -663,20 +663,23 @@ type AgentTokenClient = {
   revoked_at: string | null
 }
 
-function AgentAccess({ userId, accessToken }: { userId: string; accessToken: string }) {
+export function AgentAccess({ userId, accessToken }: { userId: string; accessToken: string }) {
   const [tokens, setTokens] = useState<AgentTokenClient[]>([])
   const [name, setName] = useState('')
   const [minted, setMinted] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const loadSequence = useRef(0)
 
   const load = useCallback(async () => {
+    const sequence = ++loadSequence.current
     const { data, error: fetchError } = await supabase
       .from('agent_token_clients')
       .select('id, name, created_at, last_used_at, revoked_at')
       .eq('user_id', userId)
       .is('revoked_at', null)
       .order('created_at', { ascending: false })
+    if (sequence !== loadSequence.current) return
     if (fetchError) setError(fetchError.message)
     else setTokens(data ?? [])
   }, [userId])
