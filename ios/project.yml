@@ -138,7 +138,7 @@ targets:
       properties:
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
-        CFBundleDisplayName: "Notepad"
+        CFBundleDisplayName: Reminders
         SUPABASE_URL: "$(SUPABASE_URL)"
         SUPABASE_ANON_KEY: "$(SUPABASE_ANON_KEY)"
         SHARED_KEYCHAIN_ACCESS_GROUP: "$(AppIdentifierPrefix)$(APP_GROUP_ID)"
