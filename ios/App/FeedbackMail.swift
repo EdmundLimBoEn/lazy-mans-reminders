@@ -3,7 +3,7 @@ import Foundation
 /// Builds the Account → Send Feedback `mailto:` link and the version footer.
 /// Kept free of SwiftUI so tests can feed concrete version/build/iOS values.
 enum FeedbackMail {
-    static let address = "hello@edmundlim.systems"
+    static let address = "edmund@sillyapps.co"
 
     struct AppInfo: Equatable {
         var version: String
