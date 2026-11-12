@@ -47,7 +47,7 @@ Apply localization fields in App Store Connect → App Information and the iOS 1
 - Support: <https://app.notepads.dev/support>
 - Marketing: none
 - Terms: <https://app.notepads.dev/terms> (optional metadata)
-- Contact: `hello@edmundlim.systems` (human must confirm monitored inbox)
+- Contact: `edmund@sillyapps.co` (human must confirm monitored inbox)
 
 Historical checks report that `lmr.edmundlim.systems` redirects with 302; do not assume production redirect/auth settings match repository config. Check all URLs unauthenticated from outside the home network.
 
@@ -115,7 +115,7 @@ Populate Test Information before external invites:
 
 | Field | Draft value |
 |---|---|
-| Feedback email | `hello@edmundlim.systems` |
+| Feedback email | `edmund@sillyapps.co` |
 | Marketing URL | none |
 | Privacy URL | `https://app.notepads.dev/privacy` |
 | Beta App Description | Use the tested capabilities from Listing copy; describe it as a beta. Placeholder draft: `Placeholder: Beta of Notepad, a small reminder board for your iPhone, the web, and the Lock Screen.` |

@@ -3,7 +3,7 @@ import { SiteHeader } from '@/components/SiteHeader'
 import { Separator } from '@/components/ui/separator'
 import { ThemeToggle } from './ThemeToggle'
 
-const CONTACT_EMAIL = 'hello@edmundlim.systems'
+const CONTACT_EMAIL = 'edmund@sillyapps.co'
 const LAST_UPDATED = '9 October 2026'
 const SITE_URL = 'https://app.notepads.dev'
 const PDPC_URL = 'https://www.pdpc.gov.sg'

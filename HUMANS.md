@@ -79,7 +79,7 @@ Detailed evidence and remaining gates: [release status](docs/release-status-2026
   - After installing the new build, open the app once while signed in (Settings → Live Activities on for this app). That uploads the push-to-start token. Later reminder notifications should raise the Lock Screen banner without opening the app.
   - Physical iPhone test: add a reminder from the web with the app killed; confirm the Lock Screen banner appears. Complete every reminder; confirm it goes away. Leave one reminder overnight and confirm the banner is still there after the scheduled 15-minute refresh.
 
-- [ ] **Legal review** — Privacy / Terms / Support are live at `/privacy`, `/terms`, `/support`. Counsel review is optional. Contact: `hello@edmundlim.systems`.
+- [ ] **Legal review** — Privacy / Terms / Support are live at `/privacy`, `/terms`, `/support`. Counsel review is optional. Contact: `edmund@sillyapps.co`.
 - [ ] **App Store Connect fields** — Copy name, subtitle, description, nutrition labels, and review notes from `docs/app-store.md`. Capture the current required screenshot groups from that file. Full submission evidence checklist is **App Store submission** below.
 - [ ] **Google web/iOS sign-in** — Provider is enabled. Confirm the Google Cloud **Web** client still has:
   - Authorized JavaScript origins: `https://np.sillyapps.co`, `https://lmr.sillyapps.co`, `https://lmr.edmundlim.systems`, `https://lazy-mans-reminders.pages.dev`, `http://localhost:5173`
