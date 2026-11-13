@@ -58,6 +58,8 @@ struct AccountView: View {
 
                 BoardPersistenceSection(registration: auth.pushRegistration)
 
+                AppIconPickerSection()
+
                 Section {
                     Button {
                         showSignOut = true

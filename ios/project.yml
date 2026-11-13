@@ -65,6 +65,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: "$(PRODUCT_BUNDLE_IDENTIFIER)"
         # XcodeGen's iOS target preset overrides the project-level device family.
         TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: "AppIcon-Minimal AppIcon-Bold"
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
       configs:
         Debug:
           APNS_ENVIRONMENT: development
