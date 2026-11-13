@@ -82,9 +82,18 @@ xcodebuild -project LazyMansReminders.xcodeproj -scheme NotepadMac \
 open /tmp/notepad-mac-demo/Build/Products/Debug/NotepadMac.app --args -demo
 ```
 
+To capture the demo without opening the menu bar popover, launch a new Debug instance with an absolute PNG path (use the app's container for sandboxed builds):
+
+```sh
+open -n -W /tmp/notepad-mac-demo/Build/Products/Debug/NotepadMac.app --args \
+  -demo -snapshot "$HOME/Library/Containers/systems.edmundlim.NotepadMacPrototype/Data/notepad-popover.png"
+```
+
+On launch, the DEBUG-only snapshot mode renders a fixed 380 × 420-point popover at scale 2 in light and dark appearance, writes `notepad-popover.png` and `notepad-popover-dark.png`, then quits. The destination directory must already exist and be writable by the app. The background approximates the popover material with the window background color and rounded corners; this is a view render, not a capture of the system popover chrome. Release ignores `-snapshot`.
+
 Alternatively select `NotepadMac`, Debug, My Mac in Xcode and add `-demo` under Run → Arguments. If macOS requires a locally signed executable to launch, run through Xcode with development signing. The unsigned command verifies building, not provisioning or Keychain access. Live sign-in needs a correctly configured, signed local build and reachable Supabase; do not paste config values into logs or the handoff.
 
-`-demo` is compiled only under `#if DEBUG`. It creates three sample rows in a separate in-memory store before initializing any auth client, real reminder store, defaults, Keychain or runtime configuration. Add and complete work locally; relaunch resets the samples, polling is skipped, and sign-out is hidden. The build system still expects its normal config file, but the running demo needs no valid Supabase credentials. Release ignores the argument and contains no demo store or sample fixtures. Click the menu bar note icon to capture screenshots; all new sample text remains Edmund's placeholder.
+`-demo` is compiled only under `#if DEBUG`. It creates three sample rows in a separate in-memory store before initializing any auth client, real reminder store, defaults, Keychain or runtime configuration. Add and complete work locally; relaunch resets the samples, polling is skipped, and sign-out is hidden. The build system still expects its normal config file, but the running demo needs no valid Supabase credentials. Release ignores the argument and contains no demo store or sample fixtures. Use `-snapshot` as above or click the menu bar note icon to capture screenshots; all new sample text remains Edmund's placeholder.
 
 On Mac, verify both Debug and Release builds, popover positioning/focus on reopening, Return submission, completed-row removal, six-line limit, 500-character validation, failure/retry and draft retention, keyboard-only/VoiceOver operation, large text, and light/dark appearance. Verify the demo with networking disabled and Release ignoring `-demo`. For live QA, test existing-password login and OTP only once the template is suitable, quit/relaunch session restoration, token expiry, sleep/wake, two-device updates, poor connectivity, failed writes and sign-out/account switching without stale data. Confirm sandbox/Keychain behavior in a signed build and rerun the iOS simulator suite to cover the guarded shared helper.
 
