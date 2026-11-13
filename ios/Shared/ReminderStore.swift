@@ -228,7 +228,7 @@ actor ReminderStore {
 
         try requireCurrentIdentity(session, revision: identityRevision)
 
-        // Best-effort: drop this user's done reminders older than 7 days (DB trigger sets completed_at).
+        // Best-effort: drop this user's done reminders older than 3 days (DB trigger sets completed_at).
         if performMaintenance {
             await deleteOldCompletedReminders(accessToken: session.accessToken)
             try requireCurrentIdentity(session, revision: identityRevision)
