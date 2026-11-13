@@ -10,7 +10,7 @@ struct AppIconPickerSection: View {
         Section {
             ForEach(AppIconOption.allCases) { option in
                 Button {
-                    Task { await selection.select(option) }
+                    selection.select(option)
                 } label: {
                     HStack(spacing: 14) {
                         Image(option.previewImageName)
