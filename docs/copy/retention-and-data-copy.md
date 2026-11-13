@@ -1,6 +1,6 @@
 # Retention and data copy — Notepad 1.0.1
 
-Edmund owns all user-facing wording, including tool descriptions shown to agents. This is a source inventory and placement brief, not replacement copy. No existing UI, policy, App Store or MCP wording was changed by this task. Source line numbers refer to this checkout; text is verbatim with layout whitespace folded, HTML/JSX formatting removed where possible, and static policy constants resolved. Dynamic strings retain source interpolation. Markdown metadata rows and manifest fragments are quoted as source. Repeated occurrences have their own locations. Test fixtures, logs, generated files and historical operator checklists are not additional product-copy surfaces.
+Edmund owns all user-facing wording, including tool descriptions shown to agents. This is a source inventory and placement brief with suggested text Edmund can tweak. The privacy page now says 3 days, matching the done-reminder migration; its sentence is otherwise unchanged. The App Store beta description now uses the existing draft sentence without placeholder labels. Source line numbers refer to this checkout; text is verbatim with layout whitespace folded, HTML/JSX formatting removed where possible, and static policy constants resolved. Dynamic strings retain source interpolation. Markdown metadata rows and manifest fragments are quoted as source. Repeated occurrences have their own locations. Test fixtures, logs, generated files and historical operator checklists are not additional product-copy surfaces.
 
 ## Facts and implementation audit
 
@@ -12,7 +12,7 @@ Edmund owns all user-facing wording, including tool descriptions shown to agents
 - Updated SQL fixtures: `supabase/tests/budgeted_retention_cleanup.sql` (4-day expired rows; 2-day and exact 3-day retained rows, authenticated isolation, service-role cleanup, budget exhaustion/resumption); `supabase/tests/retention_skip_locked.sql` (4-/5-day expired rows, skip/retry locked rows). CI now runs them after the new migration, then rechecks anon grants and push-job retention.
 - **Push-job logs keep their separate 7-day retention.** `reminder_push_jobs` uses `created_at`, not reminder `completed_at`. Historical cleanup is in `202610280001_reminder_push_replay.sql:87`; current `cleanup_reminder_push_jobs()` and the every-minute `reminder-push-retention` cron job are in `20261101000200_push_job_retention.sql:39–60`. These migrations and `supabase/tests/push_job_retention.sql` are unchanged. The other cron jobs handle routine firing, push replay and Live Activity refresh, not done-row deletion.
 - Audited `supabase/functions/`: no independent 7-day/one-week done-reminder cutoff. Account-deletion responses are inventoried below. `mcp/` and `plugins/`: no existing retention duration in descriptions/docs; relevant completion/access descriptions remain untouched and appear below. `landing/`: no retention/deletion/privacy/data-use/analytics promises or privacy link; its Lock Screen visibility marketing is not a data-retention promise. No Fastlane metadata tree is present; App Store draft text lives in `docs/app-store.md`. Historical ASC-state documents report past declarations rather than additional literal submission copy.
-- Other seven-day references (routine cadence and TestFlight soak) concern different features and remain unchanged. The privacy policy's 7-day statement stays unchanged pending Edmund's wording; it must be reconciled before a separately authorized release.
+- Other seven-day references (routine cadence and TestFlight soak) concern different features and remain unchanged. The privacy policy now states 3 days, matching the migration; the remaining wording is unchanged.
 
 ## Existing strings
 
@@ -61,7 +61,7 @@ Edmund owns all user-facing wording, including tool descriptions shown to agents
 | `web/src/LegalPages.tsx:217` | The web app uses browser local storage (and similar) to keep your Supabase Auth session and, if you choose, a theme preference (System, Light, or Dark). There are no advertising cookies and no optional analytics cookies. We do not show a cookie banner because this storage is required to sign you in (the theme preference is optional). You can clear it by signing out or clearing site data in your browser. | Existing disclosure; the retention change does not change this data category, purpose, permission or privacy practice. | Privacy policy, existing section |
 | `web/src/LegalPages.tsx:225` | 6. Retention | Existing disclosure; the retention change does not change this data category, purpose, permission or privacy practice. | Privacy policy, existing section |
 | `web/src/LegalPages.tsx:227` | Account, active reminders, device tokens, lock-screen prefs, and agent grants are kept while the account exists. | Account and active reminder data remain subject to account/manual deletion; done reminders use the separate 3-day cutoff. | Privacy policy, existing section |
-| `web/src/LegalPages.tsx:231` | The web and iOS clients request deletion of reminders completed more than 7 days ago when loading the board. This cleanup is best effort: reminders may remain longer if the board is not opened or cleanup fails. A daily database job may also perform this cleanup if configured. | Done tasks become eligible for deletion 3 days after completed_at. Board-load cleanup is best effort; locks, budgets and unopened boards can delay removal. Optional cron calls the same function. | Privacy policy, existing section |
+| `web/src/LegalPages.tsx:231` | The web and iOS clients request deletion of reminders completed more than 3 days ago when loading the board. This cleanup is best effort: reminders may remain longer if the board is not opened or cleanup fails. A daily database job may also perform this cleanup if configured. | Done tasks become eligible for deletion 3 days after completed_at. Board-load cleanup is best effort; locks, budgets and unopened boards can delay removal. Optional cron calls the same function. | Privacy policy, existing section |
 | `web/src/LegalPages.tsx:237` | Invalid APNs tokens may be removed during normal push delivery. | Existing disclosure; the retention change does not change this data category, purpose, permission or privacy practice. | Privacy policy, existing section |
 | `web/src/LegalPages.tsx:240` | TestFlight feedback and diagnostics are available through Apple’s developer tools, subject to Apple’s retention. Deleting your Service account does not delete records held by Apple or copies already shared with agents you authorized. | Apple-held beta data and copies held by authorized agents have independent retention; the done-task cutoff does not erase those copies. | Privacy policy, existing section |
 | `web/src/LegalPages.tsx:245` | Successful account deletion removes your auth user, reminders, device and Live Activity tokens, lock-screen preferences, personal agent keys, and connected-agent grants from the active Service. It does not immediately erase provider backups or operational logs; these follow the providers’ retention settings. Contact us for retention questions. | Account deletion removes active-service data and agent access; provider backups/logs have separate retention. Push-job records retain their existing 7-day policy. | Privacy policy, existing section |
@@ -231,7 +231,7 @@ Edmund owns all user-facing wording, including tool descriptions shown to agents
 | `docs/app-store.md:80` | &#124; Other Data Types &#124; App Functionality; linked &#124; Retained security/operational data &#124; | Existing declared collection purposes/linkage/tracking and account-data behavior; a shorter done-task lifetime does not change the declared categories. | App Store privacy labels / TestFlight / metadata |
 | `docs/app-store.md:82` | Baseline declares no tracking or advertising; verify actual integrated services. Nutrition labels must cover actual collection and relevant purposes, not merely visible UI. Optional beta feedback has separate disclosure criteria. | Existing declared collection purposes/linkage/tracking and account-data behavior; a shorter done-task lifetime does not change the declared categories. | App Store privacy labels / TestFlight / metadata |
 | `docs/app-store.md:120` | &#124; Privacy URL &#124; `https://app.notepads.dev/privacy` &#124; | Existing declared collection purposes/linkage/tracking and account-data behavior; a shorter done-task lifetime does not change the declared categories. | App Store privacy labels / TestFlight / metadata |
-| `docs/app-store.md:121` | &#124; Beta App Description &#124; Use the tested capabilities from Listing copy; describe it as a beta. Placeholder draft: `Placeholder: Beta of Notepad, a small reminder board for your iPhone, the web, and the Lock Screen.` &#124; | Existing declared collection purposes/linkage/tracking and account-data behavior; a shorter done-task lifetime does not change the declared categories. | App Store privacy labels / TestFlight / metadata |
+| `docs/app-store.md:121` | &#124; Beta App Description &#124; Use the tested capabilities from Listing copy; describe it as a beta. Suggested text (Edmund can tweak): `Beta of Notepad, a small reminder board for your iPhone, the web, and the Lock Screen.` &#124; | Existing declared collection purposes/linkage/tracking and account-data behavior; a shorter done-task lifetime does not change the declared categories. | App Store privacy labels / TestFlight / metadata |
 | `docs/app-store.md:130` | 5. Check poor connectivity, sign-out, and sign-in to another account for stale private data. | Existing declared collection purposes/linkage/tracking and account-data behavior; a shorter done-task lifetime does not change the declared categories. | App Store privacy labels / TestFlight / metadata |
 | `docs/app-store.md:131` | 6. Test export, feedback and deletion using disposable accounts with consent. Cover Apple confirmation cancellation, revoke errors and manual fallback, plus email/Google deletion. | Existing declared collection purposes/linkage/tracking and account-data behavior; a shorter done-task lifetime does not change the declared categories. | App Store privacy labels / TestFlight / metadata |
 | `ios/Shared/PrivacyInfo.xcprivacy:5` | &lt;key&gt;NSPrivacyTracking&lt;/key&gt;<br>	&lt;false/&gt; | Manifest declaration unchanged: seven collected types linked to the user for app functionality, none for tracking; no tracking domains. | Apple privacy report / App Store declaration source |
@@ -244,33 +244,33 @@ Edmund owns all user-facing wording, including tool descriptions shown to agents
 | `ios/Shared/PrivacyInfo.xcprivacy:73` | &lt;string&gt;NSPrivacyCollectedDataTypeOtherDataTypes&lt;/string&gt; | Manifest declaration unchanged: seven collected types linked to the user for app functionality, none for tracking; no tracking domains. | Apple privacy report / App Store declaration source |
 | `ios/Shared/PrivacyInfo.xcprivacy:85` | &lt;string&gt;NSPrivacyCollectedDataTypeOtherDiagnosticData&lt;/string&gt; | Manifest declaration unchanged: seven collected types linked to the user for app functionality, none for tracking; no tracking domains. | Apple privacy report / App Store declaration source |
 
-## New strings needed
+## Suggested strings
 
 These are placement proposals only; no new UI is implemented here.
 
-| Place | Facts for Edmund | Text |
+| Place | Facts for Edmund | Suggested text (Edmund can tweak) |
 |---|---|---|
-| iOS reminder list, completion feedback or future done section (`ios/App/ReminderListView.swift`) | Current native list shows active rows only. Completion hides the row from this view immediately; stored done rows become eligible for deletion after 3 days. | [PLACEHOLDER - Edmund to write] |
-| Web board, adjacent to completed rows or a future done-section heading (`web/src/Board.tsx`) | Done rows have a 3-day lifetime from completion; cleanup can be delayed and deleted rows cannot be reopened. | [PLACEHOLDER - Edmund to write] |
-| Privacy policy retention section (`web/src/LegalPages.tsx`) | 3-day done-task cutoff and best-effort execution; push-job logs have a separate 7-day cutoff; provider backups/logs remain distinct. | [PLACEHOLDER - Edmund to write] |
-| Web export action / iOS Download My Data destination | Export includes surviving data; auto-deleted done rows are no longer available. | [PLACEHOLDER - Edmund to write] |
-| MCP complete/list/reopen descriptions and plugin skill | Agents need the retention window to explain missing completed rows and limits on reopening. | [PLACEHOLDER - Edmund to write] |
-| App Store description / 1.0.1 release notes / TestFlight notes | 3-day done-task lifetime; no change to tracking, account deletion or data purposes. | [PLACEHOLDER - Edmund to write] |
-| Landing footer | Entry point to the existing privacy policy and data/retention explanation. | [PLACEHOLDER - Edmund to write] |
+| iOS reminder list, completion feedback or future done section (`ios/App/ReminderListView.swift`) | Current native list shows active rows only. Completion hides the row from this view immediately; stored done rows become eligible for deletion after 3 days. | Completed reminders are eligible for deletion after 3 days. |
+| Web board, adjacent to completed rows or a future done-section heading (`web/src/Board.tsx`) | Done rows have a 3-day lifetime from completion; cleanup can be delayed and deleted rows cannot be reopened. | Completed reminders are eligible for deletion after 3 days. Deleted reminders cannot be reopened. |
+| Privacy policy retention section (`web/src/LegalPages.tsx`) | 3-day done-task cutoff and best-effort execution; push-job logs have a separate 7-day cutoff; provider backups/logs remain distinct. | The web and iOS clients request deletion of reminders completed more than 3 days ago when loading the board. |
+| Web export action / iOS Download My Data destination | Export includes surviving data; auto-deleted done rows are no longer available. | Deleted reminders are not included in your download. |
+| MCP complete/list/reopen descriptions and plugin skill | Agents need the retention window to explain missing completed rows and limits on reopening. | Completed reminders are eligible for deletion after 3 days. Deleted reminders cannot be listed or reopened. |
+| App Store description / 1.0.1 release notes / TestFlight notes | 3-day done-task lifetime; no change to tracking, account deletion or data purposes. | Completed reminders are eligible for deletion after 3 days. |
+| Landing footer | Entry point to the existing privacy policy and data/retention explanation. | Privacy |
 
 ## Steering to web app & agent connections
 
 Placement only. Web destination: `https://app.notepads.dev`. Agent setup should lead to the existing web Agent access section / connection setup, which supplies the configured MCP endpoint; do not invent a new setup route or bypass OAuth consent. These are proposals, not implemented links.
 
-| Entry point | Placement / destination | Text |
+| Entry point | Placement / destination | Suggested text (Edmund can tweak) |
 |---|---|---|
-| iOS Account/settings | Alongside Download My Data; separate web-board and agent-setup entries. | [PLACEHOLDER - Edmund to write] |
-| iOS empty board | Secondary entry below the first-reminder composer, linking to web board/setup. | [PLACEHOLDER - Edmund to write] |
-| iOS after first reminder | Dismissible secondary setup entry after successful creation, linking to web board/agent setup. | [PLACEHOLDER - Edmund to write] |
-| Web board header | Agent-setup link near board/account navigation, targeting the existing Agent access section. | [PLACEHOLDER - Edmund to write] |
-| Web empty board | Secondary agent-setup entry below the composer. | [PLACEHOLDER - Edmund to write] |
-| Widget | App deep-link entry that opens the native board/account setup, with web/agent links there; fit WidgetKit constraints during implementation. | [PLACEHOLDER - Edmund to write] |
-| Landing page | Keep existing Open app entry to app.notepads.dev; optional adjacent agent-setup entry. | [PLACEHOLDER - Edmund to write] |
+| iOS Account/settings | Alongside Download My Data; separate web-board and agent-setup entries. | Your Board / Agent access |
+| iOS empty board | Secondary entry below the first-reminder composer, linking to web board/setup. | Your Board / Agent access |
+| iOS after first reminder | Dismissible secondary setup entry after successful creation, linking to web board/agent setup. | Your Board / Agent access |
+| Web board header | Agent-setup link near board/account navigation, targeting the existing Agent access section. | Agent access |
+| Web empty board | Secondary agent-setup entry below the composer. | Agent access |
+| Widget | App deep-link entry that opens the native board/account setup, with web/agent links there; fit WidgetKit constraints during implementation. | Your Board |
+| Landing page | Keep existing Open app entry to app.notepads.dev; optional adjacent agent-setup entry. | Open app / Agent access |
 
 ## Verification / handoff
 
@@ -283,4 +283,4 @@ psql -X -v ON_ERROR_STOP=1 -f supabase/tests/anon_helper_execute.sql
 psql -X -v ON_ERROR_STOP=1 -f supabase/tests/push_job_retention.sql
 ```
 
-Use only a disposable local test database; these fixtures assume administrator rights and the CI Supabase roles/extensions. The concurrent lock fixture commits setup then removes it. This change does not apply migrations remotely. Edmund still needs to write the public retention wording, and release owners need to verify any out-of-repo cron configuration before claiming a cleanup schedule.
+Use only a disposable local test database; these fixtures assume administrator rights and the CI Supabase roles/extensions. The concurrent lock fixture commits setup then removes it. This change does not apply migrations remotely. The privacy page now says 3 days and suggested lines are provided above for Edmund to tweak. Release owners need to verify any out-of-repo cron configuration before claiming a cleanup schedule.

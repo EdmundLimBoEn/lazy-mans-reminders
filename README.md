@@ -82,7 +82,7 @@ supabase db push
 
 The migrations create `reminders`, `device_tokens`, `lock_screen_prefs`, and `agent_tokens`, enable RLS, add per-user policies, and enable Realtime for reminders. Agent keys are minted with `mint_agent_token` and listed through the `agent_token_clients` view (no hash). Concurrent agent adds go through `add_agent_reminder`, which locks per user and clamps capacity at 16. The iPhone measures how many lines fit in the Lock Screen Live Activity and upserts `lock_screen_prefs.max_lines` so the web board uses the same capacity. Completed reminders get a `completed_at` timestamp (maintained by a trigger); web and iOS call `delete_old_completed_reminders()` on board load so done rows older than 3 days are removed without requiring dashboard cron.
 
-The 3-day cutoff is measured from `completed_at`, not creation or last edit. Cleanup is best effort and can be delayed by board inactivity, row locks, or the shared write budget. Push delivery logs (`reminder_push_jobs`) retain their separate 7-day policy. See [the copy inventory](docs/copy/retention-and-data-copy.md) for unchanged public wording that Edmund needs to review.
+The 3-day cutoff is measured from `completed_at`, not creation or last edit. Cleanup is best effort and can be delayed by board inactivity, row locks, or the shared write budget. Push delivery logs (`reminder_push_jobs`) retain their separate 7-day policy. See [the copy inventory](docs/copy/retention-and-data-copy.md) for the updated privacy wording and suggested text Edmund can tweak.
 
 Optional: if you enable the `pg_cron` extension in the Supabase dashboard, you can also schedule `select public.delete_old_completed_reminders();` daily so cleanup runs even when no client opens the board.
 
