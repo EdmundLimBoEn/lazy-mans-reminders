@@ -182,7 +182,7 @@ final class MacReminderModel: ObservableObject {
             // SDK session must also remove all local reminder data.
             if client?.auth.currentSession == nil { await clearBoard(resetCode: false) }
             if error is CancellationError { return }
-            errorMessage = "[PLACEHOLDER - Edmund to write]"
+            errorMessage = "Could not complete that action. Please try again."
         }
     }
 }
@@ -203,7 +203,14 @@ private struct MacDemoStore {
     private(set) var reminders: [Reminder] = []
 
     init() {
-        for _ in 0..<3 { add("[PLACEHOLDER - Edmund to write]") }
+        for text in [
+            "Water the sample plant",
+            "Read the sample book",
+            "Book dentist for Thursday",
+            "Pay electricity bill"
+        ] {
+            add(text)
+        }
     }
 
     mutating func add(_ text: String) {

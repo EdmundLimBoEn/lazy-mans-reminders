@@ -53,8 +53,7 @@ struct MacReminderView: View {
                         .disabled(model.isBusy)
                 }
                 Spacer()
-                // No existing iOS quit label; Edmund supplies this copy.
-                Button("[PLACEHOLDER - Edmund to write]") { NSApplication.shared.terminate(nil) }
+                Button("Quit Notepad") { NSApplication.shared.terminate(nil) }
                     .keyboardShortcut("q")
             }
             .font(.caption)
@@ -133,7 +132,7 @@ struct MacReminderView: View {
             Text("Sign In").font(.headline)
             if model.codeEmail != nil {
                 Text("Check Your Inbox")
-                TextField("[PLACEHOLDER - Edmund to write]", text: $code)
+                TextField("Sign-in code", text: $code)
                     .onSubmit { Task { await model.verifyCode(code) } }
                 Button("Sign In") { Task { await model.verifyCode(code) } }
                     .disabled(code.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -151,12 +150,12 @@ struct MacReminderView: View {
                     Button("Sign In with Password", action: signInWithPassword)
                         .disabled(email.isEmpty || password.isEmpty)
                 } else {
-                    Button("[PLACEHOLDER - Edmund to write]") {
+                    Button("Send Sign-In Link") {
                         Task { await model.sendCode(email: email) }
                     }
                     .disabled(email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
-                Button(usesPassword ? "[PLACEHOLDER - Edmund to write]" : "Use an Existing Password") {
+                Button(usesPassword ? "Use a Sign-In Link Instead" : "Use an Existing Password") {
                     password = ""
                     usesPassword.toggle()
                 }
