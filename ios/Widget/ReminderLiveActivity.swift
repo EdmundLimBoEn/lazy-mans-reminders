@@ -9,7 +9,7 @@ import WidgetKit
 /// compact text widens the collapsed Dynamic Island over status icons.
 /// Live Activities HIG asks that compact content stay as narrow as possible
 /// and not cover the status bar. Press-and-hold uses the expanded
-/// presentation for the same board lines as the Lock Screen banner.
+/// presentation for a shorter preview of the Lock Screen board.
 struct ReminderLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: ReminderAttributes.self) { context in
@@ -17,12 +17,13 @@ struct ReminderLiveActivity: Widget {
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.bottom) {
-                    expandedIsland(lines: context.state.lines)
+                    ExpandedReminderIsland(lines: context.state.lines)
+                        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                 }
                 // The expanded pill's bottom corner starts curving while the
                 // last line is still drawing. Extra bottom margin keeps that
                 // curve below the text.
-                .contentMargins(.bottom, 14)
+                .contentMargins(.bottom, 24)
             } compactLeading: {
                 EmptyView()
             } compactTrailing: {
@@ -35,8 +36,8 @@ struct ReminderLiveActivity: Widget {
 
     @ViewBuilder
     private func lockScreenBanner(lines: [String]) -> some View {
-        reminderLineStack(
-            lines: lines,
+        ReminderActivityLineStack(
+            lines: ReminderActivityPresentation.presentedLines(lines),
             font: .system(size: LockScreenLineBudget.pointSize, weight: .semibold)
         )
         .padding(.top, 14)
@@ -47,25 +48,32 @@ struct ReminderLiveActivity: Widget {
         .activityBackgroundTint(.clear)
         .activitySystemActionForegroundColor(.primary)
     }
+}
 
-    @ViewBuilder
-    private func expandedIsland(lines: [String]) -> some View {
-        reminderLineStack(
-            lines: lines,
+private struct ExpandedReminderIsland: View {
+    let lines: [String]
+    @ScaledMetric(relativeTo: .subheadline) private var islandLineHeight: CGFloat = 20
+
+    var body: some View {
+        ReminderActivityLineStack(
+            lines: ReminderActivityPresentation.expandedIslandLines(lines, lineHeight: islandLineHeight),
             font: .subheadline.weight(.semibold)
         )
-        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+        .padding(.horizontal, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
         // The island background is always black. Force dark so `.primary`
         // text stays light when the phone is in light mode.
         .environment(\.colorScheme, .dark)
     }
+}
 
-    @ViewBuilder
-    private func reminderLineStack(lines: [String], font: Font) -> some View {
-        let display = ReminderActivityPresentation.presentedLines(lines)
+private struct ReminderActivityLineStack: View {
+    let lines: [String]
+    let font: Font
+
+    var body: some View {
         VStack(alignment: .leading, spacing: LockScreenLineBudget.lineSpacing) {
-            ForEach(Array(display.enumerated()), id: \.offset) { _, line in
+            ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
                 Text(line)
                     .font(font)
                     .foregroundStyle(.primary)

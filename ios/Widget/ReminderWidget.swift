@@ -39,6 +39,8 @@ struct ReminderProvider: TimelineProvider {
 
 struct ReminderWidgetView: View {
     @Environment(\.widgetFamily) private var family
+    @ScaledMetric(relativeTo: .subheadline) private var lineHeight: CGFloat = 20
+    @ScaledMetric(relativeTo: .caption) private var headerHeight: CGFloat = 15
     let entry: ReminderEntry
 
     private var lines: [String] {
@@ -49,12 +51,9 @@ struct ReminderWidgetView: View {
     }
 
     private var lineLimit: Int {
-        switch family {
-        case .accessoryInline: return 1
-        case .accessoryRectangular: return 3
-        case .systemSmall: return 4
-        default: return 6
-        }
+        ReminderWidgetPresentation.lineLimit(
+            for: family, lineHeight: lineHeight, headerHeight: headerHeight
+        )
     }
 
     private var isAccessory: Bool {
@@ -66,7 +65,7 @@ struct ReminderWidgetView: View {
             if family == .accessoryInline {
                 Text(lines.joined(separator: " · "))
             } else {
-                VStack(alignment: .leading, spacing: isAccessory ? 2 : 8) {
+                VStack(alignment: .leading, spacing: ReminderWidgetPresentation.spacing(for: family)) {
                     if !isAccessory {
                         Text("Your Board")
                             .font(.caption.weight(.semibold))
