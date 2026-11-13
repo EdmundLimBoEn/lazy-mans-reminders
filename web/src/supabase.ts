@@ -8,6 +8,7 @@ if (!url || !anonKey) {
 }
 
 export const supabase = createClient(url, anonKey, {
+  global: { headers: { 'x-notepad-client': 'web' } },
   auth: {
     flowType: 'pkce',
     detectSessionInUrl: false,
