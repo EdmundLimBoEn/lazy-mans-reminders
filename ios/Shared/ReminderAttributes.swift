@@ -35,11 +35,34 @@ enum ReminderActivityPresentation {
         return capped(flattened(from: active), limit: limit)
     }
 
-    /// Lock Screen banner and expanded Dynamic Island lines from content state.
+    /// Lock Screen banner lines from content state.
     /// Adds the empty placeholder and clips to the current device budget.
     static func presentedLines(_ lines: [String]) -> [String] {
         let source = lines.isEmpty ? ["Nothing to remember"] : lines
         return Array(source.prefix(ReminderBoardLimits.lockScreenMaxLines))
+    }
+
+    /// Reserve 48pt of the island's roughly 160pt height for system chrome and
+    /// corner clearance. The overflow footer counts toward the five-row cap.
+    static func expandedIslandLines(_ lines: [String], lineHeight: CGFloat = 20) -> [String] {
+        let rowHeight = max(20, ceil(lineHeight))
+        let spacing = LockScreenLineBudget.lineSpacing
+        let limit = min(5, max(1, Int((112 + spacing) / (rowHeight + spacing))))
+        let source = lines.isEmpty ? ["Nothing to remember"] : lines
+        guard source.count > limit else { return source }
+
+        // Content state can already end in an overflow footer. Include its
+        // hidden rows when applying the smaller island budget.
+        var content = source
+        var previouslyHidden = 0
+        if let last = content.last, last.hasPrefix("+"), last.hasSuffix(" more"),
+           let count = Int(last.dropFirst().dropLast(5)), count > 0 {
+            previouslyHidden = count
+            content.removeLast()
+        }
+        let visible = Array(content.prefix(limit - 1))
+        let overflow = content.count - visible.count + previouslyHidden
+        return visible + ["+\(overflow) more"]
     }
 
     static func previewLines(_ lines: [String], limit: Int = 6) -> [String] {
