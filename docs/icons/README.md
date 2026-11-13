@@ -33,9 +33,13 @@ is needed to reproduce the output; those earlier explorations were reference
 only.
 
 The Account settings sheet has three thumbnail selection rows, ordered as above.
-Every new app-authored label, accessibility label and status message uses
-`[PLACEHOLDER - Edmund to write]`. Edmund must supply distinct accessible labels,
-the section heading, and unsupported/error/busy copy before release.
+The picker uses the following copy, which Edmund can tweak:
+
+- Section heading: “App Icon”.
+- Row and accessibility labels: “Default”, “Minimal”, “Bold”.
+- Busy accessibility label: “Changing app icon”.
+- Unsupported device footer: “App icons can’t be changed on this device.”
+- Error footer: “Couldn’t change the icon. Try again.”
 
 `AppIconSelection` reads the current selection from UIKit on appearance, on
 foregrounding, and after a change completes. It disables unsupported/busy

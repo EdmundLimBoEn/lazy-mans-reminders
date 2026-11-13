@@ -8,7 +8,6 @@ struct AppIconPickerSection: View {
 
     var body: some View {
         Section {
-            // Image rows keep the choices distinguishable until Edmund supplies copy.
             ForEach(AppIconOption.allCases) { option in
                 Button {
                     Task { await selection.select(option) }
@@ -19,7 +18,7 @@ struct AppIconPickerSection: View {
                             .frame(width: 48, height: 48)
                             .clipShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
                             .accessibilityHidden(true)
-                        Text("[PLACEHOLDER - Edmund to write]")
+                        iconLabel(for: option)
                             .foregroundStyle(.primary)
                         Spacer(minLength: 8)
                         if selection.selected == option {
@@ -31,25 +30,36 @@ struct AppIconPickerSection: View {
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("[PLACEHOLDER - Edmund to write]")
+                .accessibilityLabel(iconLabel(for: option))
                 .accessibilityAddTraits(selection.selected == option ? .isSelected : [])
                 .disabled(!selection.supportsAlternateIcons || selection.isChanging)
             }
             if selection.isChanging {
                 ProgressView()
-                    .accessibilityLabel("[PLACEHOLDER - Edmund to write]")
+                    .accessibilityLabel("Changing app icon")
             }
         } header: {
-            Text("[PLACEHOLDER - Edmund to write]")
+            Text("App Icon")
         } footer: {
-            if !selection.supportsAlternateIcons || selection.hasError {
-                Text("[PLACEHOLDER - Edmund to write]")
+            if !selection.supportsAlternateIcons {
+                Text("App icons can’t be changed on this device.")
+                    .accessibilityAddTraits(.updatesFrequently)
+            } else if selection.hasError {
+                Text("Couldn’t change the icon. Try again.")
                     .accessibilityAddTraits(.updatesFrequently)
             }
         }
         .onAppear { selection.refresh() }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { selection.refresh() }
+        }
+    }
+
+    private func iconLabel(for option: AppIconOption) -> Text {
+        switch option {
+        case .default: return Text("Default")
+        case .minimal: return Text("Minimal")
+        case .bold: return Text("Bold")
         }
     }
 }
