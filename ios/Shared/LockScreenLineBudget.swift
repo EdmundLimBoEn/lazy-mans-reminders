@@ -1,5 +1,7 @@
 import Foundation
+#if os(iOS)
 import UIKit
+#endif
 
 /// Measures how many compact reminder lines fit in the Lock Screen Live Activity
 /// glass on this phone, caches the result in the App Group, and syncs to Supabase
@@ -17,6 +19,7 @@ enum LockScreenLineBudget {
 
     /// Last measured (or fallback) line budget for this device.
     static var cachedMaxLines: Int {
+#if os(iOS)
         guard
             let defaults = UserDefaults(suiteName: AppConfig.appGroupID),
             let value = defaults.object(forKey: cacheKey) as? Int,
@@ -25,8 +28,14 @@ enum LockScreenLineBudget {
             return fallbackMaxLines
         }
         return min(value, maxLinesCap)
+#else
+        // The Mac prototype has no phone geometry or App Group. Do not publish
+        // a Mac screen measurement over the user's phone-derived preference.
+        return fallbackMaxLines
+#endif
     }
 
+#if os(iOS)
     /// Pure geometry → line count (unit-testable).
     static func computeMaxLines(
         screenHeight: CGFloat,
@@ -65,6 +74,7 @@ enum LockScreenLineBudget {
         }
         return lines
     }
+#endif
 }
 
 enum LockScreenMarqueePolicy {
