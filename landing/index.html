@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-itunes-app" content="app-id=6799138197">
 <title>Notepad</title>
 <!-- Copy below is verbatim from the sillyapps.co Notepad entry. Text marked "Placeholder:" is temporary; replace it when final copy is ready. -->
 <meta name="description" content="Reminders that live on your Lock Screen.">
@@ -20,7 +21,8 @@ header,footer{max-width:960px;width:100%;margin:0 auto;padding:20px 24px;display
 header a.brand{display:flex;gap:10px;align-items:center;color:inherit;text-decoration:none;font-weight:600}
 header img{width:28px;height:28px;border-radius:7px}
 main{flex:1;max-width:640px;margin:0 auto;padding:72px 24px;text-align:center}
-main img{width:96px;height:96px;border-radius:22px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+main > img{width:96px;height:96px;border-radius:22px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.app-store-badge img{display:block;width:auto;height:40px}
 h1{font-size:44px;line-height:1.1;letter-spacing:-.03em;margin:28px 0 12px}
 p.lead{font-size:18px;color:var(--muted);margin:0 auto 32px;max-width:520px}
 .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
@@ -43,8 +45,7 @@ footer a{color:inherit}
   <p class="lead">Live Activities keep today's list in view, so you never open another list app. Calm, useful, and a little cheeky.</p>
   <div class="actions">
     <a class="btn primary" href="https://app.notepads.dev">Open app</a>
-    <!-- Placeholder: app is not on the App Store yet. Swap for the App Store link and label at launch. -->
-    <span class="btn" aria-disabled="true">Placeholder: Coming soon to the App Store</span>
+    <a class="app-store-badge" href="https://apps.apple.com/app/id6799138197"><img src="/app-store-badge.svg" alt="Download on the App Store" height="40"></a>
   </div>
   <div class="tags"><span>iOS</span><span>Web</span><span>Free</span></div>
 </main>

@@ -99,6 +99,63 @@ final class ReminderPresentationTests: XCTestCase {
         XCTAssertFalse(display.contains { $0.hasPrefix("+") && $0.hasSuffix(" more") })
     }
 
+    func testExpandedIslandKeepsFourAndFiveLinesInOrder() {
+        for count in [4, 5] {
+            let lines = (0..<count).map { "Item \($0)" }
+            XCTAssertEqual(ReminderActivityPresentation.expandedIslandLines(lines), lines)
+        }
+    }
+
+    func testExpandedIslandIncludesOverflowWithinFiveRows() {
+        for count in [6, 16] {
+            let lines = (0..<count).map { "Item \($0)" }
+            XCTAssertEqual(
+                ReminderActivityPresentation.expandedIslandLines(lines),
+                ["Item 0", "Item 1", "Item 2", "Item 3", "+\(count - 4) more"]
+            )
+        }
+    }
+
+    func testExpandedIslandPreservesPreviouslyCountedOverflow() {
+        let lines = ["a", "b", "c", "d", "e", "+7 more"]
+        XCTAssertEqual(
+            ReminderActivityPresentation.expandedIslandLines(lines),
+            ["a", "b", "c", "d", "+8 more"]
+        )
+        let short = ["a", "+7 more"]
+        XCTAssertEqual(ReminderActivityPresentation.expandedIslandLines(short), short)
+    }
+
+    func testExpandedIslandUsesExistingEmptyState() {
+        XCTAssertEqual(
+            ReminderActivityPresentation.expandedIslandLines([]),
+            ["Nothing to remember"]
+        )
+    }
+
+    func testExpandedIslandReducesRowsForLargerText() {
+        let lines = (0..<6).map { "Item \($0)" }
+        XCTAssertEqual(
+            ReminderActivityPresentation.expandedIslandLines(lines, lineHeight: 26),
+            ["Item 0", "Item 1", "+4 more"]
+        )
+        XCTAssertEqual(
+            ReminderActivityPresentation.expandedIslandLines(lines, lineHeight: 40),
+            ["Item 0", "+5 more"]
+        )
+    }
+
+    func testExpandedIslandRowsLeaveRoomForChromeAndCorners() {
+        let lines = (0..<16).map { "Item \($0)" }
+        for height in [20.0, 23.5, 26.0, 30.0, 40.0] {
+            let display = ReminderActivityPresentation.expandedIslandLines(lines, lineHeight: height)
+            let textHeight = CGFloat(display.count) * ceil(height)
+                + CGFloat(display.count - 1) * LockScreenLineBudget.lineSpacing
+            XCTAssertLessThanOrEqual(display.count, 5)
+            XCTAssertLessThanOrEqual(textHeight + 48, 160)
+        }
+    }
+
     func testMarqueeStopsWhenReduceMotionIsOn() {
         XCTAssertTrue(
             LockScreenMarqueePolicy.shouldScroll(overflow: 20, reduceMotion: false)
