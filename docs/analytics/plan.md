@@ -84,15 +84,15 @@ For either option, before collecting from iOS, update App Store Connect declarat
 
 Neither design inherently tracks across other companies' apps/sites or uses IDFA. ATT permission is not required for that nontracking setup; adding a third-party SDK alone does not establish tracking. Do not confuse ATT with general legal consent: any consent/notice requirements depend on jurisdiction, purpose and SDK storage practices, especially optional web analytics. No consent dialog is added by this implementation. [Apple tracking definition](https://developer.apple.com/app-store/app-privacy-details/).
 
-Edmund owns every published word. Required copy tasks (no policy/UI text changed here):
+Edmund owns every published word. Suggested copy he can tweak before enabling collection (no published policy/UI text changed here); the PostHog line applies only if that option is adopted later:
 
 | Location / decision | Copy |
 | --- | --- |
-| Privacy policy collection and purpose: owner-linked daily interaction counts, platform hints, product measurement and abuse review | [PLACEHOLDER - Edmund to write] |
-| Retention/deletion: rolling 90 UTC dates, cron backlog caveat, erasure on successful account deletion, provider backups | [PLACEHOLDER - Edmund to write] |
-| Access/export: current client export does not include admin-only analytics; provide an authenticated support-mediated access process without exposing cross-user reports | [PLACEHOLDER - Edmund to write] |
-| App Store privacy declarations and any explanatory release text | [PLACEHOLDER - Edmund to write] |
-| If PostHog later: replace “no third-party product analytics” claim; identify processor/region, identifiers, retention/deletion and any storage/consent choice | [PLACEHOLDER - Edmund to write] |
+| Privacy policy collection and purpose: owner-linked daily interaction counts, platform hints, product measurement and abuse review | We keep daily usage counts linked to your account and the reported platform in Supabase to understand usage and prevent abuse, without reminder text or sharing with a separate analytics provider. |
+| Retention/deletion: rolling 90 UTC dates, cron backlog caveat, erasure on successful account deletion, provider backups | We keep counts for today and the previous 89 UTC dates, though cleanup delays may extend this; successful account deletion removes them from the active service, while backups follow the providers’ retention settings. |
+| Access/export: current client export does not include admin-only analytics; provide an authenticated support-mediated access process without exposing cross-user reports | Daily usage counts are not included in Download my data; contact support for a copy of your own counts after we verify your account. |
+| App Store privacy declarations and any explanatory release text | Account-linked usage counts and user IDs are used for analytics and app functionality, including abuse prevention, and are not used for tracking. |
+| If PostHog later: replace “no third-party product analytics” claim; identify processor/region, identifiers, retention/deletion and any storage/consent choice | If we add PostHog, we will first explain its processing role, storage region, identifiers, retention and deletion rules, and any storage or consent choices. |
 
 The existing “no third-party product analytics” statement remains consistent with the chosen Supabase-only option, but does not substitute for disclosure of new first-party product analytics.
 

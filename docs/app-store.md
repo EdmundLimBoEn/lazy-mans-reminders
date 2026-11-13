@@ -118,7 +118,7 @@ Populate Test Information before external invites:
 | Feedback email | `edmund@sillyapps.co` |
 | Marketing URL | none |
 | Privacy URL | `https://app.notepads.dev/privacy` |
-| Beta App Description | Use the tested capabilities from Listing copy; describe it as a beta. Placeholder draft: `Placeholder: Beta of Notepad, a small reminder board for your iPhone, the web, and the Lock Screen.` |
+| Beta App Description | Suggested copy to tweak for the tested build: `Beta of Notepad, a small reminder board for your iPhone, the web, and the Lock Screen.` |
 | Beta review access | Verified synthetic account, private credentials, contact and notes as above |
 
 What to Test (edit to the selected build):
