@@ -9,8 +9,8 @@ begin;
 alter table public.reminders disable trigger user;
 insert into auth.users(id) values ('55555555-5555-4555-8555-555555555555');
 insert into public.reminders(id, user_id, text, is_done, completed_at) values
- ('55555555-5555-4555-8555-555555555551', '55555555-5555-4555-8555-555555555555', 'Locked expired', true, now() - interval '9 days'),
- ('55555555-5555-4555-8555-555555555552', '55555555-5555-4555-8555-555555555555', 'Available expired', true, now() - interval '8 days');
+ ('55555555-5555-4555-8555-555555555551', '55555555-5555-4555-8555-555555555555', 'Locked expired', true, now() - interval '5 days'),
+ ('55555555-5555-4555-8555-555555555552', '55555555-5555-4555-8555-555555555555', 'Available expired', true, now() - interval '4 days');
 alter table public.reminders enable trigger user;
 insert into public.user_write_budgets(user_id, window_started_at, writes)
 values ('55555555-5555-4555-8555-555555555555', statement_timestamp() + interval '1 hour', 598);

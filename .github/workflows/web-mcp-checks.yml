@@ -147,7 +147,6 @@ jobs:
             supabase/tests/reminder_quotas.sql \
             supabase/tests/write_budgets.sql \
             supabase/migrations/202610280003_budgeted_retention_cleanup.sql \
-            supabase/tests/budgeted_retention_cleanup.sql \
             supabase/migrations/202610280001_reminder_push_replay.sql \
             supabase/tests/reminder_push_replay.sql \
             supabase/migrations/202610280004_normalize_legacy_reminder_text.sql \
@@ -162,8 +161,6 @@ jobs:
             supabase/tests/indexable_push_dispatch.sql \
             supabase/tests/reminder_push_replay.sql \
             supabase/migrations/20261101000400_retention_skip_locked.sql \
-            supabase/tests/budgeted_retention_cleanup.sql \
-            supabase/tests/retention_skip_locked.sql \
             supabase/migrations/20261109000200_revoke_anon_helper_execute.sql \
             supabase/tests/anon_helper_execute.sql \
             supabase/tests/write_budgets.sql \
@@ -177,7 +174,12 @@ jobs:
             supabase/tests/routine_reminders.sql \
             supabase/tests/reminder_quotas.sql \
             supabase/migrations/20261109000300_revoke_anon_agent_token_clients.sql \
-            supabase/tests/agent_token_clients_grants.sql; do
+            supabase/tests/agent_token_clients_grants.sql \
+            supabase/migrations/20261113000100_done_retention_3_days.sql \
+            supabase/tests/budgeted_retention_cleanup.sql \
+            supabase/tests/retention_skip_locked.sql \
+            supabase/tests/anon_helper_execute.sql \
+            supabase/tests/push_job_retention.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
           # Exercise the initial write assertions with a deterministic minute rollover.
