@@ -39,6 +39,7 @@ describe('privacy policy disclosures', () => {
   })
 
   it('does not promise exact cleanup or guaranteed Apple revocation', () => {
+    expect(text).toContain('The web and iOS clients request deletion of reminders completed more than 3 days ago when loading the board.')
     expect(text).toContain('This cleanup is best effort')
     expect(text).toContain('these follow the providers’ retention settings')
     expect(text).toContain('account deletion does not guarantee Apple authorization has been revoked')

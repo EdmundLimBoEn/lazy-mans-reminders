@@ -12,7 +12,7 @@ export const DEFAULT_LOCK_SCREEN_MAX_LINES = 6
 export const MAX_ACTIVE_REMINDERS = 16
 
 /** Done reminders older than this are deleted by `delete_old_completed_reminders()`. */
-export const COMPLETED_REMINDER_RETENTION_DAYS = 7
+export const COMPLETED_REMINDER_RETENTION_DAYS = 3
 
 export const POST_IT_HINT =
   'Hint: This board is more like a post-it note. Combine reminders into one line, or find other ways to keep it short.'

@@ -229,7 +229,7 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           while the account exists.
         </li>
         <li>
-          The web and iOS clients request deletion of reminders completed more than 7 days ago
+          The web and iOS clients request deletion of reminders completed more than 3 days ago
           when loading the board. This cleanup is best effort: reminders may remain longer if
           the board is not opened or cleanup fails. A daily database job may also perform this
           cleanup if configured.
