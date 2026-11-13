@@ -1,6 +1,7 @@
 import { ExternalTokenError, type AuthRequest, type OAuthHelpers } from '@cloudflare/workers-oauth-provider'
 import { MCP_HOSTS, mcpResourceForRequest, TOOLS } from './constants'
 import { resolveSession } from './auth'
+import { recordAgentUsage } from './usage'
 import {
   consentCanApprove,
   consentSummary,
@@ -283,6 +284,7 @@ async function bindAuthorization(
         agentName: summary?.client.name || 'Agent',
       } satisfies BoundProps,
     })
+    await recordAgentUsage(env, user.id, 'agent_oauth_connected')
     return json({ redirectTo }, 200, cors)
   } catch (error) {
     console.error('authorization completion failed', error instanceof Error ? error.name : 'error')

@@ -179,7 +179,10 @@ jobs:
             supabase/tests/budgeted_retention_cleanup.sql \
             supabase/tests/retention_skip_locked.sql \
             supabase/tests/anon_helper_execute.sql \
-            supabase/tests/push_job_retention.sql; do
+            supabase/tests/push_job_retention.sql \
+            supabase/migrations/20261113000200_usage_events.sql \
+            supabase/tests/usage_events.sql \
+            supabase/tests/agent_append_order.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
           # Exercise the initial write assertions with a deterministic minute rollover.

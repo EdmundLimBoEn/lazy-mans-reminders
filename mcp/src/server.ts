@@ -2,6 +2,7 @@ import { McpServer } from '@modelcontextprotocol/server'
 import { z } from 'zod'
 import type { AgentSession, BoardError, BoardResult, ReminderRow } from './domain'
 import { createServiceRoleClient } from './auth'
+import { recordAgentUsage } from './usage'
 import { CLIENT_STORAGE_ERROR, runBoardCommand } from './board'
 
 export function createServer(session: AgentSession, env: Env): McpServer {
@@ -20,6 +21,7 @@ export function createServer(session: AgentSession, env: Env): McpServer {
       },
     },
     async ({ status }) => {
+      await recordAgentUsage(env, session.userId, 'mcp_list')
       const result = await runBoardCommand(supabase, session, {
         kind: 'list',
         status: status ?? 'active',
@@ -37,6 +39,7 @@ export function createServer(session: AgentSession, env: Env): McpServer {
       },
     },
     async ({ text }) => {
+      await recordAgentUsage(env, session.userId, 'mcp_add')
       const result = await runBoardCommand(supabase, session, { kind: 'add', text })
       return toToolResult(result)
     },
@@ -51,6 +54,7 @@ export function createServer(session: AgentSession, env: Env): McpServer {
       },
     },
     async ({ id }) => {
+      await recordAgentUsage(env, session.userId, 'mcp_complete')
       const result = await runBoardCommand(supabase, session, {
         kind: 'complete',
         reminderId: id,
@@ -68,6 +72,7 @@ export function createServer(session: AgentSession, env: Env): McpServer {
       },
     },
     async ({ id }) => {
+      await recordAgentUsage(env, session.userId, 'mcp_reopen')
       const result = await runBoardCommand(supabase, session, {
         kind: 'reopen',
         reminderId: id,
@@ -82,12 +87,15 @@ export function createServer(session: AgentSession, env: Env): McpServer {
       description: 'Return the bound agent name and token id, never the secret.',
       inputSchema: {},
     },
-    async () => ({
-      content: [{
-        type: 'text' as const,
-        text: JSON.stringify({ agentName: session.agentName, tokenId: session.tokenId }),
-      }],
-    }),
+    async () => {
+      await recordAgentUsage(env, session.userId, 'mcp_whoami')
+      return {
+        content: [{
+          type: 'text' as const,
+          text: JSON.stringify({ agentName: session.agentName, tokenId: session.tokenId }),
+        }],
+      }
+    },
   )
 
   return server
