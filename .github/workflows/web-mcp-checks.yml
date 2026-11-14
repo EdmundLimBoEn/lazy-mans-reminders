@@ -3,7 +3,7 @@ name: Web and MCP checks
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, dev]
     paths:
       - 'web/**'
       - 'landing/**'

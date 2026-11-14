@@ -293,9 +293,13 @@ Siri / Shortcuts: after a signed-in launch, the app exposes App Intents to list 
 
 The generated project can be recreated; make lasting project-setting changes in `ios/project.yml`.
 
+## Branching
+
+`dev` is the current working branch. Open feature and fix pull requests against `dev`. A release is a pull request from `dev` into `main`. See [AGENTS.md](AGENTS.md).
+
 ## TestFlight
 
-The default upload path is GitHub Actions: [`.github/workflows/ios-testflight.yml`](.github/workflows/ios-testflight.yml) on hosted `macos-latest` with latest-stable Xcode. It runs on `workflow_dispatch` and on pushes to `main` that touch `ios/` or the workflow file. `CURRENT_PROJECT_VERSION` in `ios/project.yml` is the build number (`CFBundleVersion`). Retired builds 4/5 used Xcode 27 beta; use a supported release toolchain and verify the archive SDK. Stable Xcode 27 is promoted in current Apple guidance.
+The default upload path is GitHub Actions: [`.github/workflows/ios-testflight.yml`](.github/workflows/ios-testflight.yml) on hosted `macos-latest` with latest-stable Xcode. It runs on `workflow_dispatch` and on pushes to `main` that touch `ios/` or the workflow file. It does not run on `dev`; a TestFlight upload starts when a release is merged into `main`. `CURRENT_PROJECT_VERSION` in `ios/project.yml` is the build number (`CFBundleVersion`). Retired builds 4/5 used Xcode 27 beta; use a supported release toolchain and verify the archive SDK. Stable Xcode 27 is promoted in current Apple guidance.
 
 Jeremy sets the secrets listed at the top of the workflow and in [HUMANS.md](HUMANS.md). The job fails immediately if any are missing.
 
