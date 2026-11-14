@@ -1,6 +1,6 @@
 # notepads.dev landing
 
-Static page. Copy is verbatim from the sillyapps.co Notepad entry; text starting with `Placeholder:` (App Store button, footer) is temporary and should be replaced with final copy. The App Store button is a non-link until the app is live.
+Static page. Copy is verbatim from the sillyapps.co Notepad entry, with final footer copy supplied by Edmund. The App Store button links to the released iOS app.
 
 Not deployed yet. Deploy (after Edmund OKs), from repo root:
 
