@@ -12,6 +12,7 @@ export type ReminderStatus = 'active' | 'completed'
 export type BoardCommand =
   | { kind: 'list'; status: ReminderStatus | 'all' }
   | { kind: 'add'; text: string }
+  | { kind: 'edit'; reminderId: string; text: string }
   | { kind: 'complete'; reminderId: string }
   | { kind: 'reopen'; reminderId: string }
 

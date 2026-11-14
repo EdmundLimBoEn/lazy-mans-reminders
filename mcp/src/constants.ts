@@ -22,6 +22,7 @@ export const PENDING_AUTH_TTL_SECONDS = 600
 export const TOOLS = [
   'list_reminders',
   'add_reminder',
+  'edit_reminder',
   'complete_reminder',
   'reopen_reminder',
   'whoami',

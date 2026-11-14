@@ -1,6 +1,6 @@
 import { createServiceRoleClient } from './auth'
 
-type AgentUsageEvent = 'mcp_list' | 'mcp_add' | 'mcp_complete' | 'mcp_reopen' |
+type AgentUsageEvent = 'mcp_list' | 'mcp_add' | 'mcp_edit' | 'mcp_complete' | 'mcp_reopen' |
   'mcp_whoami' | 'agent_oauth_connected'
 
 /** Best effort, bounded, and off unless both Worker and database flags are enabled. */
