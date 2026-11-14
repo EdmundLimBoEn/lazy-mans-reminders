@@ -191,7 +191,7 @@ Keep server-only values in private operator storage or ignored files such as `su
 | MCP Worker | Server-side `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`; bindings/routes in `mcp/wrangler.jsonc` |
 | TestFlight workflow | `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_PRIVATE_KEY_B64`, `APPSTORE_CERTIFICATES_FILE_BASE64`, `APPSTORE_CERTIFICATES_PASSWORD` |
 
-The APNs and Sign in with Apple keys serve different purposes. Private-key values accept escaped `\n` newlines. Native Apple revocation uses `APPLE_CLIENT_ID=systems.edmundlim.LazyMansReminders`, not the web Services ID. Deletion success alone does not prove Apple token revocation; verify cancellation, error, and manual-fallback paths on the release artifact.
+The APNs and Sign in with Apple keys serve different purposes. Private-key values accept escaped `\n` newlines. Native Apple revocation uses `APPLE_CLIENT_ID=systems.edmundlim.LazyMansReminders`, not the web Services ID. Deletion continues when Apple revocation cannot complete, returning `manual_required` so iOS and web show the existing manual instructions. Automated coverage exists for revocation and fallback; live secret presence remains unverified here, and the updated `delete-account` function needs redeployment and physical-device QA. Deletion success alone does not prove Apple token revocation; verify cancellation, error, and manual-fallback paths on the release artifact.
 
 ### Backend reference
 
@@ -206,7 +206,7 @@ supabase functions deploy send-reminder-push --no-verify-jwt
 supabase functions deploy delete-account
 ```
 
-`send-reminder-push` authenticates webhook requests using `x-webhook-secret`; `delete-account` retains JWT verification. The webhook targets `https://biwmsxbqrevtjwgsvsmu.supabase.co/functions/v1/send-reminder-push` for INSERT, UPDATE, and DELETE on `public.reminders`. Its header must match `WEBHOOK_SECRET`. Check deployed trigger/secrets configuration separately; do not infer it from old deployment notes.
+`send-reminder-push` authenticates webhook requests using `x-webhook-secret`; `delete-account` retains JWT verification. Web uses hosted Supabase OAuth: Apple’s code is consumed by Supabase, and the app callback receives a Supabase PKCE code, not a fresh Apple authorization code. Web deletion therefore uses the visible manual fallback. Successful deletion alone does not prove Apple token revocation. The webhook targets `https://biwmsxbqrevtjwgsvsmu.supabase.co/functions/v1/send-reminder-push` for INSERT, UPDATE, and DELETE on `public.reminders`. Its header must match `WEBHOOK_SECRET`. Check deployed trigger/secrets configuration separately; do not infer it from old deployment notes.
 
 Push delivery uses retries and replay jobs; permanent invalid-device failures remove tokens. A production push check needs a registered physical iPhone with the appropriate APNs environment. Simulator success or an accepted APNs request alone is not device-delivery evidence.
 
