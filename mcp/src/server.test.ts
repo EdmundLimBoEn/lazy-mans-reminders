@@ -6,7 +6,7 @@ import { createServiceRoleClient } from './auth'
 import { createServer } from './server'
 
 const { handlers } = vi.hoisted(() => ({
-  handlers: new Map<string, (args: { id: string }) => Promise<{ isError?: boolean; content: { text: string }[] }>>(),
+  handlers: new Map<string, (args: { id: string; text?: string }) => Promise<{ isError?: boolean; content: { text: string }[] }>>(),
 }))
 vi.mock('@modelcontextprotocol/server', () => ({
   McpServer: class {
@@ -87,5 +87,31 @@ describe('reopen_reminder', () => {
     const result = await handlers.get('reopen_reminder')!({ id })
     expect(result.isError).toBeUndefined()
     expect(JSON.parse(result.content[0].text).reminder).toEqual({ ...active[0], id })
+  })
+})
+
+
+describe('edit_reminder', () => {
+  it.each([undefined, 'false', 'true'])('returns the updated view and gates usage with flag %s', async (flag) => {
+    const row = { ...active[0], id, text: '[Test] Corrected' }
+    const update = { update: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: row, error: null }) }
+    const rpc = vi.fn().mockReturnValue({ abortSignal: vi.fn().mockResolvedValue({ error: null }) })
+    vi.mocked(createServiceRoleClient).mockReturnValue({ from: () => update, rpc } as unknown as SupabaseClient)
+    createServer(session, { USAGE_ANALYTICS_ENABLED: flag } as Env)
+    const result = await handlers.get('edit_reminder')!({ id, text: '  [Test] Corrected  ' })
+    expect(result.isError).toBeUndefined()
+    expect(JSON.parse(result.content[0].text)).toEqual({ reminder: row })
+    expect(update.update).toHaveBeenCalledWith({ text: '[Test] Corrected' })
+    if (flag === 'true') {
+      expect(rpc).toHaveBeenCalledExactlyOnceWith('record_agent_usage', { p_user_id: session.userId, p_event: 'mcp_edit' })
+    } else expect(rpc).not.toHaveBeenCalled()
+  })
+
+  it('returns the existing error format for invalid text', async () => {
+    setup(null)
+    expect(await handlers.get('edit_reminder')!({ id, text: ' ' })).toEqual({
+      isError: true, content: [{ type: 'text', text: 'Text must be 1–500 characters including any agent name prefix' }],
+    })
   })
 })

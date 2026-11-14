@@ -1,6 +1,6 @@
 ---
 name: lazy-mans-reminders
-description: Use when the user mentions reminders, a lock-screen board, LMR, Notepad, or wants to add to my board. Call Notepad MCP tools to list, add, complete, or reopen items — never invent board data or ask for secrets in chat.
+description: Use when the user mentions reminders, a lock-screen board, LMR, Notepad, or wants to add to my board. Call Notepad MCP tools to list, add, edit, complete, or reopen items — never invent board data or ask for secrets in chat.
 ---
 
 # Notepad
@@ -13,6 +13,7 @@ Use the plugin MCP server `lazy-mans-reminders` (tool names below; hosts may nam
 
 - `list_reminders` — `status`: `active` (default), `completed`, or `all`. Prefer this before complete/reopen so you have real ids.
 - `add_reminder` — `text` (1–500 characters after the server prefixes `[agentName] `; do not add that prefix yourself). Adding queues the existing insert notification.
+- `edit_reminder` — `id` from a list (or add) result and replacement `text`, trimmed to 1–500 characters including any prefix. Works on active and completed items. No prefix is added: include any existing prefix you want to keep.
 - `complete_reminder` / `reopen_reminder` — `id` from a list (or add) result. Idempotent. Never guess or invent ids.
 - `whoami` — debugging only: which agent key is bound (`agentName`, `tokenId`). Never the secret.
 
