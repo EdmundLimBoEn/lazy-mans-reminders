@@ -25,6 +25,7 @@ begin
   update public.reminders set is_done = true where id = row_id;
   delete from public.reminders where id = row_id;
   perform public.record_agent_usage(owner_id, 'mcp_list');
+  perform public.record_agent_usage(owner_id, 'mcp_edit');
   assert not exists (select 1 from public.usage_daily_counts), 'Disabled triggers/RPC wrote data';
 
   update public.usage_analytics_config set enabled = true;
@@ -84,6 +85,9 @@ begin
   perform public.record_agent_usage(owner_id, 'mcp_list');
   perform public.record_agent_usage(owner_id, 'mcp_list');
   perform public.record_agent_usage(owner_id, 'agent_oauth_connected');
+  perform public.record_agent_usage(owner_id, 'mcp_edit');
+  assert (select count = 1 and source = 'agent' from public.usage_daily_counts
+    where user_id = owner_id and event = 'mcp_edit');
   begin
     perform public.record_agent_usage(owner_id, 'reminder_created');
     raise exception 'Ingest accepted a non-agent event';
@@ -108,12 +112,14 @@ begin
   assert exists (select 1 from public.usage_daily_counts where day = today - 89);
   select sum(count) into before_count from public.usage_daily_counts;
   perform public.record_agent_usage(owner_id, 'mcp_list');
+  perform public.record_agent_usage(owner_id, 'mcp_edit');
   update public.reminders set is_done = false where id = agent_id;
   update public.reminders set is_done = true where id = agent_id;
   assert (select sum(count) = before_count from public.usage_daily_counts), 'Disable did not stop collection';
   update public.usage_analytics_config set enabled = true;
   delete from auth.users where id = owner_id;
   perform public.record_agent_usage(owner_id, 'mcp_list');
+  perform public.record_agent_usage(owner_id, 'mcp_edit');
   assert not exists (select 1 from public.usage_daily_counts where user_id = owner_id), 'Deleted account history survived';
   assert exists (select 1 from public.usage_daily_counts where user_id = other_id), 'Other account history lost';
 

@@ -88,3 +88,18 @@ describe('authenticated MCP body limit', () => {
     expect(createMcpHandler).toHaveBeenCalledTimes(2)
   })
 })
+
+
+it.each([undefined, 'Bearer invalid-token'])('rejects an edit call with invalid authentication (%s)', async (authorization) => {
+  const { request } = setup()
+  const requestHeaders = new Headers(headers)
+  requestHeaders.delete('Authorization')
+  if (authorization) requestHeaders.set('Authorization', authorization)
+  const response = await request(HOST, '/mcp', {
+    method: 'POST', headers: requestHeaders,
+    body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/call',
+      params: { name: 'edit_reminder', arguments: { id: USER, text: 'Corrected' } } }),
+  })
+  expect(response.status).toBe(401)
+  expect(createMcpHandler).not.toHaveBeenCalled()
+})
