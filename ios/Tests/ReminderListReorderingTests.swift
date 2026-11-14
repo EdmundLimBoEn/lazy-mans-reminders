@@ -17,6 +17,7 @@ final class ReminderListReorderingTests: XCTestCase {
             completingIDs: [], isEnabled: enabled, footerID: footerID,
             onMove: onMove, onDragChanged: { _ in },
             onComplete: { _ in XCTFail("Reordering must not complete a reminder") },
+            onSnooze: { _, _ in XCTFail("Reordering must not snooze a reminder") },
             onRefresh: {}, row: { Text($0.text) },
             footer: { Text(footerID == nil ? "" : "Agent access") }
         )
