@@ -140,3 +140,19 @@ it.each([false, true])('completes deletion for the initiating account (manual Ap
   expect(onAccountDeleted).toHaveBeenCalledExactlyOnceWith(manual)
   expect(render('A').open).toBe(false)
 })
+
+it('keeps the existing manual Apple instructions visible after local sign-out', () => {
+  hooks.states = ['/', session('A'), true, '', false]
+  hooks.cursor = 0
+  const board = nodes(App()).find(node => node.props.session)!
+  const props = board.props as Parameters<typeof Board>[0]
+  props.onAccountDeleted(true)
+  hooks.states[1] = null
+  hooks.cursor = 0
+  const tree = nodes(App())
+  expect(tree.some(node => node.props.children ===
+    'Your account and reminder data were deleted. Apple access could not be revoked automatically.')).toBe(true)
+  const link = tree.find(node => node.props.children ===
+    'Follow Apple’s instructions to stop using Sign in with Apple for Notepad.')!
+  expect((link.props as { href?: string }).href).toBe('https://support.apple.com/102571')
+})

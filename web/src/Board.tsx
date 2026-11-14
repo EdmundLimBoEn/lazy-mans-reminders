@@ -399,6 +399,8 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
         setDeletingAccount(false)
         return
       }
+      // Hosted Supabase OAuth consumes Apple's code. Our callback code is a
+      // Supabase PKCE code, not a fresh Apple code; keep the manual fallback.
       const { data, error: invokeError } = await supabase.functions.invoke('delete-account', {
         method: 'POST',
         body: { expectedUserId },
