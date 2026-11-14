@@ -15,13 +15,13 @@ struct ReminderLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: ReminderAttributes.self) { context in
             LockScreenReminderBanner(lines: context.state.lines)
-                .dynamicTypeSize(...DynamicTypeSize.accessibility3)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility5)
                 .widgetURL(URL(string: "lazymansreminders://board"))
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.bottom) {
                     ExpandedReminderIsland(lines: context.state.lines)
-                        .dynamicTypeSize(...DynamicTypeSize.accessibility3)
+                        .dynamicTypeSize(...DynamicTypeSize.accessibility5)
                 }
                 // The expanded pill's bottom corner starts curving while the
                 // last line is still drawing. Extra bottom margin keeps that
@@ -50,9 +50,11 @@ private struct LockScreenReminderBanner: View {
     )
 
     var body: some View {
+        let budget = LockScreenLineBudget.textBudget(lineHeight: lineHeight)
         ReminderActivityLineStack(
-            lines: ReminderActivityPresentation.lockScreenLines(lines, lineHeight: lineHeight),
-            font: .system(size: pointSize, weight: legibilityWeight == .bold ? .bold : .semibold)
+            lines: ReminderActivityPresentation.lockScreenLines(lines, lineHeight: budget.lineHeight),
+            font: .system(size: pointSize * budget.fontScale, weight: legibilityWeight == .bold ? .bold : .semibold),
+            budget: budget
         )
         .padding(.top, 14)
         .padding(.bottom, 12)
@@ -73,11 +75,15 @@ private struct LockScreenReminderBanner: View {
 private struct ExpandedReminderIsland: View {
     let lines: [String]
     @ScaledMetric(relativeTo: .subheadline) private var islandLineHeight: CGFloat = 20
+    @ScaledMetric(relativeTo: .subheadline) private var pointSize: CGFloat = 15
+    @Environment(\.legibilityWeight) private var legibilityWeight
 
     var body: some View {
+        let budget = ReminderActivityPresentation.expandedIslandTextBudget(lineHeight: islandLineHeight)
         ReminderActivityLineStack(
-            lines: ReminderActivityPresentation.expandedIslandLines(lines, lineHeight: islandLineHeight),
-            font: .subheadline.weight(.semibold)
+            lines: ReminderActivityPresentation.expandedIslandLines(lines, lineHeight: budget.lineHeight),
+            font: .system(size: pointSize * budget.fontScale, weight: legibilityWeight == .bold ? .bold : .semibold),
+            budget: budget
         )
         .padding(.horizontal, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -94,6 +100,7 @@ private struct ExpandedReminderIsland: View {
 private struct ReminderActivityLineStack: View {
     let lines: [String]
     let font: Font
+    let budget: ReminderTextBudget
 
     var body: some View {
         VStack(alignment: .leading, spacing: LockScreenLineBudget.lineSpacing) {
@@ -101,7 +108,7 @@ private struct ReminderActivityLineStack: View {
                 Text(line)
                     .font(font)
                     .foregroundStyle(.primary)
-                    .lineLimit(1)
+                    .lineLimit(budget.lineLimit(displayedRows: lines.count))
                     .truncationMode(.tail)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
