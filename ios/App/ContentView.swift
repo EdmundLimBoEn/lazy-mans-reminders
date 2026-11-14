@@ -29,6 +29,13 @@ struct ContentView: View {
                 await auth.registerDevice(token: token)
             }
         }
+        // Restore independently of the list's shared-session and drag/reorder guards.
+        // Include readiness so a newly shared account cache gets another opportunity.
+        .task(id: "\(scenePhase)-\(auth.session?.user.id.uuidString ?? "")-\(auth.isRestoringSession)-\(auth.isSharedSessionReady)") {
+            guard scenePhase == .active, !auth.isRestoringSession,
+                  let userID = auth.session?.user.id else { return }
+            await ReminderBoardSync.restoreCachedBoard(for: userID)
+        }
         .onChange(of: scenePhase) { _, phase in
             guard phase == .active, auth.session != nil, !auth.isRestoringSession else { return }
             Task {

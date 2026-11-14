@@ -145,7 +145,59 @@ final class ReminderPublicationCoordinatorTests: XCTestCase {
         }
         let snapshot = await fixture.surfaces.snapshot()
         XCTAssertEqual(snapshot.activity, [reminder])
-        XCTAssertEqual(snapshot.published, [[reminder]])
+        XCTAssertEqual(snapshot.published, [[reminder], [reminder]])
+    }
+
+    func testFailedFetchRetriesAnUnsuccessfulInitialActivityStart() async throws {
+        let reminder = sample("Saved offline board")
+        let fixture = Fixture(reminders: [reminder], pause: nil)
+        do {
+            _ = try await fixture.coordinator.refresh {
+                // Model Activity.request failing without changing the saved board.
+                await fixture.surfaces.expireActivity()
+                throw URLError(.notConnectedToInternet)
+            }
+            XCTFail("Expected fetch failure")
+        } catch {}
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.activity, [reminder])
+        XCTAssertEqual(snapshot.published, [[reminder], [reminder]])
+    }
+
+    func testExplicitReopenRestoresCacheWithoutFetchingOrSharedCredentials() async throws {
+        let reminder = sample("Saved board")
+        let fixture = Fixture(reminders: [reminder], pause: nil)
+        try await fixture.coordinator.restoreCachedBoard(for: reminder.userID)
+        await fixture.surfaces.expireActivity()
+        try await fixture.coordinator.restoreCachedBoard(for: reminder.userID)
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.activity, [reminder])
+        XCTAssertEqual(snapshot.published, [[reminder], [reminder]])
+    }
+
+    func testExplicitReopenSkipsAnotherAccountsCacheAndEmptyCache() async throws {
+        let reminder = sample("Old account")
+        let fixture = Fixture(reminders: [reminder], pause: nil)
+        try await fixture.coordinator.restoreCachedBoard(for: UUID())
+        await fixture.surfaces.setCache([])
+        try await fixture.coordinator.restoreCachedBoard(for: reminder.userID)
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertTrue(snapshot.transactions.isEmpty)
+    }
+
+    func testFailureRetryReadsCacheAfterAccountCleanup() async throws {
+        let reminder = sample("Old account")
+        let fixture = Fixture(reminders: [reminder], pause: nil)
+        do {
+            _ = try await fixture.coordinator.refresh {
+                await fixture.surfaces.setCache([])
+                try await fixture.coordinator.clear()
+                throw FakeFailure()
+            }
+        } catch {}
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.published, [[reminder], []])
+        XCTAssertTrue(snapshot.activity.isEmpty)
     }
 
     func testFailedRefreshWithAnEmptyCacheDoesNotEndAnActivity() async throws {
@@ -201,6 +253,37 @@ final class ReminderPublicationCoordinatorTests: XCTestCase {
         }
         let snapshot = await fixture.surfaces.snapshot()
         XCTAssertTrue(snapshot.published.isEmpty)
+    }
+
+    func testCancelledReopenWaitingForPublicationCannotRestoreActivity() async throws {
+        let reminder = sample("Saved board")
+        let fixture = Fixture(reminders: [reminder])
+        let first = Task { try await fixture.coordinator.apply([reminder]) }
+        await fulfillment(of: [fixture.paused], timeout: 3)
+        let reopen = Task { try await fixture.coordinator.restoreCachedBoard(for: reminder.userID) }
+        await waitForQueue(1, on: fixture.coordinator)
+        reopen.cancel()
+        await fixture.surfaces.resume()
+        try await first.value
+        do {
+            try await reopen.value
+            XCTFail("Expected cancellation")
+        } catch { XCTAssertTrue(error is CancellationError) }
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.published, [[reminder]])
+    }
+
+    func testCancelledCleanupStillEndsTheBoard() async throws {
+        let reminder = sample("Saved board")
+        let fixture = Fixture(reminders: [reminder], pause: nil)
+        try await fixture.coordinator.apply([reminder])
+        let cleanup = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            try await fixture.coordinator.clear()
+        }
+        try await cleanup.value
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertTrue(snapshot.activity.isEmpty)
     }
 
     func testCleanupWaitsForOldPublicationPausedBeforeSpotlightIndex() async throws {

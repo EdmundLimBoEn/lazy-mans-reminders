@@ -2,7 +2,7 @@ import Foundation
 
 actor ReminderPublicationCoordinator {
     enum Publication: Equatable {
-        case board(notify: Bool)
+        case board(notify: Bool, allowStart: Bool = true)
         case clear
         case index
         case replaceIndex
@@ -25,12 +25,18 @@ actor ReminderPublicationCoordinator {
 
     // Callers may hold a completed result from an earlier account. Only the
     // cache loaded inside the publication gate can supply published reminders.
-    func apply(_ reminders: [Reminder], notify: Bool = true) async throws {
-        try await run(.board(notify: notify))
+    func apply(_ reminders: [Reminder], notify: Bool = true, allowStart: Bool = true) async throws {
+        try await run(.board(notify: notify, allowStart: allowStart))
     }
 
     func clear() async throws {
         try await run(.clear)
+    }
+
+    // Reopen recovery must not depend on shared credentials, network, or list editing.
+    // Validate ownership inside the same gate as account cleanup.
+    func restoreCachedBoard(for userID: UUID) async throws {
+        try await run(.board(notify: false), onlyIfNonempty: true, ownerID: userID)
     }
 
     func refresh(_ fetch: () async throws -> [Reminder]) async throws -> [Reminder] {
@@ -38,7 +44,15 @@ actor ReminderPublicationCoordinator {
         // Restore a saved board before network/auth refresh, including when offline.
         // An empty cache is not evidence that a remote board was cleared.
         try await run(.board(notify: false), onlyIfNonempty: true)
-        _ = try await fetch()
+        do {
+            _ = try await fetch()
+        } catch {
+            // The first local request can fail (for example during activation).
+            // Retry the current cache even when the network cannot supply a board.
+            try Task.checkCancellation()
+            try await run(.board(notify: false), onlyIfNonempty: true)
+            throw error
+        }
         try Task.checkCancellation()
         try await run(.board(notify: false))
         return await load()
@@ -53,11 +67,16 @@ actor ReminderPublicationCoordinator {
     }
 
     private func run(
-        _ publication: Publication, identifiers: [UUID]? = nil, onlyIfNonempty: Bool = false
+        _ publication: Publication, identifiers: [UUID]? = nil, onlyIfNonempty: Bool = false,
+        ownerID: UUID? = nil
     ) async throws {
         await acquire()
         defer { release() }
+        // Cleanup must finish even if its originating view/task was cancelled.
+        if publication != .clear { try Task.checkCancellation() }
         let current = await load()
+        if publication != .clear { try Task.checkCancellation() }
+        if let ownerID, !current.allSatisfy({ $0.userID == ownerID }) { return }
         if onlyIfNonempty && current.isEmpty { return }
         let reminders: [Reminder]
         if publication == .clear {
