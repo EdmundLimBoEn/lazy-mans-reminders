@@ -1,14 +1,14 @@
 # App Store Connect notes
 
-Draft source for the **free 1.0** submission, app id `6799138197`. Updated **9 October 2026**. Not submitted or certified ready. Read [Apple requirements and evidence gaps](apple-release-requirements.md) and [HUMANS.md](../HUMANS.md) before applying fields. Earlier 27 October/30 November targets are internal plans, not Apple deadlines; release follows evidence and Edmund's approval.
+Metadata reference for **Notepad**, app id `6799138197`, free with no in-app purchases. The source version in `ios/project.yml` is **1.0.1**, with build-number floor **11**. October submission notes below are historical evidence, not a current review-state check. Read [Apple requirements and evidence gaps](apple-release-requirements.md) and the historical checklist in [HUMANS.md](../HUMANS.md) before preparing a release; release follows evidence and Edmund's approval.
 
-The App Store name and the native `CFBundleDisplayName` (app and widget) are **Notepad**. No current authenticated ASC state was verified for this docs change. There is no Fastlane metadata tree.
+The product name and app `CFBundleDisplayName` are **Notepad**; the widget display name remains **Reminders** in `ios/project.yml`. No current authenticated ASC state was verified for this docs change. There is no Fastlane metadata tree.
 
 ## Listing copy
 
 | Field | Draft value | Limit |
 |---|---|---|
-| Name | `Notepad` | 20 / 30 characters |
+| Name | `Notepad` | 7 / 30 characters |
 | Subtitle | `Lock Screen reminder board` | 26 / 30 characters |
 | Locale | `en-US` | Primary locale |
 | Category | Productivity | Confirm in ASC |
@@ -35,21 +35,21 @@ Support: https://app.notepads.dev/support
 
 Promotional text: `A place for notes on your Lock Screen, your iPhone, and on the web.`
 
-What's New (1.0): `app`
+Historical 1.0 What's New draft: `app`. Prepare the selected release's notes from verified changes and device QA.
 
 Only add Siri/Apple Intelligence claims or exact phrases after testing them in the selected signed build. App Intents source/SDK guards are not runtime evidence. Do not promise uninterrupted or indefinite Live Activity persistence.
 
-Apply localization fields in App Store Connect → App Information and the iOS 1.0 version. If using `asc`, inspect the installed command help before applying; do not assume old command syntax still works. Confirm saved values before submission. This docs work does not authorize external writes or submission.
+For an authorized release, apply localization fields in App Store Connect → App Information and the selected iOS version. If using `asc`, inspect the installed command help before applying; do not assume old command syntax still works. Confirm saved values before submission. This docs work does not authorize external writes or submission.
 
 ## URLs and support
 
 - Privacy: <https://app.notepads.dev/privacy>
 - Support: <https://app.notepads.dev/support>
-- Marketing: none
+- Marketing: <https://notepads.dev> (site URL; saved ASC field not verified here)
 - Terms: <https://app.notepads.dev/terms> (optional metadata)
 - Contact: `edmund@sillyapps.co` (human must confirm monitored inbox)
 
-Historical checks report that `lmr.edmundlim.systems` redirects with 302; do not assume production redirect/auth settings match repository config. Check all URLs unauthenticated from outside the home network.
+The same privacy, terms, and support paths exist on `np.sillyapps.co` and `lmr.sillyapps.co`. Historical checks report that `lmr.edmundlim.systems` redirects with 302; do not assume production redirect/auth settings match repository config. Check all URLs unauthenticated from outside the home network.
 
 ## Pricing, availability, content rights and DSA
 
@@ -67,7 +67,7 @@ Complete the current questionnaire and confirm the resulting global/regional rat
 
 The manifest and ASC privacy labels are separate declarations. Merged PR #53 declares provider profile metadata, technical diagnostics and security/operational data as well as account and reminder data. On 12 October, the seven reviewed types below were entered and published in ASC. Keep the answers consistent with actual app, backend and partner behavior as it changes. [Apple App Privacy Details](https://developer.apple.com/app-store/app-privacy-details/).
 
-Current manifest and published ASC labels: all used for **App Functionality**, **linked to the user**, and **not used for tracking**.
+Current manifest and ASC labels recorded on 12 October: all used for **App Functionality**, **linked to the user**, and **not used for tracking**.
 
 | Data | Proposed purpose/linkage | Evidence |
 |---|---|---|
@@ -85,7 +85,7 @@ Baseline declares no tracking or advertising; verify actual integrated services.
 
 ## Review notes
 
-**Submission blocker: verify reviewer access on the selected build.** Merged [reviewer-access PR #52](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/52) adds existing-account email/password login and a [secure provisioning guide](reviewer-access.md). A dedicated confirmed synthetic account was provisioned on 11 October; backend password login and board access passed. Fresh-install native QA and entry of its private credentials into ASC remain open. Keep actual credentials out of this repository; enter them in ASC's dedicated account fields. Sign in with Apple self-signup alone is not verified reviewer access. [Apple review information](https://developer.apple.com/help/app-review/before-submitting-for-review/complete-review).
+**Verify reviewer access on the selected build.** Historical 11 October snapshot: merged [reviewer-access PR #52](https://github.com/EdmundLimBoEn/lazy-mans-reminders/pull/52) adds existing-account email/password login and a [secure provisioning guide](reviewer-access.md). A dedicated confirmed synthetic account was provisioned on 11 October; backend password login and board access passed. Fresh-install native QA and entry of its private credentials into ASC remain open. Keep actual credentials out of this repository; enter them in ASC's dedicated account fields. Sign in with Apple self-signup alone is not verified reviewer access. [Apple review information](https://developer.apple.com/help/app-review/before-submitting-for-review/complete-review).
 
 Set sign-in required to **yes** and provide verified access, contact first/last name, reachable phone/email and any additional authentication instructions. Do not paste `none yet`, blank credentials, or fabricated accounts into a submission. Confirm the credentials remain usable throughout review. TestFlight external beta review needs the same access preparation.
 
@@ -116,14 +116,14 @@ Populate Test Information before external invites:
 | Field | Draft value |
 |---|---|
 | Feedback email | `edmund@sillyapps.co` |
-| Marketing URL | none |
+| Marketing URL | `https://notepads.dev` (verify the saved field separately) |
 | Privacy URL | `https://app.notepads.dev/privacy` |
 | Beta App Description | Use the tested capabilities from Listing copy; describe it as a beta. Suggested text (Edmund can tweak): `Beta of Notepad, a small reminder board for your iPhone, the web, and the Lock Screen.` |
 | Beta review access | Verified synthetic account, private credentials, contact and notes as above |
 
 What to Test (edit to the selected build):
 
-1. Try Apple, Google and email authentication, including cold-launch and expired-session recovery. Test existing-account password login when its PR is integrated.
+1. Try Apple, Google and email authentication, including cold-launch and expired-session recovery. Test existing-account password login in the selected build.
 2. Deny notification permission first; confirm board usability. On a second pass enable banners and add a line from the web board.
 3. Enable Live Activities separately. Open the signed-in app to register tokens; test active lines, background renewal and completing the final line. Record OS/build/device, not just APNs acceptance.
 4. Add Lock Screen and Home Screen Board widgets; compare active lines with the app.
@@ -150,7 +150,7 @@ Suggested 5–6 shots: board with composer, completion action, Live Activity, Lo
 
 The script is read-only and never submits. The revised checker from merged PR #59 replaces the historical baseline's false-positive checks described in the [audit](apple-release-requirements.md#read-only-preflight-audit-script-unchanged). It deliberately reports UNKNOWN and exits nonzero for API-unverifiable evidence; resolve those items with actual evidence and a manual release decision, not a forced green report. Preflight does not certify privacy, age, DSA, encryption, SDK/signing, reviewer access or physical QA.
 
-On 11 October, a dedicated review account was provisioned and its password login and synthetic board access were verified against the backend. Its credentials remain private and have not been entered in ASC. [Current release evidence](release-status-2026-10-11.md) records the signed build 9 upload and deletion backend version 8. Native reviewer access, Apple processing, screenshots, metadata and physical-device gates remain open.
+Historical 11 October snapshot: a dedicated review account was provisioned and its password login and synthetic board access were verified against the backend. Its credentials remain private and have not been entered in ASC. [11 October release evidence](release-status-2026-10-11.md) records the signed build 9 upload and deletion backend version 8. Native reviewer access, Apple processing, screenshots, metadata and physical-device gates remain open.
 
 All human prerequisites are tracked in [HUMANS.md](../HUMANS.md#app-store-submission). Native build handoff is in [MAC_HANDOFF.md](../MAC_HANDOFF.md). Hosted macOS CI exists, but this Linux docs work did not run Xcode, upload a binary, inspect authenticated ASC state, deploy changes or submit review. Edmund must review evidence and authorize release.
 

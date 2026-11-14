@@ -1,43 +1,61 @@
-# Mac handoff — Lazy Man's Reminders
+# Notepad — iOS verification on a Mac
 
-Updated **9 October 2026**, audited at `c131c41`. This replaces the stale 7 August snapshot and its already-completed OAuth setup instructions. Use the reviewed release commit, not an old hardcoded tip.
+This handoff covers building and checking the iOS app on macOS. Linux cannot run Xcode, and hosted macOS CI is build/simulator evidence, not physical-device QA. This documentation refresh does not authorize an upload or App Store submission.
 
-Repository: `EdmundLimBoEn/lazy-mans-reminders`. Historical project records identify bundle `systems.edmundlim.LazyMansReminders`, widget `systems.edmundlim.LazyMansReminders.Widget`, App Group `group.systems.edmundlim.LazyMansReminders`, team `DUU8J39BA7`, ASC app `6799138197`. Confirm these in the signing account; this docs audit did not authenticate to Apple.
+Repository: `EdmundLimBoEn/lazy-mans-reminders`. The iOS app display name is **Notepad**; the Xcode project and signing identifiers retain `LazyMansReminders`. `ios/project.yml` sets marketing version **1.0.1**, build-number floor **11**, and an iOS **17.0** deployment target. Verify the resulting artifact's version/build; do not assume the source pin is the latest TestFlight build.
 
-Canonical web: <https://np.sillyapps.co> (lmr.sillyapps.co stays live; no 301). MCP: <https://np-mcp.sillyapps.co/mcp> (lmr-mcp.edmundlim.systems stays live; no 301). Privacy/support are `/privacy` and `/support` on the canonical web host. Dual-serve hosts and hosted Auth allowlists require the checks in [HUMANS.md](HUMANS.md).
+| Identifier | Value |
+| --- | --- |
+| App bundle | `systems.edmundlim.LazyMansReminders` |
+| Widget bundle | `systems.edmundlim.LazyMansReminders.Widget` |
+| App Group | `group.systems.edmundlim.LazyMansReminders` |
+| Team | `DUU8J39BA7` |
+| App Store app | `6799138197` |
 
-## Build evidence
+Confirm signing identifiers in the authorized account. No Apple account state was checked for this refresh.
 
-Use a Mac with a supported **release Xcode 26+ and iOS 26 SDK+**, XcodeGen and authorized Apple Developer access. Apple requires those upload minimums since 28 April 2026. The current iOS 17 deployment target exceeds Apple's effective iOS 13 floor. Stable Xcode 27 is supported by current Apple submission guidance; old beta builds 4/5 remain retired. [Official requirements](https://developer.apple.com/news/upcoming-requirements/).
+## Addresses to check
 
-The repository's [TestFlight workflow](.github/workflows/ios-testflight.yml) uses hosted macOS with latest-stable Xcode. It runs only on pushes to `main` and on `workflow_dispatch`; merges into `dev` do not upload a build. It is a build route, not physical QA. Do not upload unreviewed PRs. Coordinate the reviewed commit, build number, signing configuration and upload authorization with Edmund. See [AGENTS.md](AGENTS.md) for the `dev` working branch and `dev` → `main` release procedure.
+- Web board: <https://app.notepads.dev>; landing: <https://notepads.dev>.
+- Privacy: <https://app.notepads.dev/privacy>; terms: <https://app.notepads.dev/terms>; support: <https://app.notepads.dev/support>. Contact: `edmund@sillyapps.co`.
+- Legacy web: `https://np.sillyapps.co` and `https://lmr.sillyapps.co` stay live without a 301; `https://lazy-mans-reminders.pages.dev` is the fallback. The same legal/support paths exist on those hosts. `https://lmr.edmundlim.systems` stays attached and 302s to `lmr.sillyapps.co`, preserving path and query.
+- MCP: <https://np-mcp.sillyapps.co/mcp>; legacy <https://lmr-mcp.edmundlim.systems/mcp> stays live without a 301.
+- iOS magic-link handoff: `https://app.notepads.dev/auth/ios`. Custom callback: `lazymansreminders://auth/callback`.
 
-1. Fetch the reviewed release commit on the Mac and record it with the build number.
-2. Prepare ignored `ios/Config.xcconfig` from `ios/Config.example.xcconfig`; keep credentials, keys and certificates out of source, screenshots and logs.
-3. Run `xcodegen generate` from `ios`, then open the generated project. Confirm app/extension team, IDs, App Groups, Apple login and production APNs entitlements in the signed archive.
-4. Record `xcodebuild -version` and `xcodebuild -showsdks`; run the native simulator tests and archive the reviewed commit with release settings. Inspect actual archive SDK, minimum OS and embedded extension.
-5. Inspect bundled privacy manifests, resolved SDKs, aggregate Xcode privacy report and icon. CI latest-stable selection and a repository manifest are insufficient evidence on their own.
-6. Upload only after separate approval; wait for processing and install the exact resulting TestFlight artifact for QA. Keep beta external review distinct from App Store review.
+The repo's Supabase Site URL remains `https://np.sillyapps.co`; current clients use `app.notepads.dev`. See the [exact redirect allowlist](README.md#authentication-configuration). Verify hosted Auth settings separately from local config.
 
-## Physical-device release gates
+## Build checklist
 
-Record device model, OS, build/commit, date, result and any screenshots. Complete [HUMANS.md](HUMANS.md#app-store-submission); do not mark tasks done solely because APNs accepted a request or source tests pass.
+Use a Mac with Xcode and XcodeGen. `ios/project.yml` and native workflows select **Xcode 27.1**; workflows use the `xcode-27` runner. Recheck Apple's upload requirements before an authorized release; [the requirements audit](docs/apple-release-requirements.md) is dated evidence.
 
-- Apple, Google, email magic link and reviewer existing-account login from fresh install; expired-session, cold-launch and poor-network behavior.
-- Add/edit/complete/delete/reorder as supported by the selected build; web sync and capacity.
-- Denied and allowed notification paths, Settings recovery and separate Live Activities setting.
-- Lock Screen/Home Screen widgets, background activity updates/renewal/end, force-quit separately, and user dismissal. Follow [persistence QA](docs/live-activity-persistence.md).
-- No stale private board, widget or activity after sign-out, account switching and deletion.
-- Export and feedback routes; in-app deletion on disposable Apple/Google/email accounts with consent, including cancellation/failure/manual-revocation fallback and agent access cleanup.
-- VoiceOver, Larger Text, contrast and Reduce Motion common tasks. Publish accessibility support only after criteria pass.
-- Siri/Shortcuts only for features compiled into this artifact; test each phrase before advertising it.
+The [TestFlight workflow](.github/workflows/ios-testflight.yml) runs on pushes to `main` touching `ios/**`, `scripts/**`, or that workflow file, and on `workflow_dispatch`. Merges into `dev` do not upload. Feature/fix PRs target `dev`; releases go from `dev` to `main` as described in [AGENTS.md](AGENTS.md). Coordinate the reviewed commit, signing configuration, build number, and upload authorization with Edmund.
 
-## Submission preparation
+1. Fetch the reviewed commit on the Mac and record it with the build number.
+2. Prepare ignored `ios/Config.xcconfig` from `ios/Config.example.xcconfig`. Keep credentials, keys, and certificates out of source, screenshots, and logs.
+3. Run `xcodegen generate --spec ios/project.yml`, then open `ios/LazyMansReminders.xcodeproj`. Confirm both targets' team, identifiers and App Group, app Sign in with Apple, and production APNs entitlements in the signed archive.
+4. Record `xcodebuild -version` and `xcodebuild -showsdks`. Run `scripts/check-ios-toolchain.sh`, `scripts/ios-release-build.sh`, and `scripts/ios-simulator-unit-tests.sh` from the repo root. Archive the reviewed commit with release settings; inspect its SDK, minimum OS, and embedded widget.
+5. Inspect bundled privacy manifests, resolved SDKs, aggregate Xcode privacy report, default icon, and alternate icon entries. Source files and CI toolchain selection alone do not establish archive contents.
+6. Upload only after separate authorization. Install the exact processed TestFlight artifact for QA; keep beta review distinct from App Store review.
 
-[Apple requirements](docs/apple-release-requirements.md) maps sources to gaps; [submission notes](docs/app-store.md) provides draft metadata. Use the separate [reviewer provisioning guide](docs/reviewer-access.md) after its PR is integrated. Provision a stable confirmed synthetic account, enter credentials privately in ASC, verify access without the owner's inbox and keep it available throughout review. Apple self-signup alone is not a demonstrated review access solution.
+## Physical-device checklist
 
-Capture current required screenshot display groups and verify scaling in ASC, validate the archived icon, confirm actual Free pricing/availability, and complete age/privacy/encryption/DSA declarations. Edmund determines trader status; individual/free does not settle it. Check contact identity, phone/email, membership, agreements, roles and all public URLs. No identities, policy choices or credentials should be invented.
+Record device model, OS, artifact version/build, commit, date, and results. Historical checkmarks in [HUMANS.md](HUMANS.md) do not validate a new artifact.
 
-Use read-only preflight as one input; parser success does not certify native behavior or owner declarations. Human authorization is required before production deployment or App Review submission. This Linux work did not run Xcode or physical-device QA; no accessible interactive Mac build host was discovered or used.
+- Test Apple, Google, email magic link, and existing-account password login from a fresh install, including expired sessions, cold launch, and poor connectivity. Verify canonical and legacy redirect paths.
+- Add, edit, complete, delete, and reorder reminders; check web sync and capacity. Verify done-row cleanup after 3 days from `completed_at`, allowing for best-effort execution.
+- Create/edit a routine on the web, then receive and complete its generated reminder on iPhone. Routine editing is on the web.
+- Test denied/allowed notifications, Settings recovery, and the separate Live Activities setting.
+- Check Lock Screen and Home Screen widgets, activity updates/renewal/end, user dismissal, and force-quit separately. Follow [persistence QA](docs/live-activity-persistence.md).
+- Confirm no stale private board, widget, or activity remains after sign-out, account switching, or deletion.
+- Test export, feedback, support/privacy links, and deletion on disposable Apple/Google/email accounts with consent. Include cancellation, failures, manual Apple-revocation fallback, and agent-access cleanup.
+- Switch between **Default**, **Minimal**, and **Bold** in Account; restore Default, relaunch, and confirm the selected icon/checkmark.
+- Test VoiceOver, Voice Control labels, **Move up / Move down** actions, Larger Text, Reduce Motion, Increase Contrast, Reduce Transparency, and readable error text. Publish accessibility support only after device QA passes.
+- Test “List reminders in Notepad”, “Add a reminder in Notepad”, and “Mark this as done in Notepad” with Siri/Shortcuts. Signed-out requests should ask you to sign in to Notepad on this iPhone first. Advertise only behavior verified in the selected artifact.
 
-Written by gpt-6.1-sol in T3 Code on behalf of Edmund
+## Release preparation
+
+Use [submission notes](docs/app-store.md) for metadata and the [reviewer-access guide](docs/reviewer-access.md) for private account preparation. Confirm working reviewer access from a fresh install, keep credentials only in private review fields, and use a separate disposable account for deletion QA.
+
+Capture current required screenshots, check the archived icons, confirm Free pricing with no in-app purchases, and review privacy, age, encryption, availability, and trader declarations with Edmund. Verify all public URLs and contact details. Read-only preflight is one input; it does not certify native behavior or owner declarations.
+
+Production deploys are performed by jeremy after Edmund's explicit OK. App Store submission requires separate authorization and release evidence; no submission is part of this documentation work.
