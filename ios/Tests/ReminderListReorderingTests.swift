@@ -84,8 +84,13 @@ final class ReminderListReorderingTests: XCTestCase {
         let list = collection(coordinator)
         let frame = try XCTUnwrap(list.layoutAttributesForItem(at: IndexPath(item: 0, section: 0))?.frame)
         let pan = PositionedPan()
+        pan.panVelocity = CGPoint(x: 0, y: 100)
         pan.point = CGPoint(x: frame.maxX - 22, y: frame.midY)
         XCTAssertTrue(coordinator.gestureRecognizerShouldBegin(pan))
+        // Horizontal movement on the grip yields to the trailing snooze swipe.
+        pan.panVelocity = CGPoint(x: -100, y: 0)
+        XCTAssertFalse(coordinator.gestureRecognizerShouldBegin(pan))
+        pan.panVelocity = CGPoint(x: 0, y: 100)
         pan.point.x = frame.midX
         XCTAssertFalse(coordinator.gestureRecognizerShouldBegin(pan))
         // Hit testing uses the original touch even after the finger leaves the grip.
@@ -96,6 +101,9 @@ final class ReminderListReorderingTests: XCTestCase {
         pan.offset = .zero
         pan.point.x = frame.minX + 22
         XCTAssertTrue(coordinator.gestureRecognizerShouldBegin(pan))
+        pan.panVelocity = CGPoint(x: 100, y: 0)
+        XCTAssertFalse(coordinator.gestureRecognizerShouldBegin(pan))
+        pan.panVelocity = CGPoint(x: 0, y: 100)
         pan.point.x = frame.maxX - 22
         XCTAssertFalse(coordinator.gestureRecognizerShouldBegin(pan))
     }
@@ -139,6 +147,8 @@ final class ReminderListReorderingTests: XCTestCase {
 private final class PositionedPan: UIPanGestureRecognizer {
     var point = CGPoint.zero
     var offset = CGPoint.zero
+    var panVelocity = CGPoint.zero
     override func location(in view: UIView?) -> CGPoint { point }
     override func translation(in view: UIView?) -> CGPoint { offset }
+    override func velocity(in view: UIView?) -> CGPoint { panVelocity }
 }
