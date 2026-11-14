@@ -182,6 +182,12 @@ jobs:
             supabase/tests/push_job_retention.sql \
             supabase/migrations/20261113000200_usage_events.sql \
             supabase/tests/usage_events.sql \
+            supabase/migrations/20261114000100_schedule_done_retention.sql \
+            supabase/tests/done_retention_schedule.sql \
+            supabase/migrations/20261114000100_schedule_done_retention.sql \
+            supabase/tests/done_retention_schedule.sql \
+            supabase/tests/budgeted_retention_cleanup.sql \
+            supabase/tests/retention_skip_locked.sql \
             supabase/tests/agent_append_order.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
