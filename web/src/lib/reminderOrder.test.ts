@@ -47,3 +47,14 @@ describe('persistReminderOrder', () => {
     expect(rpc.mock.calls).toEqual([['reorder_reminders', { p_ids: ['b', 'c', 'a'] }]])
   })
 })
+
+it('never reorders or persists a currently snoozed row', async () => {
+  const sleeping = { id: 'sleeping', sort_order: 99, is_done: false, created_at: '2026-01-01', snoozed_until: '2999-01-01T00:00:00Z' }
+  const board = [...items, sleeping]
+  expect(moveActiveReminder(board, 'sleeping', 'a')).toBe(board)
+  const moved = moveActiveReminder(board, 'a', 'c')
+  expect(moved.find(row => row.id === 'sleeping')).toBe(sleeping)
+  const rpc = vi.fn().mockResolvedValue({ error: null })
+  await persistReminderOrder(moved, { rpc })
+  expect(rpc).toHaveBeenCalledWith('reorder_reminders', { p_ids: ['b', 'c', 'a'] })
+})

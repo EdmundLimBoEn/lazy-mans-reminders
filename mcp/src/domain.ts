@@ -36,6 +36,7 @@ export type ReminderRow = {
   sort_order: number
   created_at: string
   completed_at: string | null
+  snoozed_until?: string | null
 }
 
 export type BoardSnapshot = {

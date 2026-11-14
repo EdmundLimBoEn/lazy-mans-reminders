@@ -66,7 +66,7 @@ function deferred<T>() {
   return { promise, resolve }
 }
 const original = { id: 'note', user_id: 'user', text: 'Original', sort_order: 0, is_done: false, created_at: '2026-01-01' }
-type Row = typeof original
+type Row = typeof original & { snoozed_until?: string | null }
 type Result = { data: Row[]; error: null } | { data: null; error: { message: string } }
 let stored: Row[]
 let reads: ReturnType<typeof deferred<Result>>[]
@@ -85,7 +85,7 @@ beforeEach(async () => {
   db.rpc.mockResolvedValue({ error: null })
   db.from.mockImplementation((table: string) => {
     const query = {
-      select: () => query, eq: () => query, order: () => query,
+      select: () => query, eq: () => query, or: () => query, order: () => query,
       maybeSingle: async () => ({ data: { max_lines: 6 }, error: null }),
       then: (resolve: (result: Result) => void) => {
         const pending = reads.shift()
@@ -522,7 +522,7 @@ it.each(['SUBSCRIBED', 'online'])('recovers a failed read on %s and removes reco
   const success = db.from.getMockImplementation()!
   db.from.mockImplementation(() => {
     const query = {
-      select: () => query, eq: () => query, order: () => query,
+      select: () => query, eq: () => query, or: () => query, order: () => query,
       maybeSingle: async () => ({ data: null, error: null }),
       then: (resolve: (value: unknown) => void) => Promise.resolve({ data: null, error: { message: 'Offline' } }).then(resolve),
     }
@@ -763,4 +763,16 @@ it('recognizes capacity markers in server fields and preserves unrelated errors'
     expect(reminderErrorMessage({ message: 'Rejected', [field]: 'LMR_CAPACITY_REACHED' })).toBe(POST_IT_HINT)
   }
   expect(reminderErrorMessage({ message: 'Offline' })).toBe('Offline')
+})
+
+it('hides snoozed rows on load and realtime reload and restores expired rows', async () => {
+  stored = [original, { ...original, id: 'sleeping', text: 'Sleeping', snoozed_until: '2999-01-01T00:00:00Z' }]
+  await hooks.load!()
+  expect(displayed()).toEqual(['Original'])
+  stored[0].snoozed_until = '2999-01-01T00:00:00Z'
+  await hooks.load!()
+  expect(displayed()).toEqual([])
+  stored[1].snoozed_until = '2000-01-01T00:00:00Z'
+  await hooks.load!()
+  expect(displayed()).toEqual(['Sleeping'])
 })
