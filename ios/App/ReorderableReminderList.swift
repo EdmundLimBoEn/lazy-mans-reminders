@@ -102,6 +102,8 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
                     parent.row(reminder)
                     ReminderDragGrip(isEnabled: parent.isEnabled && items.count > 1)
                         .accessibilityLabel("Reorder \(reminder.text)")
+                        .accessibilityInputLabels(["Reorder \(reminder.text)"])
+                        .accessibilityHint("Drag to change position, or use the Move up and Move down actions")
                         .accessibilityValue("Position \(indexPath.item + 1) of \(items.count)")
                         .accessibilityAction(named: "Move up") { [weak self] in
                             self?.moveAccessible(id: reminder.id, direction: -1)
@@ -202,18 +204,18 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
 
 private struct ReminderDragGrip: View {
     let isEnabled: Bool
+    @Environment(\.colorSchemeContrast) private var contrast
 
     var body: some View {
         HStack(spacing: 3) {
             dots
             dots
         }
-        .foregroundStyle(.tertiary)
+        .foregroundStyle(contrast == .increased ? .primary : .tertiary)
         .opacity(isEnabled ? 1 : 0.3)
         .frame(width: 44, height: 44)
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
-        .accessibilityHint("Drag to change position, or use the Move up and Move down actions")
     }
 
     private var dots: some View {

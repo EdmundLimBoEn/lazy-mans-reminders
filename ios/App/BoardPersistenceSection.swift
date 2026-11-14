@@ -1,5 +1,6 @@
 import ActivityKit
 import SwiftUI
+import UIKit
 
 struct BoardPersistenceSection: View {
     @EnvironmentObject private var auth: AuthManager
@@ -63,7 +64,10 @@ struct BoardPersistenceSection: View {
     @MainActor
     private func refreshBoard() async {
         isRefreshing = true
-        defer { isRefreshing = false }
+        defer {
+            isRefreshing = false
+            if let result { UIAccessibility.post(notification: .announcement, argument: result) }
+        }
         do {
             await auth.registerLiveActivityTokens()
             let reminders = try await ReminderStore.shared.refresh()

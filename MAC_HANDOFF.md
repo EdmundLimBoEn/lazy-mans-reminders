@@ -10,7 +10,7 @@ Canonical web: <https://np.sillyapps.co> (lmr.sillyapps.co stays live; no 301). 
 
 Use a Mac with a supported **release Xcode 26+ and iOS 26 SDK+**, XcodeGen and authorized Apple Developer access. Apple requires those upload minimums since 28 April 2026. The current iOS 17 deployment target exceeds Apple's effective iOS 13 floor. Stable Xcode 27 is supported by current Apple submission guidance; old beta builds 4/5 remain retired. [Official requirements](https://developer.apple.com/news/upcoming-requirements/).
 
-The repository's [TestFlight workflow](.github/workflows/ios-testflight.yml) uses hosted macOS with latest-stable Xcode. It is a build route, not physical QA. Do not upload unreviewed PRs. Coordinate the reviewed commit, build number, signing configuration and upload authorization with Edmund.
+The repository's [TestFlight workflow](.github/workflows/ios-testflight.yml) uses hosted macOS with latest-stable Xcode. It runs only on pushes to `main` and on `workflow_dispatch`; merges into `dev` do not upload a build. It is a build route, not physical QA. Do not upload unreviewed PRs. Coordinate the reviewed commit, build number, signing configuration and upload authorization with Edmund. See [AGENTS.md](AGENTS.md) for the `dev` working branch and `dev` → `main` release procedure.
 
 1. Fetch the reviewed release commit on the Mac and record it with the build number.
 2. Prepare ignored `ios/Config.xcconfig` from `ios/Config.example.xcconfig`; keep credentials, keys and certificates out of source, screenshots and logs.

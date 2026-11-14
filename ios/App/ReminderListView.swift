@@ -5,6 +5,7 @@ import UIKit
 struct ReminderListView: View {
     @EnvironmentObject private var auth: AuthManager
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
@@ -29,7 +30,7 @@ struct ReminderListView: View {
         NavigationStack {
             Group {
                 if isLoading && !hasLoaded && reminders.isEmpty {
-                    ProgressView("Loading reminders")
+                    AccessibleProgressView("Loading reminders")
                         .controlSize(.large)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if reminders.isEmpty, let error {
@@ -82,7 +83,7 @@ struct ReminderListView: View {
             .sheet(isPresented: $showAccount) {
                 AccountView()
                     .environmentObject(auth)
-                    .presentationDetents([.medium, .large])
+                    .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.large] : [.medium, .large])
                     .presentationDragIndicator(.visible)
                     .presentationContentInteraction(.scrolls)
             }
@@ -95,7 +96,9 @@ struct ReminderListView: View {
     }
 
     private var prefersSolidChrome: Bool {
-        reduceTransparency || colorSchemeContrast == .increased
+        ReminderAccessibility.usesSolidBackground(
+            reduceTransparency: reduceTransparency, increasedContrast: colorSchemeContrast == .increased
+        )
     }
 
     private var emptyBoard: some View {
@@ -150,14 +153,15 @@ struct ReminderListView: View {
                     Task { await refresh() }
                 } label: {
                     if isLoading {
-                        ProgressView()
+                        AccessibleProgressView()
                             .controlSize(.regular)
                     } else {
                         Text("Try Again")
                     }
                 }
                 .disabled(isLoading)
-                .accessibilityLabel(isLoading ? "Loading reminders" : "Try Again")
+                .accessibilityLabel("Try Again")
+                .accessibilityValue(ReminderAccessibility.progressValue(isBusy: isLoading))
             }
             .frame(maxWidth: .infinity, minHeight: 320)
         }
@@ -209,7 +213,7 @@ struct ReminderListView: View {
                 )
                 .font(.body)
                 .tint(.primary)
-                .lineLimit(1...4)
+                .lineLimit(1...(dynamicTypeSize.isAccessibilitySize ? 2 : 4))
                 .textInputAutocapitalization(.sentences)
                 .focused($composerFocused)
                 .disabled(atCapacity || isReordering || isDragging || draft.isSubmitting)
@@ -233,6 +237,7 @@ struct ReminderListView: View {
                     .buttonStyle(.plain)
                     .accessibilityLabel("Done")
                     .accessibilityHint("Dismisses the keyboard")
+                    .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                     .transition(.opacity)
                 }
 
@@ -241,7 +246,7 @@ struct ReminderListView: View {
                 } label: {
                     Group {
                         if draft.isSubmitting {
-                            ProgressView()
+                            AccessibleProgressView()
                                 .controlSize(.small)
                                 .accessibilityHidden(true)
                         } else {
@@ -251,7 +256,7 @@ struct ReminderListView: View {
                                 .accessibilityHidden(true)
                         }
                     }
-                    .frame(width: addVisualSize, height: addVisualSize)
+                    .frame(width: min(44, addVisualSize), height: min(44, addVisualSize))
                     .background {
                         Circle()
                             .fill(canAdd ? Color.primary : Color(.quaternarySystemFill))
@@ -261,8 +266,10 @@ struct ReminderListView: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(!canAdd)
-                .accessibilityLabel(draft.isSubmitting ? "Adding reminder" : "Add reminder")
+                .accessibilityLabel("Add reminder")
+                .accessibilityValue(ReminderAccessibility.progressValue(isBusy: draft.isSubmitting))
                 .accessibilityHint("Saves the text as a new reminder")
+                .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
             }
             .padding(.leading, 14)
             .padding(.trailing, 5)
@@ -299,7 +306,8 @@ struct ReminderListView: View {
             .fill(Color(.secondarySystemBackground))
             .overlay {
                 shape.strokeBorder(
-                    composerFocused ? Color(.tertiaryLabel) : Color(.separator),
+                    colorSchemeContrast == .increased ? Color.primary
+                        : (composerFocused ? Color(.tertiaryLabel) : Color(.separator)),
                     lineWidth: colorSchemeContrast == .increased || prefersSolidChrome ? 1 : 0.5
                 )
             }
@@ -307,7 +315,7 @@ struct ReminderListView: View {
     }
 
     private var addHitSize: CGFloat {
-        max(44, addVisualSize + 16)
+        max(44, min(44, addVisualSize) + 16)
     }
 
     private var atCapacity: Bool {
@@ -360,7 +368,7 @@ struct ReminderListView: View {
     }
 
     private func animateBoard(_ updates: () -> Void) {
-        if reduceMotion {
+        if !ReminderAccessibility.allowsAnimation(reduceMotion: reduceMotion) {
             updates()
         } else {
             withAnimation(.easeInOut(duration: 0.2), updates)
@@ -368,8 +376,12 @@ struct ReminderListView: View {
     }
 
     private func presentError(_ message: String) {
+        let isNewError = error != message
         error = message
         errorTick += 1
+        if isNewError {
+            UIAccessibility.post(notification: .announcement, argument: message)
+        }
     }
 
     private func refresh() async {
@@ -450,7 +462,7 @@ private struct BoardErrorBanner: View {
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(.red)
+                .foregroundStyle(.primary)
                 .symbolRenderingMode(.hierarchical)
                 .accessibilityHidden(true)
             Text(message)
@@ -467,14 +479,16 @@ private struct BoardErrorBanner: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Dismiss")
+            .accessibilityLabel("Dismiss error")
         }
         .padding(.leading, 16)
         .padding(.trailing, 4)
         .padding(.vertical, 4)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
-            if reduceTransparency || colorSchemeContrast == .increased {
+            if ReminderAccessibility.usesSolidBackground(
+                reduceTransparency: reduceTransparency, increasedContrast: colorSchemeContrast == .increased
+            ) {
                 Color(.secondarySystemGroupedBackground)
             } else {
                 Rectangle().fill(.regularMaterial)
@@ -499,6 +513,7 @@ private struct BoardScrollEdge: ViewModifier {
 }
 
 private struct ReminderRow: View {
+    @Environment(\.colorSchemeContrast) private var contrast
     let reminder: Reminder
     let isCompleting: Bool
     let onComplete: () -> Void
@@ -512,21 +527,24 @@ private struct ReminderRow: View {
                     .foregroundStyle(isCompleting ? .secondary : .primary)
                     .strikethrough(isCompleting)
                     .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, alignment: .leading)
             } icon: {
-                Image(systemName: isCompleting ? "checkmark.circle.fill" : "circle")
-                    .font(.title3.weight(.light))
-                    .foregroundStyle(isCompleting ? Color.accentColor : Color(.tertiaryLabel))
+                Image(systemName: ReminderAccessibility.completionSymbol(isCompleting: isCompleting))
+                    .font(.title3.weight(contrast == .increased ? .semibold : .light))
+                    .foregroundStyle(contrast == .increased ? Color.primary
+                        : (isCompleting ? Color.accentColor : Color(.tertiaryLabel)))
                     .frame(minWidth: 44, minHeight: 44, alignment: .center)
                     .contentShape(Rectangle())
             }
         }
         .buttonStyle(.plain)
         .disabled(isCompleting)
-        .opacity(isCompleting ? 0.55 : 1)
+        .opacity(isCompleting && contrast != .increased ? 0.55 : 1)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(reminder.text)
-        .accessibilityValue(isCompleting ? "Completing" : "Active")
+        .accessibilityInputLabels([reminder.text])
+        .accessibilityValue(ReminderAccessibility.completionValue(isCompleting: isCompleting))
         .accessibilityHint("Marks this reminder complete")
         .accessibilityAddTraits(.isButton)
     }
