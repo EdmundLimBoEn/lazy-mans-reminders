@@ -29,7 +29,7 @@ import Foundation
 @main struct Regression {
     static func main() {
         var draft = ReminderDraft()
-        let atCapacity = false, isReordering = false, isDragging = false
+        let atCapacity = false, isReordering = false, isDragging = false, isAddingClipboard = false
         func isDisabled() -> Bool { DISABLED_EXPRESSION }
         func type(_ text: String) {
             if !isDisabled() { draft.edit(text) }

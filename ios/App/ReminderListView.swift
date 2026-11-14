@@ -15,6 +15,7 @@ struct ReminderListView: View {
     @State private var draft = ReminderDraft()
     @State private var isLoading = true
     @State private var hasLoaded = false
+    @State private var hasLoadedSuccessfully = false
     @State private var error: String?
     @State private var completingIDs: Set<UUID> = []
     @State private var isReordering = false
@@ -22,6 +23,9 @@ struct ReminderListView: View {
     @State private var isDragging = false
     @State private var hasDeferredBoardUpdate = false
     @State private var showAccount = false
+    @State private var clipboardSnapshot = ClipboardOfferPolicy.Snapshot()
+    @State private var isAddingClipboard = false
+    @AppStorage(ClipboardOfferPolicy.storageKey) private var clipboardLastHandledChangeCount = -1
     @AppStorage(BoardSetupTip.storageKey) private var setupTipDismissed = false
     @FocusState private var composerFocused: Bool
     @ScaledMetric(relativeTo: .body) private var addVisualSize: CGFloat = 28
@@ -70,6 +74,13 @@ struct ReminderListView: View {
             .task(id: scenePhase == .active && auth.isSharedSessionReady) {
                 guard scenePhase == .active else { return }
                 await refresh()
+                updateClipboardSnapshot()
+            }
+            .onChange(of: scenePhase) { _, phase in
+                if phase != .active { clipboardSnapshot = .init() }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIPasteboard.changedNotification)) { _ in
+                updateClipboardSnapshot()
             }
             .sensoryFeedback(.success, trigger: hapticTick)
             .sensoryFeedback(.error, trigger: errorTick)
@@ -196,6 +207,14 @@ struct ReminderListView: View {
 
     private var composer: some View {
         VStack(alignment: .leading, spacing: 8) {
+            if showClipboardOffer {
+                let offeredChangeCount = clipboardSnapshot.changeCount
+                ClipboardOfferCard { strings in
+                    Task { await addFromClipboard(strings, changeCount: offeredChangeCount) }
+                } onDismiss: {
+                    clipboardLastHandledChangeCount = max(clipboardLastHandledChangeCount, offeredChangeCount)
+                }
+            }
             if atCapacity {
                 Text(ReminderBoardLimits.postItHint)
                     .font(.caption)
@@ -216,7 +235,7 @@ struct ReminderListView: View {
                 .lineLimit(1...(dynamicTypeSize.isAccessibilitySize ? 2 : 4))
                 .textInputAutocapitalization(.sentences)
                 .focused($composerFocused)
-                .disabled(atCapacity || isReordering || isDragging || draft.isSubmitting)
+                .disabled(atCapacity || isReordering || isDragging || draft.isSubmitting || isAddingClipboard)
                 .submitLabel(.return)
                 .accessibilityLabel("New reminder")
                 .accessibilityHint(
@@ -323,12 +342,61 @@ struct ReminderListView: View {
     }
 
     private var canAdd: Bool {
-        !atCapacity && !isReordering && !isDragging && draft.canSubmit
+        !atCapacity && !isReordering && !isDragging && !isAddingClipboard && draft.canSubmit
     }
 
     private var reorderDisabled: Bool {
-        isReordering || isLoading || draft.isSubmitting
+        isReordering || isLoading || draft.isSubmitting || isAddingClipboard
             || reminders.contains { completingIDs.contains($0.id) }
+    }
+
+    private var showClipboardOffer: Bool {
+        ClipboardOfferPolicy.shouldShow(
+            snapshot: clipboardSnapshot,
+            lastHandledChangeCount: clipboardLastHandledChangeCount,
+            isActive: scenePhase == .active,
+            isSessionReady: auth.isSharedSessionReady,
+            hasLoaded: hasLoadedSuccessfully,
+            isLoading: isLoading,
+            hasError: error != nil,
+            isAtCapacity: atCapacity,
+            isBusy: draft.isSubmitting || isAddingClipboard || isReordering || isDragging || showAccount
+        )
+    }
+
+    private func updateClipboardSnapshot() {
+        guard scenePhase == .active, auth.isSharedSessionReady else {
+            clipboardSnapshot = .init()
+            return
+        }
+        // Only type metadata is inspected automatically. PasteButton delivers text.
+        let pasteboard = UIPasteboard.general
+        clipboardSnapshot = .init(hasStrings: pasteboard.hasStrings, changeCount: pasteboard.changeCount)
+    }
+
+    private func addFromClipboard(_ strings: [String], changeCount: Int) async {
+        guard changeCount > clipboardLastHandledChangeCount else { return }
+        // Consume this offer before any suspension, including blank/failed pastes.
+        // Errors stay in the existing banner; they never cause an automatic retry.
+        clipboardLastHandledChangeCount = changeCount
+        updateClipboardSnapshot()
+        guard clipboardSnapshot.changeCount == changeCount,
+              scenePhase == .active, auth.isSharedSessionReady,
+              hasLoadedSuccessfully, !isLoading, error == nil, !showAccount,
+              !draft.isSubmitting, !isAddingClipboard, !isReordering, !isDragging,
+              let userID = auth.session?.user.id,
+              let value = ClipboardOfferPolicy.reminderText(from: strings) else { return }
+        guard !atCapacity else {
+            presentError(ReminderBoardLimits.postItHint)
+            return
+        }
+        isAddingClipboard = true
+        defer { isAddingClipboard = false }
+        do {
+            try await createReminder(value, userID: userID)
+        } catch {
+            presentError(error.localizedDescription)
+        }
     }
 
     private func moveReminders(from offsets: IndexSet, to destination: Int) {
@@ -397,6 +465,7 @@ struct ReminderListView: View {
             let refreshed = try await ReminderBoardSync.refreshForeground()
             guard revision == boardRevision, !isReordering, !isDragging else { return }
             reminders = refreshed
+            hasLoadedSuccessfully = true
             error = nil
         } catch {
             guard !Task.isCancelled else { return }
@@ -416,21 +485,22 @@ struct ReminderListView: View {
         }
         guard let value = draft.beginSubmission() else { return }
         do {
-            let updated = try await ReminderStore.shared.create(text: value, userID: userID)
-            error = nil
-            animateBoard { reminders = updated }
-            await ReminderBoardSync.apply(reminders, notify: false)
+            try await createReminder(value, userID: userID)
             composerFocused = true
-            hapticTick += 1
-            UIAccessibility.post(
-                notification: .announcement,
-                argument: "Reminder added"
-            )
             draft.finishSubmission(succeeded: true)
         } catch {
             draft.finishSubmission(succeeded: false)
             presentError(error.localizedDescription)
         }
+    }
+
+    private func createReminder(_ value: String, userID: UUID) async throws {
+        let updated = try await ReminderStore.shared.create(text: value, userID: userID)
+        error = nil
+        animateBoard { reminders = updated }
+        await ReminderBoardSync.apply(reminders, notify: false)
+        hapticTick += 1
+        UIAccessibility.post(notification: .announcement, argument: "Reminder added")
     }
 
     private func markDone(_ reminder: Reminder) async {
