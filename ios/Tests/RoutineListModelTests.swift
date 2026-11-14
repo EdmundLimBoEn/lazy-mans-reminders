@@ -31,6 +31,42 @@ final class RoutineListModelTests: XCTestCase {
         try await checkStaleRead(delete: true)
     }
 
+    func testSaveWhileBusyThrowsWithoutSendingDraftOrChangingState() async throws {
+        let fixture = RoutineStoreFixture()
+        defer { fixture.cleanUp() }
+        try await fixture.signIn()
+        let started = expectation(description: "Delete suspended")
+        let network = DelayedRoutineRead(started: started)
+        let model = RoutineListModel(store: fixture.routineStore { try await network.send($0) })
+        let deletion = Task { await model.change(fixture.routine, delete: true, userID: fixture.userID) }
+        await fulfillment(of: [started], timeout: 3)
+        XCTAssertTrue(model.isBusy)
+
+        var draft = RoutineDraft()
+        draft.text = "New routine"
+        do {
+            try await model.save(draft, userID: fixture.userID)
+            XCTFail("A busy save must not report success")
+        } catch {
+            XCTAssertEqual(error.localizedDescription, "A routine change is in progress. Try again.")
+        }
+
+        let methods = await network.requestMethods
+        XCTAssertEqual(methods, ["DELETE"], "The draft must not be sent")
+        XCTAssertTrue(model.isBusy)
+        XCTAssertTrue(model.routines.isEmpty)
+        XCTAssertFalse(model.isLoading)
+        XCTAssertFalse(model.hasLoaded)
+        XCTAssertFalse(model.loadFailed)
+        XCTAssertNil(model.error)
+
+        await network.finish(data: Data())
+        await deletion.value
+        XCTAssertFalse(model.isBusy)
+        XCTAssertTrue(model.showsEmpty)
+        XCTAssertNil(model.error)
+    }
+
     func testOlderReadCannotOverwriteNewerRefresh() async throws {
         try await checkStaleRead(delete: false)
     }
@@ -60,10 +96,12 @@ private actor DelayedRoutineRead {
     let started: XCTestExpectation
     var pending: CheckedContinuation<(Data, URLResponse), Error>?
     var firstRequest: URLRequest?
+    var requestMethods: [String] = []
 
     init(started: XCTestExpectation) { self.started = started }
 
     func send(_ request: URLRequest) async throws -> (Data, URLResponse) {
+        requestMethods.append(request.httpMethod ?? "GET")
         if firstRequest == nil {
             firstRequest = request
             return try await withCheckedThrowingContinuation { continuation in

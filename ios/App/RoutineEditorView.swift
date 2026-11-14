@@ -94,7 +94,7 @@ struct RoutineEditorView: View {
                     }
                     .frame(minHeight: 44)
                     .disabled(draft.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                    Button("Cancel edit") { dismiss() }
+                    Button(draft.original != nil ? "Cancel edit" : "Cancel") { dismiss() }
                         .frame(minHeight: 44)
                 }
             }

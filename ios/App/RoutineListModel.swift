@@ -13,6 +13,14 @@ final class RoutineListModel: ObservableObject {
 
     init(store: RoutineStore = .shared) { self.store = store }
 
+    enum SaveError: LocalizedError {
+        case busy
+
+        var errorDescription: String? {
+            "A routine change is in progress. Try again."
+        }
+    }
+
     var showsEmpty: Bool {
         RoutinePresentation.showsEmpty(isLoading: isLoading, hasLoaded: hasLoaded,
                                        count: routines.count, loadFailed: loadFailed)
@@ -39,7 +47,7 @@ final class RoutineListModel: ObservableObject {
     }
 
     func save(_ draft: RoutineDraft, userID: UUID) async throws {
-        guard !isBusy else { return }
+        guard !isBusy else { throw SaveError.busy }
         beginMutation()
         do {
             try await store.save(draft, userID: userID)
