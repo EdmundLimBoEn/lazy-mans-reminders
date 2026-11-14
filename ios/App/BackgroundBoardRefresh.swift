@@ -36,10 +36,11 @@ enum BackgroundBoardRefresh {
                 try Task.checkCancellation()
                 await AuthManager.shared.waitForRestoration()
                 try Task.checkCancellation()
+                ReminderLiveActivityController.startObservingTokens()
                 await AuthManager.shared.registerLiveActivityTokens()
                 let reminders = try await ReminderStore.shared.refresh(performMaintenance: false)
                 try Task.checkCancellation()
-                await ReminderBoardSync.apply(reminders)
+                await ReminderBoardSync.apply(reminders, allowStart: false)
                 success = true
             } catch {
                 print("Background board refresh did not complete: \(error.localizedDescription)")
