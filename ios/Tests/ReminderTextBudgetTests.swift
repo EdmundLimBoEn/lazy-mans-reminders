@@ -122,9 +122,11 @@ final class ReminderTextBudgetTests: XCTestCase {
 
     func testLongReminderAndPlaceholdersKeepFullTextBeforeVisualWrapping() {
         let long = String(repeating: "Bring the notebook and charging cable 漢字 😀. ", count: 30)
+        // Display rows trim surrounding whitespace; VoiceOver keeps the original text.
+        let displayText = long.trimmingCharacters(in: .whitespacesAndNewlines)
         let reminders = [reminder(long)]
         let budget = ReminderActivityPresentation.expandedIslandTextBudget(lineHeight: 64)
-        XCTAssertEqual(ReminderActivityPresentation.displayLines(from: reminders, limit: 2), [long])
+        XCTAssertEqual(ReminderActivityPresentation.displayLines(from: reminders, limit: 2), [displayText])
         XCTAssertEqual(ReminderActivityPresentation.expandedIslandLines([long], lineHeight: budget.lineHeight), [long])
         XCTAssertEqual(ReminderActivityPresentation.lockScreenLines([long], lineHeight: budget.lineHeight), [long])
         XCTAssertEqual(ReminderActivityPresentation.accessibilitySummary(from: reminders), long)
