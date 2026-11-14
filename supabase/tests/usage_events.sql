@@ -20,14 +20,24 @@ declare
   role_name text;
   signature text;
 begin
-  assert not (select enabled from public.usage_analytics_config), 'Collection must default off';
+  assert exists (select 1 from public.usage_analytics_config where singleton and enabled),
+    'Enable migration must turn collection on';
+  update public.usage_analytics_config set enabled = false where singleton;
+  assert not (select enabled from public.usage_analytics_config), 'Disabled fixture must be off';
   insert into public.reminders(user_id, text) values (owner_id, 'Disabled') returning id into row_id;
   update public.reminders set is_done = true where id = row_id;
   delete from public.reminders where id = row_id;
   perform public.record_agent_usage(owner_id, 'mcp_list');
   assert not exists (select 1 from public.usage_daily_counts), 'Disabled triggers/RPC wrote data';
 
-  update public.usage_analytics_config set enabled = true;
+  -- A missing singleton remains fail-closed even after the enable migration.
+  delete from public.usage_analytics_config where singleton;
+  insert into public.reminders(user_id, text) values (owner_id, 'Missing config') returning id into row_id;
+  update public.reminders set is_done = true where id = row_id;
+  delete from public.reminders where id = row_id;
+  perform public.record_agent_usage(owner_id, 'mcp_list');
+  assert not exists (select 1 from public.usage_daily_counts), 'Missing config wrote data';
+  insert into public.usage_analytics_config(singleton, enabled) values (true, true);
   perform set_config('request.headers', '{"x-notepad-client":"web"}', true);
   perform set_config('request.jwt.claims', '{"role":"authenticated"}', true);
   insert into public.reminders(user_id, text) values (owner_id, 'Created') returning id into row_id;
