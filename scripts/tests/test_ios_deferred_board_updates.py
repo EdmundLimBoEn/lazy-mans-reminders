@@ -13,6 +13,9 @@ SOURCE = ROOT / "ios/App/ReminderListView.swift"
 HARNESS = r'''
 import Foundation
 
+enum ScenePhase { case active, background }
+struct Auth { var isSharedSessionReady = true }
+
 @MainActor final class ReminderStore {
     static let shared = ReminderStore()
     var snapshot = [1, 2]
@@ -33,6 +36,10 @@ import Foundation
     var hasDeferredBoardUpdate = false
     var boardRevision = 0
     var reminders = [1, 2]
+    var scenePhase = ScenePhase.active
+    var auth = Auth()
+    var completingIDs: Set<Int> = []
+    var hapticTick = 0
     // PRODUCTION_MEMBER
     func replay() async { await replayDeferredBoardUpdate() }
 }
@@ -95,6 +102,25 @@ import Foundation
         let reads = store.reads
         await board.replay()
         precondition(store.reads == reads, "Idle state changes must not reload without an update")
+
+        store.snapshot = []
+        board.hasDeferredBoardUpdate = true
+        await board.replay()
+        precondition(board.hapticTick == 1, "A foreground remote clear uses the success haptic")
+        board.hasDeferredBoardUpdate = true
+        await board.replay()
+        precondition(board.hapticTick == 1, "Repeated empty publications must not repeat the haptic")
+        for suppressed in 0..<3 {
+            board.reminders = [1]
+            board.hasDeferredBoardUpdate = true
+            board.scenePhase = suppressed == 0 ? .background : .active
+            board.auth.isSharedSessionReady = suppressed != 1
+            board.completingIDs = suppressed == 2 ? [1] : []
+            await board.replay()
+            precondition(board.reminders.isEmpty)
+            precondition(board.hapticTick == 1,
+                         "Background, sign-out and in-app completions must not add a remote-clear haptic")
+        }
     }
 }
 '''

@@ -362,6 +362,10 @@ struct ReminderListView: View {
             // A new drag/save may have started while reading the actor's cache.
             guard !isDragging && !isReordering else { return }
             guard revision == boardRevision else { continue }
+            if !reminders.isEmpty && cached.isEmpty && scenePhase == .active
+                && auth.isSharedSessionReady && completingIDs.isEmpty {
+                hapticTick += 1
+            }
             reminders = cached
             hasDeferredBoardUpdate = false
         }
@@ -396,6 +400,10 @@ struct ReminderListView: View {
         do {
             let refreshed = try await ReminderBoardSync.refreshForeground()
             guard revision == boardRevision, !isReordering, !isDragging else { return }
+            if !reminders.isEmpty && refreshed.isEmpty && scenePhase == .active
+                && auth.isSharedSessionReady && completingIDs.isEmpty {
+                hapticTick += 1
+            }
             reminders = refreshed
             error = nil
         } catch {
@@ -445,7 +453,9 @@ struct ReminderListView: View {
             hapticTick += 1
             UIAccessibility.post(
                 notification: .announcement,
-                argument: "Completed \(reminder.text)"
+                argument: ReminderAccessibility.completionAnnouncement(
+                    text: reminder.text, boardIsEmpty: !updated.contains { !$0.isDone }
+                )
             )
         } catch {
             presentError(error.localizedDescription)

@@ -62,7 +62,9 @@ enum ReminderBoardSync {
         }
 
         WidgetCenter.shared.reloadAllTimelines()
-        await ReminderLiveActivityController.sync(reminders: reminders)
+        await ReminderLiveActivityController.sync(
+            reminders: reminders, isClearing: publication == .clear
+        )
         do {
 #if LMR_REMINDERS_SCHEMA
             if #available(iOS 27.0, *) {

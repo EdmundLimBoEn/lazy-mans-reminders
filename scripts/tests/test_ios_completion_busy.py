@@ -15,7 +15,11 @@ SOURCE = ROOT / "ios/App/ReminderListView.swift"
 HARNESS = r'''
 import Foundation
 
-struct Reminder { let id = UUID(); let text = "Test" }
+struct Reminder { let id = UUID(); let text = "Test"; var isDone = false }
+enum ReminderActivityPresentation { static let boardClearMessage = "Nothing to do." }
+enum ReminderAccessibility {
+    // PRODUCTION_ANNOUNCEMENT
+}
 // PRODUCTION_DRAFT
 struct User { let id = UUID() }
 struct Session { let user = User() }
@@ -47,9 +51,10 @@ enum Failure: Error { case offline }
         duringApply?()
     }
 }
-enum UIAccessibility {
+@MainActor enum UIAccessibility {
     enum Notification { case announcement }
-    static func post(notification: Notification, argument: String) {}
+    static var announcements: [String] = []
+    static func post(notification: Notification, argument: String) { announcements.append(argument) }
 }
 @MainActor final class Board {
     var isReordering = false
@@ -89,6 +94,9 @@ enum UIAccessibility {
         }
         await board.complete(reminder)
         precondition(board.completingIDs.isEmpty, "Success must release busy state")
+        precondition(board.hapticTick == 1, "Last completion keeps one success haptic")
+        precondition(UIAccessibility.announcements == ["Completed Test\nNothing to do."],
+                     "Speak the completion before the clear moment without interrupting it")
         // A remote reopen or routine firing restores the same ID to the board.
         board.reminders = [reminder]
         precondition(board.canReorder, "Reopened reminder must allow reorder")
@@ -158,7 +166,10 @@ class CompletionBusyTests(unittest.TestCase):
             path = Path(directory)
             swift = path / "Regression.swift"
             swift.write_text(HARNESS.replace("// PRODUCTION_MEMBERS", members).replace(
-                "// PRODUCTION_DRAFT", (ROOT / "ios/App/ReminderDraft.swift").read_text()))
+                "// PRODUCTION_DRAFT", (ROOT / "ios/App/ReminderDraft.swift").read_text()).replace(
+                "// PRODUCTION_ANNOUNCEMENT", member(
+                    (ROOT / "ios/Shared/ReminderAccessibility.swift").read_text(),
+                    "static func completionAnnouncement(")))
             subprocess.run(["swiftc", "-parse-as-library", str(swift), "-o", str(path / "test")],
                            check=True, capture_output=True, text=True)
             result = subprocess.run([str(path / "test")], capture_output=True, text=True)

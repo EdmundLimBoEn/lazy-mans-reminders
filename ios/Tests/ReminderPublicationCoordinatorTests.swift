@@ -149,13 +149,17 @@ final class ReminderPublicationCoordinatorTests: XCTestCase {
     }
 
     func testFailedRefreshWithAnEmptyCacheDoesNotEndAnActivity() async throws {
-        let fixture = Fixture(reminders: [], pause: nil)
+        let reminder = sample("Still valid activity")
+        let fixture = Fixture(reminders: [reminder], pause: nil)
+        try await fixture.coordinator.apply([reminder])
+        await fixture.surfaces.setCache([])
         do {
             _ = try await fixture.coordinator.refresh { throw FakeFailure() }
             XCTFail("Expected refresh failure")
         } catch {}
         let snapshot = await fixture.surfaces.snapshot()
-        XCTAssertTrue(snapshot.transactions.isEmpty)
+        XCTAssertEqual(snapshot.transactions, [.board(notify: true)])
+        XCTAssertEqual(snapshot.activity, [reminder])
     }
 
     func testSuccessfulEmptyRefreshClearsTheSavedActivity() async throws {
@@ -166,6 +170,45 @@ final class ReminderPublicationCoordinatorTests: XCTestCase {
             return []
         }
         let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.published, [[reminder], []])
+        XCTAssertTrue(snapshot.activity.isEmpty)
+        XCTAssertEqual(snapshot.transactions, [.board(notify: false), .board(notify: false)])
+    }
+
+    func testSuccessfulEmptyRefreshPublishesEvenWithAnEmptyCache() async throws {
+        let fixture = Fixture(reminders: [], pause: nil)
+        _ = try await fixture.coordinator.refresh { [] }
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.published, [[]])
+        XCTAssertEqual(snapshot.transactions, [.board(notify: false)])
+    }
+
+    func testLastCompletionFromAppOrIntentPublishesBoardInsteadOfAccountCleanup() async throws {
+        for notify in [false, true] {
+            let reminder = sample("Last reminder")
+            let fixture = Fixture(reminders: [reminder], pause: nil)
+            try await fixture.coordinator.apply([reminder])
+            await fixture.surfaces.setCache([])
+            try await fixture.coordinator.apply([], notify: notify)
+            let cleared = await fixture.surfaces.snapshot()
+            XCTAssertEqual(cleared.published, [[reminder], []])
+            XCTAssertEqual(cleared.transactions, [.board(notify: true), .board(notify: notify)])
+
+            let added = sample("New reminder")
+            await fixture.surfaces.setCache([added])
+            try await fixture.coordinator.apply([added], notify: notify)
+            let restored = await fixture.surfaces.snapshot()
+            XCTAssertEqual(restored.activity, [added])
+        }
+    }
+
+    func testSignOutUsesExplicitCleanupRatherThanAnEmptyBoardPublication() async throws {
+        let reminder = sample("Signed-out account")
+        let fixture = Fixture(reminders: [reminder], pause: nil)
+        try await fixture.coordinator.apply([reminder])
+        try await fixture.coordinator.clear()
+        let snapshot = await fixture.surfaces.snapshot()
+        XCTAssertEqual(snapshot.transactions, [.board(notify: true), .clear])
         XCTAssertEqual(snapshot.published, [[reminder], []])
         XCTAssertTrue(snapshot.activity.isEmpty)
     }
