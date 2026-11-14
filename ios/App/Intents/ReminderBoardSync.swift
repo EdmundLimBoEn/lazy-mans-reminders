@@ -12,12 +12,16 @@ enum ReminderBoardSync {
         publish: publish
     )
 
-    static func apply(_ reminders: [Reminder], notify: Bool = true) async {
-        try? await coordinator.apply(reminders, notify: notify)
+    static func apply(_ reminders: [Reminder], notify: Bool = true, allowStart: Bool = true) async {
+        try? await coordinator.apply(reminders, notify: notify, allowStart: allowStart)
     }
 
     static func clear() async {
         try? await coordinator.clear()
+    }
+
+    static func restoreCachedBoard(for userID: UUID) async {
+        try? await coordinator.restoreCachedBoard(for: userID)
     }
 
     static func refreshForeground() async throws -> [Reminder] {
@@ -62,7 +66,9 @@ enum ReminderBoardSync {
         }
 
         WidgetCenter.shared.reloadAllTimelines()
-        await ReminderLiveActivityController.sync(reminders: reminders)
+        let allowStart: Bool
+        if case .board(_, let requested) = publication { allowStart = requested } else { allowStart = false }
+        await ReminderLiveActivityController.sync(reminders: reminders, allowStart: allowStart)
         do {
 #if LMR_REMINDERS_SCHEMA
             if #available(iOS 27.0, *) {
@@ -81,7 +87,7 @@ enum ReminderBoardSync {
             print("Spotlight replace failed: \(error.localizedDescription)")
         }
         let notify: Bool
-        if case .board(let requested) = publication { notify = requested } else { notify = true }
+        if case .board(let requested, _) = publication { notify = requested } else { notify = true }
         if notify {
             NotificationCenter.default.post(name: .didUpdateReminders, object: nil)
         }
