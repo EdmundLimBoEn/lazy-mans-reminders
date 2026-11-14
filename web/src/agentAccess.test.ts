@@ -95,3 +95,19 @@ it('ignores a stale list read after mint', async () => {
   await new Promise(resolve => setTimeout(resolve, 0))
   expect(names()).toEqual(['Cursor'])
 })
+
+it('drops a second mint while the first RPC is in flight', async () => {
+  mockFrom()
+  db.rpc.mockReset()
+  render()
+  hooks.effect!()
+  render().find(node => node.props.id === 'agent-key-name')!.props.onChange!({ target: { value: 'Cursor' } })
+  const minted = deferred<{ data: string; error: null }>()
+  db.rpc.mockReturnValue(minted.promise)
+  const submit = render().find(node => node.props.className?.includes('agent-key-form'))!.props.onSubmit!
+  submit({ preventDefault() {} })
+  submit({ preventDefault() {} })
+  expect(db.rpc).toHaveBeenCalledTimes(1)
+  expect(db.rpc).toHaveBeenCalledWith('mint_agent_token', { p_name: 'Cursor' })
+  minted.resolve({ data: 'lmr_secret', error: null })
+})
