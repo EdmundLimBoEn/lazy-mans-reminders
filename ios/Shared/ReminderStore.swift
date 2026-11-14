@@ -356,6 +356,25 @@ actor ReminderStore {
         return reordered
     }
 
+    /// Other app stores share token refresh and identity protection, without using the board cache.
+    struct RequestSession {
+        let session: SharedSession
+        let identityRevision: String?
+    }
+
+    func requestSession(for userID: UUID) async throws -> RequestSession {
+        let revision = defaults.string(forKey: identityRevisionKey)
+        guard let session = await loadFreshSession(), session.userID == userID else {
+            throw StoreError.signedOut
+        }
+        try requireCurrentIdentity(session, revision: revision)
+        return RequestSession(session: session, identityRevision: revision)
+    }
+
+    func validateRequestSession(_ snapshot: RequestSession) throws {
+        try requireCurrentIdentity(snapshot.session, revision: snapshot.identityRevision)
+    }
+
     // Actor methods can resume after sign-out while an HTTP request is suspended.
     private func requireCurrentIdentity(_ session: SharedSession, revision: String?) throws {
         guard defaults.string(forKey: identityRevisionKey) == revision,
