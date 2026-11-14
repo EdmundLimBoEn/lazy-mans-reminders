@@ -300,6 +300,48 @@ final class ReminderIntentUpdateTests: XCTestCase {
         XCTAssertEqual(cached, [active])
     }
 
+
+    func testCreateCapacityRejectionIsVisibleInAppAndIntentsWithoutPublishing() async throws {
+        for viaIntent in [false, true] {
+            let original = sample()
+            let suite = "ReminderIntentCapacityTests.\(UUID())"
+            let defaults = UserDefaults(suiteName: suite)!
+            defer { defaults.removePersistentDomain(forName: suite) }
+            let store = ReminderStore(
+                defaults: defaults, credentials: MemorySessionCredentials(),
+                serviceURL: URL(string: "https://reminders.invalid")!, anonKey: "test",
+                requestData: { request in
+                    let isRead = request.httpMethod == "GET"
+                    let data = isRead ? Data("[]".utf8)
+                        : Data(#"{"message":"Quota exceeded","details":"6 LMR_CAPACITY_REACHED"}"#.utf8)
+                    return (data, HTTPURLResponse(url: request.url!, statusCode: isRead ? 200 : 400,
+                                                  httpVersion: nil, headerFields: nil)!)
+                }
+            )
+            try await store.saveSession(accessToken: "test", refreshToken: "refresh",
+                                        expiresAt: Date().addingTimeInterval(3600), userID: original.userID)
+            do {
+                if viaIntent {
+                    _ = try await ReminderIntentActions.create(title: "New", store: store,
+                        publish: { _ in XCTFail("Rejected creates must not publish") })
+                } else {
+                    _ = try await store.createAcknowledged(text: "New")
+                }
+                XCTFail("Expected capacity rejection")
+            } catch {
+                if viaIntent {
+                    guard case ReminderIntentError.atCapacity = error else {
+                        return XCTFail("Expected spoken capacity error, got \(error)")
+                    }
+                } else {
+                    XCTAssertEqual(error.localizedDescription, ReminderBoardLimits.postItHint)
+                }
+            }
+            let cached = await store.cached()
+            XCTAssertTrue(cached.isEmpty)
+        }
+    }
+
     private actor Counter {
         var value = 0
         func increment() { value += 1 }

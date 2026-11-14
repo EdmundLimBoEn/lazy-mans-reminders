@@ -6,7 +6,7 @@ import { createServiceRoleClient } from './auth'
 import { createServer } from './server'
 
 const { handlers } = vi.hoisted(() => ({
-  handlers: new Map<string, (args: { id: string }) => Promise<{ isError?: boolean; content: { text: string }[] }>>(),
+  handlers: new Map<string, (args: { id?: string; text?: string }) => Promise<{ isError?: boolean; content: { text: string }[] }>>(),
 }))
 vi.mock('@modelcontextprotocol/server', () => ({
   McpServer: class {
@@ -49,6 +49,7 @@ describe('reopen_reminder', () => {
     const { update, count, list, rpc } = setup()
     const result = await handlers.get('reopen_reminder')!({ id })
     expect(result.isError).toBe(true)
+    expect(result.content[1].text).toBe(POST_IT_HINT)
     expect(JSON.parse(result.content[0].text)).toEqual({
       error: 'capacity', maxLines: 16, hint: POST_IT_HINT,
       capacity: { used: 16, maximum: 16, remaining: 0 },
@@ -87,5 +88,24 @@ describe('reopen_reminder', () => {
     const result = await handlers.get('reopen_reminder')!({ id })
     expect(result.isError).toBeUndefined()
     expect(JSON.parse(result.content[0].text).reminder).toEqual({ ...active[0], id })
+  })
+})
+
+describe('add_reminder capacity message', () => {
+  it.each([6, 9, 16])('preserves JSON and includes plain language at a %i-line budget', async maximum => {
+    const { rpc, from } = setup()
+    rpc.mockResolvedValue({ data: null, error: { message: 'LMR_CAPACITY_REACHED', details: String(maximum) } })
+    const count = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), then: (resolve: (value: unknown) => unknown) => Promise.resolve({ count: maximum, error: null }).then(resolve) }
+    const prefs = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: { max_lines: maximum }, error: null }) }
+    const list = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), gt: vi.fn().mockReturnThis(), order: vi.fn().mockReturnThis(), range: vi.fn().mockResolvedValue({ data: [], error: null }).mockResolvedValueOnce({ data: active.slice(0, maximum), error: null }) }
+    from.mockReset().mockReturnValueOnce(count).mockReturnValueOnce(prefs).mockReturnValue(list)
+    const result = await handlers.get('add_reminder')!({ text: 'New' })
+    expect(result.isError).toBe(true)
+    expect(JSON.parse(result.content[0].text)).toMatchObject({
+      error: 'capacity', maxLines: maximum, hint: POST_IT_HINT,
+      capacity: { used: maximum, maximum, remaining: 0 },
+    })
+    expect(result.content[1]).toEqual({ type: 'text', text: POST_IT_HINT })
+    expect(rpc).toHaveBeenCalledWith('add_agent_reminder', { p_user_id: session.userId, p_text: '[Test] New' })
   })
 })

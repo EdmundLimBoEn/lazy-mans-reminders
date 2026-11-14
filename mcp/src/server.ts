@@ -124,7 +124,10 @@ function toToolResult(result: BoardResult) {
   }
   return {
     isError: true,
-    content: [{ type: 'text' as const, text: boardErrorText(result) }],
+    content: [
+      { type: 'text' as const, text: boardErrorText(result) },
+      ...(result.kind === 'capacity' ? [{ type: 'text' as const, text: result.hint }] : []),
+    ],
   }
 }
 
