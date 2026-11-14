@@ -181,10 +181,16 @@ jobs:
             supabase/tests/anon_helper_execute.sql \
             supabase/tests/push_job_retention.sql \
             supabase/migrations/20261113000200_usage_events.sql \
+            supabase/migrations/20261113000300_enable_usage_analytics.sql \
             supabase/tests/usage_events.sql \
             supabase/tests/agent_append_order.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
+          # The enable migration leaves collection on. Same-user usage upserts would
+          # serialize mint_agent_token and hide a missing advisory lock in the
+          # negative control below. The usage tests already covered the on path.
+          docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 \
+            -c "update public.usage_analytics_config set enabled = false where singleton;"
           # Exercise the initial write assertions with a deterministic minute rollover.
           docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 \
             -v write_budget_rollover=1 -f /tmp/supabase/tests/write_budgets.sql
