@@ -65,7 +65,7 @@ Store the custom function values in an ignored file such as `supabase/.env.funct
 supabase secrets set --env-file supabase/.env.functions
 ```
 
-The four `APPLE_*` secrets are used only by `delete-account` to revoke Sign in with Apple tokens. After setting them, redeploy that function (see below). Baseline deletion continues when Apple revocation cannot complete; this is a release gap requiring successful revocation or the documented manual fallback, configuration checks and device QA.
+The four `APPLE_*` secrets are used only by `delete-account` to revoke Sign in with Apple tokens. After setting them, redeploy that function (see below). Deletion continues when Apple revocation cannot complete, returning `manual_required` so iOS and web show the existing manual instructions. Automated coverage exists for revocation and fallback; live secret presence remains unverified here, and the updated `delete-account` function needs redeployment and physical-device QA before release.
 
 ## Supabase
 
@@ -130,7 +130,7 @@ Delivery behaviour:
 - Transient APNs failures (network, 429, 5xx, expired provider JWT) are retried inside the function. If any device is still retryable afterwards the function returns **503** so the webhook / `pg_net` trigger can try the whole job again. Permanent failures (including `410 Unregistered` and `400 BadDeviceToken`) prune that token and still return 200.
 - After changing this function, redeploy with `supabase functions deploy send-reminder-push --no-verify-jwt`. The database trigger itself (`send_reminder_push` → `notify_reminder_push`, on INSERT, UPDATE, and DELETE) is configured in the project, not this repo.
 
-`delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, agent tokens, and auth user (service role). For Sign in with Apple users, the iOS app first requests a fresh `authorizationCode` and the function exchanges it at `https://appleid.apple.com/auth/token`, then POSTs `https://appleid.apple.com/auth/revoke` with the refresh token (or the access token if Apple does not return a refresh token). If the Apple secrets are missing or Apple returns an error, deletion still succeeds and the function logs a structured warning. Non-Apple users never hit those endpoints. Successful deletion alone does not prove Apple token revocation; verify cancellation, failure and manual fallback behavior before release.
+`delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, agent tokens, and auth user (service role). For Sign in with Apple users, the iOS app first requests a fresh `authorizationCode` and the function exchanges it at `https://appleid.apple.com/auth/token`, then POSTs `https://appleid.apple.com/auth/revoke` with the refresh token (or the access token if Apple does not return a refresh token). If the Apple secrets are missing or Apple returns an error, deletion still succeeds and the function logs a structured warning. Non-Apple users never hit those endpoints. Web uses hosted Supabase OAuth: Apple’s code is consumed by Supabase, and the app callback receives a Supabase PKCE code, not a fresh Apple authorization code. Web deletion therefore uses the visible manual fallback. Successful deletion alone does not prove Apple token revocation; verify cancellation, failure and manual fallback behavior before release.
 
 After creating the Sign in with Apple key and setting `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY`, and `APPLE_CLIENT_ID`:
 
