@@ -55,6 +55,7 @@ enum UIAccessibility {
     var isReordering = false
     var isDragging = false
     var isLoading = false
+    var isAddingClipboard = false
     var draft = ReminderDraft()
     var auth = Auth()
     var composerFocused = false
@@ -152,6 +153,7 @@ class CompletionBusyTests(unittest.TestCase):
         members = "\n".join(member(source, declaration) for declaration in (
             "private func markDone(", "private var reorderDisabled: Bool",
             "private func addReminder(", "private var canAdd: Bool",
+            "private func createReminder(",
             "private var atCapacity: Bool",
         ))
         with tempfile.TemporaryDirectory() as directory:
