@@ -25,9 +25,10 @@ export async function loadBoardContent(
   const [{ data: reminders, error }, { data: prefs, error: prefsError }] =
     await Promise.all([
       supabase.from("reminders").select(
-        "id, user_id, text, routine_id, routine_fired_at",
+        "id, user_id, text, routine_id, routine_fired_at, snoozed_until",
       ).eq("user_id", userId)
-        .eq("is_done", false).order("sort_order", { ascending: true })
+        .eq("is_done", false)
+        .or("snoozed_until.is.null,snoozed_until.lte.now").order("sort_order", { ascending: true })
         .order("created_at", { ascending: true }),
       supabase.from("lock_screen_prefs").select("max_lines")
         .eq("user_id", userId).maybeSingle(),

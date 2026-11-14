@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label'
 import { SiteHeader } from '@/components/SiteHeader'
 import { cn } from '@/lib/utils'
 import { accountExportFilename, buildAccountExport, serializeAccountExport, type AccountExportAgentKey, type AccountExportReminder } from './lib/accountExport'
-import { nextSortOrder, sortReminders, isAtCapacity, effectiveMaximum, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
+import { isCurrentlySnoozed, isActiveReminder, nextSortOrder, sortReminders, isAtCapacity, effectiveMaximum, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
 import { ConnectedAgents } from './ConnectedAgents'
 import { LegalFooterLinks } from './legalFooter'
 import { AGENT_TOKEN_PLACEHOLDER, LMR_AGENT_TOKEN_VAR, MCP_URL, claudeMcpConfig, cursorMcpConfig, grokConnectorConfig, lmrAgentTokenHeaderTemplate } from './mcp'
@@ -28,6 +28,7 @@ type Reminder = {
   text: string
   sort_order: number
   is_done: boolean
+  snoozed_until?: string | null
   created_at: string
 }
 
@@ -91,8 +92,8 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [confirmDelete, deletingAccount])
 
-  const sorted = useMemo(() => sortReminders(reminders), [reminders])
-  const active = useMemo(() => sorted.filter((item) => !item.is_done), [sorted])
+  const sorted = useMemo(() => sortReminders(reminders.filter(item => !isCurrentlySnoozed(item))), [reminders])
+  const active = useMemo(() => sorted.filter(item => isActiveReminder(item)), [sorted])
 
   const load = useCallback(async () => {
     const sequence = ++loadSequence.current
@@ -116,8 +117,9 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
     const [{ data, error: fetchError }, prefsResult] = await Promise.all([
       supabase
         .from('reminders')
-        .select('id, user_id, text, sort_order, is_done, created_at')
+        .select('id, user_id, text, sort_order, is_done, created_at, snoozed_until')
         .eq('user_id', session.user.id)
+        .or('snoozed_until.is.null,snoozed_until.lte.now')
         .order('is_done')
         .order('sort_order')
         .order('created_at'),
@@ -130,7 +132,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
     if (sequence !== loadSequence.current) return
     if (fetchError) setError(fetchError.message)
     else {
-      const refreshed = data ?? []
+      const refreshed = (data ?? []).filter(item => !isCurrentlySnoozed(item))
       setReminders(refreshed)
       setEditingId(current => refreshed.some(item => item.id === current) ? current : null)
     }

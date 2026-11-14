@@ -19,6 +19,7 @@ function client(
       const query = {
         select: () => query,
         eq: () => query,
+        or: () => query,
         order: () => query,
         maybeSingle: () => Promise.resolve(result),
         then: (resolve: (value: typeof result) => unknown) =>
@@ -80,6 +81,7 @@ const inserted = {
 
 // Model the database filters so completed and other users' rows are excluded.
 function boardClient(rows: (typeof inserted & {
+  snoozed_until?: string | null;
   routine_id?: string;
   routine_fired_at?: string;
 })[]) {
@@ -91,6 +93,11 @@ function boardClient(rows: (typeof inserted & {
         select: () => query,
         eq: (key: string, value: unknown) => {
           filtered = filtered.filter((row) => Reflect.get(row, key) === value);
+          return query;
+        },
+        or: (filter: string) => {
+          assertEquals(filter, "snoozed_until.is.null,snoozed_until.lte.now");
+          filtered = filtered.filter(row => row.snoozed_until == null || Date.parse(row.snoozed_until) <= Date.now());
           return query;
         },
         order: () => query,
@@ -187,4 +194,14 @@ Deno.test("alert candidate does not turn a failed board read into push content",
       inserted,
     )
   );
+});
+
+Deno.test("snoozed lines and delayed alerts stay hidden until due, before cron clears them", async () => {
+  const sleeping = { ...inserted, snoozed_until: "2999-01-01T00:00:00Z" };
+  assertEquals(await loadBoardContent(boardClient([sleeping]), inserted.user_id, inserted), {
+    lines: [], alertRecord: undefined,
+  });
+  const expired = { ...sleeping, snoozed_until: "2000-01-01T00:00:00Z" };
+  assertEquals(await loadBoardLines(boardClient([expired]), inserted.user_id), [inserted.text]);
+  assertEquals(await loadBoardLines(boardClient([{ ...expired, snoozed_until: null }]), inserted.user_id), [inserted.text]);
 });

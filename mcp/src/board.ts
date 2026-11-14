@@ -97,7 +97,8 @@ async function listBoard(
       .from('reminders')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', session.userId)
-      .eq('is_done', false),
+      .eq('is_done', false)
+      .or('snoozed_until.is.null,snoozed_until.lte.now'),
     supabase
       .from('lock_screen_prefs')
       .select('max_lines')
@@ -114,8 +115,9 @@ async function listBoard(
   while (true) {
     let query = supabase
       .from('reminders')
-      .select('id, text, is_done, sort_order, created_at, completed_at')
+      .select('id, text, is_done, sort_order, created_at, completed_at, snoozed_until')
       .eq('user_id', session.userId)
+    if (status === 'active') query = query.or('snoozed_until.is.null,snoozed_until.lte.now')
     if (status !== 'all') query = query.eq('is_done', status === 'completed')
     if (afterId !== undefined) query = query.gt('id', afterId)
     const { data, error } = await query
@@ -192,7 +194,7 @@ async function setCompletion(
     ? supabase.from('reminders').update({ is_done: true }).eq('id', reminderId).eq('user_id', session.userId).eq('is_done', false)
     : supabase.rpc('reopen_reminder', { p_user_id: session.userId, p_reminder_id: reminderId })
   const { data, error } = await query
-    .select('id, text, is_done, sort_order, created_at, completed_at')
+    .select('id, text, is_done, sort_order, created_at, completed_at, snoozed_until')
     .maybeSingle()
   if (error) {
     const maximum = capacityMaximumFromError(error.message, error.details)
@@ -211,7 +213,7 @@ async function setCompletion(
   }
   if (!data && isDone) {
     const existing = await supabase.from('reminders')
-      .select('id, text, is_done, sort_order, created_at, completed_at')
+      .select('id, text, is_done, sort_order, created_at, completed_at, snoozed_until')
       .eq('id', reminderId).eq('user_id', session.userId).eq('is_done', true)
       .maybeSingle()
     if (existing.error) return boardErrorFromStorage(existing.error.message, existing.error.details)
@@ -229,5 +231,6 @@ function toReminderRow(row: ReminderSelect): ReminderRow {
     sort_order: row.sort_order,
     created_at: row.created_at,
     completed_at: row.completed_at ?? null,
+    snoozed_until: row.snoozed_until ?? null,
   }
 }

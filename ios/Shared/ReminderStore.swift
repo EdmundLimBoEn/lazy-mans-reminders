@@ -164,7 +164,7 @@ actor ReminderStore {
 
     private func cachedSnapshot() -> [Reminder]? {
         guard let data = defaults.data(forKey: cacheKey) else { return nil }
-        return try? ReminderJSON.decoder.decode([Reminder].self, from: data)
+        return try? ReminderJSON.decoder.decode([Reminder].self, from: data).filter { $0.isVisible() }
     }
 
     /// The app owns its cache. A widget snapshot is usable only until that cache
@@ -178,7 +178,7 @@ actor ReminderStore {
               snapshot.cacheRevision == defaults.string(forKey: cacheRevisionKey) else {
             return cachedSnapshot()
         }
-        return snapshot.reminders
+        return snapshot.reminders.filter { $0.isVisible() }
     }
 
     private func cache(_ reminders: [Reminder]) throws {
@@ -241,6 +241,7 @@ actor ReminderStore {
         components.queryItems = [
             URLQueryItem(name: "select", value: "*"),
             URLQueryItem(name: "is_done", value: "eq.false"),
+            URLQueryItem(name: "or", value: "(snoozed_until.is.null,snoozed_until.lte.now)"),
             URLQueryItem(name: "order", value: "sort_order.asc,created_at.asc")
         ]
         var request = URLRequest(url: components.url!, timeoutInterval: 15)
@@ -258,6 +259,7 @@ actor ReminderStore {
         }
 
         let reminders = try ReminderJSON.decoder.decode([Reminder].self, from: responseData)
+            .filter { $0.isVisible() }
         try requireCurrentIdentity(session, revision: identityRevision)
         // Only an acknowledged mutation or a newer accepted refresh makes this snapshot obsolete.
         if revision != contentRevision || sequence < acceptedRefreshSequence || isReordering { return cached() }
@@ -570,7 +572,7 @@ actor ReminderStore {
     private func cacheAcknowledgedReminder(_ reminder: Reminder) throws -> [Reminder] {
         contentRevision += 1
         var reminders = cached().filter { $0.id != reminder.id && !$0.isDone }
-        if !reminder.isDone { reminders.append(reminder) }
+        if reminder.isVisible() { reminders.append(reminder) }
         reminders.sort {
             if $0.sortOrder != $1.sortOrder { return $0.sortOrder < $1.sortOrder }
             return $0.createdAt < $1.createdAt
@@ -584,6 +586,11 @@ actor ReminderStore {
         try await update(id: id, isDone: true)
     }
 
+    /// Uses the same per-ID reservation, session checks and server acknowledgement as completion.
+    func snooze(id: UUID, until: Date) async throws -> [Reminder] {
+        try await updateAcknowledged(id: id, snoozedUntil: until).activeReminders
+    }
+
     /// Patches text and/or completion. Returns the active (not done) cache afterwards.
     func update(id: UUID, text: String? = nil, isDone: Bool? = nil) async throws -> [Reminder] {
         guard !isReordering else { throw StoreError.mutationConflict }
@@ -593,7 +600,7 @@ actor ReminderStore {
 
     /// Returns the acknowledged row even when completion removes it from the active cache.
     func updateAcknowledged(
-        id: UUID, text: String? = nil, isDone: Bool? = nil
+        id: UUID, text: String? = nil, isDone: Bool? = nil, snoozedUntil: Date? = nil
     ) async throws -> (reminder: Reminder, activeReminders: [Reminder]) {
         guard !isReordering else { throw StoreError.mutationConflict }
         let trimmed = text?.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -601,7 +608,7 @@ actor ReminderStore {
             guard !trimmed.isEmpty else { throw StoreError.emptyText }
             guard trimmed.unicodeScalars.count <= 500 else { throw StoreError.tooLong }
         }
-        guard trimmed != nil || isDone != nil else { throw StoreError.mutationConflict }
+        guard trimmed != nil || isDone != nil || snoozedUntil != nil else { throw StoreError.mutationConflict }
         // Reserve this reminder before authentication or transport can suspend the actor.
         guard pendingUpdates[id] == nil else { throw StoreError.mutationConflict }
         let mutationID = UUID()
@@ -619,16 +626,25 @@ actor ReminderStore {
         struct UpdateBody: Encodable {
             var text: String?
             var isDone: Bool?
+            var snoozedUntil: Date?
 
             enum CodingKeys: String, CodingKey {
                 case text
                 case isDone = "is_done"
+                case snoozedUntil = "snoozed_until"
             }
 
             func encode(to encoder: Encoder) throws {
                 var container = encoder.container(keyedBy: CodingKeys.self)
                 if let text { try container.encode(text, forKey: .text) }
                 if let isDone { try container.encode(isDone, forKey: .isDone) }
+                if isDone == true { try container.encodeNil(forKey: .snoozedUntil) }
+                else if let snoozedUntil {
+                    // The shared cache encoder stores numeric dates; PostgREST needs ISO-8601.
+                    let formatter = ISO8601DateFormatter()
+                    formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+                    try container.encode(formatter.string(from: snoozedUntil), forKey: .snoozedUntil)
+                }
             }
         }
 
@@ -639,6 +655,9 @@ actor ReminderStore {
         components.queryItems = [
             URLQueryItem(name: "id", value: "eq.\(id.uuidString)")
         ]
+        if snoozedUntil != nil {
+            components.queryItems?.append(URLQueryItem(name: "is_done", value: "eq.false"))
+        }
         var request = URLRequest(url: components.url!, timeoutInterval: 15)
         request.httpMethod = "PATCH"
         request.setValue("ios", forHTTPHeaderField: "x-notepad-client")
@@ -647,7 +666,7 @@ actor ReminderStore {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("return=representation", forHTTPHeaderField: "Prefer")
         request.httpBody = try ReminderJSON.encoder.encode(
-            UpdateBody(text: trimmed, isDone: isDone)
+            UpdateBody(text: trimmed, isDone: isDone, snoozedUntil: snoozedUntil)
         )
 
         if isDone == false {
@@ -675,6 +694,12 @@ actor ReminderStore {
         // A returned row is a snapshot; a newer same-ID request makes it obsolete.
         guard pendingUpdates[id] == mutationID else { throw StoreError.mutationConflict }
         let updated = try acknowledgedReminder(responseData, ownerID: ownerID, id: id, text: trimmed, isDone: isDone)
+        if let snoozedUntil {
+            guard !updated.isDone, let acknowledgedUntil = updated.snoozedUntil,
+                  abs(acknowledgedUntil.timeIntervalSince(snoozedUntil)) < 0.001 else {
+                throw StoreError.mutationConflict
+            }
+        }
         return (updated, try cacheAcknowledgedReminder(updated))
     }
 }

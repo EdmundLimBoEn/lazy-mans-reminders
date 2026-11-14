@@ -164,5 +164,6 @@ function toView(row: ReminderRow) {
     sort_order: row.sort_order,
     created_at: row.created_at,
     completed_at: row.completed_at,
+    snoozed_until: row.snoozed_until ?? null,
   }
 }
