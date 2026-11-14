@@ -9,16 +9,16 @@ Reviewed `README.md`, `HUMANS.md`, `MAC_HANDOFF.md`, the migrations through `202
 | Existing data/path | What it tells us; limitations |
 | --- | --- |
 | `reminders` | Owner UUID, text, order, completion state, creation/update/completion times, routine linkage/firing time. There is no separate thread/task table: a “thread” here means a reminder row. DELETE loses the row; no durable historical deletion count exists. |
-| Completed-reminder cleanup | `delete_old_completed_reminders()` removes rows completed over seven days ago, requested on board load and optionally by cron. Deletes are not necessarily deliberate user actions. |
+| Completed-reminder cleanup | `delete_old_completed_reminders()` removes rows completed over 3 days ago (from `completed_at`, per `20261113000100_done_retention_3_days.sql`), requested on board load and optionally by cron. Deletes are not necessarily deliberate user actions. |
 | `agent_tokens` | Owner, name, creation/last-used/revocation timestamps and token hash. MCP PAT authentication touches `last_used_at` best effort; this is neither a historical event stream nor OAuth coverage. Never copy hashes or token names into analytics. |
 | MCP OAuth | Grants and authorization state live in Cloudflare storage, not `agent_tokens`. Successful `completeAuthorization()` is a connection signal, not evidence of later tool use. |
 | `add_agent_reminder` / MCP board commands | Service-only add RPC serializes per owner and clamps capacity to the phone preference within 1–16. MCP also lists, completes, reopens and answers `whoami`; client-only analytics would miss all these. |
 | Quotas and budgets | Hard limit: 16 active reminders, 50 routines, 20 active personal agent tokens; shared database budget: 600 row mutations/minute/user. Completed rows can accumulate; high create/delete churn can occur under the active limit. `user_write_budgets` keeps the current window only. Worker rate limits are separate. |
 | Routines, devices and preferences | Server routines can create/reactivate reminders; device registration establishes push capability, not active iOS use. A reminder's text prefix or existence of a device token is not a trustworthy source classifier. |
 | Source | No explicit web/iOS marker in the reviewed clients. Web uses `web/src/supabase.ts`; reminder operations on iOS use direct `URLRequest`s in `ios/Shared/ReminderStore.swift`, not just the auth Supabase client. |
-| Privacy | Manifest lists seven linked, nontracking types for App Functionality, including User ID, Device ID and Other Diagnostic Data; no Product Interaction or Analytics purpose. Policy describes operational logs and seven-day completed cleanup, and says no third-party product analytics or optional analytics cookies. |
+| Privacy | Manifest lists seven linked, nontracking types for App Functionality, including User ID, Device ID and Other Diagnostic Data; no Product Interaction or Analytics purpose. Policy describes operational logs and 3-day completed cleanup, and says no third-party product analytics or optional analytics cookies. |
 
-The supplied task names `app.notepads.dev`; repository guidance still names `np.sillyapps.co` and its aliases. No hostname changes were made; Edmund should confirm the publication host when updating policy copy.
+Current clients and legal pages use `https://app.notepads.dev`; the legacy web hosts remain available. Repository Supabase config still sets `site_url` to `https://np.sillyapps.co` and allowlists the canonical host and legacy callbacks; this does not verify the live dashboard setting.
 
 ## Options and goal coverage
 
@@ -55,7 +55,7 @@ Migration: `supabase/migrations/20261113000200_usage_events.sql` (new, after the
 
 `x-notepad-client: web` is added to the shared web client; `ios` to iOS ReminderStore requests, including cleanup; `agent` to the MCP service client. The database accepts `agent` only with a verified PostgREST service-role claim, except the internal agent-add context. Web/iOS hints are caller supplied and spoofable: use them for approximate platform comparisons, never authorization or sanctions. No user-agent parsing, text-prefix parsing, persistent creation-source column or new JWT claim is invented. The source describes the request performing a change, not where the reminder was originally created. Native background/Shortcuts work uses `ios`, so this is not foreground screen usage.
 
-Old clients and cron/admin requests without markers are `unknown`; malformed/unsupported headers also fall back to unknown. Routine reactivation is not a new creation. Routine insertions contribute to counts, often unknown. All deletion reasons share `reminder_deleted`: seven-day cleanup initiated by web/iOS is attributed to that initiating platform. Account teardown may temporarily count explicit child deletes, then the auth-user FK erases that account's counters; cascade deletes cannot recreate them. These counters are not a manual-delete audit or a forensic archive. A later reason enum would need explicit, trusted context in each cleanup/scheduler path.
+Old clients and cron/admin requests without markers are `unknown`; malformed/unsupported headers also fall back to unknown. Routine reactivation is not a new creation. Routine insertions contribute to counts, often unknown. All deletion reasons share `reminder_deleted`: 3-day cleanup initiated by web/iOS is attributed to that initiating platform. Account teardown may temporarily count explicit child deletes, then the auth-user FK erases that account's counters; cascade deletes cannot recreate them. These counters are not a manual-delete audit or a forensic archive. A later reason enum would need explicit, trusted context in each cleanup/scheduler path.
 
 ### Reports, thresholds and retention
 

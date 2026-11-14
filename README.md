@@ -1,173 +1,123 @@
-# Lazy Man's Reminders
+# Notepad
 
-A Supabase-backed reminder board with a React/Vite web app and an iOS 17 app plus WidgetKit extension. The iOS app receives APNs notifications and refreshes the shared widget data. The App Store release is **free** (no in-app purchases).
+Notepad is a small reminder board for iPhone, the web, and the Lock Screen. It uses Supabase for accounts and shared data, with a React/Vite web app, an iOS 17+ app and WidgetKit extension, and an MCP server for agents. The app is free, with no in-app purchases or subscriptions.
 
-## Current deployment status
+The product name and iOS app display name are **Notepad**. The repository, Xcode project, and bundle identifiers still use `lazy-mans-reminders` / `LazyMansReminders`. App Store app id: [`6799138197`](https://apps.apple.com/app/id6799138197). Support: [edmund@sillyapps.co](mailto:edmund@sillyapps.co).
 
-Repository release audit as of 9 October 2026. The planned App Store release is **free** (no in-app purchases); submission and approval remain open. Deployment details below include historical operator reports, not a fresh production certification.
+## Addresses
 
-- Web app: canonical domain <https://np.sillyapps.co>; <https://lmr.sillyapps.co> stays live on the same Pages project (dual-serve, no 301). <https://lazy-mans-reminders.pages.dev> is the Pages fallback. The older domain <https://lmr.edmundlim.systems> stays attached and currently 302s to `lmr.sillyapps.co` (Cloudflare Redirect Rule on the `edmundlim.systems` zone) so shipped iOS builds and old links keep working.
-- Cloudflare Pages project: `lazy-mans-reminders`
-- Supabase project: `lazy-mans-reminders` (`biwmsxbqrevtjwgsvsmu`, Singapore)
-- Database migrations: **deployed** (including agent tokens)
-- Supabase Auth: site URL and redirects **deployed**; Apple web + native configured; Google provider enabled; Resend SMTP for magic-link email
-- `send-reminder-push` and `delete-account` Edge Functions: **deployed**
-- Agent MCP Worker: canonical <https://np-mcp.sillyapps.co/mcp>; <https://lmr-mcp.edmundlim.systems/mcp> stays live (dual-serve, no 301).
-- iOS app and widget: **implemented**; TestFlight build uploaded; physical-device smoke and App Store submission still open. Submission fields live in [docs/app-store.md](docs/app-store.md).
-- Lock Screen: Live Activity plus accessory widgets; push alerts are body-only (no title)
-- Custom domain DNS: `np.sillyapps.co` and `lmr.sillyapps.co` (web, proxied CNAME → `lazy-mans-reminders.pages.dev`) and `np-mcp.sillyapps.co` plus `lmr-mcp.edmundlim.systems` (MCP Worker, both custom domains). Jeremy attaches the `np` / `np-mcp` DNS and Worker route; do not deploy from this change.
+| Service | Canonical address | Project |
+| --- | --- | --- |
+| Landing page | <https://notepads.dev> | Cloudflare Pages `notepads-landing` |
+| Web board | <https://app.notepads.dev> | Cloudflare Pages `lazy-mans-reminders` |
+| Agent MCP | <https://np-mcp.sillyapps.co/mcp> | Cloudflare Worker `lazy-mans-reminders-mcp` |
+| Supabase | `https://biwmsxbqrevtjwgsvsmu.supabase.co` | `lazy-mans-reminders`, Singapore |
 
-### Deferred launch checklist
+The legacy web hosts <https://np.sillyapps.co> and <https://lmr.sillyapps.co> stay live alongside the canonical host (dual-serve, no 301). <https://lazy-mans-reminders.pages.dev> is the Pages fallback. The older <https://lmr.edmundlim.systems> stays attached and 302s to `lmr.sillyapps.co`, preserving path and query for old builds and links. The legacy MCP endpoint <https://lmr-mcp.edmundlim.systems/mcp> also stays live without a 301.
 
-See [HUMANS.md](HUMANS.md) for the live checklist. Remaining human work:
+[Privacy](https://app.notepads.dev/privacy), [terms](https://app.notepads.dev/terms), and [support](https://app.notepads.dev/support) use the canonical web host; the same paths exist on the legacy web hosts. These addresses describe the setup, not a fresh production or App Store status check.
 
-- [ ] Open `ios/LazyMansReminders.xcodeproj`, sign both targets, then test Apple / Google / magic-link login, push, widgets, and account deletion on a physical iPhone.
-- [ ] Finish TestFlight external testing as needed, then submit the **free** App Store release (Pricing and Availability: Free).
+## Repository
 
-## Prerequisites
+| Path | Contents |
+| --- | --- |
+| `ios/` | iOS app, widgets, shared code, tests, and XcodeGen `project.yml` |
+| `web/` | Vite/React web app and legal pages |
+| `mcp/` | Cloudflare Worker MCP server and OAuth |
+| `landing/` | Static notepads.dev site |
+| `supabase/` | Database migrations, Edge Functions, and SQL tests |
+| `plugins/lazy-mans-reminders/` | Agent and Cursor plugin manifests and instructions |
+| `docs/` | Product, data handling, and native/release reference docs |
+| `scripts/` | Validation, build, and operator utilities |
+| `.github/workflows/` | CI and TestFlight workflows |
 
-- Node.js 20+ and npm
-- A Supabase account and Supabase CLI
-- A Cloudflare account and Wrangler CLI (included in `web`)
-- macOS with release Xcode 26+ and iOS 26 SDK+ for App Store uploads, XcodeGen, and an Apple Developer Program membership (the iOS 17 deployment target can remain; see [Apple requirements](docs/apple-release-requirements.md))
+## Current behavior
 
-## Configuration and secrets
+`ios/project.yml` sets marketing version **1.0.1** and `CURRENT_PROJECT_VERSION` **11**. Those are source values, not a claim about the latest uploaded build.
 
-Do not commit real credentials. Copy the example files locally:
+- One shared board supports reminders, completion, reordering, iPhone push, widgets, and a Lock Screen Live Activity. Live Activity visibility and updates depend on iOS settings, connectivity, and system limits.
+- Settings offers **Default**, **Minimal**, and **Bold** app icons.
+- iPhone accessibility work includes VoiceOver and Voice Control labels, **Move up / Move down** reorder actions, Reduce Motion, stronger Increase Contrast / Reduce Transparency treatment, and primary-color error text. Publish accessibility support claims only after device QA.
+- Done reminders older than **3 days**, measured from `completed_at`, are removed by `delete_old_completed_reminders()`. Web and iOS request this cleanup on board load. It is best effort: inactivity, locks, and write budgets can delay removal. A daily cron call is optional. Push-job logs have a separate **7-day** retention policy. See [retention and data copy](docs/copy/retention-and-data-copy.md).
+- In-house daily usage counters are implemented; there is no PostHog integration. Collection defaults off through `usage_analytics_config.enabled=false`. Worker tool/OAuth counters additionally require `USAGE_ANALYTICS_ENABLED=true`, so those events require both flags. See [the analytics design and enablement prerequisites](docs/analytics/plan.md).
+
+### Routine reminders
+
+Create and edit routines under **Routine reminders** on the [web board](https://app.notepads.dev). Choose one weekday for a weekly reminder, or a start date and an interval of **1–365 days**, plus a time and IANA timezone. The timezone stays fixed when you travel; scheduling follows local time across daylight-saving changes.
+
+The database stores `routine_reminders`; its scheduler checks every minute, creates or reactivates a board row, and sends an iPhone push through the existing APNs path. Due routines move to the top, including when the board is full. Completing or deleting the generated reminder keeps the routine running; pause or delete the routine to stop future occurrences. Deleting a routine preserves its current board row. After an outage, one overdue occurrence fires and missed intervals are skipped.
+
+Routine data is included in web exports and account deletion. iOS receives and completes generated reminders; routine editing is on the web. Push delivery depends on network and notification settings. There are no web push notifications.
+
+## Local setup
+
+Use Node.js **22** (as in web/MCP CI) and npm. Database development needs the Supabase CLI and Docker; Edge Function checks use Deno 2. Native development needs macOS, Xcode, and XcodeGen. The native workflows and `ios/project.yml` currently select **Xcode 27.1**, with an iOS 17 deployment target.
+
+Copy the example configuration files and fill in local values:
 
 ```sh
 cp web/.env.example web/.env.local
 cp ios/Config.example.xcconfig ios/Config.xcconfig
 ```
 
-Client configuration (safe to ship, but keep environment-specific values out of source):
+Client configuration:
 
-- `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `web/.env.local`
-- `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `ios/Config.xcconfig`
-- `DEVELOPMENT_TEAM`, `PRODUCT_BUNDLE_IDENTIFIER`, `WIDGET_BUNDLE_IDENTIFIER`, and `APP_GROUP_ID` in `ios/Config.xcconfig`
+- Web: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`.
+- iOS: `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `DEVELOPMENT_TEAM`, `PRODUCT_BUNDLE_IDENTIFIER`, `WIDGET_BUNDLE_IDENTIFIER`, `APP_GROUP_ID`.
 
-Server-only secrets (never put these in Vite, the iOS config, source control, screenshots, or command history):
+The URL and publishable/anon key are client values; access control depends on Supabase RLS. Never put a service-role key or other server secret in Vite or the iOS config. Keep local config and credentials out of source control.
 
-- `APNS_KEY_ID`: Apple APNs key ID
-- `APNS_TEAM_ID`: Apple Developer Team ID
-- `APNS_PRIVATE_KEY`: contents of the downloaded `.p8` key, with newlines represented as `\n`
-- `APNS_TOPIC`: the iOS app bundle identifier
-- `WEBHOOK_SECRET`: a long random value shared only by the database webhook and Edge Function
-- `SUPABASE_SERVICE_ROLE_KEY`: provided automatically to the deployed Supabase Edge Function; never expose it to clients
-- `APPLE_TEAM_ID`: Apple Developer Team ID (same team as the app, `DUU8J39BA7` for this project)
-- `APPLE_KEY_ID`: Key ID of a **Sign in with Apple** key (not the APNs key unless that key also has Sign in with Apple enabled)
-- `APPLE_PRIVATE_KEY`: contents of that key's `.p8` file, with newlines represented as `\n`
-- `APPLE_CLIENT_ID`: the iOS app bundle identifier (`systems.edmundlim.LazyMansReminders`). This is the native App ID, not the web Services ID.
-
-Store the custom function values in an ignored file such as `supabase/.env.functions`, then upload that file:
+Run the web app:
 
 ```sh
-supabase secrets set --env-file supabase/.env.functions
+cd web
+npm ci
+npm run dev
 ```
 
-The four `APPLE_*` secrets are used only by `delete-account` to revoke Sign in with Apple tokens. After setting them, redeploy that function (see below). Baseline deletion continues when Apple revocation cannot complete; this is a release gap requiring successful revocation or the documented manual fallback, configuration checks and device QA.
+For a disposable local database, `supabase start` starts the stack and `supabase db reset` recreates it from migrations. Reset discards local data. Point client configuration at that local instance when testing it. Live database migrations belong to the separately authorized operator workflow below.
 
-## Supabase
+### Authentication configuration
 
-### Create and migrate the project
+[`supabase/config.toml`](supabase/config.toml) still sets `site_url = "https://np.sillyapps.co"`. Current clients and legal links use `https://app.notepads.dev`. Repository config does not establish the live dashboard Site URL.
 
-1. Create a project in the Supabase dashboard and record its project ref, URL, and publishable/anon key.
-2. Authenticate the CLI, link this checkout, and apply migrations:
+The repository redirect allowlist is:
+
+| Origin | Allowed entries |
+| --- | --- |
+| `https://app.notepads.dev` | Bare origin, `/**`, `/auth/callback`, `/auth/ios` |
+| `https://np.sillyapps.co` | Bare origin, `/auth/callback`, `/auth/ios` |
+| `https://lmr.sillyapps.co` | Bare origin, `/auth/callback`, `/auth/ios` |
+| `https://lmr.edmundlim.systems` | Bare origin, `/auth/callback`, `/auth/ios` |
+| `https://lazy-mans-reminders.pages.dev` | Bare origin, `/auth/callback`, `/auth/ios` |
+| `http://localhost:5173` | Bare origin, `/auth/callback` |
+| iOS custom scheme | `lazymansreminders://auth/callback` |
+
+The HTTPS `/auth/ios` path hands magic links to iOS; the custom scheme remains unchanged. Keep legacy entries for old builds. Email signup/confirmation is enabled in the repo config; Apple and Google are disabled local stubs, with hosted provider settings managed separately. Do not treat these stubs as production provider configuration or push them over hosted settings.
+
+### iOS build
 
 ```sh
-supabase login
-supabase link --project-ref YOUR_PROJECT_REF
-supabase db push
+brew install xcodegen
+xcodegen generate --spec ios/project.yml
+open ios/LazyMansReminders.xcodeproj
 ```
 
-The migrations create `reminders`, `device_tokens`, `lock_screen_prefs`, and `agent_tokens`, enable RLS, add per-user policies, and enable Realtime for reminders. Agent keys are minted with `mint_agent_token` and listed through the `agent_token_clients` view (no hash). Concurrent agent adds go through `add_agent_reminder`, which locks per user and clamps capacity at 16. The iPhone measures how many lines fit in the Lock Screen Live Activity and upserts `lock_screen_prefs.max_lines` so the web board uses the same capacity. Completed reminders get a `completed_at` timestamp (maintained by a trigger); web and iOS call `delete_old_completed_reminders()` on board load so done rows older than 3 days are removed without requiring dashboard cron.
+Make lasting project-setting changes in `ios/project.yml`. The signing identifiers are:
 
-The 3-day cutoff is measured from `completed_at`, not creation or last edit. Cleanup is best effort and can be delayed by board inactivity, row locks, or the shared write budget. Push delivery logs (`reminder_push_jobs`) retain their separate 7-day policy. See [the copy inventory](docs/copy/retention-and-data-copy.md) for the updated privacy wording and suggested text Edmund can tweak.
+- App: `systems.edmundlim.LazyMansReminders`
+- Widget: `systems.edmundlim.LazyMansReminders.Widget`
+- App Group: `group.systems.edmundlim.LazyMansReminders`
 
-Optional: if you enable the `pg_cron` extension in the Supabase dashboard, you can also schedule `select public.delete_old_completed_reminders();` daily so cleanup runs even when no client opens the board.
+For device builds, configure the Apple Developer team, matching app/extension identifiers and profiles, the shared App Group, Sign in with Apple, and Push Notifications. Confirm Background Modes for remote notifications and fetch. `APNS_TOPIC` must match the app bundle identifier. Debug uses sandbox APNs tokens; Release/TestFlight uses production tokens.
 
-For a fully local stack:
-
-```sh
-supabase start
-supabase db reset
-```
-
-### Configure authentication
-
-In Supabase **Authentication → URL Configuration**:
-
-- Set the Site URL to `https://np.sillyapps.co`.
-- Add `http://localhost:5173/auth/callback`.
-- Add `https://np.sillyapps.co/auth/callback` and `https://lmr.sillyapps.co/auth/callback`.
-- Add `https://lazy-mans-reminders.pages.dev/auth/callback` as a fallback.
-- Add `lazymansreminders://auth/callback` for iOS Google OAuth.
-- Add `https://np.sillyapps.co/auth/ios`, `https://lmr.sillyapps.co/auth/ios`, and `https://lazy-mans-reminders.pages.dev/auth/ios` for iOS magic-link handoff.
-- Also allow the bare origins used by OAuth returns: `http://localhost:5173`, `https://np.sillyapps.co`, `https://lmr.sillyapps.co`, and `https://lazy-mans-reminders.pages.dev`.
-- Keep the older-domain entries (`https://lmr.edmundlim.systems`, `/auth/callback`, `/auth/ios`) so shipped iOS builds that still send that host keep working. Keep `https://lmr.sillyapps.co` (and its `/auth/callback` and `/auth/ios` paths) as a live dual-serve host; do not 301 it.
-
-Keep `supabase/config.toml` aligned for local development. In **Authentication → Providers**:
-
-- Enable **Email** (magic link) with confirmations.
-- Enable **Apple** and **Google** using the steps in `HUMANS.md` (Services ID + secret for web Apple; Web OAuth client for Google; iOS App ID in Apple Client IDs).
-
-Test Apple, Google, and a magic link from both the web app and a physical iPhone; the production hostname must exactly match an allowed redirect.
-
-### Deploy push delivery
-
-Upload the server-only secrets first, then deploy the Edge Functions:
-
-```sh
-supabase functions deploy send-reminder-push --no-verify-jwt
-supabase functions deploy delete-account
-```
-
-`send-reminder-push` disables JWT verification because the database webhook authenticates with `x-webhook-secret`. The function checks that shared secret before using the service-role client.
-
-Delivery behaviour:
-
-- Each APNs request sets `apns-expiration` 24 hours out so alerts are stored if the phone is offline, and `apns-collapse-id` equal to the reminder id so webhook retries replace the same banner instead of stacking duplicates.
-- Transient APNs failures (network, 429, 5xx, expired provider JWT) are retried inside the function. If any device is still retryable afterwards the function returns **503** so the webhook / `pg_net` trigger can try the whole job again. Permanent failures (including `410 Unregistered` and `400 BadDeviceToken`) prune that token and still return 200.
-- After changing this function, redeploy with `supabase functions deploy send-reminder-push --no-verify-jwt`. The database trigger itself (`send_reminder_push` → `notify_reminder_push`, on INSERT, UPDATE, and DELETE) is configured in the project, not this repo.
-
-`delete-account` keeps JWT verification on. Signed-in clients call it to delete the caller's reminders, device tokens, agent tokens, and auth user (service role). For Sign in with Apple users, the iOS app first requests a fresh `authorizationCode` and the function exchanges it at `https://appleid.apple.com/auth/token`, then POSTs `https://appleid.apple.com/auth/revoke` with the refresh token (or the access token if Apple does not return a refresh token). If the Apple secrets are missing or Apple returns an error, deletion still succeeds and the function logs a structured warning. Non-Apple users never hit those endpoints. Successful deletion alone does not prove Apple token revocation; verify cancellation, failure and manual fallback behavior before release.
-
-After creating the Sign in with Apple key and setting `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY`, and `APPLE_CLIENT_ID`:
-
-```sh
-supabase secrets set --env-file supabase/.env.functions
-supabase functions deploy delete-account
-```
-
-## Routine reminders
-
-Create routines on the web board under **Routine reminders**. Choose a weekday and time for a weekly reminder, or a start date and an interval of 1–365 calendar days. For a Tuesday uniform, choose **Monday at 19:00**. The chosen IANA timezone stays fixed when you travel, and the local time stays the same across daylight-saving changes. A nonexistent spring-forward time runs after the clock jumps forward; an ambiguous fall-back time uses standard time.
-
-The server checks schedules every minute, even with both apps closed. Each occurrence sends an iPhone push through the existing device registration and APNs delivery path, and reactivates one shared board row. Due routines move to the top of the board, including when it is full. Completing or deleting the board row keeps the routine running; pause or delete the routine to stop future occurrences. Deleting the routine preserves its current board row. After an outage, one overdue occurrence fires and missed intervals are skipped. Push delivery is subject to network and iOS notification settings; there are no web push notifications.
-
-Deploy migration `202610120001_routine_reminders.sql` and redeploy `send-reminder-push` and `delete-account` before deploying the web app. The migration enables `pg_cron` and installs the `fire-routine-reminders` job. Users cannot call its scheduler function or overwrite computed run times. Routine data is included in web account exports and account deletion. iOS receives and completes the generated board reminders; routine editing is currently on the web.
-
-Run `supabase/tests/routine_reminders.sql` against a disposable migrated database to verify scheduling, reactivation, pause/resume, and ownership checks. Its fixtures roll back.
+After a signed-in launch, Siri/Shortcuts can list reminders, add a reminder, or mark one done. Phrases use `\(.applicationName)`, so examples are **“List reminders in Notepad”**, **“Add a reminder in Notepad”**, and **“Mark this as done in Notepad”**. Signed-out requests say to sign in to Notepad on this iPhone first. SDK-gated reminders-domain schemas are not proof of Siri behavior; test the selected artifact. See [the native handoff](MAC_HANDOFF.md) for build and device QA.
 
 ## Agent MCP
 
-Remote agents talk to the board at `https://np-mcp.sillyapps.co/mcp`. `https://lmr-mcp.edmundlim.systems/mcp` stays live.
+Use `https://np-mcp.sillyapps.co/mcp`; `https://lmr-mcp.edmundlim.systems/mcp` remains available. OAuth is the usual path: add the endpoint to the host, sign in on the [board](https://app.notepads.dev), then select **Allow**. For Grok Bot, use **Settings → Plugins → custom connector**.
 
-### Grok Bot
-
-Add a custom connector and use OAuth:
-
-1. Settings → Plugins → custom connector
-2. URL: `https://np-mcp.sillyapps.co/mcp`
-3. Sign in with Google or Apple in the browser that opens, then tap **Allow**.
-
-Personal agent keys remain available under **Agent access → Advanced** for hosts that cannot use OAuth. Plugin installs can set `LMR_AGENT_TOKEN`.
-
-### Cursor, Claude, Codex
-
-OAuth is the usual path for clients that complete `/connect`: the client opens a browser, you sign in on the familiar board, tap Allow. No bearer tokens to paste. Personal keys remain under **Advanced** for clients that cannot do OAuth.
-
-Cursor / Claude Code / Codex can load `plugins/lazy-mans-reminders/` or the same URL in `mcp.json`:
+Cursor, Claude Code, and Codex can load `plugins/lazy-mans-reminders/`; see its [README](plugins/lazy-mans-reminders/README.md) for the two manifest formats. Clients supporting remote MCP can also use:
 
 ```json
 {
@@ -179,67 +129,92 @@ Cursor / Claude Code / Codex can load `plugins/lazy-mans-reminders/` or the same
 }
 ```
 
-The Worker uses the service-role key as a Wrangler secret; never put that key on Pages. The web app only calls `/bind` with the user's Supabase session.
+For hosts that cannot use OAuth, personal agent keys remain under **Agent access → Advanced**. Configure `LMR_AGENT_TOKEN` through the host's private settings. Never commit a token or paste it into chat. The Worker accepts OAuth sessions or personal keys; its Supabase service-role key stays server-side.
 
-In Supabase **Database → Webhooks**, create a webhook with:
+`mcp/wrangler.jsonc` lists `https://app.notepads.dev` first in `WEB_ORIGINS`, which determines the board origin used by `/authorize` for `/connect`.
 
-- Name: `send-reminder-push`
-- Table: `public.reminders`
-- Events: `INSERT`, `UPDATE`, `DELETE` (completing or deleting the last reminder is what ends the Live Activity)
-- Method: `POST`
-- URL: `https://YOUR_PROJECT_REF.supabase.co/functions/v1/send-reminder-push`
-- Header: `x-webhook-secret: <the exact WEBHOOK_SECRET value>`
+## Checks
 
-Insert a reminder after registering a physical device and inspect **Edge Functions → Logs**. Simulator push tokens and sandbox tokens do not validate production APNs delivery.
-
-## Web app and Cloudflare Pages
-
-Run locally:
+From the repository root, run the checks relevant to your change:
 
 ```sh
-cd web
-npm ci
-npm run dev
-```
-
-Validate a production build:
-
-```sh
-cd web
-npm ci
-npm run lint
-npm run build
-```
-
-### Tests
-
-```sh
-# Web (Vitest — routing + reminder sort/reorder helpers)
-cd web && npm test
-
-# MCP Worker (Vitest — token parse/hash + add prefix/capacity mapping)
-cd mcp && npm test
-
-# Edge Function helpers (Deno — webhook payload classification / APNs host / account deletion)
+(cd web && npm ci && npm test && npm run lint && npm run build)
+(cd mcp && npm ci && npm test && npm run typecheck)
 deno test supabase/functions/_shared supabase/functions/delete-account
-
-# iOS (XCTest — Reminder JSON coding; regenerate project first if needed)
-cd ios && xcodegen generate --spec project.yml
-xcodebuild -project LazyMansReminders.xcodeproj -scheme LazyMansReminders \
-  -destination 'platform=iOS Simulator,name=iPhone 17' \
-  -only-testing:LazyMansRemindersTests test
+deno check supabase/functions/send-reminder-push/index.ts supabase/functions/delete-account/index.ts
+python3 -B -m unittest discover -s scripts/tests -v
+python3 scripts/check_migration_versions.py
 ```
 
-For a Git-connected Cloudflare Pages project, configure:
+The script tests include PostgreSQL cases; see CI for their disposable database setup. Routine SQL tests live in `supabase/tests/routine_reminders.sql`; the web/MCP workflow records the migration/test sequence and rollback fixtures. Use a disposable database, not production.
 
-- Root directory: `web`
-- Build command: `npm run build`
-- Build output directory: `dist`
-- Production and Preview variables: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
+On a Mac, after generating the Xcode project:
 
-These two `VITE_` values are embedded in the browser bundle and are not server secrets; security depends on Supabase RLS. Never add the service-role key to Cloudflare Pages.
+```sh
+./scripts/check-ios-toolchain.sh
+./scripts/ios-release-build.sh
+./scripts/ios-simulator-unit-tests.sh
+```
 
-Deploy manually after `wrangler login`:
+### CI triggers
+
+All four workflows support `workflow_dispatch`.
+
+| Workflow | Pull requests | Pushes | Checks |
+| --- | --- | --- | --- |
+| [`ios-tests.yml`](.github/workflows/ios-tests.yml) | All paths | `main`, `dev`: `ios/**`, `scripts/**`, or its workflow file | Third-party sign-in flags off; Release app/widget build and simulator unit tests |
+| [`web-mcp-checks.yml`](.github/workflows/web-mcp-checks.yml) | All paths | `main`, `dev`: `web/**`, `landing/**`, `mcp/**`, `supabase/**`, `scripts/**`, or its workflow file | Web tests/lint/build, MCP tests/typecheck, release-script tests, routine database/push tests |
+| [`ios-persistence-checks.yml`](.github/workflows/ios-persistence-checks.yml) | `ios/**`, `supabase/**`, `scripts/**`, or its workflow file | None | Reorder/reopen database tests, simulator tests, server lifecycle tests |
+| [`ios-testflight.yml`](.github/workflows/ios-testflight.yml) | None | `main` only: `ios/**`, `scripts/**`, or its workflow file | Signed TestFlight build/upload |
+
+## Branching and releases
+
+`dev` is the default working branch. Feature and fix PRs target `dev`; a release is a PR from `dev` into `main`. See [AGENTS.md](AGENTS.md). Merging into `dev` does not upload a TestFlight build or authorize a deployment/submission.
+
+TestFlight uses the `xcode-27` runner and Xcode 27.1. Its workflow can run on the filtered `main` pushes above or manual dispatch. `CURRENT_PROJECT_VERSION` is the source build-number floor; export enables automatic build-number management, so confirm the actual uploaded artifact rather than inferring it from the source pin.
+
+Native verification is covered in [MAC_HANDOFF.md](MAC_HANDOFF.md). [App Store notes](docs/app-store.md) hold metadata guidance; [HUMANS.md](HUMANS.md) and dated release audits preserve historical evidence. Linux cannot run Xcode, and hosted CI does not establish physical-device behavior. App Store submission requires Edmund's authorization and verified release evidence.
+
+## Operator reference
+
+Production web, landing, MCP Worker, Edge Function deploys and live database migrations are performed by **jeremy after Edmund explicitly OKs them**. The commands below are references for that authorized work, not contributor setup steps. No production state is verified by this README.
+
+### Server secrets
+
+Keep server-only values in private operator storage or ignored files such as `supabase/.env.functions`, never client bundles, source, screenshots, or command history.
+
+| Component | Configuration |
+| --- | --- |
+| Push function | `APNS_KEY_ID`, `APNS_TEAM_ID`, `APNS_PRIVATE_KEY`, `APNS_TOPIC`, `WEBHOOK_SECRET` |
+| Apple revocation in `delete-account` | `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY`, `APPLE_CLIENT_ID` |
+| Supabase Edge Functions | Supabase provides `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` |
+| MCP Worker | Server-side `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`; bindings/routes in `mcp/wrangler.jsonc` |
+| TestFlight workflow | `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_PRIVATE_KEY_B64`, `APPSTORE_CERTIFICATES_FILE_BASE64`, `APPSTORE_CERTIFICATES_PASSWORD` |
+
+The APNs and Sign in with Apple keys serve different purposes. Private-key values accept escaped `\n` newlines. Native Apple revocation uses `APPLE_CLIENT_ID=systems.edmundlim.LazyMansReminders`, not the web Services ID. Deletion success alone does not prove Apple token revocation; verify cancellation, error, and manual-fallback paths on the release artifact.
+
+### Backend reference
+
+The existing project's ref is `biwmsxbqrevtjwgsvsmu`. For an approved migration/function rollout, the CLI commands are:
+
+```sh
+supabase login
+supabase link --project-ref biwmsxbqrevtjwgsvsmu
+supabase db push
+supabase secrets set --env-file supabase/.env.functions
+supabase functions deploy send-reminder-push --no-verify-jwt
+supabase functions deploy delete-account
+```
+
+`send-reminder-push` authenticates webhook requests using `x-webhook-secret`; `delete-account` retains JWT verification. The webhook targets `https://biwmsxbqrevtjwgsvsmu.supabase.co/functions/v1/send-reminder-push` for INSERT, UPDATE, and DELETE on `public.reminders`. Its header must match `WEBHOOK_SECRET`. Check deployed trigger/secrets configuration separately; do not infer it from old deployment notes.
+
+Push delivery uses retries and replay jobs; permanent invalid-device failures remove tokens. A production push check needs a registered physical iPhone with the appropriate APNs environment. Simulator success or an accepted APNs request alone is not device-delivery evidence.
+
+### Cloudflare reference
+
+Web Pages settings are root `web`, build command `npm run build`, output `dist`, and client variables `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`. The project name remains `lazy-mans-reminders` despite the canonical domain change. Never put the service-role key on Pages.
+
+Existing web deployment command, for the approved operator:
 
 ```sh
 cd web
@@ -248,83 +223,8 @@ npm run build
 npx wrangler pages deploy dist --project-name lazy-mans-reminders --branch main
 ```
 
-Custom domain: `np.sillyapps.co` is the canonical domain on the Pages project. `lmr.sillyapps.co` stays attached and live (dual-serve, no 301). Both use a proxied CNAME → `lazy-mans-reminders.pages.dev` on the `sillyapps.co` zone. The older `lmr.edmundlim.systems` custom domain stays on the project; a Cloudflare Single Redirect rule on the `edmundlim.systems` zone currently 302s it to `https://lmr.sillyapps.co`, keeping the path and query. Keep Supabase Auth redirects in sync (see above). The MCP Worker's `WEB_ORIGINS` (in `mcp/wrangler.jsonc`) lists the canonical origin first, because `/authorize` sends the browser to that origin's `/connect`. MCP custom domains are `np-mcp.sillyapps.co` and `lmr-mcp.edmundlim.systems` (both attached, no 301).
-
-## iOS
-
-### Apple identifiers, App Group, and APNs
-
-In Apple Developer **Certificates, Identifiers & Profiles**:
-
-1. Register an explicit App ID for the app and another for the widget extension.
-2. Create an App Group and enable it for both identifiers.
-3. Enable **Push Notifications** for the app identifier.
-4. Create an APNs authentication key, download its `.p8` file once, and record its Key ID and Team ID.
-5. Create or refresh development and App Store provisioning profiles after enabling capabilities.
-
-The `PRODUCT_BUNDLE_IDENTIFIER`, widget identifier, and `APP_GROUP_ID` in `ios/Config.xcconfig` must exactly match the portal. `APNS_TOPIC` must equal `PRODUCT_BUNDLE_IDENTIFIER`. Debug builds register sandbox tokens; Release/TestFlight builds register production tokens.
-
-### Generate and run the Xcode project
-
-Copy config, install XcodeGen if needed, and generate the project:
-
-```sh
-cp ios/Config.example.xcconfig ios/Config.xcconfig
-# set DEVELOPMENT_TEAM (DUU8J39BA7 for Edmund Lim) if needed
-brew install xcodegen
-xcodegen generate --spec ios/project.yml
-open ios/LazyMansReminders.xcodeproj
-```
-
-Bundle IDs (must match Apple Developer portal):
-
-- App: `systems.edmundlim.LazyMansReminders`
-- Widget: `systems.edmundlim.LazyMansReminders.Widget`
-- App Group: `group.systems.edmundlim.LazyMansReminders`
-
-In Xcode:
-
-1. Select the development team for both targets and confirm automatic signing resolves profiles.
-2. Confirm the app has **Push Notifications** and **Background Modes → Remote notifications**.
-3. Confirm both targets show the same App Group.
-4. Run on a physical iPhone, sign in through the `lazymansreminders://auth/callback` link, allow notifications, and add the widget.
-
-Siri / Shortcuts: after a signed-in launch, the app exposes App Intents to list the board, add a line, or mark one done (“complete milk”, “mark this as done”). Unsigned-in requests tell you to open the app first. Shortcuts phrases use the app name **Lazy Man's Reminders**. Builds with the iOS 27 SDK also compile the reminders-domain schema for Apple Intelligence; hosted TestFlight uses stable Xcode and the plain App Intents path.
-
-The generated project can be recreated; make lasting project-setting changes in `ios/project.yml`.
-
-## Branching
-
-`dev` is the current working branch. Open feature and fix pull requests against `dev`. A release is a pull request from `dev` into `main`. See [AGENTS.md](AGENTS.md).
-
-## TestFlight
-
-The default upload path is GitHub Actions: [`.github/workflows/ios-testflight.yml`](.github/workflows/ios-testflight.yml) on hosted `macos-latest` with latest-stable Xcode. It runs on `workflow_dispatch` and on pushes to `main` that touch `ios/` or the workflow file. It does not run on `dev`; a TestFlight upload starts when a release is merged into `main`. `CURRENT_PROJECT_VERSION` in `ios/project.yml` is the build number (`CFBundleVersion`). Retired builds 4/5 used Xcode 27 beta; use a supported release toolchain and verify the archive SDK. Stable Xcode 27 is promoted in current Apple guidance.
-
-Jeremy sets the secrets listed at the top of the workflow and in [HUMANS.md](HUMANS.md). The job fails immediately if any are missing.
-
-Manual archive (Organizer) is still possible on stable Xcode:
-
-1. Create the app record in App Store Connect using the exact app bundle ID.
-2. In Xcode, select **Any iOS Device (arm64)**, then **Product → Archive**.
-3. In Organizer, choose **Distribute App → App Store Connect → Upload**.
-4. Wait for processing, answer export-compliance questions, add internal testers, and verify sign-in, sync, widget refresh, and production push delivery.
-5. For external testing, create a group, add testing notes, and submit the build for Beta App Review.
-
-Increment `CURRENT_PROJECT_VERSION` in `ios/project.yml` before each upload.
-
-## Free App Store release
-
-The planned iOS release is a free download with no in-app purchases or subscriptions. It has not been certified release-ready by this audit.
-
-1. In App Store Connect, under **Pricing and Availability**, set the price to **Free** for the storefronts you ship.
-2. Complete app metadata, privacy details, age rating, screenshots, support URL (`https://np.sillyapps.co/support`), and privacy URL (`https://np.sillyapps.co/privacy`). Use [docs/app-store.md](docs/app-store.md) for nutrition labels and review notes.
-3. Attach a tested build, choose manual or automatic release, and submit for review.
-
-Before submission, complete [the current Apple requirements checklist](docs/apple-release-requirements.md) and [all human gates](HUMANS.md#app-store-submission), including actual reviewer access, native QA, deletion/Apple revocation, privacy disclosures, screenshot coverage, age/encryption and DSA declarations. [MAC_HANDOFF.md](MAC_HANDOFF.md) describes the native verification route. Linux cannot run Xcode locally; repository hosted macOS CI does not establish physical-device behavior. Only submit after Edmund reviews the evidence and authorizes it.
+The MCP package's `npm run deploy` runs `wrangler deploy` using `mcp/wrangler.jsonc`. Keep both MCP custom domains and legacy web aliases. The static site's separate command and project are documented in [landing/README.md](landing/README.md).
 
 ## License
 
-This project is licensed under [CC BY-NC-4.0](https://creativecommons.org/licenses/by-nc/4.0/). See [LICENSE](./LICENSE).
-
-Written by gpt-6.1-sol in T3 Code on behalf of Edmund
+Licensed under [CC BY-NC-4.0](https://creativecommons.org/licenses/by-nc/4.0/). See [LICENSE](LICENSE).
