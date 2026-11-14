@@ -20,6 +20,9 @@ struct Reminder { let id = UUID(); let text = "Test" }
 struct User { let id = UUID() }
 struct Session { let user = User() }
 struct Auth { var session: Session? = Session() }
+enum BoardDiscoveryNudge {
+    static func recordSuccessfulAddition() {}
+}
 enum ReminderBoardLimits {
     static let postItHint = "Capacity"
     static func isAtCapacity(_ count: Int) -> Bool { count >= 5 }

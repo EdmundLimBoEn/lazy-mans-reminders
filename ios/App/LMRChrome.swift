@@ -2,6 +2,9 @@ import SwiftUI
 
 enum LMRWeb {
     static let origin = URL(string: "https://app.notepads.dev")!
+    static let board = origin
+    /// Instructions on the board, not an OAuth authorization entry point.
+    static let agentAccess = URL(string: "#agent-access-heading", relativeTo: origin)!.absoluteURL
     static let privacy = URL(string: "https://app.notepads.dev/privacy")!
     static let terms = URL(string: "https://app.notepads.dev/terms")!
     static let support = URL(string: "https://app.notepads.dev/support")!

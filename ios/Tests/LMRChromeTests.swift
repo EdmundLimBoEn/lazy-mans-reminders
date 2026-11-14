@@ -22,10 +22,22 @@ final class LMRChromeTests: XCTestCase {
         XCTAssertEqual(LMRWeb.iosAuthRedirect.absoluteString, "https://app.notepads.dev/auth/ios")
     }
 
+    func testDiscoveryURLsOpenTheBoardWithoutStartingAuthorization() {
+        XCTAssertEqual(LMRWeb.board, LMRWeb.origin)
+        XCTAssertEqual(LMRWeb.agentAccess.scheme, LMRWeb.origin.scheme)
+        XCTAssertEqual(LMRWeb.agentAccess.host, LMRWeb.origin.host)
+        XCTAssertTrue(["", "/"].contains(LMRWeb.agentAccess.path))
+        XCTAssertEqual(LMRWeb.agentAccess.fragment, "agent-access-heading")
+        XCTAssertNil(LMRWeb.agentAccess.query)
+        XCTAssertNil(LMRWeb.board.fragment)
+        XCTAssertNil(LMRWeb.board.query)
+    }
+
     func testInAppLinksUseCanonicalHost() {
         let urls = [
             LMRWeb.origin, LMRWeb.privacy, LMRWeb.terms,
             LMRWeb.support, LMRWeb.dataExport, LMRWeb.iosAuthRedirect,
+            LMRWeb.board, LMRWeb.agentAccess,
         ]
         for url in urls {
             XCTAssertEqual(url.scheme, "https", url.absoluteString)
