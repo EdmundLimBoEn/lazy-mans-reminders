@@ -23,6 +23,16 @@ struct ReminderListView: View {
     @State private var hasDeferredBoardUpdate = false
     @State private var showAccount = false
     @AppStorage(BoardSetupTip.storageKey) private var setupTipDismissed = false
+    @AppStorage(BoardDiscoveryNudge.web.shownKey) private var webNudgeShown = false
+    @AppStorage(BoardDiscoveryNudge.web.dismissedKey) private var webNudgeDismissed = false
+    @AppStorage(BoardDiscoveryNudge.agent.shownKey) private var agentNudgeShown = false
+    @AppStorage(BoardDiscoveryNudge.agent.dismissedKey) private var agentNudgeDismissed = false
+    @AppStorage(BoardDiscoveryNudge.successfulAdditionCountKey) private var successfulAdditionCount = 0
+    @State private var nudgeVisit: BoardNudgeVisit?
+    @State private var needsNudgeVisit = true
+    @State private var hasSuccessfulBoardLoad = false
+    @State private var activeRefreshCount = 0
+    @State private var keyboardVisible = false
     @FocusState private var composerFocused: Bool
     @ScaledMetric(relativeTo: .body) private var addVisualSize: CGFloat = 28
 
@@ -68,8 +78,27 @@ struct ReminderListView: View {
             }
             .refreshable { await refresh() }
             .task(id: scenePhase == .active && auth.isSharedSessionReady) {
-                guard scenePhase == .active else { return }
+                guard scenePhase == .active, auth.isSharedSessionReady else { return }
+                if needsNudgeVisit {
+                    nudgeVisit = BoardNudgeVisit(
+                        setupTipDismissed: setupTipDismissed,
+                        successfulAdditionCount: successfulAdditionCount,
+                        webShown: webNudgeShown, webDismissed: webNudgeDismissed,
+                        agentShown: agentNudgeShown, agentDismissed: agentNudgeDismissed
+                    )
+                    needsNudgeVisit = false
+                    hasSuccessfulBoardLoad = false
+                }
                 await refresh()
+            }
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .background { needsNudgeVisit = true }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+                keyboardVisible = true
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
+                keyboardVisible = false
             }
             .sensoryFeedback(.success, trigger: hapticTick)
             .sensoryFeedback(.error, trigger: errorTick)
@@ -123,9 +152,49 @@ struct ReminderListView: View {
                     .padding(.horizontal, 20)
                     .transition(.opacity)
                 }
+                discoveryNudge
                 boardSiriTip
             }
             .frame(maxWidth: .infinity, minHeight: 320)
+        }
+    }
+
+    private var visibleDiscoveryNudge: BoardDiscoveryNudge? {
+        guard let nudgeVisit, let candidate = nudgeVisit.candidate else { return nil }
+        let visibility = BoardNudgeVisit.Visibility(
+            hasLoaded: hasSuccessfulBoardLoad,
+            isLoading: isLoading || activeRefreshCount > 0,
+            hasError: error != nil,
+            isBoardEmpty: reminders.isEmpty,
+            isEditing: composerFocused || !draft.text.isEmpty || draft.isSubmitting
+                || isDragging || isReordering || !completingIDs.isEmpty,
+            isKeyboardVisible: keyboardVisible,
+            isPresentingConsent: auth.isAuthenticating || auth.isRestoringSession || !auth.isSharedSessionReady,
+            isAccountPresented: showAccount,
+            isActive: scenePhase == .active && !needsNudgeVisit,
+            isShowingSetupTip: reminders.isEmpty && !setupTipDismissed
+        )
+        let dismissed = candidate == .web ? webNudgeDismissed : agentNudgeDismissed
+        return nudgeVisit.shouldShow(visibility, isDismissed: dismissed) ? candidate : nil
+    }
+
+    @ViewBuilder
+    private var discoveryNudge: some View {
+        if let nudge = visibleDiscoveryNudge {
+            BoardDiscoveryNudgeCard(nudge: nudge) {
+                if nudge == .web {
+                    webNudgeDismissed = true
+                } else {
+                    agentNudgeDismissed = true
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 8)
+            .onAppear {
+                // Keep this visit's card available until dismissed; never show it
+                // on another visit, even if the user simply leaves it alone.
+                if nudge == .web { webNudgeShown = true } else { agentNudgeShown = true }
+            }
         }
     }
 
@@ -172,6 +241,7 @@ struct ReminderListView: View {
             reminders: reminders,
             completingIDs: completingIDs,
             isEnabled: !reorderDisabled,
+            footerID: visibleDiscoveryNudge?.rawValue,
             onMove: moveReminders,
             onDragChanged: { dragging in
                 isDragging = dragging
@@ -190,6 +260,8 @@ struct ReminderListView: View {
                 Task { await markDone(reminder) }
             }
             .reminderOnscreenIdentity(reminder.id)
+        } footer: {
+            discoveryNudge
         }
         .modifier(BoardScrollEdge())
     }
@@ -387,6 +459,10 @@ struct ReminderListView: View {
     private func refresh() async {
         guard auth.isSharedSessionReady else { return }
         guard !isReordering && !isDragging else { return }
+        // Unlike the initial-load spinner, this covers every refresh and clears
+        // on cancellation/early returns, including overlapping refreshes.
+        activeRefreshCount += 1
+        defer { activeRefreshCount -= 1 }
         let revision = boardRevision
         if !hasLoaded {
             isLoading = true
@@ -398,6 +474,7 @@ struct ReminderListView: View {
             guard revision == boardRevision, !isReordering, !isDragging else { return }
             reminders = refreshed
             error = nil
+            hasSuccessfulBoardLoad = true
         } catch {
             guard !Task.isCancelled else { return }
             guard revision == boardRevision, !isReordering, !isDragging else { return }
@@ -417,6 +494,7 @@ struct ReminderListView: View {
         guard let value = draft.beginSubmission() else { return }
         do {
             let updated = try await ReminderStore.shared.create(text: value, userID: userID)
+            BoardDiscoveryNudge.recordSuccessfulAddition()
             error = nil
             animateBoard { reminders = updated }
             await ReminderBoardSync.apply(reminders, notify: false)

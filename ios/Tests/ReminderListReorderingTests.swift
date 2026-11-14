@@ -5,19 +5,20 @@ import XCTest
 
 @MainActor
 final class ReminderListReorderingTests: XCTestCase {
-    private typealias Board = ReorderableReminderList<Text>
+    private typealias Board = ReorderableReminderList<Text, Text>
 
-    private func board(enabled: Bool = true, onMove: @escaping (IndexSet, Int) -> Void) -> Board {
+    private func board(enabled: Bool = true, footerID: String? = nil, onMove: @escaping (IndexSet, Int) -> Void) -> Board {
         let userID = UUID()
         return Board(
             reminders: (0..<4).map {
                 Reminder(id: UUID(), userID: userID, text: "Item \($0)", sortOrder: $0,
                          isDone: false, createdAt: .now)
             },
-            completingIDs: [], isEnabled: enabled,
+            completingIDs: [], isEnabled: enabled, footerID: footerID,
             onMove: onMove, onDragChanged: { _ in },
             onComplete: { _ in XCTFail("Reordering must not complete a reminder") },
-            onRefresh: {}, row: { Text($0.text) }
+            onRefresh: {}, row: { Text($0.text) },
+            footer: { Text(footerID == nil ? "" : "Agent access") }
         )
     }
 
@@ -98,14 +99,34 @@ final class ReminderListReorderingTests: XCTestCase {
         XCTAssertFalse(coordinator.gestureRecognizerShouldBegin(pan))
     }
 
+    func testDiscoveryFooterIsSeparateFromReminderItemsAndCannotBeReordered() throws {
+        for footerID in [nil, "agent"] as [String?] {
+            let parent = board(footerID: footerID) { _, _ in XCTFail("Footer must not reorder") }
+            let coordinator = parent.makeCoordinator()
+            let list = collection(coordinator)
+            let footer = try XCTUnwrap(list.supplementaryView(
+                forElementKind: UICollectionView.elementKindSectionFooter,
+                at: IndexPath(item: 0, section: 0)
+            ))
+            XCTAssertEqual(footer.isHidden, footerID == nil)
+            XCTAssertEqual(coordinator.collectionView(list, numberOfItemsInSection: 0), 4)
+            XCTAssertFalse(coordinator.collectionView(list, canMoveItemAt: IndexPath(item: 4, section: 0)))
+        }
+    }
+
     private func collection(_ coordinator: Board.Coordinator) -> UICollectionView {
+        var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+        configuration.footerMode = .supplementary
         let list = UICollectionView(
             frame: CGRect(x: 0, y: 0, width: 390, height: 600),
-            collectionViewLayout: UICollectionViewCompositionalLayout.list(
-                using: UICollectionLayoutListConfiguration(appearance: .insetGrouped)
-            )
+            collectionViewLayout: UICollectionViewCompositionalLayout.list(using: configuration)
         )
         list.register(UICollectionViewListCell.self, forCellWithReuseIdentifier: "reminder")
+        list.register(
+            UICollectionViewListCell.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+            withReuseIdentifier: "boardFooter"
+        )
         list.dataSource = coordinator
         coordinator.list = list
         list.reloadData()
