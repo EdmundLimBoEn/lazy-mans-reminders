@@ -77,6 +77,12 @@ struct AccountView: View {
                 }
 
                 Section {
+                    Link(destination: LMRWeb.board) {
+                        AccountRow("Your board, everywhere", systemImage: "globe", external: true)
+                    }
+                    Link(destination: LMRWeb.agentAccess) {
+                        AccountRow("Agent access", systemImage: "link", external: true)
+                    }
                     Link(destination: LMRWeb.privacy) {
                         AccountRow("Privacy", systemImage: "hand.raised", external: true)
                     }
