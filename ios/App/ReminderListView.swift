@@ -181,6 +181,7 @@ struct ReminderListView: View {
                 }
             },
             onComplete: { reminder in Task { await markDone(reminder) } },
+            onSnooze: { reminder, option in Task { await snooze(reminder, option: option) } },
             onRefresh: { await refresh() }
         ) { reminder in
             ReminderRow(
@@ -429,6 +430,22 @@ struct ReminderListView: View {
             draft.finishSubmission(succeeded: true)
         } catch {
             draft.finishSubmission(succeeded: false)
+            presentError(error.localizedDescription)
+        }
+    }
+
+    private func snooze(_ reminder: Reminder, option: ReminderSnooze) async {
+        guard !isReordering, !isDragging, !completingIDs.contains(reminder.id) else { return }
+        completingIDs.insert(reminder.id)
+        defer { completingIDs.remove(reminder.id) }
+        do {
+            let updated = try await ReminderStore.shared.snooze(id: reminder.id, until: option.until())
+            error = nil
+            animateBoard { reminders = updated }
+            await ReminderBoardSync.apply(reminders, notify: false)
+            hapticTick += 1
+            UIAccessibility.post(notification: .announcement, argument: "Snoozed \(reminder.text)")
+        } catch {
             presentError(error.localizedDescription)
         }
     }

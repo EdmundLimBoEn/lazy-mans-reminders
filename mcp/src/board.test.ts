@@ -30,6 +30,7 @@ describe('board snapshot preferences', () => {
         return {
           select() { return this },
           eq() { return this },
+          or() { return this },
           gt() { if (Array.isArray(result.data)) result.data = []; return this },
           order() { return this },
           range() { return this },
@@ -166,7 +167,7 @@ it('reopens through the owner-locked RPC and returns its acknowledged row', asyn
   const { sessionFromProps } = await import('./session')
   const session = sessionFromProps({ userId: '00000000-0000-0000-0000-000000000001', agentName: 'Test' })!
   const row = { id: '00000000-0000-0000-0000-000000000011', text: 'Test', is_done: false,
-    sort_order: 0, created_at: '2026-01-01', completed_at: null }
+    sort_order: 0, created_at: '2026-01-01', snoozed_until: null, completed_at: null }
   const query = { select: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: row, error: null }) }
   const db = { rpc: vi.fn().mockReturnValue(query), from: vi.fn() }
   const result = await runBoardCommand(db as unknown as import('@supabase/supabase-js').SupabaseClient,

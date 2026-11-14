@@ -1,3 +1,4 @@
+import { isActiveReminder, isCurrentlySnoozed } from './reminders'
 import { describe, expect, it } from 'vitest'
 import {
   nextSortOrder,
@@ -94,4 +95,18 @@ describe('isStaleCompletedReminder', () => {
     expect(isStaleCompletedReminder('2026-08-05T11:59:59Z', now)).toBe(true)
     expect(isStaleCompletedReminder('2026-08-04T12:00:00Z', now)).toBe(true)
   })
+})
+
+it('excludes future snoozes from active capacity and includes due rows at the boundary', () => {
+  const now = Date.parse('2026-11-14T12:00:00Z')
+  const rows = [
+    { is_done: false },
+    { is_done: false, snoozed_until: null },
+    { is_done: false, snoozed_until: '2026-11-14T12:00:01Z' },
+    { is_done: false, snoozed_until: '2026-11-14T12:00:00Z' },
+    { is_done: false, snoozed_until: '2026-11-14T11:59:59Z' },
+    { is_done: true },
+  ]
+  expect(rows.map(row => isCurrentlySnoozed(row, now))).toEqual([false, false, true, false, false, false])
+  expect(rows.filter(row => isActiveReminder(row, now))).toHaveLength(4)
 })

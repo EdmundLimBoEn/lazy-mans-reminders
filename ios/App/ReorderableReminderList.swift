@@ -8,6 +8,7 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
     let onMove: (IndexSet, Int) -> Void
     let onDragChanged: (Bool) -> Void
     let onComplete: (Reminder) -> Void
+    let onSnooze: (Reminder, ReminderSnooze) -> Void
     let onRefresh: () async -> Void
     @ViewBuilder let row: (Reminder) -> Row
 
@@ -36,6 +37,22 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
             action.image = UIImage(systemName: "checkmark.circle")
             action.backgroundColor = .systemGreen
             return UISwipeActionsConfiguration(actions: [action])
+        }
+        configuration.trailingSwipeActionsConfigurationProvider = { [weak coordinator] indexPath in
+            guard let coordinator, coordinator.parent.isEnabled, !coordinator.isDragging,
+                  coordinator.items.indices.contains(indexPath.item) else { return nil }
+            let reminder = coordinator.items[indexPath.item]
+            let actions = ReminderSnooze.allCases.map { option in
+                let action = UIContextualAction(style: .normal, title: option.title) { _, _, finish in
+                    coordinator.parent.onSnooze(reminder, option)
+                    finish(true)
+                }
+                action.backgroundColor = option == .tonight ? .systemIndigo : .systemGray
+                return action
+            }
+            let configuration = UISwipeActionsConfiguration(actions: actions)
+            configuration.performsFirstActionWithFullSwipe = false
+            return configuration
         }
         let list = UICollectionView(
             frame: .zero,
@@ -100,6 +117,15 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
             cell.contentConfiguration = UIHostingConfiguration {
                 HStack(spacing: 0) {
                     parent.row(reminder)
+                        .accessibilityAction(named: Text(ReminderSnooze.threeHours.accessibilityLabel)) { [weak self] in
+                            self?.snoozeAccessible(reminder, option: .threeHours)
+                        }
+                        .accessibilityAction(named: Text(ReminderSnooze.tonight.accessibilityLabel)) { [weak self] in
+                            self?.snoozeAccessible(reminder, option: .tonight)
+                        }
+                        .accessibilityAction(named: Text(ReminderSnooze.tomorrow.accessibilityLabel)) { [weak self] in
+                            self?.snoozeAccessible(reminder, option: .tomorrow)
+                        }
                     ReminderDragGrip(isEnabled: parent.isEnabled && items.count > 1)
                         .accessibilityLabel("Reorder \(reminder.text)")
                         .accessibilityInputLabels(["Reorder \(reminder.text)"])
@@ -137,6 +163,8 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
         func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
             guard let list, let pan = gestureRecognizer as? UIPanGestureRecognizer,
                   parent.isEnabled, !isDragging else { return false }
+            let velocity = pan.velocity(in: list)
+            guard abs(velocity.y) > abs(velocity.x) else { return false }
             let point = pan.location(in: list)
             let translation = pan.translation(in: list)
             let start = CGPoint(x: point.x - translation.x, y: point.y - translation.y)
@@ -184,6 +212,11 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
         private func finishDrag() {
             isDragging = false
             parent.onDragChanged(false)
+        }
+
+        func snoozeAccessible(_ reminder: Reminder, option: ReminderSnooze) {
+            guard parent.isEnabled, !isDragging else { return }
+            parent.onSnooze(reminder, option)
         }
 
         func moveAccessible(id: UUID, direction: Int) {
