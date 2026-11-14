@@ -212,16 +212,30 @@ export async function revokeAppleTokensWithAuthorizationCode(input: {
     };
   }
 
-  const tokenResponse = await postAppleForm({
-    url: APPLE_TOKEN_URL,
-    fetchImpl: input.fetchImpl,
-    fields: {
-      client_id: input.config.clientId,
-      client_secret: clientSecret,
-      code: input.authorizationCode,
-      grant_type: "authorization_code",
-    },
-  });
+  let tokenResponse: Response;
+  try {
+    tokenResponse = await postAppleForm({
+      url: APPLE_TOKEN_URL,
+      fetchImpl: input.fetchImpl,
+      fields: {
+        client_id: input.config.clientId,
+        client_secret: clientSecret,
+        code: input.authorizationCode,
+        grant_type: "authorization_code",
+      },
+    });
+  } catch {
+    // The single-use code may already have been consumed; do not retry it.
+    return {
+      ok: false,
+      warning: {
+        event: "apple_token_revoke",
+        outcome: "failed",
+        reason: "apple_network_error",
+        endpoint: "token",
+      },
+    };
+  }
   if (!tokenResponse.ok) {
     return {
       ok: false,
@@ -372,15 +386,6 @@ export async function maybeRevokeAppleTokens(input: {
 }): Promise<"not_applicable" | "revoked" | "manual_required"> {
   if (!userHasAppleIdentity(input.user)) return "not_applicable";
 
-  if (!input.authorizationCode) {
-    input.warn({
-      event: "apple_token_revoke",
-      outcome: "skipped",
-      reason: "no_authorization_code",
-    });
-    return "manual_required";
-  }
-
   const secrets = readAppleSecrets(input.env);
   if (!secrets.ok) {
     input.warn({
@@ -388,6 +393,15 @@ export async function maybeRevokeAppleTokens(input: {
       outcome: "skipped",
       reason: "missing_secrets",
       missing: secrets.missing,
+    });
+    return "manual_required";
+  }
+
+  if (!input.authorizationCode) {
+    input.warn({
+      event: "apple_token_revoke",
+      outcome: "skipped",
+      reason: "no_authorization_code",
     });
     return "manual_required";
   }
