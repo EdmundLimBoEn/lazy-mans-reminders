@@ -76,6 +76,8 @@ export async function runBoardCommand(
       return listBoard(supabase, session, command.status)
     case 'add':
       return addReminder(supabase, session, command.text)
+    case 'edit':
+      return editReminder(supabase, session, command.reminderId, command.text)
     case 'complete':
       return setCompletion(supabase, session, command.reminderId, true)
     case 'reopen':
@@ -178,6 +180,28 @@ async function addReminder(
     reminder: toReminderRow(written),
     capacity: capacityFromUsed(used, maximum),
   }
+}
+
+async function editReminder(
+  supabase: SupabaseClient,
+  session: AgentSession,
+  reminderId: string,
+  text: string,
+): Promise<BoardResult> {
+  if (!UUID.test(reminderId)) return { kind: 'not_found' }
+  // Editing replaces visible text, including any prefix the caller chooses to keep.
+  const trimmed = text.trim()
+  if (trimmed.length < 1 || [...trimmed].length > 500) return { kind: 'invalid_text' }
+
+  const { data, error } = await supabase.from('reminders')
+    .update({ text: trimmed })
+    .eq('id', reminderId)
+    .eq('user_id', session.userId)
+    .select('id, text, is_done, sort_order, created_at, completed_at')
+    .maybeSingle()
+  if (error) return boardErrorFromStorage(error.message, error.details)
+  if (!data) return { kind: 'not_found' }
+  return { kind: 'changed', reminder: toReminderRow(data as ReminderSelect) }
 }
 
 async function setCompletion(
