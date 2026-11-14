@@ -11,6 +11,15 @@ enum ReminderBoardLimits {
     static let postItHint =
         "Hint: This board is more like a post-it note. Combine reminders into one line, or find other ways to keep it short."
 
+    static func isCapacityRejection(_ data: Data) -> Bool {
+        guard let fields = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return false
+        }
+        return ["message", "details", "hint"].contains {
+            (fields[$0] as? String)?.contains("LMR_CAPACITY_REACHED") == true
+        }
+    }
+
     static func isAtCapacity(_ activeCount: Int) -> Bool {
         activeCount >= maxActive
     }

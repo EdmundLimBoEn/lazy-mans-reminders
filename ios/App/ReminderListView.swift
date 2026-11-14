@@ -409,11 +409,11 @@ struct ReminderListView: View {
     }
 
     private func addReminder() async {
-        guard canAdd, let userID = auth.session?.user.id else { return }
         if atCapacity {
             presentError(ReminderBoardLimits.postItHint)
             return
         }
+        guard canAdd, let userID = auth.session?.user.id else { return }
         guard let value = draft.beginSubmission() else { return }
         do {
             let updated = try await ReminderStore.shared.create(text: value, userID: userID)

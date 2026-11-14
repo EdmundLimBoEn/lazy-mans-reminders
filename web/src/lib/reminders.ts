@@ -56,3 +56,10 @@ export function sortReminders<T extends ReminderLike>(reminders: T[]): T[] {
 export function nextSortOrder(reminders: Pick<ReminderLike, 'sort_order'>[]): number {
   return Math.max(-1, ...reminders.map((item) => item.sort_order)) + 1
 }
+
+/** Translate quota rejections even when another client filled the board first. */
+export function reminderErrorMessage(error: { message: string; details?: string | null; hint?: string | null }): string {
+  return [error.message, error.details, error.hint].some(value => value?.includes('LMR_CAPACITY_REACHED'))
+    ? POST_IT_HINT
+    : error.message
+}
