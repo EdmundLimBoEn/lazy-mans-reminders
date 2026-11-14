@@ -13,8 +13,14 @@ struct ContentView: View {
             } else if auth.session == nil {
                 SignInView()
             } else {
-                ReminderListView()
-                    .id(auth.session?.user.id)
+                TabView {
+                    ReminderListView()
+                        .tabItem { Label("Your Board", systemImage: "note.text") }
+                    RoutineListView()
+                        .tabItem { Label("Routine reminders", systemImage: "repeat") }
+                }
+                .tint(.primary)
+                .id(auth.session?.user.id)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

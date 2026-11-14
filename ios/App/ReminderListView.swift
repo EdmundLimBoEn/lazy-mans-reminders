@@ -453,7 +453,7 @@ struct ReminderListView: View {
     }
 }
 
-private struct BoardErrorBanner: View {
+struct BoardErrorBanner: View {
     let message: String
     let onDismiss: () -> Void
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
