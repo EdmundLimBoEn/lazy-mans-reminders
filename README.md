@@ -36,7 +36,7 @@ The legacy web hosts <https://np.sillyapps.co> and <https://lmr.sillyapps.co> st
 `ios/project.yml` sets marketing version **1.0.1** and `CURRENT_PROJECT_VERSION` **11**. Those are source values, not a claim about the latest uploaded build.
 
 - One shared board supports reminders, completion, reordering, iPhone push, widgets, and a Lock Screen Live Activity. Live Activity visibility and updates depend on iOS settings, connectivity, and system limits.
-- Settings offers **Default**, **Minimal**, and **Bold** app icons.
+- Account offers **Default**, **Minimal**, and **Bold** app icons.
 - iPhone accessibility work includes VoiceOver and Voice Control labels, **Move up / Move down** reorder actions, Reduce Motion, stronger Increase Contrast / Reduce Transparency treatment, and primary-color error text. Publish accessibility support claims only after device QA.
 - Done reminders older than **3 days**, measured from `completed_at`, are removed by `delete_old_completed_reminders()`. Web and iOS request this cleanup on board load. It is best effort: inactivity, locks, and write budgets can delay removal. A daily cron call is optional. Push-job logs have a separate **7-day** retention policy. See [retention and data copy](docs/copy/retention-and-data-copy.md).
 - In-house daily usage counters are implemented; there is no PostHog integration. Collection defaults off through `usage_analytics_config.enabled=false`. Worker tool/OAuth counters additionally require `USAGE_ANALYTICS_ENABLED=true`, so those events require both flags. See [the analytics design and enablement prerequisites](docs/analytics/plan.md).

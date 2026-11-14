@@ -27,12 +27,12 @@ python3 -B scripts/icons/render_previews.py
 ```
 
 The first command that runs a script also regenerates the regular 48 pt preview
-imagesets at 1×, 2× and 3×. Settings loads those resources, since app icon assets
+imagesets at 1×, 2× and 3×. Account loads those resources, since app icon assets
 are not ordinary UIImage resources. No input from `/workspace/notepad-icons`
 is needed to reproduce the output; those earlier explorations were reference
 only.
 
-The Account settings sheet has three thumbnail selection rows, ordered as above.
+The Account sheet has three thumbnail selection rows, ordered as above.
 The picker uses the following copy, which Edmund can tweak:
 
 - Section heading: “App Icon”.
@@ -58,7 +58,7 @@ On a Mac, regenerate `ios/project.yml` with XcodeGen and run the existing
 `LazyMansRemindersTests` target, including `AppIconOptionTests`. Check the built
 app's Info.plist for `AppIcon-Minimal` and `AppIcon-Bold`; confirm the widget still
 builds. On an iPhone, switch through all three choices, return to Default, reopen
-Settings, and relaunch the app. Confirm the selected checkmark matches the Home
+Account, and relaunch the app. Confirm the selected checkmark matches the Home
 Screen and check VoiceOver/Larger Text. The system may display its own icon-change
 confirmation. Native compilation, asset compilation and device behavior cannot
 be verified on this Linux host.

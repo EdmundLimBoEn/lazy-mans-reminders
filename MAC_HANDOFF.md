@@ -48,7 +48,7 @@ Record device model, OS, artifact version/build, commit, date, and results. Hist
 - Check Lock Screen and Home Screen widgets, activity updates/renewal/end, user dismissal, and force-quit separately. Follow [persistence QA](docs/live-activity-persistence.md).
 - Confirm no stale private board, widget, or activity remains after sign-out, account switching, or deletion.
 - Test export, feedback, support/privacy links, and deletion on disposable Apple/Google/email accounts with consent. Include cancellation, failures, manual Apple-revocation fallback, and agent-access cleanup.
-- Switch between **Default**, **Minimal**, and **Bold** in Settings; restore Default, relaunch, and confirm the selected icon/checkmark.
+- Switch between **Default**, **Minimal**, and **Bold** in Account; restore Default, relaunch, and confirm the selected icon/checkmark.
 - Test VoiceOver, Voice Control labels, **Move up / Move down** actions, Larger Text, Reduce Motion, Increase Contrast, Reduce Transparency, and readable error text. Publish accessibility support only after device QA passes.
 - Test “List reminders in Notepad”, “Add a reminder in Notepad”, and “Mark this as done in Notepad” with Siri/Shortcuts. Signed-out requests should ask you to sign in to Notepad on this iPhone first. Advertise only behavior verified in the selected artifact.
 
