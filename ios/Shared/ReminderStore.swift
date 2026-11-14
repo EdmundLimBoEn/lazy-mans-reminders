@@ -542,6 +542,9 @@ actor ReminderStore {
             throw StoreError.invalidResponse
         }
         guard 200..<300 ~= http.statusCode else {
+            if ReminderBoardLimits.isCapacityRejection(responseData) {
+                throw StoreError.atCapacity
+            }
             throw StoreError.requestFailed(http.statusCode)
         }
 
@@ -668,6 +671,9 @@ actor ReminderStore {
             throw StoreError.invalidResponse
         }
         guard 200..<300 ~= http.statusCode else {
+            if ReminderBoardLimits.isCapacityRejection(responseData) {
+                throw StoreError.atCapacity
+            }
             throw StoreError.requestFailed(http.statusCode)
         }
 

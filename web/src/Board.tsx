@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label'
 import { SiteHeader } from '@/components/SiteHeader'
 import { cn } from '@/lib/utils'
 import { accountExportFilename, buildAccountExport, serializeAccountExport, type AccountExportAgentKey, type AccountExportReminder } from './lib/accountExport'
-import { nextSortOrder, sortReminders, isAtCapacity, effectiveMaximum, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
+import { reminderErrorMessage, nextSortOrder, sortReminders, isAtCapacity, effectiveMaximum, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
 import { ConnectedAgents } from './ConnectedAgents'
 import { LegalFooterLinks } from './legalFooter'
 import { AGENT_TOKEN_PLACEHOLDER, LMR_AGENT_TOKEN_VAR, MCP_URL, claudeMcpConfig, cursorMcpConfig, grokConnectorConfig, lmrAgentTokenHeaderTemplate } from './mcp'
@@ -202,7 +202,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
         .insert({ text: value, user_id: session.user.id, sort_order: nextOrder })
       if (insertError) {
         setText(value)
-        setError(insertError.message)
+        setError(reminderErrorMessage(insertError))
       }
       await load()
     } finally {
@@ -232,7 +232,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
       if (updateError) {
         // Restore only our optimistic row; preserve any newer state from a read.
         setReminders((items) => items.map((item) => item === optimistic ? previous : item))
-        setError(updateError.message)
+        setError(reminderErrorMessage(updateError))
       }
       // Invalidate reads started during the write and reconcile acknowledged state.
       await load()
@@ -449,6 +449,9 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
             <h1 id="board-heading" className="text-2xl font-semibold tracking-tight">Your board</h1>
             <p className="board-hint text-sm leading-relaxed text-muted-foreground" id="board-hint">{POST_IT_HINT}</p>
           </div>
+          {boardFull && (
+            <p className="text-sm text-muted-foreground" role="status">Board full — combine lines instead</p>
+          )}
           <form className="add-form flex gap-2" onSubmit={add}>
             <div className="relative flex-1">
               <Plus className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
@@ -472,7 +475,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
             <span className="max-sm:hidden">Capacity set by your iPhone Lock Screen</span>
           </div>
           {error && (
-            <Alert variant="destructive" className="pr-12">
+            <Alert variant={error === POST_IT_HINT ? "default" : "destructive"} className="pr-12">
               <CircleAlert aria-hidden="true" />
               <AlertDescription className="[overflow-wrap:anywhere]">{error}</AlertDescription>
               <Button
