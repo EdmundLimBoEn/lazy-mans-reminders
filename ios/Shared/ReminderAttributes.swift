@@ -42,17 +42,26 @@ enum ReminderActivityPresentation {
         return Array(source.prefix(ReminderBoardLimits.lockScreenMaxLines))
     }
 
-    /// Reserve 48pt of the island's roughly 160pt height for system chrome and
-    /// corner clearance. The overflow footer counts toward the five-row cap.
+    /// Reserve 48pt of the island's roughly 160pt height for chrome and corners.
+    private static let expandedIslandContentHeight: CGFloat = 160 - 48
+
+    static func expandedIslandTextBudget(lineHeight: CGFloat) -> ReminderTextBudget {
+        ReminderTextBudget(contentHeight: expandedIslandContentHeight, lineHeight: max(20, lineHeight),
+                           spacing: LockScreenLineBudget.lineSpacing)
+    }
+
+    /// The overflow footer counts toward the five-row cap.
     static func expandedIslandLines(_ lines: [String], lineHeight: CGFloat = 20) -> [String] {
         let rowHeight = max(20, ceil(lineHeight))
         let spacing = LockScreenLineBudget.lineSpacing
-        let limit = min(5, max(1, Int((112 + spacing) / (rowHeight + spacing))))
+        let limit = min(5, max(1, Int((expandedIslandContentHeight + spacing) / (rowHeight + spacing))))
         return boundedLines(lines, limit: limit)
     }
 
-    static func lockScreenLines(_ lines: [String], lineHeight: CGFloat) -> [String] {
-        boundedLines(lines, limit: LockScreenLineBudget.scaledLineLimit(lineHeight: lineHeight))
+    static func lockScreenLines(
+        _ lines: [String], lineHeight: CGFloat, baseLimit: Int = LockScreenLineBudget.cachedMaxLines
+    ) -> [String] {
+        boundedLines(lines, limit: LockScreenLineBudget.scaledLineLimit(lineHeight: lineHeight, baseLimit: baseLimit))
     }
 
     /// Speak the full cached text even when the widget's visual preview is truncated.

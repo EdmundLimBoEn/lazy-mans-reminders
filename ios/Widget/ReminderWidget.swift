@@ -40,9 +40,12 @@ struct ReminderProvider: TimelineProvider {
 struct ReminderWidgetView: View {
     @Environment(\.widgetFamily) private var family
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.legibilityWeight) private var legibilityWeight
     @ScaledMetric(relativeTo: .subheadline) private var lineHeight: CGFloat = 20
     @ScaledMetric(relativeTo: .caption) private var headerHeight: CGFloat = 15
     @ScaledMetric(relativeTo: .caption) private var accessoryLineHeight: CGFloat = 15
+    @ScaledMetric(relativeTo: .subheadline) private var pointSize: CGFloat = 15
+    @ScaledMetric(relativeTo: .caption) private var accessoryPointSize: CGFloat = 12
     let entry: ReminderEntry
 
     private var lines: [String] {
@@ -54,6 +57,13 @@ struct ReminderWidgetView: View {
 
     private var lineLimit: Int {
         ReminderWidgetPresentation.lineLimit(
+            for: family, lineHeight: textBudget.lineHeight,
+            headerHeight: headerHeight, showsHeader: showsHeader
+        )
+    }
+
+    private var textBudget: ReminderTextBudget {
+        ReminderWidgetPresentation.textBudget(
             for: family, lineHeight: isAccessory ? accessoryLineHeight : lineHeight,
             headerHeight: headerHeight, showsHeader: showsHeader
         )
@@ -80,8 +90,11 @@ struct ReminderWidgetView: View {
                     }
                     ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
                         Text(line)
-                            .font(isAccessory ? .caption : .subheadline)
-                            .lineLimit(lines.count == 1 ? lineLimit : 1)
+                            .font(.system(
+                                size: (isAccessory ? accessoryPointSize : pointSize) * textBudget.fontScale,
+                                weight: legibilityWeight == .bold ? .bold : .regular
+                            ))
+                            .lineLimit(textBudget.lineLimit(displayedRows: lines.count))
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     if !isAccessory { Spacer(minLength: 0) }
@@ -106,7 +119,7 @@ struct ReminderWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: ReminderProvider()) { entry in
             ReminderWidgetView(entry: entry)
-                .dynamicTypeSize(...DynamicTypeSize.accessibility3)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility5)
         }
         .configurationDisplayName("Board")
         .description("Keep your reminders on the Home Screen or Lock Screen, even after a Live Activity ends.")
