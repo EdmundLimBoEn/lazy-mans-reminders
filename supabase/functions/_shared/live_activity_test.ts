@@ -13,6 +13,7 @@ import {
   LIVE_ACTIVITY_RECYCLE_AFTER_MS,
   LIVE_ACTIVITY_START_GRACE_MS,
   LIVE_ACTIVITY_TOKEN_PATTERN,
+  liveActivityEventContent,
   liveActivityStaleDateUnix,
   liveActivityTopic,
   parseLiveActivityToken,
@@ -213,6 +214,61 @@ Deno.test("end payload dismisses immediately", () => {
   assertEquals(body.aps.event, "end");
   assertEquals(body.aps["dismissal-date"], 1);
   assertEquals(body.aps["content-state"], { lines: [] });
+});
+
+Deno.test("empty-board current activity end shows the clear message for three seconds", () => {
+  const nowUnix = 1_775_000_000;
+  const body = JSON.parse(buildLiveActivityPayload({
+    event: "end",
+    ...liveActivityEventContent({
+      event: "end",
+      destination: "activity",
+      lines: [],
+      nowUnix,
+    }),
+    timestamp: nowUnix,
+    staleDate: liveActivityStaleDateUnix(nowUnix),
+  }));
+  assertEquals(body.aps.event, "end");
+  assertEquals(body.aps["content-state"], { lines: ["Nothing to do."] });
+  assertEquals(body.aps["dismissal-date"], nowUnix + 3);
+});
+
+Deno.test("retirement ends dismiss immediately with empty lines regardless of board content", () => {
+  const nowUnix = 1_775_000_000;
+  for (const lines of [[], ["Milk"]]) {
+    const content = liveActivityEventContent({
+      event: "end",
+      destination: "retiring",
+      lines,
+      nowUnix,
+    });
+    assertEquals(content.dismissalDate, undefined);
+    const body = JSON.parse(buildLiveActivityPayload({
+      event: "end",
+      ...content,
+      timestamp: nowUnix,
+      staleDate: liveActivityStaleDateUnix(nowUnix),
+    }));
+    assertEquals(body.aps["content-state"], { lines: [] });
+    assertEquals(body.aps["dismissal-date"], 1);
+  }
+});
+
+Deno.test("other activity events preserve their content and default dismissal", () => {
+  for (const event of ["start", "update", "end"] as const) {
+    for (const destination of ["push-to-start", "activity"] as const) {
+      for (const lines of [[], ["Milk"]]) {
+        if (event === "end" && destination === "activity" && !lines.length) {
+          continue;
+        }
+        assertEquals(
+          liveActivityEventContent({ event, destination, lines, nowUnix: 100 }),
+          { lines },
+        );
+      }
+    }
+  }
 });
 
 Deno.test("live activity APNs headers use the liveactivity topic", () => {
