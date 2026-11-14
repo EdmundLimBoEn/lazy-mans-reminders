@@ -19,6 +19,7 @@ struct AppIconPickerSection: View {
                             .clipShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
                             .accessibilityHidden(true)
                         iconLabel(for: option)
+                            .fixedSize(horizontal: false, vertical: true)
                             .foregroundStyle(.primary)
                         Spacer(minLength: 8)
                         if selection.selected == option {
@@ -35,7 +36,7 @@ struct AppIconPickerSection: View {
                 .disabled(!selection.supportsAlternateIcons || selection.isChanging)
             }
             if selection.isChanging {
-                ProgressView()
+                AccessibleProgressView()
                     .accessibilityLabel("Changing app icon")
             }
         } header: {
@@ -47,6 +48,11 @@ struct AppIconPickerSection: View {
             } else if selection.hasError {
                 Text("Couldn’t change the icon. Try again.")
                     .accessibilityAddTraits(.updatesFrequently)
+            }
+        }
+        .onChange(of: selection.hasError) { _, hasError in
+            if hasError {
+                UIAccessibility.post(notification: .announcement, argument: "Couldn’t change the icon. Try again.")
             }
         }
         .onAppear { selection.refresh() }

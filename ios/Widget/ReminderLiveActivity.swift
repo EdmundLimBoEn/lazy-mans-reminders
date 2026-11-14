@@ -1,6 +1,7 @@
 import ActivityKit
 import SwiftUI
 import WidgetKit
+import UIKit
 
 /// Full-width Lock Screen banner — notification-style clear glass.
 /// Compact type so the phone-measured line budget can actually fit.
@@ -13,12 +14,14 @@ import WidgetKit
 struct ReminderLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: ReminderAttributes.self) { context in
-            lockScreenBanner(lines: context.state.lines)
+            LockScreenReminderBanner(lines: context.state.lines)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility3)
+                .widgetURL(URL(string: "lazymansreminders://board"))
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.bottom) {
                     ExpandedReminderIsland(lines: context.state.lines)
-                        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                        .dynamicTypeSize(...DynamicTypeSize.accessibility3)
                 }
                 // The expanded pill's bottom corner starts curving while the
                 // last line is still drawing. Extra bottom margin keeps that
@@ -31,22 +34,39 @@ struct ReminderLiveActivity: Widget {
             } minimal: {
                 EmptyView()
             }
+            .widgetURL(URL(string: "lazymansreminders://board"))
         }
     }
+}
 
-    @ViewBuilder
-    private func lockScreenBanner(lines: [String]) -> some View {
+private struct LockScreenReminderBanner: View {
+    let lines: [String]
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+    @Environment(\.colorSchemeContrast) private var contrast
+    @Environment(\.legibilityWeight) private var legibilityWeight
+    @ScaledMetric(relativeTo: .subheadline) private var pointSize = LockScreenLineBudget.pointSize
+    @ScaledMetric(relativeTo: .subheadline) private var lineHeight = ceil(
+        UIFont.systemFont(ofSize: LockScreenLineBudget.pointSize, weight: .semibold).lineHeight
+    )
+
+    var body: some View {
         ReminderActivityLineStack(
-            lines: ReminderActivityPresentation.presentedLines(lines),
-            font: .system(size: LockScreenLineBudget.pointSize, weight: .semibold)
+            lines: ReminderActivityPresentation.lockScreenLines(lines, lineHeight: lineHeight),
+            font: .system(size: pointSize, weight: legibilityWeight == .bold ? .bold : .semibold)
         )
         .padding(.top, 14)
         .padding(.bottom, 12)
         .padding(.horizontal, 16)
         .frame(maxWidth: .infinity, alignment: .topLeading)
         // `.clear` → system Liquid Glass (matches notification Clear look).
-        .activityBackgroundTint(.clear)
+        .activityBackgroundTint(ReminderAccessibility.usesSolidBackground(
+            reduceTransparency: reduceTransparency, increasedContrast: contrast == .increased
+        ) ? Color(.systemBackground) : .clear)
         .activitySystemActionForegroundColor(.primary)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Your Board")
+        .accessibilityValue(ReminderActivityPresentation.accessibilitySummary(lines: lines))
+        .accessibilityHint("Opens your board in Notepad")
     }
 }
 
@@ -64,6 +84,10 @@ private struct ExpandedReminderIsland: View {
         // The island background is always black. Force dark so `.primary`
         // text stays light when the phone is in light mode.
         .environment(\.colorScheme, .dark)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Your Board")
+        .accessibilityValue(ReminderActivityPresentation.accessibilitySummary(lines: lines))
+        .accessibilityHint("Opens your board in Notepad")
     }
 }
 
