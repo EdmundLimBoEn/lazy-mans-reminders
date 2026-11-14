@@ -34,6 +34,19 @@ final class ReminderPresentationTests: XCTestCase {
         XCTAssertTrue(ReminderActivityPresentation.lines(from: []).isEmpty)
     }
 
+    func testClearMomentContentKeepsItsCopyOnEveryLiveActivitySurface() {
+        let state = ReminderActivityPresentation.finalState(for: .boardEmpty)
+        XCTAssertEqual(state.lines, ["Nothing to do."])
+        XCTAssertEqual(ReminderActivityPresentation.presentedLines(state.lines), ["Nothing to do."])
+        XCTAssertEqual(ReminderActivityPresentation.lockScreenLines(state.lines, lineHeight: 40), ["Nothing to do."])
+        XCTAssertEqual(ReminderActivityPresentation.expandedIslandLines(state.lines, lineHeight: 40), ["Nothing to do."])
+        XCTAssertEqual(ReminderActivityPresentation.displayLines(from: []), ["Nothing to remember"])
+    }
+
+    func testAccountCleanupDoesNotUseClearMomentCopy() {
+        XCTAssertEqual(ReminderActivityPresentation.finalState(for: .clear).lines, [])
+    }
+
     func testDisplayLinesIncludeEmptyPlaceholder() {
         XCTAssertEqual(
             ReminderActivityPresentation.displayLines(from: []),

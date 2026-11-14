@@ -1,6 +1,7 @@
 /** Live Activity board lines, lifecycle decision, and APNs payloads. */
 
 export const LIVE_ACTIVITY_ATTRIBUTES_TYPE = "ReminderAttributes";
+export const BOARD_CLEAR_MESSAGE = "Nothing to do.";
 export const LIVE_ACTIVITY_FALLBACK_MAX_LINES = 6;
 /** Recycle before Apple's 8h active cap so the banner does not vanish with reminders still on the board. */
 export const LIVE_ACTIVITY_RECYCLE_AFTER_MS = 7 * 60 * 60 * 1000;
@@ -121,6 +122,25 @@ export function buildLiveActivityHeaders(input: {
 
 export function liveActivityStaleDateUnix(nowUnix: number): number {
   return nowUnix + LIVE_ACTIVITY_STALE_AFTER_SECONDS;
+}
+
+/** Preserve the clear moment only for an empty board's current activity. */
+export function liveActivityEventContent(input: {
+  event: "start" | "update" | "end";
+  destination: "push-to-start" | "activity" | "retiring";
+  lines: string[];
+  nowUnix: number;
+}): { lines: string[]; dismissalDate?: number } {
+  if (input.event === "end") {
+    if (input.destination === "retiring") return { lines: [] };
+    if (input.destination === "activity" && input.lines.length === 0) {
+      return {
+        lines: [BOARD_CLEAR_MESSAGE],
+        dismissalDate: input.nowUnix + 3,
+      };
+    }
+  }
+  return { lines: input.lines };
 }
 
 type LiveActivityPayloadInput = {

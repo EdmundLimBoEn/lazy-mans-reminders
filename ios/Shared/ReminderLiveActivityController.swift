@@ -41,22 +41,28 @@ enum ReminderLiveActivityController {
         Task { await observeActivityList() }
     }
 
-    static func sync(reminders: [Reminder]) async {
+    static func sync(reminders: [Reminder], isClearing: Bool = false) async {
         startObservingTokens()
         let lines = ReminderActivityPresentation.lines(from: reminders)
         let state = ReminderAttributes.ContentState(lines: lines)
         let existing = activeActivities
         let content = ActivityContent(state: state, staleDate: Date().addingTimeInterval(8 * 60 * 60))
-        let hasActivity = lines.isEmpty
+        let hasActivity = isClearing || lines.isEmpty
             ? !Activity<ReminderAttributes>.activities.isEmpty : !existing.isEmpty
-        switch LiveActivityPolicy.action(lineCount: lines.count, activityExists: hasActivity) {
+        switch LiveActivityPolicy.action(
+            lineCount: lines.count, activityExists: hasActivity, isClearing: isClearing
+        ) {
         case .none:
             return
-        case .end:
+        case .end(let reason):
             isEndingBoard = true
             defer { isEndingBoard = false }
+            let ending = endPresentation(for: reason, now: Date())
             for activity in Activity<ReminderAttributes>.activities {
-                await activity.end(ActivityContent(state: state, staleDate: nil), dismissalPolicy: .immediate)
+                guard shouldEndActivity(
+                    state: activity.activityState, content: activity.content.state, reason: reason
+                ) else { continue }
+                await activity.end(ending.content, dismissalPolicy: ending.dismissalPolicy)
             }
         case .update:
             selectedActivityID = LiveActivityPolicy.selectedActivityID(
@@ -86,6 +92,28 @@ enum ReminderLiveActivityController {
                 print("Reminder Live Activity request failed: \(error.localizedDescription)")
             }
         }
+    }
+
+    static func endPresentation(
+        for reason: LiveActivityPolicy.EndReason, now: Date
+    ) -> (content: ActivityContent<ReminderAttributes.ContentState>, dismissalPolicy: ActivityUIDismissalPolicy) {
+        let content = ActivityContent(
+            state: ReminderActivityPresentation.finalState(for: reason), staleDate: nil
+        )
+        let dismissalPolicy: ActivityUIDismissalPolicy = reason.dismissalDate(now: now)
+            .map { .after($0) } ?? .immediate
+        return (content, dismissalPolicy)
+    }
+
+    static func shouldEndActivity(
+        state: ActivityState, content: ReminderAttributes.ContentState,
+        reason: LiveActivityPolicy.EndReason
+    ) -> Bool {
+        guard state != .dismissed else { return false }
+        // An empty refresh must not extend (or immediately dismiss) the final frame.
+        // Explicit account cleanup still removes ended, visible activities immediately.
+        return reason == .clear || state != .ended
+            || content != ReminderActivityPresentation.finalState(for: .boardEmpty)
     }
 
     private static func observePushToStartTokens() async {
