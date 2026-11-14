@@ -28,7 +28,7 @@ class SharedSessionReadinessTests(unittest.TestCase):
     def test_active_board_task_restarts_when_shared_session_becomes_ready(self):
         source = (ROOT / "ios/App/ReminderListView.swift").read_text()
         task = member(source, ".task(id: scenePhase == .active && auth.isSharedSessionReady)")
-        self.assertIn("guard scenePhase == .active else { return }", task)
+        self.assertIn("guard scenePhase == .active, auth.isSharedSessionReady else { return }", task)
         self.assertIn("await refresh()", task)
         refresh = member(source, "private func refresh()")
         self.assertLess(
