@@ -100,15 +100,30 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
             cell.contentConfiguration = UIHostingConfiguration {
                 HStack(spacing: 0) {
                     parent.row(reminder)
-                    ReminderDragGrip(isEnabled: parent.isEnabled && items.count > 1)
-                        .accessibilityLabel("Reorder \(reminder.text)")
-                        .accessibilityValue("Position \(indexPath.item + 1) of \(items.count)")
-                        .accessibilityAction(named: "Move up") { [weak self] in
+                    Menu {
+                        Button("Move up", systemImage: "arrow.up") { [weak self] in
                             self?.moveAccessible(id: reminder.id, direction: -1)
                         }
-                        .accessibilityAction(named: "Move down") { [weak self] in
+                        .disabled(indexPath.item == 0)
+                        Button("Move down", systemImage: "arrow.down") { [weak self] in
                             self?.moveAccessible(id: reminder.id, direction: 1)
                         }
+                        .disabled(indexPath.item == items.count - 1)
+                    } label: {
+                        ReminderDragGrip(isEnabled: parent.isEnabled && items.count > 1)
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(!parent.isEnabled || items.count < 2)
+                    .accessibilityLabel("Reorder \(reminder.text)")
+                    .accessibilityInputLabels(["Reorder \(reminder.text)"])
+                    .accessibilityHint("Opens Move up and Move down actions")
+                    .accessibilityValue("Position \(indexPath.item + 1) of \(items.count)")
+                    .accessibilityAction(named: "Move up") { [weak self] in
+                        self?.moveAccessible(id: reminder.id, direction: -1)
+                    }
+                    .accessibilityAction(named: "Move down") { [weak self] in
+                        self?.moveAccessible(id: reminder.id, direction: 1)
+                    }
                 }
                 .padding(.leading, 16)
                 .padding(.trailing, 8)
@@ -202,18 +217,19 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
 
 private struct ReminderDragGrip: View {
     let isEnabled: Bool
+    @Environment(\.colorSchemeContrast) private var contrast
 
     var body: some View {
         HStack(spacing: 3) {
             dots
             dots
         }
-        .foregroundStyle(.tertiary)
+        .foregroundStyle(contrast == .increased ? .primary : .tertiary)
         .opacity(isEnabled ? 1 : 0.3)
         .frame(width: 44, height: 44)
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
-        .accessibilityHint("Drag to change position, or use the Move up and Move down actions")
+        .accessibilityHidden(true)
     }
 
     private var dots: some View {

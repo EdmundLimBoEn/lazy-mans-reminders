@@ -46,6 +46,14 @@ enum LockScreenLineBudget {
         return min(maxLinesCap, max(minLines, lines))
     }
 
+    /// Keep the measured banner height while scaling its type, by showing fewer rows.
+    static func scaledLineLimit(lineHeight: CGFloat, baseLimit: Int = cachedMaxLines) -> Int {
+        let baseHeight = ceil(UIFont.systemFont(ofSize: pointSize, weight: .semibold).lineHeight)
+        let count = max(minLines, min(maxLinesCap, baseLimit))
+        let available = CGFloat(count) * (baseHeight + lineSpacing)
+        return min(count, max(1, Int(available / (max(baseHeight, ceil(lineHeight)) + lineSpacing))))
+    }
+
     /// Recompute from the current screen, write App Group cache, return the value.
     @discardableResult
     static func refreshLocalCache(

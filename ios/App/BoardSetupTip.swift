@@ -37,6 +37,7 @@ struct BoardSetupTipCard: View {
             HStack(alignment: .firstTextBaseline) {
                 Text("Keep Your Board in View")
                     .font(.headline)
+                    .fixedSize(horizontal: false, vertical: true)
                     .accessibilityAddTraits(.isHeader)
                 Spacer()
                 Button(action: onDismiss) {
@@ -59,6 +60,7 @@ struct BoardSetupTipCard: View {
                 } icon: {
                     Image(systemName: step.symbol)
                         .foregroundStyle(.tint)
+                        .accessibilityHidden(true)
                 }
             }
         }

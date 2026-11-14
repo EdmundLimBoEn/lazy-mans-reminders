@@ -39,8 +39,10 @@ struct ReminderProvider: TimelineProvider {
 
 struct ReminderWidgetView: View {
     @Environment(\.widgetFamily) private var family
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .subheadline) private var lineHeight: CGFloat = 20
     @ScaledMetric(relativeTo: .caption) private var headerHeight: CGFloat = 15
+    @ScaledMetric(relativeTo: .caption) private var accessoryLineHeight: CGFloat = 15
     let entry: ReminderEntry
 
     private var lines: [String] {
@@ -52,9 +54,13 @@ struct ReminderWidgetView: View {
 
     private var lineLimit: Int {
         ReminderWidgetPresentation.lineLimit(
-            for: family, lineHeight: lineHeight, headerHeight: headerHeight
+            for: family, lineHeight: isAccessory ? accessoryLineHeight : lineHeight,
+            headerHeight: headerHeight, showsHeader: showsHeader
         )
     }
+
+    // Give primary reminder text the header space at accessibility sizes.
+    private var showsHeader: Bool { !isAccessory && !dynamicTypeSize.isAccessibilitySize }
 
     private var isAccessory: Bool {
         family == .accessoryInline || family == .accessoryRectangular
@@ -66,15 +72,16 @@ struct ReminderWidgetView: View {
                 Text(lines.joined(separator: " · "))
             } else {
                 VStack(alignment: .leading, spacing: ReminderWidgetPresentation.spacing(for: family)) {
-                    if !isAccessory {
+                    if showsHeader {
                         Text("Your Board")
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(.secondary)
+                            .lineLimit(1)
                     }
                     ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
                         Text(line)
                             .font(isAccessory ? .caption : .subheadline)
-                            .lineLimit(1)
+                            .lineLimit(lines.count == 1 ? lineLimit : 1)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     if !isAccessory { Spacer(minLength: 0) }
@@ -85,6 +92,10 @@ struct ReminderWidgetView: View {
         .containerBackground(for: .widget) {
             if isAccessory { Color.clear } else { Color(.systemBackground) }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Your Board")
+        .accessibilityValue(ReminderActivityPresentation.accessibilitySummary(from: entry.reminders))
+        .accessibilityHint("Opens your board in Notepad")
         .widgetURL(URL(string: "lazymansreminders://board"))
     }
 }
@@ -95,6 +106,7 @@ struct ReminderWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: ReminderProvider()) { entry in
             ReminderWidgetView(entry: entry)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility3)
         }
         .configurationDisplayName("Board")
         .description("Keep your reminders on the Home Screen or Lock Screen, even after a Live Activity ends.")

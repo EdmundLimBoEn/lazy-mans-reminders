@@ -48,6 +48,25 @@ enum ReminderActivityPresentation {
         let rowHeight = max(20, ceil(lineHeight))
         let spacing = LockScreenLineBudget.lineSpacing
         let limit = min(5, max(1, Int((112 + spacing) / (rowHeight + spacing))))
+        return boundedLines(lines, limit: limit)
+    }
+
+    static func lockScreenLines(_ lines: [String], lineHeight: CGFloat) -> [String] {
+        boundedLines(lines, limit: LockScreenLineBudget.scaledLineLimit(lineHeight: lineHeight))
+    }
+
+    /// Speak the full cached text even when the widget's visual preview is truncated.
+    static func accessibilitySummary(from reminders: [Reminder]?) -> String {
+        guard let reminders else { return "Couldn’t Load Board" }
+        let active = reminders.filter { !$0.isDone }
+        return active.isEmpty ? "Nothing to remember" : active.map(\.text).joined(separator: "; ")
+    }
+
+    static func accessibilitySummary(lines: [String]) -> String {
+        (lines.isEmpty ? ["Nothing to remember"] : lines).joined(separator: "; ")
+    }
+
+    private static func boundedLines(_ lines: [String], limit: Int) -> [String] {
         let source = lines.isEmpty ? ["Nothing to remember"] : lines
         guard source.count > limit else { return source }
 
