@@ -28,6 +28,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
   const [weeklyStartChanged, setWeeklyStartChanged] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const draftRevision = useRef(0)
+  const createId = useRef<string | null>(null)
   const readGeneration = useRef(0)
   const routineRows = useMemo(() => routines.map(routine => ({
     routine,
@@ -107,6 +108,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
   }, [load, userId])
 
   function reset() {
+    createId.current = null
     setText('')
     setEditingId(null)
   }
@@ -132,9 +134,15 @@ export function RoutineReminders({ userId }: { userId: string }) {
       }
       let result
       try {
-        result = editingId
-          ? await supabase.from('routine_reminders').update(values).eq('id', editingId).eq('user_id', userId).select('id').single()
-          : await supabase.from('routine_reminders').insert({ ...values, user_id: userId })
+        if (editingId) {
+          result = await supabase.from('routine_reminders').update(values).eq('id', editingId).eq('user_id', userId).select('id').single()
+        } else {
+          createId.current ??= crypto.randomUUID()
+          result = await supabase.rpc('create_routine_reminder', {
+            p_id: createId.current, p_user_id: userId, p_text: values.text, p_interval_days: values.interval_days,
+            p_start_date: values.start_date, p_local_time: values.local_time, p_timezone: values.timezone,
+          })
+        }
       } finally {
         // Invalidate reads started during the write, before reconciliation begins.
         readGeneration.current += 1
@@ -181,6 +189,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
   }
 
   function edit(routine: Routine) {
+    createId.current = null
     setEditingId(routine.id)
     setWeeklyStartChanged(false)
     setText(routine.text)
@@ -199,7 +208,10 @@ export function RoutineReminders({ userId }: { userId: string }) {
       <p className="text-sm text-muted-foreground">Repeat at the same local time. For Tuesday's uniform, choose Monday at 7 pm.</p>
       <p className="text-sm text-muted-foreground">When due, the reminder returns to your board and sends a push to your registered iPhone. Completing it keeps the routine running.</p>
     </div>
-    <form onSubmit={save} onChange={() => { draftRevision.current += 1 }} className="grid gap-3 rounded-lg border p-4">
+    <form onSubmit={save} onChange={() => {
+      draftRevision.current += 1
+      createId.current = null
+    }} className="grid gap-3 rounded-lg border p-4">
       <div className="grid gap-2"><Label htmlFor="routine-text">Reminder</Label>
         <Input id="routine-text" value={text} onChange={e => setText(e.target.value)} placeholder="Prepare Tuesday's uniform" maxLength={500} required /></div>
       <div className="grid gap-3 sm:grid-cols-2">

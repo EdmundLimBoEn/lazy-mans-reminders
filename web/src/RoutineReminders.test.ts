@@ -6,7 +6,7 @@ import { RoutineReminders } from './RoutineReminders'
 // Exercise the component's real handlers with state retained between renders,
 // without requiring a browser or replacing the async save/change logic.
 const hooks = vi.hoisted(() => ({ states: [] as unknown[], cursor: 0, effects: [] as Array<() => void | (() => void)>, load: undefined as undefined | (() => Promise<void>) }))
-const db = vi.hoisted(() => ({ channel: vi.fn(), removeChannel: vi.fn(), from: vi.fn() }))
+const db = vi.hoisted(() => ({ channel: vi.fn(), removeChannel: vi.fn(), from: vi.fn(), rpc: vi.fn() }))
 vi.mock('./supabase', () => ({ supabase: db }))
 vi.mock('react', async (importOriginal) => ({
   ...await importOriginal<typeof import('react')>(),
@@ -78,6 +78,7 @@ function mutationResult<T>(result: T | Promise<T>) {
 beforeEach(async () => {
   hooks.states = []
   db.from.mockReset()
+  db.rpc.mockReset()
   db.from.mockReturnValue({ select: () => ({ eq: () => ({ order: async () => ({ data: [routine], error: null }) }) }) })
   render()
   await hooks.load!()
@@ -190,11 +191,51 @@ it('shows the empty routine copy after a failed load recovers', async () => {
   expect(view.tree.some(node => node.props.children === 'No routines yet.')).toBe(true)
 })
 
-it.each(['insert', 'update'] as const)('uses the selected timezone for weekly %s start dates', async (operation) => {
+it('retries a committed create with a lost response and still allows a later identical routine', async () => {
+  const rows = new Map<string, typeof routine>()
+  let loseResponse = true
+  const fetch = async (input: string | URL | Request, init?: RequestInit) => {
+    if (init?.method === 'GET') return Response.json([...rows.values()])
+
+    const body = JSON.parse(String(init?.body))
+    const id = body.p_id ?? body.id ?? crypto.randomUUID()
+    if (!rows.has(id)) rows.set(id, { ...routine, id, text: body.p_text ?? body.text })
+    if (loseResponse) {
+      loseResponse = false
+      throw new Error('Connection lost after commit')
+    }
+    return new URL(String(input)).pathname.includes('/rpc/')
+      ? Response.json(id)
+      : new Response(null, { status: 201 })
+  }
+  const client = new PostgrestClient('https://example.test', { fetch })
+  db.from.mockImplementation(table => client.from(table))
+  db.rpc.mockImplementation((name, args) => client.rpc(name, args))
+  render().button('Cancel edit').onClick()
+  render().change('routine-text', 'Tuesday uniform')
+
+  await render().form.onSubmit({ preventDefault() {} })
+  expect(rows.size).toBe(1)
+  expect(render().alert).toContain('Connection lost after commit')
+  expect(render().text.value).toBe('Tuesday uniform')
+  expect(render().submit.disabled).toBe(false)
+
+  await render().form.onSubmit({ preventDefault() {} })
+  expect(rows.size).toBe(1)
+  expect(render().alert).toBeUndefined()
+  expect(render().text.value).toBe('')
+  expect(render().tree.filter(node => node.type === 'li')).toHaveLength(1)
+
+  render().change('routine-text', 'Tuesday uniform')
+  await render().form.onSubmit({ preventDefault() {} })
+  expect(rows.size).toBe(2)
+})
+
+it.each(['create', 'update'] as const)('uses the selected timezone for weekly %s start dates', async (operation) => {
   vi.useFakeTimers()
   vi.setSystemTime(new Date('2026-10-26T01:00:00Z'))
   try {
-    if (operation === 'insert') {
+    if (operation === 'create') {
       render().button('Cancel edit').onClick()
       render().change('routine-text', 'Sunday reminder')
     }
@@ -203,12 +244,19 @@ it.each(['insert', 'update'] as const)('uses the selected timezone for weekly %s
     render().change('routine-zone', 'America/New_York')
     const query = { eq: vi.fn() }
     query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult({ error: null }))
-    const write = vi.fn(() => operation === 'insert' ? Promise.resolve({ error: null }) : query)
-    db.from.mockReturnValueOnce({ [operation]: write })
+    const update = vi.fn(() => query)
+    if (operation === 'create') db.rpc.mockResolvedValueOnce({ error: null })
+    else db.from.mockReturnValueOnce({ update })
     await render().form.onSubmit({ preventDefault() {} })
-    expect(write).toHaveBeenCalledWith(expect.objectContaining({
-      start_date: '2026-10-25', local_time: '22:00', timezone: 'America/New_York',
-    }))
+    if (operation === 'create') {
+      expect(db.rpc).toHaveBeenCalledWith('create_routine_reminder', expect.objectContaining({
+        p_start_date: '2026-10-25', p_local_time: '22:00', p_timezone: 'America/New_York',
+      }))
+    } else {
+      expect(update).toHaveBeenCalledWith(expect.objectContaining({
+        start_date: '2026-10-25', local_time: '22:00', timezone: 'America/New_York',
+      }))
+    }
   } finally {
     vi.useRealTimers()
   }
@@ -247,20 +295,21 @@ it.each([
   }
 })
 
-it.each(['insert', 'update', 'pause', 'delete'] as const)('releases busy controls and preserves the draft when %s throws', async (operation) => {
-  if (operation === 'insert') {
+it.each(['create', 'update', 'pause', 'delete'] as const)('releases busy controls and preserves the draft when %s throws', async (operation) => {
+  if (operation === 'create') {
     render().button('Cancel edit').onClick()
     render().text.onChange({ target: { value: 'Keep my draft' } })
   }
   let reject!: (error: Error) => void
   const pending = new Promise((_, fail) => { reject = fail })
-  const query = { eq: vi.fn(), insert: () => pending, update: vi.fn(), delete: vi.fn() }
+  const query = { eq: vi.fn(), update: vi.fn(), delete: vi.fn() }
   query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult(pending))
   query.update.mockReturnValue(query)
   query.delete.mockReturnValue(query)
   db.from.mockReturnValue(query)
+  db.rpc.mockReturnValue(pending)
   const view = render()
-  const saving = operation === 'insert' || operation === 'update'
+  const saving = operation === 'create' || operation === 'update'
     ? view.form.onSubmit({ preventDefault() {} })
     : view.button(operation === 'pause' ? 'Pause' : 'Delete routine').onClick()
   expect(render().submit.disabled).toBe(true)
@@ -272,7 +321,7 @@ it.each(['insert', 'update', 'pause', 'delete'] as const)('releases busy control
   expect(result.submit.disabled).toBe(false)
   expect(result.text.value).toBe('Keep my draft')
   expect(result.alert).toBe('Offline')
-  if (operation !== 'insert') expect(result.submit.children).toBe('Save routine')
+  if (operation !== 'create') expect(result.submit.children).toBe('Save routine')
 })
 
 it('releases controls and clears the saved draft if refresh throws after a save', async () => {
@@ -365,8 +414,8 @@ it.each([false, true])('keeps a deleted routine draft when saving (deletion alre
   expect(new Headers(init?.headers).get('Prefer')).toContain('return=representation')
 })
 
-it.each(['insert', 'update'] as const)('preserves edits made during a pending %s', async (operation) => {
-  if (operation === 'insert') {
+it.each(['create', 'update'] as const)('preserves edits made during a pending %s', async (operation) => {
+  if (operation === 'create') {
     render().button('Cancel edit').onClick()
     render().change('routine-text', 'Submitted draft')
   }
@@ -374,28 +423,41 @@ it.each(['insert', 'update'] as const)('preserves edits made during a pending %s
   const pending = new Promise<{ error: null }>(done => { resolve = done })
   const query = { eq: vi.fn() }
   query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult(pending))
-  const write = vi.fn(() => operation === 'insert' ? pending : query)
-  db.from.mockReturnValueOnce({ [operation]: write })
+  const update = vi.fn(() => query)
+  if (operation === 'create') db.rpc.mockReturnValueOnce(pending)
+  else db.from.mockReturnValueOnce({ update })
   const saving = render().form.onSubmit({ preventDefault() {} })
   expect(render().submit.disabled).toBe(true)
   render().change('routine-text', 'New draft while saving')
   render().change('routine-time', '20:30')
-  expect(write.mock.calls[0]).toEqual([expect.objectContaining({
-    text: operation === 'insert' ? 'Submitted draft' : 'Keep my draft', local_time: '19:00',
-  })])
+  if (operation === 'create') {
+    expect(db.rpc).toHaveBeenCalledWith('create_routine_reminder', expect.objectContaining({
+      p_text: 'Submitted draft', p_local_time: '19:00',
+    }))
+  } else {
+    expect(update).toHaveBeenCalledWith(expect.objectContaining({ text: 'Keep my draft', local_time: '19:00' }))
+  }
   resolve({ error: null })
   await saving
   expect(render().text.value).toBe('New draft while saving')
   expect(render().submit.disabled).toBe(false)
-  expect(render().submit.children).toBe(operation === 'insert' ? 'Add routine' : 'Save routine')
+  expect(render().submit.children).toBe(operation === 'create' ? 'Add routine' : 'Save routine')
 
   // The preserved draft remains saveable, including its schedule changes.
   const nextQuery = { eq: vi.fn() }
   nextQuery.eq.mockReturnValueOnce(nextQuery).mockReturnValueOnce(mutationResult({ error: null }))
-  const nextWrite = vi.fn(() => operation === 'insert' ? Promise.resolve({ error: null }) : nextQuery)
-  db.from.mockReturnValueOnce({ [operation]: nextWrite })
+  const nextUpdate = vi.fn(() => nextQuery)
+  if (operation === 'create') db.rpc.mockResolvedValueOnce({ error: null })
+  else db.from.mockReturnValueOnce({ update: nextUpdate })
   await render().form.onSubmit({ preventDefault() {} })
-  expect(nextWrite).toHaveBeenCalledWith(expect.objectContaining({ text: 'New draft while saving', local_time: '20:30' }))
+  if (operation === 'create') {
+    expect(db.rpc).toHaveBeenLastCalledWith('create_routine_reminder', expect.objectContaining({
+      p_text: 'New draft while saving', p_local_time: '20:30',
+    }))
+    expect(db.rpc.mock.calls[1][1].p_id).not.toBe(db.rpc.mock.calls[0][1].p_id)
+  } else {
+    expect(nextUpdate).toHaveBeenCalledWith(expect.objectContaining({ text: 'New draft while saving', local_time: '20:30' }))
+  }
   expect(render().text.value).toBe('')
 })
 
@@ -488,10 +550,12 @@ function mockRead(promise: Promise<ReadResult>) {
   db.from.mockReturnValueOnce({ select: () => ({ eq: () => ({ order: () => promise }) }) })
 }
 
-it.each(['insert', 'update', 'pause', 'resume', 'delete'])(
+it.each(['create', 'update', 'pause', 'resume', 'delete'])(
   '%s reconciliation survives an older read completing afterward', async operation => {
-    if (operation === 'insert') render().button('Cancel edit').onClick()
-    if (operation === 'insert') render().change('routine-text', 'New routine')
+    if (operation === 'create') {
+      render().button('Cancel edit').onClick()
+      render().change('routine-text', 'New routine')
+    }
     if (operation === 'resume') {
       mockRead(Promise.resolve({ data: [{ ...routine, enabled: false }], error: null }))
       await hooks.load!()
@@ -501,10 +565,11 @@ it.each(['insert', 'update', 'pause', 'resume', 'delete'])(
     const loading = hooks.load!()
     const query = { eq: vi.fn() }
     query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult({ error: null }))
-    db.from.mockReturnValueOnce({ insert: () => Promise.resolve({ error: null }), update: () => query, delete: () => query })
+    if (operation === 'create') db.rpc.mockResolvedValueOnce({ error: null })
+    else db.from.mockReturnValueOnce({ update: () => query, delete: () => query })
     const saved = operation === 'delete' ? [] : [{ ...routine, text: 'Saved routine', enabled: operation !== 'pause' }]
     mockRead(Promise.resolve({ data: saved, error: null }))
-    if (operation === 'insert' || operation === 'update') await render().form.onSubmit({ preventDefault() {} })
+    if (operation === 'create' || operation === 'update') await render().form.onSubmit({ preventDefault() {} })
     else render().button(operation === 'delete' ? 'Delete routine' : operation === 'pause' ? 'Pause' : 'Resume').onClick()
     await vi.waitFor(() => expect(render().submit.disabled).toBe(false))
     const displayed = () => render().tree.filter(node => node.type === 'li').map(node => nodes(node).filter(child => child.type === 'p').map(child => child.props.children))
@@ -559,7 +624,7 @@ it('keeps the newest snapshot when routine reads finish out of order', async () 
   expect(render().button('Resume')).toBeDefined()
 })
 
-it.each(['insert', 'update', 'pause', 'resume', 'delete'].flatMap(operation =>
+it.each(['create', 'update', 'pause', 'resume', 'delete'].flatMap(operation =>
   ['reconciliation first', 'realtime first'].map(order => ({ operation, order })),
 ))('$operation preserves overlapping successful reads ($order)', async ({ operation, order }) => {
   vi.useFakeTimers()
@@ -574,7 +639,7 @@ it.each(['insert', 'update', 'pause', 'resume', 'delete'].flatMap(operation =>
   const cleanup = hooks.effects.at(-1)!()
   try {
     await vi.advanceTimersByTimeAsync(0)
-    if (operation === 'insert') {
+    if (operation === 'create') {
       render().button('Cancel edit').onClick()
       render().change('routine-text', 'New routine')
     }
@@ -584,10 +649,11 @@ it.each(['insert', 'update', 'pause', 'resume', 'delete'].flatMap(operation =>
     }
     const query = { eq: vi.fn() }
     query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult({ error: null }))
-    db.from.mockReturnValueOnce({ insert: () => Promise.resolve({ error: null }), update: () => query, delete: () => query })
+    if (operation === 'create') db.rpc.mockResolvedValueOnce({ error: null })
+    else db.from.mockReturnValueOnce({ update: () => query, delete: () => query })
     const reconciliation = deferred<ReadResult>()
     mockRead(reconciliation.promise)
-    const saving = operation === 'insert' || operation === 'update'
+    const saving = operation === 'create' || operation === 'update'
       ? render().form.onSubmit({ preventDefault() {} })
       : render().button(operation === 'delete' ? 'Delete routine' : operation === 'pause' ? 'Pause' : 'Resume').onClick()
     await vi.advanceTimersByTimeAsync(0)
