@@ -385,11 +385,34 @@ Deno.test("routine reactivation alerts once but completion and edits remain sile
     routine_id: "33333333-3333-4333-8333-333333333333",
     routine_fired_at: "2026-10-12T11:00:00Z",
   };
-  const payload = { type: "UPDATE", schema: "public", table: "reminders", record,
-    old_record: { ...record, routine_fired_at: "2026-10-05T11:00:00Z" } };
-  assertEquals(classifyWebhookPayload(payload), { ok: true, kind: "process", sendsAlert: true, userId: record.user_id });
-  assertEquals(classifyWebhookPayload({ ...payload, old_record: record }), { ok: true, kind: "process", sendsAlert: false, userId: record.user_id });
-  assertEquals(classifyWebhookPayload({ ...payload, record: { ...record, text: "" } }), { ok: true, kind: "process", sendsAlert: false, userId: record.user_id });
+  const event = { type: "UPDATE", schema: "public", table: "reminders" };
+  const payload = {
+    ...event,
+    record,
+    old_record: { routine_fired_at: "2026-10-05T11:00:00Z" },
+  };
+  const refresh = {
+    ok: true,
+    kind: "process",
+    sendsAlert: false,
+    userId: record.user_id,
+  } as const;
+  assertEquals(classifyWebhookPayload(payload), {
+    ...refresh,
+    sendsAlert: true,
+  });
+  assertEquals(
+    classifyWebhookPayload({ ...event, record: { user_id: record.user_id } }),
+    refresh,
+  );
+  assertEquals(
+    classifyWebhookPayload({ ...payload, old_record: record }),
+    refresh,
+  );
+  assertEquals(
+    classifyWebhookPayload({ ...payload, record: { ...record, text: "" } }),
+    refresh,
+  );
 });
 
 for (const type of ["INSERT", "UPDATE"]) {
