@@ -13,6 +13,13 @@ end $$;
 insert into auth.users(id) values
   ('11111111-1111-4111-8111-111111111111'),
   ('22222222-2222-4222-8222-222222222222');
+-- The historical CI migration run uses the Postgres image without Supabase Auth.
+do $$ begin
+  if to_regclass('auth.sessions') is not null then
+    insert into auth.sessions(id, user_id) values
+      ('11111111-1111-4111-8111-000000000001', '11111111-1111-4111-8111-111111111111');
+  end if;
+end $$;
 insert into public.agent_tokens(id, user_id, name, token_hash) values
   ('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1', '11111111-1111-4111-8111-111111111111', 'Revoke fixture', 'revocation-fixture-1'),
   ('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2', '11111111-1111-4111-8111-111111111111', 'Delete fixture', 'revocation-fixture-2'),
@@ -23,7 +30,7 @@ set writes = 599, window_started_at = statement_timestamp() + interval '1 hour';
 
 -- Background personal-token bookkeeping can still consume the last write.
 set local role service_role;
-set local request.jwt.claim.sub = '';
+set local request.jwt.claims = '{}';
 update public.agent_tokens set last_used_at = now()
 where id in ('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1', 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa3');
 do $$ begin
@@ -42,7 +49,8 @@ end $$;
 reset role;
 
 set local role authenticated;
-set local request.jwt.claim.sub = '11111111-1111-4111-8111-111111111111';
+set local request.jwt.claims =
+  '{"sub":"11111111-1111-4111-8111-111111111111","session_id":"11111111-1111-4111-8111-000000000001"}';
 do $$ begin
   assert not public.revoke_agent_token('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa3'),
     'Revocation must still enforce ownership';
@@ -92,7 +100,7 @@ do $$ begin
   delete from public.agent_tokens where id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2';
   assert found, 'Owner must be able to delete an active credential';
 end $$;
-set local request.jwt.claim.sub = '';
+set local request.jwt.claims = '{}';
 do $$ begin
   begin
     perform public.revoke_agent_token('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa3');
