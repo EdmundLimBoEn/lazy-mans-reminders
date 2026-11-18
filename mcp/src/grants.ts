@@ -41,7 +41,10 @@ export async function listAllUserGrants(oauth: OAuthHelpers, userId: string): Pr
 
 export async function describeGrants(oauth: OAuthHelpers, grants: GrantSummary[]): Promise<GrantView[]> {
   const names = new Map<string, string | null>()
-  const clientIds = [...new Set(grants.map((grant) => grant.clientId))]
+  // Only provider-issued opaque IDs can use the legacy lookup. URL lookups may contact the client.
+  const legacyClients = grants.filter(({ metadata, clientId }) =>
+    metadata?.clientName === undefined && /^[A-Za-z0-9_-]+$/.test(clientId))
+  const clientIds = [...new Set(legacyClients.map((grant) => grant.clientId))]
   let next = 0
   await Promise.all(Array.from({ length: Math.min(CLIENT_LOOKUP_CONCURRENCY, clientIds.length) }, async () => {
     while (next < clientIds.length) {
@@ -58,7 +61,9 @@ export async function describeGrants(oauth: OAuthHelpers, grants: GrantSummary[]
     .map((grant) => ({
       id: grant.id,
       clientId: grant.clientId,
-      clientName: names.get(grant.clientId) ?? null,
+      clientName: grant.metadata?.clientName === undefined
+        ? names.get(grant.clientId) ?? null
+        : displayName(grant.metadata.clientName),
       redirectOrigin: redirectOrigin(grant.redirectUri),
       createdAt: grant.createdAt,
       expiresAt: grant.expiresAt ?? null,

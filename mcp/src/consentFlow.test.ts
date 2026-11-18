@@ -120,7 +120,7 @@ describe('consent and grants', () => {
     )
     const clients = new Map<string, ClientInfo>([
       ['grok', client({ clientId: 'grok', clientName: 'Grok', redirectUris: ['https://grok.example/callback'] })],
-      ['cursor', client({ clientId: 'cursor', clientName: 'Cursor', redirectUris: ['cursor://anysphere.cursor-mcp/oauth/callback'] })],
+      ['cursor', client({ clientId: 'cursor', clientName: '  Cursor\t', redirectUris: ['cursor://anysphere.cursor-mcp/oauth/callback'] })],
       ['web', client({ clientId: 'web', clientName: 'Web', redirectUris: ['https://app.example/callback'] })],
     ])
     await seed(STATE_GROK, requestFor('grok', 'https://grok.example/callback', ['board']))
@@ -229,7 +229,7 @@ describe('consent and grants', () => {
     })
     expect(bound.status).toBe(200)
     expect(completed).toHaveLength(1)
-    expect(completed[0].metadata).toEqual({})
+    expect(completed[0].metadata).toEqual({ clientName: 'Cursor' })
     expect(completed[0].scope).toEqual(['board'])
     expect(completed[0].props).toEqual({ userId: USER_A, tokenId: 'oauth', agentName: 'Cursor' })
     expect(completed[0].props).not.toHaveProperty('userEmail')
