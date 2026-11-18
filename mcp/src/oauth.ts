@@ -10,6 +10,7 @@ import {
 } from './consent'
 import { cleanupUserGrants, describeGrants, listAllUserGrants, revokeUserGrant } from './grants'
 import { readJsonBody } from './jsonBody'
+import { redirectUriAllowed } from './redirects'
 import type { BoundProps } from './session'
 import { bearerToken, defaultIdentityDeps, type IdentityDeps } from './supabaseUser'
 
@@ -164,7 +165,7 @@ async function startAuthorize(request: Request, env: Env): Promise<Response> {
   } catch (error) {
     const failed = asAuthorizeFailure(error)
     if (!failed) throw error
-    if (!failed.redirectUri) {
+    if (!failed.redirectUri || !redirectUriAllowed(failed.redirectUri)) {
       return json({ error: failed.code, error_description: failed.description }, 400)
     }
     const redirect = new URL(failed.redirectUri)
