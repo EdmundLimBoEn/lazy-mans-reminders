@@ -5,7 +5,7 @@ export type TokenHash = string & { readonly __brand: 'TokenHash' }
 
 export type PresentedToken = { tokenId: TokenId; secret: TokenSecret }
 
-export type AgentSession = { userId: UserId; tokenId: TokenId; agentName: string }
+export type AgentSession = { userId: UserId; tokenId: TokenId; agentName: string; canEdit: boolean }
 
 export type ReminderStatus = 'active' | 'completed'
 

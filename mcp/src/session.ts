@@ -5,6 +5,7 @@ export type BoundProps = {
   userId: string
   agentName: string
   tokenId?: string
+  canEdit?: boolean
 }
 
 export function sessionFromProps(props: unknown): AgentSession | null {
@@ -21,5 +22,6 @@ export function sessionFromProps(props: unknown): AgentSession | null {
     userId: bound.userId as UserId,
     tokenId: tokenId as TokenId,
     agentName,
+    canEdit: bound.canEdit === true,
   }
 }

@@ -6,6 +6,7 @@ describe('sessionFromProps', () => {
     expect(sessionFromProps({ userId: 'user-1', agentName: 'Grok' })).toEqual({
       userId: 'user-1',
       tokenId: 'oauth',
+      canEdit: false,
       agentName: 'Grok',
     })
   })

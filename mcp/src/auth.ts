@@ -56,5 +56,6 @@ export async function resolveSession(
     userId: row.user_id as AgentSession['userId'],
     tokenId: row.id as AgentSession['tokenId'],
     agentName: row.name,
+    canEdit: true,
   }
 }
