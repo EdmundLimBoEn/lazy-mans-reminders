@@ -1,4 +1,5 @@
 import { exportJWK, generateKeyPair, SignJWT } from "npm:jose@6.2.10";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.112.1";
 import {
   assertEquals,
   assertExists,
@@ -251,6 +252,59 @@ async function assertDeleted(
   assertEquals(result.deletedTables, []);
   assertEquals(result.deletedUserId, userId);
 }
+
+Deno.test("account-deletion preflight allows the web client's request headers", async () => {
+  let post: Request | undefined;
+  const client = createClient("https://example.supabase.co", "test-anon-key", {
+    global: {
+      headers: { "x-notepad-client": "web" },
+      fetch: (input, init) => {
+        post = new Request(input, init);
+        return Promise.resolve(Response.json({ ok: true }));
+      },
+    },
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  const { error } = await client.functions.invoke("delete-account", {
+    method: "POST",
+    body: { expectedUserId: googleUser.id },
+  });
+  assertEquals(error, null);
+  assertExists(post);
+  assertEquals(post.headers.get("x-notepad-client"), "web");
+
+  // The SDK headers, including the JSON content type, are not CORS-safelisted.
+  const requestedHeaders = [...post.headers.keys()];
+  const unexpected = () => {
+    throw new Error("Preflights must not use deletion dependencies");
+  };
+  const response = await handleDeleteAccount(
+    new Request(post.url, {
+      method: "OPTIONS",
+      headers: {
+        Origin: "https://board.example.com",
+        "Access-Control-Request-Method": post.method,
+        "Access-Control-Request-Headers": requestedHeaders.join(", "),
+      },
+    }),
+    {
+      env: unexpected,
+      fetchImpl: unexpected,
+      nowSeconds: unexpected,
+      warn: unexpected,
+      getUser: unexpected,
+      deleteAuthUser: unexpected,
+    },
+  );
+
+  assertEquals(response.status, 200);
+  const allowedHeaders = response.headers.get("Access-Control-Allow-Headers");
+  assertExists(allowedHeaders);
+  const allowed = allowedHeaders.toLowerCase().split(",").map((name) =>
+    name.trim()
+  );
+  assertEquals(requestedHeaders.filter((name) => !allowed.includes(name)), []);
+});
 
 Deno.test("Apple client secret JWT uses ES256 claims Apple requires", async () => {
   const jwt = await mintAppleClientSecret({
