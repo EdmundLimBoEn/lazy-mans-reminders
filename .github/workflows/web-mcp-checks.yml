@@ -74,6 +74,7 @@ jobs:
           python3 scripts/check_privacy_manifest.py --self-test
       - run: |
           export PATH="$(pg_config --bindir):$PATH"
+          type initdb postgres
           python3 -B -m unittest discover -s scripts/tests -v
       - run: python3 scripts/check_migration_versions.py
       - run: bash -n scripts/check-ios-toolchain.sh scripts/ios-release-build.sh scripts/ios-simulator-unit-tests.sh
