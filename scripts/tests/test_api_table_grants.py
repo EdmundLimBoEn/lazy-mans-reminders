@@ -39,8 +39,13 @@ class ApiTableGrantsTests(unittest.TestCase):
           create role service_role bypassrls;
           create schema auth;
           create table auth.users (id uuid primary key);
+          create table auth.sessions (id uuid primary key, user_id uuid, not_after timestamptz);
+          create function auth.jwt() returns jsonb language sql stable as $$
+            select nullif(current_setting('request.jwt.claims', true), '')::jsonb
+          $$;
           create function auth.uid() returns uuid language sql stable as $$
-            select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
+            select coalesce(nullif(current_setting('request.jwt.claim.sub', true), ''),
+                            auth.jwt()->>'sub')::uuid
           $$;
           grant usage on schema auth to authenticated, service_role;
           insert into auth.users values ('{OWNER}'), ('{OTHER}');
@@ -164,6 +169,44 @@ class ApiTableGrantsTests(unittest.TestCase):
           set local role service_role;
           do $$ begin
             assert (select max_lines from public.lock_screen_prefs where user_id = '{OTHER}') = 9;
+          end $$;
+          rollback;
+        """)
+
+    def test_personal_token_mint_requires_live_owner_session(self):
+        revoked = '10000000-0000-0000-0000-000000000001'
+        live = '10000000-0000-0000-0000-000000000002'
+        foreign = '10000000-0000-0000-0000-000000000003'
+        expired = '10000000-0000-0000-0000-000000000004'
+        self.sql(f"""
+          begin;
+          insert into auth.sessions (id, user_id, not_after) values
+            ('{revoked}', '{OWNER}', null), ('{live}', '{OWNER}', null),
+            ('{foreign}', '{OTHER}', null), ('{expired}', '{OWNER}', now() - interval '1 hour');
+          delete from auth.sessions where id = '{revoked}';
+          set local role authenticated;
+          do $$
+          declare
+            claims jsonb := jsonb_build_object('sub', '{OWNER}', 'role', 'authenticated',
+                                               'exp', extract(epoch from now() + interval '1 hour'));
+            session_id text;
+          begin
+            foreach session_id in array array['{revoked}', '{foreign}', '{expired}', null] loop
+              perform set_config('request.jwt.claims', jsonb_strip_nulls(
+                claims || jsonb_build_object('session_id', session_id))::text, true);
+              begin
+                perform public.mint_agent_token('Denied');
+                assert false, 'Mint accepted an inactive or unowned session';
+              exception when raise_exception then
+                if sqlerrm <> 'Not authenticated' then raise; end if;
+              end;
+            end loop;
+            assert (select count(*) = 0 from public.agent_tokens);
+            perform set_config('request.jwt.claims',
+              (claims || jsonb_build_object('session_id', '{live}'))::text, true);
+            perform public.mint_agent_token('Allowed');
+            assert (select count(*) = 1 from public.agent_tokens
+                    where user_id = '{OWNER}' and name = 'Allowed');
           end $$;
           rollback;
         """)
