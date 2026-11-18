@@ -1,9 +1,9 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { CLIENT_STORAGE_ERROR, POST_IT_HINT } from './board'
-import type { AgentSession } from './domain'
 import { createServiceRoleClient } from './auth'
 import { createServer } from './server'
+import { sessionFromProps } from './session'
 
 const { handlers } = vi.hoisted(() => ({
   handlers: new Map<string, (args: { id?: string; text?: string }) => Promise<{ isError?: boolean; content: { text: string }[] }>>(),
@@ -17,7 +17,7 @@ vi.mock('@modelcontextprotocol/server', () => ({
 }))
 vi.mock('./auth', () => ({ createServiceRoleClient: vi.fn() }))
 
-const session = { userId: '11111111-1111-4111-8111-111111111111', tokenId: 'test', agentName: 'Test' } as AgentSession
+const session = sessionFromProps({ userId: '11111111-1111-4111-8111-111111111111', tokenId: 'test', agentName: 'Test', canEdit: true })!
 const id = '22222222-2222-4222-8222-222222222222'
 const active = Array.from({ length: 16 }, (_, i) => ({
   id: `active-${i}`, text: `Reminder ${i}`, is_done: false,

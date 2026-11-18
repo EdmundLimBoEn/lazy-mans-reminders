@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { CLIENT_STORAGE_ERROR, runBoardCommand } from './board'
 import type { AgentSession, ReminderRow } from './domain'
 
-const session = { userId: '11111111-1111-4111-8111-111111111111', tokenId: 'test', agentName: 'Test' } as AgentSession
+const session = { userId: '11111111-1111-4111-8111-111111111111', tokenId: 'test', agentName: 'Test', canEdit: true } as AgentSession
 const id = '22222222-2222-4222-8222-222222222222'
 const original: ReminderRow & { user_id: string } = {
   id, user_id: session.userId, text: '[Test] Buy mlk', is_done: false,
@@ -26,12 +26,19 @@ function setup(row = { ...original }, error?: string) {
   const db = createClient('https://database.test', 'test-service-role', {
     global: { fetch }, auth: { persistSession: false, autoRefreshToken: false },
   })
-  return { row, fetch, edit: (text: string, reminderId = id) => runBoardCommand(db, session, { kind: 'edit', reminderId, text }) }
+  return { db, row, fetch, edit: (text: string, reminderId = id) => runBoardCommand(db, session, { kind: 'edit', reminderId, text }) }
 }
 
 afterEach(() => vi.restoreAllMocks())
 
 describe('edit reminder', () => {
+  it('requires edit permission at execution before accessing storage', async () => {
+    const { db, fetch } = setup()
+    const command = { kind: 'edit', reminderId: id, text: 'Corrected' } as const
+    expect(await runBoardCommand(db, { ...session, canEdit: false }, command)).toEqual({ kind: 'unauthorized' })
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
   it.each(['Buy milk', '[Test] Buy milk', '[Other] Buy milk', '😀'.repeat(500)])(
     'replaces trimmed visible text without adding a prefix (%s)', async (text) => {
       const { edit, fetch, row } = setup()

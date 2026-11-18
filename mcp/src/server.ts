@@ -45,7 +45,7 @@ export function createServer(session: AgentSession, env: Env): McpServer {
     },
   )
 
-  server.registerTool(
+  if (session.canEdit) server.registerTool(
     'edit_reminder',
     {
       description: 'Replace the text of an active or completed reminder. Text is trimmed and must be 1–500 characters, including any prefix. No agent name prefix is added.',

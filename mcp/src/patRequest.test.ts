@@ -73,7 +73,7 @@ describe('personal-token MCP requests', () => {
       expect(update).toHaveBeenCalledWith({ last_used_at: expect.any(String) })
       expect(updateEq).toHaveBeenCalledWith('id', tokenId)
       expect(await response!.json()).toEqual({
-        props: { userId, tokenId, agentName: 'Test agent' },
+        props: { userId, tokenId, agentName: 'Test agent', canEdit: true },
         audience: resource,
       })
     } finally {

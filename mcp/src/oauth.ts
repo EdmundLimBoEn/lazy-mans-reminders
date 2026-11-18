@@ -75,11 +75,7 @@ export async function resolveExternalPat(input: {
   }
   if (!session) return null
   return {
-    props: {
-      userId: session.userId,
-      tokenId: session.tokenId,
-      agentName: session.agentName,
-    },
+    props: session,
     audience: mcpResourceForRequest(input.request),
   }
 }

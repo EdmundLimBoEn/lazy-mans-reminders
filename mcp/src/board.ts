@@ -77,6 +77,7 @@ export async function runBoardCommand(
     case 'add':
       return addReminder(supabase, session, command.text)
     case 'edit':
+      if (!session.canEdit) return { kind: 'unauthorized' }
       return editReminder(supabase, session, command.reminderId, command.text)
     case 'complete':
       return setCompletion(supabase, session, command.reminderId, true)
