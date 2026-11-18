@@ -1,4 +1,6 @@
 -- Run only on a disposable database, after the device-token quota migration.
+\ir ../migrations/20261118221705_check_device_quota_ownership.sql
+
 begin;
 insert into auth.users(id) values
   ('55555555-5555-4555-8555-555555555551'),
@@ -97,7 +99,9 @@ select extensions.dblink_connect('device_quota_race', format('dbname=%L user=%L 
   current_setting('port')));
 create temporary table device_quota_peer as
 select pid from extensions.dblink('device_quota_race', 'select pg_backend_pid()') as t(pid integer);
-insert into auth.users(id) values ('55555555-5555-4555-8555-555555555553');
+insert into auth.users(id) values
+  ('55555555-5555-4555-8555-555555555553'),
+  ('55555555-5555-4555-8555-555555555554');
 insert into public.device_tokens(token, user_id, updated_at)
 select lpad(n::text, 64, 'd'), '55555555-5555-4555-8555-555555555553',
   '2020-01-01'::timestamptz + n * interval '1 day'
@@ -134,6 +138,37 @@ do $$ begin
   assert (select count(*) = 2 from public.device_tokens
     where token in (lpad('5', 64, 'd'), lpad('6', 64, 'd'))), 'Concurrent new devices were lost';
 end $$;
+
+-- The oldest device is locked by the owner's other session. Rejected writes
+-- must reach RLS without waiting for the quota trigger to evict that device.
+select extensions.dblink_exec('device_quota_race', 'begin');
+select token from extensions.dblink('device_quota_race', $$
+  select token from public.device_tokens where token = lpad('2', 64, 'd') for no key update
+$$) as t(token text);
+begin;
+set local lock_timeout = '500ms';
+set local role authenticated;
+set local request.jwt.claim.sub = '55555555-5555-4555-8555-555555555554';
+insert into public.device_tokens(token, user_id) values (lpad('7', 64, 'd'), auth.uid());
+do $$
+declare owner_id constant uuid := '55555555-5555-4555-8555-555555555553';
+begin
+  begin
+    insert into public.device_tokens(token, user_id) values (lpad('8', 64, 'd'), owner_id);
+    raise exception 'Cross-account registration bypassed RLS';
+  exception when insufficient_privilege then null;
+  end;
+  begin
+    update public.device_tokens set user_id = owner_id where token = lpad('7', 64, 'd');
+    raise exception 'Cross-account ownership update bypassed RLS';
+  exception when insufficient_privilege then null;
+  end;
+end $$;
+set local request.jwt.claim.sub = '55555555-5555-4555-8555-555555555553';
+insert into public.reminders(user_id, text) values (auth.uid(), 'Device quota regression');
+rollback;
+select extensions.dblink_exec('device_quota_race', 'rollback');
 select extensions.dblink_disconnect('device_quota_race');
 drop table device_quota_peer;
-delete from auth.users where id = '55555555-5555-4555-8555-555555555553';
+delete from auth.users where id in (
+  '55555555-5555-4555-8555-555555555553', '55555555-5555-4555-8555-555555555554');
