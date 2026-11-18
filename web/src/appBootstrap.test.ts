@@ -1,5 +1,6 @@
 import { beforeEach, expect, it, vi } from 'vitest'
 import type { ReactElement, ReactNode } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import App from './App'
 
 const hooks = vi.hoisted(() => ({
@@ -14,6 +15,7 @@ const auth = vi.hoisted(() => ({
 vi.mock('./supabase', () => ({ supabase: { auth } }))
 vi.mock('react', async original => ({
   ...await original<typeof import('react')>(),
+  lazy: () => () => null,
   useState: (initial: unknown) => {
     const index = hooks.cursor++
     if (!(index in hooks.states)) {
@@ -76,4 +78,22 @@ it.each([
     expect(tree.some(node => node.props.children === message)).toBe(true)
     expect(tree.some(node => node.props.label === 'Loading')).toBe(false)
   })
+})
+
+it.each([
+  ['#agent-access-heading', 1],
+  ['', 0],
+])('scrolls to Agent access on authenticated board mount for hash "%s"', async (hash, expectedScrolls) => {
+  window.location.hash = hash
+  const heading = { scrollIntoView: vi.fn() }
+  const querySelector = (selector: string) => selector === '#agent-access-heading' ? heading : null
+  vi.stubGlobal('document', { title: '', querySelector })
+  auth.getSession.mockResolvedValue({ data: { session: { user: { id: 'user' } } } })
+  start()
+  await Promise.resolve()
+  const [tree] = render()
+  hooks.effects = []
+  renderToStaticMarkup(tree)
+  for (const effect of hooks.effects) effect()
+  expect(heading.scrollIntoView).toHaveBeenCalledTimes(expectedScrolls)
 })
