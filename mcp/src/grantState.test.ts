@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { memoryState } from '../test/memoryObjects'
 import { GrantState, grantStorage } from './grantState'
 
@@ -14,6 +14,7 @@ function setup() {
   }
   const env = { OAUTH_KV: kv } as unknown as Env
   const state = memoryState()
+  const setAlarm = vi.spyOn(state.storage, 'setAlarm')
   let object = new GrantState(state, env)
   const call = (method: string, key = GRANT, value?: string, rotation?: { from?: string; to: string }) => object.fetch(new Request('https://grant-state/storage', {
     method: 'POST', body: JSON.stringify({ method, key, value, rotation }),
@@ -24,10 +25,20 @@ function setup() {
     idFromName: (name: string) => name,
     get: () => ({ fetch: (input: string, init?: RequestInit) => object.fetch(new Request(input, init)) }),
   } as unknown as DurableObjectNamespace
-  return { records, kv, state, call, rotate, storage: () => grantStorage(env), restart: () => { object = new GrantState(state, env) } }
+  const alarm = async () => {
+    await state.storage.deleteAlarm()
+    await object.alarm()
+  }
+  return {
+    records, kv, state, call, rotate, alarm, setAlarm,
+    storage: () => grantStorage(env),
+    restart: () => { object = new GrantState(state, env) },
+  }
 }
 
 describe('atomic refresh rotation', () => {
+  afterEach(() => vi.useRealTimers())
+
   async function pendingRefresh(stale = false) {
     const context = setup()
     const expiresAt = Math.floor(Date.now() / 1000) + 3600
@@ -61,6 +72,57 @@ describe('atomic refresh rotation', () => {
     expect(await storage.get(GRANT, 'json')).toMatchObject({ expiresAt })
     expect((await rotate('initial', 'retry')).status).toBe(204)
     expect(await storage.get(GRANT)).toBe(records.get(GRANT))
+  })
+
+  it('removes the recovery copy at the grant expiry without a client retry', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    const { storage, kv, records, restart, alarm, setAlarm, state, prior, expiresAt } = await pendingRefresh()
+    vi.setSystemTime(expiresAt * 1000 - 300_000)
+    kv.put.mockRejectedValueOnce(new Error('KV PUT failed: 429 Too Many Requests'))
+    await expect(storage.put(TOKEN, 'rejected')).rejects.toThrow('429 Too Many Requests')
+    expect(setAlarm).toHaveBeenCalledExactlyOnceWith(expiresAt * 1000)
+
+    restart()
+    vi.setSystemTime(expiresAt * 1000 - 1)
+    expect(await storage.get(GRANT)).toBe(prior)
+    vi.setSystemTime(expiresAt * 1000)
+    records.delete(GRANT)
+    await alarm()
+    expect(await state.storage.get('recoveredGrant')).toBeUndefined()
+    expect(await state.storage.get('refreshTokenId')).toBe('initial')
+    expect(await storage.get(GRANT)).toBeNull()
+  })
+
+  it('discards an expired recovery copy on read if the alarm has not fired', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    const { storage, kv, records, state, expiresAt } = await pendingRefresh()
+    kv.put.mockRejectedValueOnce(new Error('KV PUT failed: 429 Too Many Requests'))
+    await expect(storage.put(TOKEN, 'rejected')).rejects.toThrow('429 Too Many Requests')
+
+    vi.setSystemTime(expiresAt * 1000)
+    records.delete(GRANT)
+    expect(await storage.get(GRANT)).toBeNull()
+    expect(await state.storage.get('recoveredGrant')).toBeUndefined()
+  })
+
+  it('schedules expiry on the first read of a recovery copy stored without an alarm', async () => {
+    const { storage, state, setAlarm, prior, expiresAt } = await pendingRefresh()
+    await state.storage.put('recoveredGrant', prior)
+
+    expect(await storage.get(GRANT)).toBe(prior)
+    expect(setAlarm).toHaveBeenCalledExactlyOnceWith(expiresAt * 1000)
+  })
+
+  it('does not create a recovery copy if the token write is rejected after the grant expires', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    const { storage, kv, records, state, expiresAt } = await pendingRefresh()
+    kv.put.mockRejectedValueOnce(new Error('KV PUT failed: 429 Too Many Requests'))
+
+    vi.setSystemTime(expiresAt * 1000)
+    records.delete(GRANT)
+    await expect(storage.put(TOKEN, 'rejected')).rejects.toThrow('429 Too Many Requests')
+    expect(await state.storage.get('recoveredGrant')).toBeUndefined()
+    expect(await storage.get(GRANT)).toBeNull()
   })
 
   it('excludes competing refreshes until the rejected token write has been recovered', async () => {
