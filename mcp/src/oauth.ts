@@ -1,4 +1,4 @@
-import { ExternalTokenError, type AuthRequest, type OAuthHelpers } from '@cloudflare/workers-oauth-provider'
+import { ExternalTokenError, type AuthRequest, type ClientInfo, type OAuthHelpers } from '@cloudflare/workers-oauth-provider'
 import { MCP_HOSTS, mcpResourceForRequest, TOOLS } from './constants'
 import { resolveSession } from './auth'
 import { recordAgentUsage } from './usage'
@@ -228,10 +228,18 @@ async function denyConsent(request: Request, env: Env, deps: IdentityDeps): Prom
   const oauth = oauthHelpers(env)
   if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
   const oauthRequest = await loadPending(env, state)
+  if (!oauthRequest) return json({ error: 'expired_state' }, 400, cors)
+
+  let client: ClientInfo | null
+  try {
+    client = await oauth.lookupClient(oauthRequest.clientId)
+  } catch {
+    return json({ error: 'temporarily_unavailable' }, 503, cors)
+  }
+  const redirectTo = denialRedirect(oauthRequest, client)
+
   if (!await consumeAuthorizationState(env, state)) return json({ error: 'expired_state' }, 400, cors)
-  if (!oauthRequest) return json({ redirectTo: null }, 200, cors)
-  const client = await oauth.lookupClient(oauthRequest.clientId)
-  return json({ redirectTo: denialRedirect(oauthRequest, client) }, 200, cors)
+  return json({ redirectTo }, 200, cors)
 }
 
 async function bindAuthorization(
