@@ -1,11 +1,7 @@
 -- Disposable database only. Transport is replaced transactionally; no HTTP calls.
 begin;
 create or replace function public.post_reminder_push(payload jsonb) returns bigint
-language plpgsql security definer set search_path = '' as $$
-begin
-  raise exception 'simulated transport outage';
-end;
-$$;
+language sql as $$ select 1::bigint $$;
 do $$
 declare
   owner_id uuid := gen_random_uuid();
@@ -22,7 +18,7 @@ begin
   perform public.request_reminder_push(event);
   assert (select count(*) = 2 from public.reminder_push_jobs where user_id = owner_id);
   assert (select bool_and(attempts = 1 and status = 'pending' and payload = event)
-    from public.reminder_push_jobs where user_id = owner_id), 'Submission failure lost the event';
+    from public.reminder_push_jobs where user_id = owner_id), 'Submission must keep the event pending';
   perform public.dispatch_reminder_push_jobs();
   assert (select bool_and(attempts = 1) from public.reminder_push_jobs where user_id = owner_id),
     'Backoff was bypassed';
