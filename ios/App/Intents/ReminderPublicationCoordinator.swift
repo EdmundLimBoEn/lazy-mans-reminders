@@ -1,4 +1,16 @@
 import Foundation
+import UserNotifications
+
+protocol DeliveredNotificationCenter {
+    func deliveredRequests() async -> [UNNotificationRequest]
+    func removeDeliveredNotifications(withIdentifiers identifiers: [String])
+}
+
+extension UNUserNotificationCenter: DeliveredNotificationCenter {
+    func deliveredRequests() async -> [UNNotificationRequest] {
+        await deliveredNotifications().map(\.request)
+    }
+}
 
 actor ReminderPublicationCoordinator {
     enum Publication: Equatable {
@@ -10,6 +22,7 @@ actor ReminderPublicationCoordinator {
 
     private let load: () async -> [Reminder]
     private let publish: ([Reminder], Publication) async throws -> Void
+    private let notificationCenter: any DeliveredNotificationCenter
     private var isPublishing = false
     private var waiters: [CheckedContinuation<Void, Never>] = []
 
@@ -17,10 +30,12 @@ actor ReminderPublicationCoordinator {
 
     init(
         load: @escaping () async -> [Reminder],
-        publish: @escaping ([Reminder], Publication) async throws -> Void
+        publish: @escaping ([Reminder], Publication) async throws -> Void,
+        notificationCenter: any DeliveredNotificationCenter = UNUserNotificationCenter.current()
     ) {
         self.load = load
         self.publish = publish
+        self.notificationCenter = notificationCenter
     }
 
     // Callers may hold a completed result from an earlier account. Only the
@@ -80,6 +95,12 @@ actor ReminderPublicationCoordinator {
         if onlyIfNonempty && current.isEmpty { return }
         let reminders: [Reminder]
         if publication == .clear {
+            let requestIDs = await notificationCenter.deliveredRequests()
+                .filter { $0.content.categoryIdentifier == NotificationAccessPolicy.reminderCategoryID }
+                .map(\.identifier)
+            if !requestIDs.isEmpty {
+                notificationCenter.removeDeliveredNotifications(withIdentifiers: requestIDs)
+            }
             reminders = []
         } else if let identifiers {
             reminders = current.filter { identifiers.contains($0.id) }
