@@ -1,4 +1,5 @@
 import { safeReturnPath } from './pkceCallback'
+import { normalizePath } from './routing'
 
 export const MCP_ORIGIN = 'https://np-mcp.sillyapps.co'
 export const MCP_URL = `${MCP_ORIGIN}/mcp`
@@ -40,8 +41,8 @@ export function lmrAgentTokenHeaderTemplate(): string {
 
 export function signInReturnTo(pathname: string, search = '', hash = ''): string | null {
   if (pathname === '/' && hash === AGENT_ACCESS_HASH) return `/${AGENT_ACCESS_HASH}`
-  if (pathname !== '/connect') return null
-  return `${pathname}${search}`
+  if (normalizePath(pathname) !== '/connect') return null
+  return `/connect${search}`
 }
 
 export function authCallbackUrlFrom(origin: string, pathname: string, search = '', hash = ''): string {

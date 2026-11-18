@@ -57,7 +57,7 @@ function setEmail(value: string) {
 beforeEach(() => {
   hooks.states = []
   vi.resetAllMocks()
-  vi.stubGlobal('window', { location: { href: 'https://np.sillyapps.co/', origin: 'https://np.sillyapps.co' } })
+  vi.stubGlobal('window', { location: new URL('https://np.sillyapps.co/') })
   vi.stubGlobal('sessionStorage', { getItem: () => null, setItem: () => {}, removeItem: () => {} })
 })
 
