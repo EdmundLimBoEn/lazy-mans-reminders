@@ -1,4 +1,4 @@
-"""Exercise API roles without default table grants, with PostgreSQL binaries on PATH."""
+"""Exercise API roles and analytics rollout on disposable PostgreSQL databases."""
 from pathlib import Path
 import re
 import shutil
@@ -7,12 +7,15 @@ import tempfile
 import unittest
 
 
-MIGRATIONS = Path(__file__).resolve().parents[2] / 'supabase' / 'migrations'
+ROOT = Path(__file__).resolve().parents[2]
+MIGRATIONS = ROOT / 'supabase' / 'migrations'
 OWNER = '00000000-0000-0000-0000-000000000001'
 OTHER = '00000000-0000-0000-0000-000000000002'
 
 
-class ApiTableGrantsTests(unittest.TestCase):
+class _DisposableDatabase(unittest.TestCase):
+    stop_after = None
+
     @classmethod
     def setUpClass(cls):
         for tool in ('initdb', 'postgres'):
@@ -65,6 +68,8 @@ class ApiTableGrantsTests(unittest.TestCase):
             sql = re.sub(r'^create extension if not exists pg_(cron|net)\b[^\n]*\n',
                          '', migration.read_text(), flags=re.MULTILINE)
             cls.sql(sql, migration.name)
+            if migration.name == cls.stop_after:
+                break
 
     @classmethod
     def sql(cls, statement, source='API role operation'):
@@ -79,6 +84,44 @@ class ApiTableGrantsTests(unittest.TestCase):
         if result.returncode or re.search(r'\b(?:ERROR|FATAL|PANIC):', result.stderr):
             raise AssertionError(f'{source}\n{result.stderr}')
 
+
+class AnalyticsRolloutTests(_DisposableDatabase):
+    stop_after = '20261113000200_usage_events.sql'
+
+    def test_sql_editor_rollout_counts_an_edit(self):
+        runbook = (ROOT / 'docs/analytics/enable.md').read_text()
+        before_deploy = runbook.split('## Live enablement\n', 1)[1].split('npm run deploy', 1)[0]
+        # Use the SQL Editor override for the flag, then apply the migration files
+        # the runbook requires between that override and the Worker deployment.
+        toggle, prerequisites = before_deploy.split('```sql\n', 1)[1].split('```', 1)
+        self.sql(toggle, 'Runbook SQL Editor enablement')
+        for path in re.findall(r'`(supabase/migrations/[^`]+\.sql)`', prerequisites):
+            self.sql((ROOT / path).read_text(), path)
+
+        self.sql(f"""
+          begin;
+          insert into public.reminders (id, user_id, text) values ('{OWNER}', '{OWNER}', 'Before edit');
+          grant select, update (text) on public.reminders to service_role;
+          set local role service_role;
+          do $$
+          declare today date := (statement_timestamp() at time zone 'UTC')::date;
+          begin
+            begin
+              -- The Worker treats an analytics error as best effort and still edits.
+              perform public.record_agent_usage('{OWNER}', 'mcp_edit');
+            exception when invalid_parameter_value or check_violation then null;
+            end;
+            update public.reminders set text = 'After edit' where id = '{OWNER}' and user_id = '{OWNER}';
+            assert found, 'Fixture reminder edit did not succeed';
+            assert coalesce((select events from public.usage_source_report(today, today)
+              where source = 'agent' and event = 'mcp_edit'), 0) = 1,
+              'One successful edit must increment mcp_edit by one';
+          end $$;
+          rollback;
+        """, 'Rollout edit verification')
+
+
+class ApiTableGrantsTests(_DisposableDatabase):
     def test_reminder_crud_and_service_reopen(self):
         self.sql(f"""
           begin;

@@ -30,7 +30,13 @@ identified in [the analytics plan](plan.md) before the live enablement.
    is idempotent while enabled, but will re-enable collection after a rollback.
    Do not bulk-apply unrelated pending migrations just to enable this switch.
 
-2. From an approved checkout containing this change, confirm `mcp/wrangler.jsonc`
+2. Before deploying the Worker, confirm that
+   `supabase/migrations/20261114000100_mcp_edit_usage.sql` has been applied. This
+   migration is required for both enablement paths above. If it is pending, apply
+   it through the normal migration release or run the full migration in the SQL
+   Editor. The SQL Editor does not record the migration in Supabase history.
+
+3. From an approved checkout containing this change, confirm `mcp/wrangler.jsonc`
    names `lazy-mans-reminders-mcp` and contains
    `"USAGE_ANALYTICS_ENABLED": "true"` under `vars`. With the existing authorized
    Cloudflare login, run:
@@ -67,11 +73,13 @@ increase by one, with `web` source buckets. Repeat on iOS to check `ios` attribu
 if desired; older clients can report `unknown`. These events remain counted after
 the reminder is deleted.
 
-Connect an authenticated MCP client for that test account to
+Create a reminder on the test board for the MCP check. Connect an authenticated,
+edit-enabled MCP client for that test account to
 `https://np-mcp.sillyapps.co/mcp` (or `https://lmr-mcp.edmundlim.systems/mcp`).
-Invoke the `list_reminders` tool once and rerun `usage_source_report`: expect
-`source='agent'`, `event='mcp_list'` to increase by one. Repeat on the other host
-if verifying both routes. A completed new OAuth authorization should add
+Invoke `list_reminders` once, then use `edit_reminder` once to change the
+reminder. Rerun `usage_source_report` and confirm that `mcp_list` and `mcp_edit`
+each increased by one under `source='agent'`. Repeat on the other host if
+verifying both routes. A completed new OAuth authorization should add
 `agent_oauth_connected`; token refresh alone will not. Worker telemetry is best
 effort, so allow the request to finish and investigate missing increments.
 `usage_daily_report` reports reminder mutations; use `usage_source_report` for
