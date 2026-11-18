@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
+import { navigateOnClick } from '@/routing'
 
 export function BrandMark({ className }: { className?: string }) {
   return (
@@ -29,10 +30,7 @@ export function SiteHeader({
       <a
         href="/"
         className="flex items-center gap-2 text-sm font-medium tracking-tight"
-        onClick={(event) => {
-          event.preventDefault()
-          onNavigate('/')
-        }}
+        onClick={navigateOnClick(onNavigate, '/')}
       >
         <BrandMark />
         <span>Notepad</span>

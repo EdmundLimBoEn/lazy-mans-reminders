@@ -1,3 +1,5 @@
+import type { MouseEventHandler } from 'react'
+
 export type AppRoute =
   | '/'
   | '/privacy'
@@ -24,4 +26,13 @@ export function normalizePath(pathname: string): AppRoute {
   const path = (stripped === '/' ? '/' : stripped.replace(/\/{2,}/g, '/')).toLowerCase() as AppRoute
   if (KNOWN.has(path)) return path
   return 'not-found'
+}
+
+export function navigateOnClick(onNavigate: (path: string) => void, path: string): MouseEventHandler<HTMLAnchorElement> {
+  return event => {
+    if (event.defaultPrevented || event.button !== 0 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+
+    event.preventDefault()
+    onNavigate(path)
+  }
 }
