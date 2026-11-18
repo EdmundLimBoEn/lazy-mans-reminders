@@ -1,7 +1,8 @@
 import { beforeEach, expect, it, vi } from 'vitest'
-import type { ReactElement, ReactNode } from 'react'
+import type { MouseEvent, MouseEventHandler, ReactElement, ReactNode } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import App, { SignIn } from './App'
+import { LegalFooterLinks } from './legalFooter'
 import { authStorageKey } from './supabase'
 
 const hooks = vi.hoisted(() => ({
@@ -30,7 +31,16 @@ vi.mock('react', async original => ({
   useEffect: (effect: () => void) => { hooks.effects.push(effect) },
 }))
 
-type Props = { children?: ReactNode; role?: string; title?: string; label?: string; session?: unknown }
+type Props = {
+  children?: ReactNode
+  role?: string
+  title?: string
+  label?: string
+  session?: unknown
+  href?: string
+  onClick?: MouseEventHandler<HTMLAnchorElement>
+  onNavigate?: (path: string) => void
+}
 function nodes(node: ReactNode): ReactElement<Props>[] {
   if (Array.isArray(node)) return node.flatMap(nodes)
   if (!node || typeof node !== 'object' || !('props' in node)) return []
@@ -98,6 +108,40 @@ it.each([
   renderToStaticMarkup(tree)
   for (const effect of hooks.effects) effect()
   expect(heading.scrollIntoView).toHaveBeenCalledTimes(expectedScrolls)
+})
+
+it.each([
+  ['ordinary click', {}, true],
+  ['Ctrl-click', { ctrlKey: true }, false],
+  ['Cmd-click', { metaKey: true }, false],
+  ['Shift-click', { shiftKey: true }, false],
+  ['Alt-click', { altKey: true }, false],
+  ['middle-click', { button: 1 }, false],
+  ['already cancelled click', { defaultPrevented: true }, false],
+] as const)('routes a board footer %s only when appropriate', async (_name, overrides, intercept) => {
+  const session = { user: { id: 'user' } }
+  auth.getSession.mockResolvedValue({ data: { session } })
+  start()
+  await Promise.resolve()
+
+  const board = render().find(node => node.props.session === session)!
+  const footer = LegalFooterLinks({ onNavigate: board.props.onNavigate! })
+  const privacy = nodes(footer).find(node => node.type === 'a' && node.props.href === '/privacy')!
+  const event = {
+    button: 0,
+    defaultPrevented: false,
+    preventDefault: vi.fn(),
+    ...overrides,
+  }
+  privacy.props.onClick!(event as unknown as MouseEvent<HTMLAnchorElement>)
+
+  expect(event.preventDefault).toHaveBeenCalledTimes(intercept ? 1 : 0)
+  if (intercept) {
+    expect(window.history.pushState).toHaveBeenCalledExactlyOnceWith({}, '', '/privacy')
+  } else {
+    expect(window.history.pushState).not.toHaveBeenCalled()
+  }
+  expect(render().some(node => node.props.session === session)).toBe(!intercept)
 })
 
 it.each(['session removal', 'storage clear', 'return to visible tab'])(

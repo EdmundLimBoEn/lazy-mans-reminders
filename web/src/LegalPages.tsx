@@ -1,6 +1,7 @@
-import type { MouseEvent, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { SiteHeader } from '@/components/SiteHeader'
 import { Separator } from '@/components/ui/separator'
+import { navigateOnClick } from './routing'
 import { ThemeToggle } from './ThemeToggle'
 
 const CONTACT_EMAIL = 'edmund@sillyapps.co'
@@ -17,10 +18,7 @@ function LegalShell({
   children,
   onNavigate,
 }: LegalPageProps & { title: string; children: ReactNode }) {
-  const go = (path: string) => (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault()
-    onNavigate(path)
-  }
+  const go = (path: string) => navigateOnClick(onNavigate, path)
   return (
     <div className="mx-auto w-full max-w-2xl px-4 pb-16 sm:px-6">
       <SiteHeader onNavigate={onNavigate}>
@@ -529,11 +527,11 @@ export function SupportPage({ onNavigate }: LegalPageProps) {
       <p>
         Reviewers and users can reach the operator at{' '}
         <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Privacy Policy:{' '}
-        <a href="/privacy" onClick={(e) => { e.preventDefault(); onNavigate('/privacy') }}>
+        <a href="/privacy" onClick={navigateOnClick(onNavigate, '/privacy')}>
           {SITE_URL}/privacy
         </a>
         . Terms:{' '}
-        <a href="/terms" onClick={(e) => { e.preventDefault(); onNavigate('/terms') }}>
+        <a href="/terms" onClick={navigateOnClick(onNavigate, '/terms')}>
           {SITE_URL}/terms
         </a>
         .

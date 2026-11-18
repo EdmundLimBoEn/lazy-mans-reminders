@@ -15,7 +15,7 @@ import { AuthCallback } from './AuthCallback'
 import { IosAuthHandoff } from './IosAuthHandoff'
 import { LegalFooterLinks } from './legalFooter'
 import { AGENT_ACCESS_HASH, authCallbackUrl, rememberReturnTo } from './mcp'
-import { normalizePath, type AppRoute } from './routing'
+import { navigateOnClick, normalizePath, type AppRoute } from './routing'
 import { authStorageKey, supabase } from './supabase'
 import { ThemeToggle } from './ThemeToggle'
 
@@ -304,7 +304,7 @@ export default function App() {
       <StatusShell title="Page not found" onNavigate={navigate}>
         <StatusText>That URL is not part of Notepad.</StatusText>
         <Button asChild className="mt-3">
-          <a href="/" onClick={(event) => { event.preventDefault(); navigate('/') }}>Back to the board</a>
+          <a href="/" onClick={navigateOnClick(navigate, '/')}>Back to the board</a>
         </Button>
       </StatusShell>
     )

@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { navigateOnClick } from './routing'
 
 export function LegalFooterLinks({
   onNavigate,
@@ -13,11 +14,11 @@ export function LegalFooterLinks({
       className={cn('legal-footer-links flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-muted-foreground', className)}
       aria-label="Legal and support"
     >
-      <a className={link} href="/privacy" onClick={(e) => { e.preventDefault(); onNavigate('/privacy') }}>Privacy</a>
+      <a className={link} href="/privacy" onClick={navigateOnClick(onNavigate, '/privacy')}>Privacy</a>
       <span aria-hidden="true">·</span>
-      <a className={link} href="/terms" onClick={(e) => { e.preventDefault(); onNavigate('/terms') }}>Terms</a>
+      <a className={link} href="/terms" onClick={navigateOnClick(onNavigate, '/terms')}>Terms</a>
       <span aria-hidden="true">·</span>
-      <a className={link} href="/support" onClick={(e) => { e.preventDefault(); onNavigate('/support') }}>Support</a>
+      <a className={link} href="/support" onClick={navigateOnClick(onNavigate, '/support')}>Support</a>
     </nav>
   )
 }
