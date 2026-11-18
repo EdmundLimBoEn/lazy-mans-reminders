@@ -1,4 +1,5 @@
 import Foundation
+import Security
 import Supabase
 import XCTest
 @testable import LazyMansReminders
@@ -64,6 +65,54 @@ final class AuthSessionClientTests: XCTestCase {
                        refreshToken: "test-refresh-\(userID)",
                        user: User(id: userID, appMetadata: [:], userMetadata: [:], aud: "authenticated",
                                   createdAt: now, updatedAt: now))
+    }
+
+    private func keychainAttributes(for key: String) throws -> [String: Any] {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: "supabase.gotrue.swift",
+            kSecAttrAccount as String: key,
+            kSecReturnAttributes as String: true,
+            kSecReturnPersistentRef as String: true
+        ]
+        var result: CFTypeRef?
+        XCTAssertEqual(SecItemCopyMatching(query as CFDictionary, &result), errSecSuccess)
+        return try XCTUnwrap(result as? [String: Any])
+    }
+
+    func testReadingLegacySDKSessionUpgradesSameKeychainItem() throws {
+        let project = UUID().uuidString.lowercased()
+        let key = "sb-\(project)-auth-token"
+        let legacy = AuthClient.Configuration.defaultLocalStorage
+        let original = session(userID: UUID())
+        try legacy.store(key: key, value: JSONEncoder().encode(original))
+        defer { try? legacy.remove(key: key) }
+        let before = try keychainAttributes(for: key)
+        XCTAssertEqual(before[kSecAttrAccessible as String] as? String, kSecAttrAccessibleAfterFirstUnlock as String)
+        let reference = try XCTUnwrap(before[kSecValuePersistentRef as String] as? Data)
+
+        let client = AuthSessionClient(supabaseURL: URL(string: "https://\(project).invalid")!, supabaseKey: anonKey)
+        XCTAssertEqual(client.auth.currentSession?.refreshToken, original.refreshToken)
+        let after = try keychainAttributes(for: key)
+        XCTAssertEqual(after[kSecValuePersistentRef as String] as? Data, reference)
+        XCTAssertEqual(after[kSecAttrAccessible as String] as? String, kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly as String)
+    }
+
+    func testNewSDKSignInWritesDeviceOnlyKeychainItem() async throws {
+        let project = UUID().uuidString.lowercased()
+        let key = "sb-\(project)-auth-token"
+        defer { try? AuthClient.Configuration.defaultLocalStorage.remove(key: key) }
+        let payload = try AuthClient.Configuration.jsonEncoder.encode(session(userID: UUID()))
+        let client = AuthSessionClient(
+            supabaseURL: URL(string: "https://\(project).invalid")!, supabaseKey: anonKey,
+            authFetch: { request in
+                (payload, HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil,
+                                          headerFields: ["Content-Type": "application/json"])!)
+            }
+        )
+        _ = try await client.auth.signIn(email: "user@example.invalid", password: "fixture-only")
+        let attributes = try keychainAttributes(for: key)
+        XCTAssertEqual(attributes[kSecAttrAccessible as String] as? String, kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly as String)
     }
 
     func testConstructingClientDoesNotStartAnSDKInitialRefreshOutsideGate() async throws {
