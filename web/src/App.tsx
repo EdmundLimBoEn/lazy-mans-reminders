@@ -1,4 +1,4 @@
-import { lazy, Suspense, type ComponentProps, FormEvent, useCallback, useEffect, useState } from 'react'
+import { Component, lazy, Suspense, type ComponentProps, FormEvent, type ReactNode, useCallback, useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { Info } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -24,6 +24,28 @@ const Connect = lazy(() => import('./Connect').then(module => ({ default: module
 const PrivacyPage = lazy(() => import('./LegalPages').then(module => ({ default: module.PrivacyPage })))
 const TermsPage = lazy(() => import('./LegalPages').then(module => ({ default: module.TermsPage })))
 const SupportPage = lazy(() => import('./LegalPages').then(module => ({ default: module.SupportPage })))
+
+function renderStartError(onNavigate: (path: string) => void, message?: string) {
+  return (
+    <StatusShell title="Could not start the app" role="alert" onNavigate={onNavigate}>
+      {message && <StatusText>{message}</StatusText>}
+      <Button className="mt-3" type="button" onClick={() => window.location.reload()}>Try again</Button>
+    </StatusShell>
+  )
+}
+
+class LazyRoute extends Component<{ onNavigate: (path: string) => void; children: ReactNode }> {
+  state = { failed: false }
+
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+
+  render() {
+    if (this.state.failed) return renderStartError(this.props.onNavigate)
+    return <Suspense fallback={<Splash label="Loading" />}>{this.props.children}</Suspense>
+  }
+}
 
 function BoardRoute(props: ComponentProps<typeof Board>) {
   useEffect(() => {
@@ -294,11 +316,13 @@ export default function App() {
     }
   }, [])
 
+  const renderLazyRoute = (page: ReactNode) => <LazyRoute key={path} onNavigate={navigate}>{page}</LazyRoute>
+
   if (path === '/auth/callback') return <AuthCallback onNavigate={navigate} />
   if (path === '/auth/ios') return <IosAuthHandoff onNavigate={navigate} />
-  if (path === '/privacy') return <Suspense fallback={<Splash label="Loading" />}><PrivacyPage onNavigate={navigate} /></Suspense>
-  if (path === '/terms') return <Suspense fallback={<Splash label="Loading" />}><TermsPage onNavigate={navigate} /></Suspense>
-  if (path === '/support') return <Suspense fallback={<Splash label="Loading" />}><SupportPage onNavigate={navigate} /></Suspense>
+  if (path === '/privacy') return renderLazyRoute(<PrivacyPage onNavigate={navigate} />)
+  if (path === '/terms') return renderLazyRoute(<TermsPage onNavigate={navigate} />)
+  if (path === '/support') return renderLazyRoute(<SupportPage onNavigate={navigate} />)
   if (path === 'not-found') {
     return (
       <StatusShell title="Page not found" onNavigate={navigate}>
@@ -311,21 +335,10 @@ export default function App() {
   }
 
   if (!ready) return <Splash label="Loading" />
-  if (authError) {
-    return (
-      <StatusShell title="Could not start the app" role="alert" onNavigate={navigate}>
-        <StatusText>{authError}</StatusText>
-        <Button className="mt-3" type="button" onClick={() => window.location.reload()}>Try again</Button>
-      </StatusShell>
-    )
-  }
+  if (authError) return renderStartError(navigate, authError)
   if (path === '/connect') {
     return session
-      ? (
-        <Suspense fallback={<Splash label="Loading" />}>
-          <Connect key={session.user.id} session={session} onNavigate={navigate} />
-        </Suspense>
-      )
+      ? renderLazyRoute(<Connect key={session.user.id} session={session} onNavigate={navigate} />)
       : <SignIn onNavigate={navigate} connectingAgent />
   }
 
@@ -343,10 +356,8 @@ export default function App() {
         </Alert>
       )}
       {session
-        ? (
-          <Suspense fallback={<Splash label="Loading" />}>
-            <BoardRoute key={session.user.id} session={session} onNavigate={navigate} onAccountDeleted={setManualAppleRevocation} />
-          </Suspense>
+        ? renderLazyRoute(
+          <BoardRoute key={session.user.id} session={session} onNavigate={navigate} onAccountDeleted={setManualAppleRevocation} />,
         )
         : <SignIn onNavigate={navigate} />}
     </>
