@@ -3,6 +3,7 @@ import { safeReturnPath } from './pkceCallback'
 export const MCP_ORIGIN = 'https://np-mcp.sillyapps.co'
 export const MCP_URL = `${MCP_ORIGIN}/mcp`
 export const RETURN_TO_KEY = 'lmr_return_to'
+export const AGENT_ACCESS_HASH = '#agent-access-heading'
 
 /** Placeholder only. Never put a real agent key in source, snippets, or tests. */
 export const AGENT_TOKEN_PLACEHOLDER = 'TOKEN'
@@ -37,25 +38,27 @@ export function lmrAgentTokenHeaderTemplate(): string {
   return `Authorization: Bearer \${${LMR_AGENT_TOKEN_VAR}}`
 }
 
-/** Persist /connect?state=… across OAuth so AuthCallback can return to Allow. */
-export function connectReturnTo(pathname: string, search = ''): string | null {
+export function signInReturnTo(pathname: string, search = '', hash = ''): string | null {
+  if (pathname === '/' && hash === AGENT_ACCESS_HASH) return `/${AGENT_ACCESS_HASH}`
   if (pathname !== '/connect') return null
   return `${pathname}${search}`
 }
 
-export function authCallbackUrlFrom(origin: string, pathname: string, search = ''): string {
+export function authCallbackUrlFrom(origin: string, pathname: string, search = '', hash = ''): string {
   const url = new URL('/auth/callback', origin)
-  const returnTo = connectReturnTo(pathname, search)
+  const returnTo = signInReturnTo(pathname, search, hash)
   if (returnTo) url.searchParams.set('return_to', returnTo)
   return url.toString()
 }
 
 export function authCallbackUrl(): string {
-  return authCallbackUrlFrom(window.location.origin, window.location.pathname, window.location.search)
+  const { origin, pathname, search, hash } = window.location
+  return authCallbackUrlFrom(origin, pathname, search, hash)
 }
 
 export function rememberReturnTo(): void {
-  const next = connectReturnTo(window.location.pathname, window.location.search)
+  const { pathname, search, hash } = window.location
+  const next = signInReturnTo(pathname, search, hash)
   try {
     if (next) sessionStorage.setItem(RETURN_TO_KEY, next)
     else sessionStorage.removeItem(RETURN_TO_KEY)

@@ -1,4 +1,4 @@
-import { lazy, Suspense, FormEvent, useCallback, useEffect, useState } from 'react'
+import { lazy, Suspense, type ComponentProps, FormEvent, useCallback, useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { Info } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -14,7 +14,7 @@ import { StatusShell, StatusText } from '@/components/StatusShell'
 import { AuthCallback } from './AuthCallback'
 import { IosAuthHandoff } from './IosAuthHandoff'
 import { LegalFooterLinks } from './legalFooter'
-import { authCallbackUrl, rememberReturnTo } from './mcp'
+import { AGENT_ACCESS_HASH, authCallbackUrl, rememberReturnTo } from './mcp'
 import { normalizePath, type AppRoute } from './routing'
 import { supabase } from './supabase'
 import { ThemeToggle } from './ThemeToggle'
@@ -24,6 +24,15 @@ const Connect = lazy(() => import('./Connect').then(module => ({ default: module
 const PrivacyPage = lazy(() => import('./LegalPages').then(module => ({ default: module.PrivacyPage })))
 const TermsPage = lazy(() => import('./LegalPages').then(module => ({ default: module.TermsPage })))
 const SupportPage = lazy(() => import('./LegalPages').then(module => ({ default: module.SupportPage })))
+
+function BoardRoute(props: ComponentProps<typeof Board>) {
+  useEffect(() => {
+    if (window.location.hash === AGENT_ACCESS_HASH) {
+      document.querySelector(AGENT_ACCESS_HASH)?.scrollIntoView()
+    }
+  }, [])
+  return <Board {...props} />
+}
 
 function usePathname(): [AppRoute, (path: string) => void] {
   const [path, setPath] = useState<AppRoute>(() => normalizePath(window.location.pathname))
@@ -313,7 +322,7 @@ export default function App() {
       {session
         ? (
           <Suspense fallback={<Splash label="Loading" />}>
-            <Board key={session.user.id} session={session} onNavigate={navigate} onAccountDeleted={setManualAppleRevocation} />
+            <BoardRoute key={session.user.id} session={session} onNavigate={navigate} onAccountDeleted={setManualAppleRevocation} />
           </Suspense>
         )
         : <SignIn onNavigate={navigate} />}

@@ -8,7 +8,7 @@ import {
   MCP_URL,
   authCallbackUrlFrom,
   claudeMcpConfig,
-  connectReturnTo,
+  signInReturnTo,
   cursorMcpConfig,
   grokConnectorConfig,
   lmrAgentTokenHeaderTemplate,
@@ -51,12 +51,13 @@ describe('agent MCP snippets', () => {
   })
 })
 
-describe('connectReturnTo', () => {
+describe('signInReturnTo', () => {
   it('keeps the connect path and query, and ignores other routes', () => {
-    expect(connectReturnTo('/connect', '?state=abc')).toBe('/connect?state=abc')
-    expect(connectReturnTo('/connect')).toBe('/connect')
-    expect(connectReturnTo('/')).toBeNull()
-    expect(connectReturnTo('/privacy')).toBeNull()
+    expect(signInReturnTo('/connect', '?state=abc')).toBe('/connect?state=abc')
+    expect(signInReturnTo('/connect')).toBe('/connect')
+    expect(signInReturnTo('/')).toBeNull()
+    expect(signInReturnTo('/privacy', '', '#agent-access-heading')).toBeNull()
+    expect(signInReturnTo('/', '', '#other')).toBeNull()
   })
 })
 
