@@ -273,7 +273,7 @@ async function bindAuthorization(
     const { redirectTo } = await completingOauth.completeAuthorization({
       request: oauthRequest,
       userId: user.id,
-      metadata: {},
+      metadata: { clientName: summary?.client.name ?? null },
       scope: ['board'],
       props: {
         userId: user.id,

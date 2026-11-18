@@ -1,5 +1,7 @@
 import type { GrantSummary, OAuthHelpers } from '@cloudflare/workers-oauth-provider'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { setup } from '../test/oauthWorker'
+import { MCP_HOSTS } from './constants'
 import { cleanupUserGrants, describeGrants, listAllUserGrants, revokeUserGrant } from './grants'
 
 function grant(partial: Partial<GrantSummary> & Pick<GrantSummary, 'id' | 'userId'>): GrantSummary {
@@ -111,6 +113,30 @@ describe('grant ownership', () => {
 })
 
 describe('grant descriptions', () => {
+  afterEach(() => vi.unstubAllGlobals())
+
+  it('lists current and legacy URL grants without fetching client metadata', async () => {
+    const { kv, request } = setup()
+    const userId = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
+    const clientId = 'https://agent.example/installation/client.json'
+    const current = grant({ id: 'current', userId, clientId, metadata: { clientName: 'Approved name' }, createdAt: 2 })
+    const legacy = grant({ id: 'legacy', userId, clientId, metadata: {} })
+    for (const item of [current, legacy]) {
+      kv.set(`grant:${userId}:${item.id}`, JSON.stringify(item))
+    }
+    vi.stubGlobal('Cloudflare', { compatibilityFlags: { global_fetch_strictly_public: true } })
+    const fetch = vi.fn(async () => new Response(null, { status: 404 }))
+    vi.stubGlobal('fetch', fetch)
+
+    const response = await request(MCP_HOSTS[0], '/grants', { headers: { Authorization: 'Bearer test-session' } })
+    expect(response.status).toBe(200)
+    expect(fetch).not.toHaveBeenCalled()
+    expect(await response.json()).toMatchObject({ grants: [
+      { id: 'current', clientName: 'Approved name' },
+      { id: 'legacy', clientName: null },
+    ] })
+  })
+
   it('resolves distinct clients concurrently within a fixed bound and preserves descriptions', async () => {
     const grants = Array.from({ length: 26 }, (_, i) => grant({
       id: `grant-${i}`,
