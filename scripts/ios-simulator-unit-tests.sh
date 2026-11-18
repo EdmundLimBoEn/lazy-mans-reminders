@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build LazyMansRemindersTests on an available iPhone simulator.
 # Used by ios-tests.yml and by ios-testflight.yml before archive.
-# Needs no signing secrets: ad-hoc simulator identity, CODE_SIGNING_ALLOWED=NO.
+# Ad-hoc signing gives the test host its Keychain entitlements without signing secrets.
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
@@ -35,4 +35,4 @@ xcodebuild test \
   CODE_SIGN_IDENTITY=- \
   DEVELOPMENT_TEAM= \
   PROVISIONING_PROFILE_SPECIFIER= \
-  CODE_SIGNING_ALLOWED=NO
+  CODE_SIGNING_ALLOWED=YES

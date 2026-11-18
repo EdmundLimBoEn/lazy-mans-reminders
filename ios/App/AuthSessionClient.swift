@@ -9,7 +9,7 @@ final class AuthSessionClient {
 
     init(supabaseURL: URL = AppConfig.supabaseURL,
          supabaseKey: String = AppConfig.supabaseAnonKey,
-         storage: any AuthLocalStorage = AuthClient.Configuration.defaultLocalStorage,
+         storage: any AuthLocalStorage = DeviceOnlyAuthStorage(),
          authFetch: @escaping AuthClient.FetchHandler = { try await URLSession.shared.data(for: $0) },
          globalSession: URLSession = .shared) {
         // Preserve SupabaseClient's existing Keychain namespace.
