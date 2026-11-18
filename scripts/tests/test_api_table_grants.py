@@ -173,6 +173,58 @@ class ApiTableGrantsTests(unittest.TestCase):
           rollback;
         """)
 
+    def test_routine_create_retry_at_quota_returns_same_schedule_and_fires_once(self):
+        owner = '00000000-0000-0000-0000-000000000003'
+        routine_id = '10000000-0000-0000-0000-000000000001'
+        self.addCleanup(self.sql, f"delete from auth.users where id = '{owner}';")
+        self.sql(f"""
+          begin;
+          insert into auth.users values ('{owner}');
+          insert into public.routine_reminders(user_id, text, interval_days, start_date, local_time, timezone, enabled)
+            select '{owner}', 'Paused', 7, current_date, '19:00', 'UTC', false
+            from generate_series(1, 49);
+          set local role authenticated;
+          set local request.jwt.claim.sub = '{owner}';
+          select public.create_routine_reminder('{routine_id}', '{owner}', 'Uniform', 7, current_date, '19:00', 'UTC');
+          reset role;
+          update public.routine_reminders set next_run_at = now() - interval '1 minute'
+            where id = '{routine_id}';
+          commit;
+        """)
+        self.sql(f"""
+          begin;
+          set local role authenticated;
+          set local request.jwt.claim.sub = '{owner}';
+          do $$ begin
+            assert public.create_routine_reminder(
+              '{routine_id}', '{owner}', 'Uniform', 7, current_date, '19:00', 'UTC'
+            ) = '{routine_id}'::uuid, 'Retry must return the original routine even at quota';
+            assert (select count(*) from public.routine_reminders where text = 'Uniform') = 1;
+          end $$;
+          set local request.jwt.claim.sub = '{OTHER}';
+          do $$ begin
+            begin
+              perform public.create_routine_reminder(
+                '{routine_id}', '{owner}', 'Uniform', 7, current_date, '19:00', 'UTC');
+              assert false, 'Retry accepted a different owner';
+            exception when insufficient_privilege then null;
+            end;
+            begin
+              perform public.create_routine_reminder(
+                '{routine_id}', '{OTHER}', 'Uniform', 7, current_date, '19:00', 'UTC');
+              assert false, 'A foreign routine ID was returned as a successful create';
+            exception when unique_violation then null;
+            end;
+          end $$;
+          reset role;
+          do $$ begin
+            assert public.fire_due_routines() = 1, 'The original due occurrence must fire once';
+            assert public.fire_due_routines() = 0;
+            assert (select count(*) from public.reminders where user_id = '{owner}' and text = 'Uniform') = 1;
+          end $$;
+          rollback;
+        """)
+
     def test_personal_token_mint_requires_live_owner_session(self):
         revoked = '10000000-0000-0000-0000-000000000001'
         live = '10000000-0000-0000-0000-000000000002'
