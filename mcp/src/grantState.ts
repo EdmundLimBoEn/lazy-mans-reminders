@@ -26,9 +26,35 @@ function grantKey(key: string): string | null {
   return null
 }
 
+function grantExpiryMs(grant: string): number | undefined {
+  const { expiresAt } = JSON.parse(grant) as { expiresAt?: number }
+  return expiresAt === undefined ? undefined : expiresAt * 1000
+}
+
 /** Serializes provider storage operations for one grant, including its access tokens. */
 export class GrantState implements DurableObject {
   constructor(private readonly state: DurableObjectState, private readonly env: Env) {}
+
+  private async readRecoveredGrant(): Promise<string | undefined> {
+    const { storage } = this.state
+    const grant = await storage.get<string>('recoveredGrant')
+    if (grant === undefined) return
+    const expiresAt = grantExpiryMs(grant)
+    if (expiresAt === undefined) return grant
+    if (expiresAt <= Date.now()) {
+      await storage.delete('recoveredGrant')
+      return
+    }
+    // Schedule cleanup for copies stored before recovery alarms were added.
+    if (await storage.getAlarm() !== expiresAt) await storage.setAlarm(expiresAt)
+    return grant
+  }
+
+  async alarm(): Promise<void> {
+    await this.state.blockConcurrencyWhile(async () => {
+      await this.readRecoveredGrant()
+    })
+  }
 
   async fetch(request: Request): Promise<Response> {
     const operation = await request.json<Operation>()
@@ -50,7 +76,7 @@ export class GrantState implements DurableObject {
         return method === 'get' ? Response.json(null) : new Response(null, { status: 409 })
       }
       if (method === 'get') {
-        const recovered = key === grantKey(key) ? await this.state.storage.get<string>('recoveredGrant') : undefined
+        const recovered = key === grantKey(key) ? await this.readRecoveredGrant() : undefined
         return Response.json(recovered ?? await this.env.OAUTH_KV.get(key))
       }
       let previousRefreshTokenId: string | undefined
@@ -77,11 +103,14 @@ export class GrantState implements DurableObject {
         const recovery = operation.refreshRecovery
         if (recovery && key !== grantKey(key) && error instanceof Error && /429 Too Many Requests/i.test(error.message) &&
             await this.state.storage.get<string>('refreshTokenId') === recovery.to) {
-          // Restore the usable grant before reopening its generation. Keep it
-          // authoritative here: an immediate KV rewrite can itself be rate limited
-          // and KV reads may still return the discarded successor.
-          await this.state.storage.put('recoveredGrant', recovery.grant)
-          await this.state.storage.put('refreshTokenId', recovery.from)
+          const expiresAt = grantExpiryMs(recovery.grant)
+          if (expiresAt === undefined || expiresAt > Date.now()) {
+            // Arm cleanup before saving the copy, then reopen its generation.
+            // KV may rate-limit a rewrite or still return the discarded successor.
+            if (expiresAt !== undefined) await this.state.storage.setAlarm(expiresAt)
+            await this.state.storage.put('recoveredGrant', recovery.grant)
+            await this.state.storage.put('refreshTokenId', recovery.from)
+          }
         }
         if (operation.rotation && error instanceof Error && /429 Too Many Requests/i.test(error.message)) {
           if (previousRefreshTokenId === undefined) await this.state.storage.delete('refreshTokenId')

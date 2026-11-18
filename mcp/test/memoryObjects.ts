@@ -1,5 +1,6 @@
 export function memoryState(): DurableObjectState {
   const entries = new Map<string, unknown>()
+  let alarm: number | null = null
   let queue = Promise.resolve()
   const serialize = <T>(callback: () => Promise<T>): Promise<T> => {
     const result = queue.then(callback)
@@ -10,7 +11,9 @@ export function memoryState(): DurableObjectState {
     get: async (key: string) => structuredClone(entries.get(key)),
     put: async (key: string, value: unknown) => { entries.set(key, structuredClone(value)) },
     delete: async (key: string) => entries.delete(key),
-    setAlarm: async () => {},
+    getAlarm: async () => alarm,
+    setAlarm: async (time: number | Date) => { alarm = Number(time) },
+    deleteAlarm: async () => { alarm = null },
     transaction: <T>(fn: (store: unknown) => Promise<T>) => serialize(() => fn(storage)),
   }
   return { storage, blockConcurrencyWhile: serialize } as unknown as DurableObjectState
