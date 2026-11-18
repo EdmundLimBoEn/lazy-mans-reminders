@@ -3,7 +3,7 @@ import { OAUTH_TOKEN_ID } from './constants'
 import type { BoundProps } from './session'
 import type { AccountExists } from './supabaseUser'
 
-export type AccountCheck = 'live' | 'deleted' | 'unavailable'
+export type AccountCheck = 'live' | 'deleted' | 'suspended' | 'unavailable'
 
 export async function checkAccount(
   env: Env,
@@ -11,7 +11,9 @@ export async function checkAccount(
   userId: string,
 ): Promise<AccountCheck> {
   try {
-    return (await accountExists(env, userId)) ? 'live' : 'deleted'
+    const account = await accountExists(env, userId)
+    if (account === 'suspended') return account
+    return account ? 'live' : 'deleted'
   } catch (error) {
     console.error('account lookup failed', error instanceof Error ? error.name : 'error')
     return 'unavailable'
@@ -33,13 +35,11 @@ export function publicGrantProps(props: unknown, userId: string): BoundProps {
 export type TokenDecision =
   | { kind: 'ok'; newProps: BoundProps }
   | { kind: 'unavailable' }
+  | { kind: 'suspended' }
   | { kind: 'deleted' }
   | { kind: 'invalid_scope' }
 
-/**
- * Decide a token issue or refresh. An outage is `unavailable` and does not
- * revoke. The caller turns `deleted` and `unavailable` into OAuth errors.
- */
+/** Decide a token issue or refresh. Only account deletion revokes the grant. */
 export async function decideTokenExchange(
   env: Env,
   accountExists: AccountExists,
@@ -49,7 +49,7 @@ export async function decideTokenExchange(
   // requestedScope is the provider's effective scope after downscoping.
   if (!exchange.requestedScope.includes('board')) return { kind: 'invalid_scope' }
   const status = await checkAccount(env, accountExists, exchange.userId)
-  if (status === 'unavailable') return { kind: 'unavailable' }
+  if (status === 'unavailable' || status === 'suspended') return { kind: status }
   if (status === 'deleted') {
     try {
       await revoke(exchange.grantId, exchange.userId)
