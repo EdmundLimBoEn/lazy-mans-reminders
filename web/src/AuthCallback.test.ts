@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { ReactElement, ReactNode } from 'react'
 import { AuthCallback } from './AuthCallback'
 import { authCallbackUrl, rememberReturnTo, RETURN_TO_KEY } from './mcp'
@@ -173,13 +173,19 @@ it('preserves the stored fallback for a consent callback without return_to', asy
   expect(storage.has(RETURN_TO_KEY)).toBe(false)
 })
 
-it.each(['callback URL', 'session storage'])('returns to Agent access after sign-in via %s', async source => {
-  visit('/#agent-access-heading')
-  rememberReturnTo()
-  const url = new URL(authCallbackUrl())
-  if (source === 'callback URL') storage.clear()
-  else url.searchParams.delete('return_to')
-  url.searchParams.set('code', 'test')
-  callback(url.href)
-  await vi.waitFor(() => expect(replace).toHaveBeenCalledExactlyOnceWith('/#agent-access-heading'))
+describe.each(['callback URL', 'session storage'])('sign-in return via %s', source => {
+  it.each([
+    ['/#agent-access-heading', '/#agent-access-heading'],
+    ['/connect/?state=abc', '/connect?state=abc'],
+    ['/CONNECT/?state=abc', '/connect?state=abc'],
+  ])('restores the destination after signing in from %s', async (start, destination) => {
+    visit(start)
+    rememberReturnTo()
+    const url = new URL(authCallbackUrl())
+    if (source === 'callback URL') storage.clear()
+    else url.searchParams.delete('return_to')
+    url.searchParams.set('code', 'test')
+    callback(url.href)
+    await vi.waitFor(() => expect(replace).toHaveBeenCalledExactlyOnceWith(destination))
+  })
 })
