@@ -318,6 +318,26 @@ describe('single-use authorization', () => {
     expect(await repeatedDenial.json()).toEqual({ error: 'expired_state' })
   })
 
+  it('delivers the denial callback on retry after a client metadata outage', async () => {
+    const { oauth, pending, deny } = await setup()
+    const lookup = vi.spyOn(oauth, 'lookupClient').mockRejectedValueOnce(new Error('Client metadata unavailable'))
+
+    const failed = await deny()
+    expect(failed.status).toBe(503)
+    expect(failed.headers.get('Access-Control-Allow-Origin')).toBe('https://lmr.sillyapps.co')
+    expect(await failed.json()).toEqual({ error: 'temporarily_unavailable' })
+
+    const retry = await deny()
+    expect(retry.status).toBe(200)
+    const { redirectTo } = await retry.json() as { redirectTo: string }
+    const callback = new URL(redirectTo)
+    expect(`${callback.origin}${callback.pathname}`).toBe(pending.redirectUri)
+    expect(callback.searchParams.get('error')).toBe('access_denied')
+    expect(callback.searchParams.get('state')).toBe(pending.state)
+    expect(lookup).toHaveBeenCalledTimes(2)
+    expect(oauth.completeAuthorization).not.toHaveBeenCalled()
+  })
+
   it('rejects denial when approval wins after denial reads the pending state', async () => {
     const { kv, states, oauth, bind, deny } = await setup()
     const get = states.get.bind(states)
