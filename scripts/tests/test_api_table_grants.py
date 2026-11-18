@@ -115,6 +115,49 @@ class ApiTableGrantsTests(unittest.TestCase):
           rollback;
         """)
 
+    def test_completion_counter_skips_account_locked_for_deletion(self):
+        owner = '00000000-0000-0000-0000-000000000031'
+        self.sql("alter system set max_prepared_transactions = 1;")
+        self.sql(f"""
+          insert into auth.users(id) values ('{owner}');
+          insert into public.reminders(id, user_id, text) values ('{owner}', '{owner}', 'Pending');
+          do $$ begin
+            assert exists (select 1 from public.usage_daily_counts
+                           where user_id = '{owner}' and event = 'reminder_created');
+          end $$;
+        """)
+        # Keep the same row lock that DELETE holds before cascading to reminders.
+        # A prepared transaction retains it across standalone backend sessions.
+        self.sql(f"""
+          begin;
+          select id from auth.users where id = '{owner}' for update;
+          prepare transaction 'deleting_account';
+        """)
+        try:
+            self.sql(f"""
+              begin;
+              set local lock_timeout = '500ms';
+              set local role authenticated;
+              set local request.jwt.claim.sub = '{owner}';
+              update public.reminders set is_done = true where id = '{owner}';
+              reset role;
+              do $$ begin
+                assert exists (select 1 from public.reminders where id = '{owner}' and is_done);
+                assert not exists (select 1 from public.usage_daily_counts
+                                   where user_id = '{owner}' and event = 'reminder_completed');
+              end $$;
+              commit;
+            """)
+        finally:
+            self.sql("commit prepared 'deleting_account';")
+        self.sql(f"""
+          delete from auth.users where id = '{owner}';
+          do $$ begin
+            assert not exists (select 1 from public.reminders where user_id = '{owner}');
+            assert not exists (select 1 from public.usage_daily_counts where user_id = '{owner}');
+          end $$;
+        """)
+
     def test_device_registration_and_service_delivery(self):
         self.sql(f"""
           begin;
