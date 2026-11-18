@@ -91,6 +91,28 @@ describe('grant ownership', () => {
     expect(grants.map((item) => item.id)).toEqual(['grant-b-bbbbbbbb'])
   })
 
+  it.each([1, 2])('stops paging when the owned grant is found on page %i', async (targetPage) => {
+    const id = 'grant-a-aaaaaaaa'
+    const listUserGrants = vi.fn<OAuthHelpers['listUserGrants']>()
+      .mockRejectedValue(new Error('later page unavailable'))
+    if (targetPage === 2) {
+      listUserGrants.mockResolvedValueOnce({
+        items: [grant({ id, userId: 'user-b' })],
+        cursor: 'page-2',
+      })
+    }
+    listUserGrants.mockResolvedValueOnce({
+      items: [grant({ id, userId: 'user-a' })],
+      cursor: 'later-page',
+    })
+    const revokeGrant = vi.fn<OAuthHelpers['revokeGrant']>().mockResolvedValue(undefined)
+    const oauth = { ...oauthFor([]), listUserGrants, revokeGrant }
+
+    await expect(revokeUserGrant(oauth, 'user-a', id)).resolves.toBe('revoked')
+    expect(listUserGrants).toHaveBeenCalledTimes(targetPage)
+    expect(revokeGrant).toHaveBeenCalledExactlyOnceWith(id, 'user-a')
+  })
+
   it('reports cleanup incomplete when a revoke fails and does not claim the rest are gone', async () => {
     const grants = [
       grant({ id: 'grant-ok-aaaaaaa', userId: 'user-a' }),

@@ -24,19 +24,24 @@ export type CleanupReport = {
   complete: boolean
 }
 
-/** Walk every page of the provider's per-user grant index. */
-export async function listAllUserGrants(oauth: OAuthHelpers, userId: string): Promise<GrantSummary[]> {
-  const items: GrantSummary[] = []
+async function* listOwnedGrantPages(oauth: OAuthHelpers, userId: string): AsyncGenerator<GrantSummary[]> {
   let cursor: string | undefined
   for (let page = 0; page < MAX_PAGES; page += 1) {
     const result = await oauth.listUserGrants(userId, cursor ? { limit: PAGE_SIZE, cursor } : { limit: PAGE_SIZE })
-    for (const grant of result.items) {
-      if (grant.userId === userId) items.push(grant)
-    }
-    if (!result.cursor) return items
+    yield result.items.filter((grant) => grant.userId === userId)
+    if (!result.cursor) return
     cursor = result.cursor
   }
   throw new Error('Grant listing did not terminate')
+}
+
+/** Walk every page of the provider's per-user grant index. */
+export async function listAllUserGrants(oauth: OAuthHelpers, userId: string): Promise<GrantSummary[]> {
+  const items: GrantSummary[] = []
+  for await (const grants of listOwnedGrantPages(oauth, userId)) {
+    items.push(...grants)
+  }
+  return items
 }
 
 export async function describeGrants(oauth: OAuthHelpers, grants: GrantSummary[]): Promise<GrantView[]> {
@@ -81,10 +86,12 @@ export async function revokeUserGrant(
   userId: string,
   grantId: string,
 ): Promise<'revoked' | 'not_found'> {
-  const owned = await listAllUserGrants(oauth, userId)
-  if (!owned.some((grant) => grant.id === grantId)) return 'not_found'
-  await oauth.revokeGrant(grantId, userId)
-  return 'revoked'
+  for await (const grants of listOwnedGrantPages(oauth, userId)) {
+    if (!grants.some((grant) => grant.id === grantId)) continue
+    await oauth.revokeGrant(grantId, userId)
+    return 'revoked'
+  }
+  return 'not_found'
 }
 
 /**
