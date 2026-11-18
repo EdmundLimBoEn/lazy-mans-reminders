@@ -651,13 +651,16 @@ Deno.test("exhausted revocation retries and code exchange outages preserve delet
   }
 });
 
-Deno.test("OAuth cleanup failure stops before deleting app data or auth", async () => {
+Deno.test("OAuth cleanup failure stops before Apple code exchange or account deletion", async () => {
   for (const reason of ["incomplete", "unreachable"] as const) {
     const result = await runDelete({
-      user: googleUser,
+      user: appleUser,
+      body: { appleAuthorizationCode: "single-use-code" },
       grants: { ok: false, reason },
     });
     assertEquals(result.response.status, 503);
+    assertEquals(result.grantCleanupCalls, 1);
+    assertEquals(result.appleCalls.map((call) => call.url), []);
     assertEquals(result.deletedTables, []);
     assertEquals(result.deletedUserId, null);
   }

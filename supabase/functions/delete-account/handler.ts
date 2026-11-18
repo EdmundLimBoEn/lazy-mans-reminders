@@ -141,6 +141,19 @@ export async function handleDeleteAccount(
       { status: 409, headers: corsHeaders },
     );
   }
+  const revokeGrants = deps.revokeGrants ?? revokeUserOauthGrants;
+  const cleanup = await revokeGrants({
+    authorization: authHeader,
+    fetchImpl: deps.fetchImpl,
+  });
+  if (!cleanup.ok) {
+    console.error("Could not revoke OAuth grants", cleanup.reason);
+    return new Response("Could not revoke connected agents", {
+      status: 503,
+      headers: corsHeaders,
+    });
+  }
+
   const appleAuthorizationCode = typeof body.appleAuthorizationCode === "string"
     ? body.appleAuthorizationCode.trim() || undefined
     : undefined;
@@ -161,19 +174,6 @@ export async function handleDeleteAccount(
       event: "apple_token_revoke",
       outcome: "failed",
       reason: "unexpected_error",
-    });
-  }
-
-  const revokeGrants = deps.revokeGrants ?? revokeUserOauthGrants;
-  const cleanup = await revokeGrants({
-    authorization: authHeader,
-    fetchImpl: deps.fetchImpl,
-  });
-  if (!cleanup.ok) {
-    console.error("Could not revoke OAuth grants", cleanup.reason);
-    return new Response("Could not revoke connected agents", {
-      status: 503,
-      headers: corsHeaders,
     });
   }
 
