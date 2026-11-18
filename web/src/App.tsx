@@ -16,7 +16,7 @@ import { IosAuthHandoff } from './IosAuthHandoff'
 import { LegalFooterLinks } from './legalFooter'
 import { AGENT_ACCESS_HASH, authCallbackUrl, rememberReturnTo } from './mcp'
 import { normalizePath, type AppRoute } from './routing'
-import { supabase } from './supabase'
+import { authStorageKey, supabase } from './supabase'
 import { ThemeToggle } from './ThemeToggle'
 
 const Board = lazy(() => import('./Board'))
@@ -252,23 +252,46 @@ export default function App() {
   }, [path])
 
   useEffect(() => {
-    void (async () => {
+    let revision = 0
+    const readSession = async () => {
+      const readRevision = ++revision
       try {
         const { data, error } = await supabase.auth.getSession()
-        if (error) setAuthError(error.message)
+        if (readRevision !== revision) return
+        setAuthError(error?.message ?? '')
         setSession(data.session)
       } catch (caught) {
+        if (readRevision !== revision) return
+        setSession(null)
         if (caught instanceof Error) setAuthError(caught.message)
-      } finally {
-        setReady(true)
       }
-    })()
-    const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setReady(true)
+    }
+    const onStorage = (event: StorageEvent) => {
+      if ((event.key === authStorageKey || event.key === null) && event.storageArea === window.localStorage) {
+        void readSession()
+      }
+    }
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') void readSession()
+    }
+    window.addEventListener('storage', onStorage)
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    void readSession()
+    const { data } = supabase.auth.onAuthStateChange((event, nextSession) => {
+      // The initial read above also carries any error from session storage.
+      if (event === 'INITIAL_SESSION') return
+      ++revision
       setAuthError('')
       setSession(nextSession)
       setReady(true)
     })
-    return () => data.subscription.unsubscribe()
+    return () => {
+      ++revision
+      window.removeEventListener('storage', onStorage)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+      data.subscription.unsubscribe()
+    }
   }, [])
 
   if (path === '/auth/callback') return <AuthCallback onNavigate={navigate} />
