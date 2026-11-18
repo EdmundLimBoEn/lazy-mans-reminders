@@ -169,7 +169,10 @@ export function RoutineReminders({ userId }: { userId: string }) {
       }
       const { error } = result
       if (error) setError(error.message)
-      else { if (editingId === routine.id) reset(); await load() }
+      else {
+        if (remove && editingId === routine.id) reset()
+        await load()
+      }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Could not update routine')
     } finally {

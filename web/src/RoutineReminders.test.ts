@@ -296,6 +296,34 @@ it('clears the draft after a successful save and refresh', async () => {
   expect(render().submit.children).toBe('Add routine')
 })
 
+it.each(['Pause', 'Resume'])('preserves the edit draft through %s and saves it to the same routine', async action => {
+  const enabled = action === 'Pause'
+  mockRead(Promise.resolve({ data: [{ ...routine, enabled }], error: null }))
+  await hooks.load!()
+  render().change('routine-time', '20:30')
+
+  const filter = { eq: vi.fn() }
+  const update = vi.fn(() => filter)
+  filter.eq.mockReturnValueOnce(filter).mockResolvedValueOnce({ error: null })
+  db.from.mockReturnValueOnce({ update })
+  mockRead(Promise.resolve({ data: [{ ...routine, enabled: !enabled }], error: null }))
+  render().button(action).onClick()
+  await vi.waitFor(() => expect(render().submit.disabled).toBe(false))
+
+  const view = render()
+  expect(update).toHaveBeenCalledWith({ enabled: !enabled })
+  expect(view.button(enabled ? 'Resume' : 'Pause').disabled).toBe(false)
+  expect(view.text.value).toBe('Keep my draft')
+  expect(view.submit.children).toBe('Save routine')
+
+  filter.eq.mockClear().mockReturnValueOnce(filter).mockReturnValueOnce(mutationResult({ error: null }))
+  db.from.mockReturnValueOnce({ update })
+  await view.form.onSubmit({ preventDefault() {} })
+  expect(update).toHaveBeenLastCalledWith(expect.objectContaining({ text: 'Keep my draft', local_time: '20:30' }))
+  expect(filter.eq).toHaveBeenCalledWith('id', routine.id)
+  expect(render().alert).toBeUndefined()
+})
+
 it.each([false, true])('keeps a deleted routine draft when saving (deletion already refreshed: %s)', async refreshed => {
   render().change('routine-repeat', 'days')
   render().change('routine-days', '3')
