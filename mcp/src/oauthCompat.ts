@@ -45,7 +45,11 @@ export async function prepareOauthRequest(request: Request): Promise<Request | R
   }
 
   const bytes = await readBodyBytes(rewritten, path === '/token' ? 16 * 1024 : 1024 * 1024)
-  if (bytes instanceof Response) return bytes
+  if (bytes instanceof Response) {
+    const origin = rewritten.headers.get('Origin')
+    if (origin) bytes.headers.set('Access-Control-Allow-Origin', origin)
+    return bytes
+  }
   rewritten = new Request(rewritten, { body: bytes })
   if (path !== '/token' || !isJsonContentType(rewritten.headers.get('Content-Type'))) return rewritten
 
