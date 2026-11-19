@@ -324,6 +324,26 @@ it.each(['create', 'update', 'pause', 'delete'] as const)('releases busy control
   if (operation !== 'create') expect(result.submit.children).toBe('Save routine')
 })
 
+it('keeps the failed save alert and draft through a background refresh until retry', async () => {
+  render().button('Cancel edit').onClick()
+  render().change('routine-text', 'New routine')
+  db.rpc.mockResolvedValueOnce({ error: { message: 'Save failed' } })
+  await render().form.onSubmit({ preventDefault() {} })
+  expect(render().alert).toBe('Save failed')
+
+  mockRead(Promise.resolve({ data: [{ ...routine, text: 'Updated elsewhere' }], error: null }))
+  await hooks.load!()
+  const refreshed = render()
+  expect(refreshed.tree.some(node => node.props.children === 'Updated elsewhere')).toBe(true)
+  expect(refreshed.text.value).toBe('New routine')
+  expect(refreshed.alert).toBe('Save failed')
+
+  db.rpc.mockResolvedValueOnce({ error: null })
+  await refreshed.form.onSubmit({ preventDefault() {} })
+  expect(render().text.value).toBe('')
+  expect(render().alert).toBeUndefined()
+})
+
 it('releases controls and clears the saved draft if refresh throws after a save', async () => {
   const query = { eq: vi.fn() }
   query.eq.mockReturnValueOnce(query).mockReturnValueOnce(mutationResult({ error: null }))
@@ -333,6 +353,8 @@ it('releases controls and clears the saved draft if refresh throws after a save'
   // The write succeeded, so keeping the draft would invite a duplicate insert.
   expect(render().text.value).toBe('')
   expect(render().alert).toBe('Refresh failed')
+  await hooks.load!()
+  expect(render().alert).toBeUndefined()
 })
 
 it('clears the draft after a successful save and refresh', async () => {

@@ -24,7 +24,9 @@ export function RoutineReminders({ userId }: { userId: string }) {
   const [timezone, setTimezone] = useState(() => Intl.DateTimeFormat().resolvedOptions().timeZone)
   const [busy, setBusy] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [readError, setReadError] = useState('')
+  const [mutationError, setMutationError] = useState('')
+  const error = mutationError || readError
   const [weeklyStartChanged, setWeeklyStartChanged] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const draftRevision = useRef(0)
@@ -39,21 +41,23 @@ export function RoutineReminders({ userId }: { userId: string }) {
     </>,
   })), [routines])
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (fallbackMessage?: string) => {
     const generation = ++readGeneration.current
     try {
       const { data, error } = await supabase.from('routine_reminders')
         .select('id,text,interval_days,start_date,local_time,timezone,enabled,next_run_at')
         .eq('user_id', userId).order('created_at')
       if (generation !== readGeneration.current) return
-      if (error) setError(error.message)
+      if (error) setReadError(error.message)
       else {
-        setError('')
+        setReadError('')
         setRoutines(data ?? [])
       }
       setLoading(false)
     } catch (error) {
-      if (generation === readGeneration.current) throw error
+      if (generation === readGeneration.current) {
+        setReadError(error instanceof Error ? error.message : fallbackMessage ?? String(error))
+      }
     }
   }, [userId])
 
@@ -82,8 +86,6 @@ export function RoutineReminders({ userId }: { userId: string }) {
       inFlight = true
       try {
         await load()
-      } catch (error) {
-        if (!stopped) setError(error instanceof Error ? error.message : String(error))
       } finally {
         inFlight = false
         // Events received during this read need one fresh snapshot afterward.
@@ -117,13 +119,13 @@ export function RoutineReminders({ userId }: { userId: string }) {
     event.preventDefault()
     if (busy || !text.trim()) return
     try { new Intl.DateTimeFormat('en', { timeZone: timezone }) } catch {
-      setError('Enter a valid timezone, such as Asia/Singapore.')
+      setMutationError('Enter a valid timezone, such as Asia/Singapore.')
       return
     }
     // Reads started before this write must not restore an older snapshot.
     readGeneration.current += 1
     setBusy(true)
-    setError('')
+    setMutationError('')
     const submittedRevision = draftRevision.current
     try {
       const values = {
@@ -148,13 +150,13 @@ export function RoutineReminders({ userId }: { userId: string }) {
         readGeneration.current += 1
       }
       const { error } = result
-      if (error) setError(error.message)
+      if (error) setMutationError(error.message)
       else {
         if (draftRevision.current === submittedRevision) reset()
-        await load()
+        await load('Could not save routine')
       }
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Could not save routine')
+      setMutationError(error instanceof Error ? error.message : 'Could not save routine')
     } finally {
       setBusy(false)
     }
@@ -164,7 +166,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
     // Reads started before this write must not restore an older snapshot.
     readGeneration.current += 1
     setBusy(true)
-    setError('')
+    setMutationError('')
     try {
       const query = supabase.from('routine_reminders')
       let result
@@ -176,13 +178,13 @@ export function RoutineReminders({ userId }: { userId: string }) {
         readGeneration.current += 1
       }
       const { error } = result
-      if (error) setError(error.message)
+      if (error) setMutationError(error.message)
       else {
         if (remove && editingId === routine.id) reset()
-        await load()
+        await load('Could not update routine')
       }
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Could not update routine')
+      setMutationError(error instanceof Error ? error.message : 'Could not update routine')
     } finally {
       setBusy(false)
     }
