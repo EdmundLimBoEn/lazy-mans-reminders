@@ -145,6 +145,8 @@ export function headersWithAuthorization(
   return { ...headers, authorization: `bearer ${jwt}` };
 }
 
+export type SendResult = "sent" | "retryable" | "failed" | "invalid" | "pruned";
+
 export async function deliverWithRetries(input: {
   headers: Record<string, string>;
   stopOnUncertainDelivery?: boolean;
@@ -153,9 +155,12 @@ export async function deliverWithRetries(input: {
   ) => Promise<ApnsOutcome>;
   nextJwt: () => Promise<string>;
   onExpiredJwt: () => void;
-  onPrune: (outcome: Extract<ApnsOutcome, { kind: "prune" }>) => Promise<void>;
+  // A true result confirms deletion of the entire device registration.
+  onPrune: (
+    outcome: Extract<ApnsOutcome, { kind: "prune" }>,
+  ) => Promise<boolean | void>;
   sleep: (ms: number) => Promise<void>;
-}): Promise<"sent" | "failed" | "retryable" | "invalid"> {
+}): Promise<SendResult> {
   let headers = input.headers;
   let lastRetryable = false;
 
@@ -168,8 +173,7 @@ export async function deliverWithRetries(input: {
     }
     if (outcome.kind === "sent") return "sent";
     if (outcome.kind === "prune") {
-      await input.onPrune(outcome);
-      return "invalid";
+      return await input.onPrune(outcome) ? "pruned" : "invalid";
     }
     if (outcome.kind === "permanent") return "failed";
 

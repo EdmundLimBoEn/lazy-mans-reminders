@@ -30,7 +30,7 @@ for (const operation of ["alert pruning", "Live Activity end"] as const) {
       );
       const logged: unknown[][] = [];
       const originalError = console.error;
-      let rejected = false;
+      let rejection: unknown;
       try {
         console.error = (...args: unknown[]) => logged.push(args);
         const cleanup = operation === "alert pruning"
@@ -46,14 +46,20 @@ for (const operation of ["alert pruning", "Live Activity end"] as const) {
             activityToken,
             registration,
           );
-        await cleanup.catch(() => {
-          rejected = true;
+        await cleanup.catch((error) => {
+          rejection = error;
         });
       } finally {
         console.error = originalError;
       }
 
-      assertEquals(rejected, operation === "Live Activity end");
+      assertEquals(rejection !== undefined, true);
+      if (operation === "alert pruning") {
+        assertEquals(
+          (rejection as Error).message,
+          "Could not remove expired APNs token",
+        );
+      }
       assertEquals(
         requestUrl?.searchParams.get("token") === `eq.${alertToken}`,
         true,
