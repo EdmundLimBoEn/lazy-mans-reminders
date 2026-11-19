@@ -15,6 +15,13 @@ const REDIRECT = 'https://client.example/callback'
 const VERIFIER = 'a'.repeat(43)
 const USER_ID = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
 
+function softDeleteAccount(deps: IdentityDeps) {
+  vi.spyOn(deps, 'accountExists').mockImplementation(supabaseAccountExistsWith(async (input) => {
+    expect(new URL(String(input)).pathname).toBe(`/auth/v1/admin/users/${USER_ID}`)
+    return Response.json({ id: USER_ID, deleted_at: '2026-01-01T00:00:00Z' })
+  }))
+}
+
 function suspendAccount(deps: IdentityDeps) {
   vi.useFakeTimers({ toFake: ['Date'] })
   const expiry = new Date(Date.now() + 60_000)
@@ -23,6 +30,19 @@ function suspendAccount(deps: IdentityDeps) {
     return Response.json({ id: USER_ID, banned_until: expiry.toISOString() })
   }))
   return () => vi.setSystemTime(expiry)
+}
+
+async function personalKeyAccess(request: ReturnType<typeof setup>['request']) {
+  const secret = 'test-secret' as TokenSecret
+  const tokenHash = await hashSecret(secret)
+  vi.stubGlobal('fetch', async (input: RequestInfo | URL, init?: RequestInit) => {
+    expect(new URL(String(input)).pathname).toBe('/rest/v1/agent_tokens')
+    if (init?.method === 'PATCH') return new Response(null, { status: 204 })
+    return Response.json({ id: USER_ID, user_id: USER_ID, name: 'Test', token_hash: tokenHash, revoked_at: null })
+  })
+  return () => request(HOST, '/mcp', {
+    headers: { Authorization: `Bearer lmr_${USER_ID}_${secret}` },
+  })
 }
 
 function deferred() {
@@ -68,7 +88,7 @@ async function authorize() {
   return { ...worker, tokens, client_id, grantId, refresh, access }
 }
 
-describe('account suspension', () => {
+describe('account status', () => {
   afterEach(() => {
     vi.unstubAllGlobals()
     vi.useRealTimers()
@@ -77,16 +97,7 @@ describe('account suspension', () => {
 
   it('denies agent keys before the MCP handler runs and accepts the same key at expiry', async () => {
     const { request, deps } = setup()
-    const secret = 'test-secret' as TokenSecret
-    const tokenHash = await hashSecret(secret)
-    vi.stubGlobal('fetch', async (input: RequestInfo | URL, init?: RequestInit) => {
-      expect(new URL(String(input)).pathname).toBe('/rest/v1/agent_tokens')
-      if (init?.method === 'PATCH') return new Response(null, { status: 204 })
-      return Response.json({ id: USER_ID, user_id: USER_ID, name: 'Test', token_hash: tokenHash, revoked_at: null })
-    })
-    const access = () => request(HOST, '/mcp', {
-      headers: { Authorization: `Bearer lmr_${USER_ID}_${secret}` },
-    })
+    const access = await personalKeyAccess(request)
     const expire = suspendAccount(deps)
 
     expect((await access()).status).toBe(401)
@@ -126,6 +137,24 @@ describe('account suspension', () => {
 
     expire()
     expect((await refresh()).status).toBe(200)
+  })
+
+  it('denies personal keys before board access for a soft-deleted account', async () => {
+    const { request, deps } = setup()
+    const access = await personalKeyAccess(request)
+    softDeleteAccount(deps)
+
+    expect((await access()).status).toBe(401)
+    expect(createMcpHandler).not.toHaveBeenCalled()
+  })
+
+  it('rejects OAuth refresh for a soft-deleted account', async () => {
+    const { deps, refresh } = await authorize()
+    softDeleteAccount(deps)
+
+    const response = await refresh()
+    expect(response.status).toBe(400)
+    expect(await response.json()).toMatchObject({ error: 'invalid_grant' })
   })
 })
 
