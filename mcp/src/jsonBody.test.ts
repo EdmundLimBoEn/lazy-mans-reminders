@@ -118,7 +118,8 @@ describe('OAuth provider body limits', () => {
     ['/register', 'application/json', 1024 * 1024],
     ['/register/', 'application/x-www-form-urlencoded', 1024 * 1024],
     ['/register', 'application/octet-stream', 1024 * 1024],
-  ])('rejects oversized streamed %s (%s) before forwarding', async (path, contentType, limit) => {
+  ])('rejects oversized streamed %s (%s) with CORS before forwarding', async (path, contentType, limit) => {
+    const origin = 'https://client.example'
     let consumed = 0
     const cancel = vi.fn()
     const body = new ReadableStream<Uint8Array>({
@@ -130,11 +131,13 @@ describe('OAuth provider body limits', () => {
       cancel,
     }, { highWaterMark: 0 })
     const response = await handleWorkerFetch(new Request(`https://example.com${path}`, {
-      method: 'POST', headers: { 'Content-Type': contentType }, body, duplex: 'half',
+      method: 'POST', headers: { 'Content-Type': contentType, Origin: origin }, body, duplex: 'half',
     } as RequestInit), {
       AUTH_RATE_LIMIT: { limit: async () => ({ success: true }) },
     } as unknown as Env, {} as ExecutionContext)
     expect(response.status).toBe(413)
+    expect(await response.json()).toEqual({ error: 'invalid_body' })
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe(origin)
     expect(consumed).toBeLessThanOrEqual(Number(limit) + 4096)
     expect(cancel).toHaveBeenCalledOnce()
     expect(providerFetch).not.toHaveBeenCalled()
