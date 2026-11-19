@@ -1,5 +1,3 @@
-export const DEFAULT_GRANT_CLEANUP_URL =
-  "https://np-mcp.sillyapps.co/account/grants/cleanup";
 export const DEFAULT_GRANT_CLEANUP_TIMEOUT_MS = 5_000;
 export const MAX_GRANT_CLEANUP_BODY_BYTES = 16 * 1024;
 
@@ -14,13 +12,15 @@ export type GrantCleanupResult =
  */
 export async function revokeUserOauthGrants(input: {
   authorization: string;
-  cleanupUrl?: string;
+  cleanupUrl: string | undefined;
   fetchImpl?: typeof fetch;
   timeoutMs?: number;
 }): Promise<GrantCleanupResult> {
   const fetchImpl = input.fetchImpl ?? fetch;
-  const url = input.cleanupUrl ?? Deno.env.get("MCP_GRANT_CLEANUP_URL") ??
-    DEFAULT_GRANT_CLEANUP_URL;
+  const url = URL.parse(input.cleanupUrl ?? "");
+  if (url?.protocol !== "https:") {
+    return { ok: false, reason: "unreachable" };
+  }
   const controller = new AbortController();
   let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
   const timeoutMs = input.timeoutMs ?? DEFAULT_GRANT_CLEANUP_TIMEOUT_MS;
@@ -48,8 +48,9 @@ export async function revokeUserOauthGrants(input: {
   const cleanup = async (): Promise<GrantCleanupResult> => {
     let response: Response;
     try {
-      response = await fetchImpl(url, {
+      response = await fetchImpl(url.href, {
         method: "POST",
+        redirect: "error",
         headers: {
           Authorization: input.authorization,
           "Content-Type": "application/json",

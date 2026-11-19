@@ -2,7 +2,6 @@ import { assertEquals, assertExists } from "jsr:@std/assert";
 import { handleDeleteAccount } from "../delete-account/handler.ts";
 import {
   DEFAULT_GRANT_CLEANUP_TIMEOUT_MS,
-  DEFAULT_GRANT_CLEANUP_URL,
   MAX_GRANT_CLEANUP_BODY_BYTES,
   revokeUserOauthGrants,
 } from "./oauth_grant_cleanup.ts";
@@ -19,6 +18,7 @@ Deno.test("grant cleanup sends authenticated POST and accepts a complete report"
     fetchImpl: (url, init) => {
       assertEquals(url, input.cleanupUrl);
       assertEquals(init?.method, "POST");
+      assertEquals(init?.redirect, "error");
       assertEquals(
         new Headers(init?.headers).get("Authorization"),
         input.authorization,
@@ -40,11 +40,47 @@ Deno.test("grant cleanup sends authenticated POST and accepts a complete report"
   assertEquals(DEFAULT_GRANT_CLEANUP_TIMEOUT_MS, 5_000);
 });
 
-Deno.test("grant cleanup defaults to the canonical MCP host", () => {
-  assertEquals(
-    DEFAULT_GRANT_CLEANUP_URL,
-    "https://np-mcp.sillyapps.co/account/grants/cleanup",
-  );
+Deno.test("account deletion sends the bearer only to the deployment's HTTPS cleanup endpoint", async () => {
+  const stagingUrl = "https://staging-mcp.example/account/grants/cleanup";
+  for (
+    const cleanupUrl of [undefined, "", "invalid", "http://mcp.example", stagingUrl]
+  ) {
+    const calls: { url: string; bearer: string | null }[] = [];
+    let deletions = 0;
+    const response = await handleDeleteAccount(
+      new Request("https://staging.example/functions/v1/delete-account", {
+        method: "POST",
+        headers: { Authorization: input.authorization },
+      }),
+      {
+        env: (name) =>
+          name === "MCP_GRANT_CLEANUP_URL" ? cleanupUrl : "test-config",
+        getUser: () => Promise.resolve({ user: { id: "test-user" } }),
+        fetchImpl: (url, init) => {
+          calls.push({
+            url: String(url),
+            bearer: new Headers(init?.headers).get("Authorization"),
+          });
+          return Promise.resolve(Response.json({ complete: true }));
+        },
+        nowSeconds: () => 1_700_000_000,
+        warn: () => {},
+        deleteAuthUser: () => {
+          deletions++;
+          return Promise.resolve({ error: null });
+        },
+      },
+    );
+    if (cleanupUrl === stagingUrl) {
+      assertEquals(calls, [{ url: stagingUrl, bearer: input.authorization }]);
+      assertEquals(response.status, 200);
+      assertEquals(deletions, 1);
+    } else {
+      assertEquals(calls, []);
+      assertEquals(response.status, 503);
+      assertEquals(deletions, 0);
+    }
+  }
 });
 
 Deno.test("grant cleanup fails closed for malformed or incomplete reports", async () => {
