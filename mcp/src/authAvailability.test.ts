@@ -26,7 +26,7 @@ const routes = [
 
 describe('browser authentication availability', () => {
   it.each(routes)('%s %s preserves verification outages and rejected credentials', async (method, path) => {
-    for (const status of [503, 500, 429, 401, 403]) {
+    for (const status of [503, 500, 429, 400, 401, 403]) {
       const response = await handlePublicRequest(new Request(`https://lmr-mcp.edmundlim.systems${path}`, {
         method, headers: { Authorization: 'Bearer test-session', Origin: env.WEB_ORIGINS },
       }), env, {
@@ -38,6 +38,19 @@ describe('browser authentication availability', () => {
       expect(response.headers.get('Access-Control-Allow-Origin')).toBe(env.WEB_ORIGINS)
       expect(response.headers.get('Cache-Control')).toBe('no-store')
     }
+  })
+
+  it('returns unauthorized for a revoked browser session', async () => {
+    const revoked = json(403, { code: 'session_not_found', message: 'Session not found' })
+    revoked.headers.set('X-Supabase-Api-Version', '2024-01-01')
+    const response = await handlePublicRequest(new Request('https://lmr-mcp.edmundlim.systems/consent', {
+      headers: { Authorization: 'Bearer test-session' },
+    }), env, {
+      verifyUser: verifySupabaseUserWith(async () => revoked),
+      accountExists: vi.fn(),
+    })
+    expect(response.status).toBe(401)
+    expect(await response.json()).toEqual({ error: 'unauthorized' })
   })
 
   it('returns a controlled response when the network fails', async () => {

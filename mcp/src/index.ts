@@ -159,46 +159,6 @@ function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: Ex
   return options
 }
 
-async function checkCodeRedirect(request: Request, env: Env): Promise<Response | null> {
-  if (request.method !== 'POST' || new URL(request.url).pathname !== '/token' ||
-      request.headers.get('Content-Type')?.split(';')[0].trim().toLowerCase() !== 'application/x-www-form-urlencoded') return null
-
-  let form: FormData
-  try {
-    form = await request.clone().formData()
-  } catch {
-    return null // Let the provider report malformed requests.
-  }
-  // Match the provider's duplicate-parameter rejection before inspecting values.
-  for (const key of form.keys()) {
-    if (key !== 'resource' && form.getAll(key).length > 1) return null
-  }
-  if (form.get('grant_type') !== 'authorization_code') return null
-  const code = form.get('code')
-  if (typeof code !== 'string' || code.split(':').length !== 3) return null
-  const [userId, grantId] = code.split(':')
-  // Provider 0.10.3 stores the issuing redirectUri on the grant, but only checks
-  // client registration at redemption. Reuse its record and existing code format.
-  let grant: { redirectUri?: string } | null
-  try {
-    grant = await env.OAUTH_KV.get<{ redirectUri?: string }>(`grant:${userId}:${grantId}`, 'json')
-  } catch (error) {
-    const rateLimited = (error instanceof OAuthError && error.statusCode === 429) ||
-      (error instanceof Error && /429 Too Many Requests/i.test(error.message))
-    const response = json({
-      error: 'temporarily_unavailable',
-      error_description: TOKEN_ISSUANCE_UNAVAILABLE,
-    }, rateLimited ? 429 : 503)
-    response.headers.set('Retry-After', '30')
-    response.headers.set('Access-Control-Expose-Headers', 'Retry-After')
-    return response
-  }
-  if (!grant?.redirectUri || form.get('redirect_uri') !== grant.redirectUri) {
-    return json({ error: 'invalid_grant', error_description: 'Redirect URI does not match the authorization request' }, 400)
-  }
-  return null
-}
-
 export async function handleWorkerFetch(
   request: Request,
   env: Env,
@@ -221,8 +181,6 @@ export async function handleWorkerFetch(
   if (prepared instanceof Response) return prepared
   const claim: CodeClaim = {}
   env = { ...env, OAUTH_KV: grantStorage(env, claim) }
-  const redirectError = await checkCodeRedirect(prepared, env)
-  if (redirectError) return redirectError
   return new OAuthProvider(providerOptions(env, deps, mcpResourceForRequest(prepared), ctx, claim)).fetch(prepared, env, ctx)
 }
 

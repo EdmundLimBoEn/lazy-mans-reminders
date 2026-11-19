@@ -2,10 +2,7 @@ import {
   maybeRevokeAppleTokens,
   userHasAppleIdentity,
 } from "../_shared/apple_token_revoke.ts";
-import {
-  type GrantCleanupResult,
-  revokeUserOauthGrants,
-} from "../_shared/oauth_grant_cleanup.ts";
+import { revokeUserOauthGrants } from "../_shared/oauth_grant_cleanup.ts";
 
 export const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
@@ -25,10 +22,7 @@ export type DeleteAccountDeps = {
   getUser: (
     authorization: string,
   ) => Promise<{ user: DeleteAccountUser | null }>;
-  revokeGrants?: (input: {
-    authorization: string;
-    fetchImpl?: typeof fetch;
-  }) => Promise<GrantCleanupResult>;
+  revokeGrants?: typeof revokeUserOauthGrants;
   deleteAuthUser: (userId: string) => Promise<{ error: unknown }>;
 };
 
@@ -144,6 +138,7 @@ export async function handleDeleteAccount(
   const revokeGrants = deps.revokeGrants ?? revokeUserOauthGrants;
   const cleanup = await revokeGrants({
     authorization: authHeader,
+    cleanupUrl: deps.env("MCP_GRANT_CLEANUP_URL"),
     fetchImpl: deps.fetchImpl,
   });
   if (!cleanup.ok) {

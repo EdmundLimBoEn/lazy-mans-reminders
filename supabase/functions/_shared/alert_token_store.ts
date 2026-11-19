@@ -1,4 +1,5 @@
 import type { DeviceRow, ServiceClient } from "./device_delivery.ts";
+import { postgrestErrorCodeForLog } from "./postgrest_error_log.ts";
 import type { ApnsOutcome } from "./push_helpers.ts";
 
 export async function pruneAlertToken(
@@ -21,7 +22,10 @@ export async function pruneAlertToken(
   }
   const { data, error } = await query.select("token").maybeSingle();
   if (error) {
-    console.error("Could not remove expired APNs token", error);
+    console.error(
+      "Could not remove expired APNs token",
+      postgrestErrorCodeForLog(error.code),
+    );
     throw new Error("Could not remove expired APNs token");
   }
   return data !== null;
