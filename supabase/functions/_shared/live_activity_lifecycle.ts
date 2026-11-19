@@ -1,6 +1,7 @@
 import { decideLiveActivity, parseStartedAtMs } from "./live_activity.ts";
+import type { SendResult } from "./push_helpers.ts";
 
-export type SendResult = "sent" | "retryable" | "failed" | "invalid";
+export type { SendResult } from "./push_helpers.ts";
 
 export async function reconcileLiveActivity(input: {
   lines: string[];

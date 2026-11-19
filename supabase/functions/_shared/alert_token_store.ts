@@ -5,7 +5,7 @@ export async function pruneAlertToken(
   supabase: Pick<ServiceClient, "from">,
   device: Pick<DeviceRow, "token" | "user_id" | "updated_at">,
   outcome: Extract<ApnsOutcome, { kind: "prune" }>,
-): Promise<void> {
+): Promise<boolean> {
   // Match the exact revision read before sending, including sub-millisecond
   // precision. A registration refreshed during the request must survive.
   let query = supabase.from("device_tokens").delete()
@@ -19,6 +19,10 @@ export async function pruneAlertToken(
       new Date(outcome.invalidatedAtMs).toISOString(),
     );
   }
-  const { error } = await query;
-  if (error) console.error("Could not remove expired APNs token", error);
+  const { data, error } = await query.select("token").maybeSingle();
+  if (error) {
+    console.error("Could not remove expired APNs token", error);
+    throw new Error("Could not remove expired APNs token");
+  }
+  return data !== null;
 }

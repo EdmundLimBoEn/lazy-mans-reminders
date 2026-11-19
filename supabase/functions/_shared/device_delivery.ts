@@ -79,7 +79,20 @@ export async function deliverDevices(input: {
         input.alertCandidate,
       );
       assertCurrent();
-      results.push(...await input.deliver(device, content, assertCurrent));
+      const deviceResults = await input.deliver(device, content, assertCurrent);
+      if (deviceResults.includes("pruned")) {
+        // The registration deletion cascades to the slot and ends retries for
+        // every destination on this device.
+        claimed = false;
+        results.push(
+          ...deviceResults.filter((result) =>
+            result !== "retryable" && result !== "pruned"
+          ),
+          "invalid",
+        );
+      } else {
+        results.push(...deviceResults);
+      }
     } catch {
       results.push("retryable");
     } finally {

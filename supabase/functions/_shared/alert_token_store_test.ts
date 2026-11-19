@@ -33,13 +33,15 @@ function client(rows: Row[]) {
               );
               return query;
             },
-            then(resolve: (value: { error: null }) => unknown) {
-              for (let i = rows.length - 1; i >= 0; i--) {
-                if (predicates.every((matches) => matches(rows[i]))) {
-                  rows.splice(i, 1);
-                }
-              }
-              return Promise.resolve({ error: null }).then(resolve);
+            select() {
+              return query;
+            },
+            maybeSingle() {
+              const index = rows.findIndex((row) =>
+                predicates.every((matches) => matches(row))
+              );
+              const data = index < 0 ? null : rows.splice(index, 1)[0];
+              return Promise.resolve({ data, error: null });
             },
           };
           return query;
@@ -91,7 +93,7 @@ for (const status of [400, 410]) {
           timestamp: invalidation,
         }),
       ));
-      assertEquals(await run, "invalid");
+      assertEquals(await run, refreshed ? "invalid" : "pruned");
       assertEquals(rows, expected);
     });
   }
