@@ -1,5 +1,7 @@
 # Human actions
 
+Current context: the product is **Notepad**, the canonical web app is <https://app.notepads.dev>, the landing page is <https://notepads.dev>, and support is `edmund@sillyapps.co`. `dev` is the working branch; feature/fix PRs target it. The dated checklist and evidence below are historical, not current host/name guidance. Use [README.md](README.md) for current setup.
+
 ## UI hill climb, 4 November 2026
 
 - [x] T3 discovery recovered after the XCTest runner booted regular iPhone 17 Pro `78F5A64F-7B2E-4562-8EF9-10F3312CC694` (iOS 26.2). device_open and device_screenshot now work; no human action remains for discovery.
@@ -73,10 +75,10 @@ Detailed evidence and remaining gates: [release status](docs/release-status-2026
 - [ ] **Device test** — Open `ios/LazyMansReminders.xcodeproj`, sign both targets with team `DUU8J39BA7`, run on a physical iPhone (Apple / Google / magic link, complete-tap, push, lock-screen widgets, account deletion). This checklist does not establish physical-device validation of the selected release build.
 - [ ] **Expanded island spacing** — After TestFlight processing finishes for the 24 Sep 2026 upload ([run 35936302830](https://github.com/EdmundLimBoEn/lazy-mans-reminders/actions/runs/35936302830)), install that build and press-and-hold the island. The last reminder line should sit above the bottom curve.
 - [ ] **Siri / App Intents (iOS 26+, Apple Intelligence on iOS 27)** — After a signed-in launch on a physical iPhone, confirm:
-  - “Hey Siri, list reminders in Lazy Man's Reminders”
-  - “Hey Siri, add a reminder in Lazy Man's Reminders” / “remind me to …” (in this app)
-  - “Hey Siri, mark this as done” (with the board on screen) or “complete *milk* in Lazy Man's Reminders”
-  - Spotlight shows an active reminder by its text. Unsigned-in, Siri should ask you to sign in.
+  - “Hey Siri, list reminders in Notepad”
+  - “Hey Siri, add a reminder in Notepad” / “remind me to …” (in this app)
+  - “Hey Siri, mark this as done in Notepad” (select a reminder when prompted)
+  - Spotlight shows an active reminder by its text. Unsigned-in, Siri should ask you to sign in to Notepad on this iPhone first.
 - [ ] **Live Activity persistence (2026-08-28)** — Code is in the repo. Migration `202608280001_live_activity_tokens` applied to `biwmsxbqrevtjwgsvsmu` via `supabase db push --linked` (28 Aug 2026). Still needs:
   - [x] Apply migration `202608280001_live_activity_tokens`.
   - [x] Redeploy `send-reminder-push` with JWT verification off (24 Sep 2026, includes the quiet Live Activity refresh).
@@ -85,7 +87,7 @@ Detailed evidence and remaining gates: [release status](docs/release-status-2026
   - After installing the new build, open the app once while signed in (Settings → Live Activities on for this app). That uploads the push-to-start token. Later reminder notifications should raise the Lock Screen banner without opening the app.
   - Physical iPhone test: add a reminder from the web with the app killed; confirm the Lock Screen banner appears. Complete every reminder; confirm it goes away. Leave one reminder overnight and confirm the banner is still there after the scheduled 15-minute refresh.
 
-- [ ] **Legal review** — Privacy / Terms / Support are live at `/privacy`, `/terms`, `/support`. Counsel review is optional. Contact: `hello@edmundlim.systems`.
+- [ ] **Legal review** — Privacy / Terms / Support are live at `/privacy`, `/terms`, `/support`. Counsel review is optional. Contact: `edmund@sillyapps.co`.
 - [ ] **App Store Connect fields** — Copy name, subtitle, description, nutrition labels, and review notes from `docs/app-store.md`. Capture the current required screenshot groups from that file. Full submission evidence checklist is **App Store submission** below.
 - [ ] **Google web/iOS sign-in** — Provider is enabled. Confirm the Google Cloud **Web** client still has:
   - Authorized JavaScript origins: `https://np.sillyapps.co`, `https://lmr.sillyapps.co`, `https://lmr.edmundlim.systems`, `https://lazy-mans-reminders.pages.dev`, `http://localhost:5173`

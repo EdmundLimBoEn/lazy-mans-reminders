@@ -1,12 +1,12 @@
-import type { MouseEvent, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { SiteHeader } from '@/components/SiteHeader'
 import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
+import { navigateOnClick } from './routing'
 import { ThemeToggle } from './ThemeToggle'
 
-const CONTACT_EMAIL = 'hello@edmundlim.systems'
+const CONTACT_EMAIL = 'edmund@sillyapps.co'
 const LAST_UPDATED = '9 October 2026'
-const SITE_URL = 'https://np.sillyapps.co'
+const SITE_URL = 'https://app.notepads.dev'
 const PDPC_URL = 'https://www.pdpc.gov.sg'
 
 type LegalPageProps = {
@@ -18,10 +18,7 @@ function LegalShell({
   children,
   onNavigate,
 }: LegalPageProps & { title: string; children: ReactNode }) {
-  const go = (path: string) => (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault()
-    onNavigate(path)
-  }
+  const go = (path: string) => navigateOnClick(onNavigate, path)
   return (
     <div className="mx-auto w-full max-w-2xl px-4 pb-16 sm:px-6">
       <SiteHeader onNavigate={onNavigate}>
@@ -230,7 +227,7 @@ export function PrivacyPage({ onNavigate }: LegalPageProps) {
           while the account exists.
         </li>
         <li>
-          The web and iOS clients request deletion of reminders completed more than 7 days ago
+          The web and iOS clients request deletion of reminders completed more than 3 days ago
           when loading the board. This cleanup is best effort: reminders may remain longer if
           the board is not opened or cleanup fails. A daily database job may also perform this
           cleanup if configured.
@@ -530,32 +527,16 @@ export function SupportPage({ onNavigate }: LegalPageProps) {
       <p>
         Reviewers and users can reach the operator at{' '}
         <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Privacy Policy:{' '}
-        <a href="/privacy" onClick={(e) => { e.preventDefault(); onNavigate('/privacy') }}>
+        <a href="/privacy" onClick={navigateOnClick(onNavigate, '/privacy')}>
           {SITE_URL}/privacy
         </a>
         . Terms:{' '}
-        <a href="/terms" onClick={(e) => { e.preventDefault(); onNavigate('/terms') }}>
+        <a href="/terms" onClick={navigateOnClick(onNavigate, '/terms')}>
           {SITE_URL}/terms
         </a>
         .
       </p>
     </LegalShell>
-  )
-}
-
-export function LegalFooterLinks({ onNavigate, className }: LegalPageProps & { className?: string }) {
-  const link = 'underline underline-offset-4 decoration-border hover:text-foreground hover:decoration-current'
-  return (
-    <nav
-      className={cn('legal-footer-links flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-muted-foreground', className)}
-      aria-label="Legal and support"
-    >
-      <a className={link} href="/privacy" onClick={(e) => { e.preventDefault(); onNavigate('/privacy') }}>Privacy</a>
-      <span aria-hidden="true">·</span>
-      <a className={link} href="/terms" onClick={(e) => { e.preventDefault(); onNavigate('/terms') }}>Terms</a>
-      <span aria-hidden="true">·</span>
-      <a className={link} href="/support" onClick={(e) => { e.preventDefault(); onNavigate('/support') }}>Support</a>
-    </nav>
   )
 }
 

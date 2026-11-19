@@ -94,7 +94,9 @@ let reminderCap: number
 let reminderFailurePage: number | undefined
 let afterReminderRead: (() => void) | undefined
 const reminderRequests: { after?: string; from: number; to: number; order?: string; userId?: string; columns?: string }[] = []
-const click = vi.fn()
+const click = vi.fn(() => {
+  expect(URL.revokeObjectURL).not.toHaveBeenCalled()
+})
 const createElement = vi.fn(() => ({ href: '', download: '', click }))
 const createObjectURL = vi.fn<(blob: Blob) => string>(() => 'blob:export')
 
@@ -185,6 +187,7 @@ it('rejects a preference-only failure without downloading and permits a successf
   expect(render('A').text).not.toContain('Preference read failed')
   const payload = JSON.parse(await createObjectURL.mock.calls[0][0].text())
   expect(payload.lock_screen.max_lines).toBe(7)
+  await settleExport()
   expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:export')
 })
 
@@ -305,6 +308,13 @@ it.each(['account change', 'sign out', 'unmount'])('cancels after pagination whi
   expect(createObjectURL).not.toHaveBeenCalled()
   expect(createElement).not.toHaveBeenCalled()
   expect(click).not.toHaveBeenCalled()
+})
+
+it('keeps the export blob URL alive until after the download click', async () => {
+  render('A').click('Download my data')
+  await vi.waitFor(() => expect(click).toHaveBeenCalledTimes(1))
+  await settleExport()
+  expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:export')
 })
 
 it('continues exporting across a token refresh for the same account', async () => {

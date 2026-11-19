@@ -1,5 +1,15 @@
 export const IOS_APP_CALLBACK = 'lazymansreminders://auth/callback'
 
+const NATIVE_AUTH_CALLBACK_PARAMS = new Set([
+  'code',
+  'type',
+  'sb',
+  'sb_flow_id',
+  'error',
+  'error_code',
+  'error_description',
+])
+
 export type IosHandoff =
   | { status: 'open'; href: string }
   | { status: 'error'; message: string }
@@ -13,6 +23,20 @@ function firstParam(params: URLSearchParams[], name: string): string | null {
   return null
 }
 
+function takeAllowed(
+  source: URLSearchParams,
+  dest: URLSearchParams,
+  seen: Set<string>,
+): boolean {
+  for (const [key, value] of source) {
+    if (!NATIVE_AUTH_CALLBACK_PARAMS.has(key)) continue
+    if (seen.has(key)) return false
+    seen.add(key)
+    dest.append(key, value)
+  }
+  return true
+}
+
 export function iosHandoffFromLocation(href: string): IosHandoff {
   const url = new URL(href)
   const search = new URLSearchParams(url.search)
@@ -21,14 +45,18 @@ export function iosHandoffFromLocation(href: string): IosHandoff {
   const error = firstParam(groups, 'error_description') || firstParam(groups, 'error')
   if (error) return { status: 'error', message: error }
 
-  const hasQuery = [...search.keys()].length > 0
-  const hasHash = [...hash.keys()].length > 0
-  if (!hasQuery && !hasHash) return { status: 'empty' }
+  const nextSearch = new URLSearchParams()
+  const nextHash = new URLSearchParams()
+  const seen = new Set<string>()
+  if (!takeAllowed(search, nextSearch, seen) || !takeAllowed(hash, nextHash, seen)) {
+    return { status: 'empty' }
+  }
+  const query = nextSearch.toString()
+  const fragment = nextHash.toString()
+  if (!query && !fragment) return { status: 'empty' }
 
-  const next = new URL(IOS_APP_CALLBACK)
-  search.forEach((value, key) => next.searchParams.append(key, value))
   return {
     status: 'open',
-    href: `${IOS_APP_CALLBACK}${next.search}${url.hash}`,
+    href: `${IOS_APP_CALLBACK}${query ? `?${query}` : ''}${fragment ? `#${fragment}` : ''}`,
   }
 }

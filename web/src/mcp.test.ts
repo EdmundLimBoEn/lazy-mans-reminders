@@ -8,7 +8,7 @@ import {
   MCP_URL,
   authCallbackUrlFrom,
   claudeMcpConfig,
-  connectReturnTo,
+  signInReturnTo,
   cursorMcpConfig,
   grokConnectorConfig,
   lmrAgentTokenHeaderTemplate,
@@ -51,17 +51,19 @@ describe('agent MCP snippets', () => {
   })
 })
 
-describe('connectReturnTo', () => {
+describe('signInReturnTo', () => {
   it('keeps the connect path and query, and ignores other routes', () => {
-    expect(connectReturnTo('/connect', '?state=abc')).toBe('/connect?state=abc')
-    expect(connectReturnTo('/connect')).toBe('/connect')
-    expect(connectReturnTo('/')).toBeNull()
-    expect(connectReturnTo('/privacy')).toBeNull()
+    expect(signInReturnTo('/connect', '?state=abc')).toBe('/connect?state=abc')
+    expect(signInReturnTo('/connect')).toBe('/connect')
+    expect(signInReturnTo('/')).toBeNull()
+    expect(signInReturnTo('/privacy', '', '#agent-access-heading')).toBeNull()
+    expect(signInReturnTo('/', '', '#other')).toBeNull()
   })
 })
 
 describe('authCallbackUrlFrom', () => {
   it.each([
+    'https://app.notepads.dev',
     'https://np.sillyapps.co',
     'https://lmr.sillyapps.co',
   ])('puts return_to on the callback URL for %s so a new tab can still finish Allow', (origin) => {
@@ -71,8 +73,8 @@ describe('authCallbackUrlFrom', () => {
   })
 
   it('leaves homepage sign-in callbacks clean', () => {
-    expect(authCallbackUrlFrom('https://np.sillyapps.co', '/')).toBe(
-      'https://np.sillyapps.co/auth/callback',
+    expect(authCallbackUrlFrom('https://app.notepads.dev', '/')).toBe(
+      'https://app.notepads.dev/auth/callback',
     )
   })
 })

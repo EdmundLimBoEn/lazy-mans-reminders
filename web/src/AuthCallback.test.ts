@@ -1,9 +1,8 @@
-import { afterEach, beforeEach, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { ReactElement, ReactNode } from 'react'
 import { AuthCallback } from './AuthCallback'
-import { rememberReturnTo, RETURN_TO_KEY } from './mcp'
+import { authCallbackUrl, rememberReturnTo, RETURN_TO_KEY } from './mcp'
 
-// Keep hook state across renders and replay the effect as StrictMode does.
 const hooks = vi.hoisted(() => ({
   states: [] as unknown[], cursor: 0,
   effect: undefined as undefined | (() => void | (() => void)),
@@ -38,7 +37,7 @@ function render() {
 }
 function visit(path: string) {
   const url = new URL(path, 'https://np.sillyapps.co')
-  vi.stubGlobal('window', { location: { href: url.href, search: url.search, origin: url.origin, pathname: url.pathname, replace } })
+  vi.stubGlobal('window', { location: { href: url.href, search: url.search, origin: url.origin, pathname: url.pathname, hash: url.hash, replace } })
 }
 function callback(path: string) {
   hooks.states = []
@@ -72,6 +71,14 @@ beforeEach(() => {
   })
 })
 afterEach(() => vi.unstubAllGlobals())
+
+it('shows an exchange rejection instead of the splash', async () => {
+  auth.exchangeCodeForSession.mockRejectedValue(
+    new DOMException('The quota has been exceeded.', 'QuotaExceededError'),
+  )
+  callback('/auth/callback?code=account-b')
+  await vi.waitFor(() => expectError('The quota has been exceeded.', '/'))
+})
 
 it.each([
   ['/', 'Sign-in code expired', 'Sign-in code expired'],
@@ -145,10 +152,40 @@ it('clears abandoned consent state when a homepage sign-in starts', async () => 
   expect(replace).toHaveBeenCalledWith('/')
 })
 
+it('does not send a missing-code retry to a protocol-relative return_to', () => {
+  callback('/auth/callback?return_to=' + encodeURIComponent('/.//evil.example/phish'))
+  expectError(
+    'Missing sign-in code. Start sign-in again from the board or connect link.',
+    '/',
+  )
+})
+
+it('does not location.replace a protocol-relative return_to after exchange', async () => {
+  callback('/auth/callback?code=account-b&return_to=' + encodeURIComponent('/.//evil.example/phish'))
+  await vi.waitFor(() => expect(replace).toHaveBeenCalledExactlyOnceWith('/'))
+})
+
 it('preserves the stored fallback for a consent callback without return_to', async () => {
   visit('/connect?state=current')
   rememberReturnTo()
   await callback('/auth/callback?code=test')
   expect(replace).toHaveBeenCalledWith('/connect?state=current')
   expect(storage.has(RETURN_TO_KEY)).toBe(false)
+})
+
+describe.each(['callback URL', 'session storage'])('sign-in return via %s', source => {
+  it.each([
+    ['/#agent-access-heading', '/#agent-access-heading'],
+    ['/connect/?state=abc', '/connect?state=abc'],
+    ['/CONNECT/?state=abc', '/connect?state=abc'],
+  ])('restores the destination after signing in from %s', async (start, destination) => {
+    visit(start)
+    rememberReturnTo()
+    const url = new URL(authCallbackUrl())
+    if (source === 'callback URL') storage.clear()
+    else url.searchParams.delete('return_to')
+    url.searchParams.set('code', 'test')
+    callback(url.href)
+    await vi.waitFor(() => expect(replace).toHaveBeenCalledExactlyOnceWith(destination))
+  })
 })

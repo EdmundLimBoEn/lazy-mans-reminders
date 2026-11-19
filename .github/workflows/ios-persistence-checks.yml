@@ -43,13 +43,13 @@ jobs:
           python3 scripts/tests/test_reopen_lock_order.py
   ios:
     name: iOS simulator tests
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1
         with:
-          xcode-version: "26.6"
+          xcode-version: "27.1"
       - name: Verify submission toolchain
         run: ./scripts/check-ios-toolchain.sh
       - run: HOMEBREW_NO_AUTO_UPDATE=1 brew install xcodegen

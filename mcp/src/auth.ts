@@ -12,6 +12,7 @@ type TokenRow = {
 
 export function createServiceRoleClient(env: Env): SupabaseClient {
   return createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+    global: { headers: { 'x-notepad-client': 'agent' } },
     auth: { persistSession: false, autoRefreshToken: false },
   })
 }
@@ -55,5 +56,6 @@ export async function resolveSession(
     userId: row.user_id as AgentSession['userId'],
     tokenId: row.id as AgentSession['tokenId'],
     agentName: row.name,
+    canEdit: true,
   }
 }

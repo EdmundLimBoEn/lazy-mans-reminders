@@ -67,15 +67,27 @@ select extensions.dblink_connect('token_race', format('dbname=%L user=%L host=%L
   current_database(), current_user, split_part(current_setting('unix_socket_directories'), ',', 1),
   current_setting('port')));
 insert into auth.users(id) values ('44444444-4444-4444-8444-444444444444');
+-- The historical CI migration run uses the Postgres image without Supabase Auth.
+do $$ begin
+  if to_regclass('auth.sessions') is not null then
+    insert into auth.sessions(id, user_id) values
+      ('44444444-4444-4444-8444-000000000001', '44444444-4444-4444-8444-444444444444');
+  end if;
+end $$;
 insert into public.agent_tokens(user_id, name, token_hash)
 select '44444444-4444-4444-8444-444444444444', 'Fixture', 'token-race-fixture-' || n
 from generate_series(1, 19) n;
 select extensions.dblink_exec('token_race', 'set role authenticated');
-select extensions.dblink_exec('token_race', 'set request.jwt.claim.sub = ''44444444-4444-4444-8444-444444444444''');
+-- The historical CI auth.uid() reads the standalone subject claim on each connection.
+select extensions.dblink_exec('token_race', $$set request.jwt.claim.sub = '44444444-4444-4444-8444-444444444444'$$);
+select extensions.dblink_exec('token_race', $$set request.jwt.claims =
+  '{"sub":"44444444-4444-4444-8444-444444444444","session_id":"44444444-4444-4444-8444-000000000001"}'$$);
 select extensions.dblink_exec('token_race', 'set lock_timeout = ''300ms''');
 begin;
 set local role authenticated;
 set local request.jwt.claim.sub = '44444444-4444-4444-8444-444444444444';
+set local request.jwt.claims =
+  '{"sub":"44444444-4444-4444-8444-444444444444","session_id":"44444444-4444-4444-8444-000000000001"}';
 do $$ begin perform public.mint_agent_token('Twentieth'); end $$;
 reset role;
 do $$ begin

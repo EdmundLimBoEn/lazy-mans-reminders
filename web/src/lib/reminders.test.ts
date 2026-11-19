@@ -86,12 +86,12 @@ describe('isStaleCompletedReminder', () => {
   })
 
   it(`is false within ${COMPLETED_REMINDER_RETENTION_DAYS} days (exclusive boundary)`, () => {
-    expect(isStaleCompletedReminder('2026-08-01T12:00:00Z', now)).toBe(false)
-    expect(isStaleCompletedReminder('2026-08-08T11:00:00Z', now)).toBe(false)
+    expect(isStaleCompletedReminder('2026-08-05T12:00:00Z', now)).toBe(false)
+    expect(isStaleCompletedReminder('2026-08-06T12:00:00Z', now)).toBe(false)
   })
 
   it(`is true beyond ${COMPLETED_REMINDER_RETENTION_DAYS} days`, () => {
-    expect(isStaleCompletedReminder('2026-08-01T11:59:59Z', now)).toBe(true)
-    expect(isStaleCompletedReminder('2026-07-01T00:00:00Z', now)).toBe(true)
+    expect(isStaleCompletedReminder('2026-08-05T11:59:59Z', now)).toBe(true)
+    expect(isStaleCompletedReminder('2026-08-04T12:00:00Z', now)).toBe(true)
   })
 })

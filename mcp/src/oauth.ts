@@ -1,6 +1,7 @@
-import { ExternalTokenError, type AuthRequest, type OAuthHelpers } from '@cloudflare/workers-oauth-provider'
+import { ExternalTokenError, type AuthRequest, type ClientInfo, type OAuthHelpers } from '@cloudflare/workers-oauth-provider'
 import { MCP_HOSTS, mcpResourceForRequest, TOOLS } from './constants'
 import { resolveSession } from './auth'
+import { recordAgentUsage } from './usage'
 import {
   consentCanApprove,
   consentSummary,
@@ -9,6 +10,7 @@ import {
 } from './consent'
 import { cleanupUserGrants, describeGrants, listAllUserGrants, revokeUserGrant } from './grants'
 import { readJsonBody } from './jsonBody'
+import { redirectUriAllowed } from './redirects'
 import type { BoundProps } from './session'
 import { bearerToken, defaultIdentityDeps, type IdentityDeps } from './supabaseUser'
 
@@ -74,11 +76,7 @@ export async function resolveExternalPat(input: {
   }
   if (!session) return null
   return {
-    props: {
-      userId: session.userId,
-      tokenId: session.tokenId,
-      agentName: session.agentName,
-    },
+    props: session,
     audience: mcpResourceForRequest(input.request),
   }
 }
@@ -151,6 +149,12 @@ async function consumeAuthorizationState(env: Env, state: string): Promise<boole
   return consumed === true
 }
 
+async function restoreAuthorizationState(env: Env, state: string): Promise<void> {
+  const id = env.AUTHORIZATION_STATE.idFromName(state)
+  const result = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/restore', { method: 'POST' })
+  if (!result.ok) throw new Error('Authorization state unavailable')
+}
+
 async function startAuthorize(request: Request, env: Env): Promise<Response> {
   const oauth = oauthHelpers(env)
   if (!oauth) return json({ error: 'server_misconfigured' }, 500)
@@ -161,7 +165,7 @@ async function startAuthorize(request: Request, env: Env): Promise<Response> {
   } catch (error) {
     const failed = asAuthorizeFailure(error)
     if (!failed) throw error
-    if (!failed.redirectUri) {
+    if (!failed.redirectUri || !redirectUriAllowed(failed.redirectUri)) {
       return json({ error: failed.code, error_description: failed.description }, 400)
     }
     const redirect = new URL(failed.redirectUri)
@@ -224,10 +228,18 @@ async function denyConsent(request: Request, env: Env, deps: IdentityDeps): Prom
   const oauth = oauthHelpers(env)
   if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
   const oauthRequest = await loadPending(env, state)
+  if (!oauthRequest) return json({ error: 'expired_state' }, 400, cors)
+
+  let client: ClientInfo | null
+  try {
+    client = await oauth.lookupClient(oauthRequest.clientId)
+  } catch {
+    return json({ error: 'temporarily_unavailable' }, 503, cors)
+  }
+  const redirectTo = denialRedirect(oauthRequest, client)
+
   if (!await consumeAuthorizationState(env, state)) return json({ error: 'expired_state' }, 400, cors)
-  if (!oauthRequest) return json({ redirectTo: null }, 200, cors)
-  const client = await oauth.lookupClient(oauthRequest.clientId)
-  return json({ redirectTo: denialRedirect(oauthRequest, client) }, 200, cors)
+  return json({ redirectTo }, 200, cors)
 }
 
 async function bindAuthorization(
@@ -269,7 +281,7 @@ async function bindAuthorization(
     const { redirectTo } = await completingOauth.completeAuthorization({
       request: oauthRequest,
       userId: user.id,
-      metadata: {},
+      metadata: { clientName: summary?.client.name ?? null },
       scope: ['board'],
       props: {
         userId: user.id,
@@ -277,9 +289,15 @@ async function bindAuthorization(
         agentName: summary?.client.name || 'Agent',
       } satisfies BoundProps,
     })
+    await recordAgentUsage(env, user.id, 'agent_oauth_connected')
     return json({ redirectTo }, 200, cors)
   } catch (error) {
     console.error('authorization completion failed', error instanceof Error ? error.name : 'error')
+    try {
+      await restoreAuthorizationState(env, state)
+    } catch (restoreError) {
+      console.error('authorization restore failed', restoreError instanceof Error ? restoreError.name : 'error')
+    }
     return json({ error: 'authorization_failed' }, 400, cors)
   }
 }

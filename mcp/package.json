@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "postinstall": "node scripts/patch-client-metadata-diagnostics.mjs",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "types": "wrangler types",
@@ -11,10 +12,10 @@
   },
   "dependencies": {
     "@cloudflare/workers-oauth-provider": "^0.10.3",
-    "@modelcontextprotocol/server": "2.0.0",
+    "@modelcontextprotocol/server": "2.4.0",
     "@supabase/supabase-js": "^2.55.0",
     "agents": "^0.21.0",
-    "zod": "^4.4.3"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
@@ -24,10 +25,12 @@
   },
   "overrides": {
     "proxy-addr": "2.0.8",
-    "fast-uri": "3.1.8",
-    "hono": "4.13.13",
-    "ip-address": "10.7.3",
-    "qs": "6.16.0",
-    "source-map-js": "1.2.2"
+    "hono": "4.13.19",
+    "source-map-js": "1.2.2",
+    "@modelcontextprotocol/client": "2.4.0",
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "@modelcontextprotocol/server": "$@modelcontextprotocol/server",
+    "@hono/node-server": "^2.1.6",
+    "picomatch": "^4.0.4"
   }
 }

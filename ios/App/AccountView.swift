@@ -1,11 +1,13 @@
 import SwiftUI
 import UserNotifications
+import UIKit
 
 struct AccountView: View {
     @EnvironmentObject private var auth: AuthManager
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var showSignOut = false
     @State private var showDeleteAccount = false
     @State private var isDeletingAccount = false
@@ -31,6 +33,8 @@ struct AccountView: View {
                                 .foregroundStyle(.primary)
                                 .textSelection(.enabled)
                                 .accessibilityIdentifier("account.error")
+                                .fixedSize(horizontal: false, vertical: true)
+                                .accessibilityAddTraits(.updatesFrequently)
                         }
                     }
 
@@ -39,10 +43,12 @@ struct AccountView: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(accountTitle)
                                     .font(.headline)
+                                    .fixedSize(horizontal: false, vertical: true)
                                     .textSelection(.enabled)
                                 if let subtitle = accountSubtitle {
                                     Text(subtitle)
                                         .font(.subheadline)
+                                        .fixedSize(horizontal: false, vertical: true)
                                         .foregroundStyle(.secondary)
                                         .textSelection(.enabled)
                                 }
@@ -53,6 +59,8 @@ struct AccountView: View {
                                 .foregroundStyle(Color(.systemBackground))
                                 .frame(width: 40, height: 40)
                                 .background(Circle().fill(Color.primary))
+                                .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                                .accessibilityHidden(true)
                         }
                         .listRowBackground(Color.clear)
                         .accountMeasure("identity.row")
@@ -76,6 +84,8 @@ struct AccountView: View {
 #endif
                     })
 
+                    AppIconPickerSection()
+
                     Section {
                         Button {
                             guard !hillclimbReadOnly else { return }
@@ -88,6 +98,12 @@ struct AccountView: View {
                     }
 
                     Section {
+                        Link(destination: LMRWeb.board) {
+                            AccountRow("Your board, everywhere", systemImage: "globe", external: true)
+                        }
+                        Link(destination: LMRWeb.agentAccess) {
+                            AccountRow("Agent access", systemImage: "link", external: true)
+                        }
                         Link(destination: LMRWeb.privacy) {
                             AccountRow("Privacy", systemImage: "hand.raised", external: true)
                         }
@@ -171,7 +187,7 @@ struct AccountView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     if isDeletingAccount {
-                        ProgressView()
+                        AccessibleProgressView()
                             .accessibilityLabel("Deleting account")
                     } else {
                         Button { dismiss() } label: {
@@ -284,15 +300,23 @@ struct AccountView: View {
                     openURL(url)
                 }
             } label: {
-                HStack {
+                notificationLayout {
                     Text("Notifications")
-                    Spacer()
+                    if !dynamicTypeSize.isAccessibilitySize { Spacer() }
                     Text(NotificationAccessPolicy.value(notificationAccess))
                         .foregroundStyle(.secondary)
                 }
             }
+            .accessibilityLabel("Notifications")
+            .accessibilityValue(NotificationAccessPolicy.value(notificationAccess))
             .accessibilityHint("Opens Settings so you can allow notifications")
         }
+    }
+
+    private var notificationLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+            : AnyLayout(HStackLayout())
     }
 
     private func refreshNotificationAccess() async {
@@ -341,6 +365,7 @@ private struct AccountRow: View {
                 .accountMeasure("\(title).icon")
                 .accessibilityHidden(true)
             Text(title)
+                .fixedSize(horizontal: false, vertical: true)
                 .foregroundStyle(Color.primary)
                 .accountMeasure("\(title).title")
             Spacer(minLength: 8)

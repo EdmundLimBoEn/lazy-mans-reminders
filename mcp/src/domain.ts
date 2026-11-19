@@ -5,13 +5,14 @@ export type TokenHash = string & { readonly __brand: 'TokenHash' }
 
 export type PresentedToken = { tokenId: TokenId; secret: TokenSecret }
 
-export type AgentSession = { userId: UserId; tokenId: TokenId; agentName: string }
+export type AgentSession = { userId: UserId; tokenId: TokenId; agentName: string; canEdit: boolean }
 
 export type ReminderStatus = 'active' | 'completed'
 
 export type BoardCommand =
   | { kind: 'list'; status: ReminderStatus | 'all' }
   | { kind: 'add'; text: string }
+  | { kind: 'edit'; reminderId: string; text: string }
   | { kind: 'complete'; reminderId: string }
   | { kind: 'reopen'; reminderId: string }
 

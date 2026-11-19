@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createMcpHandler } from 'agents/mcp/server'
 import { setup } from '../test/oauthWorker'
+import { TOOLS } from './constants'
 import { hashSecret } from './token'
 import type { TokenSecret } from './domain'
 
@@ -18,6 +19,12 @@ const headers = {
   Authorization: `Bearer lmr_${USER}_test-secret`,
   'Content-Type': 'application/json',
   Accept: 'application/json, text/event-stream',
+}
+
+async function readMcpResponse(response: Response) {
+  if (!response.headers.get('Content-Type')?.includes('text/event-stream')) return response.json()
+  const data = (await response.text()).split('\n').find((line) => line.startsWith('data: '))
+  return JSON.parse(data!.slice(6))
 }
 
 beforeEach(async () => {
@@ -76,15 +83,39 @@ describe('authenticated MCP body limit', () => {
     for (const body of [message, message.padEnd(LIMIT, ' ')]) {
       const response = await request(HOST, path, { method: 'POST', headers, body })
       expect(response.status).toBe(200)
-      const text = await response.text()
-      const data = response.headers.get('Content-Type')?.includes('text/event-stream')
-        ? text.split('\n').find((line) => line.startsWith('data: '))!.slice(6)
-        : text
-      expect(JSON.parse(data)).toMatchObject({
+      expect(await readMcpResponse(response)).toMatchObject({
         jsonrpc: '2.0', id: 1,
         result: { serverInfo: { name: 'notepad', version: '1.0.0' } },
       })
     }
     expect(createMcpHandler).toHaveBeenCalledTimes(2)
   })
+})
+
+it('lists registered tools for an authenticated MCP request', async () => {
+  const { request } = setup()
+  const response = await request(HOST, '/mcp', {
+    method: 'POST',
+    headers: { ...headers, 'MCP-Protocol-Version': '2025-03-26' },
+    body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }),
+  })
+  expect(response.status).toBe(200)
+  expect(await readMcpResponse(response)).toMatchObject({
+    jsonrpc: '2.0', id: 1,
+    result: { tools: expect.arrayContaining(TOOLS.map((name) => expect.objectContaining({ name }))) },
+  })
+})
+
+it.each([undefined, 'Bearer invalid-token'])('rejects an edit call with invalid authentication (%s)', async (authorization) => {
+  const { request } = setup()
+  const requestHeaders = new Headers(headers)
+  requestHeaders.delete('Authorization')
+  if (authorization) requestHeaders.set('Authorization', authorization)
+  const response = await request(HOST, '/mcp', {
+    method: 'POST', headers: requestHeaders,
+    body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/call',
+      params: { name: 'edit_reminder', arguments: { id: USER, text: 'Corrected' } } }),
+  })
+  expect(response.status).toBe(401)
+  expect(createMcpHandler).not.toHaveBeenCalled()
 })

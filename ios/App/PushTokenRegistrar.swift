@@ -21,7 +21,13 @@ final class PushTokenRegistrar: ObservableObject {
         }
     }
 
+    private struct SupersededToken: Codable, Equatable {
+        let token: String
+        let userID: UUID
+    }
+
     private struct Pending: Codable {
+        var supersededTokens: [SupersededToken]?
         var deviceToken: String?
         var userID: UUID?
         var pushToStartToken: String?
@@ -38,6 +44,7 @@ final class PushTokenRegistrar: ObservableObject {
     private let defaults: UserDefaults
     private let key: String
     private let environment: String
+    private let remove: (String, UUID) async throws -> Void
     private let upload: (Registration) async throws -> Void
     private let retryDelay: () async throws -> Void
     private var pending: Pending
@@ -50,17 +57,19 @@ final class PushTokenRegistrar: ObservableObject {
         defaults: UserDefaults = .standard,
         environment: String = PushTokenRegistrar.environment,
         retryDelay: @escaping () async throws -> Void = { try await Task.sleep(nanoseconds: 500_000_000) },
+        remove: @escaping (String, UUID) async throws -> Void,
         upload: @escaping (Registration) async throws -> Void
     ) {
         self.defaults = defaults
         self.environment = environment
         self.key = "push-registration-\(environment)"
+        self.remove = remove
         self.upload = upload
         self.retryDelay = retryDelay
         self.pending = defaults.data(forKey: key)
             .flatMap { try? JSONDecoder().decode(Pending.self, from: $0) } ?? Pending()
         self.lastSuccess = pending.lastSuccess
-        self.needsRetry = pending.activityPushToken != nil
+        self.needsRetry = pending.activityPushToken != nil || !(pending.supersededTokens ?? []).isEmpty
     }
 
     nonisolated static var environment: String {
@@ -128,10 +137,35 @@ final class PushTokenRegistrar: ObservableObject {
 
     func recordDeviceToken(_ token: String) {
         guard pending.deviceToken != token else { return }
+        if let oldToken = pending.deviceToken, let userID = pending.userID {
+            let old = SupersededToken(token: oldToken, userID: userID)
+            if !(pending.supersededTokens ?? []).contains(old) {
+                pending.supersededTokens = (pending.supersededTokens ?? []) + [old]
+            }
+        }
         pending.deviceToken = token
         // Acknowledgements belong to the account/device pair. Keep a newer
         // pending activity, or requeue the selected activity and its clock.
         invalidateRegistration()
+    }
+
+    /// Called while paused so no in-flight upload can recreate a deleted row.
+    func removeRegistrations(userID: UUID) async throws {
+        precondition(isPaused && !isUploading)
+        if let token = pending.deviceToken {
+            try await remove(token, userID)
+            registrationWasRemoved()
+        }
+        // Rotation callbacks may have arrived while the current row was deleted.
+        try await removeSupersededTokens()
+    }
+
+    private func removeSupersededTokens() async throws {
+        while let old = pending.supersededTokens?.first {
+            try await remove(old.token, old.userID)
+            pending.supersededTokens?.removeAll { $0 == old }
+            save()
+        }
     }
 
     func recordPushToStartToken(_ token: String) {
@@ -159,6 +193,13 @@ final class PushTokenRegistrar: ObservableObject {
             for waiter in waiters { waiter.resume() }
         }
         while !isPaused, let deviceToken = pending.deviceToken, let userID = pending.userID {
+            do {
+                try await removeSupersededTokens()
+            } catch {
+                needsRetry = true
+                return
+            }
+            guard !isPaused, pending.deviceToken == deviceToken, pending.userID == userID else { continue }
             let sentRevision = revision
             let registration = Registration(
                 token: deviceToken, userID: userID, environment: environment,

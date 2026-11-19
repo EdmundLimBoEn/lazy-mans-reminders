@@ -8,13 +8,17 @@ insert into auth.users(id) values
 -- Simulate history accumulated across multiple write windows.
 alter table public.reminders disable trigger aaa_enforce_write_budget;
 insert into public.reminders(user_id, text, is_done, completed_at)
-select owner_id, 'Expired ' || n, true, now() - interval '8 days'
+select owner_id, 'Expired ' || n, true, now() - interval '4 days'
 from (values ('11111111-1111-4111-8111-111111111111'::uuid),
              ('22222222-2222-4222-8222-222222222222'::uuid)) owners(owner_id)
 cross join lateral generate_series(1, case when owner_id = '11111111-1111-4111-8111-111111111111'::uuid then 601 else 602 end) n;
 insert into public.reminders(user_id, text, is_done, completed_at) values
  ('11111111-1111-4111-8111-111111111111', 'Active', false, null),
- ('11111111-1111-4111-8111-111111111111', 'Recent', true, now());
+ ('11111111-1111-4111-8111-111111111111', 'Recent', true, now() - interval '2 days'),
+ ('11111111-1111-4111-8111-111111111111', 'Boundary', true, now() - interval '3 days');
+-- Retention uses completion time even when a row was created much earlier.
+update public.reminders set created_at = now() - interval '30 days'
+where text in ('Active', 'Recent', 'Boundary');
 alter table public.reminders enable trigger aaa_enforce_write_budget;
 insert into public.device_tokens(user_id, token)
 values ('22222222-2222-4222-8222-222222222222', repeat('a', 64));
@@ -34,8 +38,9 @@ set local request.jwt.claim.sub = '11111111-1111-4111-8111-111111111111';
 do $$ begin
   assert public.delete_old_completed_reminders() = 1, 'Partial budget must preserve successful deletes';
   assert public.delete_old_completed_reminders() = 0, 'Exhaustion must return without rolling back earlier progress';
-  assert (select count(*) = 600 from public.reminders where is_done and completed_at < now() - interval '7 days');
-  assert (select count(*) = 2 from public.reminders where text in ('Active', 'Recent'));
+  assert (select count(*) = 600 from public.reminders where is_done and completed_at < now() - interval '3 days');
+  assert (select count(*) = 3 from public.reminders where text in ('Active', 'Recent', 'Boundary')),
+    'Active rows, two-day completions and the exact three-day boundary must remain';
 end $$;
 reset role;
 do $$ begin
@@ -56,7 +61,7 @@ where user_id = '11111111-1111-4111-8111-111111111111';
 set local role authenticated;
 do $$ begin
   assert public.delete_old_completed_reminders() = 600, 'The remaining backlog must resume in the next window';
-  assert (select count(*) = 2 from public.reminders);
+  assert (select count(*) = 3 from public.reminders);
 end $$;
 reset role;
 
@@ -69,6 +74,6 @@ do $$ begin
   assert not exists (select 1 from public.routine_reminders);
   assert not exists (select 1 from public.agent_tokens);
   assert not exists (select 1 from public.user_write_budgets where user_id = '22222222-2222-4222-8222-222222222222');
-  assert (select count(*) = 2 from public.reminders), 'Account cascades must retain the other owner';
+  assert (select count(*) = 3 from public.reminders), 'Account cascades must retain the other owner';
 end $$;
 rollback;

@@ -69,4 +69,16 @@ describe('safeReturnPath', () => {
     expect(safeReturnPath('/%2f%2fevil.example')).toBe('/')
     expect(safeReturnPath('/%5cevil.example')).toBe('/')
   })
+
+  it.each([
+    '/.//evil.example',
+    '/.//evil.example/phish',
+    '/..//evil.example/phish',
+    '/%2e%2e//evil.example/phish',
+    '/%2e%2e///evil.example',
+  ])('rejects a protocol-relative path after dot-segment normalization: %s', (candidate) => {
+    const returned = safeReturnPath(candidate)
+    expect(returned).toBe('/')
+    expect(new URL(returned, 'https://np.sillyapps.co').origin).toBe('https://np.sillyapps.co')
+  })
 })

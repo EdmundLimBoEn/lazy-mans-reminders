@@ -6,7 +6,7 @@ final class FeedbackMailTests: XCTestCase {
         let info = FeedbackMail.AppInfo(version: "1.0", build: "7", osVersion: "18.2")
         XCTAssertEqual(
             FeedbackMail.url(info)?.absoluteString,
-            "mailto:hello@edmundlim.systems"
+            "mailto:edmund@sillyapps.co"
                 + "?subject=Notepad%20feedback%20%281.0%20build%207%29"
                 + "&body=%0A%0A---%0AApp%20version%3A%201.0%20%287%29%0AiOS%3A%2018.2%0A"
         )
@@ -17,7 +17,7 @@ final class FeedbackMailTests: XCTestCase {
         let url = try XCTUnwrap(FeedbackMail.url(info))
         let components = try XCTUnwrap(URLComponents(url: url, resolvingAgainstBaseURL: false))
         XCTAssertEqual(components.scheme, "mailto")
-        XCTAssertEqual(components.path, "hello@edmundlim.systems")
+        XCTAssertEqual(components.path, "edmund@sillyapps.co")
         let items = Dictionary(
             uniqueKeysWithValues: (components.queryItems ?? []).map { ($0.name, $0.value ?? "") }
         )

@@ -12,24 +12,36 @@ final class LMRChromeTests: XCTestCase {
     }
 
     func testLegalPageURLs() {
-        XCTAssertEqual(LMRWeb.privacy.absoluteString, "https://np.sillyapps.co/privacy")
-        XCTAssertEqual(LMRWeb.terms.absoluteString, "https://np.sillyapps.co/terms")
-        XCTAssertEqual(LMRWeb.support.absoluteString, "https://np.sillyapps.co/support")
-        XCTAssertEqual(LMRWeb.dataExport.absoluteString, "https://np.sillyapps.co")
+        XCTAssertEqual(LMRWeb.privacy.absoluteString, "https://app.notepads.dev/privacy")
+        XCTAssertEqual(LMRWeb.terms.absoluteString, "https://app.notepads.dev/terms")
+        XCTAssertEqual(LMRWeb.support.absoluteString, "https://app.notepads.dev/support")
+        XCTAssertEqual(LMRWeb.dataExport.absoluteString, "https://app.notepads.dev")
     }
 
     func testMagicLinkLandsOnCanonicalHost() {
-        XCTAssertEqual(LMRWeb.iosAuthRedirect.absoluteString, "https://np.sillyapps.co/auth/ios")
+        XCTAssertEqual(LMRWeb.iosAuthRedirect.absoluteString, "https://app.notepads.dev/auth/ios")
+    }
+
+    func testDiscoveryURLsOpenTheBoardWithoutStartingAuthorization() {
+        XCTAssertEqual(LMRWeb.board, LMRWeb.origin)
+        XCTAssertEqual(LMRWeb.agentAccess.scheme, LMRWeb.origin.scheme)
+        XCTAssertEqual(LMRWeb.agentAccess.host, LMRWeb.origin.host)
+        XCTAssertTrue(["", "/"].contains(LMRWeb.agentAccess.path))
+        XCTAssertEqual(LMRWeb.agentAccess.fragment, "agent-access-heading")
+        XCTAssertNil(LMRWeb.agentAccess.query)
+        XCTAssertNil(LMRWeb.board.fragment)
+        XCTAssertNil(LMRWeb.board.query)
     }
 
     func testInAppLinksUseCanonicalHost() {
         let urls = [
             LMRWeb.origin, LMRWeb.privacy, LMRWeb.terms,
             LMRWeb.support, LMRWeb.dataExport, LMRWeb.iosAuthRedirect,
+            LMRWeb.board, LMRWeb.agentAccess,
         ]
         for url in urls {
             XCTAssertEqual(url.scheme, "https", url.absoluteString)
-            XCTAssertEqual(url.host, "np.sillyapps.co", url.absoluteString)
+            XCTAssertEqual(url.host, "app.notepads.dev", url.absoluteString)
         }
     }
 
@@ -67,5 +79,10 @@ final class LMRChromeTests: XCTestCase {
         XCTAssertFalse(SignInEmail.isPlausible("you@"))
         XCTAssertTrue(SignInEmail.isPlausible("you@example.com"))
         XCTAssertTrue(SignInEmail.isPlausible("  you@example.com  "))
+    }
+
+    func testComposerKeyboardDismissStaysVisibleWhileTyping() {
+        XCTAssertFalse(ComposerKeyboardDismiss.isVisible(focused: false))
+        XCTAssertTrue(ComposerKeyboardDismiss.isVisible(focused: true))
     }
 }

@@ -9,7 +9,9 @@ arguments, commit it, or include it in logs. No JWT generation or ASC mutation i
 performed here. Without a token or offline responses, checks fail closed.
 
 Environment defaults: `ASC_APP_ID=6799138197`, `ASC_VERSION=1.0`,
-`ASC_PLATFORM=IOS`. Other platforms are explicitly unsupported. If Apple returns
+`ASC_PLATFORM=IOS`. The source marketing version is now `1.0.1`; the script
+default is still `1.0`, so set `ASC_VERSION` to the intended version for an
+authorized check. Other platforms are explicitly unsupported. If Apple returns
 multiple app-information records, set `ASC_APP_INFO_ID` to the intended current
 editable record after inspecting ASC; the checker never picks the first record.
 The caller must select the current record even when only one is returned.
@@ -94,7 +96,12 @@ coverage remains UNKNOWN because Apple's current Help display naming and the
 published API enum are not a verified one-to-one mapping. No undocumented
 APP_IPHONE_69 constant is treated as proof of required coverage.
 
-Live privacy/support URLs on this app's known hosts (`np.sillyapps.co`,
+Canonical public URLs are `https://app.notepads.dev/privacy` and
+`https://app.notepads.dev/support`; the same paths remain on the legacy hosts.
+The script's `PUBLIC_HOSTS` allowlist currently omits `app.notepads.dev`, so
+canonical URLs return UNKNOWN for the HTTP probe and need separate verification.
+
+Live privacy/support URLs on the script's allowlisted hosts (`np.sillyapps.co`,
 `lmr.sillyapps.co`, `lmr.edmundlim.systems`, `lazy-mans-reminders.pages.dev`) receive unauthenticated
 HTTPS GET probes with a Mozilla user agent. HTTP 200 nonempty HTML is only HTTP
 availability evidence, not a rendered policy/content review. Access challenges,

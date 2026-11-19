@@ -3,6 +3,7 @@ import { handleDeleteAccount } from "../delete-account/handler.ts";
 import {
   DEFAULT_GRANT_CLEANUP_TIMEOUT_MS,
   DEFAULT_GRANT_CLEANUP_URL,
+  MAX_GRANT_CLEANUP_BODY_BYTES,
   revokeUserOauthGrants,
 } from "./oauth_grant_cleanup.ts";
 
@@ -166,6 +167,37 @@ Deno.test("grant cleanup deadline covers a stalled body and cancels its reader",
   assertEquals(response.body?.locked, false);
 });
 
+function paddedCompleteReport(byteLength: number): string {
+  const prefix = '{"complete":true,"pad":"';
+  const suffix = '"}';
+  const pad = byteLength - prefix.length - suffix.length;
+  if (pad < 0) throw new Error("report shorter than the complete envelope");
+  return `${prefix}${"x".repeat(pad)}${suffix}`;
+}
+
+Deno.test("grant cleanup accepts a complete report at the byte limit", async () => {
+  const report = paddedCompleteReport(MAX_GRANT_CLEANUP_BODY_BYTES);
+  assertEquals(new TextEncoder().encode(report).byteLength, MAX_GRANT_CLEANUP_BODY_BYTES);
+  assertEquals(
+    await revokeUserOauthGrants({
+      ...input,
+      fetchImpl: () => Promise.resolve(new Response(report)),
+    }),
+    { ok: true },
+  );
+});
+
+Deno.test("grant cleanup rejects an oversized complete report before parse", async () => {
+  const report = paddedCompleteReport(MAX_GRANT_CLEANUP_BODY_BYTES + 1);
+  assertEquals(
+    await revokeUserOauthGrants({
+      ...input,
+      fetchImpl: () => Promise.resolve(new Response(report)),
+    }),
+    { ok: false, reason: "incomplete" },
+  );
+});
+
 Deno.test("grant cleanup decodes JSON split across streamed chunks", async () => {
   const response = new Response(
     new ReadableStream<Uint8Array>({
@@ -191,7 +223,9 @@ Deno.test("grant cleanup aborts continuously ready chunks even when the timer is
   let completed = false;
   let signal: AbortSignal | undefined;
   const encoder = new TextEncoder();
-  const padding = encoder.encode("                ");
+  // Empty chunks stay under the byte cap so this still proves the deadline,
+  // not the oversize path.
+  const padding = encoder.encode("");
   let finishAt = 0;
   const response = new Response(
     new ReadableStream<Uint8Array>({

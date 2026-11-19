@@ -3,9 +3,10 @@ name: Web and MCP checks
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, dev]
     paths:
       - 'web/**'
+      - 'landing/**'
       - 'mcp/**'
       - 'supabase/**'
       - 'scripts/**'
@@ -73,11 +74,14 @@ jobs:
           python3 scripts/check_privacy_manifest.py --self-test
       - run: |
           export PATH="$(pg_config --bindir):$PATH"
+          type initdb postgres
           python3 -B -m unittest discover -s scripts/tests -v
+      - run: python3 scripts/check_migration_versions.py
       - run: bash -n scripts/check-ios-toolchain.sh scripts/ios-release-build.sh scripts/ios-simulator-unit-tests.sh
 
   routines:
     name: Routine database and push tests
+    needs: release-scripts
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -133,41 +137,69 @@ jobs:
             supabase/migrations/202610220002_reminder_text_and_token_lock.sql \
             supabase/migrations/202610220003_reminder_quotas.sql \
             supabase/migrations/202610250001_routine_owner_index.sql \
-            supabase/migrations/202610280001_write_budgets.sql \
-            supabase/migrations/202610280002_reminder_quota_capacity.sql \
-            supabase/migrations/202610280002_preserve_pending_routine_firings.sql \
-            supabase/migrations/202610280003_agent_append_order.sql \
+            supabase/migrations/202610280002_write_budgets.sql \
+            supabase/migrations/202610280006_reminder_quota_capacity.sql \
+            supabase/migrations/202610280005_preserve_pending_routine_firings.sql \
+            supabase/migrations/202610280007_agent_append_order.sql \
             supabase/tests/agent_append_order.sql \
             supabase/tests/routine_owner_index.sql \
             supabase/tests/reminder_text_and_token_lock.sql \
             supabase/tests/routine_reminders.sql \
             supabase/tests/reminder_quotas.sql \
             supabase/tests/write_budgets.sql \
-            supabase/migrations/202610280002_budgeted_retention_cleanup.sql \
-            supabase/tests/budgeted_retention_cleanup.sql \
+            supabase/migrations/202610280003_budgeted_retention_cleanup.sql \
             supabase/migrations/202610280001_reminder_push_replay.sql \
             supabase/tests/reminder_push_replay.sql \
-            supabase/migrations/202610280002_normalize_legacy_reminder_text.sql \
+            supabase/migrations/202610280004_normalize_legacy_reminder_text.sql \
             supabase/tests/normalize_legacy_reminder_text.sql \
+            supabase/migrations/20261101000000_device_token_quota.sql \
+            supabase/tests/device_token_quota.sql \
             supabase/migrations/20261101000100_agent_token_revocation_budget.sql \
             supabase/tests/agent_token_revocation_budget.sql \
             supabase/migrations/20261101000200_push_job_retention.sql \
+            supabase/migrations/20261118154021_materialize_push_retention_batch.sql \
             supabase/tests/push_job_retention.sql \
             supabase/migrations/20261101000500_indexable_push_dispatch.sql \
             supabase/tests/indexable_push_dispatch.sql \
             supabase/tests/reminder_push_replay.sql \
             supabase/migrations/20261101000400_retention_skip_locked.sql \
-            supabase/tests/budgeted_retention_cleanup.sql \
-            supabase/tests/retention_skip_locked.sql \
+            supabase/migrations/20261109000200_revoke_anon_helper_execute.sql \
+            supabase/tests/anon_helper_execute.sql \
             supabase/tests/write_budgets.sql \
-            supabase/migrations/202610280002_reopen_reminder_lock_order.sql \
+            supabase/migrations/202610280009_reopen_reminder_lock_order.sql \
             supabase/migrations/20261101000300_reopen_reminder_noop.sql \
             supabase/tests/reopen_noop_budget.sql \
             supabase/migrations/20261102000100_live_activity_completion_lock.sql \
             supabase/tests/live_activity_start_lease.sql \
-            supabase/tests/live_activity_completion_lock.sql; do
+            supabase/tests/live_activity_completion_lock.sql \
+            supabase/migrations/20261109000100_scheduler_reminder_nowait.sql \
+            supabase/tests/routine_reminders.sql \
+            supabase/tests/reminder_quotas.sql \
+            supabase/migrations/20261109000300_revoke_anon_agent_token_clients.sql \
+            supabase/tests/agent_token_clients_grants.sql \
+            supabase/migrations/20261113000100_done_retention_3_days.sql \
+            supabase/tests/budgeted_retention_cleanup.sql \
+            supabase/tests/retention_skip_locked.sql \
+            supabase/tests/anon_helper_execute.sql \
+            supabase/tests/push_job_retention.sql \
+            supabase/migrations/20261113000200_usage_events.sql \
+            supabase/migrations/20261113000300_enable_usage_analytics.sql \
+            supabase/migrations/20261114000100_mcp_edit_usage.sql \
+            supabase/tests/usage_events.sql \
+            supabase/migrations/20261114000200_schedule_done_retention.sql \
+            supabase/tests/done_retention_schedule.sql \
+            supabase/migrations/20261114000200_schedule_done_retention.sql \
+            supabase/tests/done_retention_schedule.sql \
+            supabase/tests/budgeted_retention_cleanup.sql \
+            supabase/tests/retention_skip_locked.sql \
+            supabase/tests/agent_append_order.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
+          # The enable migration leaves collection on. Same-user usage upserts would
+          # serialize mint_agent_token and hide a missing advisory lock in the
+          # negative control below. The usage tests already covered the on path.
+          docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 \
+            -c "update public.usage_analytics_config set enabled = false where singleton;"
           # Exercise the initial write assertions with a deterministic minute rollover.
           docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 \
             -v write_budget_rollover=1 -f /tmp/supabase/tests/write_budgets.sql

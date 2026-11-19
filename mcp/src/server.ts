@@ -2,6 +2,7 @@ import { McpServer } from '@modelcontextprotocol/server'
 import { z } from 'zod'
 import type { AgentSession, BoardError, BoardResult, ReminderRow } from './domain'
 import { createServiceRoleClient } from './auth'
+import { recordAgentUsage } from './usage'
 import { CLIENT_STORAGE_ERROR, runBoardCommand } from './board'
 
 export function createServer(session: AgentSession, env: Env): McpServer {
@@ -20,6 +21,7 @@ export function createServer(session: AgentSession, env: Env): McpServer {
       },
     },
     async ({ status }) => {
+      await recordAgentUsage(env, session.userId, 'mcp_list')
       const result = await runBoardCommand(supabase, session, {
         kind: 'list',
         status: status ?? 'active',
@@ -37,7 +39,26 @@ export function createServer(session: AgentSession, env: Env): McpServer {
       },
     },
     async ({ text }) => {
+      await recordAgentUsage(env, session.userId, 'mcp_add')
       const result = await runBoardCommand(supabase, session, { kind: 'add', text })
+      return toToolResult(result)
+    },
+  )
+
+  if (session.canEdit) server.registerTool(
+    'edit_reminder',
+    {
+      description: 'Replace the text of an active or completed reminder. Text is trimmed and must be 1–500 characters, including any prefix. No agent name prefix is added.',
+      inputSchema: {
+        id: z.string(),
+        text: z.string(),
+      },
+    },
+    async ({ id, text }) => {
+      await recordAgentUsage(env, session.userId, 'mcp_edit')
+      const result = await runBoardCommand(supabase, session, {
+        kind: 'edit', reminderId: id, text,
+      })
       return toToolResult(result)
     },
   )
@@ -51,6 +72,7 @@ export function createServer(session: AgentSession, env: Env): McpServer {
       },
     },
     async ({ id }) => {
+      await recordAgentUsage(env, session.userId, 'mcp_complete')
       const result = await runBoardCommand(supabase, session, {
         kind: 'complete',
         reminderId: id,
@@ -68,6 +90,7 @@ export function createServer(session: AgentSession, env: Env): McpServer {
       },
     },
     async ({ id }) => {
+      await recordAgentUsage(env, session.userId, 'mcp_reopen')
       const result = await runBoardCommand(supabase, session, {
         kind: 'reopen',
         reminderId: id,
@@ -82,12 +105,15 @@ export function createServer(session: AgentSession, env: Env): McpServer {
       description: 'Return the bound agent name and token id, never the secret.',
       inputSchema: {},
     },
-    async () => ({
-      content: [{
-        type: 'text' as const,
-        text: JSON.stringify({ agentName: session.agentName, tokenId: session.tokenId }),
-      }],
-    }),
+    async () => {
+      await recordAgentUsage(env, session.userId, 'mcp_whoami')
+      return {
+        content: [{
+          type: 'text' as const,
+          text: JSON.stringify({ agentName: session.agentName, tokenId: session.tokenId }),
+        }],
+      }
+    },
   )
 
   return server
@@ -116,7 +142,10 @@ function toToolResult(result: BoardResult) {
   }
   return {
     isError: true,
-    content: [{ type: 'text' as const, text: boardErrorText(result) }],
+    content: [
+      { type: 'text' as const, text: boardErrorText(result) },
+      ...(result.kind === 'capacity' ? [{ type: 'text' as const, text: result.hint }] : []),
+    ],
   }
 }
 
@@ -138,7 +167,7 @@ function boardErrorText(error: BoardError): string {
         })),
       })
     case 'invalid_text':
-      return 'Text must be 1–500 characters after the agent name prefix'
+      return 'Text must be 1–500 characters including any agent name prefix'
     case 'storage':
       return CLIENT_STORAGE_ERROR
     default: {

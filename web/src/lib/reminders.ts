@@ -12,7 +12,7 @@ export const DEFAULT_LOCK_SCREEN_MAX_LINES = 6
 export const MAX_ACTIVE_REMINDERS = 16
 
 /** Done reminders older than this are deleted by `delete_old_completed_reminders()`. */
-export const COMPLETED_REMINDER_RETENTION_DAYS = 7
+export const COMPLETED_REMINDER_RETENTION_DAYS = 3
 
 export const POST_IT_HINT =
   'Hint: This board is more like a post-it note. Combine reminders into one line, or find other ways to keep it short.'
@@ -55,4 +55,11 @@ export function sortReminders<T extends ReminderLike>(reminders: T[]): T[] {
 /** Next sort_order when appending a reminder (max existing + 1, or 0 if empty). */
 export function nextSortOrder(reminders: Pick<ReminderLike, 'sort_order'>[]): number {
   return Math.max(-1, ...reminders.map((item) => item.sort_order)) + 1
+}
+
+/** Translate quota rejections even when another client filled the board first. */
+export function reminderErrorMessage(error: { message: string; details?: string | null; hint?: string | null }): string {
+  return [error.message, error.details, error.hint].some(value => value?.includes('LMR_CAPACITY_REACHED'))
+    ? POST_IT_HINT
+    : error.message
 }

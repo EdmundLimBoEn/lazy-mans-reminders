@@ -5,6 +5,7 @@ import UIKit
 struct SignInView: View {
     @EnvironmentObject private var auth: AuthManager
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.colorSchemeContrast) private var contrast
     @ScaledMetric(relativeTo: .body) private var signInButtonHeight: CGFloat = 48
     @State private var email = ""
     @State private var password = ""
@@ -209,9 +210,10 @@ struct SignInView: View {
                     notification: .announcement,
                     argument: "Check your inbox for the sign-in link"
                 )
-            } else if case .error = notice {
+            } else if case .error(let message) = notice {
                 pending = nil
                 errorPulse += 1
+                UIAccessibility.post(notification: .announcement, argument: message)
             }
         }
     }
@@ -305,6 +307,7 @@ struct SignInView: View {
                     pending = nil
                     emailFocused = true
                 }
+                .fixedSize(horizontal: false, vertical: true)
                 .buttonStyle(.bordered)
                 .buttonBorderShape(.roundedRectangle)
                 .controlSize(.large)
@@ -408,6 +411,7 @@ struct SignInView: View {
                 .focused($emailFocused)
                 .submitLabel(usesPassword ? .next : .send)
                 .accessibilityLabel("Email address")
+                .accessibilityInputLabels(["Email", "Email address", "you@example.com"])
                 .onSubmit {
                     if usesPassword {
                         passwordFocused = true
@@ -422,13 +426,13 @@ struct SignInView: View {
                     email = ""
                 } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(contrast == .increased ? .primary : .tertiary)
                         .frame(width: 44, height: 44)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .disabled(busy)
-                .accessibilityLabel("Clear text")
+                .accessibilityLabel("Clear email address")
             }
         }
         .padding(.leading, 12)
@@ -482,6 +486,7 @@ struct SignInView: View {
                 Link("Support", destination: LMRWeb.support)
                     .frame(minHeight: 44)
             }
+            .fixedSize(horizontal: true, vertical: false)
             VStack(spacing: 0) {
                 Link("Privacy", destination: LMRWeb.privacy)
                     .frame(minHeight: 44)
@@ -506,13 +511,15 @@ struct SignInView: View {
             .frame(maxWidth: .infinity, minHeight: 22)
             .overlay {
                 if showsProgress {
-                    ProgressView()
+                    AccessibleProgressView()
                         .controlSize(.regular)
                         .accessibilityHidden(true)
                 }
             }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(showsProgress ? "\(title), in progress" : title)
+        .accessibilityLabel(title)
+        .accessibilityInputLabels([title])
+        .accessibilityValue(ReminderAccessibility.progressValue(isBusy: showsProgress))
     }
 
     private func clearNotice() {

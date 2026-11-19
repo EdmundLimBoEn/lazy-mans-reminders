@@ -44,6 +44,8 @@ actor ReminderStore {
     private var isReordering = false
     private var contentRevision = 0
     private var refreshSequence = 0
+    private var acceptedRefreshSequence = 0
+    private var inFlightRefresh: Task<SharedSession?, Never>?
     private let requestData: (URLRequest) async throws -> (Data, URLResponse)
 
     init(
@@ -91,6 +93,13 @@ actor ReminderStore {
         return stored.accessToken == accessToken && stored.refreshToken == refreshToken
     }
 
+    func freshSession(for userID: UUID) -> SharedSession? {
+        guard let session = storedSession(), session.userID == userID, session.isFresh() else {
+            return nil
+        }
+        return session
+    }
+
     private var defaults: UserDefaults {
         if let injectedDefaults { return injectedDefaults }
         guard let defaults = UserDefaults(suiteName: AppConfig.appGroupID) else {
@@ -111,6 +120,9 @@ actor ReminderStore {
             refreshToken: refreshToken,
             userID: userID ?? JWTUserID.uuid(fromAccessToken: accessToken)
         )
+        if let userID = session.userID, freshSession(for: userID) != nil, !session.isFresh() {
+            return
+        }
         let previous = storedSession()
         if previous?.userID != session.userID {
             defaults.removeObject(forKey: cacheKey)
@@ -216,7 +228,7 @@ actor ReminderStore {
 
         try requireCurrentIdentity(session, revision: identityRevision)
 
-        // Best-effort: drop this user's done reminders older than 7 days (DB trigger sets completed_at).
+        // Best-effort: drop this user's done reminders older than 3 days (DB trigger sets completed_at).
         if performMaintenance {
             await deleteOldCompletedReminders(accessToken: session.accessToken)
             try requireCurrentIdentity(session, revision: identityRevision)
@@ -232,6 +244,7 @@ actor ReminderStore {
             URLQueryItem(name: "order", value: "sort_order.asc,created_at.asc")
         ]
         var request = URLRequest(url: components.url!, timeoutInterval: 15)
+        request.setValue("ios", forHTTPHeaderField: "x-notepad-client")
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
 
@@ -246,8 +259,8 @@ actor ReminderStore {
 
         let reminders = try ReminderJSON.decoder.decode([Reminder].self, from: responseData)
         try requireCurrentIdentity(session, revision: identityRevision)
-        // An acknowledged mutation or a newer refresh makes this snapshot obsolete.
-        if revision != contentRevision || sequence != refreshSequence || isReordering { return cached() }
+        // Only an acknowledged mutation or a newer accepted refresh makes this snapshot obsolete.
+        if revision != contentRevision || sequence < acceptedRefreshSequence || isReordering { return cached() }
         // Widget fetches cannot use process-local revisions to guard the app's cache.
         if updateCache {
             try cache(reminders)
@@ -258,6 +271,7 @@ actor ReminderStore {
             )
             defaults.set(try ReminderJSON.encoder.encode(snapshot), forKey: widgetSnapshotKey)
         }
+        acceptedRefreshSequence = sequence
         return reminders
     }
 
@@ -282,6 +296,7 @@ actor ReminderStore {
                 URLQueryItem(name: "id", value: "in.(\(missing.map(\.uuidString).joined(separator: ",")))")
             ]
             var request = URLRequest(url: components.url!, timeoutInterval: 15)
+            request.setValue("ios", forHTTPHeaderField: "x-notepad-client")
             request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
             request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
             let (data, response) = try await requestData(request)
@@ -321,6 +336,7 @@ actor ReminderStore {
         }
         var request = URLRequest(url: supabaseURL.appending(path: "rest/v1/rpc/reorder_reminders"), timeoutInterval: 15)
         request.httpMethod = "POST"
+        request.setValue("ios", forHTTPHeaderField: "x-notepad-client")
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -367,6 +383,7 @@ actor ReminderStore {
             url: supabaseURL.appending(path: "rest/v1/rpc/delete_old_completed_reminders")
         )
         request.httpMethod = "POST"
+        request.setValue("ios", forHTTPHeaderField: "x-notepad-client")
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -393,6 +410,25 @@ actor ReminderStore {
         guard let refreshToken = resolved.refreshToken, !refreshToken.isEmpty else {
             return resolved.expiresAt > Date() ? resolved : nil
         }
+        if let inFlightRefresh {
+            return await inFlightRefresh.value
+        }
+        let task = Task {
+            await self.completeSharedSessionRefresh(
+                from: resolved, refreshToken: refreshToken, identityRevision: identityRevision
+            )
+        }
+        inFlightRefresh = task
+        let completed = await task.value
+        inFlightRefresh = nil
+        return completed
+    }
+
+    private func completeSharedSessionRefresh(
+        from resolved: SharedSession,
+        refreshToken: String,
+        identityRevision: String?
+    ) async -> SharedSession? {
         let refreshed = await refreshAccessToken(refreshToken, userID: resolved.userID)
         do {
             try requireCurrentIdentity(resolved, revision: identityRevision)
@@ -470,6 +506,7 @@ actor ReminderStore {
         // Exclude reorder before authentication or transport can suspend the actor.
         pendingCreates += 1
         defer { pendingCreates -= 1 }
+        let nextOrder = (cached().map(\.sortOrder).max() ?? -1) + pendingCreates
         let identityRevision = defaults.string(forKey: identityRevisionKey)
         guard let session = await loadFreshSession() else {
             throw StoreError.signedOut
@@ -479,8 +516,6 @@ actor ReminderStore {
               userID == nil || userID == ownerID else {
             throw StoreError.signedOut
         }
-
-        let nextOrder = (cached().map(\.sortOrder).max() ?? -1) + 1
         struct CreateBody: Encodable {
             let text: String
             let userID: UUID
@@ -494,6 +529,7 @@ actor ReminderStore {
         }
         var request = URLRequest(url: supabaseURL.appending(path: "rest/v1/reminders"))
         request.httpMethod = "POST"
+        request.setValue("ios", forHTTPHeaderField: "x-notepad-client")
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -506,6 +542,9 @@ actor ReminderStore {
             throw StoreError.invalidResponse
         }
         guard 200..<300 ~= http.statusCode else {
+            if ReminderBoardLimits.isCapacityRejection(responseData) {
+                throw StoreError.atCapacity
+            }
             throw StoreError.requestFailed(http.statusCode)
         }
 
@@ -605,6 +644,7 @@ actor ReminderStore {
         ]
         var request = URLRequest(url: components.url!, timeoutInterval: 15)
         request.httpMethod = "PATCH"
+        request.setValue("ios", forHTTPHeaderField: "x-notepad-client")
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -631,6 +671,9 @@ actor ReminderStore {
             throw StoreError.invalidResponse
         }
         guard 200..<300 ~= http.statusCode else {
+            if ReminderBoardLimits.isCapacityRejection(responseData) {
+                throw StoreError.atCapacity
+            }
             throw StoreError.requestFailed(http.statusCode)
         }
 

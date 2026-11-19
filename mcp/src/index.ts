@@ -20,6 +20,7 @@ const CORS = {
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, DELETE',
   'Access-Control-Allow-Headers': 'Authorization, Content-Type, Accept, MCP-Protocol-Version',
 }
+const TOKEN_ISSUANCE_UNAVAILABLE = 'Token issuance is temporarily unavailable; retry shortly'
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -59,7 +60,7 @@ async function handleMcp(
 
   const account = await checkAccount(env, deps.accountExists, session.userId)
   if (account === 'unavailable') return json({ error: 'account_lookup_unavailable' }, 503)
-  if (account === 'deleted') return unauthorized()
+  if (account !== 'live') return unauthorized()
 
   if (request.method === 'POST') {
     // Bound streamed bytes before the SDK buffers and parses the body.
@@ -108,9 +109,9 @@ function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: Ex
       if (decision.kind === 'invalid_scope') {
         throw new OAuthError('invalid_scope', { description: 'The board scope is required' })
       }
-      if (decision.kind === 'unavailable') {
+      if (decision.kind === 'unavailable' || decision.kind === 'suspended') {
         throw new OAuthError('temporarily_unavailable', {
-          description: 'Account lookup is unavailable',
+          description: decision.kind === 'suspended' ? TOKEN_ISSUANCE_UNAVAILABLE : 'Account lookup is unavailable',
           statusCode: 503,
         })
       }
@@ -135,7 +136,7 @@ function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: Ex
           }
         } catch {
           throw new OAuthError('temporarily_unavailable', {
-            description: 'Token issuance is temporarily unavailable; retry shortly',
+            description: TOKEN_ISSUANCE_UNAVAILABLE,
             statusCode: 503,
           })
         }
@@ -186,7 +187,7 @@ async function checkCodeRedirect(request: Request, env: Env): Promise<Response |
       (error instanceof Error && /429 Too Many Requests/i.test(error.message))
     const response = json({
       error: 'temporarily_unavailable',
-      error_description: 'Token issuance is temporarily unavailable; retry shortly',
+      error_description: TOKEN_ISSUANCE_UNAVAILABLE,
     }, rateLimited ? 429 : 503)
     response.headers.set('Retry-After', '30')
     response.headers.set('Access-Control-Expose-Headers', 'Retry-After')

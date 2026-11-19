@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, dev]
     paths:
       - "ios/**"
       - ".github/workflows/ios-tests.yml"
@@ -36,7 +36,7 @@ jobs:
   test:
     name: Simulator unit tests
     needs: sign-in-flags
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 60
     steps:
       - name: Checkout
@@ -45,7 +45,7 @@ jobs:
       - name: Select stable Xcode
         uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1
         with:
-          xcode-version: "26.6"
+          xcode-version: "27.1"
 
       - name: Verify submission toolchain
         run: ./scripts/check-ios-toolchain.sh
@@ -58,6 +58,9 @@ jobs:
 
       - name: Test deferred board updates
         run: python3 -B -m unittest discover -s scripts/tests -p test_ios_deferred_board_updates.py -v
+
+      - name: Test overlapping create sort order
+        run: python3 -B -m unittest discover -s scripts/tests -p test_ios_overlapping_create_order.py -v
 
       - name: Install XcodeGen
         run: HOMEBREW_NO_AUTO_UPDATE=1 brew install xcodegen

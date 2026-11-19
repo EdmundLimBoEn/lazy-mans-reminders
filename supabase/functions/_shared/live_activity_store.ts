@@ -29,5 +29,6 @@ export async function markActivityEnded(
   const { error } = await query;
   if (error) {
     console.error("Could not record Live Activity end", error);
+    throw error;
   }
 }

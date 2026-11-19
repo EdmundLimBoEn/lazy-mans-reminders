@@ -10,7 +10,7 @@ import {
 export const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-notepad-client",
 };
 
 export type DeleteAccountUser = {
@@ -32,8 +32,35 @@ export type DeleteAccountDeps = {
   deleteAuthUser: (userId: string) => Promise<{ error: unknown }>;
 };
 
+export const MAX_DELETION_BODY_BYTES = 16 * 1024;
+
 function jsonHeaders(): Record<string, string> {
   return corsHeaders;
+}
+
+async function readLimitedText(
+  request: Request,
+  maxBytes: number,
+): Promise<string | null> {
+  const reader = request.body?.getReader();
+  if (!reader) return "";
+  const bytes = new Uint8Array(maxBytes);
+  let length = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (length + value.byteLength > maxBytes) {
+        void reader.cancel().catch(() => {});
+        return null;
+      }
+      bytes.set(value, length);
+      length += value.byteLength;
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  return new TextDecoder().decode(bytes.subarray(0, length));
 }
 
 async function readDeletionBody(
@@ -42,7 +69,8 @@ async function readDeletionBody(
   { appleAuthorizationCode?: string; expectedUserId?: string } | null
 > {
   try {
-    const text = await request.text();
+    const text = await readLimitedText(request, MAX_DELETION_BODY_BYTES);
+    if (text === null) return null;
     // Native clients intentionally send no body when no Apple code is needed.
     if (text === "") return {};
     const body = JSON.parse(text);
@@ -113,6 +141,19 @@ export async function handleDeleteAccount(
       { status: 409, headers: corsHeaders },
     );
   }
+  const revokeGrants = deps.revokeGrants ?? revokeUserOauthGrants;
+  const cleanup = await revokeGrants({
+    authorization: authHeader,
+    fetchImpl: deps.fetchImpl,
+  });
+  if (!cleanup.ok) {
+    console.error("Could not revoke OAuth grants", cleanup.reason);
+    return new Response("Could not revoke connected agents", {
+      status: 503,
+      headers: corsHeaders,
+    });
+  }
+
   const appleAuthorizationCode = typeof body.appleAuthorizationCode === "string"
     ? body.appleAuthorizationCode.trim() || undefined
     : undefined;
@@ -133,19 +174,6 @@ export async function handleDeleteAccount(
       event: "apple_token_revoke",
       outcome: "failed",
       reason: "unexpected_error",
-    });
-  }
-
-  const revokeGrants = deps.revokeGrants ?? revokeUserOauthGrants;
-  const cleanup = await revokeGrants({
-    authorization: authHeader,
-    fetchImpl: deps.fetchImpl,
-  });
-  if (!cleanup.ok) {
-    console.error("Could not revoke OAuth grants", cleanup.reason);
-    return new Response("Could not revoke connected agents", {
-      status: 503,
-      headers: corsHeaders,
     });
   }
 

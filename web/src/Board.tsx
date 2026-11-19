@@ -14,9 +14,9 @@ import { Label } from '@/components/ui/label'
 import { SiteHeader } from '@/components/SiteHeader'
 import { cn } from '@/lib/utils'
 import { accountExportFilename, buildAccountExport, serializeAccountExport, type AccountExportAgentKey, type AccountExportReminder } from './lib/accountExport'
-import { nextSortOrder, sortReminders, isAtCapacity, effectiveMaximum, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
+import { reminderErrorMessage, nextSortOrder, sortReminders, isAtCapacity, effectiveMaximum, POST_IT_HINT, DEFAULT_LOCK_SCREEN_MAX_LINES } from './lib/reminders'
 import { ConnectedAgents } from './ConnectedAgents'
-import { LegalFooterLinks } from './LegalPages'
+import { LegalFooterLinks } from './legalFooter'
 import { AGENT_TOKEN_PLACEHOLDER, LMR_AGENT_TOKEN_VAR, MCP_URL, claudeMcpConfig, cursorMcpConfig, grokConnectorConfig, lmrAgentTokenHeaderTemplate } from './mcp'
 import { supabase } from './supabase'
 import { RoutineReminders } from './RoutineReminders'
@@ -57,6 +57,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
   const loadSequence = useRef(0)
   const cleanupRef = useRef({ pending: false, nextAttemptAt: 0 })
   const reorderingRef = useRef(false)
+  const addingRef = useRef(false)
   const deferredRefreshRef = useRef<(() => void) | null>(null)
   const pendingMutationsRef = useRef(new Set<string>())
   const [pendingMutations, setPendingMutations] = useState(new Set<string>())
@@ -184,25 +185,30 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
   async function add(event: FormEvent) {
     event.preventDefault()
     const value = text.trim()
-    if (!value || adding || reorderingRef.current) return
+    if (!value || adding || addingRef.current || reorderingRef.current) return
     if (isAtCapacity(active.length, maxLines)) {
       setError(POST_IT_HINT)
       return
     }
+    addingRef.current = true
     ++loadSequence.current
     setAdding(true)
     setText('')
     setError('')
-    const nextOrder = nextSortOrder(reminders)
-    const { error: insertError } = await supabase
-      .from('reminders')
-      .insert({ text: value, user_id: session.user.id, sort_order: nextOrder })
-    if (insertError) {
-      setText(value)
-      setError(insertError.message)
+    try {
+      const nextOrder = nextSortOrder(reminders)
+      const { error: insertError } = await supabase
+        .from('reminders')
+        .insert({ text: value, user_id: session.user.id, sort_order: nextOrder })
+      if (insertError) {
+        setText(value)
+        setError(reminderErrorMessage(insertError))
+      }
+      await load()
+    } finally {
+      addingRef.current = false
+      setAdding(false)
     }
-    await load()
-    setAdding(false)
   }
 
   async function patch(id: string, changes: Partial<ReminderChanges>) {
@@ -226,7 +232,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
       if (updateError) {
         // Restore only our optimistic row; preserve any newer state from a read.
         setReminders((items) => items.map((item) => item === optimistic ? previous : item))
-        setError(updateError.message)
+        setError(reminderErrorMessage(updateError))
       }
       // Invalidate reads started during the write and reconcile acknowledged state.
       await load()
@@ -376,7 +382,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
     link.href = url
     link.download = accountExportFilename()
     link.click()
-    URL.revokeObjectURL(url)
+    setTimeout(() => URL.revokeObjectURL(url), 0)
     setExporting(false)
   }
 
@@ -385,36 +391,43 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
     const expectedUserId = confirmDelete
     setDeletingAccount(true)
     setError('')
-    const { data: current, error: sessionError } = await supabase.auth.getSession()
-    if (sessionError || current.session?.user.id !== expectedUserId) {
-      setError('Your signed-in account changed. Please reopen account deletion and try again.')
+    try {
+      const { data: current, error: sessionError } = await supabase.auth.getSession()
+      if (sessionError || current.session?.user.id !== expectedUserId) {
+        setError('Your signed-in account changed. Please reopen account deletion and try again.')
+        setConfirmDelete(null)
+        setDeletingAccount(false)
+        return
+      }
+      // Hosted Supabase OAuth consumes Apple's code. Our callback code is a
+      // Supabase PKCE code, not a fresh Apple code; keep the manual fallback.
+      const { data, error: invokeError } = await supabase.functions.invoke('delete-account', {
+        method: 'POST',
+        body: { expectedUserId },
+      })
+      // Another tab may have replaced the account while deletion was pending.
+      const { data: latest, error: latestSessionError } = await supabase.auth.getSession()
+      if (latestSessionError || latest.session?.user.id !== expectedUserId) {
+        setConfirmDelete(null)
+        setDeletingAccount(false)
+        return
+      }
+      if (invokeError || data?.ok !== true) {
+        setError(
+          invokeError?.message
+            ?? 'Could not delete your account. Stay signed in and try again, or email support from the Support page.',
+        )
+        setDeletingAccount(false)
+        return
+      }
+      onAccountDeleted(data?.appleRevocation === 'manual_required')
+      await supabase.auth.signOut({ scope: 'local' })
       setConfirmDelete(null)
       setDeletingAccount(false)
-      return
-    }
-    const { data, error: invokeError } = await supabase.functions.invoke('delete-account', {
-      method: 'POST',
-      body: { expectedUserId },
-    })
-    // Another tab may have replaced the account while deletion was pending.
-    const { data: latest, error: latestSessionError } = await supabase.auth.getSession()
-    if (latestSessionError || latest.session?.user.id !== expectedUserId) {
-      setConfirmDelete(null)
+    } catch {
+      setError('Could not delete your account. Stay signed in and try again, or email support from the Support page.')
       setDeletingAccount(false)
-      return
     }
-    if (invokeError || data?.ok !== true) {
-      setError(
-        invokeError?.message
-          ?? 'Could not delete your account. Stay signed in and try again, or email support from the Support page.',
-      )
-      setDeletingAccount(false)
-      return
-    }
-    onAccountDeleted(data?.appleRevocation === 'manual_required')
-    await supabase.auth.signOut({ scope: 'local' })
-    setConfirmDelete(null)
-    setDeletingAccount(false)
   }
 
   return (
@@ -438,6 +451,9 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
             <h1 id="board-heading" className="text-2xl font-semibold tracking-tight">Your board</h1>
             <p className="board-hint text-sm leading-relaxed text-muted-foreground" id="board-hint">{POST_IT_HINT}</p>
           </div>
+          {boardFull && (
+            <p className="text-sm text-muted-foreground" role="status">Board full — combine lines instead</p>
+          )}
           <form className="add-form flex gap-2" onSubmit={add}>
             <div className="relative flex-1">
               <Plus className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
@@ -461,7 +477,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
             <span className="max-sm:hidden">Capacity set by your iPhone Lock Screen</span>
           </div>
           {error && (
-            <Alert variant="destructive" className="pr-12">
+            <Alert variant={error === POST_IT_HINT ? "default" : "destructive"} className="pr-12">
               <CircleAlert aria-hidden="true" />
               <AlertDescription className="[overflow-wrap:anywhere]">{error}</AlertDescription>
               <Button
@@ -476,6 +492,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
               </Button>
             </Alert>
           )}
+          {(loading || sorted.length > 0 || !error) && (
           <div className="rounded-lg border">
             {loading ? (
               <div className="empty px-4 py-12 text-center text-sm text-muted-foreground" role="status">Loading your board…</div>
@@ -568,6 +585,7 @@ export default function Board({ session, onNavigate, onAccountDeleted }: {
               </DndContext>
             )}
           </div>
+          )}
         </section>
 
         <RoutineReminders userId={session.user.id} />
@@ -656,20 +674,23 @@ type AgentTokenClient = {
   revoked_at: string | null
 }
 
-function AgentAccess({ userId, accessToken }: { userId: string; accessToken: string }) {
+export function AgentAccess({ userId, accessToken }: { userId: string; accessToken: string }) {
   const [tokens, setTokens] = useState<AgentTokenClient[]>([])
   const [name, setName] = useState('')
   const [minted, setMinted] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const loadSequence = useRef(0)
 
   const load = useCallback(async () => {
+    const sequence = ++loadSequence.current
     const { data, error: fetchError } = await supabase
       .from('agent_token_clients')
       .select('id, name, created_at, last_used_at, revoked_at')
       .eq('user_id', userId)
       .is('revoked_at', null)
       .order('created_at', { ascending: false })
+    if (sequence !== loadSequence.current) return
     if (fetchError) setError(fetchError.message)
     else setTokens(data ?? [])
   }, [userId])

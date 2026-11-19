@@ -1,4 +1,4 @@
-import { lazy, Suspense, FormEvent, useCallback, useEffect, useState } from 'react'
+import { Component, lazy, Suspense, type ComponentProps, FormEvent, type ReactNode, useCallback, useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { Info } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -13,14 +13,48 @@ import { Splash } from '@/components/Splash'
 import { StatusShell, StatusText } from '@/components/StatusShell'
 import { AuthCallback } from './AuthCallback'
 import { IosAuthHandoff } from './IosAuthHandoff'
-import { Connect } from './Connect'
-import { LegalFooterLinks, PrivacyPage, SupportPage, TermsPage } from './LegalPages'
-import { authCallbackUrl, rememberReturnTo } from './mcp'
-import { normalizePath, type AppRoute } from './routing'
-import { supabase } from './supabase'
+import { LegalFooterLinks } from './legalFooter'
+import { AGENT_ACCESS_HASH, authCallbackUrl, rememberReturnTo } from './mcp'
+import { navigateOnClick, normalizePath, type AppRoute } from './routing'
+import { authStorageKey, supabase } from './supabase'
 import { ThemeToggle } from './ThemeToggle'
 
 const Board = lazy(() => import('./Board'))
+const Connect = lazy(() => import('./Connect').then(module => ({ default: module.Connect })))
+const PrivacyPage = lazy(() => import('./LegalPages').then(module => ({ default: module.PrivacyPage })))
+const TermsPage = lazy(() => import('./LegalPages').then(module => ({ default: module.TermsPage })))
+const SupportPage = lazy(() => import('./LegalPages').then(module => ({ default: module.SupportPage })))
+
+function renderStartError(onNavigate: (path: string) => void, message?: string) {
+  return (
+    <StatusShell title="Could not start the app" role="alert" onNavigate={onNavigate}>
+      {message && <StatusText>{message}</StatusText>}
+      <Button className="mt-3" type="button" onClick={() => window.location.reload()}>Try again</Button>
+    </StatusShell>
+  )
+}
+
+class LazyRoute extends Component<{ onNavigate: (path: string) => void; children: ReactNode }> {
+  state = { failed: false }
+
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+
+  render() {
+    if (this.state.failed) return renderStartError(this.props.onNavigate)
+    return <Suspense fallback={<Splash label="Loading" />}>{this.props.children}</Suspense>
+  }
+}
+
+function BoardRoute(props: ComponentProps<typeof Board>) {
+  useEffect(() => {
+    if (window.location.hash === AGENT_ACCESS_HASH) {
+      document.querySelector(AGENT_ACCESS_HASH)?.scrollIntoView()
+    }
+  }, [])
+  return <Board {...props} />
+}
 
 function usePathname(): [AppRoute, (path: string) => void] {
   const [path, setPath] = useState<AppRoute>(() => normalizePath(window.location.pathname))
@@ -43,7 +77,7 @@ function usePathname(): [AppRoute, (path: string) => void] {
   return [path, navigate]
 }
 
-function SignIn({
+export function SignIn({
   onNavigate,
   connectingAgent = false,
 }: {
@@ -63,15 +97,20 @@ function SignIn({
     setLoading(true)
     setError('')
     rememberReturnTo()
-    const { error: authError } = await supabase.auth.signInWithOtp({
-      email: normalizedEmail,
-      options: { emailRedirectTo: authCallbackUrl() },
-    })
-    setLoading(false)
-    if (authError) setError(authError.message)
-    else {
-      setEmail(normalizedEmail)
-      setSent(true)
+    try {
+      const { error: authError } = await supabase.auth.signInWithOtp({
+        email: normalizedEmail,
+        options: { emailRedirectTo: authCallbackUrl() },
+      })
+      if (authError) setError(authError.message)
+      else {
+        setEmail(normalizedEmail)
+        setSent(true)
+      }
+    } catch (caught) {
+      if (caught instanceof Error) setError(caught.message)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -79,18 +118,21 @@ function SignIn({
     setOauthLoading(provider)
     setError('')
     rememberReturnTo()
-    const { error: authError } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: authCallbackUrl(),
-        queryParams: provider === 'google'
-          ? { prompt: 'select_account', access_type: 'online' }
-          : undefined,
-        scopes: provider === 'apple' ? 'name email' : undefined,
-      },
-    })
-    if (authError) {
-      setError(authError.message)
+    try {
+      const { error: authError } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: authCallbackUrl(),
+          queryParams: provider === 'google'
+            ? { prompt: 'select_account', access_type: 'online' }
+            : undefined,
+          scopes: provider === 'apple' ? 'name email' : undefined,
+        },
+      })
+      if (authError) setError(authError.message)
+    } catch (caught) {
+      if (caught instanceof Error) setError(caught.message)
+    } finally {
       setOauthLoading(null)
     }
   }
@@ -232,47 +274,71 @@ export default function App() {
   }, [path])
 
   useEffect(() => {
-    void supabase.auth.getSession().then(({ data, error }) => {
-      if (error) setAuthError(error.message)
-      setSession(data.session)
+    let revision = 0
+    const readSession = async () => {
+      const readRevision = ++revision
+      try {
+        const { data, error } = await supabase.auth.getSession()
+        if (readRevision !== revision) return
+        setAuthError(error?.message ?? '')
+        setSession(data.session)
+      } catch (caught) {
+        if (readRevision !== revision) return
+        setSession(null)
+        if (caught instanceof Error) setAuthError(caught.message)
+      }
       setReady(true)
-    })
-    const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+    }
+    const onStorage = (event: StorageEvent) => {
+      if ((event.key === authStorageKey || event.key === null) && event.storageArea === window.localStorage) {
+        void readSession()
+      }
+    }
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') void readSession()
+    }
+    window.addEventListener('storage', onStorage)
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    void readSession()
+    const { data } = supabase.auth.onAuthStateChange((event, nextSession) => {
+      // The initial read above also carries any error from session storage.
+      if (event === 'INITIAL_SESSION') return
+      ++revision
       setAuthError('')
       setSession(nextSession)
       setReady(true)
     })
-    return () => data.subscription.unsubscribe()
+    return () => {
+      ++revision
+      window.removeEventListener('storage', onStorage)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+      data.subscription.unsubscribe()
+    }
   }, [])
+
+  const renderLazyRoute = (page: ReactNode) => <LazyRoute key={path} onNavigate={navigate}>{page}</LazyRoute>
 
   if (path === '/auth/callback') return <AuthCallback onNavigate={navigate} />
   if (path === '/auth/ios') return <IosAuthHandoff onNavigate={navigate} />
-  if (path === '/privacy') return <PrivacyPage onNavigate={navigate} />
-  if (path === '/terms') return <TermsPage onNavigate={navigate} />
-  if (path === '/support') return <SupportPage onNavigate={navigate} />
+  if (path === '/privacy') return renderLazyRoute(<PrivacyPage onNavigate={navigate} />)
+  if (path === '/terms') return renderLazyRoute(<TermsPage onNavigate={navigate} />)
+  if (path === '/support') return renderLazyRoute(<SupportPage onNavigate={navigate} />)
   if (path === 'not-found') {
     return (
       <StatusShell title="Page not found" onNavigate={navigate}>
         <StatusText>That URL is not part of Notepad.</StatusText>
         <Button asChild className="mt-3">
-          <a href="/" onClick={(event) => { event.preventDefault(); navigate('/') }}>Back to the board</a>
+          <a href="/" onClick={navigateOnClick(navigate, '/')}>Back to the board</a>
         </Button>
       </StatusShell>
     )
   }
 
   if (!ready) return <Splash label="Loading" />
-  if (authError) {
-    return (
-      <StatusShell title="Could not start the app" role="alert" onNavigate={navigate}>
-        <StatusText>{authError}</StatusText>
-        <Button className="mt-3" type="button" onClick={() => window.location.reload()}>Try again</Button>
-      </StatusShell>
-    )
-  }
+  if (authError) return renderStartError(navigate, authError)
   if (path === '/connect') {
     return session
-      ? <Connect key={session.user.id} session={session} onNavigate={navigate} />
+      ? renderLazyRoute(<Connect key={session.user.id} session={session} onNavigate={navigate} />)
       : <SignIn onNavigate={navigate} connectingAgent />
   }
 
@@ -290,10 +356,8 @@ export default function App() {
         </Alert>
       )}
       {session
-        ? (
-          <Suspense fallback={<Splash label="Loading" />}>
-            <Board key={session.user.id} session={session} onNavigate={navigate} onAccountDeleted={setManualAppleRevocation} />
-          </Suspense>
+        ? renderLazyRoute(
+          <BoardRoute key={session.user.id} session={session} onNavigate={navigate} onAccountDeleted={setManualAppleRevocation} />,
         )
         : <SignIn onNavigate={navigate} />}
     </>

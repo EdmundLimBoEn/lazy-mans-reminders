@@ -23,7 +23,7 @@ export function pkceReturnToFromCallbackUrl(href: string): string | null {
   return pkceParamFromCallbackUrl(href, 'return_to')
 }
 
-const SITE_ORIGIN = 'https://np.sillyapps.co'
+const SITE_ORIGIN = 'https://app.notepads.dev'
 
 /** Only allow a same-origin relative path. Backslash and encoded slash/backslash forms are rejected. */
 export function safeReturnPath(
@@ -44,5 +44,14 @@ export function safeReturnPath(
   }
   if (resolved.origin !== base.origin) return fallback
   if (!resolved.pathname.startsWith('/') || resolved.username || resolved.password) return fallback
-  return `${resolved.pathname}${resolved.search}${resolved.hash}`
+  const returned = `${resolved.pathname}${resolved.search}${resolved.hash}`
+  // Dot-segment normalization can turn `/.//evil.example` into `//evil.example`,
+  // which location.replace and <a href> treat as a protocol-relative URL.
+  if (!returned.startsWith('/') || returned.startsWith('//')) return fallback
+  try {
+    if (new URL(returned, base).origin !== base.origin) return fallback
+  } catch {
+    return fallback
+  }
+  return returned
 }

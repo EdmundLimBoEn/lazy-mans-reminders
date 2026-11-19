@@ -1,4 +1,5 @@
 import { exportJWK, generateKeyPair, SignJWT } from "npm:jose@6.2.10";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.112.1";
 import {
   assertEquals,
   assertExists,
@@ -15,6 +16,7 @@ import {
   type DeleteAccountDeps,
   type DeleteAccountUser,
   handleDeleteAccount,
+  MAX_DELETION_BODY_BYTES,
 } from "./handler.ts";
 
 const TEST_P256_PKCS8 = `-----BEGIN PRIVATE KEY-----
@@ -105,7 +107,7 @@ function form(body: string): Record<string, string> {
 async function runDelete(input: {
   user: DeleteAccountUser | null;
   body?: unknown;
-  rawBody?: string;
+  rawBody?: BodyInit;
   env?: Record<string, string | undefined>;
   token?: Response | ((body: string) => Response);
   revoke?: Response | ((body: string) => Response);
@@ -250,6 +252,59 @@ async function assertDeleted(
   assertEquals(result.deletedTables, []);
   assertEquals(result.deletedUserId, userId);
 }
+
+Deno.test("account-deletion preflight allows the web client's request headers", async () => {
+  let post: Request | undefined;
+  const client = createClient("https://example.supabase.co", "test-anon-key", {
+    global: {
+      headers: { "x-notepad-client": "web" },
+      fetch: (input, init) => {
+        post = new Request(input, init);
+        return Promise.resolve(Response.json({ ok: true }));
+      },
+    },
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  const { error } = await client.functions.invoke("delete-account", {
+    method: "POST",
+    body: { expectedUserId: googleUser.id },
+  });
+  assertEquals(error, null);
+  assertExists(post);
+  assertEquals(post.headers.get("x-notepad-client"), "web");
+
+  // The SDK headers, including the JSON content type, are not CORS-safelisted.
+  const requestedHeaders = [...post.headers.keys()];
+  const unexpected = () => {
+    throw new Error("Preflights must not use deletion dependencies");
+  };
+  const response = await handleDeleteAccount(
+    new Request(post.url, {
+      method: "OPTIONS",
+      headers: {
+        Origin: "https://board.example.com",
+        "Access-Control-Request-Method": post.method,
+        "Access-Control-Request-Headers": requestedHeaders.join(", "),
+      },
+    }),
+    {
+      env: unexpected,
+      fetchImpl: unexpected,
+      nowSeconds: unexpected,
+      warn: unexpected,
+      getUser: unexpected,
+      deleteAuthUser: unexpected,
+    },
+  );
+
+  assertEquals(response.status, 200);
+  const allowedHeaders = response.headers.get("Access-Control-Allow-Headers");
+  assertExists(allowedHeaders);
+  const allowed = allowedHeaders.toLowerCase().split(",").map((name) =>
+    name.trim()
+  );
+  assertEquals(requestedHeaders.filter((name) => !allowed.includes(name)), []);
+});
 
 Deno.test("Apple client secret JWT uses ES256 claims Apple requires", async () => {
   const jwt = await mintAppleClientSecret({
@@ -585,19 +640,27 @@ Deno.test("exhausted revocation retries and code exchange outages preserve delet
     assertEquals(result.appleCalls.length, throwToken ? 1 : 5);
     assertEquals(result.warnings.length, 1);
     assertEquals(
+      result.warnings[0]?.reason,
+      throwToken ? "apple_network_error" : "apple_http_error",
+    );
+    assertEquals(result.warnings[0]?.endpoint, throwToken ? "token" : "revoke");
+    assertEquals(
       JSON.stringify(result.warnings).includes("refresh-token"),
       false,
     );
   }
 });
 
-Deno.test("OAuth cleanup failure stops before deleting app data or auth", async () => {
+Deno.test("OAuth cleanup failure stops before Apple code exchange or account deletion", async () => {
   for (const reason of ["incomplete", "unreachable"] as const) {
     const result = await runDelete({
-      user: googleUser,
+      user: appleUser,
+      body: { appleAuthorizationCode: "single-use-code" },
       grants: { ok: false, reason },
     });
     assertEquals(result.response.status, 503);
+    assertEquals(result.grantCleanupCalls, 1);
+    assertEquals(result.appleCalls.map((call) => call.url), []);
     assertEquals(result.deletedTables, []);
     assertEquals(result.deletedUserId, null);
   }
@@ -707,4 +770,44 @@ Deno.test("intentionally empty native deletion requests remain supported", async
     await assertDeleted(result, googleUser.id);
     assertEquals(result.grantCleanupCalls, 1);
   }
+});
+
+Deno.test("a deletion JSON body exactly at the byte limit still deletes", async () => {
+  const padding = "a".repeat(MAX_DELETION_BODY_BYTES - '{"padding":""}'.length);
+  const rawBody = JSON.stringify({ padding });
+  assertEquals(
+    new TextEncoder().encode(rawBody).length,
+    MAX_DELETION_BODY_BYTES,
+  );
+  const result = await runDelete({ user: googleUser, rawBody });
+  await assertDeleted(result, googleUser.id);
+});
+
+Deno.test("oversized deletion JSON is rejected before grant cleanup", async () => {
+  const padding = "a".repeat(MAX_DELETION_BODY_BYTES);
+  const result = await runDelete({
+    user: googleUser,
+    rawBody: JSON.stringify({ padding }),
+  });
+  assertEquals(result.response.status, 400);
+  assertEquals(await result.response.text(), "Invalid deletion request body");
+  assertEquals(result.grantCleanupCalls, 0);
+  assertEquals(result.deletedUserId, null);
+});
+
+Deno.test("web Apple deletion without a code still reports missing configuration safely", async () => {
+  const result = await runDelete({ user: appleUser, env: supabaseEnv() });
+  await assertDeleted(result, appleUser.id);
+  assertEquals(result.appleCalls, []);
+  assertEquals(result.warnings, [{
+    event: "apple_token_revoke",
+    outcome: "skipped",
+    reason: "missing_secrets",
+    missing: [
+      "APPLE_TEAM_ID",
+      "APPLE_KEY_ID",
+      "APPLE_PRIVATE_KEY",
+      "APPLE_CLIENT_ID",
+    ],
+  }]);
 });

@@ -39,6 +39,13 @@ struct ReminderProvider: TimelineProvider {
 
 struct ReminderWidgetView: View {
     @Environment(\.widgetFamily) private var family
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.legibilityWeight) private var legibilityWeight
+    @ScaledMetric(relativeTo: .subheadline) private var lineHeight: CGFloat = 20
+    @ScaledMetric(relativeTo: .caption) private var headerHeight: CGFloat = 15
+    @ScaledMetric(relativeTo: .caption) private var accessoryLineHeight: CGFloat = 15
+    @ScaledMetric(relativeTo: .subheadline) private var pointSize: CGFloat = 15
+    @ScaledMetric(relativeTo: .caption) private var accessoryPointSize: CGFloat = 12
     let entry: ReminderEntry
 
     private var lines: [String] {
@@ -49,13 +56,21 @@ struct ReminderWidgetView: View {
     }
 
     private var lineLimit: Int {
-        switch family {
-        case .accessoryInline: return 1
-        case .accessoryRectangular: return 3
-        case .systemSmall: return 4
-        default: return 6
-        }
+        ReminderWidgetPresentation.lineLimit(
+            for: family, lineHeight: textBudget.lineHeight,
+            headerHeight: headerHeight, showsHeader: showsHeader
+        )
     }
+
+    private var textBudget: ReminderTextBudget {
+        ReminderWidgetPresentation.textBudget(
+            for: family, lineHeight: isAccessory ? accessoryLineHeight : lineHeight,
+            headerHeight: headerHeight, showsHeader: showsHeader
+        )
+    }
+
+    // Give primary reminder text the header space at accessibility sizes.
+    private var showsHeader: Bool { !isAccessory && !dynamicTypeSize.isAccessibilitySize }
 
     private var isAccessory: Bool {
         family == .accessoryInline || family == .accessoryRectangular
@@ -66,16 +81,20 @@ struct ReminderWidgetView: View {
             if family == .accessoryInline {
                 Text(lines.joined(separator: " · "))
             } else {
-                VStack(alignment: .leading, spacing: isAccessory ? 2 : 8) {
-                    if !isAccessory {
+                VStack(alignment: .leading, spacing: ReminderWidgetPresentation.spacing(for: family)) {
+                    if showsHeader {
                         Text("Your Board")
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(.secondary)
+                            .lineLimit(1)
                     }
                     ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
                         Text(line)
-                            .font(isAccessory ? .caption : .subheadline)
-                            .lineLimit(1)
+                            .font(.system(
+                                size: (isAccessory ? accessoryPointSize : pointSize) * textBudget.fontScale,
+                                weight: legibilityWeight == .bold ? .bold : .regular
+                            ))
+                            .lineLimit(textBudget.lineLimit(displayedRows: lines.count))
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     if !isAccessory { Spacer(minLength: 0) }
@@ -86,6 +105,10 @@ struct ReminderWidgetView: View {
         .containerBackground(for: .widget) {
             if isAccessory { Color.clear } else { Color(.systemBackground) }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Your Board")
+        .accessibilityValue(ReminderActivityPresentation.accessibilitySummary(from: entry.reminders))
+        .accessibilityHint("Opens your board in Notepad")
         .widgetURL(URL(string: "lazymansreminders://board"))
     }
 }
@@ -96,6 +119,7 @@ struct ReminderWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: ReminderProvider()) { entry in
             ReminderWidgetView(entry: entry)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility5)
         }
         .configurationDisplayName("Board")
         .description("Keep your reminders on the Home Screen or Lock Screen, even after a Live Activity ends.")

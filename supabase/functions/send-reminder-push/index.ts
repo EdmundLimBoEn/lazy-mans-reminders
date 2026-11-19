@@ -16,6 +16,7 @@ import {
   type SendResult,
 } from "../_shared/live_activity_lifecycle.ts";
 import { timingSafeEqual } from "node:crypto";
+import { apnsNetworkFailureLog } from "../_shared/apns_network_log.ts";
 import { createDeliveryClient } from "../_shared/delivery_client.ts";
 import {
   buildLiveActivityHeaders,
@@ -218,7 +219,7 @@ async function sendOnce(input: {
     }
     return outcome;
   } catch (error) {
-    console.error("APNs request failed", error);
+    console.error("APNs request failed", apnsNetworkFailureLog(error));
     return { kind: "uncertain", status: 0, reason: "network" };
   }
 }

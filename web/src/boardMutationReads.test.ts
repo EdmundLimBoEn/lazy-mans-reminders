@@ -4,10 +4,12 @@ import type { Session } from '@supabase/supabase-js'
 import { PostgrestClient } from '@supabase/postgrest-js'
 import App from './App'
 import Board from './Board'
+import { POST_IT_HINT, reminderErrorMessage } from './lib/reminders'
+import { Alert } from './components/ui/alert'
 
 // Run the real Board handlers with retained hooks and controllable database reads.
 const hooks = vi.hoisted(() => ({ effects: [] as (() => void | (() => void))[], states: [] as unknown[], cursor: 0, load: undefined as undefined | (() => Promise<void>) }))
-const db = vi.hoisted(() => ({ auth: { onAuthStateChange: () => ({ data: { subscription: { unsubscribe: vi.fn() } } }) }, from: vi.fn(), rpc: vi.fn(), update: vi.fn(), delete: vi.fn(), channel: vi.fn(), removeChannel: vi.fn() }))
+const db = vi.hoisted(() => ({ auth: { onAuthStateChange: () => ({ data: { subscription: { unsubscribe: vi.fn() } } }) }, from: vi.fn(), rpc: vi.fn(), update: vi.fn(), delete: vi.fn(), insert: vi.fn(), channel: vi.fn(), removeChannel: vi.fn() }))
 vi.mock('./supabase', () => ({ supabase: db }))
 vi.mock('@dnd-kit/core', async (original) => ({
   ...await original<typeof import('@dnd-kit/core')>(),
@@ -33,7 +35,7 @@ vi.mock('react', async (original) => ({
 }))
 
 type Props = {
-  disabled?: boolean; value?: string; children?: ReactNode; session?: Session; 'aria-label'?: string; text?: string; id?: string
+  variant?: string; placeholder?: string; disabled?: boolean; value?: string; children?: ReactNode; session?: Session; 'aria-label'?: string; text?: string; id?: string
   ref?: (button: HTMLButtonElement | null) => void
   onKeyDown?: (event: { key: string }) => void
   onClick?: () => void
@@ -68,7 +70,7 @@ type Row = typeof original
 type Result = { data: Row[]; error: null } | { data: null; error: { message: string } }
 let stored: Row[]
 let reads: ReturnType<typeof deferred<Result>>[]
-let write: ReturnType<typeof deferred<{ error: { message: string } | null }>>
+let write: ReturnType<typeof deferred<{ error: { message: string; details?: string } | null }>>
 
 beforeEach(async () => {
   vi.clearAllMocks()
@@ -90,7 +92,8 @@ beforeEach(async () => {
         return (pending ? pending.promise : Promise.resolve({ data: stored.map(row => ({ ...row })), error: null })).then(resolve)
       },
       update: (changes: unknown) => { db.update(changes); return mutation },
-      delete: () => { db.delete(); return mutation }, insert: () => write.promise,
+      delete: () => { db.delete(); return mutation },
+      insert: (row: unknown) => { db.insert(row); return write.promise },
     }
     const mutation = { eq: () => mutation, select: () => mutation, single: () => write.promise, then: write.promise.then.bind(write.promise) }
     expect(['reminders', 'lock_screen_prefs']).toContain(table)
@@ -689,4 +692,75 @@ it('does not restore Edit focus when saving fails and the editor stays open', as
   await vi.waitFor(() => expect(control('Save reminder').disabled).toBe(false))
   expect(control('Edit reminder: Original').value).toBe('Updated')
   expect(attachEditButtons().size).toBe(0)
+})
+
+function hasCopy(text: string) {
+  return render().some(node => node.props.children === text)
+}
+
+it.each(['empty', 'error', 'populated'] as const)('gates the empty board copy on a %s first load', async outcome => {
+  hooks.states = []
+  stored = outcome === 'populated' ? [{ ...original }] : []
+  const pending = deferred<Result>()
+  reads = [pending]
+  expect(hasCopy('Nothing to remember.')).toBe(false)
+  expect(hasCopy('Loading your board…')).toBe(true)
+  const loading = hooks.load!()
+  pending.resolve(
+    outcome === 'error'
+      ? { data: null, error: { message: 'offline' } }
+      : { data: stored.map(row => ({ ...row })), error: null },
+  )
+  await loading
+  expect(hasCopy('Loading your board…')).toBe(false)
+  expect(hasCopy('Nothing to remember.')).toBe(outcome === 'empty')
+  expect(hasCopy('offline')).toBe(outcome === 'error')
+  expect(displayed()).toEqual(outcome === 'populated' ? ['Original'] : [])
+})
+
+it('drops a second add while the first insert is in flight', async () => {
+  control('New reminder').onChange!({ target: { value: 'New' } })
+  const submit = render().find(node => node.type === 'form')!.props.onSubmit!
+  submit({ preventDefault() {} })
+  submit({ preventDefault() {} })
+  expect(db.insert).toHaveBeenCalledTimes(1)
+  expect(db.insert).toHaveBeenCalledWith({ text: 'New', user_id: 'user', sort_order: 1 })
+  stored = [original, { ...original, id: 'new', text: 'New', sort_order: 1 }]
+  write.resolve({ error: null })
+  await vi.waitFor(() => expect(displayed()).toEqual(['Original', 'New']))
+})
+
+it('shows existing full-board copy and prevents inserts at the phone budget', async () => {
+  stored = Array.from({ length: 6 }, (_, index) => ({ ...original, id: String(index) }))
+  await hooks.load!()
+  expect(control('New reminder').disabled).toBe(true)
+  expect(control('New reminder').placeholder).toBe('Board full — combine lines instead')
+  expect(hasCopy(POST_IT_HINT)).toBe(true)
+  control('New reminder').onChange!({ target: { value: 'New' } })
+  render().find(node => node.type === 'form')!.props.onSubmit!({ preventDefault() {} })
+  expect(db.insert).not.toHaveBeenCalled()
+  expect(hasCopy('Board full — combine lines instead')).toBe(true)
+  expect(render().find(node => node.type === Alert)?.props.variant).toBe('default')
+})
+
+it.each(['add', 'reopen'])('shows a neutral hint for a server capacity rejection on %s', async operation => {
+  if (operation === 'add') mutate('add')
+  else {
+    stored = [{ ...original, is_done: true }]
+    await hooks.load!()
+    db.rpc.mockImplementation(() => ({ select: () => ({ single: () => write.promise }) }))
+    control('Mark "Original" active').onClick!()
+  }
+  write.resolve({ error: { message: 'Quota exceeded', details: '6 LMR_CAPACITY_REACHED' } })
+  await vi.waitFor(() => expect(render().find(node => node.type === Alert)?.props.variant).toBe('default'))
+  expect(hasCopy('Quota exceeded')).toBe(false)
+  expect(hasCopy(POST_IT_HINT)).toBe(true)
+  if (operation === 'add') expect(control('New reminder').value).toBe('New')
+})
+
+it('recognizes capacity markers in server fields and preserves unrelated errors', () => {
+  for (const field of ['message', 'details', 'hint']) {
+    expect(reminderErrorMessage({ message: 'Rejected', [field]: 'LMR_CAPACITY_REACHED' })).toBe(POST_IT_HINT)
+  }
+  expect(reminderErrorMessage({ message: 'Offline' })).toBe('Offline')
 })

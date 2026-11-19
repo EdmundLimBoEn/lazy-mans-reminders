@@ -126,6 +126,37 @@ final class ReminderStoreReorderTests: XCTestCase {
         XCTAssertEqual(cache, reordered)
     }
 
+    func testOverlappingCreatesReserveDistinctSortOrders() async throws {
+        let fixture = Fixture()
+        defer { fixture.cleanUp() }
+        let firstStarted = expectation(description: "First create suspended")
+        let secondStarted = expectation(description: "Second create suspended")
+        let network = HeldCreates(started: [firstStarted, secondStarted])
+        let store = fixture.makeStore { try await network.send($0) }
+        try await fixture.seed(store)
+        let first = Task { try await store.create(text: "First") }
+        await fulfillment(of: [firstStarted], timeout: 3)
+        let second = Task { try await store.create(text: "Second") }
+        await fulfillment(of: [secondStarted], timeout: 3)
+        let orders = try await network.postedSortOrders()
+        XCTAssertEqual(orders, [7, 8])
+        XCTAssertEqual(Set(orders).count, orders.count)
+
+        let created = Reminder(id: UUID(), userID: fixture.reminders[0].userID,
+                               text: "First", sortOrder: 7, isDone: false,
+                               createdAt: fixture.reminders[0].createdAt)
+        let secondCreated = Reminder(id: UUID(), userID: created.userID, text: "Second",
+                                     sortOrder: 8, isDone: false, createdAt: created.createdAt)
+        // Resume one held create at a time: resuming both back to back lets either
+        // task re-enter the store actor first, which made this assertion order-dependent.
+        await network.finish(index: 0, data: try ReminderJSON.encoder.encode([created]))
+        let firstBoard = try await first.value
+        await network.finish(index: 1, data: try ReminderJSON.encoder.encode([secondCreated]))
+        let secondBoard = try await second.value
+        XCTAssertEqual(firstBoard, fixture.reminders + [created])
+        XCTAssertEqual(secondBoard, fixture.reminders + [created, secondCreated])
+    }
+
     func testReorderWaitsForEveryCreateAndRecoversAfterSuccessFailureAndCancellation() async throws {
         let failures: [Error?] = [nil, URLError(.timedOut), CancellationError()]
         for failure in failures {
@@ -169,9 +200,7 @@ final class ReminderStoreReorderTests: XCTestCase {
         let started = expectation(description: "Create authentication suspended")
         let network = HeldCreates(started: [started])
         let store = fixture.makeStore { try await network.send($0) }
-        try await fixture.seed(store)
-        try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
-                                    expiresAt: Date().addingTimeInterval(-60), userID: fixture.reminders[0].userID)
+        try await fixture.seed(store, expiresAt: Date().addingTimeInterval(-60))
         let create = Task { try await store.create(text: "First") }
         await fulfillment(of: [started], timeout: 3)
         await assertReorderBlocked(store)
@@ -241,6 +270,16 @@ final class ReminderStoreReorderTests: XCTestCase {
             }
         }
 
+        func postedSortOrders() throws -> [Int] {
+            struct Body: Decodable {
+                let sortOrder: Int
+                enum CodingKeys: String, CodingKey { case sortOrder = "sort_order" }
+            }
+            return try requests.map { request in
+                try ReminderJSON.decoder.decode(Body.self, from: XCTUnwrap(request.httpBody)).sortOrder
+            }
+        }
+
         func allowReorder(_ data: Data) { reorderData = data }
 
         func finish(index: Int, data: Data, error: Error? = nil) {
@@ -298,9 +337,9 @@ final class ReminderStoreReorderTests: XCTestCase {
             ReminderStore(defaults: defaults, credentials: MemorySessionCredentials(), serviceURL: URL(string: "https://reminders.invalid")!,
                           anonKey: "test-key", requestData: send)
         }
-        func seed(_ store: ReminderStore) async throws {
+        func seed(_ store: ReminderStore, expiresAt: Date = Date().addingTimeInterval(3600)) async throws {
             try await store.saveSession(accessToken: "test-token", refreshToken: "test-refresh",
-                                        expiresAt: Date().addingTimeInterval(3600), userID: reminders[0].userID)
+                                        expiresAt: expiresAt, userID: reminders[0].userID)
             defaults.set(try ReminderJSON.encoder.encode(reminders), forKey: "cached-reminders")
         }
         func response(_ data: Data, request: URLRequest, status: Int = 200) -> (Data, URLResponse) {

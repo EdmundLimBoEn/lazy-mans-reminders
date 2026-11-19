@@ -3,7 +3,7 @@ import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import type { DeviceRow } from "./device_delivery.ts";
 import type { PushJob } from "./push_replay.ts";
 
-Deno.test("push jobs retry invalid Live Activity token cleanup before caching outcomes", async (t) => {
+Deno.test("push jobs retry Live Activity registration cleanup", async (t) => {
   const originalEnv = Deno.env.get;
   const originalServe = Deno.serve;
   const originalFetch = globalThis.fetch;
@@ -28,6 +28,8 @@ Deno.test("push jobs retry invalid Live Activity token cleanup before caching ou
     }\n-----END PRIVATE KEY-----`,
   };
   const invalidToken = "a".repeat(64);
+  const activeToken = "b".repeat(64);
+  let emptyBoard = false;
   let device: DeviceRow;
   let job: PushJob;
   let column:
@@ -79,9 +81,19 @@ Deno.test("push jobs retry invalid Live Activity token cleanup before caching ou
       case "/rest/v1/device_tokens":
         if (init?.method === "PATCH") {
           assertEquals(body[column], null);
-          assertEquals(url.searchParams.get(column), `eq.${invalidToken}`);
+          assertEquals(
+            url.searchParams.get(column),
+            `eq.${emptyBoard ? activeToken : invalidToken}`,
+          );
           assertEquals(url.searchParams.get("token"), `eq.${device.token}`);
           assertEquals(url.searchParams.get("user_id"), `eq.${device.user_id}`);
+          if (emptyBoard) {
+            assertEquals(body.activity_started_at, null);
+            assertEquals(
+              url.searchParams.get("activity_started_at"),
+              `eq.${device.activity_started_at}`,
+            );
+          }
           if (++cleanupAttempts === 1) {
             return Promise.resolve(
               Response.json({ message: "offline" }, { status: 503 }),
@@ -92,6 +104,7 @@ Deno.test("push jobs retry invalid Live Activity token cleanup before caching ou
         }
         return reply(device);
       case "/rest/v1/reminders":
+        if (emptyBoard) return reply([]);
         return reply([{
           id: "reminder",
           user_id: device.user_id,
@@ -130,7 +143,7 @@ Deno.test("push jobs retry invalid Live Activity token cleanup before caching ou
           push_to_start_token: "d".repeat(64),
           activity_push_token: column === "push_to_start_token"
             ? null
-            : "b".repeat(64),
+            : activeToken,
           activity_started_at: column === "push_to_start_token"
             ? null
             : new Date().toISOString(),
@@ -188,6 +201,51 @@ Deno.test("push jobs retry invalid Live Activity token cleanup before caching ou
         assertEquals(sends.length, column === "push_to_start_token" ? 2 : 3);
       });
     }
+
+    await t.step("reuses an accepted end after a failed write", async () => {
+      emptyBoard = true;
+      column = "activity_push_token";
+      const startedAt = new Date().toISOString();
+      device = {
+        token: "c".repeat(64),
+        user_id: "22222222-2222-4222-8222-222222222222",
+        environment: "development",
+        updated_at: startedAt,
+        push_to_start_token: "d".repeat(64),
+        activity_push_token: activeToken,
+        activity_started_at: startedAt,
+        retiring_activity_push_token: null,
+      };
+      job = {
+        id: "11111111-1111-4111-8111-111111111111",
+        user_id: device.user_id,
+        device_token: device.token,
+        payload: { type: "live_activity_refresh" },
+        status: "pending",
+        outcomes: {},
+        alert_sent: false,
+      };
+      cleanupAttempts = 0;
+      sends = [];
+
+      const first = await invoke();
+      assertEquals(first.status, 503);
+      assertEquals(await first.json(), { sent: 1, failed: 0, retryable: 1 });
+      assertEquals(job.status, "pending");
+      assertEquals(Object.values(job.outcomes), ["sent"]);
+      assertEquals(cleanupAttempts, 1);
+      assertEquals(device.activity_push_token, activeToken);
+      assertEquals(device.activity_started_at, startedAt);
+
+      const retry = await invoke();
+      assertEquals(retry.status, 200);
+      await retry.json();
+      assertEquals(job.status, "complete");
+      assertEquals(cleanupAttempts, 2);
+      assertEquals(device.activity_push_token, null);
+      assertEquals(device.activity_started_at, null);
+      assertEquals(sends, [{ event: "end", token: activeToken }]);
+    });
   } finally {
     globalThis.fetch = originalFetch;
     Deno.serve = originalServe;
