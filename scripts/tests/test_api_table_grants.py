@@ -122,6 +122,62 @@ class AnalyticsRolloutTests(_DisposableDatabase):
 
 
 class ApiTableGrantsTests(_DisposableDatabase):
+    def test_client_cannot_insert_routine_firing_timestamp(self):
+        self.sql(f"""
+          begin;
+          set local role authenticated;
+          set local request.jwt.claim.sub = '{OWNER}';
+          do $$ begin
+            insert into public.reminders(user_id, text, routine_fired_at)
+              values (auth.uid(), 'Client reminder', now());
+            assert false, 'Client supplied a routine firing timestamp on insert';
+          exception when insufficient_privilege then null;
+          end $$;
+          rollback;
+        """)
+
+    def test_only_scheduler_can_stamp_a_recurring_alert(self):
+        self.sql(f"""
+          begin;
+          insert into public.routine_reminders(id, user_id, text, interval_days, start_date, local_time, timezone)
+            values ('{OWNER}', '{OWNER}', 'Daily', 1, current_date, '12:00', 'UTC');
+          insert into public.reminders(user_id, text, routine_id, routine_fired_at)
+            values ('{OWNER}', 'Daily', '{OWNER}', now() - interval '1 day');
+          insert into public.device_tokens(user_id, token) values ('{OWNER}', repeat('a', 64));
+
+          set local role authenticated;
+          set local request.jwt.claim.sub = '{OWNER}';
+          do $$ begin
+            update public.reminders set text = 'Edited' where routine_id = '{OWNER}';
+            assert found, 'Owner must still be able to edit a routine reminder';
+            begin
+              update public.reminders set routine_fired_at = (
+                select next_run_at from public.routine_reminders where id = '{OWNER}'
+              ) where routine_id = '{OWNER}';
+              assert false, 'Client supplied the upcoming firing timestamp on update';
+            exception when insufficient_privilege then null;
+            end;
+          end $$;
+
+          reset role;
+          update public.routine_reminders set next_run_at = now() where id = '{OWNER}';
+          set local role service_role;
+          do $$ begin
+            assert public.fire_due_routines() = 1;
+          end $$;
+          reset role;
+          do $$ begin
+            assert (select routine_fired_at = now() from public.reminders where routine_id = '{OWNER}');
+            assert (select count(*) = 1 from public.reminder_push_jobs
+                    where user_id = '{OWNER}' and payload->>'type' = 'UPDATE'
+                      and payload->'record'->>'routine_id' = '{OWNER}'
+                      and (payload->'record'->>'routine_fired_at')::timestamptz = now()
+                      and (payload->'old_record'->>'routine_fired_at')::timestamptz = now() - interval '1 day'),
+              'A scheduled repeat must queue an alert with the new and previous firing timestamps';
+          end $$;
+          rollback;
+        """)
+
     def test_reminder_crud_and_service_reopen(self):
         self.sql(f"""
           begin;
