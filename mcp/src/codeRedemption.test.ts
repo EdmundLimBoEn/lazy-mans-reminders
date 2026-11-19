@@ -16,7 +16,7 @@ const REDIRECT = 'https://client.example/callback'
 const OTHER_REDIRECT = 'https://client.example/other-callback'
 const VERIFIER = 'a'.repeat(43)
 
-async function setup(format: 'form' | 'json' = 'form') {
+async function setup(format: 'form' | 'json' = 'form', confidential = false) {
   const kv = new Map<string, string>()
   const states = new Map<string, DurableObjectState>()
   const objects = new Map<string, AuthorizationState>()
@@ -73,7 +73,7 @@ async function setup(format: 'form' | 'json' = 'form') {
     resourceMetadata: { resource: MCP_RESOURCE },
   }, env)
   const client = await oauth.createClient({
-    redirectUris: [REDIRECT, OTHER_REDIRECT], tokenEndpointAuthMethod: 'none',
+    redirectUris: [REDIRECT, OTHER_REDIRECT], tokenEndpointAuthMethod: confidential ? 'client_secret_post' : 'none',
     grantTypes: ['authorization_code', 'refresh_token'], responseTypes: ['code'],
   })
   const challenge = Buffer.from(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(VERIFIER))).toString('base64url')
@@ -104,15 +104,49 @@ async function setup(format: 'form' | 'json' = 'form') {
 }
 
 describe('authorization code redemption', () => {
-  it.each(['form', 'json'] as const)('retries %s code exchange after redirect-check storage failures', async (format) => {
+  it.each(['form', 'json'] as const)('authenticates the %s client before checking the stored redirect URI', async (format) => {
+    const { exchange, env, client } = await setup(format, true)
+    const grants = vi.spyOn(env.GRANT_STATE, 'get')
+    for (const redirect_uri of [REDIRECT, OTHER_REDIRECT]) {
+      const response = await exchange({ redirect_uri, client_secret: 'incorrect-secret' })
+      expect(response.status).toBe(401)
+      expect(await response.json()).toEqual({
+        error: 'invalid_client',
+        error_description: 'Client authentication failed: invalid client_secret',
+      })
+    }
+    expect(grants).not.toHaveBeenCalled()
+    expect((await exchange({ client_secret: client.clientSecret! })).status).toBe(200)
+  })
+
+  it.each(['code', 'pkce'] as const)('validates the %s before checking the stored redirect URI', async (credential) => {
+    const { code, exchange, env, accountExists } = await setup()
+    const invalid: Record<string, string> = credential === 'code' ? { code: `${code}x` } : { code_verifier: 'b'.repeat(43) }
+    for (const redirect_uri of [REDIRECT, OTHER_REDIRECT]) {
+      const response = await exchange({ ...invalid, redirect_uri })
+      expect(response.status).toBe(400)
+      expect(await response.json()).toEqual({
+        error: 'invalid_grant',
+        error_description: credential === 'code' ? 'Invalid authorization code' : 'Invalid PKCE code_verifier',
+      })
+    }
+    expect(env.OAUTH_KV.put).not.toHaveBeenCalled()
+    expect(accountExists).not.toHaveBeenCalled()
+    expect((await exchange()).status).toBe(200)
+  })
+
+  it.each(['form', 'json'] as const)('retries %s code exchange after grant read failures', async (format) => {
     for (const failure of ['kv-rate-limit', 'kv-unavailable', 'grant-rate-limit', 'grant-unavailable']) {
       const { exchange, env, kv, objects, accountExists } = await setup(format)
       const before = new Map(kv)
       const rateLimited = failure.endsWith('rate-limit')
       if (failure.startsWith('kv-')) {
-        vi.mocked(env.OAUTH_KV.get).mockRejectedValueOnce(new Error(
-          rateLimited ? 'KV GET failed: 429 Too Many Requests' : 'Storage unavailable',
-        ))
+        const read = kv.get.bind(kv)
+        const get = vi.spyOn(kv, 'get').mockImplementation((key) => {
+          if (!key.startsWith('grant:')) return read(key)
+          get.mockRestore()
+          throw new Error(rateLimited ? 'KV GET failed: 429 Too Many Requests' : 'Storage unavailable')
+        })
       } else {
         vi.spyOn(env.GRANT_STATE, 'get').mockReturnValueOnce({
           fetch: async () => new Response(null, { status: rateLimited ? 429 : 503 }),
@@ -196,14 +230,17 @@ describe('authorization code redemption', () => {
   })
 
   it.each(['form', 'json'] as const)('rejects a different registered redirect URI in %s without consuming the code', async (format) => {
-    const { exchange, env, accountExists } = await setup(format)
+    const { exchange, env, accountExists, objects } = await setup(format)
     const rejected = await exchange({ redirect_uri: OTHER_REDIRECT })
     expect(rejected.status).toBe(400)
-    expect(await rejected.json()).toMatchObject({ error: 'invalid_grant' })
+    expect(await rejected.json()).toEqual({
+      error: 'invalid_grant', error_description: 'Redirect URI does not match the authorization request',
+    })
     expect(rejected.headers.get('Cache-Control')).toBe('no-store')
     expect(rejected.headers.get('Access-Control-Allow-Origin')).toBe('*')
     expect(env.OAUTH_KV.put).not.toHaveBeenCalled()
     expect(accountExists).not.toHaveBeenCalled()
+    expect(objects.size).toBe(0)
 
     const accepted = await exchange()
     expect(accepted.status).toBe(200)
@@ -219,6 +256,27 @@ describe('authorization code redemption', () => {
     expect(await response.json()).toMatchObject({
       access_token: expect.any(String), refresh_token: expect.any(String),
     })
+  })
+
+  it('keeps replay errors uniform and revokes only with the original redirect URI', async () => {
+    const { exchange, kv, env } = await setup()
+    env.OAUTH_KV.list = async ({ prefix } = {}) => ({
+      keys: [...kv.keys()].filter((key) => key.startsWith(prefix ?? '')).map((name) => ({ name })),
+      list_complete: true,
+      cacheStatus: null,
+    })
+    expect((await exchange()).status).toBe(200)
+    const grantKey = [...kv.keys()].find((key) => key.startsWith('grant:'))!
+
+    const mismatch = await exchange({ redirect_uri: OTHER_REDIRECT })
+    expect(mismatch.status).toBe(400)
+    const mismatchError = await mismatch.json()
+    expect(kv.has(grantKey)).toBe(true)
+
+    const match = await exchange()
+    expect(match.status).toBe(400)
+    expect(await match.json()).toEqual(mismatchError)
+    expect(kv.has(grantKey)).toBe(false)
   })
 
   it.each(['missing', 'empty'])('rejects a %s redirect URI even with valid PKCE', async (redirect) => {

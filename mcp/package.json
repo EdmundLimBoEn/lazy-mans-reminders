@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "postinstall": "node scripts/patch-client-metadata-diagnostics.mjs",
+    "postinstall": "node scripts/patch-oauth-provider.mjs",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "types": "wrangler types",
