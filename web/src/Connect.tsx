@@ -44,10 +44,10 @@ export function Connect({ session, onNavigate }: { session: Session; onNavigate:
   useEffect(() => {
     if (!state) return
     let cancelled = false
-    setPhase('loading')
-    setSummary(null)
-    setError('')
-    void (async () => {
+    async function loadConsent() {
+      setPhase('loading')
+      setSummary(null)
+      setError('')
       try {
         const response = await fetch(`${MCP_ORIGIN}/consent?state=${encodeURIComponent(state)}`, {
           headers: { Authorization: `Bearer ${session.access_token}` },
@@ -67,10 +67,15 @@ export function Connect({ session, onNavigate }: { session: Session; onNavigate:
         if (!cancelled) {
           setPhase('blocked')
           setError('Could not reach the agent connector. Stay on this page and try again.')
+          window.addEventListener('online', loadConsent, { once: true })
         }
       }
-    })()
-    return () => { cancelled = true }
+    }
+    void loadConsent()
+    return () => {
+      cancelled = true
+      window.removeEventListener('online', loadConsent)
+    }
   }, [state, session.access_token])
 
   async function allow(event: FormEvent) {
