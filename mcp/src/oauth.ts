@@ -56,7 +56,7 @@ export function serverCard() {
     version: '1.0.0',
     url: '/mcp',
     auth: { type: 'oauth' },
-    tools: TOOLS,
+    tools: TOOLS.filter((name) => name !== 'edit_reminder'),
   }
 }
 
