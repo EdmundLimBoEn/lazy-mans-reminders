@@ -6,7 +6,6 @@ import {
   consentCanApprove,
   consentSummary,
   denialRedirect,
-  type ConsentSummary,
 } from './consent'
 import { retryGrantDeletion } from './grantState'
 import { cleanupUserGrants, describeGrants, listAllUserGrants, revokeUserGrant } from './grants'
@@ -135,11 +134,15 @@ async function requireUser(request: Request, env: Env, deps: IdentityDeps, cors:
   }
 }
 
-async function loadPending(env: Env, state: string): Promise<AuthRequest | null> {
-  const id = env.AUTHORIZATION_STATE.idFromName(state)
-  const result = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/pending')
-  if (!result.ok) throw new Error('Authorization state unavailable')
-  return asAuthRequest(await result.json())
+async function loadPending(env: Env, state: string, cors: Record<string, string>): Promise<AuthRequest | null | Response> {
+  try {
+    const id = env.AUTHORIZATION_STATE.idFromName(state)
+    const result = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/pending')
+    if (!result.ok) throw new Error('Authorization state unavailable')
+    return asAuthRequest(await result.json())
+  } catch {
+    return json({ error: 'temporarily_unavailable' }, 503, cors)
+  }
 }
 
 async function consumeAuthorizationState(env: Env, state: string): Promise<boolean> {
@@ -200,21 +203,17 @@ async function readConsent(request: Request, env: Env, deps: IdentityDeps): Prom
   if (user instanceof Response) return user
   const state = new URL(request.url).searchParams.get('state') ?? ''
   if (!STATE.test(state)) return json({ error: 'invalid_state' }, 400, cors)
-  const pending = await summarizePending(env, state)
-  if (pending instanceof Response) return json(await pending.json(), pending.status, cors)
-  if (!consentCanApprove(pending)) return json({ error: 'board_not_requested', summary: pending }, 400, cors)
-  return json({ summary: pending }, 200, cors)
-}
 
-async function summarizePending(env: Env, state: string): Promise<ConsentSummary | Response> {
   const oauth = oauthHelpers(env)
-  if (!oauth) return json({ error: 'server_misconfigured' }, 500)
-  const oauthRequest = await loadPending(env, state)
-  if (!oauthRequest) return json({ error: 'expired_state' }, 400)
+  if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
+  const oauthRequest = await loadPending(env, state, cors)
+  if (oauthRequest instanceof Response) return oauthRequest
+  if (!oauthRequest) return json({ error: 'expired_state' }, 400, cors)
   const client = await oauth.lookupClient(oauthRequest.clientId)
   const summary = consentSummary(oauthRequest, client)
-  if (!summary) return json({ error: 'untrusted_client' }, 400)
-  return summary
+  if (!summary) return json({ error: 'untrusted_client' }, 400, cors)
+  if (!consentCanApprove(summary)) return json({ error: 'board_not_requested', summary }, 400, cors)
+  return json({ summary }, 200, cors)
 }
 
 async function denyConsent(request: Request, env: Env, deps: IdentityDeps): Promise<Response> {
@@ -228,7 +227,8 @@ async function denyConsent(request: Request, env: Env, deps: IdentityDeps): Prom
 
   const oauth = oauthHelpers(env)
   if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
-  const oauthRequest = await loadPending(env, state)
+  const oauthRequest = await loadPending(env, state, cors)
+  if (oauthRequest instanceof Response) return oauthRequest
   if (!oauthRequest) return json({ error: 'expired_state' }, 400, cors)
 
   let client: ClientInfo | null
@@ -261,7 +261,8 @@ async function bindAuthorization(
   const state = typeof body.state === 'string' ? body.state : ''
   if (!STATE.test(state)) return json({ error: 'invalid_state' }, 400, cors)
 
-  const oauthRequest = await loadPending(env, state)
+  const oauthRequest = await loadPending(env, state, cors)
+  if (oauthRequest instanceof Response) return oauthRequest
   if (!oauthRequest) return json({ error: 'expired_state' }, 400, cors)
   const resource = oauthRequest.resource
   if (resource !== undefined && !MCP_HOSTS.some((host) => resource === `https://${host}/mcp`)) {

@@ -295,10 +295,40 @@ describe('single-use authorization', () => {
       body: JSON.stringify({ state }),
     }), env, deps)
     const consent = () => handlePublicRequest(new Request(`https://lmr-mcp.edmundlim.systems/consent?state=${state}`, {
-      headers: { Authorization: 'Bearer token-a' },
+      headers: { Authorization: 'Bearer token-a', Origin: 'https://lmr.sillyapps.co' },
     }), env, deps)
     return { kv, oauth, pending, state, states: env.AUTHORIZATION_STATE, consent, bind: () => post('/bind'), deny: () => post('/consent/deny') }
   }
+
+  it.each([
+    ['consent', { summary: { client: { name: 'Grok' } } }, 0],
+    ['deny', { redirectTo: expect.stringContaining('error=access_denied') }, 0],
+    ['bind', { redirectTo: 'https://grok.example/callback?code=one' }, 1],
+  ] as const)('can retry %s after a pending-state outage', async (action, expected, completions) => {
+    const { states, state, oauth, ...actions } = await setup()
+    const stub = states.get(states.idFromName(state))
+    vi.spyOn(states, 'get').mockReturnValueOnce({
+      ...stub,
+      fetch: async () => new Response(null, { status: 503 }),
+    })
+    const request = actions[action]
+
+    const failed = await request()
+    expect(failed.status).toBe(503)
+    expect(failed.headers.get('Access-Control-Allow-Origin')).toBe('https://lmr.sillyapps.co')
+    expect(await failed.json()).toEqual({ error: 'temporarily_unavailable' })
+    expect(oauth.completeAuthorization).not.toHaveBeenCalled()
+
+    const retry = await request()
+    expect(retry.status).toBe(200)
+    expect(await retry.json()).toMatchObject(expected)
+    if (action !== 'consent') {
+      const replay = await request()
+      expect(replay.status).toBe(400)
+      expect(await replay.json()).toEqual({ error: 'expired_state' })
+    }
+    expect(oauth.completeAuthorization).toHaveBeenCalledTimes(completions)
+  })
 
   it('reads fresh consent and binds despite delayed KV visibility after authorization succeeds', async () => {
     const { consent, bind, oauth } = await setup(true)
