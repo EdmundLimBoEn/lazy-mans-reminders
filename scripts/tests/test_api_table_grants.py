@@ -321,6 +321,45 @@ class ApiTableGrantsTests(_DisposableDatabase):
           rollback;
         """)
 
+    def test_over_budget_registration_does_not_lock_eviction_target(self):
+        owner = '00000000-0000-0000-0000-000000000032'
+        self.sql("alter system set max_prepared_transactions = 1;")
+        self.sql(f"""
+          insert into auth.users(id) values ('{owner}');
+          insert into public.device_tokens(token, user_id, updated_at)
+            select lpad(n::text, 64, 'e'), '{owner}', '2020-01-01'::timestamptz + n * interval '1 day'
+            from generate_series(1, 5) n;
+          update public.user_write_budgets set writes = 600, window_started_at = 'infinity'
+            where user_id = '{owner}';
+        """)
+        # Retain the same device lock reminder push enqueue takes.
+        self.sql("""
+          begin;
+          select token from public.device_tokens where token = lpad('1', 64, 'e') for key share;
+          prepare transaction 'enqueueing_push';
+        """)
+        try:
+            self.sql(f"""
+              begin;
+              set local lock_timeout = '500ms';
+              set local role authenticated;
+              set local request.jwt.claim.sub = '{owner}';
+              do $$ begin
+                insert into public.device_tokens(token, user_id) values (lpad('6', 64, 'e'), auth.uid());
+                assert false, 'Over-budget registration succeeded';
+              exception when raise_exception then
+                assert sqlerrm = 'rate_limited', 'Registration returned the wrong write-budget error';
+              end $$;
+              do $$ begin
+                assert (select count(*) = 5 and bool_or(token = lpad('1', 64, 'e'))
+                        from public.device_tokens), 'Rejected registration changed the device quota';
+              end $$;
+              rollback;
+            """)
+        finally:
+            self.sql("rollback prepared 'enqueueing_push';")
+            self.sql(f"delete from auth.users where id = '{owner}';")
+
     def test_preference_sync_and_board_reads(self):
         self.sql(f"""
           begin;
