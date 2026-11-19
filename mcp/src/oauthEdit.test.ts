@@ -1,6 +1,8 @@
 import { Client } from '@modelcontextprotocol/client'
 import { InMemoryTransport } from '@modelcontextprotocol/server'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
+import { MCP_RESOURCE } from './constants'
+import { handlePublicRequest } from './oauth'
 import { createServer } from './server'
 import { sessionFromProps } from './session'
 
@@ -37,6 +39,16 @@ it('lists only the approved board operations and whoami', async () => {
   expect(tools.map(tool => tool.name).sort()).toEqual([
     'add_reminder', 'complete_reminder', 'list_reminders', 'reopen_reminder', 'whoami',
   ])
+})
+
+it('advertises exactly the tools listed for a board grant', async () => {
+  const url = new URL('/.well-known/mcp/server-card.json', MCP_RESOURCE)
+  const response = await handlePublicRequest(new Request(url), env)
+  expect(response.status).toBe(200)
+
+  const card = await response.json<{ tools: string[] }>()
+  const { tools } = await client.listTools()
+  expect(card.tools.sort()).toEqual(tools.map(tool => tool.name).sort())
 })
 
 it('rejects a direct edit call under a board grant before any database writes', async () => {

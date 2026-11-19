@@ -41,7 +41,7 @@ describe('mcp worker routes', () => {
     expect(body.auth.type).toBe('oauth')
     expect(body.tools).toContain('list_reminders')
     expect(body.tools).toContain('whoami')
-    expect(body.tools).toContain('edit_reminder')
+    expect(body.tools).not.toContain('edit_reminder')
   })
 
   it('rejects bind without a signed-in session', async () => {
