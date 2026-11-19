@@ -383,6 +383,55 @@ Deno.test("Apple revoke falls back to the access token when no refresh token is 
   assertEquals(revokeForm.token_type_hint, "access_token");
 });
 
+for (
+  const { name, subjects, expected } of [
+    {
+      name: "matching first subject",
+      subjects: [APPLE_SUBJECT, "second-subject"],
+      expected: "manual_required",
+    },
+    {
+      name: "matching last subject",
+      subjects: ["second-subject", APPLE_SUBJECT],
+      expected: "manual_required",
+    },
+    {
+      name: "duplicate subject",
+      subjects: [APPLE_SUBJECT, APPLE_SUBJECT],
+      expected: "revoked",
+    },
+    {
+      name: "missing subject alongside a match",
+      subjects: [undefined, APPLE_SUBJECT],
+      expected: "manual_required",
+    },
+  ]
+) {
+  Deno.test(`linked Apple identities with a ${name} revoke the matched token`, async () => {
+    const result = await runDelete({
+      user: {
+        ...appleUser,
+        identities: subjects.map((sub) => ({
+          provider: "apple",
+          identity_data: { sub },
+        })),
+      },
+      body: { appleAuthorizationCode: "code" },
+    });
+    assertEquals(result.appleCalls.map((call) => call.url), [
+      APPLE_TOKEN_URL,
+      APPLE_KEYS_URL,
+      APPLE_REVOKE_URL,
+    ]);
+    assertEquals(form(result.appleCalls[2].body).token, "refresh-token");
+    assertEquals(await result.response.json(), {
+      ok: true,
+      appleRevocation: expected,
+    });
+    assertEquals(result.deletedUserId, appleUser.id);
+  });
+}
+
 Deno.test("a different Apple subject cannot be revoked for the authenticated account", async () => {
   for (
     const tokens of [
@@ -396,6 +445,7 @@ Deno.test("a different Apple subject cannot be revoked for the authenticated acc
         identities: [
           { provider: "google", identity_data: { sub: "other-apple-subject" } },
           ...appleUser.identities!,
+          { provider: "apple", identity_data: { sub: "second-subject" } },
         ],
       },
       body: {

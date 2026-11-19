@@ -190,7 +190,7 @@ async function appleErrorMessage(
 
 export async function revokeAppleTokensWithAuthorizationCode(input: {
   authorizationCode: string;
-  expectedSubject: string;
+  expectedSubjects: ReadonlySet<string>;
   config: AppleSecretConfig;
   fetchImpl: typeof fetch;
   nowSeconds: number;
@@ -296,10 +296,10 @@ export async function revokeAppleTokensWithAuthorizationCode(input: {
   // A valid code can belong to a different Apple account. Bind the exchanged
   // identity to the authenticated user's linked identity before revoking it.
   try {
-    if (typeof tokens.id_token !== "string" || !input.expectedSubject) {
+    if (typeof tokens.id_token !== "string") {
       throw new Error("Missing Apple identity");
     }
-    await jwtVerify(
+    const { payload } = await jwtVerify(
       tokens.id_token,
       createRemoteJWKSet(new URL(APPLE_KEYS_URL), {
         [customFetch]: input.fetchImpl,
@@ -309,11 +309,16 @@ export async function revokeAppleTokensWithAuthorizationCode(input: {
         algorithms: ["RS256"],
         issuer: APPLE_AUDIENCE,
         audience: input.config.clientId,
-        subject: input.expectedSubject,
         requiredClaims: ["exp"],
         currentDate: new Date(input.nowSeconds * 1000),
       },
     );
+    if (
+      typeof payload.sub !== "string" ||
+      !input.expectedSubjects.has(payload.sub)
+    ) {
+      throw new Error("Unlinked Apple subject");
+    }
   } catch {
     return {
       ok: false,
@@ -406,10 +411,18 @@ export async function maybeRevokeAppleTokens(input: {
     return "manual_required";
   }
 
-  const expectedSubject = input.user.identities?.find(
-    (identity) => identity.provider?.toLowerCase() === "apple",
-  )?.identity_data?.sub;
-  if (typeof expectedSubject !== "string" || !expectedSubject.trim()) {
+  const expectedSubjects = new Set<string>();
+  let hasMissingSubject = false;
+  for (const identity of input.user.identities ?? []) {
+    if (identity.provider?.toLowerCase() !== "apple") continue;
+    const sub = identity.identity_data?.sub;
+    if (typeof sub === "string" && sub.trim()) {
+      expectedSubjects.add(sub);
+    } else {
+      hasMissingSubject = true;
+    }
+  }
+  if (expectedSubjects.size === 0) {
     input.warn({
       event: "apple_token_revoke",
       outcome: "skipped",
@@ -420,11 +433,13 @@ export async function maybeRevokeAppleTokens(input: {
 
   const result = await revokeAppleTokensWithAuthorizationCode({
     authorizationCode: input.authorizationCode,
-    expectedSubject,
+    expectedSubjects,
     config: secrets.config,
     fetchImpl: input.fetchImpl,
     nowSeconds: input.nowSeconds,
   });
   if (!result.ok) input.warn(result.warning);
-  return result.ok ? "revoked" : "manual_required";
+  return result.ok && expectedSubjects.size === 1 && !hasMissingSubject
+    ? "revoked"
+    : "manual_required";
 }
