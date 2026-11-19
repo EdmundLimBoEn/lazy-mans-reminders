@@ -130,6 +130,47 @@ describe('account suspension', () => {
 })
 
 describe('revocation during refresh', () => {
+  it('lets only the grant owner retry a failed grant record deletion', async () => {
+    const { post, request, env, deps, kv, grantId, refresh, access } = await authorize()
+    const grantKey = `grant:${USER_ID}:${grantId}`
+    const deleteKey = env.OAUTH_KV.delete.bind(env.OAUTH_KV)
+    let failGrantDelete = true
+    const deleteRecord = vi.spyOn(env.OAUTH_KV, 'delete').mockImplementation(async (key) => {
+      if (key === grantKey && failGrantDelete) {
+        failGrantDelete = false
+        throw new Error('KV unavailable')
+      }
+      await deleteKey(key)
+    })
+    const revoke = () => post(HOST, '/grants/revoke', { grantId })
+
+    const failed = await revoke()
+    expect(failed.status).toBe(503)
+    expect(await failed.json()).toEqual({ error: 'grant_revoke_failed' })
+    expect(kv.has(grantKey)).toBe(true)
+    expect((await access()).status).toBe(401)
+    expect((await refresh()).status).toBe(400)
+
+    const list = await request(HOST, '/grants', { headers: { Authorization: 'Bearer test-session' } })
+    expect(list.status).toBe(200)
+    expect(await list.json()).toEqual({ grants: [] })
+
+    deleteRecord.mockClear()
+    vi.spyOn(deps, 'verifyUser').mockResolvedValueOnce({
+      id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', email: null, fullName: 'Other user',
+    })
+    expect((await revoke()).status).toBe(404)
+    expect(deleteRecord).not.toHaveBeenCalled()
+    expect(kv.has(grantKey)).toBe(true)
+
+    const retried = await revoke()
+    expect(retried.status).toBe(200)
+    expect(await retried.json()).toEqual({ revoked: true })
+    expect(kv.has(grantKey)).toBe(false)
+    expect((await access()).status).toBe(401)
+    expect((await refresh()).status).toBe(400)
+  })
+
   it('denies an individually revoked access token despite stale KV while preserving its grant and sibling tokens', async () => {
     const { post, kv, tokens, client_id, refresh, access } = await authorize()
     const rotated = await refresh()
