@@ -31,14 +31,15 @@ Deno.test("alert rejection retries failed pruning and completes after a cascade"
   const userId = "22222222-2222-4222-8222-222222222222";
   const deviceToken = "a".repeat(64);
   const record = { id: jobId, user_id: userId, text: "Milk" };
-  const registered = "2026-10-28T00:00:00.000Z";
-  const refreshed = "2026-10-28T00:00:00.001Z";
+  const registered = "2026-10-28T00:00:00.000001Z";
+  const refreshed = "2026-10-28T00:00:00.000002Z";
   const invalidated = "2026-10-28T00:00:01.000Z";
   let device: DeviceRow | null;
   let job: PushJob | null;
   let deleteFails = false;
   let refreshOnSend = false;
   let sends = 0;
+  let accepted = 0;
   let jobWrites = 0;
 
   const reset = (startToken: string | null = null) => {
@@ -64,6 +65,7 @@ Deno.test("alert rejection retries failed pruning and completes after a cascade"
     deleteFails = false;
     refreshOnSend = false;
     sends = 0;
+    accepted = 0;
     jobWrites = 0;
   };
   const read = () => ({ device, job });
@@ -75,10 +77,20 @@ Deno.test("alert rejection retries failed pruning and completes after a cascade"
   }) as typeof Deno.serve;
   const fetchResponse = (input: RequestInfo | URL, init?: RequestInit) => {
     const url = new URL(String(input));
-    if (url.hostname === "api.sandbox.push.apple.com") {
+    if (
+      url.hostname === "api.sandbox.push.apple.com" ||
+      url.hostname === "api.push.apple.com"
+    ) {
       assertEquals(url.pathname, `/3/device/${deviceToken}`);
       sends++;
-      if (refreshOnSend && device) device.updated_at = refreshed;
+      if (url.hostname === "api.push.apple.com") {
+        accepted++;
+        return new Response(null, { status: 200 });
+      }
+      if (refreshOnSend && device) {
+        device.updated_at = refreshed;
+        device.environment = "production";
+      }
       return Response.json({
         reason: "Unregistered",
         timestamp: Date.parse(invalidated),
@@ -110,6 +122,17 @@ Deno.test("alert rejection retries failed pruning and completes after a cascade"
         return Response.json(job ? [job] : []);
       case "/rest/v1/device_tokens": {
         if (init?.method !== "DELETE") {
+          const revision = url.searchParams.get("updated_at");
+          if (revision) {
+            assertEquals(revision, `gt.${registered}`);
+            assertEquals(url.searchParams.get("token"), `eq.${deviceToken}`);
+            assertEquals(url.searchParams.get("user_id"), `eq.${userId}`);
+            return Response.json(
+              device && device.updated_at > registered
+                ? [{ token: device.token }]
+                : [],
+            );
+          }
           return Response.json(device ? [device] : []);
         }
         if (deleteFails) {
@@ -194,18 +217,37 @@ Deno.test("alert rejection retries failed pruning and completes after a cascade"
     );
 
     await t.step(
-      "a refreshed registration survives and its job completes normally",
+      "a refreshed registration receives the pending alert on retry",
       async () => {
         reset();
         refreshOnSend = true;
         assertEquals(await invoke(), {
+          status: 503,
+          body: { sent: 0, failed: 0, retryable: 1 },
+        });
+        assertEquals(read().device?.updated_at, refreshed);
+        assertEquals(read().job?.status, "pending");
+        assertEquals(read().job?.outcomes, { alert: "retryable" });
+        assertEquals(read().job?.alert_sent, false);
+        assertEquals(sends, 1);
+        assertEquals(accepted, 0);
+
+        assertEquals(await invoke(), {
           status: 200,
-          body: { sent: 0, failed: 1, retryable: 0 },
+          body: { sent: 1, failed: 0, retryable: 0 },
         });
         assertEquals(read().device?.updated_at, refreshed);
         assertEquals(read().job?.status, "complete");
-        assertEquals(read().job?.outcomes, { alert: "invalid" });
-        assertEquals(sends, 1);
+        assertEquals(read().job?.outcomes, { alert: "sent" });
+        assertEquals(read().job?.alert_sent, true);
+        assertEquals(sends, 2);
+        assertEquals(accepted, 1);
+
+        assertEquals(await invoke(), {
+          status: 200,
+          body: { sent: 0, failed: 0, retryable: 0 },
+        });
+        assertEquals(sends, 2);
       },
     );
   } finally {

@@ -146,6 +146,7 @@ export function headersWithAuthorization(
 }
 
 export type SendResult = "sent" | "retryable" | "failed" | "invalid" | "pruned";
+export type PruneResult = Extract<SendResult, "pruned" | "invalid" | "retryable">;
 
 export async function deliverWithRetries(input: {
   headers: Record<string, string>;
@@ -155,10 +156,10 @@ export async function deliverWithRetries(input: {
   ) => Promise<ApnsOutcome>;
   nextJwt: () => Promise<string>;
   onExpiredJwt: () => void;
-  // A true result confirms deletion of the entire device registration.
+  // "pruned" confirms deletion of the entire device registration.
   onPrune: (
     outcome: Extract<ApnsOutcome, { kind: "prune" }>,
-  ) => Promise<boolean | void>;
+  ) => Promise<PruneResult | void>;
   sleep: (ms: number) => Promise<void>;
 }): Promise<SendResult> {
   let headers = input.headers;
@@ -173,7 +174,7 @@ export async function deliverWithRetries(input: {
     }
     if (outcome.kind === "sent") return "sent";
     if (outcome.kind === "prune") {
-      return await input.onPrune(outcome) ? "pruned" : "invalid";
+      return await input.onPrune(outcome) ?? "invalid";
     }
     if (outcome.kind === "permanent") return "failed";
 

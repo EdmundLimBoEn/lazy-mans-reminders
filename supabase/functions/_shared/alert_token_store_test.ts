@@ -19,34 +19,40 @@ function client(rows: Row[]) {
   return {
     from(table: string) {
       assertEquals(table, "device_tokens");
-      return {
+      const predicates: Array<(row: Row) => boolean> = [];
+      let deleting = false;
+      const query = {
         delete() {
-          const predicates: Array<(row: Row) => boolean> = [];
-          const query = {
-            eq(column: keyof Row, value: string) {
-              predicates.push((row) => row[column] === value);
-              return query;
-            },
-            lte(column: "updated_at", value: string) {
-              predicates.push((row) =>
-                Date.parse(row[column]) <= Date.parse(value)
-              );
-              return query;
-            },
-            select() {
-              return query;
-            },
-            maybeSingle() {
-              const index = rows.findIndex((row) =>
-                predicates.every((matches) => matches(row))
-              );
-              const data = index < 0 ? null : rows.splice(index, 1)[0];
-              return Promise.resolve({ data, error: null });
-            },
-          };
+          deleting = true;
           return query;
         },
+        eq(column: keyof Row, value: string) {
+          predicates.push((row) => row[column] === value);
+          return query;
+        },
+        lte(column: "updated_at", value: string) {
+          predicates.push((row) =>
+            Date.parse(row[column]) <= Date.parse(value)
+          );
+          return query;
+        },
+        gt(column: "updated_at", value: string) {
+          predicates.push((row) => Date.parse(row[column]) > Date.parse(value));
+          return query;
+        },
+        select() {
+          return query;
+        },
+        maybeSingle() {
+          const index = rows.findIndex((row) =>
+            predicates.every((matches) => matches(row))
+          );
+          const data = index < 0 ? null : rows[index];
+          if (data && deleting) rows.splice(index, 1);
+          return Promise.resolve({ data, error: null });
+        },
       };
+      return query;
     },
   };
 }
@@ -93,7 +99,7 @@ for (const status of [400, 410]) {
           timestamp: invalidation,
         }),
       ));
-      assertEquals(await run, refreshed ? "invalid" : "pruned");
+      assertEquals(await run, refreshed ? "retryable" : "pruned");
       assertEquals(rows, expected);
     });
   }
@@ -107,8 +113,14 @@ for (const offset of [-1, 0, 1]) {
       updated_at: new Date(invalidation + offset).toISOString(),
       activity_push_token: "activity",
     };
-    const rows = [row];
-    await deliverWithRetries({
+    const newer = {
+      ...row,
+      updated_at: new Date(invalidation + 2).toISOString(),
+    };
+    const otherDevice = { ...newer, token: "other-device" };
+    const otherOwner = { ...newer, user_id: "other-owner" };
+    const rows = [row, otherDevice, otherOwner];
+    const result = await deliverWithRetries({
       headers: {},
       send: () =>
         Promise.resolve(
@@ -122,7 +134,14 @@ for (const offset of [-1, 0, 1]) {
       onPrune: (outcome) => pruneAlertToken(client(rows), { ...row }, outcome),
       sleep: () => Promise.resolve(),
     });
-    assertEquals(rows, offset > 0 ? [row] : []);
+    assertEquals(result, offset > 0 ? "invalid" : "pruned");
+    assertEquals(
+      rows,
+      offset > 0 ? [row, otherDevice, otherOwner] : [
+        otherDevice,
+        otherOwner,
+      ],
+    );
   });
 }
 
