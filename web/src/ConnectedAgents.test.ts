@@ -20,6 +20,7 @@ vi.mock('react', async original => ({
     return hooks.states[index]
   },
   useCallback: (callback: unknown) => callback,
+  useLayoutEffect: (effect: () => void) => { effect() },
   useEffect: (effect: typeof hooks.effect) => { hooks.effect = effect },
 }))
 
@@ -98,6 +99,32 @@ it.each(['success', 'http error', 'rejection'])('ignores a token-refresh read re
   expect(names()).toEqual([])
   expect(error()).toBeUndefined()
   expect(fetchMock).toHaveBeenCalledTimes(4)
+})
+
+it('reloads with the refreshed token when revocation finishes after token rotation', async () => {
+  const revoke = deferred<Response>()
+  const refreshRead = deferred<Response>()
+  fetchMock.mockReturnValueOnce(revoke.promise)
+  render().find(node => node.props.onClick)!.props.onClick!()
+
+  fetchMock.mockReturnValueOnce(refreshRead.promise)
+  render('refreshed-token')
+  hooks.effect!()
+  fetchMock.mockImplementationOnce((_url, init: RequestInit) => {
+    const authorized = new Headers(init.headers).get('Authorization') === 'Bearer refreshed-token'
+    return Promise.resolve(response([], authorized ? 200 : 401))
+  })
+  revoke.resolve(new Response(null, { status: 204 }))
+  await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(4))
+  expect(fetchMock).toHaveBeenLastCalledWith(expect.stringMatching(/\/grants$/), {
+    headers: { Authorization: 'Bearer refreshed-token' },
+  })
+
+  refreshRead.resolve(response([agent]))
+  await new Promise(resolve => setTimeout(resolve, 0))
+  const view = render('refreshed-token')
+  expect(view.some(node => node.props.children === 'No connected agents.')).toBe(true)
+  expect(view.some(node => node.type === 'strong' || node.props.role === 'alert')).toBe(false)
 })
 
 it('invalidates pending reads as soon as revocation begins', async () => {
