@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { parseGrantList, type GrantView } from './grantList'
 import { MCP_ORIGIN } from './mcp'
@@ -25,6 +25,11 @@ export function ConnectedAgents({ accessToken }: { accessToken: string }) {
     setError('')
     setGrants(parsed)
   }, [accessToken])
+
+  const currentLoad = useRef(load)
+  useLayoutEffect(() => {
+    currentLoad.current = load
+  }, [load])
 
   useEffect(() => {
     const requests = readGeneration
@@ -55,7 +60,7 @@ export function ConnectedAgents({ accessToken }: { accessToken: string }) {
         setError('Could not revoke that agent.')
         return
       }
-      await load()
+      await currentLoad.current()
     } catch {
       ++readGeneration.current
       setError('Could not reach the agent connector.')
