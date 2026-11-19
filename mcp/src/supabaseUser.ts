@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, isAuthSessionMissingError } from '@supabase/supabase-js'
 
 export type VerifiedUser = {
   id: string
@@ -47,7 +47,7 @@ export function verifySupabaseUserWith(fetchImpl?: FetchLike): VerifyUser {
       return await supabase.auth.getUser(accessToken)
     })
     if (error) {
-      if (error.status === 401 || error.status === 403) return null
+      if (error.status === 401 || error.status === 403 || isAuthSessionMissingError(error)) return null
       throw error
     }
     if (!data.user) return null
