@@ -158,6 +158,34 @@ class ApiTableGrantsTests(_DisposableDatabase):
           rollback;
         """)
 
+    def test_reminder_insert_rechecks_devices_in_its_snapshot(self):
+        self.sql(f"""
+          begin;
+          insert into public.device_tokens(user_id, token) values
+            ('{OWNER}', repeat('d1', 32)), ('{OWNER}', repeat('d2', 32));
+
+          -- Remove a registration after the enqueue statement takes its snapshot
+          -- but before it scans devices. This reproduces a stale scan without timing.
+          create function pg_temp.remove_device() returns trigger language plpgsql as $$
+          begin
+            delete from public.device_tokens where token = repeat('d1', 32);
+            return null;
+          end $$;
+          create trigger deregister_device before insert on public.reminder_push_jobs
+            for each statement execute function pg_temp.remove_device();
+
+          set local role authenticated;
+          set local request.jwt.claim.sub = '{OWNER}';
+          insert into public.reminders(user_id, text) values (auth.uid(), 'During sign-out');
+          reset role;
+          do $$ begin
+            assert exists (select from public.reminders where user_id = '{OWNER}');
+            assert (select count(*) = 1 and bool_and(device_token = repeat('d2', 32))
+                    from public.reminder_push_jobs where user_id = '{OWNER}');
+          end $$;
+          rollback;
+        """)
+
     def test_completion_counter_skips_account_locked_for_deletion(self):
         owner = '00000000-0000-0000-0000-000000000031'
         self.sql("alter system set max_prepared_transactions = 1;")
