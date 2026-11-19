@@ -1,7 +1,9 @@
 import type { AuthRequest, ClientInfo, GrantSummary, OAuthHelpers } from '@cloudflare/workers-oauth-provider'
 import { describe, expect, it, vi } from 'vitest'
+import { memoryObjects } from '../test/memoryObjects'
 import { AuthorizationState } from './authorizationState'
 import { PENDING_AUTH_TTL_SECONDS } from './constants'
+import { GrantState } from './grantState'
 import { handlePublicRequest } from './oauth'
 import type { IdentityDeps } from './supabaseUser'
 
@@ -170,6 +172,7 @@ describe('consent and grants', () => {
       AUTHORIZATION_STATE: states,
       OAUTH_PROVIDER: oauth,
     } as unknown as Env
+    env.GRANT_STATE = memoryObjects((state) => new GrantState(state, env))
 
     function authed(path: string, token: string, init?: RequestInit) {
       const headers = new Headers(init?.headers)

@@ -8,6 +8,7 @@ import {
   denialRedirect,
   type ConsentSummary,
 } from './consent'
+import { retryGrantDeletion } from './grantState'
 import { cleanupUserGrants, describeGrants, listAllUserGrants, revokeUserGrant } from './grants'
 import { readJsonBody } from './jsonBody'
 import { redirectUriAllowed } from './redirects'
@@ -329,7 +330,9 @@ async function revokeGrant(request: Request, env: Env, deps: IdentityDeps): Prom
   if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
   try {
     const outcome = await revokeUserGrant(oauth, user.id, grantId)
-    if (outcome === 'not_found') return json({ error: 'not_found' }, 404, cors)
+    if (outcome === 'not_found' && !await retryGrantDeletion(env, user.id, grantId)) {
+      return json({ error: 'not_found' }, 404, cors)
+    }
     return json({ revoked: true }, 200, cors)
   } catch {
     return json({ error: 'grant_revoke_failed' }, 503, cors)
