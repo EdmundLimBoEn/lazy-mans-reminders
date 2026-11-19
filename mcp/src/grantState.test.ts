@@ -270,6 +270,42 @@ describe('authoritative grant revocation', () => {
     expect(kv.get).not.toHaveBeenCalled()
   })
 
+  it('removes token markers on whole-grant revocation and leaves none after late deletions', async () => {
+    const { call, restart, records, state } = setup()
+    const sibling = 'token:user:grant:sibling'
+    records.set(sibling, 'sibling token')
+    for (const key of [TOKEN, sibling]) {
+      expect((await call('delete', key)).status).toBe(204)
+      expect(await state.storage.get(`revoked:${key}`)).toBe(true)
+    }
+
+    expect((await call('delete')).status).toBe(204)
+    restart()
+    expect([...await state.storage.list()]).toEqual([['revoked', true]])
+    for (const key of [TOKEN, sibling]) {
+      records.set(key, 'stale KV token')
+      expect(await (await call('get', key)).json()).toBeNull()
+      expect((await call('put', key, 'late write')).status).toBe(409)
+    }
+    expect((await call('delete', sibling)).status).toBe(204)
+    expect(records.has(sibling)).toBe(false)
+    expect([...await state.storage.list()]).toEqual([['revoked', true]])
+  })
+
+  it('finishes clearing token markers when a grant deletion is retried after restart', async () => {
+    const { call, restart, records, state } = setup()
+    expect((await call('delete', TOKEN)).status).toBe(204)
+    vi.spyOn(state.storage, 'list').mockRejectedValueOnce(new Error('Storage unavailable'))
+    await expect(call('delete')).rejects.toThrow('Storage unavailable')
+
+    restart()
+    expect(records.has(GRANT)).toBe(true)
+    expect(await (await call('get')).json()).toBeNull()
+    expect((await call('retry-delete')).status).toBe(204)
+    expect(records.has(GRANT)).toBe(false)
+    expect([...await state.storage.list()]).toEqual([['revoked', true]])
+  })
+
   it.each([GRANT, TOKEN])('serializes revocation behind an in-progress KV write for %s', async (key) => {
     const { call, kv, records } = setup()
     let entered!: () => void

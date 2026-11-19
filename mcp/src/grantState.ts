@@ -65,13 +65,23 @@ export class GrantState implements DurableObject {
       const revocationKey = key === grantKey(key) ? 'revoked' : `revoked:${key}`
       if (method === 'delete' || method === 'retry-delete') {
         if (method === 'delete') {
-          // Retain markers to reject stale KV records and late writes. Legacy grants
-          // can live indefinitely; token keys identify individual credentials.
-          await this.state.storage.put(revocationKey, true)
+          // The whole-grant marker already rejects stale tokens and late writes.
+          if (revocationKey === 'revoked' || !await this.state.storage.get('revoked')) {
+            await this.state.storage.put(revocationKey, true)
+          }
         } else if (revocationKey !== 'revoked' || !await this.state.storage.get('revoked')) {
           return new Response(null, { status: 404 })
         }
-        if (revocationKey === 'revoked') await this.state.storage.delete('recoveredGrant')
+        if (revocationKey === 'revoked') {
+          const { storage } = this.state
+          await storage.delete('recoveredGrant')
+          // The grant marker is durable, so individual token markers are redundant.
+          while (true) {
+            const markers = await storage.list({ prefix: 'revoked:token:', limit: 128 })
+            if (!markers.size) break
+            await storage.delete([...markers.keys()])
+          }
+        }
         await this.env.OAUTH_KV.delete(key)
         return new Response(null, { status: 204 })
       }
