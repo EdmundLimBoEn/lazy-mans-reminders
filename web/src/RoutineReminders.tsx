@@ -29,6 +29,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
   const error = mutationError || readError
   const [weeklyStartChanged, setWeeklyStartChanged] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const reminderInputRef = useRef<HTMLInputElement>(null)
   const draftRevision = useRef(0)
   const createId = useRef<string | null>(null)
   const readGeneration = useRef(0)
@@ -201,6 +202,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
     setStartDate(routine.start_date)
     setTime(routine.local_time.slice(0, 5))
     setTimezone(routine.timezone)
+    reminderInputRef.current?.focus()
   }
 
   const selectClass = 'h-9 w-full rounded-md border bg-background px-3 text-sm'
@@ -215,7 +217,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
       createId.current = null
     }} className="grid gap-3 rounded-lg border p-4">
       <div className="grid gap-2"><Label htmlFor="routine-text">Reminder</Label>
-        <Input id="routine-text" value={text} onChange={e => setText(e.target.value)} placeholder="Prepare Tuesday's uniform" maxLength={500} required /></div>
+        <Input ref={reminderInputRef} id="routine-text" value={text} onChange={e => setText(e.target.value)} placeholder="Prepare Tuesday's uniform" maxLength={500} required /></div>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="grid gap-2"><Label htmlFor="routine-repeat">Repeat</Label>
           <select id="routine-repeat" className={selectClass} value={cadence} onChange={e => { setCadence(e.target.value === 'weekly' ? 'weekly' : 'days'); setWeeklyStartChanged(true) }}>
