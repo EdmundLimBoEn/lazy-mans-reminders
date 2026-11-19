@@ -77,6 +77,7 @@ export function supabaseAccountExistsWith(fetchImpl?: FetchLike): AccountExists 
       throw error
     }
     if (data.user?.id !== userId) return false
+    if (data.user.deleted_at) return false
     const bannedUntil = data.user.banned_until
     if (bannedUntil && Date.parse(bannedUntil) > Date.now()) return 'suspended'
     return true
