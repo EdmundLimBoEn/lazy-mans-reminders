@@ -21,7 +21,7 @@ export type DeleteAccountDeps = {
   warn: (payload: Record<string, unknown>) => void;
   getUser: (
     authorization: string,
-  ) => Promise<{ user: DeleteAccountUser | null }>;
+  ) => Promise<{ user: DeleteAccountUser | null; unavailable?: boolean }>;
   revokeGrants?: typeof revokeUserOauthGrants;
   deleteAuthUser: (userId: string) => Promise<{ error: unknown }>;
 };
@@ -117,7 +117,13 @@ export async function handleDeleteAccount(
     }
   }
 
-  const { user } = await deps.getUser(authHeader);
+  const { user, unavailable } = await deps.getUser(authHeader);
+  if (unavailable) {
+    return new Response("Could not delete account", {
+      status: 503,
+      headers: corsHeaders,
+    });
+  }
   if (!user) {
     return new Response("Unauthorized", { status: 401, headers: corsHeaders });
   }

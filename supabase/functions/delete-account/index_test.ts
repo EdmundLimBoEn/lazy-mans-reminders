@@ -12,6 +12,7 @@ import {
   APPLE_TOKEN_URL,
   mintAppleClientSecret,
 } from "../_shared/apple_token_revoke.ts";
+import { getDeleteAccountUser } from "./get_user.ts";
 import {
   type DeleteAccountDeps,
   type DeleteAccountUser,
@@ -106,6 +107,7 @@ function form(body: string): Record<string, string> {
 
 async function runDelete(input: {
   user: DeleteAccountUser | null;
+  getUser?: DeleteAccountDeps["getUser"];
   body?: unknown;
   rawBody?: BodyInit;
   env?: Record<string, string | undefined>;
@@ -188,7 +190,7 @@ async function runDelete(input: {
     fetchImpl,
     nowSeconds: () => NOW_SECONDS,
     warn: (payload) => warnings.push(payload),
-    getUser: () => Promise.resolve({ user: input.user }),
+    getUser: input.getUser ?? (() => Promise.resolve({ user: input.user })),
     revokeGrants: () => {
       grantCleanupCalls++;
       return Promise.resolve(input.grants ?? { ok: true });
@@ -751,6 +753,49 @@ Deno.test("unauthenticated requests cannot revoke Apple credentials or delete da
   assertEquals(result.deletedTables, []);
   assertEquals(result.deletedUserId, null);
 });
+
+for (
+  const { name, authResponse, expectedStatus } of [
+    {
+      name: "a revoked session",
+      authResponse: () =>
+        Response.json({ error_code: "session_not_found" }, { status: 403 }),
+      expectedStatus: 401,
+    },
+    {
+      name: "an Auth outage",
+      authResponse: () => new Response(null, { status: 503 }),
+      expectedStatus: 503,
+    },
+  ]
+) {
+  Deno.test(`account deletion returns ${expectedStatus} for ${name} before cleanup`, async () => {
+    const { SUPABASE_URL, SUPABASE_ANON_KEY } = supabaseEnv();
+    const result = await runDelete({
+      user: null,
+      body: { appleAuthorizationCode: "code" },
+      getUser: (authorization) =>
+        getDeleteAccountUser(
+          SUPABASE_URL,
+          SUPABASE_ANON_KEY,
+          authorization,
+          (url, init) => {
+            assertEquals(String(url), `${SUPABASE_URL}/auth/v1/user`);
+            assertEquals(
+              new Headers(init?.headers).get("Authorization"),
+              "Bearer user-jwt",
+            );
+            return Promise.resolve(authResponse());
+          },
+        ),
+    });
+    assertEquals(result.response.status, expectedStatus);
+    assertEquals(result.grantCleanupCalls, 0);
+    assertEquals(result.appleCalls, []);
+    assertEquals(result.deletedTables, []);
+    assertEquals(result.deletedUserId, null);
+  });
+}
 
 Deno.test("mismatched expected identity stops before any account cleanup", async () => {
   for (const expectedUserId of [googleUser.id, ""]) {

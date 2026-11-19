@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.112.1";
+import { getDeleteAccountUser } from "./get_user.ts";
 import { corsHeaders, handleDeleteAccount } from "./handler.ts";
 
 function requiredEnv(name: string): string {
@@ -13,19 +14,12 @@ Deno.serve((request) =>
     fetchImpl: fetch,
     nowSeconds: () => Math.floor(Date.now() / 1000),
     warn: (payload) => console.warn(JSON.stringify(payload)),
-    getUser: async (authorization) => {
-      const userClient = createClient(
+    getUser: (authorization) =>
+      getDeleteAccountUser(
         requiredEnv("SUPABASE_URL"),
         requiredEnv("SUPABASE_ANON_KEY"),
-        {
-          global: { headers: { Authorization: authorization } },
-          auth: { persistSession: false, autoRefreshToken: false },
-        },
-      );
-      const { data: { user }, error } = await userClient.auth.getUser();
-      if (error || !user) return { user: null };
-      return { user };
-    },
+        authorization,
+      ),
     deleteAuthUser: async (userId) => {
       const admin = createClient(
         requiredEnv("SUPABASE_URL"),
