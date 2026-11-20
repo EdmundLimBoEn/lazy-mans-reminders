@@ -599,8 +599,30 @@ Deno.test("Apple HTTP 400 still deletes the account", async () => {
   await assertDeleted(revokeFailure, appleUser.id);
   assertEquals(revokeFailure.warnings[0]?.endpoint, "revoke");
   assertEquals(revokeFailure.warnings[0]?.status, 400);
+  assertEquals(revokeFailure.warnings[0]?.appleError, "invalid_request");
   assertEquals(revokeFailure.deletedUserId, appleUser.id);
 });
+
+for (const endpoint of ["token", "revoke"] as const) {
+  Deno.test(`Apple ${endpoint} warnings omit unrecognized upstream errors`, async () => {
+    const result = await runDelete({
+      user: appleUser,
+      body: { appleAuthorizationCode: "auth-code-from-ios" },
+      [endpoint]: Response.json({ error: "invalid_grant: diagnostic-marker" }, {
+        status: 400,
+      }),
+    });
+
+    await assertDeleted(result, appleUser.id);
+    assertEquals(JSON.parse(JSON.stringify(result.warnings)), [{
+      event: "apple_token_revoke",
+      outcome: "failed",
+      reason: "apple_http_error",
+      status: 400,
+      endpoint,
+    }]);
+  });
+}
 
 Deno.test("missing Apple secrets still delete the account", async () => {
   const result = await runDelete({
