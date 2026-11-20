@@ -87,8 +87,11 @@ describe('worker config', () => {
     expect(origins?.split(',')[0]).toBe('https://app.notepads.dev')
     expect(origins).toContain('https://np.sillyapps.co')
     expect(origins).toContain('https://lmr.sillyapps.co')
-    expect(source).toContain('"pattern": "np-mcp.sillyapps.co"')
-    expect(source).toContain('"pattern": "lmr-mcp.edmundlim.systems"')
+    const routes = source.match(/"routes":\s*\[([^\]]+)\]/)?.[1] ?? ''
+    const customDomains = Array.from(routes.matchAll(/"pattern":\s*"([^"]+)",\s*"custom_domain":\s*true/g), ([, host]) => host)
+    expect(customDomains).toEqual(expect.arrayContaining([
+      'mcp.notepads.dev', 'np-mcp.sillyapps.co', 'lmr-mcp.edmundlim.systems',
+    ]))
     const index = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'index.ts'), 'utf8')
     expect(index).toMatch(/allowedHostnames:\s*\[\s*\.\.\.MCP_HOSTS\s*\]/)
   })

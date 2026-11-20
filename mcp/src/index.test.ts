@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { MCP_HOSTS } from './constants'
 import { handlePublicRequest } from './oauth'
 
 function memoryKv(): KVNamespace {
@@ -30,11 +31,8 @@ const env = {
 } as Env
 
 describe('mcp worker routes', () => {
-  it.each([
-    'https://np-mcp.sillyapps.co/',
-    'https://lmr-mcp.edmundlim.systems/',
-  ])('serves an unauthenticated server card on %s', async (url) => {
-    const response = await handlePublicRequest(new Request(url), env)
+  it.each(MCP_HOSTS)('serves an unauthenticated server card on %s', async (host) => {
+    const response = await handlePublicRequest(new Request(`https://${host}/`), env)
     expect(response.status).toBe(200)
     const body = await response.json() as { url: string; auth: { type: string }; tools: string[] }
     expect(body.url).toBe('/mcp')

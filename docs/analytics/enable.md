@@ -51,8 +51,8 @@ identified in [the analytics plan](plan.md) before the live enablement.
    Check `whoami` shows the account owning the Worker before deploying. This
    redeploys the MCP Worker with the nonsecret var; it changes no secrets.
    In Cloudflare, verify the active deployment of `lazy-mans-reminders-mcp` has
-   the text variable `USAGE_ANALYTICS_ENABLED=true` and both custom domains
-   `np-mcp.sillyapps.co` and `lmr-mcp.edmundlim.systems`.
+   the text variable `USAGE_ANALYTICS_ENABLED=true` and all three custom domains
+   `mcp.notepads.dev`, `np-mcp.sillyapps.co`, and `lmr-mcp.edmundlim.systems`.
 
 ## Verify
 
@@ -75,11 +75,13 @@ the reminder is deleted.
 
 Create a reminder on the test board for the MCP check. Connect an authenticated,
 edit-enabled MCP client for that test account to
-`https://np-mcp.sillyapps.co/mcp` (or `https://lmr-mcp.edmundlim.systems/mcp`).
+`https://mcp.notepads.dev/mcp`.
 Invoke `list_reminders` once, then use `edit_reminder` once to change the
 reminder. Rerun `usage_source_report` and confirm that `mcp_list` and `mcp_edit`
-each increased by one under `source='agent'`. Repeat on the other host if
-verifying both routes. A completed new OAuth authorization should add
+each increased by one under `source='agent'`. The legacy endpoints
+`https://np-mcp.sillyapps.co/mcp` and `https://lmr-mcp.edmundlim.systems/mcp`
+both serve requests directly without redirects. Repeat on each legacy host if
+verifying all three routes. A completed new OAuth authorization should add
 `agent_oauth_connected`; token refresh alone will not. Worker telemetry is best
 effort, so allow the request to finish and investigate missing increments.
 `usage_daily_report` reports reminder mutations; use `usage_source_report` for

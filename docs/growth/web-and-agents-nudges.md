@@ -43,7 +43,7 @@ The web destination is `https://app.notepads.dev`. Agent setup should lead to th
 | README: web description, excerpt | “A Supabase-backed reminder board with a React/Vite web app and an iOS 17 app plus WidgetKit extension.” | `README.md:3` |
 | README: web routines, excerpt | “Create routines on the web board under **Routine reminders**.” | `README.md:142` |
 | README: web-only editing, excerpt | “iOS receives and completes the generated board reminders; routine editing is currently on the web.” | `README.md:146` |
-| README: MCP destination | “Remote agents talk to the board at `https://np-mcp.sillyapps.co/mcp`. `https://lmr-mcp.edmundlim.systems/mcp` stays live.” | `README.md:152` |
+| README: MCP destination | “Use `https://mcp.notepads.dev/mcp`. The legacy endpoints `https://np-mcp.sillyapps.co/mcp` and `https://lmr-mcp.edmundlim.systems/mcp` remain available.” | `README.md:118` |
 | README: connector instruction | “Add a custom connector and use OAuth:” / “Settings → Plugins → custom connector” / “Sign in with Google or Apple in the browser that opens, then tap **Allow**.” | `README.md:156`, `README.md:158`, `README.md:160` |
 | README: personal keys | “Personal agent keys remain available under **Agent access → Advanced** for hosts that cannot use OAuth. Plugin installs can set `LMR_AGENT_TOKEN`.” | `README.md:162` |
 | README: browser authorization | “OAuth is the usual path for clients that complete `/connect`: the client opens a browser, you sign in on the familiar board, tap Allow. No bearer tokens to paste. Personal keys remain under **Advanced** for clients that cannot do OAuth.” | `README.md:166` |

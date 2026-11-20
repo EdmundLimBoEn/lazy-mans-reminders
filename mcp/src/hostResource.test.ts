@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { setup } from '../test/oauthWorker'
-import { MCP_HOSTS, MCP_RESOURCE } from './constants'
+import { MCP_HOSTS } from './constants'
 import type { TokenSecret } from './domain'
 import { hashSecret } from './token'
 
@@ -17,22 +17,50 @@ afterEach(() => vi.unstubAllGlobals())
 
 describe('worker resource binding across supported hosts', () => {
   it.each(MCP_HOSTS)('advertises and accepts a valid personal token on %s', async (host) => {
-    const { request } = setup()
+    const { request, deps } = setup()
     const metadata = await request(host, '/.well-known/oauth-protected-resource/mcp')
-    expect(await metadata.json()).toMatchObject({ resource: `https://${host}/mcp` })
+    const { resource, authorization_servers: issuers } = await metadata.json() as {
+      resource: string
+      authorization_servers: string[]
+    }
+    expect(resource).toBe(`https://${host}/mcp`)
+    expect(issuers[0]).toBe(`https://${host}`)
+    expect(issuers).toEqual(expect.arrayContaining(MCP_HOSTS.map((server) => `https://${server}`)))
+    const discovery = await request(host, '/.well-known/oauth-authorization-server')
+    expect(await discovery.json()).toMatchObject({
+      issuer: `https://${host}`,
+      authorization_endpoint: `https://${host}/authorize`,
+      token_endpoint: `https://${host}/token`,
+    })
+    const expectedMetadata = `resource_metadata="https://${host}/.well-known/oauth-protected-resource/mcp"`
+    const unauthenticated = await request(host, '/mcp')
+    expect(unauthenticated.status).toBe(401)
+    expect(unauthenticated.headers.get('WWW-Authenticate')).toContain(expectedMetadata)
     const token_hash = await hashSecret('test-secret' as TokenSecret)
     vi.stubGlobal('fetch', async (_input: unknown, init?: RequestInit) => init?.method === 'PATCH'
       ? new Response(null, { status: 204 })
       : Response.json({ id: USER, user_id: USER, name: 'Test', token_hash, revoked_at: null }))
-    const response = await request(host, '/mcp', { headers: { Authorization: `Bearer lmr_${USER}_test-secret` } })
+    const access = () => request(host, '/mcp', { headers: { Authorization: `Bearer lmr_${USER}_test-secret` } })
+    const response = await access()
     expect(response.status).toBe(200)
     expect(await response.json()).toEqual({ accepted: true })
+
+    deps.accountExists.mockResolvedValueOnce(false)
+    const denied = await access()
+    expect(denied.status).toBe(401)
+    expect(await denied.json()).toEqual({ error: 'unauthorized' })
+    expect(denied.headers.get('WWW-Authenticate')).toContain(expectedMetadata)
   })
 
-  it('does not advertise an arbitrary request host as a supported resource', async () => {
+  it('advertises the canonical resource and challenge for an unknown host', async () => {
     const { request } = setup()
     const response = await request('evil.example', '/.well-known/oauth-protected-resource/mcp')
-    expect(await response.json()).toMatchObject({ resource: MCP_RESOURCE })
+    expect(await response.json()).toMatchObject({ resource: 'https://mcp.notepads.dev/mcp' })
+    const denied = await request('evil.example', '/mcp')
+    expect(denied.status).toBe(401)
+    expect(denied.headers.get('WWW-Authenticate')).toContain(
+      'resource_metadata="https://mcp.notepads.dev/.well-known/oauth-protected-resource/mcp"',
+    )
   })
 
   it.each(MCP_HOSTS)('keeps %s grants usable after consent completes on the other host', async (host) => {
