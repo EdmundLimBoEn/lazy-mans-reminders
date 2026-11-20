@@ -3,7 +3,7 @@ import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
 import type { DeviceRow } from "./device_delivery.ts";
 import type { PushJob } from "./push_replay.ts";
 
-Deno.test("alert rejection retries failed pruning and completes after a cascade", async (t) => {
+Deno.test("alert replay after APNs rejection", async (t) => {
   const originalEnv = Deno.env.get;
   const originalServe = Deno.serve;
   const originalFetch = globalThis.fetch;
@@ -38,6 +38,7 @@ Deno.test("alert rejection retries failed pruning and completes after a cascade"
   let job: PushJob | null;
   let deleteFails = false;
   let refreshOnSend = false;
+  let providerStatus: 403 | 200 | undefined;
   let sends = 0;
   let accepted = 0;
   let jobWrites = 0;
@@ -64,6 +65,7 @@ Deno.test("alert rejection retries failed pruning and completes after a cascade"
     };
     deleteFails = false;
     refreshOnSend = false;
+    providerStatus = undefined;
     sends = 0;
     accepted = 0;
     jobWrites = 0;
@@ -83,7 +85,12 @@ Deno.test("alert rejection retries failed pruning and completes after a cascade"
     ) {
       assertEquals(url.pathname, `/3/device/${deviceToken}`);
       sends++;
-      if (url.hostname === "api.push.apple.com") {
+      if (providerStatus === 403) {
+        return Response.json({ reason: "InvalidProviderToken" }, {
+          status: 403,
+        });
+      }
+      if (providerStatus === 200 || url.hostname === "api.push.apple.com") {
         accepted++;
         return new Response(null, { status: 200 });
       }
@@ -173,6 +180,33 @@ Deno.test("alert rejection retries failed pruning and completes after a cascade"
 
   try {
     await import("../send-reminder-push/index.ts");
+    await t.step(
+      "provider rejection keeps the alert pending until recovery",
+      async () => {
+        reset();
+        providerStatus = 403;
+        assertEquals(await invoke(), {
+          status: 503,
+          body: { sent: 0, failed: 0, retryable: 1 },
+        });
+        assertEquals(read().device?.token, deviceToken);
+        assertEquals(read().job?.status, "pending");
+        assertEquals(read().job?.alert_sent, false);
+        assertEquals(sends, 1);
+        assertEquals(accepted, 0);
+
+        providerStatus = 200;
+        assertEquals(await invoke(), {
+          status: 200,
+          body: { sent: 1, failed: 0, retryable: 0 },
+        });
+        assertEquals(read().job?.status, "complete");
+        assertEquals(read().job?.alert_sent, true);
+        assertEquals((await invoke()).body.sent, 0);
+        assertEquals(sends, 2);
+        assertEquals(accepted, 1);
+      },
+    );
     await t.step(
       "delete failure leaves the job pending for a successful retry",
       async () => {
