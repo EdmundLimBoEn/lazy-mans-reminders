@@ -1,7 +1,7 @@
 import { safeReturnPath } from './pkceCallback'
 import { normalizePath } from './routing'
 
-export const MCP_ORIGIN = 'https://np-mcp.sillyapps.co'
+export const MCP_ORIGIN = 'https://mcp.notepads.dev'
 export const MCP_URL = `${MCP_ORIGIN}/mcp`
 export const RETURN_TO_KEY = 'lmr_return_to'
 export const AGENT_ACCESS_HASH = '#agent-access-heading'

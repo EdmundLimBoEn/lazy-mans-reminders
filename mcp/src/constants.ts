@@ -1,7 +1,6 @@
-export const MCP_HOST = 'np-mcp.sillyapps.co'
-export const MCP_HOSTS = [MCP_HOST, 'lmr-mcp.edmundlim.systems'] as const
+export const MCP_HOST = 'mcp.notepads.dev'
+export const MCP_HOSTS = [MCP_HOST, 'np-mcp.sillyapps.co', 'lmr-mcp.edmundlim.systems'] as const
 export const MCP_RESOURCE = `https://${MCP_HOST}/mcp`
-export const MCP_RESOURCE_METADATA = `https://${MCP_HOST}/.well-known/oauth-protected-resource/mcp`
 
 export function mcpResourceForRequest(request: Request): string {
   try {
@@ -14,8 +13,10 @@ export function mcpResourceForRequest(request: Request): string {
   }
   return MCP_RESOURCE
 }
-export const MCP_WWW_AUTHENTICATE =
-  `Bearer realm="OAuth", resource_metadata="${MCP_RESOURCE_METADATA}", scope="board"`
+export function mcpResourceMetadataForRequest(request: Request): string {
+  return new URL('/.well-known/oauth-protected-resource/mcp', mcpResourceForRequest(request)).href
+}
+
 export const OAUTH_TOKEN_ID = 'oauth'
 export const PENDING_AUTH_TTL_SECONDS = 600
 

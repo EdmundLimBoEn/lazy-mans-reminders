@@ -3,7 +3,7 @@ import { createMcpHandler } from 'agents/mcp/server'
 import { checkAccount, decideTokenExchange } from './accountGate'
 import { grantStorage, type CodeClaim } from './grantState'
 import { readBodyBytes } from './jsonBody'
-import { MCP_HOSTS, mcpResourceForRequest, MCP_WWW_AUTHENTICATE } from './constants'
+import { MCP_HOSTS, mcpResourceForRequest, mcpResourceMetadataForRequest } from './constants'
 import { corsHeaders, handlePublicRequest, resolveExternalPat } from './oauth'
 import { prepareOauthRequest, rewriteOauthPath } from './oauthCompat'
 import { registrationRedirectError } from './redirects'
@@ -33,14 +33,14 @@ function json(data: unknown, status = 200): Response {
   })
 }
 
-function unauthorized(): Response {
+function unauthorized(request: Request): Response {
   return new Response(JSON.stringify({ error: 'unauthorized' }), {
     status: 401,
     headers: {
       ...CORS,
       'Content-Type': 'application/json',
       'Cache-Control': 'no-store',
-      'WWW-Authenticate': MCP_WWW_AUTHENTICATE,
+      'WWW-Authenticate': `Bearer realm="OAuth", resource_metadata="${mcpResourceMetadataForRequest(request)}", scope="board"`,
     },
   })
 }
@@ -56,11 +56,11 @@ async function handleMcp(
   }
 
   const session = sessionFromProps((ctx as ExecutionContext & { props?: unknown }).props)
-  if (!session) return unauthorized()
+  if (!session) return unauthorized(request)
 
   const account = await checkAccount(env, deps.accountExists, session.userId)
   if (account === 'unavailable') return json({ error: 'account_lookup_unavailable' }, 503)
-  if (account !== 'live') return unauthorized()
+  if (account !== 'live') return unauthorized(request)
 
   if (request.method === 'POST') {
     // Bound streamed bytes before the SDK buffers and parses the body.
@@ -87,6 +87,7 @@ async function handleMcp(
 }
 
 function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: ExecutionContext, claim: CodeClaim = {}): OAuthProviderOptions<Env> {
+  const { hostname, origin } = new URL(resource)
   const options: OAuthProviderOptions<Env> = {
     apiRoute: '/mcp',
     apiHandler: { fetch: (request, nextEnv, ctx) => handleMcp(request, nextEnv, ctx, deps) },
@@ -148,7 +149,7 @@ function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: Ex
     },
     resourceMetadata: {
       resource,
-      authorization_servers: MCP_HOSTS.map((host) => `https://${host}`),
+      authorization_servers: [origin, ...MCP_HOSTS.filter((host) => host !== hostname).map((host) => `https://${host}`)],
       scopes_supported: ['board'],
       resource_name: "Notepad",
     },
@@ -165,7 +166,8 @@ export async function handleWorkerFetch(
   ctx: ExecutionContext,
   deps: IdentityDeps = defaultIdentityDeps,
 ): Promise<Response> {
-  const path = rewriteOauthPath(new URL(request.url).pathname)
+  const url = new URL(request.url)
+  const path = rewriteOauthPath(url.pathname)
   // Match the provider's public routes; consent and account routes keep their allowlist.
   const publicCors = path.startsWith('/mcp') || path === '/token' || path === '/register'
   const origin = request.headers.get('Origin')
@@ -181,7 +183,17 @@ export async function handleWorkerFetch(
   if (prepared instanceof Response) return prepared
   const claim: CodeClaim = {}
   env = { ...env, OAUTH_KV: grantStorage(env, claim) }
-  return new OAuthProvider(providerOptions(env, deps, mcpResourceForRequest(prepared), ctx, claim)).fetch(prepared, env, ctx)
+  const resource = mcpResourceForRequest(prepared)
+  const response = await new OAuthProvider(providerOptions(env, deps, resource, ctx, claim)).fetch(prepared, env, ctx)
+  // The provider builds its challenge from the incoming origin, even on unknown hosts.
+  if (path === '/mcp' && response.status === 401 && resource !== `${url.origin}/mcp`) {
+    const challenge = response.headers.get('WWW-Authenticate')
+    if (challenge) {
+      response.headers.set('WWW-Authenticate', challenge.replace(/resource_metadata="[^"]*"/,
+        `resource_metadata="${mcpResourceMetadataForRequest(prepared)}"`))
+    }
+  }
+  return response
 }
 
 export default {

@@ -12,9 +12,16 @@ describe('pages security headers', () => {
     expect(headers).not.toContain('preload')
     expect(headers).toContain('https://biwmsxbqrevtjwgsvsmu.supabase.co')
     expect(headers).toContain('wss://biwmsxbqrevtjwgsvsmu.supabase.co')
-    expect(headers).toContain('https://np-mcp.sillyapps.co')
-    expect(headers).toContain('https://lmr-mcp.edmundlim.systems')
     expect(headers).not.toContain('https://*.supabase.co')
+  })
+
+  it('allows the canonical and legacy MCP origins in connect-src', () => {
+    const connectSources = headers.match(/\bconnect-src ([^;]+)/)?.[1].split(/\s+/)
+    expect(connectSources).toEqual(expect.arrayContaining([
+      'https://mcp.notepads.dev',
+      'https://np-mcp.sillyapps.co',
+      'https://lmr-mcp.edmundlim.systems',
+    ]))
   })
 
   it('keeps script-src and style-src self-only', () => {
