@@ -14,7 +14,7 @@ import { StatusShell, StatusText } from '@/components/StatusShell'
 import { AuthCallback } from './AuthCallback'
 import { IosAuthHandoff } from './IosAuthHandoff'
 import { LegalFooterLinks } from './legalFooter'
-import { AGENT_ACCESS_HASH, authCallbackUrl, rememberReturnTo } from './mcp'
+import { ACCOUNT_HASH, AGENT_ACCESS_HASH, authCallbackUrl, rememberReturnTo } from './mcp'
 import { navigateOnClick, normalizePath, type AppRoute } from './routing'
 import { authStorageKey, supabase } from './supabase'
 import { ThemeToggle } from './ThemeToggle'
@@ -49,8 +49,9 @@ class LazyRoute extends Component<{ onNavigate: (path: string) => void; children
 
 function BoardRoute(props: ComponentProps<typeof Board>) {
   useEffect(() => {
-    if (window.location.hash === AGENT_ACCESS_HASH) {
-      document.querySelector(AGENT_ACCESS_HASH)?.scrollIntoView()
+    const { hash } = window.location
+    if (hash === AGENT_ACCESS_HASH || hash === ACCOUNT_HASH) {
+      document.querySelector(hash)?.scrollIntoView()
     }
   }, [])
   return <Board {...props} />

@@ -101,3 +101,80 @@ jobs:
         with:
           name: ios-test-results
           path: ${{ runner.temp }}/ios.xcresult
+
+  mac:
+    name: macOS menu bar build and tests
+    needs: sign-in-flags
+    runs-on: xcode-27
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select stable Xcode
+        uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1
+        with:
+          xcode-version: "27.1"
+
+      - name: Verify submission toolchain
+        run: ./scripts/check-ios-toolchain.sh
+
+      - name: Install XcodeGen
+        run: HOMEBREW_NO_AUTO_UPDATE=1 brew install xcodegen
+
+      - name: Generate Xcode project
+        working-directory: ios
+        run: |
+          set -euo pipefail
+          cp Config.example.xcconfig Config.xcconfig
+          xcodegen generate --spec project.yml
+
+      - name: Build Debug and universal Release
+        working-directory: ios
+        run: |
+          set -euo pipefail
+          xcode=(xcodebuild -project LazyMansReminders.xcodeproj -scheme NotepadMac
+            -destination 'platform=macOS' -derivedDataPath "${RUNNER_TEMP}/notepad-mac"
+            CODE_SIGNING_ALLOWED=NO)
+          "${xcode[@]}" -configuration Debug build
+          "${xcode[@]}" -configuration Release ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO build
+          app="${RUNNER_TEMP}/notepad-mac/Build/Products/Release/NotepadMac.app"
+          binary="${app}/Contents/MacOS/NotepadMac"
+          if ! archs=$(xcrun lipo -archs "$binary"); then
+            echo "::error::Could not read Release binary architectures from $binary"
+            exit 1
+          fi
+          echo "NotepadMac Release architectures: $archs"
+          for arch in arm64 x86_64; do
+            if [[ ! $archs =~ (^|[[:space:]])$arch([[:space:]]|$) ]]; then
+              echo "::error::NotepadMac Release binary is missing $arch (expected arm64 and x86_64)"
+              exit 1
+            fi
+          done
+
+      - name: Run NotepadMacTests
+        working-directory: ios
+        run: |
+          xcodebuild test -project LazyMansReminders.xcodeproj -scheme NotepadMac \
+            -configuration Debug -destination 'platform=macOS' \
+            -derivedDataPath "${RUNNER_TEMP}/notepad-mac" \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Render menu bar screenshots
+        timeout-minutes: 3
+        run: |
+          set -euo pipefail
+          screenshots=$(mktemp -d "${RUNNER_TEMP}/notepad-mac-screenshots.XXXXXX")
+          app="${RUNNER_TEMP}/notepad-mac/Build/Products/Debug/NotepadMac.app"
+          "${app}/Contents/MacOS/NotepadMac" -demo -snapshot "${screenshots}/board.png"
+          for name in board board-dark board-signed-out board-full; do
+            test -s "${screenshots}/${name}.png"
+          done
+          printf 'NOTEPAD_MAC_SCREENSHOTS=%s\n' "$screenshots" >> "$GITHUB_ENV"
+
+      - name: Upload menu bar screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: notepad-mac-screenshots
+          path: ${{ env.NOTEPAD_MAC_SCREENSHOTS }}/*.png
+          if-no-files-found: error

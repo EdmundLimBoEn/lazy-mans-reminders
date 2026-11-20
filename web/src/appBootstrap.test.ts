@@ -94,11 +94,12 @@ it.each([
 
 it.each([
   ['#agent-access-heading', 1],
+  ['#account-heading', 1],
   ['', 0],
-])('scrolls to Agent access on authenticated board mount for hash "%s"', async (hash, expectedScrolls) => {
+])('scrolls on authenticated board mount for hash "%s"', async (hash, expectedScrolls) => {
   window.location.hash = hash
   const heading = { scrollIntoView: vi.fn() }
-  const querySelector = (selector: string) => selector === '#agent-access-heading' ? heading : null
+  const querySelector = (selector: string) => selector === hash ? heading : null
   Object.assign(document, { querySelector })
   auth.getSession.mockResolvedValue({ data: { session: { user: { id: 'user' } } } })
   start()

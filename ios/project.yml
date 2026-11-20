@@ -41,6 +41,80 @@ settings:
     Release:
       SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) $(LMR_SCHEMA_$(SDK_VERSION_MAJOR))
 targets:
+  NotepadMac:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: Mac
+        excludes:
+          - PrivacyInfo.xcprivacy
+      - path: App/NativeAuthCallback.swift
+      - path: Shared/AppConfig.swift
+      - path: Shared/Reminder.swift
+      - path: Shared/ReminderStore.swift
+      - path: Shared/SharedSessionStorage.swift
+      - path: Shared/ReminderIntentSupport.swift
+      - path: Shared/ReminderBoardLimits.swift
+      - path: Shared/LockScreenLineBudget.swift
+      - path: Mac/PrivacyInfo.xcprivacy
+        buildPhase: resources
+        type: file
+    dependencies:
+      - package: Supabase
+        product: Supabase
+    scheme:
+      testTargets:
+        - NotepadMacTests
+    settings:
+      base:
+        # The existing App Store record uses the same bundle ID on both platforms.
+        PRODUCT_BUNDLE_IDENTIFIER: "$(PRODUCT_BUNDLE_IDENTIFIER)"
+        PRODUCT_NAME: NotepadMac
+        TARGETED_DEVICE_FAMILY: ""
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: ""
+        ENABLE_APP_SANDBOX: YES
+        ENABLE_HARDENED_RUNTIME: YES
+    info:
+      path: Mac/Info.plist
+      properties:
+        CFBundleDisplayName: Notepad
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        LSUIElement: true
+        LSApplicationCategoryType: public.app-category.productivity
+        CFBundleURLTypes:
+          - CFBundleURLSchemes:
+              - lazymansreminders
+        SUPABASE_URL: "$(SUPABASE_URL)"
+        SUPABASE_ANON_KEY: "$(SUPABASE_ANON_KEY)"
+        ITSAppUsesNonExemptEncryption: false
+    entitlements:
+      path: Mac/NotepadMac.entitlements
+      properties:
+        com.apple.developer.applesignin:
+          - Default
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
+    attributes:
+      SystemCapabilities:
+        com.apple.SignInWithApple:
+          enabled: 1
+  NotepadMacTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: MacTests
+    dependencies:
+      - target: NotepadMac
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "$(PRODUCT_BUNDLE_IDENTIFIER).MacTests"
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: ""
+        BUNDLE_LOADER: "$(TEST_HOST)"
   LazyMansReminders:
     type: application
     platform: iOS

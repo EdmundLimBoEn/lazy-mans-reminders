@@ -1,8 +1,8 @@
 import Foundation
 
-/// Board capacity follows the phone-measured Lock Screen Live Activity budget.
+/// Board capacity follows the Lock Screen budget on iOS and the server cap on Mac.
 enum ReminderBoardLimits {
-    /// Active reminders allowed — same as what fits on this phone’s banner.
+    /// Maximum number of active reminders for this client.
     static var maxActive: Int { LockScreenLineBudget.cachedMaxLines }
 
     /// Lines shown in the Live Activity (same budget).
