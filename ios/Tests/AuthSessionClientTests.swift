@@ -9,6 +9,7 @@ final class AuthSessionClientTests: XCTestCase {
     private let endpoint = URL(string: "https://credential-test.invalid")!
     private let key = "sb-credential-test-auth-token"
     private let anonKey = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYW5vbiJ9.test-signature"
+    private let sdkService = "systems.edmundlim.reminders.sdk-auth"
 
     private final class MemoryStorage: AuthLocalStorage, @unchecked Sendable {
         private let lock = NSLock()
@@ -67,41 +68,105 @@ final class AuthSessionClientTests: XCTestCase {
                                   createdAt: now, updatedAt: now))
     }
 
-    private func keychainAttributes(for key: String) throws -> [String: Any] {
-        let query: [String: Any] = [
+    private func keychainQuery(for key: String, group: String,
+                               service: String = "supabase.gotrue.swift") -> [String: Any] {
+        [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: "supabase.gotrue.swift",
+            kSecAttrService as String: service,
             kSecAttrAccount as String: key,
-            kSecReturnAttributes as String: true,
-            kSecReturnPersistentRef as String: true
+            kSecAttrAccessGroup as String: group
         ]
+    }
+
+    private func keychainAttributes(_ item: [String: Any]) throws -> [String: Any] {
+        let query = item.merging([
+            kSecReturnAttributes as String: true,
+            kSecReturnData as String: true,
+            kSecReturnPersistentRef as String: true
+        ]) { _, new in new }
         var result: CFTypeRef?
         XCTAssertEqual(SecItemCopyMatching(query as CFDictionary, &result), errSecSuccess)
         return try XCTUnwrap(result as? [String: Any])
     }
 
-    func testReadingLegacySDKSessionUpgradesSameKeychainItem() throws {
+    private func keychainGroups() throws -> (shared: String, app: String) {
+        let bundle = Bundle.main
+        let shared = try XCTUnwrap(bundle.object(forInfoDictionaryKey: "SHARED_KEYCHAIN_ACCESS_GROUP") as? String)
+        let appGroup = try XCTUnwrap(bundle.object(forInfoDictionaryKey: "APP_GROUP_ID") as? String)
+        let bundleID = try XCTUnwrap(bundle.bundleIdentifier)
+        return (shared, String(shared.dropLast(appGroup.count)) + bundleID)
+    }
+
+    private func deleteSDKFixtures(_ keys: [String], groups: (shared: String, app: String)) {
+        for key in keys {
+            SecItemDelete(keychainQuery(for: key, group: groups.shared) as CFDictionary)
+            SecItemDelete(keychainQuery(for: key, group: groups.app) as CFDictionary)
+            SecItemDelete(keychainQuery(for: key, group: groups.app, service: sdkService) as CFDictionary)
+        }
+    }
+
+    func testReadingLegacySDKSessionMovesSessionAndVerifierOutOfSharedGroup() throws {
         let project = UUID().uuidString.lowercased()
         let key = "sb-\(project)-auth-token"
-        let legacy = AuthClient.Configuration.defaultLocalStorage
+        let verifierKey = "\(key)-code-verifier"
+        let groups = try keychainGroups()
+        let sharedSession = keychainQuery(for: key, group: groups.shared)
+        let sharedVerifier = keychainQuery(for: verifierKey, group: groups.shared)
+        let widgetItem = keychainQuery(for: key, group: groups.shared,
+                                       service: "systems.edmundlim.reminders.shared-session")
+        let legacy = KeychainLocalStorage(accessGroup: groups.shared)
+        let oldAppStorage = KeychainLocalStorage(accessGroup: groups.app)
         let original = session(userID: UUID())
+        let verifier = Data("fixture-verifier".utf8)
+        let widgetCredential = Data("fixture-widget-credential".utf8)
+        defer {
+            deleteSDKFixtures([key, verifierKey], groups: groups)
+            SecItemDelete(widgetItem as CFDictionary)
+        }
+        // Before Keychain sharing, the SDK could write the same account in the app ID group.
+        let older = try JSONEncoder().encode(session(userID: UUID()))
+        try oldAppStorage.store(key: key, value: older)
         try legacy.store(key: key, value: JSONEncoder().encode(original))
-        defer { try? legacy.remove(key: key) }
-        let before = try keychainAttributes(for: key)
+        try legacy.store(key: verifierKey, value: verifier)
+        let widgetAttributes = widgetItem.merging([kSecValueData as String: widgetCredential]) { _, new in new }
+        XCTAssertEqual(SecItemAdd(widgetAttributes as CFDictionary, nil), errSecSuccess)
+        let before = try keychainAttributes(sharedSession)
+        XCTAssertEqual(try keychainAttributes(sharedVerifier)[kSecValueData as String] as? Data, verifier)
         XCTAssertEqual(before[kSecAttrAccessible as String] as? String, kSecAttrAccessibleAfterFirstUnlock as String)
         let reference = try XCTUnwrap(before[kSecValuePersistentRef as String] as? Data)
 
         let client = AuthSessionClient(supabaseURL: URL(string: "https://\(project).invalid")!, supabaseKey: anonKey)
         XCTAssertEqual(client.auth.currentSession?.refreshToken, original.refreshToken)
-        let after = try keychainAttributes(for: key)
+        let after = try keychainAttributes(keychainQuery(for: key, group: groups.app, service: sdkService))
         XCTAssertEqual(after[kSecValuePersistentRef as String] as? Data, reference)
         XCTAssertEqual(after[kSecAttrAccessible as String] as? String, kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly as String)
+        let movedVerifier = try keychainAttributes(keychainQuery(for: verifierKey, group: groups.app, service: sdkService))
+        XCTAssertEqual(movedVerifier[kSecValueData as String] as? Data, verifier)
+        XCTAssertEqual(movedVerifier[kSecAttrAccessible as String] as? String, kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly as String)
+        XCTAssertEqual(SecItemCopyMatching(sharedSession as CFDictionary, nil), errSecItemNotFound)
+        XCTAssertEqual(SecItemCopyMatching(sharedVerifier as CFDictionary, nil), errSecItemNotFound)
+        XCTAssertEqual(try keychainAttributes(widgetItem)[kSecValueData as String] as? Data, widgetCredential)
+        XCTAssertEqual(try oldAppStorage.retrieve(key: key), older)
+
+        try DeviceOnlyAuthStorage().remove(key: key)
+        XCTAssertNil(try DeviceOnlyAuthStorage().retrieve(key: key))
     }
 
-    func testNewSDKSignInWritesDeviceOnlyKeychainItem() async throws {
+    func testOldAppPrivateRecordCanStillBeRead() throws {
+        let key = "sb-\(UUID())-auth-token"
+        let groups = try keychainGroups()
+        defer { deleteSDKFixtures([key], groups: groups) }
+        let credential = Data("fixture-private-credential".utf8)
+        try KeychainLocalStorage(accessGroup: groups.app).store(key: key, value: credential)
+        XCTAssertEqual(try DeviceOnlyAuthStorage().retrieve(key: key), credential)
+    }
+
+    func testNewSDKCredentialsArePrivateAndDeviceOnly() async throws {
         let project = UUID().uuidString.lowercased()
         let key = "sb-\(project)-auth-token"
-        defer { try? AuthClient.Configuration.defaultLocalStorage.remove(key: key) }
+        let verifierKey = "\(key)-code-verifier"
+        let groups = try keychainGroups()
+        defer { deleteSDKFixtures([key, verifierKey], groups: groups) }
         let payload = try AuthClient.Configuration.jsonEncoder.encode(session(userID: UUID()))
         let client = AuthSessionClient(
             supabaseURL: URL(string: "https://\(project).invalid")!, supabaseKey: anonKey,
@@ -111,8 +176,14 @@ final class AuthSessionClientTests: XCTestCase {
             }
         )
         _ = try await client.auth.signIn(email: "user@example.invalid", password: "fixture-only")
-        let attributes = try keychainAttributes(for: key)
-        XCTAssertEqual(attributes[kSecAttrAccessible as String] as? String, kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly as String)
+        _ = try client.auth.getOAuthSignInURL(provider: .google)
+        for account in [key, verifierKey] {
+            let attributes = try keychainAttributes(keychainQuery(for: account, group: groups.app, service: sdkService))
+            XCTAssertEqual(attributes[kSecAttrAccessible as String] as? String,
+                           kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly as String)
+            let sharedItem = keychainQuery(for: account, group: groups.shared)
+            XCTAssertEqual(SecItemCopyMatching(sharedItem as CFDictionary, nil), errSecItemNotFound)
+        }
     }
 
     func testConstructingClientDoesNotStartAnSDKInitialRefreshOutsideGate() async throws {
