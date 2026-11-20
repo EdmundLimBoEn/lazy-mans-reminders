@@ -1,6 +1,7 @@
 import SwiftUI
 #if DEBUG
 import AppKit
+import Darwin
 #endif
 
 @main
@@ -30,25 +31,29 @@ private final class MacSnapshotDelegate: NSObject, NSApplicationDelegate {
               arguments[index + 1].hasPrefix("/"),
               arguments[index + 1].lowercased().hasSuffix(".png") else {
             NSLog("Snapshot requires an absolute PNG path after -snapshot")
-            NSApplication.shared.terminate(nil)
-            return
+            exit(EXIT_FAILURE)
         }
 
         let destination = URL(fileURLWithPath: arguments[index + 1])
-        let demoModel = MacReminderModel()
-        renderSnapshot(model: demoModel, scheme: .light, destination: destination) {
-            let darkDestination = URL(fileURLWithPath:
-                destination.deletingPathExtension().path + "-dark.png")
-            self.renderSnapshot(model: demoModel, scheme: .dark, destination: darkDestination) {
+        let stem = destination.deletingPathExtension().path
+        Task {
+            do {
+                try await renderSnapshot(.board, scheme: .light, destination: destination)
+                try await renderSnapshot(.board, scheme: .dark, destination: URL(fileURLWithPath: stem + "-dark.png"))
+                try await renderSnapshot(.signedOut, scheme: .light, destination: URL(fileURLWithPath: stem + "-signed-out.png"))
+                try await renderSnapshot(.full, scheme: .light, destination: URL(fileURLWithPath: stem + "-full.png"))
                 NSApplication.shared.terminate(nil)
+            } catch {
+                NSLog("Snapshot failed: %@", error.localizedDescription)
+                exit(EXIT_FAILURE)
             }
         }
     }
 
     private func renderSnapshot(
-        model: MacReminderModel, scheme: ColorScheme, destination: URL,
-        completion: @escaping @MainActor () -> Void
-    ) {
+        _ state: MacDemoBoard.State, scheme: ColorScheme, destination: URL
+    ) async throws {
+        let model = MacReminderModel(demo: state)
         let content = MacReminderView(model: model)
             .frame(width: 380, height: 420)
             .background(Color(nsColor: .windowBackgroundColor))
@@ -65,76 +70,29 @@ private final class MacSnapshotDelegate: NSObject, NSApplicationDelegate {
         window.appearance = appearance
         window.contentView = hostingView
         window.orderFrontRegardless()
-        hostingView.layoutSubtreeIfNeeded()
-        hostingView.displayIfNeeded()
+        defer { window.close() }
 
-        waitForModel(model, attemptsRemaining: 50) { loaded in
-            guard loaded else {
-                NSLog("Snapshot model did not load: %@", destination.path)
-                window.close()
-                completion()
-                return
-            }
-            // Let SwiftUI populate rows and AppKit controls on the main run loop.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                defer {
-                    window.close()
-                    completion()
-                }
-                appearance.performAsCurrentDrawingAppearance {
-                    hostingView.layoutSubtreeIfNeeded()
-                    hostingView.displayIfNeeded()
-                    let bounds = hostingView.bounds
-                    guard var bitmap = hostingView.bitmapImageRepForCachingDisplay(in: bounds) else {
-                        NSLog("Could not render snapshot: %@", destination.path)
-                        return
-                    }
-                    // Offscreen windows may inherit a 1x display; always export at 2x.
-                    let pixelsWide = Int(bounds.width * 2)
-                    let pixelsHigh = Int(bounds.height * 2)
-                    if bitmap.pixelsWide != pixelsWide || bitmap.pixelsHigh != pixelsHigh {
-                        guard let scaledBitmap = NSBitmapImageRep(
-                            bitmapDataPlanes: nil, pixelsWide: pixelsWide, pixelsHigh: pixelsHigh,
-                            bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true,
-                            isPlanar: false, colorSpaceName: .deviceRGB,
-                            bytesPerRow: 0, bitsPerPixel: 0
-                        ) else {
-                            NSLog("Could not allocate snapshot bitmap: %@", destination.path)
-                            return
-                        }
-                        bitmap = scaledBitmap
-                    }
-                    bitmap.size = bounds.size
-                    hostingView.cacheDisplay(in: bounds, to: bitmap)
-                    guard let png = bitmap.representation(using: .png, properties: [:]) else {
-                        NSLog("Could not encode snapshot: %@", destination.path)
-                        return
-                    }
-                    do {
-                        try png.write(to: destination, options: .atomic)
-                    } catch {
-                        NSLog("Could not write snapshot: %@", error.localizedDescription)
-                    }
-                }
-            }
+        // Give SwiftUI time to lay out rows and native controls.
+        try await Task.sleep(for: .seconds(1))
+        var png: Data?
+        appearance.performAsCurrentDrawingAppearance {
+            hostingView.layoutSubtreeIfNeeded()
+            hostingView.displayIfNeeded()
+            let bounds = hostingView.bounds
+            // Export at 2x even on a 1x runner display.
+            guard let bitmap = NSBitmapImageRep(
+                bitmapDataPlanes: nil, pixelsWide: Int(bounds.width * 2), pixelsHigh: Int(bounds.height * 2),
+                bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true,
+                isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
+            ) else { return }
+            bitmap.size = bounds.size
+            hostingView.cacheDisplay(in: bounds, to: bitmap)
+            png = bitmap.representation(using: .png, properties: [:])
         }
-    }
-
-    private func waitForModel(
-        _ model: MacReminderModel, attemptsRemaining: Int,
-        completion: @escaping @MainActor (Bool) -> Void
-    ) {
-        guard !model.hasLoaded else {
-            completion(true)
-            return
+        guard let png else {
+            throw CocoaError(.fileWriteUnknown, userInfo: [NSURLErrorKey: destination])
         }
-        guard attemptsRemaining > 0 else {
-            completion(false)
-            return
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.waitForModel(model, attemptsRemaining: attemptsRemaining - 1, completion: completion)
-        }
+        try png.write(to: destination, options: .atomic)
     }
 }
 #endif

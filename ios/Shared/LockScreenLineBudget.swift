@@ -29,9 +29,8 @@ enum LockScreenLineBudget {
         }
         return min(value, maxLinesCap)
 #else
-        // The Mac prototype has no phone geometry or App Group. Do not publish
-        // a Mac screen measurement over the user's phone-derived preference.
-        return fallbackMaxLines
+        // Mac uses the server cap and leaves phone-derived preferences alone.
+        return maxLinesCap
 #endif
     }
 

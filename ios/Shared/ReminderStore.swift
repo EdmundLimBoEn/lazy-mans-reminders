@@ -1,7 +1,7 @@
 import Foundation
 
 actor ReminderStore {
-    private enum StoreError: LocalizedError {
+    enum StoreError: LocalizedError {
         case invalidResponse
         case reminderUnavailable
         case mutationConflict
@@ -34,6 +34,11 @@ actor ReminderStore {
     }
 
     static let shared = ReminderStore()
+#if os(macOS)
+    private let clientSource = "mac"
+#else
+    private let clientSource = "ios"
+#endif
 
     private let credentials: SessionCredentialStorage
     private let injectedDefaults: UserDefaults?
@@ -244,7 +249,7 @@ actor ReminderStore {
             URLQueryItem(name: "order", value: "sort_order.asc,created_at.asc")
         ]
         var request = URLRequest(url: components.url!, timeoutInterval: 15)
-        request.setValue("ios", forHTTPHeaderField: "x-notepad-client")
+        request.setValue(clientSource, forHTTPHeaderField: "x-notepad-client")
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
 
@@ -296,7 +301,7 @@ actor ReminderStore {
                 URLQueryItem(name: "id", value: "in.(\(missing.map(\.uuidString).joined(separator: ",")))")
             ]
             var request = URLRequest(url: components.url!, timeoutInterval: 15)
-            request.setValue("ios", forHTTPHeaderField: "x-notepad-client")
+            request.setValue(clientSource, forHTTPHeaderField: "x-notepad-client")
             request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
             request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
             let (data, response) = try await requestData(request)
@@ -336,7 +341,7 @@ actor ReminderStore {
         }
         var request = URLRequest(url: supabaseURL.appending(path: "rest/v1/rpc/reorder_reminders"), timeoutInterval: 15)
         request.httpMethod = "POST"
-        request.setValue("ios", forHTTPHeaderField: "x-notepad-client")
+        request.setValue(clientSource, forHTTPHeaderField: "x-notepad-client")
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -383,7 +388,7 @@ actor ReminderStore {
             url: supabaseURL.appending(path: "rest/v1/rpc/delete_old_completed_reminders")
         )
         request.httpMethod = "POST"
-        request.setValue("ios", forHTTPHeaderField: "x-notepad-client")
+        request.setValue(clientSource, forHTTPHeaderField: "x-notepad-client")
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -529,7 +534,7 @@ actor ReminderStore {
         }
         var request = URLRequest(url: supabaseURL.appending(path: "rest/v1/reminders"))
         request.httpMethod = "POST"
-        request.setValue("ios", forHTTPHeaderField: "x-notepad-client")
+        request.setValue(clientSource, forHTTPHeaderField: "x-notepad-client")
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -644,7 +649,7 @@ actor ReminderStore {
         ]
         var request = URLRequest(url: components.url!, timeoutInterval: 15)
         request.httpMethod = "PATCH"
-        request.setValue("ios", forHTTPHeaderField: "x-notepad-client")
+        request.setValue(clientSource, forHTTPHeaderField: "x-notepad-client")
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

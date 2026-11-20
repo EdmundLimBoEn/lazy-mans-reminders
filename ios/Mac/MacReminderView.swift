@@ -1,4 +1,5 @@
 import AppKit
+import AuthenticationServices
 import SwiftUI
 
 struct MacReminderView: View {
@@ -8,38 +9,41 @@ struct MacReminderView: View {
     @State private var code = ""
     @State private var password = ""
     @State private var usesPassword = false
+    @State private var isPopoverVisible = false
+    @FocusState private var addFieldFocused: Bool
+    @ScaledMetric(relativeTo: .body) private var appleButtonHeight: CGFloat = 36
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private var canAdd: Bool {
-        !draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            && draft.unicodeScalars.count <= 500
-            && !ReminderBoardLimits.isAtCapacity(model.reminders.count)
-    }
+    private let webBoardURL = URL(string: "https://app.notepads.dev")!
+    private let webAccountURL = URL(string: "https://app.notepads.dev/#account-heading")!
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("Notepad").font(.headline)
                 Spacer()
-                if model.isBusy { ProgressView().controlSize(.small) }
+                if model.isBusy && !reduceMotion { ProgressView().controlSize(.small) }
                 Button {
                     Task { await model.refresh() }
                 } label: {
                     Image(systemName: "arrow.clockwise")
                 }
-                .accessibilityLabel("Try Again")
+                .accessibilityLabel("Refresh reminders")
+                .accessibilityHint("Checks for changes on your board")
                 .keyboardShortcut("r")
                 .disabled(model.isBusy || model.isDemo)
             }
 
             if !model.hasLoaded {
-                ProgressView("Loading reminders")
+                Text("Loading reminders").foregroundStyle(.secondary)
             } else if model.isSignedIn {
                 board
             } else {
                 signIn
             }
 
-            if let error = model.errorMessage {
+            if let error = model.errorMessage, !model.isFull || error != ReminderBoardLimits.postItHint {
                 Text(error)
                     .font(.footnote)
                     .foregroundStyle(.secondary)
@@ -48,27 +52,33 @@ struct MacReminderView: View {
 
             Divider()
             HStack {
-                if model.isSignedIn && !model.isDemo {
+                if model.isSignedIn {
                     Button("Sign Out") { Task { await model.signOut() } }
                         .disabled(model.isBusy)
                 }
+                Link("Open web board", destination: webBoardURL)
                 Spacer()
                 Button("Quit Notepad") { NSApplication.shared.terminate(nil) }
                     .keyboardShortcut("q")
             }
             .font(.caption)
+            if model.isSignedIn {
+                Link("Delete account on the web", destination: webAccountURL)
+                    .font(.caption)
+            }
         }
         .padding(16)
         .frame(width: 380)
-        .tint(.blue)
-        .task {
+        .background {
+            MacPopoverVisibility { isPopoverVisible = $0 }
+        }
+        .task(id: isPopoverVisible) {
+            guard isPopoverVisible, !model.isDemo else { return }
+            if model.hasBoard { addFieldFocused = true }
             await model.refresh()
-            guard !model.isDemo else { return }
-            // Refresh on presentation and periodically while the view task lives.
-            // Realtime subscription/reconnect behavior is a separate release task.
             while !Task.isCancelled {
                 do { try await Task.sleep(for: .seconds(30)) } catch { return }
-                if model.isSignedIn { await model.refresh() }
+                if model.isSignedIn { await model.refresh(performMaintenance: false) }
             }
         }
         .onChange(of: model.isSignedIn) { _, _ in
@@ -81,12 +91,12 @@ struct MacReminderView: View {
 
     private var board: some View {
         VStack(alignment: .leading, spacing: 12) {
-            if model.reminders.isEmpty {
+            if model.hasBoard && model.reminders.isEmpty {
                 Label("All Clear", systemImage: "checkmark.circle")
                 Text("Nothing on your board. Add a reminder below.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-            } else {
+            } else if !model.reminders.isEmpty {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 8) {
                         ForEach(model.reminders) { reminder in
@@ -100,30 +110,41 @@ struct MacReminderView: View {
                                     .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
+                            .accessibilityLabel(reminder.text)
                             .accessibilityHint("Marks this reminder complete")
                             .disabled(model.isBusy)
                         }
                     }
                 }
-                .frame(height: 260)
+                .frame(maxHeight: 260)
             }
             HStack {
                 TextField("New reminder", text: $draft)
+                    .focused($addFieldFocused)
                     .onSubmit(addReminder)
-                    .disabled(model.isBusy)
+                    .disabled(!model.hasBoard)
                 Button(action: addReminder) {
                     Image(systemName: "plus")
                 }
                 .accessibilityLabel("Add reminder")
-                .disabled(model.isBusy || !canAdd)
+                .accessibilityHint("Adds this reminder to your board")
+                .disabled(model.isBusy || !model.hasBoard || model.addIssue(for: draft) != nil)
             }
-            if ReminderBoardLimits.isAtCapacity(model.reminders.count) {
+            if model.isFull {
                 Text(ReminderBoardLimits.postItHint)
                     .font(.footnote)
                     .foregroundStyle(.secondary)
-            } else if draft.unicodeScalars.count > 500 {
-                Text("Keep each reminder to 500 characters.").font(.footnote)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else if let issue = model.addIssue(for: draft), case .tooLong = issue {
+                Text(issue.localizedDescription)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
+        }
+        .defaultFocus($addFieldFocused, true)
+        .onAppear { addFieldFocused = true }
+        .onChange(of: model.hasBoard) { _, hasBoard in
+            if hasBoard { addFieldFocused = true }
         }
     }
 
@@ -141,8 +162,19 @@ struct MacReminderView: View {
                     model.useDifferentEmail()
                 }
             } else {
-                TextField("you@example.com", text: $email)
-                    .accessibilityLabel("Email address")
+                SignInWithAppleButton(.signIn) { request in
+                    model.configureAppleRequest(request)
+                } onCompletion: { result in
+                    Task { await model.handleAppleSignIn(result) }
+                }
+                .signInWithAppleButtonStyle(colorScheme == .dark ? .white : .black)
+                .frame(height: appleButtonHeight)
+                Button("Sign In with Google") {
+                    let window = NSApp.currentEvent?.window ?? NSApp.keyWindow
+                    Task { await model.signInWithGoogle(window: window) }
+                }
+                Divider()
+                TextField("Email address", text: $email)
                     .autocorrectionDisabled()
                 if usesPassword {
                     SecureField("Password", text: $password)
@@ -150,12 +182,12 @@ struct MacReminderView: View {
                     Button("Sign In with Password", action: signInWithPassword)
                         .disabled(email.isEmpty || password.isEmpty)
                 } else {
-                    Button("Send Sign-In Link") {
+                    Button("Send Sign-In Code") {
                         Task { await model.sendCode(email: email) }
                     }
                     .disabled(email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
-                Button(usesPassword ? "Use a Sign-In Link Instead" : "Use an Existing Password") {
+                Button(usesPassword ? "Use an Email Code" : "Use an Existing Password") {
                     password = ""
                     usesPassword.toggle()
                 }
@@ -166,7 +198,7 @@ struct MacReminderView: View {
     }
 
     private func addReminder() {
-        guard canAdd, !model.isBusy else { return }
+        guard model.hasBoard, model.addIssue(for: draft) == nil, !model.isBusy else { return }
         let submitted = draft
         Task {
             if await model.add(submitted), draft == submitted { draft = "" }
