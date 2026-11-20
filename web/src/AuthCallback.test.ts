@@ -176,6 +176,7 @@ it('preserves the stored fallback for a consent callback without return_to', asy
 describe.each(['callback URL', 'session storage'])('sign-in return via %s', source => {
   it.each([
     ['/#agent-access-heading', '/#agent-access-heading'],
+    ['/#account-heading', '/#account-heading'],
     ['/connect/?state=abc', '/connect?state=abc'],
     ['/CONNECT/?state=abc', '/connect?state=abc'],
   ])('restores the destination after signing in from %s', async (start, destination) => {

@@ -4,6 +4,7 @@ import { normalizePath } from './routing'
 export const MCP_ORIGIN = 'https://mcp.notepads.dev'
 export const MCP_URL = `${MCP_ORIGIN}/mcp`
 export const RETURN_TO_KEY = 'lmr_return_to'
+export const ACCOUNT_HASH = '#account-heading'
 export const AGENT_ACCESS_HASH = '#agent-access-heading'
 
 /** Placeholder only. Never put a real agent key in source, snippets, or tests. */
@@ -40,7 +41,7 @@ export function lmrAgentTokenHeaderTemplate(): string {
 }
 
 export function signInReturnTo(pathname: string, search = '', hash = ''): string | null {
-  if (pathname === '/' && hash === AGENT_ACCESS_HASH) return `/${AGENT_ACCESS_HASH}`
+  if (pathname === '/' && (hash === AGENT_ACCESS_HASH || hash === ACCOUNT_HASH)) return `/${hash}`
   if (normalizePath(pathname) !== '/connect') return null
   return `/connect${search}`
 }
