@@ -138,8 +138,8 @@ jobs:
             CODE_SIGNING_ALLOWED=NO)
           "${xcode[@]}" -configuration Debug build
           "${xcode[@]}" -configuration Release ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO build
-          xcrun lipo -verify_arch arm64 x86_64 \
-            "${RUNNER_TEMP}/notepad-mac/Build/Products/Release/NotepadMac.app/Contents/MacOS/NotepadMac"
+          app="${RUNNER_TEMP}/notepad-mac/Build/Products/Release/NotepadMac.app"
+          xcrun lipo "${app}/Contents/MacOS/NotepadMac" -verify_arch arm64 x86_64
 
       - name: Run NotepadMacTests
         working-directory: ios
