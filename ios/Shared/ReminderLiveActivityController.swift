@@ -27,8 +27,6 @@ enum ReminderLiveActivityController {
     }
 
     static func startObservingTokens() {
-        guard !didStartObserving else { return }
-        didStartObserving = true
         let existing = activeActivities
         selectedActivityID = LiveActivityPolicy.selectedActivityID(
             currentIDs: existing.map(\.id),
@@ -36,12 +34,21 @@ enum ReminderLiveActivityController {
             previousSelection: defaults.string(forKey: selectionKey)
         )
         persistSelection()
-        for activity in existing { observe(activity) }
+        for activity in existing {
+            if observedActivityIDs.contains(activity.id) { publishCurrentToken(activity) }
+            else { observe(activity) }
+        }
+        if #available(iOS 17.2, *), let token = Activity<ReminderAttributes>.pushToStartToken {
+            NotificationCenter.default.post(name: .didRegisterPushToStartToken, object: hex(token))
+        }
+        // Re-read snapshots on execution opportunities; streams need only one observer.
+        guard !didStartObserving else { return }
+        didStartObserving = true
         Task { await observePushToStartTokens() }
         Task { await observeActivityList() }
     }
 
-    static func sync(reminders: [Reminder]) async {
+    static func sync(reminders: [Reminder], allowStart: Bool = true) async {
         startObservingTokens()
         let lines = ReminderActivityPresentation.lines(from: reminders)
         let state = ReminderAttributes.ContentState(lines: lines)
@@ -49,7 +56,7 @@ enum ReminderLiveActivityController {
         let content = ActivityContent(state: state, staleDate: Date().addingTimeInterval(8 * 60 * 60))
         let hasActivity = lines.isEmpty
             ? !Activity<ReminderAttributes>.activities.isEmpty : !existing.isEmpty
-        switch LiveActivityPolicy.action(lineCount: lines.count, activityExists: hasActivity) {
+        switch LiveActivityPolicy.action(lineCount: lines.count, activityExists: hasActivity, allowStart: allowStart) {
         case .none:
             return
         case .end:
@@ -90,9 +97,6 @@ enum ReminderLiveActivityController {
 
     private static func observePushToStartTokens() async {
         guard #available(iOS 17.2, *) else { return }
-        if let token = Activity<ReminderAttributes>.pushToStartToken {
-            NotificationCenter.default.post(name: .didRegisterPushToStartToken, object: hex(token))
-        }
         for await token in Activity<ReminderAttributes>.pushToStartTokenUpdates {
             NotificationCenter.default.post(name: .didRegisterPushToStartToken, object: hex(token))
         }

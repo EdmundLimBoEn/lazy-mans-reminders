@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { StatusShell, StatusText } from '@/components/StatusShell'
 import { iosHandoffFromLocation } from './iosHandoff'
+import { navigateOnClick } from './routing'
 
 export function IosAuthHandoff({ onNavigate }: { onNavigate: (path: string) => void }) {
   const result = iosHandoffFromLocation(window.location.href)
@@ -12,10 +13,7 @@ export function IosAuthHandoff({ onNavigate }: { onNavigate: (path: string) => v
         <Button asChild className="mt-3">
           <a
             href="/"
-            onClick={(event) => {
-              event.preventDefault()
-              onNavigate('/')
-            }}
+            onClick={navigateOnClick(onNavigate, '/')}
           >
             Back to the board
           </a>

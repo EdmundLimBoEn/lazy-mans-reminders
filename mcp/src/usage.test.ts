@@ -1,15 +1,21 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createClient } from '@supabase/supabase-js'
+import { waitUntil } from 'cloudflare:workers'
 import { createServiceRoleClient } from './auth'
 import { recordAgentUsage } from './usage'
 
 vi.mock('./auth', () => ({ createServiceRoleClient: vi.fn() }))
-afterEach(() => { vi.restoreAllMocks(); vi.useRealTimers() })
+afterEach(() => {
+  vi.mocked(waitUntil).mockClear()
+  vi.restoreAllMocks()
+  vi.useRealTimers()
+})
 
 describe('optional agent usage', () => {
   it('does no work by default', async () => {
     await recordAgentUsage({} as Env, 'owner', 'mcp_list')
     expect(createServiceRoleClient).not.toHaveBeenCalled()
+    expect(waitUntil).not.toHaveBeenCalled()
   })
 
   it('sends only owner and allowlisted event, and tolerates database errors', async () => {
@@ -18,6 +24,7 @@ describe('optional agent usage', () => {
       global: { fetch }, auth: { persistSession: false, autoRefreshToken: false },
     }))
     await recordAgentUsage({ USAGE_ANALYTICS_ENABLED: 'true' } as Env, 'owner', 'agent_oauth_connected')
+    expect(waitUntil).not.toHaveBeenCalled()
     expect(fetch).toHaveBeenCalledTimes(1)
     const [url, init] = fetch.mock.calls[0]
     expect(String(url)).toContain('/rpc/record_agent_usage')
@@ -32,7 +39,9 @@ describe('optional agent usage', () => {
     vi.mocked(createServiceRoleClient).mockReturnValue(createClient('https://database.test', 'test-only', {
       global: { fetch }, auth: { persistSession: false, autoRefreshToken: false },
     }))
-    const pending = recordAgentUsage({ USAGE_ANALYTICS_ENABLED: 'true' } as Env, 'owner', 'mcp_list')
+    await recordAgentUsage({ USAGE_ANALYTICS_ENABLED: 'true' } as Env, 'owner', 'mcp_list')
+    expect(waitUntil).toHaveBeenCalledExactlyOnceWith(expect.any(Promise))
+    const [[pending]] = vi.mocked(waitUntil).mock.calls
     await vi.advanceTimersByTimeAsync(1000)
     await expect(pending).resolves.toBeUndefined()
     expect(fetch.mock.calls[0][1]!.signal!.aborted).toBe(true)

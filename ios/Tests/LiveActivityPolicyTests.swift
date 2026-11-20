@@ -2,6 +2,18 @@ import XCTest
 @testable import LazyMansReminders
 
 final class LiveActivityPolicyTests: XCTestCase {
+    func testBackgroundRefreshDoesNotLocallyRespawnAMissingOrDismissedBoard() {
+        XCTAssertEqual(LiveActivityPolicy.action(lineCount: 1, activityExists: false, allowStart: false), .none)
+        XCTAssertEqual(LiveActivityPolicy.action(lineCount: 1, activityExists: true, allowStart: false), .update)
+        XCTAssertEqual(LiveActivityPolicy.action(lineCount: 0, activityExists: true, allowStart: false), .end)
+        XCTAssertEqual(LiveActivityPolicy.action(lineCount: 0, activityExists: false, allowStart: false), .none)
+    }
+
+    func testExplicitReopenCanStartAfterBackgroundCouldNot() {
+        XCTAssertEqual(LiveActivityPolicy.action(lineCount: 1, activityExists: false, allowStart: false), .none)
+        XCTAssertEqual(LiveActivityPolicy.action(lineCount: 1, activityExists: false), .start)
+    }
+
     func testSelectsNewReplacementOnBackgroundRelaunchRegardlessOfListOrder() {
         for ids in [["old", "replacement"], ["replacement", "old"]] {
             XCTAssertEqual(LiveActivityPolicy.selectedActivityID(

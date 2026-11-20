@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { MCP_HOSTS, MCP_RESOURCE, mcpResourceForRequest } from './constants'
 import { corsHeaders, handlePublicRequest, resolveExternalPat, serverCard } from './oauth'
 
@@ -13,6 +13,51 @@ describe('mcpResourceForRequest', () => {
 
   it('falls back to the canonical resource for an unknown host', () => {
     expect(mcpResourceForRequest(new Request('https://evil.example/mcp'))).toBe(MCP_RESOURCE)
+  })
+})
+
+describe('authorization error redirects', () => {
+  const error = {
+    code: 'invalid_request',
+    description: 'Invalid authorization request',
+    state: 'client-state',
+    issuer: 'https://np-mcp.sillyapps.co',
+  }
+
+  function authorizeWithError(redirectUri: string) {
+    const parseAuthRequest = vi.fn().mockRejectedValue({ ...error, redirectUri })
+    return handlePublicRequest(new Request(`${error.issuer}/authorize`), {
+      ...env,
+      OAUTH_PROVIDER: { parseAuthRequest },
+    } as Env)
+  }
+
+  it('returns the local OAuth error for a public HTTP callback', async () => {
+    const response = await authorizeWithError('http://client.example/callback')
+
+    expect(response.status).toBe(400)
+    expect(response.headers.get('Location')).toBeNull()
+    expect(await response.json()).toEqual({
+      error: error.code,
+      error_description: error.description,
+    })
+  })
+
+  it.each([
+    'https://client.example/callback',
+    'http://127.0.0.1:3000/callback',
+  ])('redirects with the OAuth error and state to %s', async (redirectUri) => {
+    const response = await authorizeWithError(redirectUri)
+
+    expect(response.status).toBe(302)
+    const location = new URL(response.headers.get('Location')!)
+    expect(`${location.origin}${location.pathname}`).toBe(redirectUri)
+    expect(Object.fromEntries(location.searchParams)).toEqual({
+      error: error.code,
+      error_description: error.description,
+      state: error.state,
+      iss: error.issuer,
+    })
   })
 })
 

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { handleWorkerFetch } from './index'
+import { readBodyBytes } from './jsonBody'
 import { handlePublicRequest } from './oauth'
 import { prepareOauthRequest } from './oauthCompat'
 
@@ -19,6 +20,32 @@ afterEach(() => {
 })
 
 describe('JSON body limit', () => {
+  it('buffers a small streamed MCP request without allocating the full limit', async () => {
+    const limit = 1024 * 1024
+    const message = new TextEncoder().encode('{"jsonrpc":"2.0","id":1,"method":"tools/list"}')
+    const body = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(message.subarray(0, 32))
+        controller.enqueue(message.subarray(32))
+        controller.close()
+      },
+    })
+    const request = new Request('https://example.com/mcp', { method: 'POST', body, duplex: 'half' } as RequestInit)
+    const allocations: number[] = []
+    vi.stubGlobal('Uint8Array', new Proxy(Uint8Array, {
+      construct(target, args) {
+        if (typeof args[0] === 'number') allocations.push(args[0])
+        return Reflect.construct(target, args)
+      },
+    }))
+
+    const bytes = await readBodyBytes(request, limit)
+    if (bytes instanceof Response) throw new Error('Expected body bytes')
+    expect(bytes).toEqual(message)
+    expect(allocations).not.toContain(limit)
+    expect(bytes.buffer.byteLength).toBeLessThan(limit)
+  })
+
   it.each([undefined, '1'])('rejects streamed token bodies regardless of Content-Length (%s)', async (contentLength) => {
     const fetch = vi.fn()
     vi.stubGlobal('fetch', fetch)
@@ -91,7 +118,8 @@ describe('OAuth provider body limits', () => {
     ['/register', 'application/json', 1024 * 1024],
     ['/register/', 'application/x-www-form-urlencoded', 1024 * 1024],
     ['/register', 'application/octet-stream', 1024 * 1024],
-  ])('rejects oversized streamed %s (%s) before forwarding', async (path, contentType, limit) => {
+  ])('rejects oversized streamed %s (%s) with CORS before forwarding', async (path, contentType, limit) => {
+    const origin = 'https://client.example'
     let consumed = 0
     const cancel = vi.fn()
     const body = new ReadableStream<Uint8Array>({
@@ -103,11 +131,13 @@ describe('OAuth provider body limits', () => {
       cancel,
     }, { highWaterMark: 0 })
     const response = await handleWorkerFetch(new Request(`https://example.com${path}`, {
-      method: 'POST', headers: { 'Content-Type': contentType }, body, duplex: 'half',
+      method: 'POST', headers: { 'Content-Type': contentType, Origin: origin }, body, duplex: 'half',
     } as RequestInit), {
       AUTH_RATE_LIMIT: { limit: async () => ({ success: true }) },
     } as unknown as Env, {} as ExecutionContext)
     expect(response.status).toBe(413)
+    expect(await response.json()).toEqual({ error: 'invalid_body' })
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe(origin)
     expect(consumed).toBeLessThanOrEqual(Number(limit) + 4096)
     expect(cancel).toHaveBeenCalledOnce()
     expect(providerFetch).not.toHaveBeenCalled()

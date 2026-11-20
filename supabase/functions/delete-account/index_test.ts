@@ -1,4 +1,5 @@
 import { exportJWK, generateKeyPair, SignJWT } from "npm:jose@6.2.10";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.112.1";
 import {
   assertEquals,
   assertExists,
@@ -11,6 +12,7 @@ import {
   APPLE_TOKEN_URL,
   mintAppleClientSecret,
 } from "../_shared/apple_token_revoke.ts";
+import { getDeleteAccountUser } from "./get_user.ts";
 import {
   type DeleteAccountDeps,
   type DeleteAccountUser,
@@ -105,6 +107,7 @@ function form(body: string): Record<string, string> {
 
 async function runDelete(input: {
   user: DeleteAccountUser | null;
+  getUser?: DeleteAccountDeps["getUser"];
   body?: unknown;
   rawBody?: BodyInit;
   env?: Record<string, string | undefined>;
@@ -187,7 +190,7 @@ async function runDelete(input: {
     fetchImpl,
     nowSeconds: () => NOW_SECONDS,
     warn: (payload) => warnings.push(payload),
-    getUser: () => Promise.resolve({ user: input.user }),
+    getUser: input.getUser ?? (() => Promise.resolve({ user: input.user })),
     revokeGrants: () => {
       grantCleanupCalls++;
       return Promise.resolve(input.grants ?? { ok: true });
@@ -251,6 +254,59 @@ async function assertDeleted(
   assertEquals(result.deletedTables, []);
   assertEquals(result.deletedUserId, userId);
 }
+
+Deno.test("account-deletion preflight allows the web client's request headers", async () => {
+  let post: Request | undefined;
+  const client = createClient("https://example.supabase.co", "test-anon-key", {
+    global: {
+      headers: { "x-notepad-client": "web" },
+      fetch: (input, init) => {
+        post = new Request(input, init);
+        return Promise.resolve(Response.json({ ok: true }));
+      },
+    },
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  const { error } = await client.functions.invoke("delete-account", {
+    method: "POST",
+    body: { expectedUserId: googleUser.id },
+  });
+  assertEquals(error, null);
+  assertExists(post);
+  assertEquals(post.headers.get("x-notepad-client"), "web");
+
+  // The SDK headers, including the JSON content type, are not CORS-safelisted.
+  const requestedHeaders = [...post.headers.keys()];
+  const unexpected = () => {
+    throw new Error("Preflights must not use deletion dependencies");
+  };
+  const response = await handleDeleteAccount(
+    new Request(post.url, {
+      method: "OPTIONS",
+      headers: {
+        Origin: "https://board.example.com",
+        "Access-Control-Request-Method": post.method,
+        "Access-Control-Request-Headers": requestedHeaders.join(", "),
+      },
+    }),
+    {
+      env: unexpected,
+      fetchImpl: unexpected,
+      nowSeconds: unexpected,
+      warn: unexpected,
+      getUser: unexpected,
+      deleteAuthUser: unexpected,
+    },
+  );
+
+  assertEquals(response.status, 200);
+  const allowedHeaders = response.headers.get("Access-Control-Allow-Headers");
+  assertExists(allowedHeaders);
+  const allowed = allowedHeaders.toLowerCase().split(",").map((name) =>
+    name.trim()
+  );
+  assertEquals(requestedHeaders.filter((name) => !allowed.includes(name)), []);
+});
 
 Deno.test("Apple client secret JWT uses ES256 claims Apple requires", async () => {
   const jwt = await mintAppleClientSecret({
@@ -329,6 +385,55 @@ Deno.test("Apple revoke falls back to the access token when no refresh token is 
   assertEquals(revokeForm.token_type_hint, "access_token");
 });
 
+for (
+  const { name, subjects, expected } of [
+    {
+      name: "matching first subject",
+      subjects: [APPLE_SUBJECT, "second-subject"],
+      expected: "manual_required",
+    },
+    {
+      name: "matching last subject",
+      subjects: ["second-subject", APPLE_SUBJECT],
+      expected: "manual_required",
+    },
+    {
+      name: "duplicate subject",
+      subjects: [APPLE_SUBJECT, APPLE_SUBJECT],
+      expected: "revoked",
+    },
+    {
+      name: "missing subject alongside a match",
+      subjects: [undefined, APPLE_SUBJECT],
+      expected: "manual_required",
+    },
+  ]
+) {
+  Deno.test(`linked Apple identities with a ${name} revoke the matched token`, async () => {
+    const result = await runDelete({
+      user: {
+        ...appleUser,
+        identities: subjects.map((sub) => ({
+          provider: "apple",
+          identity_data: { sub },
+        })),
+      },
+      body: { appleAuthorizationCode: "code" },
+    });
+    assertEquals(result.appleCalls.map((call) => call.url), [
+      APPLE_TOKEN_URL,
+      APPLE_KEYS_URL,
+      APPLE_REVOKE_URL,
+    ]);
+    assertEquals(form(result.appleCalls[2].body).token, "refresh-token");
+    assertEquals(await result.response.json(), {
+      ok: true,
+      appleRevocation: expected,
+    });
+    assertEquals(result.deletedUserId, appleUser.id);
+  });
+}
+
 Deno.test("a different Apple subject cannot be revoked for the authenticated account", async () => {
   for (
     const tokens of [
@@ -342,6 +447,7 @@ Deno.test("a different Apple subject cannot be revoked for the authenticated acc
         identities: [
           { provider: "google", identity_data: { sub: "other-apple-subject" } },
           ...appleUser.identities!,
+          { provider: "apple", identity_data: { sub: "second-subject" } },
         ],
       },
       body: {
@@ -493,8 +599,30 @@ Deno.test("Apple HTTP 400 still deletes the account", async () => {
   await assertDeleted(revokeFailure, appleUser.id);
   assertEquals(revokeFailure.warnings[0]?.endpoint, "revoke");
   assertEquals(revokeFailure.warnings[0]?.status, 400);
+  assertEquals(revokeFailure.warnings[0]?.appleError, "invalid_request");
   assertEquals(revokeFailure.deletedUserId, appleUser.id);
 });
+
+for (const endpoint of ["token", "revoke"] as const) {
+  Deno.test(`Apple ${endpoint} warnings omit unrecognized upstream errors`, async () => {
+    const result = await runDelete({
+      user: appleUser,
+      body: { appleAuthorizationCode: "auth-code-from-ios" },
+      [endpoint]: Response.json({ error: "invalid_grant: diagnostic-marker" }, {
+        status: 400,
+      }),
+    });
+
+    await assertDeleted(result, appleUser.id);
+    assertEquals(JSON.parse(JSON.stringify(result.warnings)), [{
+      event: "apple_token_revoke",
+      outcome: "failed",
+      reason: "apple_http_error",
+      status: 400,
+      endpoint,
+    }]);
+  });
+}
 
 Deno.test("missing Apple secrets still delete the account", async () => {
   const result = await runDelete({
@@ -586,19 +714,27 @@ Deno.test("exhausted revocation retries and code exchange outages preserve delet
     assertEquals(result.appleCalls.length, throwToken ? 1 : 5);
     assertEquals(result.warnings.length, 1);
     assertEquals(
+      result.warnings[0]?.reason,
+      throwToken ? "apple_network_error" : "apple_http_error",
+    );
+    assertEquals(result.warnings[0]?.endpoint, throwToken ? "token" : "revoke");
+    assertEquals(
       JSON.stringify(result.warnings).includes("refresh-token"),
       false,
     );
   }
 });
 
-Deno.test("OAuth cleanup failure stops before deleting app data or auth", async () => {
+Deno.test("OAuth cleanup failure stops before Apple code exchange or account deletion", async () => {
   for (const reason of ["incomplete", "unreachable"] as const) {
     const result = await runDelete({
-      user: googleUser,
+      user: appleUser,
+      body: { appleAuthorizationCode: "single-use-code" },
       grants: { ok: false, reason },
     });
     assertEquals(result.response.status, 503);
+    assertEquals(result.grantCleanupCalls, 1);
+    assertEquals(result.appleCalls.map((call) => call.url), []);
     assertEquals(result.deletedTables, []);
     assertEquals(result.deletedUserId, null);
   }
@@ -639,6 +775,49 @@ Deno.test("unauthenticated requests cannot revoke Apple credentials or delete da
   assertEquals(result.deletedTables, []);
   assertEquals(result.deletedUserId, null);
 });
+
+for (
+  const { name, authResponse, expectedStatus } of [
+    {
+      name: "a revoked session",
+      authResponse: () =>
+        Response.json({ error_code: "session_not_found" }, { status: 403 }),
+      expectedStatus: 401,
+    },
+    {
+      name: "an Auth outage",
+      authResponse: () => new Response(null, { status: 503 }),
+      expectedStatus: 503,
+    },
+  ]
+) {
+  Deno.test(`account deletion returns ${expectedStatus} for ${name} before cleanup`, async () => {
+    const { SUPABASE_URL, SUPABASE_ANON_KEY } = supabaseEnv();
+    const result = await runDelete({
+      user: null,
+      body: { appleAuthorizationCode: "code" },
+      getUser: (authorization) =>
+        getDeleteAccountUser(
+          SUPABASE_URL,
+          SUPABASE_ANON_KEY,
+          authorization,
+          (url, init) => {
+            assertEquals(String(url), `${SUPABASE_URL}/auth/v1/user`);
+            assertEquals(
+              new Headers(init?.headers).get("Authorization"),
+              "Bearer user-jwt",
+            );
+            return Promise.resolve(authResponse());
+          },
+        ),
+    });
+    assertEquals(result.response.status, expectedStatus);
+    assertEquals(result.grantCleanupCalls, 0);
+    assertEquals(result.appleCalls, []);
+    assertEquals(result.deletedTables, []);
+    assertEquals(result.deletedUserId, null);
+  });
+}
 
 Deno.test("mismatched expected identity stops before any account cleanup", async () => {
   for (const expectedUserId of [googleUser.id, ""]) {
@@ -713,7 +892,10 @@ Deno.test("intentionally empty native deletion requests remain supported", async
 Deno.test("a deletion JSON body exactly at the byte limit still deletes", async () => {
   const padding = "a".repeat(MAX_DELETION_BODY_BYTES - '{"padding":""}'.length);
   const rawBody = JSON.stringify({ padding });
-  assertEquals(new TextEncoder().encode(rawBody).length, MAX_DELETION_BODY_BYTES);
+  assertEquals(
+    new TextEncoder().encode(rawBody).length,
+    MAX_DELETION_BODY_BYTES,
+  );
   const result = await runDelete({ user: googleUser, rawBody });
   await assertDeleted(result, googleUser.id);
 });
@@ -728,4 +910,21 @@ Deno.test("oversized deletion JSON is rejected before grant cleanup", async () =
   assertEquals(await result.response.text(), "Invalid deletion request body");
   assertEquals(result.grantCleanupCalls, 0);
   assertEquals(result.deletedUserId, null);
+});
+
+Deno.test("web Apple deletion without a code still reports missing configuration safely", async () => {
+  const result = await runDelete({ user: appleUser, env: supabaseEnv() });
+  await assertDeleted(result, appleUser.id);
+  assertEquals(result.appleCalls, []);
+  assertEquals(result.warnings, [{
+    event: "apple_token_revoke",
+    outcome: "skipped",
+    reason: "missing_secrets",
+    missing: [
+      "APPLE_TEAM_ID",
+      "APPLE_KEY_ID",
+      "APPLE_PRIVATE_KEY",
+      "APPLE_CLIENT_ID",
+    ],
+  }]);
 });

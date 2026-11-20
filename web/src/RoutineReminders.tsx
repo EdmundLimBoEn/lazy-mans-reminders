@@ -24,10 +24,14 @@ export function RoutineReminders({ userId }: { userId: string }) {
   const [timezone, setTimezone] = useState(() => Intl.DateTimeFormat().resolvedOptions().timeZone)
   const [busy, setBusy] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [readError, setReadError] = useState('')
+  const [mutationError, setMutationError] = useState('')
+  const error = mutationError || readError
   const [weeklyStartChanged, setWeeklyStartChanged] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const reminderInputRef = useRef<HTMLInputElement>(null)
   const draftRevision = useRef(0)
+  const createId = useRef<string | null>(null)
   const readGeneration = useRef(0)
   const routineRows = useMemo(() => routines.map(routine => ({
     routine,
@@ -38,21 +42,23 @@ export function RoutineReminders({ userId }: { userId: string }) {
     </>,
   })), [routines])
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (fallbackMessage?: string) => {
     const generation = ++readGeneration.current
     try {
       const { data, error } = await supabase.from('routine_reminders')
         .select('id,text,interval_days,start_date,local_time,timezone,enabled,next_run_at')
         .eq('user_id', userId).order('created_at')
       if (generation !== readGeneration.current) return
-      if (error) setError(error.message)
+      if (error) setReadError(error.message)
       else {
-        setError('')
+        setReadError('')
         setRoutines(data ?? [])
       }
       setLoading(false)
     } catch (error) {
-      if (generation === readGeneration.current) throw error
+      if (generation === readGeneration.current) {
+        setReadError(error instanceof Error ? error.message : fallbackMessage ?? String(error))
+      }
     }
   }, [userId])
 
@@ -81,8 +87,6 @@ export function RoutineReminders({ userId }: { userId: string }) {
       inFlight = true
       try {
         await load()
-      } catch (error) {
-        if (!stopped) setError(error instanceof Error ? error.message : String(error))
       } finally {
         inFlight = false
         // Events received during this read need one fresh snapshot afterward.
@@ -107,6 +111,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
   }, [load, userId])
 
   function reset() {
+    createId.current = null
     setText('')
     setEditingId(null)
   }
@@ -115,13 +120,13 @@ export function RoutineReminders({ userId }: { userId: string }) {
     event.preventDefault()
     if (busy || !text.trim()) return
     try { new Intl.DateTimeFormat('en', { timeZone: timezone }) } catch {
-      setError('Enter a valid timezone, such as Asia/Singapore.')
+      setMutationError('Enter a valid timezone, such as Asia/Singapore.')
       return
     }
     // Reads started before this write must not restore an older snapshot.
     readGeneration.current += 1
     setBusy(true)
-    setError('')
+    setMutationError('')
     const submittedRevision = draftRevision.current
     try {
       const values = {
@@ -132,21 +137,27 @@ export function RoutineReminders({ userId }: { userId: string }) {
       }
       let result
       try {
-        result = editingId
-          ? await supabase.from('routine_reminders').update(values).eq('id', editingId).eq('user_id', userId).select('id').single()
-          : await supabase.from('routine_reminders').insert({ ...values, user_id: userId })
+        if (editingId) {
+          result = await supabase.from('routine_reminders').update(values).eq('id', editingId).eq('user_id', userId).select('id').single()
+        } else {
+          createId.current ??= crypto.randomUUID()
+          result = await supabase.rpc('create_routine_reminder', {
+            p_id: createId.current, p_user_id: userId, p_text: values.text, p_interval_days: values.interval_days,
+            p_start_date: values.start_date, p_local_time: values.local_time, p_timezone: values.timezone,
+          })
+        }
       } finally {
         // Invalidate reads started during the write, before reconciliation begins.
         readGeneration.current += 1
       }
       const { error } = result
-      if (error) setError(error.message)
+      if (error) setMutationError(error.message)
       else {
         if (draftRevision.current === submittedRevision) reset()
-        await load()
+        await load('Could not save routine')
       }
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Could not save routine')
+      setMutationError(error instanceof Error ? error.message : 'Could not save routine')
     } finally {
       setBusy(false)
     }
@@ -156,7 +167,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
     // Reads started before this write must not restore an older snapshot.
     readGeneration.current += 1
     setBusy(true)
-    setError('')
+    setMutationError('')
     try {
       const query = supabase.from('routine_reminders')
       let result
@@ -168,16 +179,20 @@ export function RoutineReminders({ userId }: { userId: string }) {
         readGeneration.current += 1
       }
       const { error } = result
-      if (error) setError(error.message)
-      else { if (editingId === routine.id) reset(); await load() }
+      if (error) setMutationError(error.message)
+      else {
+        if (remove && editingId === routine.id) reset()
+        await load('Could not update routine')
+      }
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Could not update routine')
+      setMutationError(error instanceof Error ? error.message : 'Could not update routine')
     } finally {
       setBusy(false)
     }
   }
 
   function edit(routine: Routine) {
+    createId.current = null
     setEditingId(routine.id)
     setWeeklyStartChanged(false)
     setText(routine.text)
@@ -187,6 +202,7 @@ export function RoutineReminders({ userId }: { userId: string }) {
     setStartDate(routine.start_date)
     setTime(routine.local_time.slice(0, 5))
     setTimezone(routine.timezone)
+    reminderInputRef.current?.focus()
   }
 
   const selectClass = 'h-9 w-full rounded-md border bg-background px-3 text-sm'
@@ -196,9 +212,12 @@ export function RoutineReminders({ userId }: { userId: string }) {
       <p className="text-sm text-muted-foreground">Repeat at the same local time. For Tuesday's uniform, choose Monday at 7 pm.</p>
       <p className="text-sm text-muted-foreground">When due, the reminder returns to your board and sends a push to your registered iPhone. Completing it keeps the routine running.</p>
     </div>
-    <form onSubmit={save} onChange={() => { draftRevision.current += 1 }} className="grid gap-3 rounded-lg border p-4">
+    <form onSubmit={save} onChange={() => {
+      draftRevision.current += 1
+      createId.current = null
+    }} className="grid gap-3 rounded-lg border p-4">
       <div className="grid gap-2"><Label htmlFor="routine-text">Reminder</Label>
-        <Input id="routine-text" value={text} onChange={e => setText(e.target.value)} placeholder="Prepare Tuesday's uniform" maxLength={500} required /></div>
+        <Input ref={reminderInputRef} id="routine-text" value={text} onChange={e => setText(e.target.value)} placeholder="Prepare Tuesday's uniform" maxLength={500} required /></div>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="grid gap-2"><Label htmlFor="routine-repeat">Repeat</Label>
           <select id="routine-repeat" className={selectClass} value={cadence} onChange={e => { setCadence(e.target.value === 'weekly' ? 'weekly' : 'days'); setWeeklyStartChanged(true) }}>

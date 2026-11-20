@@ -45,6 +45,24 @@ export function createServer(session: AgentSession, env: Env): McpServer {
     },
   )
 
+  if (session.canEdit) server.registerTool(
+    'edit_reminder',
+    {
+      description: 'Replace the text of an active or completed reminder. Text is trimmed and must be 1–500 characters, including any prefix. No agent name prefix is added.',
+      inputSchema: {
+        id: z.string(),
+        text: z.string(),
+      },
+    },
+    async ({ id, text }) => {
+      await recordAgentUsage(env, session.userId, 'mcp_edit')
+      const result = await runBoardCommand(supabase, session, {
+        kind: 'edit', reminderId: id, text,
+      })
+      return toToolResult(result)
+    },
+  )
+
   server.registerTool(
     'complete_reminder',
     {
@@ -124,7 +142,10 @@ function toToolResult(result: BoardResult) {
   }
   return {
     isError: true,
-    content: [{ type: 'text' as const, text: boardErrorText(result) }],
+    content: [
+      { type: 'text' as const, text: boardErrorText(result) },
+      ...(result.kind === 'capacity' ? [{ type: 'text' as const, text: result.hint }] : []),
+    ],
   }
 }
 
@@ -146,7 +167,7 @@ function boardErrorText(error: BoardError): string {
         })),
       })
     case 'invalid_text':
-      return 'Text must be 1–500 characters after the agent name prefix'
+      return 'Text must be 1–500 characters including any agent name prefix'
     case 'storage':
       return CLIENT_STORAGE_ERROR
     default: {

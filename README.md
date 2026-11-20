@@ -10,10 +10,10 @@ The product name and iOS app display name are **Notepad**. The repository, Xcode
 | --- | --- | --- |
 | Landing page | <https://notepads.dev> | Cloudflare Pages `notepads-landing` |
 | Web board | <https://app.notepads.dev> | Cloudflare Pages `lazy-mans-reminders` |
-| Agent MCP | <https://np-mcp.sillyapps.co/mcp> | Cloudflare Worker `lazy-mans-reminders-mcp` |
+| Agent MCP | <https://mcp.notepads.dev/mcp> | Cloudflare Worker `lazy-mans-reminders-mcp` |
 | Supabase | `https://biwmsxbqrevtjwgsvsmu.supabase.co` | `lazy-mans-reminders`, Singapore |
 
-The legacy web hosts <https://np.sillyapps.co> and <https://lmr.sillyapps.co> stay live alongside the canonical host (dual-serve, no 301). <https://lazy-mans-reminders.pages.dev> is the Pages fallback. The older <https://lmr.edmundlim.systems> stays attached and 302s to `lmr.sillyapps.co`, preserving path and query for old builds and links. The legacy MCP endpoint <https://lmr-mcp.edmundlim.systems/mcp> also stays live without a 301.
+The legacy web hosts <https://np.sillyapps.co> and <https://lmr.sillyapps.co> stay live alongside the canonical host (dual-serve, no 301). <https://lazy-mans-reminders.pages.dev> is the Pages fallback. The older <https://lmr.edmundlim.systems> stays attached and 302s to `lmr.sillyapps.co`, preserving path and query for old builds and links. The legacy MCP endpoints <https://np-mcp.sillyapps.co/mcp> and <https://lmr-mcp.edmundlim.systems/mcp> both stay live and serve requests directly without redirects.
 
 [Privacy](https://app.notepads.dev/privacy), [terms](https://app.notepads.dev/terms), and [support](https://app.notepads.dev/support) use the canonical web host; the same paths exist on the legacy web hosts. These addresses describe the setup, not a fresh production or App Store status check.
 
@@ -115,7 +115,7 @@ After a signed-in launch, Siri/Shortcuts can list reminders, add a reminder, or 
 
 ## Agent MCP
 
-Use `https://np-mcp.sillyapps.co/mcp`; `https://lmr-mcp.edmundlim.systems/mcp` remains available. OAuth is the usual path: add the endpoint to the host, sign in on the [board](https://app.notepads.dev), then select **Allow**. For Grok Bot, use **Settings → Plugins → custom connector**.
+Use `https://mcp.notepads.dev/mcp`. The legacy endpoints `https://np-mcp.sillyapps.co/mcp` and `https://lmr-mcp.edmundlim.systems/mcp` remain available. OAuth is the usual path: add the endpoint to the host, sign in on the [board](https://app.notepads.dev), then select **Allow**. For Grok Bot, use **Settings → Plugins → custom connector**.
 
 Cursor, Claude Code, and Codex can load `plugins/lazy-mans-reminders/`; see its [README](plugins/lazy-mans-reminders/README.md) for the two manifest formats. Clients supporting remote MCP can also use:
 
@@ -123,7 +123,7 @@ Cursor, Claude Code, and Codex can load `plugins/lazy-mans-reminders/`; see its 
 {
   "mcpServers": {
     "lazy-mans-reminders": {
-      "url": "https://np-mcp.sillyapps.co/mcp"
+      "url": "https://mcp.notepads.dev/mcp"
     }
   }
 }
@@ -191,7 +191,7 @@ Keep server-only values in private operator storage or ignored files such as `su
 | MCP Worker | Server-side `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`; bindings/routes in `mcp/wrangler.jsonc` |
 | TestFlight workflow | `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_PRIVATE_KEY_B64`, `APPSTORE_CERTIFICATES_FILE_BASE64`, `APPSTORE_CERTIFICATES_PASSWORD` |
 
-The APNs and Sign in with Apple keys serve different purposes. Private-key values accept escaped `\n` newlines. Native Apple revocation uses `APPLE_CLIENT_ID=systems.edmundlim.LazyMansReminders`, not the web Services ID. Deletion success alone does not prove Apple token revocation; verify cancellation, error, and manual-fallback paths on the release artifact.
+The APNs and Sign in with Apple keys serve different purposes. Private-key values accept escaped `\n` newlines. Native Apple revocation uses `APPLE_CLIENT_ID=systems.edmundlim.LazyMansReminders`, not the web Services ID. Deletion continues when Apple revocation cannot complete, returning `manual_required` so iOS and web show the existing manual instructions. Automated coverage exists for revocation and fallback; live secret presence remains unverified here, and the updated `delete-account` function needs redeployment and physical-device QA. Deletion success alone does not prove Apple token revocation; verify cancellation, error, and manual-fallback paths on the release artifact.
 
 ### Backend reference
 
@@ -206,7 +206,7 @@ supabase functions deploy send-reminder-push --no-verify-jwt
 supabase functions deploy delete-account
 ```
 
-`send-reminder-push` authenticates webhook requests using `x-webhook-secret`; `delete-account` retains JWT verification. The webhook targets `https://biwmsxbqrevtjwgsvsmu.supabase.co/functions/v1/send-reminder-push` for INSERT, UPDATE, and DELETE on `public.reminders`. Its header must match `WEBHOOK_SECRET`. Check deployed trigger/secrets configuration separately; do not infer it from old deployment notes.
+`send-reminder-push` authenticates webhook requests using `x-webhook-secret`; `delete-account` retains JWT verification. Web uses hosted Supabase OAuth: Apple’s code is consumed by Supabase, and the app callback receives a Supabase PKCE code, not a fresh Apple authorization code. Web deletion therefore uses the visible manual fallback. Successful deletion alone does not prove Apple token revocation. The webhook targets `https://biwmsxbqrevtjwgsvsmu.supabase.co/functions/v1/send-reminder-push` for INSERT, UPDATE, and DELETE on `public.reminders`. Its header must match `WEBHOOK_SECRET`. Check deployed trigger/secrets configuration separately; do not infer it from old deployment notes.
 
 Push delivery uses retries and replay jobs; permanent invalid-device failures remove tokens. A production push check needs a registered physical iPhone with the appropriate APNs environment. Simulator success or an accepted APNs request alone is not device-delivery evidence.
 
@@ -223,7 +223,7 @@ npm run build
 npx wrangler pages deploy dist --project-name lazy-mans-reminders --branch main
 ```
 
-The MCP package's `npm run deploy` runs `wrangler deploy` using `mcp/wrangler.jsonc`. Keep both MCP custom domains and legacy web aliases. The static site's separate command and project are documented in [landing/README.md](landing/README.md).
+The MCP package's `npm run deploy` runs `wrangler deploy` using `mcp/wrangler.jsonc`. Keep all three MCP custom domains and the legacy web aliases. The static site's separate command and project are documented in [landing/README.md](landing/README.md).
 
 ## License
 

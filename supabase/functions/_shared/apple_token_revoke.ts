@@ -177,12 +177,23 @@ async function postAppleForm(input: {
   }
 }
 
-async function appleErrorMessage(
+const APPLE_ERROR_CODES = new Set([
+  "invalid_request",
+  "invalid_client",
+  "invalid_grant",
+  "unauthorized_client",
+  "unsupported_grant_type",
+  "invalid_scope",
+]);
+
+async function appleErrorCode(
   response: Response,
 ): Promise<string | undefined> {
   try {
-    const body = await response.json() as { error?: unknown };
-    return typeof body.error === "string" ? body.error : undefined;
+    const { error } = await response.json() as { error?: unknown };
+    return typeof error === "string" && APPLE_ERROR_CODES.has(error)
+      ? error
+      : undefined;
   } catch {
     return undefined;
   }
@@ -190,7 +201,7 @@ async function appleErrorMessage(
 
 export async function revokeAppleTokensWithAuthorizationCode(input: {
   authorizationCode: string;
-  expectedSubject: string;
+  expectedSubjects: ReadonlySet<string>;
   config: AppleSecretConfig;
   fetchImpl: typeof fetch;
   nowSeconds: number;
@@ -212,16 +223,30 @@ export async function revokeAppleTokensWithAuthorizationCode(input: {
     };
   }
 
-  const tokenResponse = await postAppleForm({
-    url: APPLE_TOKEN_URL,
-    fetchImpl: input.fetchImpl,
-    fields: {
-      client_id: input.config.clientId,
-      client_secret: clientSecret,
-      code: input.authorizationCode,
-      grant_type: "authorization_code",
-    },
-  });
+  let tokenResponse: Response;
+  try {
+    tokenResponse = await postAppleForm({
+      url: APPLE_TOKEN_URL,
+      fetchImpl: input.fetchImpl,
+      fields: {
+        client_id: input.config.clientId,
+        client_secret: clientSecret,
+        code: input.authorizationCode,
+        grant_type: "authorization_code",
+      },
+    });
+  } catch {
+    // The single-use code may already have been consumed; do not retry it.
+    return {
+      ok: false,
+      warning: {
+        event: "apple_token_revoke",
+        outcome: "failed",
+        reason: "apple_network_error",
+        endpoint: "token",
+      },
+    };
+  }
   if (!tokenResponse.ok) {
     return {
       ok: false,
@@ -231,7 +256,7 @@ export async function revokeAppleTokensWithAuthorizationCode(input: {
         reason: "apple_http_error",
         status: tokenResponse.status,
         endpoint: "token",
-        appleError: await appleErrorMessage(tokenResponse),
+        appleError: await appleErrorCode(tokenResponse),
       },
     };
   }
@@ -282,10 +307,10 @@ export async function revokeAppleTokensWithAuthorizationCode(input: {
   // A valid code can belong to a different Apple account. Bind the exchanged
   // identity to the authenticated user's linked identity before revoking it.
   try {
-    if (typeof tokens.id_token !== "string" || !input.expectedSubject) {
+    if (typeof tokens.id_token !== "string") {
       throw new Error("Missing Apple identity");
     }
-    await jwtVerify(
+    const { payload } = await jwtVerify(
       tokens.id_token,
       createRemoteJWKSet(new URL(APPLE_KEYS_URL), {
         [customFetch]: input.fetchImpl,
@@ -295,11 +320,16 @@ export async function revokeAppleTokensWithAuthorizationCode(input: {
         algorithms: ["RS256"],
         issuer: APPLE_AUDIENCE,
         audience: input.config.clientId,
-        subject: input.expectedSubject,
         requiredClaims: ["exp"],
         currentDate: new Date(input.nowSeconds * 1000),
       },
     );
+    if (
+      typeof payload.sub !== "string" ||
+      !input.expectedSubjects.has(payload.sub)
+    ) {
+      throw new Error("Unlinked Apple subject");
+    }
   } catch {
     return {
       ok: false,
@@ -354,7 +384,7 @@ export async function revokeAppleTokensWithAuthorizationCode(input: {
         reason: "apple_http_error",
         status: revokeResponse.status,
         endpoint: "revoke",
-        appleError: await appleErrorMessage(revokeResponse),
+        appleError: await appleErrorCode(revokeResponse),
       },
     };
   }
@@ -372,15 +402,6 @@ export async function maybeRevokeAppleTokens(input: {
 }): Promise<"not_applicable" | "revoked" | "manual_required"> {
   if (!userHasAppleIdentity(input.user)) return "not_applicable";
 
-  if (!input.authorizationCode) {
-    input.warn({
-      event: "apple_token_revoke",
-      outcome: "skipped",
-      reason: "no_authorization_code",
-    });
-    return "manual_required";
-  }
-
   const secrets = readAppleSecrets(input.env);
   if (!secrets.ok) {
     input.warn({
@@ -392,10 +413,27 @@ export async function maybeRevokeAppleTokens(input: {
     return "manual_required";
   }
 
-  const expectedSubject = input.user.identities?.find(
-    (identity) => identity.provider?.toLowerCase() === "apple",
-  )?.identity_data?.sub;
-  if (typeof expectedSubject !== "string" || !expectedSubject.trim()) {
+  if (!input.authorizationCode) {
+    input.warn({
+      event: "apple_token_revoke",
+      outcome: "skipped",
+      reason: "no_authorization_code",
+    });
+    return "manual_required";
+  }
+
+  const expectedSubjects = new Set<string>();
+  let hasMissingSubject = false;
+  for (const identity of input.user.identities ?? []) {
+    if (identity.provider?.toLowerCase() !== "apple") continue;
+    const sub = identity.identity_data?.sub;
+    if (typeof sub === "string" && sub.trim()) {
+      expectedSubjects.add(sub);
+    } else {
+      hasMissingSubject = true;
+    }
+  }
+  if (expectedSubjects.size === 0) {
     input.warn({
       event: "apple_token_revoke",
       outcome: "skipped",
@@ -406,11 +444,13 @@ export async function maybeRevokeAppleTokens(input: {
 
   const result = await revokeAppleTokensWithAuthorizationCode({
     authorizationCode: input.authorizationCode,
-    expectedSubject,
+    expectedSubjects,
     config: secrets.config,
     fetchImpl: input.fetchImpl,
     nowSeconds: input.nowSeconds,
   });
   if (!result.ok) input.warn(result.warning);
-  return result.ok ? "revoked" : "manual_required";
+  return result.ok && expectedSubjects.size === 1 && !hasMissingSubject
+    ? "revoked"
+    : "manual_required";
 }

@@ -69,4 +69,49 @@ final class NotificationAccessPolicyTests: XCTestCase {
             "New reminder"
         )
     }
+
+    @MainActor
+    func testAccountSwitchAndSignOutRemoveOnlyDeliveredReminders() async {
+        let gate = AuthSessionGate()
+        let alerts = DeliveredAlerts()
+        let coordinator = ReminderPublicationCoordinator(
+            load: { [] }, publish: { _, _ in }, notificationCenter: alerts
+        )
+        alerts.add("first-account", category: "reminder")
+        alerts.add("unrelated", category: "other")
+        let clearBoard = { try! await coordinator.clear() }
+
+        await gate.withLock {
+            await gate.shareIdentity(
+                previousUserID: UUID(), nextUserID: UUID(),
+                clearUserData: {}, clearBoard: clearBoard,
+                share: { XCTAssertEqual(alerts.requests.map(\.identifier), ["unrelated"]) }
+            )
+        }
+
+        alerts.add("second-account", category: "reminder")
+        let signedOut = await gate.cleanUp(operations: .init(
+            setEndingSession: { _ in }, pauseRegistration: {}, resumeRegistration: {},
+            unbind: {}, removeDeviceToken: {}, signOutSDK: {}, clearPublishedSession: {},
+            clearUserData: {}, clearBoard: clearBoard
+        ))
+        XCTAssertTrue(signedOut)
+        XCTAssertEqual(alerts.requests.map(\.identifier), ["unrelated"])
+    }
+
+    private final class DeliveredAlerts: DeliveredNotificationCenter {
+        var requests: [UNNotificationRequest] = []
+
+        func deliveredRequests() async -> [UNNotificationRequest] { requests }
+
+        func removeDeliveredNotifications(withIdentifiers identifiers: [String]) {
+            requests.removeAll { identifiers.contains($0.identifier) }
+        }
+
+        func add(_ identifier: String, category: String) {
+            let content = UNMutableNotificationContent()
+            content.categoryIdentifier = category
+            requests.append(UNNotificationRequest(identifier: identifier, content: content, trigger: nil))
+        }
+    }
 }

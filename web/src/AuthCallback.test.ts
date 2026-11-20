@@ -1,7 +1,7 @@
-import { afterEach, beforeEach, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { ReactElement, ReactNode } from 'react'
 import { AuthCallback } from './AuthCallback'
-import { rememberReturnTo, RETURN_TO_KEY } from './mcp'
+import { authCallbackUrl, rememberReturnTo, RETURN_TO_KEY } from './mcp'
 
 const hooks = vi.hoisted(() => ({
   states: [] as unknown[], cursor: 0,
@@ -37,7 +37,7 @@ function render() {
 }
 function visit(path: string) {
   const url = new URL(path, 'https://np.sillyapps.co')
-  vi.stubGlobal('window', { location: { href: url.href, search: url.search, origin: url.origin, pathname: url.pathname, replace } })
+  vi.stubGlobal('window', { location: { href: url.href, search: url.search, origin: url.origin, pathname: url.pathname, hash: url.hash, replace } })
 }
 function callback(path: string) {
   hooks.states = []
@@ -171,4 +171,21 @@ it('preserves the stored fallback for a consent callback without return_to', asy
   await callback('/auth/callback?code=test')
   expect(replace).toHaveBeenCalledWith('/connect?state=current')
   expect(storage.has(RETURN_TO_KEY)).toBe(false)
+})
+
+describe.each(['callback URL', 'session storage'])('sign-in return via %s', source => {
+  it.each([
+    ['/#agent-access-heading', '/#agent-access-heading'],
+    ['/connect/?state=abc', '/connect?state=abc'],
+    ['/CONNECT/?state=abc', '/connect?state=abc'],
+  ])('restores the destination after signing in from %s', async (start, destination) => {
+    visit(start)
+    rememberReturnTo()
+    const url = new URL(authCallbackUrl())
+    if (source === 'callback URL') storage.clear()
+    else url.searchParams.delete('return_to')
+    url.searchParams.set('code', 'test')
+    callback(url.href)
+    await vi.waitFor(() => expect(replace).toHaveBeenCalledExactlyOnceWith(destination))
+  })
 })

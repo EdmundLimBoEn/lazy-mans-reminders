@@ -8,7 +8,7 @@ import {
   MCP_URL,
   authCallbackUrlFrom,
   claudeMcpConfig,
-  connectReturnTo,
+  signInReturnTo,
   cursorMcpConfig,
   grokConnectorConfig,
   lmrAgentTokenHeaderTemplate,
@@ -16,7 +16,7 @@ import {
 
 describe('agent MCP snippets', () => {
   it('keeps plugin manifests on the same canonical MCP URL the board advertises', () => {
-    expect(MCP_URL).toBe('https://np-mcp.sillyapps.co/mcp')
+    expect(MCP_URL).toBe('https://mcp.notepads.dev/mcp')
     const root = join(dirname(fileURLToPath(import.meta.url)), '../..')
     for (const relative of [
       'plugins/lazy-mans-reminders/mcp.json',
@@ -31,14 +31,14 @@ describe('agent MCP snippets', () => {
 
   it('shows Grok the OAuth URL without a bearer header', () => {
     const snippet = grokConnectorConfig(MCP_URL)
-    expect(snippet).toContain('URL: https://np-mcp.sillyapps.co/mcp')
+    expect(snippet).toContain('URL: https://mcp.notepads.dev/mcp')
     expect(snippet).not.toMatch(/Authorization/)
     expect(snippet).not.toMatch(/lmr__/)
     expect(AGENT_TOKEN_PLACEHOLDER).toBe('TOKEN')
   })
 
   it('keeps Cursor and Claude snippets on the OAuth URL path', () => {
-    expect(cursorMcpConfig(MCP_URL)).toContain('"url": "https://np-mcp.sillyapps.co/mcp"')
+    expect(cursorMcpConfig(MCP_URL)).toContain('"url": "https://mcp.notepads.dev/mcp"')
     expect(cursorMcpConfig(MCP_URL)).not.toMatch(/Authorization/)
     expect(claudeMcpConfig(MCP_URL)).toContain('"type": "http"')
     expect(claudeMcpConfig(MCP_URL)).not.toMatch(/Authorization/)
@@ -51,12 +51,13 @@ describe('agent MCP snippets', () => {
   })
 })
 
-describe('connectReturnTo', () => {
+describe('signInReturnTo', () => {
   it('keeps the connect path and query, and ignores other routes', () => {
-    expect(connectReturnTo('/connect', '?state=abc')).toBe('/connect?state=abc')
-    expect(connectReturnTo('/connect')).toBe('/connect')
-    expect(connectReturnTo('/')).toBeNull()
-    expect(connectReturnTo('/privacy')).toBeNull()
+    expect(signInReturnTo('/connect', '?state=abc')).toBe('/connect?state=abc')
+    expect(signInReturnTo('/connect')).toBe('/connect')
+    expect(signInReturnTo('/')).toBeNull()
+    expect(signInReturnTo('/privacy', '', '#agent-access-heading')).toBeNull()
+    expect(signInReturnTo('/', '', '#other')).toBeNull()
   })
 })
 

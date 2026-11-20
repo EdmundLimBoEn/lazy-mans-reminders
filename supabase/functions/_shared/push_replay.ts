@@ -75,6 +75,8 @@ export function pushReplay(
       }
       assertCurrent();
       const result = await send();
+      // Registration deletion cascades to the job in the same transaction.
+      if (result === "pruned") return result;
       // Acceptance must suppress fallback even if saving progress fails.
       alertSent ||= carriesAlert && result === "sent";
       if (start && result === "sent") acceptedStart = start;
@@ -88,7 +90,9 @@ export function pushReplay(
       return result;
     },
     async finish(results: SendResult[]) {
-      if (!results.includes("retryable")) await save({ status: "complete" });
+      if (!results.includes("retryable") && !results.includes("pruned")) {
+        await save({ status: "complete" });
+      }
     },
   };
 }

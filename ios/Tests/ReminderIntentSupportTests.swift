@@ -2,6 +2,28 @@ import XCTest
 @testable import LazyMansReminders
 
 final class ReminderIntentSupportTests: XCTestCase {
+
+    func testCapacityCopyAndLimits() {
+        XCTAssertEqual(ReminderBoardLimits.postItHint,
+                       "Hint: This board is more like a post-it note. Combine reminders into one line, or find other ways to keep it short.")
+        XCTAssertEqual(String(localized: ReminderIntentError.atCapacity.localizedStringResource),
+                       "Your board is full. Complete a reminder or combine lines first.")
+        XCTAssertEqual(LockScreenLineBudget.fallbackMaxLines, 6)
+        XCTAssertEqual(LockScreenLineBudget.maxLinesCap, 16)
+        XCTAssertEqual(ReminderBoardLimits.maxActive, LockScreenLineBudget.cachedMaxLines)
+        XCTAssertFalse(ReminderBoardLimits.isAtCapacity(ReminderBoardLimits.maxActive - 1))
+        XCTAssertTrue(ReminderBoardLimits.isAtCapacity(ReminderBoardLimits.maxActive))
+    }
+
+    func testCapacityResponseRequiresAnExplicitServerMarker() throws {
+        for field in ["message", "details", "hint"] {
+            let data = try JSONSerialization.data(withJSONObject: [field: "6 LMR_CAPACITY_REACHED"])
+            XCTAssertTrue(ReminderBoardLimits.isCapacityRejection(data))
+        }
+        XCTAssertFalse(ReminderBoardLimits.isCapacityRejection(Data("Conflict".utf8)))
+        XCTAssertFalse(ReminderBoardLimits.isCapacityRejection(Data("{}".utf8)))
+    }
+
     func testJWTExtractsSubAsUUID() {
         let token = "aaa.eyJzdWIiOiIyMjIyMjIyMi0yMjIyLTQyMjItODIyMi0yMjIyMjIyMjIyMjIifQ.bbb"
         XCTAssertEqual(

@@ -3,7 +3,7 @@ import { createMcpHandler } from 'agents/mcp/server'
 import { checkAccount, decideTokenExchange } from './accountGate'
 import { grantStorage, type CodeClaim } from './grantState'
 import { readBodyBytes } from './jsonBody'
-import { MCP_HOSTS, mcpResourceForRequest, MCP_WWW_AUTHENTICATE } from './constants'
+import { MCP_HOSTS, mcpResourceForRequest, mcpResourceMetadataForRequest } from './constants'
 import { corsHeaders, handlePublicRequest, resolveExternalPat } from './oauth'
 import { prepareOauthRequest, rewriteOauthPath } from './oauthCompat'
 import { registrationRedirectError } from './redirects'
@@ -20,6 +20,7 @@ const CORS = {
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, DELETE',
   'Access-Control-Allow-Headers': 'Authorization, Content-Type, Accept, MCP-Protocol-Version',
 }
+const TOKEN_ISSUANCE_UNAVAILABLE = 'Token issuance is temporarily unavailable; retry shortly'
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -32,14 +33,14 @@ function json(data: unknown, status = 200): Response {
   })
 }
 
-function unauthorized(): Response {
+function unauthorized(request: Request): Response {
   return new Response(JSON.stringify({ error: 'unauthorized' }), {
     status: 401,
     headers: {
       ...CORS,
       'Content-Type': 'application/json',
       'Cache-Control': 'no-store',
-      'WWW-Authenticate': MCP_WWW_AUTHENTICATE,
+      'WWW-Authenticate': `Bearer realm="OAuth", resource_metadata="${mcpResourceMetadataForRequest(request)}", scope="board"`,
     },
   })
 }
@@ -55,11 +56,11 @@ async function handleMcp(
   }
 
   const session = sessionFromProps((ctx as ExecutionContext & { props?: unknown }).props)
-  if (!session) return unauthorized()
+  if (!session) return unauthorized(request)
 
   const account = await checkAccount(env, deps.accountExists, session.userId)
   if (account === 'unavailable') return json({ error: 'account_lookup_unavailable' }, 503)
-  if (account === 'deleted') return unauthorized()
+  if (account !== 'live') return unauthorized(request)
 
   if (request.method === 'POST') {
     // Bound streamed bytes before the SDK buffers and parses the body.
@@ -86,6 +87,7 @@ async function handleMcp(
 }
 
 function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: ExecutionContext, claim: CodeClaim = {}): OAuthProviderOptions<Env> {
+  const { hostname, origin } = new URL(resource)
   const options: OAuthProviderOptions<Env> = {
     apiRoute: '/mcp',
     apiHandler: { fetch: (request, nextEnv, ctx) => handleMcp(request, nextEnv, ctx, deps) },
@@ -108,9 +110,9 @@ function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: Ex
       if (decision.kind === 'invalid_scope') {
         throw new OAuthError('invalid_scope', { description: 'The board scope is required' })
       }
-      if (decision.kind === 'unavailable') {
+      if (decision.kind === 'unavailable' || decision.kind === 'suspended') {
         throw new OAuthError('temporarily_unavailable', {
-          description: 'Account lookup is unavailable',
+          description: decision.kind === 'suspended' ? TOKEN_ISSUANCE_UNAVAILABLE : 'Account lookup is unavailable',
           statusCode: 503,
         })
       }
@@ -135,7 +137,7 @@ function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: Ex
           }
         } catch {
           throw new OAuthError('temporarily_unavailable', {
-            description: 'Token issuance is temporarily unavailable; retry shortly',
+            description: TOKEN_ISSUANCE_UNAVAILABLE,
             statusCode: 503,
           })
         }
@@ -147,7 +149,7 @@ function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: Ex
     },
     resourceMetadata: {
       resource,
-      authorization_servers: MCP_HOSTS.map((host) => `https://${host}`),
+      authorization_servers: [origin, ...MCP_HOSTS.filter((host) => host !== hostname).map((host) => `https://${host}`)],
       scopes_supported: ['board'],
       resource_name: "Notepad",
     },
@@ -158,53 +160,14 @@ function providerOptions(env: Env, deps: IdentityDeps, resource: string, ctx: Ex
   return options
 }
 
-async function checkCodeRedirect(request: Request, env: Env): Promise<Response | null> {
-  if (request.method !== 'POST' || new URL(request.url).pathname !== '/token' ||
-      request.headers.get('Content-Type')?.split(';')[0].trim().toLowerCase() !== 'application/x-www-form-urlencoded') return null
-
-  let form: FormData
-  try {
-    form = await request.clone().formData()
-  } catch {
-    return null // Let the provider report malformed requests.
-  }
-  // Match the provider's duplicate-parameter rejection before inspecting values.
-  for (const key of form.keys()) {
-    if (key !== 'resource' && form.getAll(key).length > 1) return null
-  }
-  if (form.get('grant_type') !== 'authorization_code') return null
-  const code = form.get('code')
-  if (typeof code !== 'string' || code.split(':').length !== 3) return null
-  const [userId, grantId] = code.split(':')
-  // Provider 0.10.3 stores the issuing redirectUri on the grant, but only checks
-  // client registration at redemption. Reuse its record and existing code format.
-  let grant: { redirectUri?: string } | null
-  try {
-    grant = await env.OAUTH_KV.get<{ redirectUri?: string }>(`grant:${userId}:${grantId}`, 'json')
-  } catch (error) {
-    const rateLimited = (error instanceof OAuthError && error.statusCode === 429) ||
-      (error instanceof Error && /429 Too Many Requests/i.test(error.message))
-    const response = json({
-      error: 'temporarily_unavailable',
-      error_description: 'Token issuance is temporarily unavailable; retry shortly',
-    }, rateLimited ? 429 : 503)
-    response.headers.set('Retry-After', '30')
-    response.headers.set('Access-Control-Expose-Headers', 'Retry-After')
-    return response
-  }
-  if (!grant?.redirectUri || form.get('redirect_uri') !== grant.redirectUri) {
-    return json({ error: 'invalid_grant', error_description: 'Redirect URI does not match the authorization request' }, 400)
-  }
-  return null
-}
-
 export async function handleWorkerFetch(
   request: Request,
   env: Env,
   ctx: ExecutionContext,
   deps: IdentityDeps = defaultIdentityDeps,
 ): Promise<Response> {
-  const path = rewriteOauthPath(new URL(request.url).pathname)
+  const url = new URL(request.url)
+  const path = rewriteOauthPath(url.pathname)
   // Match the provider's public routes; consent and account routes keep their allowlist.
   const publicCors = path.startsWith('/mcp') || path === '/token' || path === '/register'
   const origin = request.headers.get('Origin')
@@ -220,9 +183,17 @@ export async function handleWorkerFetch(
   if (prepared instanceof Response) return prepared
   const claim: CodeClaim = {}
   env = { ...env, OAUTH_KV: grantStorage(env, claim) }
-  const redirectError = await checkCodeRedirect(prepared, env)
-  if (redirectError) return redirectError
-  return new OAuthProvider(providerOptions(env, deps, mcpResourceForRequest(prepared), ctx, claim)).fetch(prepared, env, ctx)
+  const resource = mcpResourceForRequest(prepared)
+  const response = await new OAuthProvider(providerOptions(env, deps, resource, ctx, claim)).fetch(prepared, env, ctx)
+  // The provider builds its challenge from the incoming origin, even on unknown hosts.
+  if (path === '/mcp' && response.status === 401 && resource !== `${url.origin}/mcp`) {
+    const challenge = response.headers.get('WWW-Authenticate')
+    if (challenge) {
+      response.headers.set('WWW-Authenticate', challenge.replace(/resource_metadata="[^"]*"/,
+        `resource_metadata="${mcpResourceMetadataForRequest(prepared)}"`))
+    }
+  }
+  return response
 }
 
 export default {

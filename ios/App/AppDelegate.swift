@@ -83,7 +83,11 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
     ) {
         SilentPushRefresh.start(
-            waitForSession: { await AuthManager.shared.waitForRestoration() },
+            waitForSession: {
+                await AuthManager.shared.waitForRestoration()
+                ReminderLiveActivityController.startObservingTokens()
+                await AuthManager.shared.registerLiveActivityTokens()
+            },
             completion: completionHandler
         )
     }

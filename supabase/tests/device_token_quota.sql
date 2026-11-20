@@ -1,4 +1,12 @@
 -- Run only on a disposable database, after the device-token quota migration.
+select to_regprocedure('public.lock_device_token_registration()') is null as needs_quota_migration \gset
+\if :needs_quota_migration
+\ir ../migrations/20261118221317_device_deregistration_budget.sql
+\ir ../migrations/20261118221705_check_device_quota_ownership.sql
+\ir ../migrations/20261119095903_lock_push_job_devices.sql
+\ir ../migrations/20261119141837_charge_device_registrations_before_eviction.sql
+\endif
+
 begin;
 insert into auth.users(id) values
   ('55555555-5555-4555-8555-555555555551'),
@@ -97,7 +105,9 @@ select extensions.dblink_connect('device_quota_race', format('dbname=%L user=%L 
   current_setting('port')));
 create temporary table device_quota_peer as
 select pid from extensions.dblink('device_quota_race', 'select pg_backend_pid()') as t(pid integer);
-insert into auth.users(id) values ('55555555-5555-4555-8555-555555555553');
+insert into auth.users(id) values
+  ('55555555-5555-4555-8555-555555555553'),
+  ('55555555-5555-4555-8555-555555555554');
 insert into public.device_tokens(token, user_id, updated_at)
 select lpad(n::text, 64, 'd'), '55555555-5555-4555-8555-555555555553',
   '2020-01-01'::timestamptz + n * interval '1 day'
@@ -134,6 +144,83 @@ do $$ begin
   assert (select count(*) = 2 from public.device_tokens
     where token in (lpad('5', 64, 'd'), lpad('6', 64, 'd'))), 'Concurrent new devices were lost';
 end $$;
+
+-- The oldest device is locked by the owner's other session. Rejected writes
+-- must reach RLS without waiting for the quota trigger to evict that device.
+select extensions.dblink_exec('device_quota_race', 'begin');
+select token from extensions.dblink('device_quota_race', $$
+  select token from public.device_tokens where token = lpad('2', 64, 'd') for no key update
+$$) as t(token text);
+begin;
+set local lock_timeout = '500ms';
+set local role authenticated;
+set local request.jwt.claim.sub = '55555555-5555-4555-8555-555555555554';
+insert into public.device_tokens(token, user_id) values (lpad('7', 64, 'd'), auth.uid());
+do $$
+declare owner_id constant uuid := '55555555-5555-4555-8555-555555555553';
+begin
+  begin
+    insert into public.device_tokens(token, user_id) values (lpad('8', 64, 'd'), owner_id);
+    raise exception 'Cross-account registration bypassed RLS';
+  exception when insufficient_privilege then null;
+  end;
+  begin
+    update public.device_tokens set user_id = owner_id where token = lpad('7', 64, 'd');
+    raise exception 'Cross-account ownership update bypassed RLS';
+  exception when insufficient_privilege then null;
+  end;
+end $$;
+set local request.jwt.claim.sub = '55555555-5555-4555-8555-555555555553';
+insert into public.reminders(user_id, text) values (auth.uid(), 'Device quota regression');
+rollback;
+select extensions.dblink_exec('device_quota_race', 'rollback');
+
+-- Pause completion just after it would acquire the shared write budget.
+insert into public.reminders(user_id, text)
+values ('55555555-5555-4555-8555-555555555553', 'Concurrent registration');
+begin;
+select user_id from public.user_write_budgets
+  where user_id = '55555555-5555-4555-8555-555555555553' for no key update;
+select extensions.dblink_send_query('device_quota_race', $$
+  insert into public.device_tokens(token, user_id) values (lpad('9', 64, 'd'), auth.uid())
+  on conflict (token) do update set user_id = excluded.user_id returning token
+$$);
+do $$
+declare deadline timestamptz := clock_timestamp() + interval '5 seconds';
+begin
+  while not exists (select from device_quota_peer where pg_backend_pid() = any(pg_blocking_pids(pid))) loop
+    assert clock_timestamp() < deadline, 'Registration never waited on the write budget';
+    perform pg_sleep(0.01);
+  end loop;
+end $$;
+
+-- The old quota trigger already locked the eviction target at this point.
+set local lock_timeout = '500ms';
+update public.reminders set is_done = true
+  where user_id = '55555555-5555-4555-8555-555555555553';
+-- The minimal CI migration set omits the notification trigger.
+select public.request_reminder_push(jsonb_build_object('type', 'UPDATE',
+  'record', jsonb_build_object('user_id', '55555555-5555-4555-8555-555555555553')))
+where not exists (select from pg_trigger where tgrelid = 'public.reminders'::regclass
+  and tgname = 'send_reminder_push');
+commit;
+select token from extensions.dblink_get_result('device_quota_race') as t(token text);
+select token from extensions.dblink_get_result('device_quota_race') as t(token text);
+do $$ begin
+  assert (select is_done from public.reminders
+    where user_id = '55555555-5555-4555-8555-555555555553'), 'Reminder completion did not commit';
+  assert exists (select from public.reminder_push_jobs
+    where device_token = lpad('3', 64, 'd') and payload->>'type' = 'UPDATE'),
+    'Reminder completion did not queue a push for a retained device';
+  assert (select count(*) = 5 from public.device_tokens
+    where user_id = '55555555-5555-4555-8555-555555555553'), 'Concurrent registration exceeded quota';
+  assert not exists (select from public.device_tokens where token = lpad('2', 64, 'd')),
+    'Concurrent registration did not evict the oldest device';
+  assert exists (select from public.device_tokens where token = lpad('9', 64, 'd')),
+    'Concurrent registration did not commit';
+end $$;
+
 select extensions.dblink_disconnect('device_quota_race');
 drop table device_quota_peer;
-delete from auth.users where id = '55555555-5555-4555-8555-555555555553';
+delete from auth.users where id in (
+  '55555555-5555-4555-8555-555555555553', '55555555-5555-4555-8555-555555555554');

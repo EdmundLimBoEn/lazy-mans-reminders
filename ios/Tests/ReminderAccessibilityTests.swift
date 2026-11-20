@@ -63,23 +63,35 @@ final class ReminderAccessibilityTests: XCTestCase {
         }
     }
 
-    func testAX3FontsAndBoundedSurfaceBudgets() {
-        // AX5 is deliberately capped to AX3 only on the bounded extension surfaces.
+    func testFontsThroughAX5AndBoundedSurfaceBudgets() {
         let categories: [UIContentSizeCategory] = [.large, .extraExtraExtraLarge,
-                                                 .accessibilityMedium, .accessibilityExtraLarge]
+                                                 .accessibilityMedium, .accessibilityLarge,
+                                                 .accessibilityExtraLarge, .accessibilityExtraExtraLarge,
+                                                 .accessibilityExtraExtraExtraLarge]
         let lines = (0..<16).map { "Item \($0)" }
         for category in categories {
             let traits = UITraitCollection(preferredContentSizeCategory: category)
             let rowHeight = ceil(UIFontMetrics(forTextStyle: .subheadline).scaledValue(for: 20, compatibleWith: traits))
             let captionHeight = ceil(UIFontMetrics(forTextStyle: .caption1).scaledValue(for: 15, compatibleWith: traits))
-            let island = ReminderActivityPresentation.expandedIslandLines(lines, lineHeight: rowHeight)
-            XCTAssertLessThanOrEqual(CGFloat(island.count) * rowHeight + CGFloat(island.count - 1) * 3 + 48, 160)
+            let islandBudget = ReminderActivityPresentation.expandedIslandTextBudget(lineHeight: rowHeight)
+            let island = ReminderActivityPresentation.expandedIslandLines(lines, lineHeight: islandBudget.lineHeight)
+            XCTAssertGreaterThanOrEqual(island.count, 2)
+            XCTAssertLessThanOrEqual(CGFloat(island.count) * islandBudget.lineHeight + CGFloat(island.count - 1) * 3 + 48, 160)
             for family in [WidgetFamily.systemSmall, .systemMedium] {
-                let count = ReminderWidgetPresentation.lineLimit(for: family, lineHeight: rowHeight, headerHeight: captionHeight)
-                XCTAssertLessThanOrEqual(captionHeight + CGFloat(count) * rowHeight + CGFloat(count + 1) * 6, 130)
+                let showsHeader = !category.isAccessibilityCategory
+                let budget = ReminderWidgetPresentation.textBudget(
+                    for: family, lineHeight: rowHeight, headerHeight: captionHeight, showsHeader: showsHeader
+                )
+                let count = ReminderWidgetPresentation.lineLimit(
+                    for: family, lineHeight: budget.lineHeight, headerHeight: captionHeight, showsHeader: showsHeader
+                )
+                let header = showsHeader ? captionHeight + 6 : 0
+                XCTAssertGreaterThanOrEqual(count, 2)
+                XCTAssertLessThanOrEqual(header + CGFloat(count) * (budget.lineHeight + 6), 130)
             }
-            let accessoryCount = ReminderWidgetPresentation.lineLimit(for: .accessoryRectangular, lineHeight: captionHeight)
-            XCTAssertLessThanOrEqual(CGFloat(accessoryCount) * captionHeight + CGFloat(accessoryCount - 1) * 2, 60)
+            let accessoryBudget = ReminderWidgetPresentation.textBudget(for: .accessoryRectangular, lineHeight: captionHeight)
+            let accessoryCount = ReminderWidgetPresentation.lineLimit(for: .accessoryRectangular, lineHeight: accessoryBudget.lineHeight)
+            XCTAssertLessThanOrEqual(CGFloat(accessoryCount) * accessoryBudget.lineHeight + CGFloat(accessoryCount - 1) * 2, 60)
         }
         let ax3 = UITraitCollection(preferredContentSizeCategory: .accessibilityExtraLarge)
         XCTAssertGreaterThanOrEqual(UIFontMetrics(forTextStyle: .subheadline).scaledValue(for: 15, compatibleWith: ax3), 30)

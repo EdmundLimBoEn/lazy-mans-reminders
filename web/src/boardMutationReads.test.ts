@@ -4,6 +4,8 @@ import type { Session } from '@supabase/supabase-js'
 import { PostgrestClient } from '@supabase/postgrest-js'
 import App from './App'
 import Board from './Board'
+import { POST_IT_HINT, reminderErrorMessage } from './lib/reminders'
+import { Alert } from './components/ui/alert'
 
 // Run the real Board handlers with retained hooks and controllable database reads.
 const hooks = vi.hoisted(() => ({ effects: [] as (() => void | (() => void))[], states: [] as unknown[], cursor: 0, load: undefined as undefined | (() => Promise<void>) }))
@@ -33,7 +35,7 @@ vi.mock('react', async (original) => ({
 }))
 
 type Props = {
-  disabled?: boolean; value?: string; children?: ReactNode; session?: Session; 'aria-label'?: string; text?: string; id?: string
+  variant?: string; placeholder?: string; disabled?: boolean; value?: string; children?: ReactNode; session?: Session; 'aria-label'?: string; text?: string; id?: string
   ref?: (button: HTMLButtonElement | null) => void
   onKeyDown?: (event: { key: string }) => void
   onClick?: () => void
@@ -68,7 +70,7 @@ type Row = typeof original
 type Result = { data: Row[]; error: null } | { data: null; error: { message: string } }
 let stored: Row[]
 let reads: ReturnType<typeof deferred<Result>>[]
-let write: ReturnType<typeof deferred<{ error: { message: string } | null }>>
+let write: ReturnType<typeof deferred<{ error: { message: string; details?: string } | null }>>
 
 beforeEach(async () => {
   vi.clearAllMocks()
@@ -726,4 +728,39 @@ it('drops a second add while the first insert is in flight', async () => {
   stored = [original, { ...original, id: 'new', text: 'New', sort_order: 1 }]
   write.resolve({ error: null })
   await vi.waitFor(() => expect(displayed()).toEqual(['Original', 'New']))
+})
+
+it('shows existing full-board copy and prevents inserts at the phone budget', async () => {
+  stored = Array.from({ length: 6 }, (_, index) => ({ ...original, id: String(index) }))
+  await hooks.load!()
+  expect(control('New reminder').disabled).toBe(true)
+  expect(control('New reminder').placeholder).toBe('Board full — combine lines instead')
+  expect(hasCopy(POST_IT_HINT)).toBe(true)
+  control('New reminder').onChange!({ target: { value: 'New' } })
+  render().find(node => node.type === 'form')!.props.onSubmit!({ preventDefault() {} })
+  expect(db.insert).not.toHaveBeenCalled()
+  expect(hasCopy('Board full — combine lines instead')).toBe(true)
+  expect(render().find(node => node.type === Alert)?.props.variant).toBe('default')
+})
+
+it.each(['add', 'reopen'])('shows a neutral hint for a server capacity rejection on %s', async operation => {
+  if (operation === 'add') mutate('add')
+  else {
+    stored = [{ ...original, is_done: true }]
+    await hooks.load!()
+    db.rpc.mockImplementation(() => ({ select: () => ({ single: () => write.promise }) }))
+    control('Mark "Original" active').onClick!()
+  }
+  write.resolve({ error: { message: 'Quota exceeded', details: '6 LMR_CAPACITY_REACHED' } })
+  await vi.waitFor(() => expect(render().find(node => node.type === Alert)?.props.variant).toBe('default'))
+  expect(hasCopy('Quota exceeded')).toBe(false)
+  expect(hasCopy(POST_IT_HINT)).toBe(true)
+  if (operation === 'add') expect(control('New reminder').value).toBe('New')
+})
+
+it('recognizes capacity markers in server fields and preserves unrelated errors', () => {
+  for (const field of ['message', 'details', 'hint']) {
+    expect(reminderErrorMessage({ message: 'Rejected', [field]: 'LMR_CAPACITY_REACHED' })).toBe(POST_IT_HINT)
+  }
+  expect(reminderErrorMessage({ message: 'Offline' })).toBe('Offline')
 })

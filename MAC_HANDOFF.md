@@ -19,7 +19,7 @@ Confirm signing identifiers in the authorized account. No Apple account state wa
 - Web board: <https://app.notepads.dev>; landing: <https://notepads.dev>.
 - Privacy: <https://app.notepads.dev/privacy>; terms: <https://app.notepads.dev/terms>; support: <https://app.notepads.dev/support>. Contact: `edmund@sillyapps.co`.
 - Legacy web: `https://np.sillyapps.co` and `https://lmr.sillyapps.co` stay live without a 301; `https://lazy-mans-reminders.pages.dev` is the fallback. The same legal/support paths exist on those hosts. `https://lmr.edmundlim.systems` stays attached and 302s to `lmr.sillyapps.co`, preserving path and query.
-- MCP: <https://np-mcp.sillyapps.co/mcp>; legacy <https://lmr-mcp.edmundlim.systems/mcp> stays live without a 301.
+- Use <https://mcp.notepads.dev/mcp> for MCP. The legacy endpoints <https://np-mcp.sillyapps.co/mcp> and <https://lmr-mcp.edmundlim.systems/mcp> both stay live without redirects.
 - iOS magic-link handoff: `https://app.notepads.dev/auth/ios`. Custom callback: `lazymansreminders://auth/callback`.
 
 The repo's Supabase Site URL remains `https://np.sillyapps.co`; current clients use `app.notepads.dev`. See the [exact redirect allowlist](README.md#authentication-configuration). Verify hosted Auth settings separately from local config.

@@ -9,7 +9,7 @@ type RefreshRecovery = {
 }
 
 type Operation = {
-  method: 'get' | 'put' | 'delete'
+  method: 'get' | 'put' | 'delete' | 'retry-delete'
   key: string
   value?: string
   options?: KVNamespacePutOptions
@@ -26,9 +26,35 @@ function grantKey(key: string): string | null {
   return null
 }
 
+function grantExpiryMs(grant: string): number | undefined {
+  const { expiresAt } = JSON.parse(grant) as { expiresAt?: number }
+  return expiresAt === undefined ? undefined : expiresAt * 1000
+}
+
 /** Serializes provider storage operations for one grant, including its access tokens. */
 export class GrantState implements DurableObject {
   constructor(private readonly state: DurableObjectState, private readonly env: Env) {}
+
+  private async readRecoveredGrant(): Promise<string | undefined> {
+    const { storage } = this.state
+    const grant = await storage.get<string>('recoveredGrant')
+    if (grant === undefined) return
+    const expiresAt = grantExpiryMs(grant)
+    if (expiresAt === undefined) return grant
+    if (expiresAt <= Date.now()) {
+      await storage.delete('recoveredGrant')
+      return
+    }
+    // Schedule cleanup for copies stored before recovery alarms were added.
+    if (await storage.getAlarm() !== expiresAt) await storage.setAlarm(expiresAt)
+    return grant
+  }
+
+  async alarm(): Promise<void> {
+    await this.state.blockConcurrencyWhile(async () => {
+      await this.readRecoveredGrant()
+    })
+  }
 
   async fetch(request: Request): Promise<Response> {
     const operation = await request.json<Operation>()
@@ -37,11 +63,25 @@ export class GrantState implements DurableObject {
     return this.state.blockConcurrencyWhile(async () => {
       const { method, key, value, options } = operation
       const revocationKey = key === grantKey(key) ? 'revoked' : `revoked:${key}`
-      if (method === 'delete') {
-        // Retain markers to reject stale KV records and late writes. Legacy grants
-        // can live indefinitely; token keys identify individual credentials.
-        await this.state.storage.put(revocationKey, true)
-        if (key === grantKey(key)) await this.state.storage.delete('recoveredGrant')
+      if (method === 'delete' || method === 'retry-delete') {
+        if (method === 'delete') {
+          // The whole-grant marker already rejects stale tokens and late writes.
+          if (revocationKey === 'revoked' || !await this.state.storage.get('revoked')) {
+            await this.state.storage.put(revocationKey, true)
+          }
+        } else if (revocationKey !== 'revoked' || !await this.state.storage.get('revoked')) {
+          return new Response(null, { status: 404 })
+        }
+        if (revocationKey === 'revoked') {
+          const { storage } = this.state
+          await storage.delete('recoveredGrant')
+          // The grant marker is durable, so individual token markers are redundant.
+          while (true) {
+            const markers = await storage.list({ prefix: 'revoked:token:', limit: 128 })
+            if (!markers.size) break
+            await storage.delete([...markers.keys()])
+          }
+        }
         await this.env.OAUTH_KV.delete(key)
         return new Response(null, { status: 204 })
       }
@@ -50,7 +90,7 @@ export class GrantState implements DurableObject {
         return method === 'get' ? Response.json(null) : new Response(null, { status: 409 })
       }
       if (method === 'get') {
-        const recovered = key === grantKey(key) ? await this.state.storage.get<string>('recoveredGrant') : undefined
+        const recovered = key === grantKey(key) ? await this.readRecoveredGrant() : undefined
         return Response.json(recovered ?? await this.env.OAUTH_KV.get(key))
       }
       let previousRefreshTokenId: string | undefined
@@ -77,11 +117,14 @@ export class GrantState implements DurableObject {
         const recovery = operation.refreshRecovery
         if (recovery && key !== grantKey(key) && error instanceof Error && /429 Too Many Requests/i.test(error.message) &&
             await this.state.storage.get<string>('refreshTokenId') === recovery.to) {
-          // Restore the usable grant before reopening its generation. Keep it
-          // authoritative here: an immediate KV rewrite can itself be rate limited
-          // and KV reads may still return the discarded successor.
-          await this.state.storage.put('recoveredGrant', recovery.grant)
-          await this.state.storage.put('refreshTokenId', recovery.from)
+          const expiresAt = grantExpiryMs(recovery.grant)
+          if (expiresAt === undefined || expiresAt > Date.now()) {
+            // Arm cleanup before saving the copy, then reopen its generation.
+            // KV may rate-limit a rewrite or still return the discarded successor.
+            if (expiresAt !== undefined) await this.state.storage.setAlarm(expiresAt)
+            await this.state.storage.put('recoveredGrant', recovery.grant)
+            await this.state.storage.put('refreshTokenId', recovery.from)
+          }
         }
         if (operation.rotation && error instanceof Error && /429 Too Many Requests/i.test(error.message)) {
           if (previousRefreshTokenId === undefined) await this.state.storage.delete('refreshTokenId')
@@ -108,16 +151,28 @@ export class GrantState implements DurableObject {
   }
 }
 
+function requestGrantState(env: Env, operation: Operation): Promise<Response> {
+  const id = env.GRANT_STATE.idFromName(grantKey(operation.key)!)
+  return env.GRANT_STATE.get(id).fetch('https://grant-state/storage', {
+    method: 'POST', body: JSON.stringify(operation),
+  })
+}
+
+/** Finish deleting the KV record when the grant's revocation marker already exists. */
+export async function retryGrantDeletion(env: Env, userId: string, grantId: string): Promise<boolean> {
+  const response = await requestGrantState(env, { method: 'retry-delete', key: `grant:${userId}:${grantId}` })
+  if (response.status === 404) return false
+  if (!response.ok) throw new Error('Grant state unavailable')
+  return true
+}
+
 /** Leave client records/listing in KV, but gate every grant/token read and mutation. */
 export function grantStorage(env: Env, claim: CodeClaim = {}): KVNamespace {
   const kv = env.OAUTH_KV
   const grantReads = new Map<string, string>()
   const refreshes = new Map<string, RefreshRecovery>()
   async function call(operation: Operation): Promise<Response> {
-    const id = env.GRANT_STATE.idFromName(grantKey(operation.key)!)
-    const response = await env.GRANT_STATE.get(id).fetch('https://grant-state/storage', {
-      method: 'POST', body: JSON.stringify(operation),
-    })
+    const response = await requestGrantState(env, operation)
     if (response.status === 429) throw new OAuthError('temporarily_unavailable', {
       description: 'Token issuance is temporarily unavailable; retry shortly',
       statusCode: 429,

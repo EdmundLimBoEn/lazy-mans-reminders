@@ -145,6 +145,9 @@ export function headersWithAuthorization(
   return { ...headers, authorization: `bearer ${jwt}` };
 }
 
+export type SendResult = "sent" | "retryable" | "failed" | "invalid" | "pruned";
+export type PruneResult = Extract<SendResult, "pruned" | "invalid" | "retryable">;
+
 export async function deliverWithRetries(input: {
   headers: Record<string, string>;
   stopOnUncertainDelivery?: boolean;
@@ -153,9 +156,12 @@ export async function deliverWithRetries(input: {
   ) => Promise<ApnsOutcome>;
   nextJwt: () => Promise<string>;
   onExpiredJwt: () => void;
-  onPrune: (outcome: Extract<ApnsOutcome, { kind: "prune" }>) => Promise<void>;
+  // "pruned" confirms deletion of the entire device registration.
+  onPrune: (
+    outcome: Extract<ApnsOutcome, { kind: "prune" }>,
+  ) => Promise<PruneResult | void>;
   sleep: (ms: number) => Promise<void>;
-}): Promise<"sent" | "failed" | "retryable" | "invalid"> {
+}): Promise<SendResult> {
   let headers = input.headers;
   let lastRetryable = false;
 
@@ -168,10 +174,11 @@ export async function deliverWithRetries(input: {
     }
     if (outcome.kind === "sent") return "sent";
     if (outcome.kind === "prune") {
-      await input.onPrune(outcome);
-      return "invalid";
+      return await input.onPrune(outcome) ?? "invalid";
     }
     if (outcome.kind === "permanent") return "failed";
+    // Let the queue back off instead of resending with rejected credentials.
+    if (outcome.kind === "provider_auth") return "retryable";
 
     lastRetryable = true;
     if (outcome.kind === "expired_jwt") {
@@ -206,6 +213,7 @@ export type ApnsOutcome =
   | { kind: "retryable"; status: number; reason: string }
   | { kind: "prune"; status: number; reason: string; invalidatedAtMs?: number }
   | { kind: "expired_jwt"; status: number; reason: string }
+  | { kind: "provider_auth"; status: number; reason: string }
   | { kind: "permanent"; status: number; reason: string };
 
 const PRUNE_REASONS = new Set([
@@ -222,8 +230,11 @@ export function classifyApnsResponse(
   if (status >= 200 && status < 300) return { kind: "sent" };
 
   const reason = parseApnsReason(body);
-  if (status === 403 && reason === "ExpiredProviderToken") {
-    return { kind: "expired_jwt", status, reason };
+  if (status === 403) {
+    return {
+      kind: reason === "ExpiredProviderToken" ? "expired_jwt" : "provider_auth",
+      status, reason,
+    };
   }
   if (status === 410 || PRUNE_REASONS.has(reason)) {
     let invalidatedAtMs: number | undefined;

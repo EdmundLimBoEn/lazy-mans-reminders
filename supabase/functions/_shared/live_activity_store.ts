@@ -1,3 +1,5 @@
+import { postgrestErrorCodeForLog } from "./postgrest_error_log.ts";
+
 type ActivityClient = {
   // deno-lint-ignore no-explicit-any
   from: (table: string) => any;
@@ -28,6 +30,10 @@ export async function markActivityEnded(
     : query.eq("activity_started_at", expectedStartedAt);
   const { error } = await query;
   if (error) {
-    console.error("Could not record Live Activity end", error);
+    console.error(
+      "Could not record Live Activity end",
+      postgrestErrorCodeForLog(error.code),
+    );
+    throw error;
   }
 }

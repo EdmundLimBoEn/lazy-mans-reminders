@@ -74,6 +74,7 @@ jobs:
           python3 scripts/check_privacy_manifest.py --self-test
       - run: |
           export PATH="$(pg_config --bindir):$PATH"
+          type initdb postgres
           python3 -B -m unittest discover -s scripts/tests -v
       - run: python3 scripts/check_migration_versions.py
       - run: bash -n scripts/check-ios-toolchain.sh scripts/ios-release-build.sh scripts/ios-simulator-unit-tests.sh
@@ -156,6 +157,7 @@ jobs:
             supabase/migrations/20261101000100_agent_token_revocation_budget.sql \
             supabase/tests/agent_token_revocation_budget.sql \
             supabase/migrations/20261101000200_push_job_retention.sql \
+            supabase/migrations/20261118154021_materialize_push_retention_batch.sql \
             supabase/tests/push_job_retention.sql \
             supabase/migrations/20261101000500_indexable_push_dispatch.sql \
             supabase/tests/indexable_push_dispatch.sql \
@@ -181,10 +183,23 @@ jobs:
             supabase/tests/anon_helper_execute.sql \
             supabase/tests/push_job_retention.sql \
             supabase/migrations/20261113000200_usage_events.sql \
+            supabase/migrations/20261113000300_enable_usage_analytics.sql \
+            supabase/migrations/20261114000100_mcp_edit_usage.sql \
             supabase/tests/usage_events.sql \
+            supabase/migrations/20261114000200_schedule_done_retention.sql \
+            supabase/tests/done_retention_schedule.sql \
+            supabase/migrations/20261114000200_schedule_done_retention.sql \
+            supabase/tests/done_retention_schedule.sql \
+            supabase/tests/budgeted_retention_cleanup.sql \
+            supabase/tests/retention_skip_locked.sql \
             supabase/tests/agent_append_order.sql; do
             docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "/tmp/$migration"
           done
+          # The enable migration leaves collection on. Same-user usage upserts would
+          # serialize mint_agent_token and hide a missing advisory lock in the
+          # negative control below. The usage tests already covered the on path.
+          docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 \
+            -c "update public.usage_analytics_config set enabled = false where singleton;"
           # Exercise the initial write assertions with a deterministic minute rollover.
           docker exec -i routine-tests psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 \
             -v write_budget_rollover=1 -f /tmp/supabase/tests/write_budgets.sql

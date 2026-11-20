@@ -1,7 +1,9 @@
 import type { AuthRequest, ClientInfo, GrantSummary, OAuthHelpers } from '@cloudflare/workers-oauth-provider'
 import { describe, expect, it, vi } from 'vitest'
+import { memoryObjects } from '../test/memoryObjects'
 import { AuthorizationState } from './authorizationState'
 import { PENDING_AUTH_TTL_SECONDS } from './constants'
+import { GrantState } from './grantState'
 import { handlePublicRequest } from './oauth'
 import type { IdentityDeps } from './supabaseUser'
 
@@ -120,7 +122,7 @@ describe('consent and grants', () => {
     )
     const clients = new Map<string, ClientInfo>([
       ['grok', client({ clientId: 'grok', clientName: 'Grok', redirectUris: ['https://grok.example/callback'] })],
-      ['cursor', client({ clientId: 'cursor', clientName: 'Cursor', redirectUris: ['cursor://anysphere.cursor-mcp/oauth/callback'] })],
+      ['cursor', client({ clientId: 'cursor', clientName: '  Cursor\t', redirectUris: ['cursor://anysphere.cursor-mcp/oauth/callback'] })],
       ['web', client({ clientId: 'web', clientName: 'Web', redirectUris: ['https://app.example/callback'] })],
     ])
     await seed(STATE_GROK, requestFor('grok', 'https://grok.example/callback', ['board']))
@@ -170,6 +172,7 @@ describe('consent and grants', () => {
       AUTHORIZATION_STATE: states,
       OAUTH_PROVIDER: oauth,
     } as unknown as Env
+    env.GRANT_STATE = memoryObjects((state) => new GrantState(state, env))
 
     function authed(path: string, token: string, init?: RequestInit) {
       const headers = new Headers(init?.headers)
@@ -229,7 +232,7 @@ describe('consent and grants', () => {
     })
     expect(bound.status).toBe(200)
     expect(completed).toHaveLength(1)
-    expect(completed[0].metadata).toEqual({})
+    expect(completed[0].metadata).toEqual({ clientName: 'Cursor' })
     expect(completed[0].scope).toEqual(['board'])
     expect(completed[0].props).toEqual({ userId: USER_A, tokenId: 'oauth', agentName: 'Cursor' })
     expect(completed[0].props).not.toHaveProperty('userEmail')
@@ -292,10 +295,40 @@ describe('single-use authorization', () => {
       body: JSON.stringify({ state }),
     }), env, deps)
     const consent = () => handlePublicRequest(new Request(`https://lmr-mcp.edmundlim.systems/consent?state=${state}`, {
-      headers: { Authorization: 'Bearer token-a' },
+      headers: { Authorization: 'Bearer token-a', Origin: 'https://lmr.sillyapps.co' },
     }), env, deps)
     return { kv, oauth, pending, state, states: env.AUTHORIZATION_STATE, consent, bind: () => post('/bind'), deny: () => post('/consent/deny') }
   }
+
+  it.each([
+    ['consent', { summary: { client: { name: 'Grok' } } }, 0],
+    ['deny', { redirectTo: expect.stringContaining('error=access_denied') }, 0],
+    ['bind', { redirectTo: 'https://grok.example/callback?code=one' }, 1],
+  ] as const)('can retry %s after a pending-state outage', async (action, expected, completions) => {
+    const { states, state, oauth, ...actions } = await setup()
+    const stub = states.get(states.idFromName(state))
+    vi.spyOn(states, 'get').mockReturnValueOnce({
+      ...stub,
+      fetch: async () => new Response(null, { status: 503 }),
+    })
+    const request = actions[action]
+
+    const failed = await request()
+    expect(failed.status).toBe(503)
+    expect(failed.headers.get('Access-Control-Allow-Origin')).toBe('https://lmr.sillyapps.co')
+    expect(await failed.json()).toEqual({ error: 'temporarily_unavailable' })
+    expect(oauth.completeAuthorization).not.toHaveBeenCalled()
+
+    const retry = await request()
+    expect(retry.status).toBe(200)
+    expect(await retry.json()).toMatchObject(expected)
+    if (action !== 'consent') {
+      const replay = await request()
+      expect(replay.status).toBe(400)
+      expect(await replay.json()).toEqual({ error: 'expired_state' })
+    }
+    expect(oauth.completeAuthorization).toHaveBeenCalledTimes(completions)
+  })
 
   it('reads fresh consent and binds despite delayed KV visibility after authorization succeeds', async () => {
     const { consent, bind, oauth } = await setup(true)
@@ -316,6 +349,26 @@ describe('single-use authorization', () => {
     const repeatedDenial = await deny()
     expect(repeatedDenial.status).toBe(400)
     expect(await repeatedDenial.json()).toEqual({ error: 'expired_state' })
+  })
+
+  it('delivers the denial callback on retry after a client metadata outage', async () => {
+    const { oauth, pending, deny } = await setup()
+    const lookup = vi.spyOn(oauth, 'lookupClient').mockRejectedValueOnce(new Error('Client metadata unavailable'))
+
+    const failed = await deny()
+    expect(failed.status).toBe(503)
+    expect(failed.headers.get('Access-Control-Allow-Origin')).toBe('https://lmr.sillyapps.co')
+    expect(await failed.json()).toEqual({ error: 'temporarily_unavailable' })
+
+    const retry = await deny()
+    expect(retry.status).toBe(200)
+    const { redirectTo } = await retry.json() as { redirectTo: string }
+    const callback = new URL(redirectTo)
+    expect(`${callback.origin}${callback.pathname}`).toBe(pending.redirectUri)
+    expect(callback.searchParams.get('error')).toBe('access_denied')
+    expect(callback.searchParams.get('state')).toBe(pending.state)
+    expect(lookup).toHaveBeenCalledTimes(2)
+    expect(oauth.completeAuthorization).not.toHaveBeenCalled()
   })
 
   it('rejects denial when approval wins after denial reads the pending state', async () => {

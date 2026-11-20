@@ -1,4 +1,4 @@
-import { ExternalTokenError, type AuthRequest, type OAuthHelpers } from '@cloudflare/workers-oauth-provider'
+import { ExternalTokenError, type AuthRequest, type ClientInfo, type OAuthHelpers } from '@cloudflare/workers-oauth-provider'
 import { MCP_HOSTS, mcpResourceForRequest, TOOLS } from './constants'
 import { resolveSession } from './auth'
 import { recordAgentUsage } from './usage'
@@ -6,10 +6,11 @@ import {
   consentCanApprove,
   consentSummary,
   denialRedirect,
-  type ConsentSummary,
 } from './consent'
+import { retryGrantDeletion } from './grantState'
 import { cleanupUserGrants, describeGrants, listAllUserGrants, revokeUserGrant } from './grants'
 import { readJsonBody } from './jsonBody'
+import { redirectUriAllowed } from './redirects'
 import type { BoundProps } from './session'
 import { bearerToken, defaultIdentityDeps, type IdentityDeps } from './supabaseUser'
 
@@ -55,7 +56,7 @@ export function serverCard() {
     version: '1.0.0',
     url: '/mcp',
     auth: { type: 'oauth' },
-    tools: TOOLS,
+    tools: TOOLS.filter((name) => name !== 'edit_reminder'),
   }
 }
 
@@ -75,11 +76,7 @@ export async function resolveExternalPat(input: {
   }
   if (!session) return null
   return {
-    props: {
-      userId: session.userId,
-      tokenId: session.tokenId,
-      agentName: session.agentName,
-    },
+    props: session,
     audience: mcpResourceForRequest(input.request),
   }
 }
@@ -137,11 +134,15 @@ async function requireUser(request: Request, env: Env, deps: IdentityDeps, cors:
   }
 }
 
-async function loadPending(env: Env, state: string): Promise<AuthRequest | null> {
-  const id = env.AUTHORIZATION_STATE.idFromName(state)
-  const result = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/pending')
-  if (!result.ok) throw new Error('Authorization state unavailable')
-  return asAuthRequest(await result.json())
+async function loadPending(env: Env, state: string, cors: Record<string, string>): Promise<AuthRequest | null | Response> {
+  try {
+    const id = env.AUTHORIZATION_STATE.idFromName(state)
+    const result = await env.AUTHORIZATION_STATE.get(id).fetch('https://authorization-state/pending')
+    if (!result.ok) throw new Error('Authorization state unavailable')
+    return asAuthRequest(await result.json())
+  } catch {
+    return json({ error: 'temporarily_unavailable' }, 503, cors)
+  }
 }
 
 async function consumeAuthorizationState(env: Env, state: string): Promise<boolean> {
@@ -168,7 +169,7 @@ async function startAuthorize(request: Request, env: Env): Promise<Response> {
   } catch (error) {
     const failed = asAuthorizeFailure(error)
     if (!failed) throw error
-    if (!failed.redirectUri) {
+    if (!failed.redirectUri || !redirectUriAllowed(failed.redirectUri)) {
       return json({ error: failed.code, error_description: failed.description }, 400)
     }
     const redirect = new URL(failed.redirectUri)
@@ -202,21 +203,17 @@ async function readConsent(request: Request, env: Env, deps: IdentityDeps): Prom
   if (user instanceof Response) return user
   const state = new URL(request.url).searchParams.get('state') ?? ''
   if (!STATE.test(state)) return json({ error: 'invalid_state' }, 400, cors)
-  const pending = await summarizePending(env, state)
-  if (pending instanceof Response) return json(await pending.json(), pending.status, cors)
-  if (!consentCanApprove(pending)) return json({ error: 'board_not_requested', summary: pending }, 400, cors)
-  return json({ summary: pending }, 200, cors)
-}
 
-async function summarizePending(env: Env, state: string): Promise<ConsentSummary | Response> {
   const oauth = oauthHelpers(env)
-  if (!oauth) return json({ error: 'server_misconfigured' }, 500)
-  const oauthRequest = await loadPending(env, state)
-  if (!oauthRequest) return json({ error: 'expired_state' }, 400)
+  if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
+  const oauthRequest = await loadPending(env, state, cors)
+  if (oauthRequest instanceof Response) return oauthRequest
+  if (!oauthRequest) return json({ error: 'expired_state' }, 400, cors)
   const client = await oauth.lookupClient(oauthRequest.clientId)
   const summary = consentSummary(oauthRequest, client)
-  if (!summary) return json({ error: 'untrusted_client' }, 400)
-  return summary
+  if (!summary) return json({ error: 'untrusted_client' }, 400, cors)
+  if (!consentCanApprove(summary)) return json({ error: 'board_not_requested', summary }, 400, cors)
+  return json({ summary }, 200, cors)
 }
 
 async function denyConsent(request: Request, env: Env, deps: IdentityDeps): Promise<Response> {
@@ -230,11 +227,20 @@ async function denyConsent(request: Request, env: Env, deps: IdentityDeps): Prom
 
   const oauth = oauthHelpers(env)
   if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
-  const oauthRequest = await loadPending(env, state)
+  const oauthRequest = await loadPending(env, state, cors)
+  if (oauthRequest instanceof Response) return oauthRequest
+  if (!oauthRequest) return json({ error: 'expired_state' }, 400, cors)
+
+  let client: ClientInfo | null
+  try {
+    client = await oauth.lookupClient(oauthRequest.clientId)
+  } catch {
+    return json({ error: 'temporarily_unavailable' }, 503, cors)
+  }
+  const redirectTo = denialRedirect(oauthRequest, client)
+
   if (!await consumeAuthorizationState(env, state)) return json({ error: 'expired_state' }, 400, cors)
-  if (!oauthRequest) return json({ redirectTo: null }, 200, cors)
-  const client = await oauth.lookupClient(oauthRequest.clientId)
-  return json({ redirectTo: denialRedirect(oauthRequest, client) }, 200, cors)
+  return json({ redirectTo }, 200, cors)
 }
 
 async function bindAuthorization(
@@ -255,7 +261,8 @@ async function bindAuthorization(
   const state = typeof body.state === 'string' ? body.state : ''
   if (!STATE.test(state)) return json({ error: 'invalid_state' }, 400, cors)
 
-  const oauthRequest = await loadPending(env, state)
+  const oauthRequest = await loadPending(env, state, cors)
+  if (oauthRequest instanceof Response) return oauthRequest
   if (!oauthRequest) return json({ error: 'expired_state' }, 400, cors)
   const resource = oauthRequest.resource
   if (resource !== undefined && !MCP_HOSTS.some((host) => resource === `https://${host}/mcp`)) {
@@ -276,7 +283,7 @@ async function bindAuthorization(
     const { redirectTo } = await completingOauth.completeAuthorization({
       request: oauthRequest,
       userId: user.id,
-      metadata: {},
+      metadata: { clientName: summary?.client.name ?? null },
       scope: ['board'],
       props: {
         userId: user.id,
@@ -324,7 +331,9 @@ async function revokeGrant(request: Request, env: Env, deps: IdentityDeps): Prom
   if (!oauth) return json({ error: 'server_misconfigured' }, 500, cors)
   try {
     const outcome = await revokeUserGrant(oauth, user.id, grantId)
-    if (outcome === 'not_found') return json({ error: 'not_found' }, 404, cors)
+    if (outcome === 'not_found' && !await retryGrantDeletion(env, user.id, grantId)) {
+      return json({ error: 'not_found' }, 404, cors)
+    }
     return json({ revoked: true }, 200, cors)
   } catch {
     return json({ error: 'grant_revoke_failed' }, 503, cors)

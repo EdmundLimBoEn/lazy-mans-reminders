@@ -2,6 +2,24 @@ import Foundation
 import WidgetKit
 
 enum ReminderWidgetPresentation {
+    static func textBudget(
+        for family: WidgetFamily,
+        lineHeight: CGFloat,
+        headerHeight: CGFloat = 15,
+        showsHeader: Bool = true
+    ) -> ReminderTextBudget {
+        let gap = spacing(for: family)
+        switch family {
+        case .accessoryInline, .accessoryRectangular:
+            return ReminderTextBudget(contentHeight: 60, lineHeight: max(15, lineHeight),
+                                      spacing: gap, minimumLines: 1)
+        default:
+            // Reserve the header gap and the trailing Spacer gap separately.
+            let contentHeight: CGFloat = showsHeader ? 130 - max(15, ceil(headerHeight)) - 2 * gap : 130 - gap
+            return ReminderTextBudget(contentHeight: contentHeight, lineHeight: max(20, lineHeight), spacing: gap)
+        }
+    }
+
     static func spacing(for family: WidgetFamily) -> CGFloat {
         switch family {
         case .accessoryInline, .accessoryRectangular: return 2

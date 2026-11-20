@@ -18,7 +18,7 @@ final class SilentPushRefresh {
         waitForDeadline: @escaping () async throws -> Void = {
             try await Task.sleep(nanoseconds: 25_000_000_000)
         },
-        publish: @escaping ([Reminder]) async -> Void = { await ReminderBoardSync.apply($0) },
+        publish: @escaping ([Reminder]) async -> Void = { await ReminderBoardSync.apply($0, allowStart: false) },
         completion: @escaping (UIBackgroundFetchResult) -> Void
     ) -> Task<Void, Never> {
         let refresh = SilentPushRefresh(completion: completion)

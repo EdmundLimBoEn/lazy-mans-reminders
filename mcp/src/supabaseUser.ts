@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, isAuthSessionMissingError } from '@supabase/supabase-js'
 
 export type VerifiedUser = {
   id: string
@@ -10,11 +10,10 @@ export type VerifiedUser = {
 export type VerifyUser = (env: Env, accessToken: string) => Promise<VerifiedUser | null>
 
 /**
- * Report whether an account still exists. Resolves false when Supabase says the
- * user is gone and throws when the answer could not be obtained, so callers can
- * fail closed instead of treating an outage as a deleted account.
+ * Resolve true for a live account, false for a deleted account, or 'suspended'
+ * for an active ban. Throws when the lookup fails so callers can fail closed.
  */
-export type AccountExists = (env: Env, userId: string) => Promise<boolean>
+export type AccountExists = (env: Env, userId: string) => Promise<boolean | 'suspended'>
 
 export type IdentityDeps = {
   verifyUser: VerifyUser
@@ -48,7 +47,7 @@ export function verifySupabaseUserWith(fetchImpl?: FetchLike): VerifyUser {
       return await supabase.auth.getUser(accessToken)
     })
     if (error) {
-      if (error.status === 401 || error.status === 403) return null
+      if (error.status === 401 || error.status === 403 || isAuthSessionMissingError(error)) return null
       throw error
     }
     if (!data.user) return null
@@ -77,7 +76,11 @@ export function supabaseAccountExistsWith(fetchImpl?: FetchLike): AccountExists 
       if (error.status === 404) return false
       throw error
     }
-    return Boolean(data.user && data.user.id === userId)
+    if (data.user?.id !== userId) return false
+    if (data.user.deleted_at) return false
+    const bannedUntil = data.user.banned_until
+    if (bannedUntil && Date.parse(bannedUntil) > Date.now()) return 'suspended'
+    return true
   }
 }
 

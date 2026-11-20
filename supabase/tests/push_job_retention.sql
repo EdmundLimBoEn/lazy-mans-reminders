@@ -14,6 +14,10 @@ declare
 begin
   insert into auth.users(id) values (owner_id);
   insert into public.device_tokens(token, user_id) values (device, owner_id);
+  -- Gather statistics before the expired backlog arrives to exercise a nested-loop rescan.
+  insert into public.reminder_push_jobs(user_id, device_token, payload)
+    values (owner_id, device, '{}');
+  analyze public.reminder_push_jobs;
   insert into public.reminder_push_jobs(user_id, device_token, payload, status, created_at)
     select owner_id, device, '{}'::jsonb,
       case when n % 3 = 0 then 'pending' when n % 3 = 1 then 'complete' else 'exhausted' end,
@@ -41,7 +45,7 @@ begin
     'Cleanup did not preserve remaining backlog';
   assert public.cleanup_reminder_push_jobs() = 1, 'Cleanup did not drain remaining backlog';
   assert public.cleanup_reminder_push_jobs() = 0, 'Cleanup deleted unexpired jobs';
-  assert (select count(*) = 7 from public.reminder_push_jobs where user_id = owner_id),
+  assert (select count(*) = 8 from public.reminder_push_jobs where user_id = owner_id),
     'Cleanup changed the seven-day retention boundary';
   assert not has_function_privilege('anon', 'public.cleanup_reminder_push_jobs()', 'EXECUTE');
   assert not has_function_privilege('authenticated', 'public.cleanup_reminder_push_jobs()', 'EXECUTE');

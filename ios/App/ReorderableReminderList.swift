@@ -1,15 +1,17 @@
 import SwiftUI
 import UIKit
 
-struct ReorderableReminderList<Row: View>: UIViewRepresentable {
+struct ReorderableReminderList<Row: View, Footer: View>: UIViewRepresentable {
     let reminders: [Reminder]
     let completingIDs: Set<UUID>
     let isEnabled: Bool
+    let footerID: String?
     let onMove: (IndexSet, Int) -> Void
     let onDragChanged: (Bool) -> Void
     let onComplete: (Reminder) -> Void
     let onRefresh: () async -> Void
     @ViewBuilder let row: (Reminder) -> Row
+    @ViewBuilder let footer: () -> Footer
 
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
 
@@ -18,6 +20,7 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
         var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
         configuration.backgroundColor = .clear
         configuration.showsSeparators = true
+        configuration.footerMode = .supplementary
         configuration.separatorConfiguration.color = .separator
         configuration.itemSeparatorHandler = { _, separator in
             var separator = separator
@@ -46,6 +49,11 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
         list.keyboardDismissMode = .interactive
         list.dataSource = coordinator
         list.register(UICollectionViewListCell.self, forCellWithReuseIdentifier: "reminder")
+        list.register(
+            UICollectionViewListCell.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+            withReuseIdentifier: "boardFooter"
+        )
         let drag = UIPanGestureRecognizer(target: coordinator, action: #selector(Coordinator.drag(_:)))
         drag.maximumNumberOfTouches = 1
         drag.delegate = coordinator
@@ -62,13 +70,26 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
     func updateUIView(_ list: UICollectionView, context: Context) {
         let coordinator = context.coordinator
         coordinator.parent = self
+        let footerChanged = coordinator.renderedFooterID != footerID
+        if let footer = list.supplementaryView(
+               forElementKind: UICollectionView.elementKindSectionFooter,
+               at: IndexPath(item: 0, section: 0)
+           ) {
+            // Hide immediately during a drag, without reloading its source index.
+            footer.isHidden = footerID == nil
+        }
         // A reload during interactive movement invalidates UIKit's source index.
-        guard !coordinator.isDragging else { return }
+        guard !coordinator.isDragging else {
+            coordinator.footerNeedsReload = coordinator.footerNeedsReload || footerChanged
+            return
+        }
         if coordinator.items != reminders || coordinator.renderedCompletingIDs != completingIDs
-            || coordinator.renderedEnabled != isEnabled {
+            || coordinator.renderedEnabled != isEnabled || footerChanged || coordinator.footerNeedsReload {
             coordinator.items = reminders
             coordinator.renderedCompletingIDs = completingIDs
             coordinator.renderedEnabled = isEnabled
+            coordinator.renderedFooterID = footerID
+            coordinator.footerNeedsReload = false
             list.reloadData()
         }
     }
@@ -78,6 +99,8 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
         var items: [Reminder]
         var renderedCompletingIDs: Set<UUID>
         var renderedEnabled: Bool
+        var renderedFooterID: String?
+        var footerNeedsReload = false
         weak var list: UICollectionView?
         weak var dragGesture: UIPanGestureRecognizer?
         private(set) var isDragging = false
@@ -88,10 +111,27 @@ struct ReorderableReminderList<Row: View>: UIViewRepresentable {
             items = parent.reminders
             renderedCompletingIDs = parent.completingIDs
             renderedEnabled = parent.isEnabled
+            renderedFooterID = parent.footerID
         }
 
         func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             items.count
+        }
+
+        func collectionView(
+            _ collectionView: UICollectionView,
+            viewForSupplementaryElementOfKind kind: String,
+            at indexPath: IndexPath
+        ) -> UICollectionReusableView {
+            let footer = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind, withReuseIdentifier: "boardFooter", for: indexPath
+            ) as! UICollectionViewListCell
+            footer.isHidden = parent.footerID == nil
+            // Self-sizing, scrollable with the reminders at every Dynamic Type size.
+            footer.contentConfiguration = UIHostingConfiguration { parent.footer() }
+                .margins(.all, 0)
+            footer.backgroundConfiguration = .clear()
+            return footer
         }
 
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

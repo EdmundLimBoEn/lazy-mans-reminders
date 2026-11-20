@@ -1,14 +1,49 @@
-import { describe, expect, it, vi } from 'vitest'
+import { createMcpHandler } from 'agents/mcp/server'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { setup } from '../test/oauthWorker'
+import type { TokenSecret } from './domain'
+import { supabaseAccountExistsWith, type IdentityDeps } from './supabaseUser'
+import { hashSecret } from './token'
 
 // Exercise the installed provider's actual crypto, token issuance and revocation.
 vi.mock('agents/mcp/server', () => ({
-  createMcpHandler: () => ({ fetch: async () => Response.json({ accepted: true }) }),
+  createMcpHandler: vi.fn(() => ({ fetch: async () => Response.json({ accepted: true }) })),
 }))
 
 const HOST = 'lmr-mcp.edmundlim.systems'
 const REDIRECT = 'https://client.example/callback'
 const VERIFIER = 'a'.repeat(43)
+const USER_ID = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
+
+function softDeleteAccount(deps: IdentityDeps) {
+  vi.spyOn(deps, 'accountExists').mockImplementation(supabaseAccountExistsWith(async (input) => {
+    expect(new URL(String(input)).pathname).toBe(`/auth/v1/admin/users/${USER_ID}`)
+    return Response.json({ id: USER_ID, deleted_at: '2026-01-01T00:00:00Z' })
+  }))
+}
+
+function suspendAccount(deps: IdentityDeps) {
+  vi.useFakeTimers({ toFake: ['Date'] })
+  const expiry = new Date(Date.now() + 60_000)
+  vi.spyOn(deps, 'accountExists').mockImplementation(supabaseAccountExistsWith(async (input) => {
+    expect(new URL(String(input)).pathname).toBe(`/auth/v1/admin/users/${USER_ID}`)
+    return Response.json({ id: USER_ID, banned_until: expiry.toISOString() })
+  }))
+  return () => vi.setSystemTime(expiry)
+}
+
+async function personalKeyAccess(request: ReturnType<typeof setup>['request']) {
+  const secret = 'test-secret' as TokenSecret
+  const tokenHash = await hashSecret(secret)
+  vi.stubGlobal('fetch', async (input: RequestInfo | URL, init?: RequestInit) => {
+    expect(new URL(String(input)).pathname).toBe('/rest/v1/agent_tokens')
+    if (init?.method === 'PATCH') return new Response(null, { status: 204 })
+    return Response.json({ id: USER_ID, user_id: USER_ID, name: 'Test', token_hash: tokenHash, revoked_at: null })
+  })
+  return () => request(HOST, '/mcp', {
+    headers: { Authorization: `Bearer lmr_${USER_ID}_${secret}` },
+  })
+}
 
 function deferred() {
   let resolve!: () => void
@@ -53,7 +88,118 @@ async function authorize() {
   return { ...worker, tokens, client_id, grantId, refresh, access }
 }
 
+describe('account status', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    vi.useRealTimers()
+    vi.mocked(createMcpHandler).mockClear()
+  })
+
+  it('denies agent keys before the MCP handler runs and accepts the same key at expiry', async () => {
+    const { request, deps } = setup()
+    const access = await personalKeyAccess(request)
+    const expire = suspendAccount(deps)
+
+    expect((await access()).status).toBe(401)
+    expect(createMcpHandler).not.toHaveBeenCalled()
+
+    expire()
+    expect((await access()).status).toBe(200)
+    expect(createMcpHandler).toHaveBeenCalledOnce()
+  })
+
+  it('denies OAuth access tokens before the MCP handler runs and accepts the same token at expiry', async () => {
+    const { deps, access } = await authorize()
+    const expire = suspendAccount(deps)
+    vi.mocked(createMcpHandler).mockClear()
+
+    expect((await access()).status).toBe(401)
+    expect(createMcpHandler).not.toHaveBeenCalled()
+
+    expire()
+    expect((await access()).status).toBe(200)
+    expect(createMcpHandler).toHaveBeenCalledOnce()
+  })
+
+  it('denies refresh without issuing credentials or revoking the OAuth grant', async () => {
+    const { deps, kv, refresh } = await authorize()
+    const savedRecords = new Map(kv)
+    const expire = suspendAccount(deps)
+
+    const response = await refresh()
+    expect(response.status).toBe(503)
+    const body = await response.json()
+    expect(body).toMatchObject({ error: 'temporarily_unavailable' })
+    expect(body).not.toHaveProperty('access_token')
+    expect(body).not.toHaveProperty('refresh_token')
+    expect(kv.size).toBe(savedRecords.size)
+    expect([...savedRecords].every(([key, value]) => kv.get(key) === value)).toBe(true)
+
+    expire()
+    expect((await refresh()).status).toBe(200)
+  })
+
+  it('denies personal keys before board access for a soft-deleted account', async () => {
+    const { request, deps } = setup()
+    const access = await personalKeyAccess(request)
+    softDeleteAccount(deps)
+
+    expect((await access()).status).toBe(401)
+    expect(createMcpHandler).not.toHaveBeenCalled()
+  })
+
+  it('rejects OAuth refresh for a soft-deleted account', async () => {
+    const { deps, refresh } = await authorize()
+    softDeleteAccount(deps)
+
+    const response = await refresh()
+    expect(response.status).toBe(400)
+    expect(await response.json()).toMatchObject({ error: 'invalid_grant' })
+  })
+})
+
 describe('revocation during refresh', () => {
+  it('lets only the grant owner retry a failed grant record deletion', async () => {
+    const { post, request, env, deps, kv, grantId, refresh, access } = await authorize()
+    const grantKey = `grant:${USER_ID}:${grantId}`
+    const deleteKey = env.OAUTH_KV.delete.bind(env.OAUTH_KV)
+    let failGrantDelete = true
+    const deleteRecord = vi.spyOn(env.OAUTH_KV, 'delete').mockImplementation(async (key) => {
+      if (key === grantKey && failGrantDelete) {
+        failGrantDelete = false
+        throw new Error('KV unavailable')
+      }
+      await deleteKey(key)
+    })
+    const revoke = () => post(HOST, '/grants/revoke', { grantId })
+
+    const failed = await revoke()
+    expect(failed.status).toBe(503)
+    expect(await failed.json()).toEqual({ error: 'grant_revoke_failed' })
+    expect(kv.has(grantKey)).toBe(true)
+    expect((await access()).status).toBe(401)
+    expect((await refresh()).status).toBe(400)
+
+    const list = await request(HOST, '/grants', { headers: { Authorization: 'Bearer test-session' } })
+    expect(list.status).toBe(200)
+    expect(await list.json()).toEqual({ grants: [] })
+
+    deleteRecord.mockClear()
+    vi.spyOn(deps, 'verifyUser').mockResolvedValueOnce({
+      id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', email: null, fullName: 'Other user',
+    })
+    expect((await revoke()).status).toBe(404)
+    expect(deleteRecord).not.toHaveBeenCalled()
+    expect(kv.has(grantKey)).toBe(true)
+
+    const retried = await revoke()
+    expect(retried.status).toBe(200)
+    expect(await retried.json()).toEqual({ revoked: true })
+    expect(kv.has(grantKey)).toBe(false)
+    expect((await access()).status).toBe(401)
+    expect((await refresh()).status).toBe(400)
+  })
+
   it('denies an individually revoked access token despite stale KV while preserving its grant and sibling tokens', async () => {
     const { post, kv, tokens, client_id, refresh, access } = await authorize()
     const rotated = await refresh()

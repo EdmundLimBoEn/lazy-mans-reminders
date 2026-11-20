@@ -3,14 +3,15 @@ const MAX_JSON_BYTES = 16 * 1024
 /** Buffer only up to the limit, counting actual streamed bytes regardless of Content-Length. */
 export async function readBodyBytes(request: Request, maxBytes: number): Promise<Uint8Array | Response> {
   const reader = request.body?.getReader()
-  const bytes = new Uint8Array(maxBytes)
+  let bytes = new Uint8Array(0)
   let length = 0
   if (reader) {
     try {
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
-        if (length + value.byteLength > maxBytes) {
+        const nextLength = length + value.byteLength
+        if (nextLength > maxBytes) {
           // Cancellation must not delay the rejection or turn it into a parse error.
           void reader.cancel().catch(() => {})
           return new Response(JSON.stringify({ error: 'invalid_body' }), {
@@ -18,8 +19,14 @@ export async function readBodyBytes(request: Request, maxBytes: number): Promise
             headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
           })
         }
+        if (nextLength > bytes.length) {
+          const capacity = Math.min(maxBytes, Math.max(nextLength, bytes.length * 2))
+          const grown = new Uint8Array(capacity)
+          grown.set(bytes)
+          bytes = grown
+        }
         bytes.set(value, length)
-        length += value.byteLength
+        length = nextLength
       }
     } finally {
       reader.releaseLock()

@@ -1,12 +1,12 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { CLIENT_STORAGE_ERROR, POST_IT_HINT } from './board'
-import type { AgentSession } from './domain'
 import { createServiceRoleClient } from './auth'
 import { createServer } from './server'
+import { sessionFromProps } from './session'
 
 const { handlers } = vi.hoisted(() => ({
-  handlers: new Map<string, (args: { id: string }) => Promise<{ isError?: boolean; content: { text: string }[] }>>(),
+  handlers: new Map<string, (args: { id?: string; text?: string }) => Promise<{ isError?: boolean; content: { text: string }[] }>>(),
 }))
 vi.mock('@modelcontextprotocol/server', () => ({
   McpServer: class {
@@ -17,7 +17,7 @@ vi.mock('@modelcontextprotocol/server', () => ({
 }))
 vi.mock('./auth', () => ({ createServiceRoleClient: vi.fn() }))
 
-const session = { userId: '11111111-1111-4111-8111-111111111111', tokenId: 'test', agentName: 'Test' } as AgentSession
+const session = sessionFromProps({ userId: '11111111-1111-4111-8111-111111111111', tokenId: 'test', agentName: 'Test', canEdit: true })!
 const id = '22222222-2222-4222-8222-222222222222'
 const active = Array.from({ length: 16 }, (_, i) => ({
   id: `active-${i}`, text: `Reminder ${i}`, is_done: false,
@@ -49,6 +49,7 @@ describe('reopen_reminder', () => {
     const { update, count, list, rpc } = setup()
     const result = await handlers.get('reopen_reminder')!({ id })
     expect(result.isError).toBe(true)
+    expect(result.content[1].text).toBe(POST_IT_HINT)
     expect(JSON.parse(result.content[0].text)).toEqual({
       error: 'capacity', maxLines: 16, hint: POST_IT_HINT,
       capacity: { used: 16, maximum: 16, remaining: 0 },
@@ -87,5 +88,49 @@ describe('reopen_reminder', () => {
     const result = await handlers.get('reopen_reminder')!({ id })
     expect(result.isError).toBeUndefined()
     expect(JSON.parse(result.content[0].text).reminder).toEqual({ ...active[0], id })
+  })
+})
+
+describe('add_reminder capacity message', () => {
+  it.each([6, 9, 16])('preserves JSON and includes plain language at a %i-line budget', async maximum => {
+    const { rpc, from } = setup()
+    rpc.mockResolvedValue({ data: null, error: { message: 'LMR_CAPACITY_REACHED', details: String(maximum) } })
+    const count = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), then: (resolve: (value: unknown) => unknown) => Promise.resolve({ count: maximum, error: null }).then(resolve) }
+    const prefs = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: { max_lines: maximum }, error: null }) }
+    const list = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), gt: vi.fn().mockReturnThis(), order: vi.fn().mockReturnThis(), range: vi.fn().mockResolvedValue({ data: [], error: null }).mockResolvedValueOnce({ data: active.slice(0, maximum), error: null }) }
+    from.mockReset().mockReturnValueOnce(count).mockReturnValueOnce(prefs).mockReturnValue(list)
+    const result = await handlers.get('add_reminder')!({ text: 'New' })
+    expect(result.isError).toBe(true)
+    expect(JSON.parse(result.content[0].text)).toMatchObject({
+      error: 'capacity', maxLines: maximum, hint: POST_IT_HINT,
+      capacity: { used: maximum, maximum, remaining: 0 },
+    })
+    expect(result.content[1]).toEqual({ type: 'text', text: POST_IT_HINT })
+    expect(rpc).toHaveBeenCalledWith('add_agent_reminder', { p_user_id: session.userId, p_text: '[Test] New' })
+  })
+})
+
+describe('edit_reminder', () => {
+  it.each([undefined, 'false', 'true'])('returns the updated view and gates usage with flag %s', async (flag) => {
+    const row = { ...active[0], id, text: '[Test] Corrected' }
+    const update = { update: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: row, error: null }) }
+    const rpc = vi.fn().mockReturnValue({ abortSignal: vi.fn().mockResolvedValue({ error: null }) })
+    vi.mocked(createServiceRoleClient).mockReturnValue({ from: () => update, rpc } as unknown as SupabaseClient)
+    createServer(session, { USAGE_ANALYTICS_ENABLED: flag } as Env)
+    const result = await handlers.get('edit_reminder')!({ id, text: '  [Test] Corrected  ' })
+    expect(result.isError).toBeUndefined()
+    expect(JSON.parse(result.content[0].text)).toEqual({ reminder: row })
+    expect(update.update).toHaveBeenCalledWith({ text: '[Test] Corrected' })
+    if (flag === 'true') {
+      expect(rpc).toHaveBeenCalledExactlyOnceWith('record_agent_usage', { p_user_id: session.userId, p_event: 'mcp_edit' })
+    } else expect(rpc).not.toHaveBeenCalled()
+  })
+
+  it('returns the existing error format for invalid text', async () => {
+    setup(null)
+    expect(await handlers.get('edit_reminder')!({ id, text: ' ' })).toEqual({
+      isError: true, content: [{ type: 'text', text: 'Text must be 1–500 characters including any agent name prefix' }],
+    })
   })
 })
