@@ -177,12 +177,23 @@ async function postAppleForm(input: {
   }
 }
 
-async function appleErrorMessage(
+const APPLE_ERROR_CODES = new Set([
+  "invalid_request",
+  "invalid_client",
+  "invalid_grant",
+  "unauthorized_client",
+  "unsupported_grant_type",
+  "invalid_scope",
+]);
+
+async function appleErrorCode(
   response: Response,
 ): Promise<string | undefined> {
   try {
-    const body = await response.json() as { error?: unknown };
-    return typeof body.error === "string" ? body.error : undefined;
+    const { error } = await response.json() as { error?: unknown };
+    return typeof error === "string" && APPLE_ERROR_CODES.has(error)
+      ? error
+      : undefined;
   } catch {
     return undefined;
   }
@@ -245,7 +256,7 @@ export async function revokeAppleTokensWithAuthorizationCode(input: {
         reason: "apple_http_error",
         status: tokenResponse.status,
         endpoint: "token",
-        appleError: await appleErrorMessage(tokenResponse),
+        appleError: await appleErrorCode(tokenResponse),
       },
     };
   }
@@ -373,7 +384,7 @@ export async function revokeAppleTokensWithAuthorizationCode(input: {
         reason: "apple_http_error",
         status: revokeResponse.status,
         endpoint: "revoke",
-        appleError: await appleErrorMessage(revokeResponse),
+        appleError: await appleErrorCode(revokeResponse),
       },
     };
   }
