@@ -1,0 +1,39 @@
+{
+  "logPath": "/Users/limboenedmund/.agent-device/logs/t3-23bb48939566ebc32a337197/2026-11-05/2026-11-05T14-22-10-886Z-mw3muzoh-e5baab41.ndjson",
+  "redactedPhaseSummary": [
+    {
+      "ts": "2026-11-05T14:20:40.880Z",
+      "level": "info",
+      "phase": "daemon_startup",
+      "durationMs": 9,
+      "command": "screenshot"
+    },
+    {
+      "ts": "2026-11-05T14:20:40.880Z",
+      "level": "info",
+      "phase": "daemon_request_prepare",
+      "command": "screenshot"
+    },
+    {
+      "ts": "2026-11-05T14:22:10.884Z",
+      "level": "error",
+      "phase": "daemon_request_timeout",
+      "command": "screenshot"
+    },
+    {
+      "ts": "2026-11-05T14:22:10.884Z",
+      "level": "error",
+      "phase": "daemon_request",
+      "durationMs": 90004,
+      "command": "screenshot"
+    }
+  ],
+  "failedAction": "Account detents Light XXXL normal medium-top native screenshot",
+  "retry": "Exact same screenshot once, --debug, own pinned session",
+  "timeUTC": "2026-11-05T14:23:58.651563+00:00",
+  "hostLoad": [
+    10.01611328125,
+    9.78369140625,
+    7.81591796875
+  ]
+}

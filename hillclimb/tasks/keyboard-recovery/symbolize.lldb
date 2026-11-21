@@ -1,0 +1,4 @@
+process attach --pid 92512
+script import lldb,json; data=json.load(open('hillclimb/tasks/keyboard-recovery/runtime-invalid-frame-log.json')); frames=data[0]['backtrace']['frames']; t=lldb.debugger.GetSelectedTarget(); mods={str(m.GetUUIDString()).upper():m for m in t.modules}; [(print(str(i)+': '+str(mods[f['imageUUID']].ResolveFileAddress(mods[f['imageUUID']].GetObjectFileHeaderAddress().GetFileAddress()+f['imageOffset'])))) for i,f in enumerate(frames) if f['imageUUID'] in mods]
+process detach
+quit

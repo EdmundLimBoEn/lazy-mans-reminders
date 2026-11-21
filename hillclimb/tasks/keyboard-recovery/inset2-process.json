@@ -1,0 +1,21 @@
+{
+  "exit": 65,
+  "observations": [
+    "Test Suite 'Selected tests' started at 2026-11-04 22:58:15.905.",
+    "Test Suite 'HillclimbUITests.xctest' started at 2026-11-04 22:58:15.906.",
+    "Test Suite 'SignInSurfaceUITests' started at 2026-11-04 22:58:15.906.",
+    "2026-11-04 22:58:16.250 xcodebuild[85369:2390765] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-04 22:58:26.230 xcodebuild[85369:2390765] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-04 22:58:35.092 xcodebuild[85369:2390765] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-a4c85563/ios/UITests/SignInSurfaceUITests.swift:22: error: -[HillclimbUITests.SignInSurfaceUITests testFocusedEmailAndPasswordClearKeyboardInBothAppearances] : XCTAssertGreaterThanOrEqual failed: (\"43.999999999999886\") is less than (\"44.0\") - Use an Existing Password",
+    "Test Case '-[HillclimbUITests.SignInSurfaceUITests testFocusedEmailAndPasswordClearKeyboardInBothAppearances]' failed (25.321 seconds).",
+    "Test Suite 'SignInSurfaceUITests' failed at 2026-11-04 22:58:41.229.",
+    "Executed 1 test, with 1 failure (0 unexpected) in 25.321 (25.323) seconds",
+    "Test Suite 'HillclimbUITests.xctest' failed at 2026-11-04 22:58:41.229.",
+    "Executed 1 test, with 1 failure (0 unexpected) in 25.321 (25.323) seconds",
+    "Test Suite 'Selected tests' failed at 2026-11-04 22:58:41.229.",
+    "Executed 1 test, with 1 failure (0 unexpected) in 25.321 (25.324) seconds",
+    "2026-11-04 22:58:53.459 xcodebuild[85369:2390765] [MT] IDETestOperationsObserverDebug: 39.487 elapsed -- Testing started completed.",
+    "Testing started"
+  ]
+}

@@ -1,0 +1,48 @@
+Attributes: Application, 0x101c2e950, pid: 93753, label: 'Notepad'
+Element subtree:
+ →Application, 0x101c2e950, pid: 93753, label: 'Notepad'
+    Window (Main), 0x101c35800, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x101c3bd60, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x101c3be80, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x101c3bc10, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x101c379d0, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x101c3bfa0, {{0.0, 0.0}, {402.0, 874.0}}
+                NavigationBar, 0x101c3c0c0, {{0.0, 62.0}, {402.0, 54.0}}, identifier: 'Your Board'
+                  StaticText, 0x101c3c1e0, {{161.3, 68.0}, {79.0, 18.0}}, label: 'Your Board'
+                  Other, 0x101c3c300, {{338.0, 66.0}, {44.0, 36.0}}, label: 'Account'
+                    Other, 0x101c3c420, {{338.0, 66.0}, {44.0, 36.0}}
+                      Button, 0x101c3c540, {{338.0, 62.0}, {44.0, 44.0}}, label: 'Account'
+                  StaticText, 0x101c3c660, {{185.7, 86.0}, {30.7, 14.0}}, label: '0 of 7'
+                Other, 0x101c3c780, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x101c3c8a0, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x101c3c9c0, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x101c3cff0, {{0.0, 0.0}, {402.0, 874.0}}
+                        ScrollView, 0x101c3d110, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x101c3d230, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x101c3d350, {{0.0, 0.0}, {402.0, 170.8}}
+                          Other, 0x101c3d470, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x101c3d590, {{0.0, 116.0}, {402.0, 320.0}}
+                            StaticText, 0x101c3d6b0, {{96.7, 180.3}, {208.7, 89.5}}, label: 'Couldn’t Load Board'
+                            StaticText, 0x101c3d7d0, {{70.2, 272.8}, {261.7, 38.0}}, label: 'The operation couldn’t be completed. (NSURLErrorDomain error -1009.)'
+                            Button, 0x101c3d8f0, {{169.0, 331.0}, {64.0, 44.0}}, label: 'Try Again'
+                          Other, 0x101c3da10, {{369.0, 116.0}, {30.0, 652.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                            Other, 0x101c3db30, {{396.0, 451.0}, {3.0, 314.0}}
+                          Other, 0x101c3dc50, {{369.0, 116.0}, {30.0, 652.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                            Other, 0x101c3dd70, {{396.0, 451.0}, {3.0, 314.0}}
+                        Other, 0x101c3de90, {{0.0, 768.0}, {402.0, 72.0}}
+                          Other, 0x101c3dfb0, {{30.0, 781.0}, {299.0, 44.0}}, label: 'New reminder', value: New reminder
+                            TextField, 0x101c3e0d0, {{30.0, 792.0}, {299.0, 22.0}}, placeholderValue: 'New reminder'
+                              Other, 0x101c3e1f0, {{32.0, 800.0}, {297.0, 11.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                                Other, 0x101c3e310, {{33.0, 808.0}, {293.0, 3.0}}
+                          Button, 0x101c3e430, {{337.0, 781.0}, {44.0, 44.0}}, label: 'Add reminder', Disabled
+                            Image, 0x101c3e550, {{337.0, 781.0}, {44.0, 44.0}}, identifier: 'arrow.up', label: 'Up', Disabled
+                Other, 0x101c3e670, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x101c3e790, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x101c3e8b0, {{0.0, 62.0}, {1.0, 1.0}}, identifier: 'hillclimb.geometry', value: {"authState":[0,0,...
+Path to element:
+ →Application, 0x101c2e950, pid: 93753, label: 'Notepad'
+Query chain:
+ →Find: Target Application 'systems.edmundlim.NotepadHillclimb'
+  Output: {
+    Application, 0x101e46720, pid: 93753, label: 'Notepad'
+  }

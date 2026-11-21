@@ -1,0 +1,369 @@
+{
+  "success": true,
+  "data": {
+    "nodes": [
+      {
+        "index": 0,
+        "type": "Other",
+        "role": "_TtC7SwiftUIP33_ACC2C5639A7D76F611E170E831FCA49118SwiftUIApplication",
+        "subrole": "UIApplication",
+        "label": "Notepad",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 402,
+          "height": 874
+        },
+        "enabled": true,
+        "depth": 0,
+        "pid": 39395,
+        "hittable": false,
+        "ref": "e1",
+        "kind": "other"
+      },
+      {
+        "index": 1,
+        "parentIndex": 0,
+        "type": "NavigationBar",
+        "role": "SwiftUI.UIKitNavigationBar",
+        "subrole": "UINavigationBar",
+        "identifier": "Sign In",
+        "rect": {
+          "x": 0,
+          "y": 62,
+          "width": 402,
+          "height": 54
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 39395,
+        "hittable": true,
+        "ref": "e2",
+        "kind": "navigation-bar"
+      },
+      {
+        "index": 2,
+        "parentIndex": 1,
+        "type": "StaticText",
+        "role": "UILabel",
+        "label": "Sign In",
+        "rect": {
+          "x": 168.33333333333334,
+          "y": 71.33333333333334,
+          "width": 65,
+          "height": 25.33333333333333
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 39395,
+        "hittable": true,
+        "ref": "e3",
+        "kind": "text"
+      },
+      {
+        "index": 3,
+        "parentIndex": 0,
+        "type": "ScrollView",
+        "role": "SwiftUI.HostingScrollView",
+        "subrole": "UIScrollView",
+        "rect": {
+          "x": 0,
+          "y": 116,
+          "width": 402,
+          "height": 696
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 39395,
+        "hittable": true,
+        "hiddenContentAbove": true,
+        "ref": "e4",
+        "kind": "scroll-area"
+      },
+      {
+        "index": 4,
+        "parentIndex": 3,
+        "type": "StaticText",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Use the same address as the web board.",
+        "rect": {
+          "x": 20,
+          "y": 116,
+          "width": 343.3333333333333,
+          "height": 22.666666666666686
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 39395,
+        "hittable": true,
+        "ref": "e5",
+        "kind": "text"
+      },
+      {
+        "index": 5,
+        "parentIndex": 3,
+        "type": "Other",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "identifier": "signin.emailTarget",
+        "rect": {
+          "x": 20,
+          "y": 150.66666666666663,
+          "width": 362,
+          "height": 44
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 39395,
+        "hittable": true,
+        "ref": "e6",
+        "kind": "other"
+      },
+      {
+        "index": 6,
+        "parentIndex": 5,
+        "type": "TextField",
+        "role": "UITextField",
+        "label": "Email address",
+        "value": "you@example.com",
+        "placeholder": "you@example.com",
+        "rect": {
+          "x": 20,
+          "y": 150.66666666666663,
+          "width": 362,
+          "height": 44
+        },
+        "enabled": true,
+        "depth": 3,
+        "password": false,
+        "editable": true,
+        "pid": 39395,
+        "hittable": true,
+        "ref": "e7",
+        "kind": "text-field"
+      },
+      {
+        "index": 7,
+        "parentIndex": 3,
+        "type": "Other",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "identifier": "signin.passwordTarget",
+        "rect": {
+          "x": 20,
+          "y": 246.33333333333331,
+          "width": 362,
+          "height": 48
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 39395,
+        "hittable": true,
+        "ref": "e8",
+        "kind": "other"
+      },
+      {
+        "index": 8,
+        "parentIndex": 7,
+        "type": "SecureTextField",
+        "role": "UITextField",
+        "label": "Password",
+        "value": "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+        "placeholder": "Password",
+        "rect": {
+          "x": 20,
+          "y": 246.33333333333331,
+          "width": 362,
+          "height": 48
+        },
+        "enabled": true,
+        "depth": 3,
+        "password": true,
+        "editable": true,
+        "pid": 39395,
+        "hittable": true,
+        "ref": "e9",
+        "kind": "securetextfield"
+      },
+      {
+        "index": 9,
+        "parentIndex": 3,
+        "type": "StaticText",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "For an existing account with a password. You can also use a sign-in link.",
+        "rect": {
+          "x": 20,
+          "y": 306.33333333333337,
+          "width": 346.66666666666663,
+          "height": 47
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 39395,
+        "hittable": true,
+        "ref": "e10",
+        "kind": "text"
+      },
+      {
+        "index": 10,
+        "parentIndex": 3,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Sign In with Password",
+        "rect": {
+          "x": 20,
+          "y": 365.33333333333326,
+          "width": 362,
+          "height": 57.66666666666663
+        },
+        "enabled": false,
+        "depth": 2,
+        "pid": 39395,
+        "hittable": false,
+        "ref": "e11",
+        "kind": "button"
+      },
+      {
+        "index": 11,
+        "parentIndex": 3,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Use a Sign-In Link Instead",
+        "rect": {
+          "x": 20,
+          "y": 435,
+          "width": 362,
+          "height": 48
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 39395,
+        "hittable": true,
+        "ref": "e12",
+        "kind": "button"
+      },
+      {
+        "index": 12,
+        "parentIndex": 3,
+        "type": "Link",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Privacy",
+        "rect": {
+          "x": 72.66666666666666,
+          "y": 525.6666666666666,
+          "width": 61.33333333333334,
+          "height": 23
+        },
+        "enabled": false,
+        "depth": 2,
+        "pid": 39395,
+        "hittable": false,
+        "ref": "e13",
+        "kind": "link"
+      },
+      {
+        "index": 13,
+        "parentIndex": 3,
+        "type": "Link",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Terms",
+        "rect": {
+          "x": 171.66666666666666,
+          "y": 525.6666666666666,
+          "width": 52.33333333333334,
+          "height": 23
+        },
+        "enabled": false,
+        "depth": 2,
+        "pid": 39395,
+        "hittable": false,
+        "ref": "e14",
+        "kind": "link"
+      },
+      {
+        "index": 14,
+        "parentIndex": 3,
+        "type": "Link",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Support",
+        "rect": {
+          "x": 261.3333333333333,
+          "y": 525.6666666666666,
+          "width": 68,
+          "height": 23
+        },
+        "enabled": false,
+        "depth": 2,
+        "pid": 39395,
+        "hittable": false,
+        "ref": "e15",
+        "kind": "link"
+      },
+      {
+        "index": 15,
+        "parentIndex": 0,
+        "type": "Other",
+        "role": "_TtCV17LazyMansReminders23HillclimbGeometryExport10ExportView",
+        "subrole": "UIView",
+        "value": "{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}",
+        "identifier": "hillclimb.geometry",
+        "rect": {
+          "x": 0,
+          "y": 62,
+          "width": 1,
+          "height": 1
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 39395,
+        "hittable": true,
+        "ref": "e16",
+        "kind": "other"
+      }
+    ],
+    "truncated": false,
+    "appName": "systems.edmundlim.NotepadHillclimb",
+    "appBundleId": "systems.edmundlim.NotepadHillclimb",
+    "visibility": {
+      "partial": true,
+      "visibleNodeCount": 16,
+      "totalNodeCount": 16,
+      "reasons": [
+        "scroll-hidden-above"
+      ]
+    },
+    "viewport": {
+      "width": 402,
+      "height": 874
+    },
+    "presentedSurface": "absent",
+    "snapshotQualityNotes": [
+      {
+        "code": "regular-geometry-clipped",
+        "clippedNodeCount": 2,
+        "droppedNodeCount": 3
+      }
+    ],
+    "snapshotDiagnostics": {
+      "stats": {
+        "count": 275,
+        "p50Ms": 52,
+        "p95Ms": 88,
+        "maxMs": 286,
+        "slowThresholdMs": 1500,
+        "platform": "ios",
+        "backends": {
+          "xctest": 275
+        }
+      }
+    },
+    "refsGeneration": 486314
+  }
+}

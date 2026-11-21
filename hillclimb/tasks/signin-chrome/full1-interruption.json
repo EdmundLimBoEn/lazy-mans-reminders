@@ -1,0 +1,16 @@
+{
+  "reason": "Known baseline strict44pt fractional failure; stop obsolete source after verified Settings teardown to rebuild48pt row and hard title edge.",
+  "signal": "SIGINT",
+  "pid": 96215,
+  "exit": 75,
+  "resultRelocatedFrom": "/tmp/hillclimb-O-full.xcresult",
+  "resultRelocatedTo": "/tmp/hillclimb-O-full1.xcresult",
+  "passed": 270,
+  "failed": 2,
+  "failures": [
+    "AccessibilitySettings keyboard target43.99999999999997 <44",
+    "BoardEdge matrix canceled by SIGINT"
+  ],
+  "skipped": 0,
+  "claim": "Not a complete or passing suite"
+}

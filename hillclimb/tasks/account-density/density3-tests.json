@@ -1,0 +1,72 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+      "deviceName" : "Hillclimb iPhone 17 Pro",
+      "modelName" : "iPhone 17 Pro",
+      "osBuildNumber" : "23C54",
+      "osVersion" : "26.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "39s",
+                  "durationInSeconds" : 39.64452290534973,
+                  "name" : "testAdjacentSectionRhythm()",
+                  "nodeIdentifier" : "AccountDensityUITests/testAdjacentSectionRhythm()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountDensityUITests/testAdjacentSectionRhythm",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "children" : [
+                    {
+                      "name" : "XCTAssertGreaterThanOrEqual failed: (\"2.3309564156524925\") is less than (\"7.0\")",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-800c5513/ios/UITests/AccountDensityUITests.swift",
+                        "lineNumber" : 139
+                      }
+                    }
+                  ],
+                  "duration" : "12s",
+                  "durationInSeconds" : 12.63156795501709,
+                  "name" : "testExplanatoryInkAndPassiveIdentity()",
+                  "nodeIdentifier" : "AccountDensityUITests/testExplanatoryInkAndPassiveIdentity()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountDensityUITests/testExplanatoryInkAndPassiveIdentity",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "AccountDensityUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountDensityUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "HillclimbUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "LazyMansReminders",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}

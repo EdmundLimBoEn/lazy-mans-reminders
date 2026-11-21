@@ -1,0 +1,494 @@
+{
+  "graders": {
+    "gpt-6.1-sol": {
+      "overall": 8.83,
+      "minimum": 7.8,
+      "errors": [],
+      "evidence_gaps": [
+        "Apple Notes was unavailable. Seventeen usable Reminders references cover only listed semantic/size/configuration pairings; no exact authentication, account persistence-help, capacity contract or combined-setting Apple counterpart.",
+        "All 51 core sheets were inspected, representing all 537 historical native originals. Full-resolution inspection was selective (54 historical originals across every major family); all 20 supplemental native originals were individually inspected. Contact sheets cannot resolve every small detail in every original.",
+        "All nine recordings were inspected through three distributed samples each (27 frames across three sheets). Continuous motion, frame pacing, hitches and transition timing were not established.",
+        "No physical haptics, spoken VoiceOver session, physical Lock Screen/wallpaper matrix, accessibility text sizes 1\u20135, live authentication, AutoFill or production-service behavior was observed.",
+        "Protected XCTest populated-password imagery is partial; full-device populated/combined-keyboard originals provide separate complete imagery. Do not treat the protected screenshots as complete keyboard proof.",
+        "Public five-sample simulator Debug metrics establish only launch/clock-scroll/scroll-signpost duration baselines. XCTest overhead and coarse full-suite host load are not isolated; no hardware feel or frame/hitch metric. The passing normal-keyboard method has a 1389.957s runner-duration outlier.",
+        "Long native Activity rows still tail-truncate; compact/minimal views are EmptyView. The short XXXL Island fix does not prove arbitrary long wording fits.",
+        "Historical 537-image acquisition SHA and original binary are preserved; graded test revision differs with byte-identical production. Parent verified hashes; reviewer did not independently repeat the complete hash audit.",
+        "Some original checkout iCloud/Git metadata reads stalled. Review continued from the parent-verified same frozen source/evidence copy outside iCloud. Full lossless raw process/diagnostic logs were not exhaustively read; structured checks, acceptance, provenance and restoration evidence were reviewed. No missing byte was treated as a visual defect.",
+        "Edmund's visual-calm acceptance remains open. Automated geometry/contrast and this review score do not supersede the explicit crowding feedback."
+      ],
+      "source_sha": "b846a9155dd4b1dd773482f6cc4169a73441ba25",
+      "categories": [
+        {
+          "name": "Visual hierarchy",
+          "score": 8,
+          "rationale": "Account guidance and actions compete at similar prominence; sign-in field grouping and the full-board footer need a calmer hierarchy. Clear titles and primary tasks remain identifiable."
+        },
+        {
+          "name": "Spacing/grid",
+          "score": 8,
+          "rationale": "Stable safe-area geometry and generally consistent margins; uniform sign-in child spacing and the capacity hint/status gutter mismatch weaken grouping. Account compact sections leave little distinction between help and actions."
+        },
+        {
+          "name": "Typography scale",
+          "score": 9.1,
+          "rationale": "Readable system typography and persistent Password label; hierarchy needs semantic grouping rather than smaller type. No observed text collision in reviewed sizes."
+        },
+        {
+          "name": "Dynamic Type",
+          "score": 9,
+          "rationale": "Default and XXXL retain fields, actions and scroll reachability. Capacity status keeps body sizing; short XXXL Island rows now both complete. Accessibility sizes 1\u20135 remain unobserved."
+        },
+        {
+          "name": "Light contrast",
+          "score": 9.4,
+          "rationale": "Reviewed light states retain strong labels and legal ink; native disabled controls are distinguishable. Any proposed secondary help treatment must preserve measured contrast."
+        },
+        {
+          "name": "Dark contrast",
+          "score": 9.4,
+          "rationale": "Dark forms, rows, error states and native Activity surfaces remain legible, with restrained separators and no decorative saturated panels."
+        },
+        {
+          "name": "Iconography",
+          "score": 9.3,
+          "rationale": "Branding and Apple mark are retained; completion, account and reorder affordances are coherent. Functional destructive trash color is appropriate."
+        },
+        {
+          "name": "Safe area / Dynamic Island",
+          "score": 9.2,
+          "rationale": "No observed obstruction in top, scrolled, keyboard and sheet states. The board's custom 24pt mask/6pt opaque accessibility boundary is distinct from Apple's native edge treatment."
+        },
+        {
+          "name": "Scroll/pull-down / last row",
+          "score": 9.4,
+          "rationale": "Long-board after-pull and true-bottom originals preserve the final row above the composer. New ordinary sign-in gestures establish real movement and bottom clearance in all four variants."
+        },
+        {
+          "name": "List rows",
+          "score": 8.7,
+          "rationale": "Large completion/reorder targets and first-line alignment work well. Persistent grips and reserved columns make long paragraphs visually denser than the short, varied Apple reference rows."
+        },
+        {
+          "name": "Empty states",
+          "score": 8.4,
+          "rationale": "All Clear is clear and the setup guidance is dismissible/focus-aware. The instructional empty state is substantially more text-heavy than Apple's minimal no-reminder surface."
+        },
+        {
+          "name": "Composer ergonomics",
+          "score": 9.1,
+          "rationale": "Multiline entry, Done, Add, retained draft and local completion are supported by captures/tests. At capacity Add disappears and full-width status preserves type; its repeated guidance still needs better hierarchy."
+        },
+        {
+          "name": "Keyboard handling",
+          "score": 9.2,
+          "rationale": "Full-device ordinary and combined-setting captures show keyboard clearance and persistent populated-password labeling. Protected XCTest screenshots are partial evidence; the separate native supplements fill that visual gap."
+        },
+        {
+          "name": "Sheet presentation/detents",
+          "score": 9.1,
+          "rationale": "Account large/medium and scrolled sheets use native detents and a hard native top edge. Local 46pt Done yields at least 44pt measured clearance/target behavior; dense content still scrolls."
+        },
+        {
+          "name": "Navigation clarity",
+          "score": 9.1,
+          "rationale": "Board, Account, Done and legal destinations are understandable. The recovery and draft paths retain context."
+        },
+        {
+          "name": "Touch targets",
+          "score": 9.4,
+          "rationale": "44pt minimums are supported for main controls, password 48pt, legal links and local sheet Done. New ordinary pan evidence complements separate enabled appearance geometry rather than conflating the fixtures."
+        },
+        {
+          "name": "Haptics",
+          "score": 8.2,
+          "rationale": "Source supplies appropriate completion/reorder feedback paths. Simulator imagery and frame samples cannot establish physical haptic quality."
+        },
+        {
+          "name": "Animation/transitions",
+          "score": 8.5,
+          "rationale": "Sampled composer/account/Activity recordings show coherent states and no sampled-frame collision; three distributed frames per recording do not establish continuous smoothness or transition timing."
+        },
+        {
+          "name": "Loading states",
+          "score": 9.2,
+          "rationale": "Board and sign-in loading states retain clear status and stable control structure without layout collapse. No live-service timing inference is made."
+        },
+        {
+          "name": "Error states",
+          "score": 9.2,
+          "rationale": "Saved-board fallback, refresh recovery and sign-in error presentation are readable. Raw network error wording is intentionally retained; its length is a content constraint, not permission to remove it."
+        },
+        {
+          "name": "VoiceOver/labels",
+          "score": 8.9,
+          "rationale": "Source includes meaningful control labels, row position/move actions and avoids a duplicate spoken Password label. Spoken order and actual VoiceOver gestures were not heard or exercised."
+        },
+        {
+          "name": "iOS HIG consistency",
+          "score": 8.8,
+          "rationale": "Native list/sheet/keyboard affordances are strong. Account's help-heavy grouping and board custom edge differ from Apple's calmer references; semantic and configuration gaps prevent layout-copy conclusions."
+        },
+        {
+          "name": "Lock Screen / Live Activity",
+          "score": 8.9,
+          "rationale": "Native expanded and banner evidence supports line budgets/counts; native tightening fixes both short XXXL Island rows. Long rows still tail-truncate and compact/minimal are EmptyView; physical Lock/wallpaper variety is untested."
+        },
+        {
+          "name": "Sign-in/onboarding",
+          "score": 8.4,
+          "rationale": "Clear methods, persistent Password label, legal targets and actual scroll reachability. Equal spacing and primary-weight helper copy make the populated XXXL stack feel like a sequence of competing blocks."
+        },
+        {
+          "name": "Settings/account",
+          "score": 7.8,
+          "rationale": "The strongest observed crowding: five mixed status/action rows, exact multi-paragraph help, and expanded guidance stack without enough distinction of purpose. This is normal product copy, not a synthetic long-reminder artifact."
+        },
+        {
+          "name": "Performance feel",
+          "score": 8.3,
+          "rationale": "Fresh five-sample launch/scroll duration metrics provide a reproducible simulator baseline. No frame/hitch metric or hardware feel; host load, XCTest overhead and a 1389.957s keyboard runner outlier limit responsiveness conclusions."
+        },
+        {
+          "name": "Delight",
+          "score": 8,
+          "rationale": "The neutral post-it identity and focused completion flow are appealing. Dense explanatory surfaces interrupt the otherwise simple experience; user acceptance of visual calm is still open."
+        },
+        {
+          "name": "Long text",
+          "score": 8.4,
+          "rationale": "Board paragraphs wrap and remain reachable; Account preserves exact guidance and errors. Native Activity long rows retain safe tail truncation, so full identity of similarly prefixed reminders is not established at a glance."
+        },
+        {
+          "name": "Reduced Motion / Transparency",
+          "score": 9.2,
+          "rationale": "Actual Settings combinations and all four original values restored at each of three teardowns are evidenced. Opaque edge fallback and combined keyboard captures support current behavior; physical perception remains unmeasured."
+        },
+        {
+          "name": "Palette / minimalism",
+          "score": 9.3,
+          "rationale": "Neutral system surfaces, restrained separators and no nested decorative cards or decorative red/orange. Minimal palette alone does not resolve the observed information density."
+        }
+      ],
+      "findings": [
+        {
+          "id": "R6-SOL-01",
+          "severity": "medium",
+          "screen": "Account, normal and expanded guidance, default and XXXL, light/dark, large and medium",
+          "evidence": [
+            "account-enabled/screens/normal-light-default-large-top.png",
+            "account-enabled/screens/normal-dark-XXXL-large-top.png",
+            "account-enabled/screens/normal-light-XXXL-expanded-guidance.png",
+            "account-enabled/screens/detents-light-XXXL-normal-medium-top.png",
+            "../../reference/round2/reminders-sheet-light.png",
+            "../../reference/round3/reminders-sheet-dark-XXXL.png"
+          ],
+          "description": "Account has the strongest product-created density. Live Activities and Background App Refresh statuses share one five-row group with Refresh/Open Settings/widget disclosure; the two exact guidance paragraphs arrive after those unrelated actions in primary ink. Expanded widget guidance adds three more paragraphs and separators. This creates an explanatory wall even without synthetic reminder data. The 6pt paragraph separation and hard native edge improve correctness, but do not create a calm hierarchy.",
+          "fix": "In BoardPersistenceSection, associate each unchanged activity/background paragraph immediately with its owning status as an unpainted contextual footnote; place Refresh/Open Settings/widget actions after a distinct native section boundary. Retain both paragraphs verbatim and visible, all expanded guidance, row labels and recovery wording. Differentiate local helper spacing (6\u20138pt) from a 16\u201324pt status/action group break instead of applying compact spacing uniformly. Evaluate semantic secondary help ink only if contrast remains at least 4.5:1 in all appearance/combined settings; keep existing type sizes and no nested cards. AccountView owns section rhythm and native detent/Done preservation.",
+          "confidence": "high",
+          "basis": "Observed normal and expanded native originals at both sizes/appearances; source-derived ownership and spacing proposal. Apple Details is a hierarchy reference with different semantics, not an equal-content height baseline.",
+          "source": [
+            "ios/App/BoardPersistenceSection.swift:26",
+            "ios/App/BoardPersistenceSection.swift:69",
+            "ios/App/BoardPersistenceSection.swift:131",
+            "ios/App/AccountView.swift:150"
+          ],
+          "check": "Before/after captures in four appearance/size variants at large and medium, plus expanded guidance, notifications error and refresh recovery. Assert both guidance paragraphs occur exactly once unchanged and directly follow their owning status before unrelated actions; native group boundaries measure 16\u201324pt and local helper gaps 6\u20138pt. Preserve all >=44pt targets, local Done >=44pt at medium, hard top-edge clearance, full scroll reachability, actual Settings restoration and the existing iOS suite. Visual side-by-side review and Edmund's acceptance are required; these geometry checks cannot certify calm."
+        },
+        {
+          "id": "R6-SOL-02",
+          "severity": "medium",
+          "screen": "Sign-in, default and populated password, default and XXXL, light/dark and combined keyboards",
+          "evidence": [
+            "signin-enabled/signin-light-default-default.png",
+            "signin-enabled/signin-dark-XXXL-default.png",
+            "signin-chrome-manual/final-native-normal-light-XXXL-focused.png",
+            "signin-chrome-manual/final-native-combined-dark-default-bottom.png",
+            "../../validation/round6/recheck/manual-native/light-XXXL-initial.png",
+            "../../validation/round6/recheck/manual-native/light-XXXL-bottom.png",
+            "../../reference/round3/reminders-compose-light-XXXL.png",
+            "../../reference/round2/reminders-sheet-light.png"
+          ],
+          "description": "Default sign-in has enough overall space, but the email/password section gives labels, helpers, fields, submit and alternate method the same 12pt relation. Primary-ink helpers compete with labels. At populated XXXL, multiple provider/field/action rectangles and explanatory lines become a tall sequence with weak internal grouping. Legal links remain reachable by an actual ordinary gesture; the deliberate noninteractive enabled-paint fixture is not a production scrolling defect.",
+          "fix": "In SignInView, introduce unpainted field units inside emailSection: each persistent label/helper/field uses 6\u20138pt internal gaps, Email and Password units use 16\u201320pt separation, and provider/email groups retain a distinct 24pt boundary. Keep every word, provider option, brand/icon, raw network error, password 48pt field, submit/alternate/Done/legal targets and current typography. Give helper text a subordinate semantic treatment only after contrast validation. Keep the single legalFooter implementation and native hard top edge; do not add cards or hide methods.",
+          "confidence": "high",
+          "basis": "Observed default, populated native keyboard and actual ordinary pan originals; source-derived uniform SignInSection spacing. Apple composer/Details references establish label-field grouping only; they contain no equivalent authentication flow.",
+          "source": [
+            "ios/App/SignInView.swift:70",
+            "ios/App/SignInView.swift:252",
+            "ios/App/SignInView.swift:388",
+            "ios/App/SignInView.swift:411",
+            "ios/App/SignInView.swift:499"
+          ],
+          "check": "Capture default/password/loading/error/inbox at both appearances and default/XXXL, with populated normal and combined keyboards. Check unchanged wording once, label-field proximity 6\u20138pt and inter-field gap 16\u201320pt without reducing fonts or targets; persistent Password label must remain visible when populated. Repeat actual ordinary gesture method in all four variants and retain at least current 50pt XXXL legal-bottom clearance, enabled-paint geometry/inertness checks, native top-edge non-overlap, all legal >=44pt targets and existing iOS suite. Ask Edmund to compare the grouping, not merely accept a shorter screenshot."
+        },
+        {
+          "id": "R6-SOL-03",
+          "severity": "low",
+          "screen": "Main board at capacity, default and XXXL, light/dark, before/after local completion",
+          "evidence": [
+            "board/light-default-true-bottom-after-pull.png",
+            "board/dark-XXXL-true-bottom-after-pull.png",
+            "board/light-XXXL-completion-after.png",
+            "board/dark-default-top.png",
+            "../../reference/round3/reminders-top-light-XXXL.png",
+            "../../reference/round3/reminders-compose-light-XXXL.png"
+          ],
+          "description": "The full-board footer presents the long Hint about combining reminders and the body-size 'Board full \u2014 combine lines instead' status as two successive instructions with different leading gutters (source: approximately 18pt hint versus 30pt status). This repeats the same task at two prominence levels beside already dense long rows. Most density inside the seeded rows comes from repeated synthetic long text, so it is not evidence that ordinary reminders need smaller typography.",
+          "fix": "In ReminderListView.composer, present the unchanged capacity status first as the clear local heading and the exact Hint immediately below as its subordinate explanation with one shared leading gutter. Use a 6\u20138pt local gap, retain full-width body-size status/static semantics and no Add at capacity. Rebalance existing padding rather than increasing the footer's occupied height; keep all words. Preserve ordinary composer geometry and row type/targets. ReorderableReminderList owns the row gutters/grip reservations; compare equivalent natural-length content before changing that layout.",
+          "confidence": "high",
+          "basis": "Observed capacity and post-completion native originals; source-derived gutter arithmetic and ordering. Apple board/composer references have different row text lengths and no identical capacity contract.",
+          "source": [
+            "ios/App/ReminderListView.swift:241",
+            "ios/App/ReminderListView.swift:255",
+            "ios/App/ReorderableReminderList.swift",
+            "ios/App/ReminderListView.swift:644"
+          ],
+          "check": "Four appearance/size before/after capacity captures must show exact status and exact Hint once, common leading x within 1pt, full body-size untruncated status, no Add control, and footer height no greater than baseline. Re-run after-pull/true-last-row clearance checks and capacity\u2192local completion\u2192ordinary composer/draft Done tests plus existing iOS suite. Add matched natural-length board screenshots against Apple to distinguish row chrome from stress text; retain all >=44pt controls."
+        }
+      ]
+    },
+    "gpt-6-astra": {
+      "overall": 8.92,
+      "minimum": 8,
+      "errors": [],
+      "evidence_gaps": [
+        "Physical haptics, spoken VoiceOver/rotor traversal, true locked-device Activity, wallpaper matrix, AX1\u20135, live authentication and AutoFill were not observed.",
+        "Nine recordings were inspected through three distributed samples each; no frame pacing or hitch metric was measured.",
+        "Public launch/scroll five-sample simulator metrics include host/XCTest effects. Normal keyboard test's unexplained 1389.957s outlier and earlier timeout/interruption records remain; pass is not responsiveness proof.",
+        "Historical protected XCTest password screenshots are partial. Full-device native normal/combined keyboard and populated-password captures supply complete selected visual evidence.",
+        "Apple references have content/semantic/configuration gaps: no auth/loading/error/Activity equivalent, no exact medium-detent or combined-settings pair, and some empty states lack size/appearance match. App paragraphs are much longer than Apple list seeds.",
+        "Dense explanatory copy and visual hierarchy require user acceptance. Passing geometry/contrast, or any future overall >=9, does not establish calm."
+      ],
+      "source_sha": "b846a9155dd4b1dd773482f6cc4169a73441ba25",
+      "categories": [
+        {
+          "name": "Visual hierarchy",
+          "score": 8.3,
+          "rationale": "Primary board task is clear; Account gives persistent guidance almost the same ink priority as actions, and Sign In's uniform spacing weakens field grouping. Passing geometry does not establish calm."
+        },
+        {
+          "name": "Spacing/grid",
+          "score": 8.2,
+          "rationale": "Consistent native gutters and safe insets; Account compact section rhythm and the capacity footer's 18pt/30pt leading-edge mismatch remain visible. See density tasks."
+        },
+        {
+          "name": "Typography scale",
+          "score": 8.9,
+          "rationale": "System styles and persistent Password heading are legible; hierarchy needs refinement without reducing sizes. Short Island strings now fit through native tightening."
+        },
+        {
+          "name": "Dynamic Type",
+          "score": 9.3,
+          "rationale": "Default/XXXL matrices preserve complete board paragraphs, full-width capacity status and Account guidance. Larger accessibility sizes AX1\u20135 remain unobserved."
+        },
+        {
+          "name": "Light contrast",
+          "score": 9.3,
+          "rationale": "Strong enabled text, controls and errors across normal/combined settings; native raster gates support the inspected samples, not every wallpaper or disabled fixture."
+        },
+        {
+          "name": "Dark contrast",
+          "score": 9.3,
+          "rationale": "Dark surfaces preserve clear text and controls, including errors and guidance. Disabled fixture paint is distinguished from enabled production appearance."
+        },
+        {
+          "name": "Iconography",
+          "score": 9.2,
+          "rationale": "Recognizable SF Symbols, original Notepad icon and native provider branding. Reorder grips are understandable but add a recurring visual column."
+        },
+        {
+          "name": "Safe area / Dynamic Island",
+          "score": 9.3,
+          "rationale": "Inspected title bands and Island content clear system boundaries. Account/Sign In use native hard edges; board's custom 24pt mask is not claimed to reproduce Apple's blur."
+        },
+        {
+          "name": "Scroll/pull-down / last row",
+          "score": 9.5,
+          "rationale": "Post-refresh final-row ink is complete above composer at both sizes/styles; new actual legal-footer gestures resolve prior reachability evidence mismatch."
+        },
+        {
+          "name": "List rows",
+          "score": 8.9,
+          "rationale": "Native separators, dedicated completion target and accessible reorder actions are strong. Permanent trailing grips narrow the text column relative to Apple; long fixture copy amplifies this."
+        },
+        {
+          "name": "Empty states",
+          "score": 8.8,
+          "rationale": "All Clear is clear and composition removes setup instructions. First-run guide is substantially denser than Apple's empty list, especially XXXL, but remains purposeful and dismissible."
+        },
+        {
+          "name": "Composer ergonomics",
+          "score": 9.1,
+          "rationale": "Draft-preserving Done and 44pt controls work in evidence. Full-capacity no-Add behavior is correct; status/help ordering and different left edges still need polish."
+        },
+        {
+          "name": "Keyboard handling",
+          "score": 9.3,
+          "rationale": "Normal and actual combined-settings secure-field supplements show complete keyboards, persistent label and Done. Focus/pan geometry passes; live AutoFill is unobserved."
+        },
+        {
+          "name": "Sheet presentation/detents",
+          "score": 9.3,
+          "rationale": "Account medium/large, scrolled title bands, reopening large and onscreen Done >=44pt are supported. Apple's available Details references are large detents only."
+        },
+        {
+          "name": "Navigation clarity",
+          "score": 9.2,
+          "rationale": "Single board, clear Account entry/Done, explicit provider/email choices and legal actions. No mistaken navigation failure inferred from inert demos."
+        },
+        {
+          "name": "Touch targets",
+          "score": 9.5,
+          "rationale": "Source and native assertions support completion/grip/Add/Done and legal targets; Account 46pt local Done remains >=44pt after medium-sheet scaling."
+        },
+        {
+          "name": "Haptics",
+          "score": 8.2,
+          "rationale": "Selection/completion/auth feedback has sensible source placement, but no physical tactile assessment was performed."
+        },
+        {
+          "name": "Animation/transitions",
+          "score": 8.7,
+          "rationale": "Nine recordings sampled at three distributed times support sensible end states and transitions; samples cannot certify cadence or absence of transient hitches."
+        },
+        {
+          "name": "Loading states",
+          "score": 9.2,
+          "rationale": "Clear centered board loading and layout-preserving authentication progress. Source prevents label collapse; no live network latency assessment."
+        },
+        {
+          "name": "Error states",
+          "score": 9,
+          "rationale": "Readable, actionable board/auth/account recovery without decorative warning colors. Raw network error wording is intentionally preserved as requested; local recovery is not live authentication proof."
+        },
+        {
+          "name": "VoiceOver/labels",
+          "score": 8.8,
+          "rationale": "Dedicated labels, full reminder text, position/action semantics and announcement policies are supported in source/AX evidence. Spoken order and rotor use remain unobserved."
+        },
+        {
+          "name": "iOS HIG consistency",
+          "score": 9,
+          "rationale": "Native List, sheet detents, provider control and keyboard treatments are convincing. Account information hierarchy and custom board edge remain distinct from Apple reference behavior."
+        },
+        {
+          "name": "Lock Screen / Live Activity",
+          "score": 8.8,
+          "rationale": "Short XXXL expanded strings now both complete with +8; banner and constrained Island preserve count budgets. Very long tails truncate and compact/minimal are intentionally empty; true locked hardware is unobserved."
+        },
+        {
+          "name": "Sign-in/onboarding",
+          "score": 8.5,
+          "rationale": "Persistent Password labeling, native provider paint and verified footer reachability are strong. Equal 12pt internal spacing and prominent helper copy make the XXXL password stack feel busier than necessary."
+        },
+        {
+          "name": "Settings/account",
+          "score": 8,
+          "rationale": "Mechanically complete and accessible at both detents, but passive identity pill, compact successive sections and primary-ink persistent prose compete with settings actions. Highest density priority."
+        },
+        {
+          "name": "Performance feel",
+          "score": 8.2,
+          "rationale": "Fresh five-sample public metrics establish a simulator baseline only. Host load, XCTest overhead and unexplained 1389.957s keyboard-method outlier preclude a responsiveness certification."
+        },
+        {
+          "name": "Delight",
+          "score": 8.4,
+          "rationale": "Direct composition, completion and restrained monochrome treatment are pleasant. Repeated chrome and guidance reduce calm in Account/Sign In; no hardware-feel evidence."
+        },
+        {
+          "name": "Long text",
+          "score": 9,
+          "rationale": "Main-board paragraphs and Account guidance remain complete; stress seed is not representative content density. Island intentionally uses one-line tails for genuinely long content."
+        },
+        {
+          "name": "Reduced Motion / Transparency",
+          "score": 9.3,
+          "rationale": "Actual combined-system-setting matrices and all-three-method teardown restoration support the implementation; solid 6pt board edge is explicit. No physical motion sensitivity evaluation."
+        },
+        {
+          "name": "Palette / minimalism",
+          "score": 9,
+          "rationale": "Restrained monochrome surfaces and functional tint respect the brief, with no nested cards or decorative red/orange. Low color count alone does not cure Account's visual density."
+        }
+      ],
+      "findings": [
+        {
+          "id": "R6-ASTRA-01",
+          "severity": "P2",
+          "title": "Account's persistent guidance and repeated groups compete with its controls",
+          "screen": "Account, default and XXXL; large top, scrolled persistence, expanded guidance and medium detent",
+          "evidence": [
+            "account-enabled/screens/normal-light-default-large-top.png",
+            "account-enabled/screens/normal-dark-XXXL-large-top.png",
+            "account-enabled/screens/normal3-light-XXXL-persistence-centered.png",
+            "account-enabled/screens/normal-dark-default-expanded-guidance.png",
+            "account-enabled/screens/detents-light-XXXL-normal-medium-top.png",
+            "../../reference/round2/reminders-sheet-light.png",
+            "../../reference/round3/reminders-sheet-light-XXXL.png"
+          ],
+          "source": [
+            "ios/App/AccountView.swift: identitySection, listSectionSpacing(.compact), notification footer",
+            "ios/App/BoardPersistenceSection.swift: guidance/footer"
+          ],
+          "basis": "Observed screenshots plus source-derived cause; subjective hierarchy judgment, not a clipping or contrast failure.",
+          "confidence": "high for observed density; medium for proposed visual improvement until side-by-side acceptance",
+          "detail": "Default Account presents a passive identity pill, notification pill/footer, persistence header and five-row group, then two primary-ink paragraphs before Sign Out and legal groups. At XXXL the explanatory prose becomes a dominant block. Apple's Details has comparable native rows but clearer section pauses and much less persistent helper prose; semantics differ, so exact row-count parity is not a target.",
+          "fix": "In AccountView remove the global compact section-spacing override and render the passive identity row with a clear row background while retaining avatar, wording and layout. Keep interactive groups native. Give the persistence-to-Sign Out boundary at least 16pt measured separation, distinct from the preserved 6pt gap within the two exact paragraphs. In BoardPersistenceSection and notification footer, evaluate a secondary helper ink token at unchanged footnote size with >=4.5:1 measured contrast in both styles and combined settings; retain primary ink for errors/actions. Do not hide paragraphs, move them behind a disclosure, introduce new headings/copy, or create nested cards.",
+          "programmatic_check": "Retain exact paragraph strings once each, 6pt internal gap and full ideal heights. Add native probes for passive identity background and >=16pt semantic boundary; raster-check helper >=4.5:1 and distinct luminance from primary actions under normal/combined settings. Re-run AccountChromeUITests including medium/large Done>=44, recovery, scrolled title bands, all Settings teardown checks and full iOS suite. Compare unchanged-content default/XXXL captures with the Apple pairs and ask user to assess calm; metrics cannot substitute for that judgment."
+        },
+        {
+          "id": "R6-ASTRA-02",
+          "severity": "P2",
+          "title": "Sign In needs field grouping rather than one uniform vertical rhythm",
+          "screen": "Sign In password variant, default/XXXL, initial/bottom and normal/combined keyboard",
+          "evidence": [
+            "../../validation/round6/recheck/manual-native/light-default-initial.png",
+            "../../validation/round6/recheck/manual-native/dark-XXXL-bottom.png",
+            "signin-chrome-manual/final-native-normal-light-default-focused.png",
+            "signin-chrome-manual/final-native-normal-dark-XXXL-focused.png",
+            "signin-chrome-manual/final-native-combined-light-XXXL-focused.png",
+            "../../reference/reminders-compose-light.png",
+            "../../reference/round3/reminders-compose-dark-XXXL.png"
+          ],
+          "source": [
+            "ios/App/SignInView.swift: SignInSection, emailSection, providerSection, legalFooter"
+          ],
+          "basis": "Observed presentation and source-derived equal 12pt child spacing. Actual scrolling succeeds; not an unreachable-footer defect.",
+          "confidence": "high for equal spacing and XXXL stack; medium for taste severity",
+          "detail": "Default has sufficient open space, so a blanket 'everything is cramped' claim would be inaccurate. In XXXL the headings, helpers, input surfaces, primary action and alternate action form a dense sequence with too little difference between within-field and between-field gaps. Apple compose is only a keyboard/form reference, not a matching authentication flow.",
+          "fix": "Replace the flat emailSection content rhythm with invisible layout groups: Email heading/helper/field as one group, Password heading/field/helper as another, and primary/alternate actions as a third. Use 6pt label-to-field/helper spacing within groups and 16pt between field groups, preserving the existing 24pt separation from providers and 48pt Password/alternate/Done targets. Keep every string, one secure field, provider branding and footer. Use source-owned helper styling only if contrast remains >=4.5:1; do not shrink type or force XXXL onto one viewport.",
+          "programmatic_check": "Probe internal gaps at 6pt and between-group gaps >=16pt; exact-copy snapshot and one secure field/one visible Password heading. Preserve existing 48pt targets and loading-label geometry. Re-run normal+combined keyboard, Done/draft, three fresh provider launches, enabled paint/inertness and ordinary actual gesture matrix. Require real XXXL displacement and every legal link >=8pt above safe bottom, plus full iOS suite. User comparison determines improved calm."
+        },
+        {
+          "id": "R6-ASTRA-03",
+          "severity": "P3",
+          "title": "Full-board footer reads as two disconnected blocks",
+          "screen": "Board at seven reminders, default/XXXL and both appearances",
+          "evidence": [
+            "board/light-default-top.png",
+            "board/dark-XXXL-top.png",
+            "board/light-XXXL-true-bottom-after-pull.png",
+            "full-dark-default-bottom-after-pull.png",
+            "../../reference/reminders-top-light.png",
+            "../../reference/round3/reminders-top-dark-XXXL.png"
+          ],
+          "source": [
+            "ios/App/ReminderListView.swift: composer capacityHint and capacity branch",
+            "ios/UITests/BoardCapacityPresentationUITests.swift: current 30pt/21pt status inset assertions"
+          ],
+          "basis": "Observed hint/status left-edge difference plus source-derived 18pt versus 30pt leading insets; crowding partly caused by synthetic long paragraphs.",
+          "confidence": "high for alignment/order; medium for proposed hierarchy benefit",
+          "detail": "The long explanatory hint precedes the concise full-board status; the status starts 12pt farther right. Together they occupy a persistent footer while the text column also reserves a trailing grip. No Add at capacity, full-width scaling and final-row clearance are already correct. Apple's floating Add is a different workflow, not a reason to remove the capacity explanation.",
+          "fix": "Create a dedicated static capacity layout in ReminderListView, with the unchanged status first and unchanged hint second, a 6pt gap and a shared leading edge at 18pt from the composer container. Retain full available width, Dynamic Type and the existing >=44pt status reserve initially; remove only input-specific asymmetric padding from this non-input branch. Keep no Add/input at capacity. Do not alter normal composer or shrink row text.",
+          "programmatic_check": "Update the intentional capacity inset assertions to the new shared 18pt edge, retaining ideal-height/contrast checks, no Add/text field, exactly one status/hint and >=44pt status reserve. Require footer total height no greater than baseline for the same type/content and final-row ink completely above composer after pull. Re-run all four capacity transitions, draft Done preservation, edge/AX checks and full iOS suite; review matched-content board captures before any grip redesign."
+        }
+      ]
+    }
+  },
+  "gate_passed": false,
+  "errors": [
+    "Missing scores-claude-opus-5.5.json"
+  ],
+  "opus_eligible": true
+}

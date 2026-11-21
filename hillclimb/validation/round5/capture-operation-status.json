@@ -1,0 +1,21 @@
+{
+  "uniqueOperations": 1419,
+  "failedOperations": [
+    {
+      "manifest": "hillclimb/rounds/5/account-enabled/captures-errors.json",
+      "operation": {
+        "argv": [
+          "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+          "press",
+          "label=\"Refresh Board Now\"",
+          "--settle"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "Error (COMMAND_FAILED): Selector did not match: label=\"Refresh Board Now\"\nHint: Selector text/label values match exactly (quote multi-word values: text=\"Sign in\"). Run snapshot -i to see current elements and refs, or use find <text> for contains matching.\nDiagnostic ID: mw2mdyva-acba0b67\nDiagnostics Log: /Users/limboenedmund/.agent-device/remote-diagnostics/t3-49f05c5d73f02a2e8a20b585/requests/f16e488c1582a44a.ndjson\n",
+        "time": 1793827180.6744058
+      }
+    }
+  ],
+  "disposition": "Retained Account selector failure; fresh snapshot identified wrong search direction; narrowed harness navigation and resumed missing states. All image hashes verified."
+}

@@ -1,0 +1,27 @@
+{
+  "reviewers": [
+    {
+      "model": "gpt-6.1-sol",
+      "overall": 8.57,
+      "minimum": 7.5,
+      "categories": 30,
+      "screenshots": 332,
+      "references": 17,
+      "sourceSHA": "20ae77e29019444a499e9e47c98d6b656ef56819"
+    },
+    {
+      "model": "gpt-6-astra",
+      "overall": 8.4,
+      "minimum": 7.3,
+      "categories": 30,
+      "screenshots": 332,
+      "references": 17,
+      "sourceSHA": "20ae77e29019444a499e9e47c98d6b656ef56819"
+    }
+  ],
+  "aggregateOnlyExpectedMissingOpus": true,
+  "opusEligible": false,
+  "stopGate": false,
+  "scoresUnmodified": "Only Astra reference path-base strings normalized;ratings/findings unchanged",
+  "sourceSHA": "20ae77e29019444a499e9e47c98d6b656ef56819"
+}

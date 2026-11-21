@@ -1,0 +1,17 @@
+{
+  "xcodebuild -version": {
+    "exit": 0,
+    "stdout": "Xcode 27.1\nBuild version 27A9269\n",
+    "stderr": ""
+  },
+  "xcodegen --version": {
+    "exit": 0,
+    "stdout": "Version: 2.46.0\n",
+    "stderr": ""
+  },
+  "xcrun --sdk iphonesimulator --show-sdk-version": {
+    "exit": 0,
+    "stdout": "27.1\n",
+    "stderr": ""
+  }
+}

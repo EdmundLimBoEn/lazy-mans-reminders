@@ -1,0 +1,219 @@
+[
+  {
+    "file": "hillclimb/rounds/4/activity/multiline-light-default-expanded.mp4",
+    "sha256": "bc9ad632dd45addfe9cb87995cadbe20ddf4e0379dbc98523d065fffc0713001",
+    "command": [
+      "ffprobe",
+      "-v",
+      "error",
+      "-show_entries",
+      "stream=width,height,r_frame_rate,avg_frame_rate,nb_frames:format=duration",
+      "-of",
+      "json",
+      "hillclimb/rounds/4/activity/multiline-light-default-expanded.mp4"
+    ],
+    "metadata": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1206,
+          "height": 2622,
+          "r_frame_rate": "600/1",
+          "avg_frame_rate": "10320/319",
+          "nb_frames": "86"
+        }
+      ],
+      "format": {
+        "duration": "2.658333"
+      }
+    },
+    "limitation": "Nominal encoded video rate, not simulator display frame pacing or physical feel"
+  },
+  {
+    "file": "hillclimb/rounds/4/activity/multiline-light-XXXL-expanded.mp4",
+    "sha256": "1193834a5798445c4184add7a196c51d79da69bd5bb9eb61ff3a38f2c7eb68d4",
+    "command": [
+      "ffprobe",
+      "-v",
+      "error",
+      "-show_entries",
+      "stream=width,height,r_frame_rate,avg_frame_rate,nb_frames:format=duration",
+      "-of",
+      "json",
+      "hillclimb/rounds/4/activity/multiline-light-XXXL-expanded.mp4"
+    ],
+    "metadata": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1206,
+          "height": 2622,
+          "r_frame_rate": "600/1",
+          "avg_frame_rate": "13200/323",
+          "nb_frames": "88"
+        }
+      ],
+      "format": {
+        "duration": "2.153333"
+      }
+    },
+    "limitation": "Nominal encoded video rate, not simulator display frame pacing or physical feel"
+  },
+  {
+    "file": "hillclimb/rounds/4/activity/multiline-dark-XXXL-expanded.mp4",
+    "sha256": "eadc9fabafebdc19dd40e8c521a234fea64ef4d59bcb634973ccdfb7749c416b",
+    "command": [
+      "ffprobe",
+      "-v",
+      "error",
+      "-show_entries",
+      "stream=width,height,r_frame_rate,avg_frame_rate,nb_frames:format=duration",
+      "-of",
+      "json",
+      "hillclimb/rounds/4/activity/multiline-dark-XXXL-expanded.mp4"
+    ],
+    "metadata": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1206,
+          "height": 2622,
+          "r_frame_rate": "600/1",
+          "avg_frame_rate": "5100/139",
+          "nb_frames": "85"
+        }
+      ],
+      "format": {
+        "duration": "2.316667"
+      }
+    },
+    "limitation": "Nominal encoded video rate, not simulator display frame pacing or physical feel"
+  },
+  {
+    "file": "hillclimb/rounds/4/activity/multiline-dark-default-expanded.mp4",
+    "sha256": "cdaef21e8b938ce6d2c00df4903d8b11851baa49898a1ff31bdbc59a068e3d38",
+    "command": [
+      "ffprobe",
+      "-v",
+      "error",
+      "-show_entries",
+      "stream=width,height,r_frame_rate,avg_frame_rate,nb_frames:format=duration",
+      "-of",
+      "json",
+      "hillclimb/rounds/4/activity/multiline-dark-default-expanded.mp4"
+    ],
+    "metadata": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1206,
+          "height": 2622,
+          "r_frame_rate": "600/1",
+          "avg_frame_rate": "344/9",
+          "nb_frames": "86"
+        }
+      ],
+      "format": {
+        "duration": "2.250000"
+      }
+    },
+    "limitation": "Nominal encoded video rate, not simulator display frame pacing or physical feel"
+  },
+  {
+    "file": "hillclimb/rounds/4/motion/account-dark-XXXL-scroll.mp4",
+    "sha256": "0cc5232c3258a76cc973fe024b44c6d9a1a81864fbf55d4333cc684a9d8368df",
+    "command": [
+      "ffprobe",
+      "-v",
+      "error",
+      "-show_entries",
+      "stream=width,height,r_frame_rate,avg_frame_rate,nb_frames:format=duration",
+      "-of",
+      "json",
+      "hillclimb/rounds/4/motion/account-dark-XXXL-scroll.mp4"
+    ],
+    "metadata": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1206,
+          "height": 2622,
+          "r_frame_rate": "600/1",
+          "avg_frame_rate": "155400/4243",
+          "nb_frames": "518"
+        }
+      ],
+      "format": {
+        "duration": "14.143333"
+      }
+    },
+    "limitation": "Nominal encoded video rate, not simulator display frame pacing or physical feel"
+  },
+  {
+    "file": "hillclimb/rounds/4/motion/composer-light-default.mp4",
+    "sha256": "5ca96a9f53c286a1c20adac36e9d87be56fc03264e5ca896d2ea06ab781fb05f",
+    "command": [
+      "ffprobe",
+      "-v",
+      "error",
+      "-show_entries",
+      "stream=width,height,r_frame_rate,avg_frame_rate,nb_frames:format=duration",
+      "-of",
+      "json",
+      "hillclimb/rounds/4/motion/composer-light-default.mp4"
+    ],
+    "metadata": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1206,
+          "height": 2622,
+          "r_frame_rate": "600/1",
+          "avg_frame_rate": "168000/7223",
+          "nb_frames": "280"
+        }
+      ],
+      "format": {
+        "duration": "12.038333"
+      }
+    },
+    "limitation": "Nominal encoded video rate, not simulator display frame pacing or physical feel"
+  },
+  {
+    "file": "hillclimb/rounds/4/accessibility/selected-states-all-three-enabled.mp4",
+    "sha256": "c6179c34e512926122a2cecd379b8c572ea93ab48a974c284c9c1af4201e48c4",
+    "command": [
+      "ffprobe",
+      "-v",
+      "error",
+      "-show_entries",
+      "stream=width,height,r_frame_rate,avg_frame_rate,nb_frames:format=duration",
+      "-of",
+      "json",
+      "hillclimb/rounds/4/accessibility/selected-states-all-three-enabled.mp4"
+    ],
+    "metadata": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1206,
+          "height": 2622,
+          "r_frame_rate": "600/1",
+          "avg_frame_rate": "82400/2311",
+          "nb_frames": "412"
+        }
+      ],
+      "format": {
+        "duration": "11.555000"
+      }
+    },
+    "limitation": "Actual system settings enabled. Nominal encoded video rate does not certify physical frame pacing. Keyboard segment includes an AutoFill menu; settled replacement PNG is separate."
+  }
+]

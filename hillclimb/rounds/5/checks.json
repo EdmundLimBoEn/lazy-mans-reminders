@@ -1,0 +1,147 @@
+{
+  "source_sha": "c60288dae3173383442723e70f7874b8878d891d",
+  "testRevision": "c60288dae3173383442723e70f7874b8878d891d",
+  "validationRevision": "Evidence commit; git log -- hillclimb/validation/round5",
+  "checks": [
+    {
+      "name": "full existing unit suite",
+      "status": "passed",
+      "evidence": "../../validation/round5/combined-tests.json",
+      "passed": 263,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "full existing UI suite",
+      "status": "passed",
+      "evidence": "../../validation/round5/combined-tests.json",
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "combined scheme test execution",
+      "status": "passed",
+      "evidence": "../../validation/round5/combined-summary.json",
+      "passed": 293,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "fresh iOS Python checks",
+      "status": "passed",
+      "evidence": "../../validation/round5/python-ios.json",
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "fresh cached backend helper suites",
+      "status": "passed",
+      "evidence": "../../validation/round5/deno.json",
+      "passed": 52,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "fresh offline overflow backend tests",
+      "status": "passed",
+      "evidence": "../../validation/round5/deno-overflow.json",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "name": "fresh unsigned arm64 Debug build",
+      "status": "passed",
+      "evidence": "../../validation/round5/build-debug-process.json"
+    },
+    {
+      "name": "fresh unsigned arm64 Release build",
+      "status": "passed",
+      "evidence": "../../validation/round5/build-release-process.json"
+    },
+    {
+      "name": "per-method all4 actual Settings restoration",
+      "status": "passed",
+      "evidence": "../../validation/round5/combined-restoration-proof.json"
+    },
+    {
+      "name": "normal and combined post-pan keyboard edge taps",
+      "status": "passed",
+      "evidence": "../../validation/round5/matrix-proof.json"
+    },
+    {
+      "name": "diagnostic/destructive native contrast",
+      "status": "passed",
+      "evidence": "../../validation/round5/combined-raster-results.json"
+    },
+    {
+      "name": "native image and usable reference hash integrity",
+      "status": "passed",
+      "evidence": "../../validation/round5/packet-integrity.json"
+    },
+    {
+      "name": "native board geometry/capacity/hint",
+      "status": "passed",
+      "evidence": "../../validation/round5/pixel-geometry-results.json"
+    },
+    {
+      "name": "Account helper/footer raster and alignment",
+      "status": "passed",
+      "evidence": "../../validation/round5/account-raster-results.json"
+    },
+    {
+      "name": "native Activity conservation",
+      "status": "passed",
+      "evidence": "../../validation/round5/activity-conservation.json"
+    },
+    {
+      "name": "owned device cleanup",
+      "status": "passed",
+      "evidence": "../../validation/round5/device-handback.json"
+    },
+    {
+      "name": "native top-band/final-row raster gates",
+      "status": "passed",
+      "evidence": "edge/raster-results.json",
+      "captures": 60
+    },
+    {
+      "name": "single completion stop/separate reorder leaf",
+      "status": "passed",
+      "evidence": "edge/ax-results.json",
+      "snapshots": 60
+    },
+    {
+      "name": "clean full-device combined-settings keyboard captures",
+      "status": "passed",
+      "evidence": "../../validation/round5/manual-keyboard-geometry.json",
+      "cases": 8
+    },
+    {
+      "name": "independent reviewer score gate",
+      "required": false,
+      "status": "not_met",
+      "reason": "Parent commissions fresh reviews; no new scores assigned. Final numeric gate remains unmet."
+    },
+    {
+      "name": "true locked physical-device Activity",
+      "required": false,
+      "status": "unavailable",
+      "reason": "Simulator Notification Center is not a truly locked physical device."
+    },
+    {
+      "name": "physical haptics and spoken VoiceOver",
+      "required": false,
+      "status": "unavailable",
+      "reason": "No hardware sensation or spoken traversal observed."
+    },
+    {
+      "name": "launch/frame-time performance certification",
+      "required": false,
+      "status": "unavailable",
+      "reason": "Optional launch metric not added or measured; encoded video metadata is not performance proof."
+    }
+  ]
+}

@@ -1,0 +1,1529 @@
+{
+  "testIdentifier" : "SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances()",
+  "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances",
+  "testName" : "testFocusedEmailAndPasswordClearKeyboardInBothAppearances()",
+  "testRuns" : [
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Screen Recording 2026-11-04 at 23.42.31.mp4",
+              "payloadId" : "0~z8zJv1sZPWX0hci9KzOfjU-lR39dl58SFFLqKDeop_ByZ3VJTSNTxmDwpJ0t9-Yoh4qvCKm559QVBU_m_OWqqg==",
+              "timestamp" : 1793806951.65,
+              "uuid" : "CAFF5E53-CEE0-4AB5-BE71-0C22950E48D3"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806951.65,
+              "title" : "kXCTAttachmentScreenRecording"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806951.634,
+          "title" : "Start Test at 2026-11-04 23:42:31.634"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806951.652,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806951.655,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:64363"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806952.903,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806953.531,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806951.655,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806951.653,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806955.811,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806955.81,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806954.751,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806956.9,
+                  "title" : "Checking existence of `Keyboard (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806956.899,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Keyboard (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806955.863,
+          "title" : "Waiting 8.0s for Keyboard (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806956.917,
+          "title" : "Checking existence of `\"Email address\" TextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806956.94,
+          "title" : "Checking existence of `\"signin.emailTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806956.961,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806956.984,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806957.006,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806957.028,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806957.049,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806957.061,
+          "title" : "Find the \"Email address\" TextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806957.082,
+          "title" : "Find the Keyboard (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806958.148,
+                  "title" : "Checking existence of `\"Done\" Button`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806958.146,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Done\" Button`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806957.091,
+          "title" : "Waiting 5.0s for \"Done\" Button to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806958.188,
+          "title" : "Checking existence of `\"Done\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806958.212,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806958.237,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806958.259,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806958.282,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806958.302,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806958.315,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806958.338,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806958.359,
+          "title" : "Find the \"you@example.com\" TextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806958.38,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-11-04 at 23.42.38",
+              "payloadId" : "0~-2alDt-UtdgaouDRI3Ji9pvqMLXzkOb-z7nN2TQdUgJJDe_IVPomTykfqMkF0m11KeeeHoPm5UaxrcczR7Gqag==",
+              "timestamp" : 1793806958.449,
+              "uuid" : "E6FEB415-D96A-4500-A60A-4FFE3949CB51"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-11-04 at 23.42.38",
+              "payloadId" : "0~JZ7ohPflIfBTsHxv9FQsTkIHAo-NaKIZIKm-ZyzPoDgHxUqC491yZ56ybN6veDNXlNPny4bmJ92lcVNz6wOHbA==",
+              "timestamp" : 1793806958.948,
+              "uuid" : "0283ECE1-F0AD-4512-8A31-76760948EB2B"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806958.395,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806958.397,
+              "title" : "Find the ScrollView (First Match)"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806958.428,
+              "title" : "Check for interrupting elements affecting ScrollView"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "UI Snapshot 2026-11-04 at 23.42.38",
+                  "payloadId" : "0~-2alDt-UtdgaouDRI3Ji9pvqMLXzkOb-z7nN2TQdUgJJDe_IVPomTykfqMkF0m11KeeeHoPm5UaxrcczR7Gqag==",
+                  "timestamp" : 1793806958.449,
+                  "uuid" : "E6FEB415-D96A-4500-A60A-4FFE3949CB51"
+                },
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-11-04 at 23.42.38",
+                  "payloadId" : "0~JZ7ohPflIfBTsHxv9FQsTkIHAo-NaKIZIKm-ZyzPoDgHxUqC491yZ56ybN6veDNXlNPny4bmJ92lcVNz6wOHbA==",
+                  "timestamp" : 1793806958.948,
+                  "uuid" : "0283ECE1-F0AD-4512-8A31-76760948EB2B"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806958.449,
+                  "title" : "kXCTAttachmentLegacySnapshot"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806958.948,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806958.447,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806958.95,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806958.395,
+          "title" : "Swipe up ScrollView (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806958.96,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806958.996,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.022,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.044,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.059,
+          "title" : "Checking existence of `\"Use an Existing Password\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.077,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.1,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.123,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.146,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.167,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.181,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.207,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.229,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.252,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.276,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.298,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.319,
+          "title" : "Find the Keyboard (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.329,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-light-default-keyboard_0_16F5ADCC-51FE-427A-9FCF-139AA8ECC89F.png",
+              "payloadId" : "0~nlKHDEIv1v_l-iF1eav71Ly9Z5IwBTuXh8TNojQ8wD3VabblRFBQefTTwGaTe3kA7vgGjb0A1WnZs1r5ueHpZQ==",
+              "timestamp" : 1793806959.408,
+              "uuid" : "96EFD8B1-60E1-4AD5-8DBC-8A5E30B591FF"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806959.408,
+              "title" : "signin-light-default-keyboard"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.408,
+          "title" : "Added attachment named 'signin-light-default-keyboard'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-11-04 at 23.42.39",
+              "payloadId" : "0~-2alDt-UtdgaouDRI3Ji9pvqMLXzkOb-z7nN2TQdUgJJDe_IVPomTykfqMkF0m11KeeeHoPm5UaxrcczR7Gqag==",
+              "timestamp" : 1793806959.455,
+              "uuid" : "ADBCD3E4-83B6-4141-872D-D7190BBD8F6C"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-11-04 at 23.42.39",
+              "payloadId" : "0~hsKG8R9KvGl-QbNQL-2k0W9bxcXa82CCwxfX8KZD2bHy9k79Z8aII2rAfJx872raxwt0YYxf0MBVxR3wL2gasA==",
+              "timestamp" : 1793806959.811,
+              "uuid" : "59457FA3-B5FB-4424-840D-671DD6590C6C"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806959.41,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806959.412,
+              "title" : "Find the \"Done\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806959.434,
+              "title" : "Check for interrupting elements affecting \"Done\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "UI Snapshot 2026-11-04 at 23.42.39",
+                  "payloadId" : "0~-2alDt-UtdgaouDRI3Ji9pvqMLXzkOb-z7nN2TQdUgJJDe_IVPomTykfqMkF0m11KeeeHoPm5UaxrcczR7Gqag==",
+                  "timestamp" : 1793806959.455,
+                  "uuid" : "ADBCD3E4-83B6-4141-872D-D7190BBD8F6C"
+                },
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-11-04 at 23.42.39",
+                  "payloadId" : "0~hsKG8R9KvGl-QbNQL-2k0W9bxcXa82CCwxfX8KZD2bHy9k79Z8aII2rAfJx872raxwt0YYxf0MBVxR3wL2gasA==",
+                  "timestamp" : 1793806959.811,
+                  "uuid" : "59457FA3-B5FB-4424-840D-671DD6590C6C"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806959.455,
+                  "title" : "kXCTAttachmentLegacySnapshot"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806959.455,
+                  "title" : "Find the \"Done\" Button"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806959.478,
+                  "title" : "Find the \"Done\" Button"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806959.503,
+                  "title" : "Find the \"Done\" Button"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806959.811,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806959.453,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806959.811,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806959.41,
+          "title" : "Tap \"Done\" Button[0.95, 0.50]"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806961.077,
+                  "title" : "Checking existence of `Keyboard (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806961.076,
+              "title" : "Checking `Expect predicate `existsNoRetry == 0` for object Keyboard (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806960.034,
+          "title" : "Waiting 5.0s for Keyboard (First Match) to not exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-11-04 at 23.42.41",
+              "payloadId" : "0~-2alDt-UtdgaouDRI3Ji9pvqMLXzkOb-z7nN2TQdUgJJDe_IVPomTykfqMkF0m11KeeeHoPm5UaxrcczR7Gqag==",
+              "timestamp" : 1793806961.137,
+              "uuid" : "68DBDE72-DAAA-4CFB-9B39-969449A955EA"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-11-04 at 23.42.41",
+              "payloadId" : "0~mqg7mDs8jkxatG5XHU61ouUiDPJ-vd3ROk6-88jboWLvhAeHHxusLjbUOAO-FTFrtearwh6gUwzoY5_YDhStsg==",
+              "timestamp" : 1793806961.424,
+              "uuid" : "DAE0DB42-09C3-485F-B554-C0E8D18B381D"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806961.106,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806961.109,
+              "title" : "Find the \"you@example.com\" TextField"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806961.121,
+              "title" : "Check for interrupting elements affecting \"you@example.com\" TextField"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "UI Snapshot 2026-11-04 at 23.42.41",
+                  "payloadId" : "0~-2alDt-UtdgaouDRI3Ji9pvqMLXzkOb-z7nN2TQdUgJJDe_IVPomTykfqMkF0m11KeeeHoPm5UaxrcczR7Gqag==",
+                  "timestamp" : 1793806961.137,
+                  "uuid" : "68DBDE72-DAAA-4CFB-9B39-969449A955EA"
+                },
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-11-04 at 23.42.41",
+                  "payloadId" : "0~mqg7mDs8jkxatG5XHU61ouUiDPJ-vd3ROk6-88jboWLvhAeHHxusLjbUOAO-FTFrtearwh6gUwzoY5_YDhStsg==",
+                  "timestamp" : 1793806961.424,
+                  "uuid" : "DAE0DB42-09C3-485F-B554-C0E8D18B381D"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806961.137,
+                  "title" : "kXCTAttachmentLegacySnapshot"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806961.424,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806961.135,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806961.425,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806961.106,
+          "title" : "Tap \"you@example.com\" TextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806962.726,
+                  "title" : "Checking existence of `Keyboard (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806962.725,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Keyboard (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806961.671,
+          "title" : "Waiting 5.0s for Keyboard (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806962.743,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806962.777,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806962.805,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806962.828,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806962.843,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806962.867,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806962.89,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806962.914,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-11-04 at 23.42.42",
+              "payloadId" : "0~-2alDt-UtdgaouDRI3Ji9pvqMLXzkOb-z7nN2TQdUgJJDe_IVPomTykfqMkF0m11KeeeHoPm5UaxrcczR7Gqag==",
+              "timestamp" : 1793806962.981,
+              "uuid" : "C73ABE64-6062-4E57-8009-0CF4E0CDD4D2"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-11-04 at 23.42.43",
+              "payloadId" : "0~H0krM9b4B3FtjHJ8RzKi6SUJsn_Au22A0WAMJH2cP5_lGSJj2oXZhYUFVUUainpopG-IwEqvL9PTBbiTuJzmzw==",
+              "timestamp" : 1793806963.331,
+              "uuid" : "8EE06ED6-5146-4265-8E02-390341D9498B"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806962.938,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806962.94,
+              "title" : "Find the \"Use an Existing Password\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806962.961,
+              "title" : "Check for interrupting elements affecting \"Use an Existing Password\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "UI Snapshot 2026-11-04 at 23.42.42",
+                  "payloadId" : "0~-2alDt-UtdgaouDRI3Ji9pvqMLXzkOb-z7nN2TQdUgJJDe_IVPomTykfqMkF0m11KeeeHoPm5UaxrcczR7Gqag==",
+                  "timestamp" : 1793806962.981,
+                  "uuid" : "C73ABE64-6062-4E57-8009-0CF4E0CDD4D2"
+                },
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-11-04 at 23.42.43",
+                  "payloadId" : "0~H0krM9b4B3FtjHJ8RzKi6SUJsn_Au22A0WAMJH2cP5_lGSJj2oXZhYUFVUUainpopG-IwEqvL9PTBbiTuJzmzw==",
+                  "timestamp" : 1793806963.331,
+                  "uuid" : "8EE06ED6-5146-4265-8E02-390341D9498B"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806962.981,
+                  "title" : "kXCTAttachmentLegacySnapshot"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806962.982,
+                  "title" : "Find the \"Use an Existing Password\" Button"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806963.004,
+                  "title" : "Find the \"Use an Existing Password\" Button"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806963.028,
+                  "title" : "Find the \"Use an Existing Password\" Button"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806963.331,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806962.98,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806963.332,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806962.938,
+          "title" : "Tap \"Use an Existing Password\" Button[0.05, 0.50]"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806963.335,
+          "title" : "Checking existence of `\"Use a Sign-In Link Instead\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806963.368,
+          "title" : "Checking existence of `Keyboard (First Match)`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-11-04 at 23.42.43",
+              "payloadId" : "0~-2alDt-UtdgaouDRI3Ji9pvqMLXzkOb-z7nN2TQdUgJJDe_IVPomTykfqMkF0m11KeeeHoPm5UaxrcczR7Gqag==",
+              "timestamp" : 1793806963.428,
+              "uuid" : "E4693F09-3383-4A9E-8639-221CC1FD4E59"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-11-04 at 23.42.43",
+              "payloadId" : "0~hsKG8R9KvGl-QbNQL-2k0W9bxcXa82CCwxfX8KZD2bHy9k79Z8aII2rAfJx872raxwt0YYxf0MBVxR3wL2gasA==",
+              "timestamp" : 1793806963.782,
+              "uuid" : "D669D82A-C923-4EA8-9F73-60C5C2251A91"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806963.379,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806963.381,
+              "title" : "Find the \"Done\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806963.406,
+              "title" : "Check for interrupting elements affecting \"Done\" Button"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "UI Snapshot 2026-11-04 at 23.42.43",
+                  "payloadId" : "0~-2alDt-UtdgaouDRI3Ji9pvqMLXzkOb-z7nN2TQdUgJJDe_IVPomTykfqMkF0m11KeeeHoPm5UaxrcczR7Gqag==",
+                  "timestamp" : 1793806963.428,
+                  "uuid" : "E4693F09-3383-4A9E-8639-221CC1FD4E59"
+                },
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-11-04 at 23.42.43",
+                  "payloadId" : "0~hsKG8R9KvGl-QbNQL-2k0W9bxcXa82CCwxfX8KZD2bHy9k79Z8aII2rAfJx872raxwt0YYxf0MBVxR3wL2gasA==",
+                  "timestamp" : 1793806963.782,
+                  "uuid" : "D669D82A-C923-4EA8-9F73-60C5C2251A91"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806963.428,
+                  "title" : "kXCTAttachmentLegacySnapshot"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806963.428,
+                  "title" : "Find the \"Done\" Button"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806963.453,
+                  "title" : "Find the \"Done\" Button"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806963.479,
+                  "title" : "Find the \"Done\" Button"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806963.782,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806963.426,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806963.784,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806963.379,
+          "title" : "Tap \"Done\" Button[0.95, 0.50]"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806965.028,
+                  "title" : "Checking existence of `Keyboard (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806965.027,
+              "title" : "Checking `Expect predicate `existsNoRetry == 0` for object Keyboard (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806963.992,
+          "title" : "Waiting 5.0s for Keyboard (First Match) to not exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806965.075,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:64391"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806966.355,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806966.988,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806965.075,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806965.074,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806969.277,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806969.276,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806968.229,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806970.402,
+                  "title" : "Checking existence of `Keyboard (First Match)`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806970.4,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object Keyboard (First Match)`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806969.348,
+          "title" : "Waiting 8.0s for Keyboard (First Match) to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806970.423,
+          "title" : "Checking existence of `\"Password\" SecureTextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806970.452,
+          "title" : "Checking existence of `\"signin.passwordTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806970.474,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806970.499,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806970.522,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806970.544,
+          "title" : "Find the \"signin.passwordTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806970.565,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806970.577,
+          "title" : "Find the \"Password\" SecureTextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806970.598,
+          "title" : "Find the Keyboard (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806971.676,
+                  "title" : "Checking existence of `\"Done\" Button`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806971.674,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Done\" Button`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806970.608,
+          "title" : "Waiting 5.0s for \"Done\" Button to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806971.717,
+          "title" : "Checking existence of `\"Done\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806971.741,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806971.765,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806971.788,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806971.811,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806971.832,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806971.845,
+          "title" : "Find the \"Use a Sign-In Link Instead\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806971.868,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806971.89,
+          "title" : "Find the \"Password\" SecureTextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806971.912,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-11-04 at 23.42.51",
+              "payloadId" : "0~v-MYvsH7TMHHz0SYpOhfyHYtYHlkpPsBMeywjfYBWq6lC7xjDzmzuqqzoUjKIrS6egAvC6K-PjjxEHi2OF0edg==",
+              "timestamp" : 1793806971.967,
+              "uuid" : "53C801FB-BA9F-4B0E-A385-EEB07157813A"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "Synthesized Event 2026-11-04 at 23.42.52",
+              "payloadId" : "0~CAWUTCOoY800_64vIC_whwNTA2UtFZHO8kGMdYBTryNvmK5mYjlfJKHeV356LBrpOmqx6fXcu6S_hX7inhKwUA==",
+              "timestamp" : 1793806972.247,
+              "uuid" : "2AFEF299-6551-457D-8F53-45575AA0A040"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806971.926,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806971.929,
+              "title" : "Find the ScrollView (First Match)"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806971.946,
+              "title" : "Check for interrupting elements affecting ScrollView"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "UI Snapshot 2026-11-04 at 23.42.51",
+                  "payloadId" : "0~v-MYvsH7TMHHz0SYpOhfyHYtYHlkpPsBMeywjfYBWq6lC7xjDzmzuqqzoUjKIrS6egAvC6K-PjjxEHi2OF0edg==",
+                  "timestamp" : 1793806971.967,
+                  "uuid" : "53C801FB-BA9F-4B0E-A385-EEB07157813A"
+                },
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "Synthesized Event 2026-11-04 at 23.42.52",
+                  "payloadId" : "0~CAWUTCOoY800_64vIC_whwNTA2UtFZHO8kGMdYBTryNvmK5mYjlfJKHeV356LBrpOmqx6fXcu6S_hX7inhKwUA==",
+                  "timestamp" : 1793806972.247,
+                  "uuid" : "2AFEF299-6551-457D-8F53-45575AA0A040"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806971.967,
+                  "title" : "kXCTAttachmentLegacySnapshot"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806972.247,
+                  "title" : "kXCTAttachmentLegacySynthesizedEvent"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806971.966,
+              "title" : "Synthesize event"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806972.248,
+              "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806971.926,
+          "title" : "Swipe up ScrollView (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.252,
+          "title" : "Find the \"Use a Sign-In Link Instead\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.268,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.284,
+          "title" : "Find the \"Use a Sign-In Link Instead\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.298,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.308,
+          "title" : "Checking existence of `\"Use a Sign-In Link Instead\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.321,
+          "title" : "Find the \"Use a Sign-In Link Instead\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.337,
+          "title" : "Find the \"Use a Sign-In Link Instead\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.352,
+          "title" : "Find the \"Use a Sign-In Link Instead\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.368,
+          "title" : "Find the \"Use a Sign-In Link Instead\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.382,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.393,
+          "title" : "Find the \"Use a Sign-In Link Instead\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.413,
+          "title" : "Find the \"Use a Sign-In Link Instead\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.428,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.444,
+          "title" : "Find the \"Use a Sign-In Link Instead\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.472,
+          "title" : "Find the \"Done\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793806972.49,
+          "title" : "Find the \"Use a Sign-In Link Instead\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "attachments" : [
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "App UI hierarchy for systems.edmundlim_0_C2A040C7-AEFE-44D9-B349-833C5F03C4C9.NotepadHillclimb",
+              "payloadId" : "0~yu7igkJpJLgsvlh0n3-TIMJKZfSyo_Lou0R9epF_nkIU8C72mPSHWaQ05S8oygohTku9s0710cHAlsV71WIawQ==",
+              "timestamp" : 1793806974.722,
+              "uuid" : "962A09AA-6688-4881-951D-28BB8ADB1E3A"
+            },
+            {
+              "lifetime" : "deleteOnSuccess",
+              "name" : "UI Snapshot 2026-11-04 at 23.42.54",
+              "payloadId" : "0~mOi5Xm9zjrsT_hgvtI7yq6A1LCwcoghdkb1Si7yXPR2xIFR2fOg7u6fQXayEG6G9NEqTRH03ZdVqMFokIm4AWg==",
+              "timestamp" : 1793806974.722,
+              "uuid" : "27EE3059-7097-4D72-9004-1C8AF331430A"
+            }
+          ],
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806973.529,
+              "title" : "Find the Keyboard (First Match) (retry 1)"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806974.587,
+              "title" : "Find the Keyboard (First Match) (retry 2)"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "App UI hierarchy for systems.edmundlim_0_C2A040C7-AEFE-44D9-B349-833C5F03C4C9.NotepadHillclimb",
+                  "payloadId" : "0~yu7igkJpJLgsvlh0n3-TIMJKZfSyo_Lou0R9epF_nkIU8C72mPSHWaQ05S8oygohTku9s0710cHAlsV71WIawQ==",
+                  "timestamp" : 1793806974.722,
+                  "uuid" : "962A09AA-6688-4881-951D-28BB8ADB1E3A"
+                },
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "UI Snapshot 2026-11-04 at 23.42.54",
+                  "payloadId" : "0~mOi5Xm9zjrsT_hgvtI7yq6A1LCwcoghdkb1Si7yXPR2xIFR2fOg7u6fQXayEG6G9NEqTRH03ZdVqMFokIm4AWg==",
+                  "timestamp" : 1793806974.722,
+                  "uuid" : "27EE3059-7097-4D72-9004-1C8AF331430A"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806974.649,
+                  "title" : "Requesting snapshot of accessibility hierarchy for app with pid 64462"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806974.722,
+                  "title" : "App UI hierarchy for systems.edmundlim.NotepadHillclimb"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806974.722,
+                  "title" : "kXCTAttachmentLegacySnapshot"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806974.648,
+              "title" : "Collecting debug information to assist test failure triage"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806974.726,
+              "title" : "Requesting snapshot of accessibility hierarchy for app with pid 64462"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806974.802,
+              "title" : "Requesting snapshot of accessibility hierarchy for app with pid 64462"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806974.831,
+              "title" : "Requesting snapshot of accessibility hierarchy for app with pid 64462"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806974.86,
+              "title" : "Find: Descendants matching type Keyboard"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806974.861,
+              "title" : "Requesting snapshot of accessibility hierarchy for app with pid 64462"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806974.896,
+              "title" : "Requesting snapshot of accessibility hierarchy for app with pid 64462"
+            },
+            {
+              "attachments" : [
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "App UI hierarchy for systems.edmundlim_0_592FBE8A-E63E-412A-A9B0-1314877B715A.NotepadHillclimb",
+                  "payloadId" : "0~uVsF9dg9K-fd61VcnDWbOC7DLg7Dqw6W9RZ-Bu2_bzeQzP4TlHeQLSE-lO4CGQDrhLkkenEC2NZxFjKpdqRMmw==",
+                  "timestamp" : 1793806974.923,
+                  "uuid" : "B78D1A22-CFF0-40AF-B427-0FF01A4C6AA0"
+                },
+                {
+                  "lifetime" : "deleteOnSuccess",
+                  "name" : "UI Snapshot 2026-11-04 at 23.42.54",
+                  "payloadId" : "0~xZBDu5GgjWxUVM7ifWY-XItqMp51oF8lC_byoPd61xRIoUuChazvMSnj2gw6ojY7c7XR4X7T7WMAEizXVfL3Mg==",
+                  "timestamp" : 1793806974.923,
+                  "uuid" : "9C096D3D-FEC8-4049-B43A-C0D2F881C07F"
+                }
+              ],
+              "childActivities" : [
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806974.923,
+                  "title" : "App UI hierarchy for systems.edmundlim.NotepadHillclimb"
+                },
+                {
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793806974.923,
+                  "title" : "kXCTAttachmentLegacySnapshot"
+                }
+              ],
+              "isAssociatedWithFailure" : true,
+              "startTime" : 1793806974.923,
+              "title" : "Failed to get matching snapshot: No matches found for first query match sequence: `Descendants matching type Keyboard`, given input App element pid: 64462"
+            },
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793806974.947,
+              "title" : "Tear Down"
+            }
+          ],
+          "isAssociatedWithFailure" : true,
+          "startTime" : 1793806972.504,
+          "title" : "Find the Keyboard (First Match)"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "deviceName" : "Hillclimb iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ]
+}

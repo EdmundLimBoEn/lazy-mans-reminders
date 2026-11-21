@@ -1,0 +1,129 @@
+diff --git a/ios/Shared/LockScreenLineBudget.swift b/ios/Shared/LockScreenLineBudget.swift
+index 1f82971..18165a2 100644
+--- a/ios/Shared/LockScreenLineBudget.swift
++++ b/ios/Shared/LockScreenLineBudget.swift
+@@ -83,6 +83,34 @@ enum ReminderActivityLayout {
+         max(1, Int((availableHeight(surface) + LockScreenLineBudget.lineSpacing)
+             / (rowHeight(pointSize: pointSize) + LockScreenLineBudget.lineSpacing)))
+     }
++
++    /// Shorten only the rendered value; the payload and accessibility label stay intact.
++    static func readableLine(_ source: String, width: CGFloat, pointSize: CGFloat) -> String {
++        let font = UIFont.systemFont(ofSize: pointSize, weight: .semibold)
++        func fits(_ value: String) -> Bool {
++            (value as NSString).size(withAttributes: [.font: font]).width <= max(0, width - 1)
++        }
++        guard !fits(source) else { return source }
++        let characters = Array(source)
++        var low = 0
++        var high = characters.count
++        while low < high {
++            let mid = (low + high + 1) / 2
++            if fits(String(characters.prefix(mid)) + "…") { low = mid } else { high = mid - 1 }
++        }
++        let prefix = String(characters.prefix(low))
++        var boundary: String.Index?
++        source.enumerateSubstrings(in: source.startIndex..<source.endIndex, options: .byWords) { _, range, _, stop in
++            if range.upperBound <= source.index(source.startIndex, offsetBy: low) {
++                boundary = range.upperBound
++            } else { stop = true }
++        }
++        // A single word can exceed the entire region. Preserve grapheme clusters
++        // rather than dropping all useful content in that case.
++        let visible = boundary.map { String(source[..<$0]) } ?? prefix
++        return visible + "…"
++    }
++
+ }
+ 
+ /// Shared by the native widget and rendered-layout regression checks.
+@@ -98,13 +126,16 @@ struct ReminderActivityLinesView: View {
+             ReminderAttributes.ContentState(lines: lines, hiddenLineCount: hiddenLineCount), limit: limit)
+         VStack(alignment: .leading, spacing: LockScreenLineBudget.lineSpacing) {
+             ForEach(Array(display.enumerated()), id: \.offset) { _, line in
+-                Text(line)
++                GeometryReader { geometry in
++                    Text(ReminderActivityLayout.readableLine(line, width: geometry.size.width, pointSize: pointSize))
++                    .accessibilityLabel(Text(line))
+                     .font(.system(size: pointSize, weight: .semibold))
+                     .foregroundStyle(.primary)
+                     .lineLimit(1)
+                     .truncationMode(.tail)
+                     .frame(maxWidth: .infinity, alignment: .leading)
+-                    .frame(height: ReminderActivityLayout.rowHeight(pointSize: pointSize))
++                }
++                .frame(height: ReminderActivityLayout.rowHeight(pointSize: pointSize))
+             }
+         }
+         .padding(.horizontal, surface == .island ? 14 : 0)
+diff --git a/ios/Tests/ActivityReadabilityTests.swift b/ios/Tests/ActivityReadabilityTests.swift
+new file mode 100644
+index 0000000..888ba9a
+--- /dev/null
++++ b/ios/Tests/ActivityReadabilityTests.swift
+@@ -0,0 +1,46 @@
++import XCTest
++import UIKit
++@testable import LazyMansReminders
++
++final class ActivityReadabilityTests: XCTestCase {
++    func testRenderedPrefixEndsAtCompleteWord() {
++        let source = "Demo 2: Review the sample notes for tomorrow"
++        let result = ReminderActivityLayout.readableLine(source, width: 320, pointSize: 23)
++        XCTAssertEqual(result, "Demo 2: Review the sample…")
++        XCTAssertTrue(source.hasPrefix(String(result.dropLast())))
++    }
++
++    func testFittingTextAndSummaryLikeUserTextRemainVerbatim() {
++        for source in ["+8 more", "Nothing to remember", "Buy milk", "", "مرحبا", "日本語", "👩🏽‍💻 café"] {
++            XCTAssertEqual(ReminderActivityLayout.readableLine(source, width: 1000, pointSize: 15), source)
++        }
++    }
++
++    func testLongWordAndUnicodePreserveGraphemesAndWidth() {
++        for source in [String(repeating: "W", count: 200), String(repeating: "👩🏽‍💻", count: 80),
++                       String(repeating: "日本語の買い物", count: 40), String(repeating: "مرحبا بالعالم ", count: 40),
++                       String(repeating: "e\u{301}", count: 200)] {
++            for width: CGFloat in [80, 200, 340] {
++                let result = ReminderActivityLayout.readableLine(source, width: width, pointSize: 23)
++                XCTAssertTrue(result.hasSuffix("…"))
++                XCTAssertTrue(source.hasPrefix(String(result.dropLast())))
++                XCTAssertLessThanOrEqual((result as NSString).size(withAttributes: [.font: UIFont.systemFont(ofSize: 23, weight: .semibold)]).width, width)
++            }
++        }
++    }
++
++    func testByteAndSurfaceCapsConserveEveryOriginalWithoutParsingCopy() throws {
++        let originals = ["+8 more"] + (1...99).map { "\($0) " + String(repeating: "👩🏽‍💻 café ", count: 100) }
++        let reminder = Reminder(id: UUID(), userID: UUID(), text: originals.joined(separator: "\n"), sortOrder: 0, isDone: false, createdAt: .now)
++        let state = ReminderActivityPresentation.state(from: [reminder], limit: 16)
++        XCTAssertLessThanOrEqual(try JSONEncoder().encode(state).count + JSONEncoder().encode(ReminderAttributes()).count, 4096)
++        for limit in 1...16 {
++            let capped = ReminderActivityPresentation.cappedState(state, limit: limit)
++            XCTAssertEqual(capped.lines.count - 1 + (capped.hiddenLineCount ?? 0), 100)
++            XCTAssertEqual(capped.lines.last, "+\(capped.hiddenLineCount!) more")
++        }
++        let legacy = try JSONDecoder().decode(ReminderAttributes.ContentState.self, from: Data(#"{"lines":["+8 more","Actual reminder"]}"#.utf8))
++        XCTAssertNil(legacy.hiddenLineCount)
++        XCTAssertEqual(ReminderActivityPresentation.surfaceLines(legacy, limit: 3), legacy.lines)
++    }
++}
+diff --git a/ios/UITests/ActivityNativeLayoutTests.swift b/ios/UITests/ActivityNativeLayoutTests.swift
+index 2000767..dba3fb7 100644
+--- a/ios/UITests/ActivityNativeLayoutTests.swift
++++ b/ios/UITests/ActivityNativeLayoutTests.swift
+@@ -15,6 +15,14 @@ final class ActivityNativeLayoutTests: XCTestCase {
+         let footer = springboard.staticTexts.matching(NSPredicate(format: "label MATCHES %@", "\\+[0-9]+ more")).firstMatch
+         XCTAssertTrue(footer.waitForExistence(timeout: 5), "Actual ActivityKit overflow row was not exposed")
+         XCTAssertEqual(footer.label, "+7 more")
++        let originals = springboard.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Demo "))
++        XCTAssertEqual(originals.count, 3, "Expected three useful source rows at default type")
++        for index in 0..<originals.count {
++            let row = originals.element(boundBy: index)
++            XCTAssertEqual(row.label, "Demo \(index + 1): Review the sample notes.")
++            XCTAssertGreaterThanOrEqual(row.frame.height, 18)
++            XCTAssertLessThanOrEqual(row.frame.maxY, footer.frame.minY)
++        }
+         let frame = footer.frame
+         XCTAssertGreaterThanOrEqual(frame.height, 18, "Last row has insufficient glyph height")
+         XCTAssertGreaterThanOrEqual(frame.minX, 30, "Last row enters the Island's curved lower-left corner")

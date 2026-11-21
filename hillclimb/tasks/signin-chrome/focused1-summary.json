@@ -1,0 +1,60 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+        "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 1,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "LazyMansReminders · Built with macOS 27.2",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1793829794.509,
+  "passedTests" : 1,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793829685.456,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "XCTUnwrap failed: expected non-nil value of type \"XCUIElement\"",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "SignInChromeUITests/testLegalFooterRestingAndBottomReachabilityWithEnabledInertAppearance()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInChromeUITests/testLegalFooterRestingAndBottomReachabilityWithEnabledInertAppearance",
+      "testName" : "testLegalFooterRestingAndBottomReachabilityWithEnabledInertAppearance()"
+    },
+    {
+      "failureText" : "XCTAssertGreaterThanOrEqual failed: (\"43.99999999999997\") is less than (\"44.0\")",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 3,
+      "testIdentifierString" : "SignInChromeUITests/testPopulatedPasswordKeepsVisualNameAndOneSecureField()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInChromeUITests/testPopulatedPasswordKeepsVisualNameAndOneSecureField",
+      "testName" : "testPopulatedPasswordKeepsVisualNameAndOneSecureField()"
+    }
+  ],
+  "title" : "Test - LazyMansReminders",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 3
+}

@@ -1,0 +1,120 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "066ECE57-46B4-414A-B53E-523775329360",
+      "deviceName" : "Hillclimb Board iPhone 17 Pro",
+      "modelName" : "iPhone 17 Pro",
+      "osBuildNumber" : "23C54",
+      "osVersion" : "26.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "name" : "XCTAssertEqual failed: (\"2\") is not equal to (\"1\")",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-db6375e7/ios/UITests/BoardCapacityDensityUITests.swift",
+                        "lineNumber" : 50
+                      }
+                    }
+                  ],
+                  "duration" : "5s",
+                  "durationInSeconds" : 5.1808470487594604,
+                  "name" : "testDarkDefaultCapacityDensity()",
+                  "nodeIdentifier" : "BoardCapacityDensityUITests/testDarkDefaultCapacityDensity()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityDensityUITests/testDarkDefaultCapacityDensity",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                },
+                {
+                  "children" : [
+                    {
+                      "name" : "XCTAssertEqual failed: (\"2\") is not equal to (\"1\")",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-db6375e7/ios/UITests/BoardCapacityDensityUITests.swift",
+                        "lineNumber" : 50
+                      }
+                    }
+                  ],
+                  "duration" : "4s",
+                  "durationInSeconds" : 4.621474027633667,
+                  "name" : "testDarkXXXLTitleAndFinalInkCapacityDensity()",
+                  "nodeIdentifier" : "BoardCapacityDensityUITests/testDarkXXXLTitleAndFinalInkCapacityDensity()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityDensityUITests/testDarkXXXLTitleAndFinalInkCapacityDensity",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                },
+                {
+                  "children" : [
+                    {
+                      "name" : "XCTAssertEqual failed: (\"2\") is not equal to (\"1\")",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-db6375e7/ios/UITests/BoardCapacityDensityUITests.swift",
+                        "lineNumber" : 50
+                      }
+                    }
+                  ],
+                  "duration" : "4s",
+                  "durationInSeconds" : 4.647807002067566,
+                  "name" : "testLightDefaultCapacityDensity()",
+                  "nodeIdentifier" : "BoardCapacityDensityUITests/testLightDefaultCapacityDensity()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityDensityUITests/testLightDefaultCapacityDensity",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                },
+                {
+                  "children" : [
+                    {
+                      "name" : "XCTAssertEqual failed: (\"2\") is not equal to (\"1\")",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-db6375e7/ios/UITests/BoardCapacityDensityUITests.swift",
+                        "lineNumber" : 50
+                      }
+                    }
+                  ],
+                  "duration" : "4s",
+                  "durationInSeconds" : 4.542534947395325,
+                  "name" : "testLightXXXLTitleAndFinalInkCapacityDensity()",
+                  "nodeIdentifier" : "BoardCapacityDensityUITests/testLightXXXLTitleAndFinalInkCapacityDensity()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityDensityUITests/testLightXXXLTitleAndFinalInkCapacityDensity",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "BoardCapacityDensityUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityDensityUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "HillclimbUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "LazyMansReminders",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}

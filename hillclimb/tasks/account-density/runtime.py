@@ -1,0 +1,5 @@
+"""Scoped runtime observations. Written by gpt-6.1-sol in Codex on behalf of Edmund."""
+import pathlib,json,subprocess,datetime,gzip,hashlib,sys
+p=pathlib.Path(__file__).parent;n=sys.argv[1];run=json.loads((p/(n+'.json')).read_text());fmt=lambda t:datetime.datetime.fromtimestamp(t).strftime('%Y-%m-%d %H:%M:%S')
+cmd=['xcrun','simctl','spawn','78F5A64F-7B2E-4562-8EF9-10F3312CC694','log','show','--start',fmt(run['start']),'--end',fmt(run['end']),'--style','json','--predicate','process == "LazyMansReminders" AND (messageType == fault OR messageType == error OR eventMessage CONTAINS[c] "Invalid frame")']
+r=subprocess.run(cmd,capture_output=True,text=True,check=True);events=json.loads(r.stdout);f=p/(n+'-runtime.json.gz');f.write_bytes(gzip.compress(r.stdout.encode(),mtime=0));summary=json.loads((p/(n+'-summary.json')).read_text());(p/(n+'-runtime-summary.json')).write_text(json.dumps(dict(command=cmd,runtimeWarnings=summary['runtimeWarnings'],invalidFrames=sum('invalid frame' in e.get('eventMessage','').lower() for e in events),otherEvents=len(events),sha256=hashlib.sha256(f.read_bytes()).hexdigest()),indent=2))

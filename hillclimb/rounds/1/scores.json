@@ -1,0 +1,43 @@
+{
+  "graders": {
+    "gpt-6.1-sol": {
+      "overall": 6.88,
+      "minimum": 4.0,
+      "errors": [],
+      "evidence_gaps": [
+        "Apple Notes was unavailable/not installed; no Notes screenshots or comparisons were used.",
+        "Only five usable Apple Reminders references were inspected. Four transition_rejected captures were excluded completely. Missing exact states: light bottom/sheet; dark top/empty/compose; all sign-in semantics and same-size XXXL references.",
+        "Live Activity, Lock Screen and compact/expanded Dynamic Island were not captured. The offline fixture deliberately does not start ActivityKit or write shared board storage. Source review does not validate its runtime appearance or lifecycle.",
+        "Haptics, VoiceOver traversal/focus, animation continuity, physical touch response and performance feel are unobserved; scores for these are provisional source/test assessments, not runtime passes.",
+        "No loading/error/authentication success/inbox/password/account-lower-content captures; these paths were reviewed in source only.",
+        "XXXL means system xxxLarge, not the largest accessibility sizes. Dynamic Type, Reduce Motion, Reduce Transparency and increased contrast were not tested across all screens/settings.",
+        "Existing 247 tests passed, but combined baseline run failed because new UI gates failed/canceled. New measured failures are 22pt composer and 36pt Account. XXXL allocated-height/final-row bounds passed; this does not establish readability through gradient.",
+        "Full-board pull test timed out waiting for app idle before visibility assertion. It does not establish app lag or a successful final-row gate. Successful manual captures establish end state only; one failed synthesized scroll attempt is retained.",
+        "Fixture stability original failure was an XCTest 128-character query harness error. The repaired predicate test subsequently executed and passed: 1 test, 0 failed in ../../validation/offline-fixture-summary.json. Frozen checks.json pending status is historical; this specific gap is resolved.",
+        "Reviewer ran no runtime tests or device interactions. Commands below are executable recommendations; reported outcomes come from checks.json and supplied validation summaries at captured source SHA."
+      ]
+    },
+    "gpt-6-astra": {
+      "overall": 6.7,
+      "minimum": 4,
+      "errors": [],
+      "evidence_gaps": [
+        "Apple Notes was unavailable/not installed; no Notes comparison is claimed.",
+        "Four Reminders PNGs marked transition_rejected were excluded entirely: bottom-light, compose-dark, sheet-light, top-dark. Settled dark empty reference also absent.",
+        "Paired light long-text/XXXL references are default-size Reminders rows with different seeded content; no reference establishes exact density or same-size Dynamic Type parity.",
+        "Sign-in is a full-screen authentication form; its supplied dark pair is an item Details sheet. Account settings and item Details also differ semantically.",
+        "Native Lock Screen banner, compact/expanded Dynamic Island, device lock transitions and ActivityKit rendering were not captured. Source is not visual proof.",
+        "Haptics, VoiceOver traversal/focus/announcements, animation continuity, keyboard dismissal and performance feel were not observed interactively by this reviewer.",
+        "Loading, submitting, error, successful sign-in, account lower content/large detent, Reduced Motion, Reduce Transparency, increased contrast and accessibility text sizes beyond XXXL lack captures.",
+        "Full-board UI pull test timed out waiting for idle before its final assertion. Raw screenshot recovery used the prescribed inside-list drag; failed attempt remains in manifest. This neither proves app unresponsiveness nor proves smooth pull behavior.",
+        "Existing 247 XCTest cases passed, but overall recorded baseline run is Failed because new UI tests failed/cancelled. XXXL geometry pass establishes allocated-height/containment, not unattenuated text ink.",
+        "Capture manifest is dirty=true at source SHA de6cb90349ccc77af90c0fbf4870af3e39977ec5. PM reports merged app sources identical; later differences are tests/scripts/docs. This reviewer did not run a fresh build or runtime suite."
+      ]
+    }
+  },
+  "gate_passed": false,
+  "errors": [
+    "Missing scores-claude-opus-5.5.json",
+    "Required programmatic checks have not all passed"
+  ]
+}

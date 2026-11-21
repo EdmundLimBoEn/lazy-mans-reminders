@@ -54,7 +54,12 @@ final class AuthManager: ObservableObject {
     @Published private(set) var isAuthenticating = false
     @Published private(set) var notice: AuthNotice?
 
-    private let client = AuthSessionClient()
+    private let client: AuthSessionClient = {
+#if DEBUG
+        if HillclimbDemo.isActive { return HillclimbDemo.offlineClient() }
+#endif
+        return AuthSessionClient()
+    }()
 
     private let appleCredentialMonitor = AppleCredentialMonitor()
     private let authSessionGate = AuthSessionGate()
@@ -69,6 +74,12 @@ final class AuthManager: ObservableObject {
     private let oauthRedirectURL = URL(string: "lazymansreminders://auth/callback")!
 
     init() {
+#if DEBUG
+        if HillclimbDemo.isActive {
+            isRestoringSession = false
+            return
+        }
+#endif
         for name in [ASAuthorizationAppleIDProvider.credentialRevokedNotification,
                      UIApplication.didBecomeActiveNotification] {
             NotificationCenter.default.publisher(for: name)

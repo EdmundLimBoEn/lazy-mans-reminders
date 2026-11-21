@@ -1,0 +1,30 @@
+{
+  "command": [
+    "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+    "--debug",
+    "screenshot",
+    "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/detents-light-XXXL-normal-medium-top.png",
+    "--pixel-density",
+    "3"
+  ],
+  "exit": 0,
+  "reportedDurationMs": 940,
+  "file": "hillclimb/rounds/7/account-enabled/screens/detents-light-XXXL-normal-medium-top.png",
+  "sha256": "fea4f5d679ddae557e2849199b4fd3bd98c3671eb441bade290878b15e9c05a3",
+  "dimensions": [
+    1206,
+    2622
+  ],
+  "firstFailure": "device-first-timeout.json",
+  "secondAttemptSucceeded": true,
+  "subsequentGeometryCommand": [
+    "python3",
+    "hillclimb/validation/round7/manual.py",
+    "get",
+    "attrs",
+    "id=\"account.geometry\""
+  ],
+  "subsequentGeometryExit": 0,
+  "recordedUTC": "2026-11-05T14:24:59.596159+00:00",
+  "cause": "Not established; no host-load causation claim"
+}

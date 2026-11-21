@@ -1,0 +1,51 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "066ECE57-46B4-414A-B53E-523775329360",
+      "deviceName" : "Hillclimb Board iPhone 17 Pro",
+      "modelName" : "iPhone 17 Pro",
+      "osBuildNumber" : "23C54",
+      "osVersion" : "26.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "duration" : "Ran for 2 minutes, 8 seconds",
+  "durationInSeconds" : 128.661337018013,
+  "hasMediaAttachments" : true,
+  "hasPerformanceMetrics" : false,
+  "startTime" : 1793812818.84,
+  "testDescription" : "Test case with 1 run",
+  "testIdentifier" : "SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances()",
+  "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances",
+  "testName" : "testFocusedEmailAndPasswordClearKeyboardInBothAppearances()",
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ],
+  "testResult" : "Passed",
+  "testRuns" : [
+    {
+      "children" : [
+        {
+          "duration" : "2m 8s",
+          "durationInSeconds" : 128.661337018013,
+          "name" : "Test Scheme Action",
+          "nodeIdentifier" : "1",
+          "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances",
+          "nodeType" : "Test Plan Configuration",
+          "result" : "Passed"
+        }
+      ],
+      "details" : "iOS Simulator 26.2",
+      "duration" : "2m 8s",
+      "durationInSeconds" : 128.661337018013,
+      "name" : "iPhone 17 Pro",
+      "nodeIdentifier" : "066ECE57-46B4-414A-B53E-523775329360",
+      "nodeType" : "Device",
+      "result" : "Passed"
+    }
+  ]
+}

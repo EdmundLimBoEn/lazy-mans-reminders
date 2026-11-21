@@ -1,0 +1,17 @@
+Failed to get matching snapshot: No matches found for Elements matching predicate '"Privacy" IN identifiers' from input {(
+    StaticText, label: 'Sign In',
+    StaticText, label: 'Notepad',
+    StaticText, label: 'Your board on this iPhone, the web, and the Lock Screen.',
+    StaticText, label: 'Email',
+    StaticText, label: 'Use the same address as the web board.',
+    StaticText, label: 'Sign in with Google',
+    StaticText, label: 'Send Sign-In Link', Disabled
+)}
+Possibly caused by runtime issues:
+Automation type mismatch: computed Other from legacy attributes vs StaticText from modern attribute. Input attributes and values: {
+    "XC_kAXXCAttributeAutomationType" = 48;
+    "XC_kAXXCAttributeElementBaseType" = UILabel;
+    "XC_kAXXCAttributeElementType" = UILabel;
+    "XC_kAXXCAttributeTraits" = 8590000128;
+}
+See test report attachments for more detail.

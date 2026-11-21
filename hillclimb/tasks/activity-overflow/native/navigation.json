@@ -1,0 +1,236 @@
+[
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "open",
+      "com.apple.springboard"
+    ],
+    "exit": 0,
+    "stdout": "Opened: com.apple.springboard\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-0b2ac98e0d8e3cbeb9e4f3ac\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "snapshot",
+      "-i"
+    ],
+    "exit": 0,
+    "stdout": "Page: com.apple.springboard\nApp: com.apple.springboard\nSnapshot: 45 nodes\nSimulator AX snapshot unavailable (target-resolution-failed); used XCTest for an unverified app generation.\n@e1 [application]\n@e2 [window] \"23:09\"\n@e3 [element(25)] \"23:09\"\n@e4 [other] \"23:09\"\n@e5 [other] \"Cellular\"\n@e6 [other] \"SSID, 3 of 3 Wi-Fi bars\"\n@e7 [other] \"100% battery power\"\n@e8 [other] \"jindo-container-view:1,client-identifier:com.apple.chrono.WidgetRenderer-Activities,element-identifier:activity:F3669732-0774-42C9-A8DD-F5C56D4B8E20:0x11f94b700\"\n@e9 [other] \"regular.view\"\n@e10 [other] \"Search\"\n@e11 [other] \"Maps\"\n@e12 [element(44)] \"Maps\"\n@e13 [element(44)] \"Maps\"\n@e14 [element(44)] \"Calendar\"\n@e15 [element(44)] \"Photos\"\n@e16 [element(44)] \"Reminders\"\n@e17 [element(44)] \"News\"\n@e18 [element(44)] \"Health\"\n@e19 [element(44)] \"Wallet\"\n@e20 [element(44)] \"Settings\"\n@e21 [element(44)] \"Fitness\"\n@e22 [element(44)] \"Fitness\"\n@e23 [other] \"label-view\"\n@e24 [element(44)] \"Watch\"\n@e25 [other] \"label-view\"\n@e26 [element(44)] \"Contacts\"\n@e27 [other] \"label-view\"\n@e28 [element(44)] \"Files\"\n@e29 [other] \"label-view\"\n@e30 [element(44)] \"Preview\"\n@e31 [other] \"label-view\"\n@e32 [element(44)] \"Utilities folder\"\n@e33 [element(44)] \"Passwords\"\n@e34 [element(44)] \"Shortcuts\"\n@e35 [element(44)] \"Notepad\"\n@e36 [other] \"label-view\"\n@e37 [element(44)] \"HillclimbUITests-Runner\"\n@e38 [other] \"label-view\"\n@e39 [element(44)] \"AgentDeviceRunnerUITests-Runner\"\n@e40 [other] \"label-view\"\n@e41 [element(34)] \"Page 2 of 2\"\n@e42 [image] \"Search\"\n@e43 [other] \"Dock\"\n@e44 [element(44)] \"Safari\"\n@e45 [element(44)] \"Messages\"\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "open",
+      "com.apple.springboard"
+    ],
+    "exit": 0,
+    "stdout": "Opened: com.apple.springboard\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-0b2ac98e0d8e3cbeb9e4f3ac\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "swipe",
+      "180",
+      "5",
+      "180",
+      "650"
+    ],
+    "exit": 0,
+    "stdout": "Flung\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "snapshot",
+      "-i"
+    ],
+    "exit": 0,
+    "stdout": "Page: com.apple.springboard\nApp: com.apple.springboard\nSnapshot: 25 visible nodes\nSimulator AX snapshot unavailable (target-resolution-failed); used XCTest for an unverified app generation.\n@e1 [application]\n@e2 [window] \"Cellular\"\n@e3 [element(25)] \"Cellular\"\n@e4 [other] \"Cellular\"\n@e5 [other] \"SSID, 3 of 3 Wi-Fi bars\"\n@e6 [other] \"100% battery power\"\n@e7 [window] \"SBCoverSheetWindow\"\n@e8 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e9 [scroll-area] [scrollable] [same label as parent]\n  [content below scroll-area hidden]\n@e10 [button] \"ListCell\"\n@e11 [other] \"ListCell.ContentView\"\n@e12 [scroll-area] [scrollable] [same label as parent]\n  [content below scroll-area hidden]\n@e13 [scroll-area] [scrollable] [same label as parent]\n  [content above scroll-area hidden]\n  [content below scroll-area hidden]\n@e14 [button] \"ListCell\"\n@e15 [other] \"ListCell.ContentView\"\n@e16 [other] \"activity-content-view\"\n@e17 [scroll-area] \"SETTINGS, 2 hours ago, Ready for Apple Intelligence, Time to experience the new personal intelligence system.\" [scrollable]\n  [content below scroll-area hidden]\n@e18 [button] \"ListCell\"\n@e19 [element(83)] \"NotificationShortLookView\"\n@e20 [button] \"2 hours ago, Ready for Apple Intelligence, Time to experience the new personal intelligence system.\"\n@e21 [scroll-area] [scrollable] [same label as parent]\n  [content below scroll-area hidden]\n@e22 [other] \"Wednesday, November 4\"\n@e23 [text] \"23:09\"\n@e24 [other] \"Home indicator\"\n@e25 [other] \"jindo-container-view:1\"\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "open",
+      "com.apple.springboard"
+    ],
+    "exit": 0,
+    "stdout": "Opened: com.apple.springboard\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-0b2ac98e0d8e3cbeb9e4f3ac\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "snapshot",
+      "-i"
+    ],
+    "exit": 0,
+    "stdout": "Page: com.apple.springboard\nApp: com.apple.springboard\nSnapshot: 45 nodes\nSimulator AX snapshot unavailable (target-resolution-failed); used XCTest for an unverified app generation.\nThe surface was still changing after open when this tree was read, so it may not match where the surface comes to rest: an element missing from it is not proof of absence.\n@e1 [application]\n@e2 [window] \"23:10\"\n@e3 [element(25)] \"23:10\"\n@e4 [other] \"23:10\"\n@e5 [other] \"Cellular\"\n@e6 [other] \"SSID, 3 of 3 Wi-Fi bars\"\n@e7 [other] \"100% battery power\"\n@e8 [other] \"jindo-container-view:1,client-identifier:com.apple.chrono.WidgetRenderer-Activities,element-identifier:activity:18B03E8C-9643-42A6-8EA7-20C59D65B9BE:0x100e3a5f0\"\n@e9 [other] \"regular.view\"\n@e10 [other] \"Search\"\n@e11 [other] \"Maps\"\n@e12 [element(44)] \"Maps\"\n@e13 [element(44)] \"Maps\"\n@e14 [element(44)] \"Calendar\"\n@e15 [element(44)] \"Photos\"\n@e16 [element(44)] \"Reminders\"\n@e17 [element(44)] \"News\"\n@e18 [element(44)] \"Health\"\n@e19 [element(44)] \"Wallet\"\n@e20 [element(44)] \"Settings\"\n@e21 [element(44)] \"Fitness\"\n@e22 [element(44)] \"Fitness\"\n@e23 [other] \"label-view\"\n@e24 [element(44)] \"Watch\"\n@e25 [other] \"label-view\"\n@e26 [element(44)] \"Contacts\"\n@e27 [other] \"label-view\"\n@e28 [element(44)] \"Files\"\n@e29 [other] \"label-view\"\n@e30 [element(44)] \"Preview\"\n@e31 [other] \"label-view\"\n@e32 [element(44)] \"Utilities folder\"\n@e33 [element(44)] \"Shortcuts\"\n@e34 [element(44)] \"Passwords\"\n@e35 [element(44)] \"Notepad\"\n@e36 [other] \"label-view\"\n@e37 [element(44)] \"HillclimbUITests-Runner\"\n@e38 [other] \"label-view\"\n@e39 [element(44)] \"AgentDeviceRunnerUITests-Runner\"\n@e40 [other] \"label-view\"\n@e41 [element(34)] \"Page 2 of 2\"\n@e42 [image] \"Search\"\n@e43 [other] \"Dock\"\n@e44 [element(44)] \"Safari\"\n@e45 [element(44)] \"Messages\"\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "open",
+      "com.apple.springboard"
+    ],
+    "exit": 0,
+    "stdout": "Opened: com.apple.springboard\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-0b2ac98e0d8e3cbeb9e4f3ac\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "swipe",
+      "180",
+      "5",
+      "180",
+      "650"
+    ],
+    "exit": 0,
+    "stdout": "Flung\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "snapshot",
+      "-i"
+    ],
+    "exit": 0,
+    "stdout": "Page: com.apple.springboard\nApp: com.apple.springboard\nSnapshot: 27 visible nodes\nSimulator AX snapshot unavailable (target-resolution-failed); used XCTest for an unverified app generation.\n@e1 [application]\n@e2 [window] \"Cellular\"\n@e3 [element(25)] \"Cellular\"\n@e4 [other] \"Cellular\"\n@e5 [other] \"SSID, 3 of 3 Wi-Fi bars\"\n@e6 [other] \"100% battery power\"\n@e7 [window] \"SBCoverSheetWindow\"\n@e8 [scroll-area] \"1 Notification\" [scrollable]\n  [content below scroll-area hidden]\n@e9 [scroll-area] [scrollable]\n@e10 [scroll-area] [scrollable] [same label as parent]\n  [content below scroll-area hidden]\n@e11 [button] \"ListCell\"\n@e12 [other] \"ListCell.ContentView\"\n@e13 [scroll-area] [scrollable] [same label as parent]\n  [content above scroll-area hidden]\n  [content below scroll-area hidden]\n@e14 [button] \"ListCell\"\n@e15 [other] \"ListCell.ContentView\"\n@e16 [other] \"activity-content-view\"\n@e17 [scroll-area] \"SETTINGS, 2 hours ago, Ready for Apple Intelligence, Time to experience the new personal intelligence system.\" [scrollable]\n  [content below scroll-area hidden]\n@e18 [button] \"ListCell\"\n@e19 [element(83)] \"NotificationShortLookView\"\n@e20 [button] \"2 hours ago, Ready for Apple Intelligence, Time to experience the new personal intelligence system.\"\n@e21 [scroll-area] [scrollable] [same label as parent]\n  [content below scroll-area hidden]\n@e22 [button] \"1 Notification\"\n@e23 [button]\n@e24 [other] \"Wed, Nov 4\"\n@e25 [text] \"23:10\"\n@e26 [other] \"Home indicator\"\n@e27 [other] \"jindo-container-view:1\"\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "open",
+      "com.apple.springboard"
+    ],
+    "exit": 0,
+    "stdout": "Opened: com.apple.springboard\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-0b2ac98e0d8e3cbeb9e4f3ac\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "snapshot",
+      "-i"
+    ],
+    "exit": 0,
+    "stdout": "Page: com.apple.springboard\nApp: com.apple.springboard\nSnapshot: 45 nodes\nSimulator AX snapshot unavailable (target-resolution-failed); used XCTest for an unverified app generation.\n@e1 [application]\n@e2 [window] \"23:10\"\n@e3 [element(25)] \"23:10\"\n@e4 [other] \"23:10\"\n@e5 [other] \"Cellular\"\n@e6 [other] \"SSID, 3 of 3 Wi-Fi bars\"\n@e7 [other] \"100% battery power\"\n@e8 [other] \"jindo-container-view:1,client-identifier:com.apple.chrono.WidgetRenderer-Activities,element-identifier:activity:94768643-08BC-4CA0-8A08-3362AEB027DE:0x100e19b00\"\n@e9 [other] \"regular.view\"\n@e10 [other] \"Search\"\n@e11 [other] \"Maps\"\n@e12 [element(44)] \"Maps\"\n@e13 [element(44)] \"Maps\"\n@e14 [element(44)] \"Calendar\"\n@e15 [element(44)] \"Photos\"\n@e16 [element(44)] \"Reminders\"\n@e17 [element(44)] \"News\"\n@e18 [element(44)] \"Health\"\n@e19 [element(44)] \"Wallet\"\n@e20 [element(44)] \"Settings\"\n@e21 [element(44)] \"Fitness\"\n@e22 [element(44)] \"Fitness\"\n@e23 [other] \"label-view\"\n@e24 [element(44)] \"Watch\"\n@e25 [other] \"label-view\"\n@e26 [element(44)] \"Contacts\"\n@e27 [other] \"label-view\"\n@e28 [element(44)] \"Files\"\n@e29 [other] \"label-view\"\n@e30 [element(44)] \"Preview\"\n@e31 [other] \"label-view\"\n@e32 [element(44)] \"Utilities folder\"\n@e33 [element(44)] \"Passwords\"\n@e34 [element(44)] \"Shortcuts\"\n@e35 [element(44)] \"Notepad\"\n@e36 [other] \"label-view\"\n@e37 [element(44)] \"HillclimbUITests-Runner\"\n@e38 [other] \"label-view\"\n@e39 [element(44)] \"AgentDeviceRunnerUITests-Runner\"\n@e40 [other] \"label-view\"\n@e41 [element(34)] \"Page 2 of 2\"\n@e42 [image] \"Search\"\n@e43 [other] \"Dock\"\n@e44 [element(44)] \"Safari\"\n@e45 [element(44)] \"Messages\"\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "open",
+      "com.apple.springboard"
+    ],
+    "exit": 0,
+    "stdout": "Opened: com.apple.springboard\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-0b2ac98e0d8e3cbeb9e4f3ac\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "swipe",
+      "180",
+      "5",
+      "180",
+      "650"
+    ],
+    "exit": 0,
+    "stdout": "Flung\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "snapshot",
+      "-i"
+    ],
+    "exit": 0,
+    "stdout": "Page: com.apple.springboard\nApp: com.apple.springboard\nSnapshot: 25 visible nodes\nSimulator AX snapshot unavailable (target-resolution-failed); used XCTest for an unverified app generation.\nThe surface was still changing after swipe 180 5 180 650 when this tree was read, so it may not match where the surface comes to rest: an element missing from it is not proof of absence.\n@e1 [application]\n@e2 [window] \"Cellular\"\n@e3 [element(25)] \"Cellular\"\n@e4 [other] \"Cellular\"\n@e5 [other] \"SSID, 3 of 3 Wi-Fi bars\"\n@e6 [other] \"100% battery power\"\n@e7 [window] \"SBCoverSheetWindow\"\n@e8 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e9 [scroll-area] [scrollable] [same label as parent]\n  [content below scroll-area hidden]\n@e10 [button] \"ListCell\"\n@e11 [other] \"ListCell.ContentView\"\n@e12 [scroll-area] [scrollable] [same label as parent]\n  [content below scroll-area hidden]\n@e13 [scroll-area] [scrollable] [same label as parent]\n  [content above scroll-area hidden]\n  [content below scroll-area hidden]\n@e14 [button] \"ListCell\"\n@e15 [other] \"ListCell.ContentView\"\n@e16 [other] \"activity-content-view\"\n@e17 [scroll-area] \"SETTINGS, 2 hours ago, Ready for Apple Intelligence, Time to experience the new personal intelligence system.\" [scrollable]\n  [content below scroll-area hidden]\n@e18 [button] \"ListCell\"\n@e19 [element(83)] \"NotificationShortLookView\"\n@e20 [button] \"2 hours ago, Ready for Apple Intelligence, Time to experience the new personal intelligence system.\"\n@e21 [scroll-area] [scrollable] [same label as parent]\n  [content below scroll-area hidden]\n@e22 [other] \"Wednesday, November 4\"\n@e23 [text] \"23:11\"\n@e24 [other] \"Home indicator\"\n@e25 [other] \"jindo-container-view:1\"\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "open",
+      "com.apple.springboard"
+    ],
+    "exit": 0,
+    "stdout": "Opened: com.apple.springboard\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-0b2ac98e0d8e3cbeb9e4f3ac\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "snapshot",
+      "-i"
+    ],
+    "exit": 0,
+    "stdout": "Page: com.apple.springboard\nApp: com.apple.springboard\nSnapshot: 45 nodes\nSimulator AX snapshot unavailable (target-resolution-failed); used XCTest for an unverified app generation.\n@e1 [application]\n@e2 [window] \"23:11\"\n@e3 [element(25)] \"23:11\"\n@e4 [other] \"23:11\"\n@e5 [other] \"Cellular\"\n@e6 [other] \"SSID, 3 of 3 Wi-Fi bars\"\n@e7 [other] \"100% battery power\"\n@e8 [other] \"jindo-container-view:1,client-identifier:com.apple.chrono.WidgetRenderer-Activities,element-identifier:activity:698957F9-7C5E-4F21-AD29-D5FD952CFB9C:0x100a71ed0\"\n@e9 [other] \"regular.view\"\n@e10 [other] \"Search\"\n@e11 [other] \"Maps\"\n@e12 [element(44)] \"Maps\"\n@e13 [element(44)] \"Maps\"\n@e14 [element(44)] \"Calendar\"\n@e15 [element(44)] \"Photos\"\n@e16 [element(44)] \"Reminders\"\n@e17 [element(44)] \"News\"\n@e18 [element(44)] \"Health\"\n@e19 [element(44)] \"Wallet\"\n@e20 [element(44)] \"Settings\"\n@e21 [element(44)] \"Fitness\"\n@e22 [element(44)] \"Fitness\"\n@e23 [other] \"label-view\"\n@e24 [element(44)] \"Watch\"\n@e25 [other] \"label-view\"\n@e26 [element(44)] \"Contacts\"\n@e27 [other] \"label-view\"\n@e28 [element(44)] \"Files\"\n@e29 [other] \"label-view\"\n@e30 [element(44)] \"Preview\"\n@e31 [other] \"label-view\"\n@e32 [element(44)] \"Utilities folder\"\n@e33 [element(44)] \"Passwords\"\n@e34 [element(44)] \"Shortcuts\"\n@e35 [element(44)] \"Notepad\"\n@e36 [other] \"label-view\"\n@e37 [element(44)] \"HillclimbUITests-Runner\"\n@e38 [other] \"label-view\"\n@e39 [element(44)] \"AgentDeviceRunnerUITests-Runner\"\n@e40 [other] \"label-view\"\n@e41 [element(34)] \"Page 2 of 2\"\n@e42 [image] \"Search\"\n@e43 [other] \"Dock\"\n@e44 [element(44)] \"Safari\"\n@e45 [element(44)] \"Messages\"\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "open",
+      "com.apple.springboard"
+    ],
+    "exit": 0,
+    "stdout": "Opened: com.apple.springboard\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-0b2ac98e0d8e3cbeb9e4f3ac\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "swipe",
+      "180",
+      "5",
+      "180",
+      "650"
+    ],
+    "exit": 0,
+    "stdout": "Flung\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "snapshot",
+      "-i"
+    ],
+    "exit": 0,
+    "stdout": "Page: com.apple.springboard\nApp: com.apple.springboard\nSnapshot: 24 visible nodes\nSimulator AX snapshot unavailable (target-resolution-failed); used XCTest for an unverified app generation.\n@e1 [application]\n@e2 [window] \"Cellular\"\n@e3 [element(25)] \"Cellular\"\n@e4 [other] \"Cellular\"\n@e5 [other] \"SSID, 3 of 3 Wi-Fi bars\"\n@e6 [other] \"100% battery power\"\n@e7 [window] \"SBCoverSheetWindow\"\n@e8 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e9 [scroll-area] [scrollable] [same label as parent]\n  [content below scroll-area hidden]\n@e10 [button] \"ListCell\"\n@e11 [other] \"ListCell.ContentView\"\n@e12 [scroll-area] [scrollable] [same label as parent]\n  [content above scroll-area hidden]\n  [content below scroll-area hidden]\n@e13 [button] \"ListCell\"\n@e14 [other] \"ListCell.ContentView\"\n@e15 [other] \"activity-content-view\"\n@e16 [scroll-area] \"SETTINGS, 2 hours ago, Ready for Apple Intelligence, Time to experience the new personal intelligence system.\" [scrollable]\n  [content below scroll-area hidden]\n@e17 [button] \"ListCell\"\n@e18 [element(83)] \"NotificationShortLookView\"\n@e19 [button] \"2 hours ago, Ready for Apple Intelligence, Time to experience the new personal intelligence system.\"\n@e20 [scroll-area] [scrollable] [same label as parent]\n  [content below scroll-area hidden]\n@e21 [other] \"Wed, Nov 4\"\n@e22 [text] \"23:11\"\n@e23 [other] \"Home indicator\"\n@e24 [other] \"jindo-container-view:1\"\n",
+    "stderr": "Warning: ios snapshots are slow in this run: p95 1783ms over 23 captures. Possible causes: device load, app or dev server stuck, helper fallback, or stale daemon.\n"
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "settings",
+      "appearance",
+      "light"
+    ],
+    "exit": 0,
+    "stdout": "Updated setting: appearance\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-0b2ac98e0d8e3cbeb9e4f3ac/agent-device",
+      "settings",
+      "text-size",
+      "large"
+    ],
+    "exit": 0,
+    "stdout": "Text size set to large\n",
+    "stderr": ""
+  }
+]

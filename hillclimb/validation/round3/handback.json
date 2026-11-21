@@ -1,0 +1,87 @@
+{
+  "operations": [
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-d375faee8af31d01dd89e9c3/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-d375faee8af31d01dd89e9c3/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-d375faee8af31d01dd89e9c3/agent-device",
+        "click",
+        "label='Back'"
+      ],
+      "exit": 0,
+      "stdout": "Tapped label='Back' (38, 84)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-d375faee8af31d01dd89e9c3/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: com.apple.reminders\nApp: com.apple.reminders\nSnapshot: 24 visible nodes\n@e1 [other] \"Reminders\"\n@e2 [navigation-bar] \"Reminders.TTRIAccountsListsView\"\n@e3 [button] \"Search\"\n@e4 [button] \"Add List\"\n@e5 [button] \"Edit\"\n@e6 [collection] \"AccountsList.ID.AccountsListTable\"\n  [content below collection hidden]\n@e7 [cell] \"2975BA16-16CF-42F0-AEBA-3FE01280E2FF\"\n@e8 [button] \"Today, 0 reminders, November 5\"\n@e9 [button] \"Scheduled, 0 reminders\"\n@e10 [button] \"All, 16 reminders\"\n@e11 [button] \"Completed\"\n@e12 [cell] \"Sync Reminders with iCloud\"\n@e13 [button] \"Close\"\n@e14 [text] \"To access your reminders on all of your devices, sign into iCloud and enable Reminders.\"\n@e15 [cell] \"Go to Settings\"\n@e16 [button] \"Go to Settings\"\n@e17 [cell] \"My Lists\"\n@e18 [text] \"My Lists\"\n@e19 [cell] \"Reminders, 16 reminders\"\n@e20 [other] \"Blue\"\n@e21 [image] \"ListBadgeDefault\"\n@e22 [text] \"16\"\n@e23 [image] \"Forward\"\n@e24 [button] \"New Reminder\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-d375faee8af31d01dd89e9c3/agent-device",
+        "close",
+        "com.apple.reminders"
+      ],
+      "exit": 0,
+      "stdout": "Closed: t3-d375faee8af31d01dd89e9c3\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-d375faee8af31d01dd89e9c3/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=empty"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-d375faee8af31d01dd89e9c3\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-d375faee8af31d01dd89e9c3/agent-device",
+        "close",
+        "systems.edmundlim.NotepadHillclimb"
+      ],
+      "exit": 0,
+      "stdout": "Closed: t3-d375faee8af31d01dd89e9c3\n",
+      "stderr": ""
+    }
+  ],
+  "activityCleanup": "../../rounds/3/activity/cleanup.json",
+  "noShutdownRequested": true,
+  "deviceVerification": {
+    "hostId": "local",
+    "id": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+    "booted": true,
+    "evidence": "device_list after close confirmed original17 booted"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "xcode": {
+    "command": [
+      "xcodebuild",
+      "-version"
+    ],
+    "exit": 0,
+    "stdout": "Xcode 27.1\nBuild version 27A9269\n",
+    "stderr": ""
+  },
+  "sdk": {
+    "command": [
+      "xcrun",
+      "--sdk",
+      "iphonesimulator",
+      "--show-sdk-version"
+    ],
+    "exit": 0,
+    "stdout": "27.1\n",
+    "stderr": ""
+  },
+  "swift": {
+    "command": [
+      "swift",
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.2.0\n",
+    "stderr": "swift-driver version: 1.168.6 "
+  },
+  "architecture": {
+    "command": [
+      "uname",
+      "-m"
+    ],
+    "exit": 0,
+    "stdout": "arm64\n",
+    "stderr": ""
+  },
+  "disk": {
+    "command": [
+      "df",
+      "-h",
+      "."
+    ],
+    "exit": 0,
+    "stdout": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   460Gi   389Gi    20Gi    96%    4.7M  208M    2%   /System/Volumes/Data\n",
+    "stderr": ""
+  }
+}

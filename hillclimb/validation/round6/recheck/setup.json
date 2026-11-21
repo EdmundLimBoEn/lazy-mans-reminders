@@ -1,0 +1,28 @@
+[
+  {
+    "command": [
+      "xcodegen",
+      "generate",
+      "--spec",
+      "ios/project.yml"
+    ],
+    "exit": 0,
+    "stdout": "\u2699\ufe0f  Generating plists...\n\u2699\ufe0f  Generating project...\n\u2699\ufe0f  Writing project...\nCreated project at /Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-96aab48e/ios/LazyMansReminders.xcodeproj\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "xcodebuild",
+      "-resolvePackageDependencies",
+      "-project",
+      "ios/LazyMansReminders.xcodeproj",
+      "-scheme",
+      "LazyMansReminders",
+      "-derivedDataPath",
+      "/tmp/hillclimb-r6-recheck-b846a915-DD"
+    ],
+    "exit": 0,
+    "stdout": "Command line invocation:\n    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild -resolvePackageDependencies -project ios/LazyMansReminders.xcodeproj -scheme LazyMansReminders -derivedDataPath /tmp/hillclimb-r6-recheck-b846a915-DD\n\nResolve Package Graph\n\nFetching from https://github.com/supabase/supabase-swift.git (cached)\n\nFetching from https://github.com/pointfreeco/swift-clocks (cached)\n\nFetching from https://github.com/apple/swift-crypto.git (cached)\n\nFetching from https://github.com/pointfreeco/xctest-dynamic-overlay (cached)\n\nFetching from https://github.com/pointfreeco/swift-concurrency-extras (cached)\n\nFetching from https://github.com/apple/swift-http-types.git (cached)\n\nFetching from https://github.com/pointfreeco/swift-issue-reporting (cached)\n\nFetching from https://github.com/apple/swift-asn1.git (cached)\n\nCreating working copy of package \u2018swift-issue-reporting\u2019\n\nChecking out 2.1.2 of package \u2018swift-issue-reporting\u2019\n\nCreating working copy of package \u2018supabase-swift\u2019\n\nChecking out 2.54.1 of package \u2018supabase-swift\u2019\n\nCreating working copy of package \u2018swift-asn1\u2019\n\nChecking out 1.7.4 of package \u2018swift-asn1\u2019\n\nCreating working copy of package \u2018swift-crypto\u2019\n\nChecking out 4.5.2 of package \u2018swift-crypto\u2019\n\nCreating working copy of package \u2018xctest-dynamic-overlay\u2019\n\nChecking out 1.13.1 of package \u2018xctest-dynamic-overlay\u2019\n\nCreating working copy of package \u2018swift-clocks\u2019\n\nChecking out 1.1.1 of package \u2018swift-clocks\u2019\n\nCreating working copy of package \u2018swift-http-types\u2019\n\nChecking out 1.8.0 of package \u2018swift-http-types\u2019\n\nCreating working copy of package \u2018swift-concurrency-extras\u2019\n\nChecking out 1.4.3 of package \u2018swift-concurrency-extras\u2019\n\n\nResolved source packages:\n  swift-crypto: https://github.com/apple/swift-crypto.git @ 4.5.2\n  swift-concurrency-extras: https://github.com/pointfreeco/swift-concurrency-extras @ 1.4.3\n  swift-asn1: https://github.com/apple/swift-asn1.git @ 1.7.4\n  Supabase: https://github.com/supabase/supabase-swift.git @ 2.54.1\n  swift-clocks: https://github.com/pointfreeco/swift-clocks @ 1.1.1\n  swift-issue-reporting: https://github.com/pointfreeco/swift-issue-reporting @ 2.1.2\n  xctest-dynamic-overlay: https://github.com/pointfreeco/xctest-dynamic-overlay @ 1.13.1\n  swift-http-types: https://github.com/apple/swift-http-types.git @ 1.8.0\n\nresolved source packages: swift-crypto, swift-concurrency-extras, swift-asn1, Supabase, swift-clocks, swift-issue-reporting, xctest-dynamic-overlay, swift-http-types\n",
+    "stderr": ""
+  }
+]

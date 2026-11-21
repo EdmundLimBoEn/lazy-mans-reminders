@@ -1,0 +1,288 @@
+{
+  "model": "gpt-6.1-sol",
+  "source_sha": "de6cb90349ccc77af90c0fbf4870af3e39977ec5",
+  "overall": 6.88,
+  "categories": [
+    {
+      "name": "Visual hierarchy",
+      "score": 7.5,
+      "rationale": "Large title, primary row text and count have clear native hierarchy. Empty onboarding guidance competes with the empty result; the scrolled board loses its title instead of retaining the compact context visible in Reminders."
+    },
+    {
+      "name": "Spacing/grid",
+      "score": 7.0,
+      "rationale": "Consistent outer margins and divider alignment. Multi-line controls sit vertically in the middle of paragraph rows; the large persistent footer and empty-state guide consume substantial reading space."
+    },
+    {
+      "name": "Typography scale",
+      "score": 8.5,
+      "rationale": "System large-title/body/caption hierarchy reads naturally in both appearances. Unbounded row text wraps without shrinking; the capacity placeholder truncates at XXXL."
+    },
+    {
+      "name": "Dynamic Type",
+      "score": 7.5,
+      "rationale": "Observed XXXL genuinely increases UIKit row text and keeps full paragraphs allocated; supplied intrinsic-height geometry check passed. The capacity placeholder is visibly ellipsized. Accessibility sizes above XXXL and other screens are untested."
+    },
+    {
+      "name": "Light contrast",
+      "score": 7.0,
+      "rationale": "Main text is crisp on white. Bottom fade turns active final-row text gray; placeholder and footer are very quiet. No numerical contrast audit was run."
+    },
+    {
+      "name": "Dark contrast",
+      "score": 6.5,
+      "rationale": "White body on black is strong. The bottom final line nearly disappears, completion circles/grips are subdued, and the gray composer placeholder looks especially inactive. No settled dark-top reference is available."
+    },
+    {
+      "name": "Iconography",
+      "score": 8.0,
+      "rationale": "Existing SF Symbols are coherent and familiar. Circle completion and grip have weak visual weight in dark mode; preserve the existing glyphs and improve placement/contrast."
+    },
+    {
+      "name": "Safe area / Dynamic Island",
+      "score": 8.0,
+      "rationale": "Observed title and toolbar clear the status area; supplied top check reaches the target-size failure after its safe-area assertion. Still images have no real Island hardware evidence, and compact/expanded Activity states were not captured."
+    },
+    {
+      "name": "Scroll/pull-down / last row",
+      "score": 4.0,
+      "rationale": "Successful default and XXXL bottom-after-pull images show the final line faded under chrome despite fitting geometrically. The exact dark-bottom Reminders pair keeps its final row crisp. Full-board automated pull test timed out; runtime pull smoothness is unproved."
+    },
+    {
+      "name": "List rows",
+      "score": 6.5,
+      "rationale": "Plain native separators and wrapping are sound. Centered completion circle/grip float halfway down long paragraphs, making their row association weaker than the first-line-aligned Reminders controls; repeated grips also narrow reading width."
+    },
+    {
+      "name": "Empty states",
+      "score": 7.0,
+      "rationale": "Clear result, existing actionable guidance and permanent composer are present. The large setup block dominates the otherwise quiet screen; it is partially faded when the keyboard appears. Usable empty-light Reminders is much calmer."
+    },
+    {
+      "name": "Composer ergonomics",
+      "score": 6.0,
+      "rationale": "Bottom anchoring and separate submit action are useful, with a source-declared >=44pt add target. The actual input element measures 22pt high; keyboard-dismiss width is source-declared 32pt. XXXL capacity text truncates."
+    },
+    {
+      "name": "Keyboard handling",
+      "score": 7.0,
+      "rationale": "Both captured composers sit above a native keyboard without overlap. Source supports interactive dismissal and explicit Done. Automated dismiss behavior is not established because its test fails at the field target assertion before tapping Done."
+    },
+    {
+      "name": "Sheet presentation/detents",
+      "score": 7.0,
+      "rationale": "Native medium/large detents, drag indicator and Done are appropriate. Medium account exposes a busy blurred board through translucent chrome and only a small portion of settings; supplied dark item-Details reference is semantically different and taller."
+    },
+    {
+      "name": "Navigation clarity",
+      "score": 7.5,
+      "rationale": "Single board plus Account is straightforward, with native Done. After scrolling, the title/count disappear and a tall mostly blank toolbar region remains; the paired Reminders bottom keeps its compact title."
+    },
+    {
+      "name": "Touch targets",
+      "score": 4.5,
+      "rationale": "Measured input height 22pt and Account width 36pt fail the minimum 44 gate. The 32x44pt dismiss button is another source-derived concern. Row/add/tip targets have explicit 44 sizing, but effective hit geometry remains untested for several controls."
+    },
+    {
+      "name": "Haptics",
+      "score": 7.0,
+      "rationale": "Source specifies success/error sensory feedback and selection feedback on drag start. Runtime timing, strength and physical-device perception are unobserved; no polish pass can be inferred from stills."
+    },
+    {
+      "name": "Animation/transitions",
+      "score": 6.5,
+      "rationale": "Source uses short 0.2s board changes and respects Reduce Motion for them. UIKit reloadData makes insert/remove continuity uncertain; the test waiting for app idle after pull timed out. Neither smoothness nor an app animation defect is established."
+    },
+    {
+      "name": "Loading states",
+      "score": 7.5,
+      "rationale": "Source provides initial loading, retry progress, per-row completion and submit progress while guarding duplicate work. None of these states is captured, so their layout and timing remain provisional."
+    },
+    {
+      "name": "Error states",
+      "score": 7.5,
+      "rationale": "Source distinguishes initial failure with retry, an inline populated-board banner and auth/account errors. Message wrapping and text selection exist. Runtime failure recovery and actual error layouts are unobserved."
+    },
+    {
+      "name": "VoiceOver/labels",
+      "score": 7.5,
+      "rationale": "Source labels completion, reorder position/actions, composer and dismissal; posts completion/save announcements. Rotor order, disabled-state announcements and focus after list reload/sheet changes have not been exercised."
+    },
+    {
+      "name": "iOS HIG consistency",
+      "score": 7.5,
+      "rationale": "System navigation, sheets, keyboard, ContentUnavailableView and UIKit plain list form a strong base. Sub44 targets, paragraph-centered controls and overlapping fade chrome reduce the native finish."
+    },
+    {
+      "name": "Lock Screen / Live Activity",
+      "score": 6.0,
+      "rationale": "Provisional source-only score: restrained banner, empty compact regions, payload/line caps and forced dark expanded Island are sensible. Fixed15pt banner text and single-line truncation need real-device review. No Activity or Lock Screen capture exists."
+    },
+    {
+      "name": "Sign-in/onboarding",
+      "score": 6.5,
+      "rationale": "Existing provider and email routes are clear and system text wraps. Two rounded outer cards containing several inset rounded fills produce the nested-surface look contrary to the requested minimal taste. No authentication interaction is observed."
+    },
+    {
+      "name": "Settings/account",
+      "score": 7.0,
+      "rationale": "Native grouped settings and clear status/value alignment are good. Medium sheet is visually busy over the board; lower account actions are not captured. Source includes confirmations, account status and useful persistence controls."
+    },
+    {
+      "name": "Performance feel",
+      "score": 6.5,
+      "rationale": "Only seven fixture rows and native virtualization are encouraging in source. No frame-time measurements or interaction recording exists; full-board idle timeout is a test/evidence concern, not proof of lag."
+    },
+    {
+      "name": "Delight",
+      "score": 6.5,
+      "rationale": "The quiet board and native controls are pleasant. A faded last line, middle-aligned paragraph controls and inactive-looking composer blunt the sense of precision. Haptic/transition delight is unobserved."
+    },
+    {
+      "name": "Long text",
+      "score": 7.0,
+      "rationale": "Default and XXXL rows wrap and supplied allocated-height tests pass. Bottom text is still optically obscured; long rows strand completion/grip at paragraph center. Capacity placeholder truncation is visible and Activity text is capped in source."
+    },
+    {
+      "name": "Reduced Motion / Transparency",
+      "score": 7.0,
+      "rationale": "Source disables explicit board/setup animations for Reduce Motion and makes error chrome solid for Reduce Transparency/increased contrast. The bottom gradient and soft edge are unconditional, and no accessibility-settings screenshots validate the result."
+    },
+    {
+      "name": "Palette / minimalism",
+      "score": 7.0,
+      "rationale": "Neutral monochrome board plus restrained indigo supports the requested direction, without decorative red/orange. Sign-in layers rounded controls within cards; account medium glass lets background text texture compete. Simplify surfaces without changing wording, branding or icons."
+    }
+  ],
+  "findings": [
+    {
+      "id": "SOL-01",
+      "severity": "high",
+      "screen": "full-light-default-bottom-after-pull.png; full-dark-default-bottom-after-pull.png; long-text-light-XXXL-bottom-after-pull.png; long-text-dark-XXXL-bottom-after-pull.png",
+      "evidence": "The final tomorrow./for tomorrow. line becomes gray to nearly black at the settled bottom; it is inside measured bounds but not equivalently readable. Exact dark-bottom pair ../../reference/reminders-bottom-dark.png leaves Final demo reminder fully bright above add. ReminderListView.swift composer adds a 36pt gradient offset -36; BoardScrollEdge applies a soft bottom edge too. This explains a likely overlap, not proof that one layer alone causes it.",
+      "fix": "Make the entire final text line settle above every fade, including the 36pt overhang. Use one intentional edge treatment, reserve bottom scroll breathing space based on actual chrome height, and remove/reduce the overhang when already at bottom. Preserve all footer/composer wording.",
+      "confidence": "high",
+      "basis": "observed + source-derived causal hypothesis",
+      "check": "Extend testFullBoardBottomAboveComposerAfterPullAndScroll and testXXXLTextFitsAllocatedHeightAtBottom: after real top pull and settled bottom in light/dark, assert final text maxY clears the fade start (not just composer.minY); attach screenshots and compare final-line ink to the same row away from edge. Existing geometry pass does not cover opacity. Run existing iOS suite too."
+    },
+    {
+      "id": "SOL-02",
+      "severity": "high",
+      "screen": "composer-light-default-top.png; composer-dark-default-top.png; full-light-default-top.png",
+      "evidence": "checks.json and bounded-ui-baseline-summary.json report New reminder 22pt high and Account 36pt wide. Source Done keyboard icon is explicitly32x44pt. The dismiss test exits at field assertion, so its actual tap outcome was not checked. Surrounding visible pill/glass is not evidence of a 44pt input accessibility frame or hit region.",
+      "fix": "Give input and Account explicit minimum 44x44pt interactive/accessible frames; make the entire intended input surface focus the field. Widen keyboard Done to 44pt. Keep existing visual glyph sizes and wording.",
+      "confidence": "high",
+      "basis": "observed test measurements + source-derived dismiss width",
+      "check": "Rerun testComposerKeyboardDismissTarget and testTopControlsAvoidIslandAndHave44PointTargets after changes; require44pt actual frames and successful edge taps, focus and dismissal. Repeat default/XXXL and keyboard on/off; retain safe-area assertion and existing suite."
+    },
+    {
+      "id": "SOL-03",
+      "severity": "medium",
+      "screen": "full-light-default-top.png; long-text-light-default-top.png; long-text-dark-XXXL-top.png",
+      "evidence": "Completion circles and six-dot grips sit around the vertical center of paragraphs six to twelve lines tall. Usable paired reminders-top-light.png places the circle beside the beginning of each task. ReminderRow uses a Label within centered HStack hosting content; long row controls become remote from the task start.",
+      "fix": "Top-align row action/grip containers to the first text-line region with consistent optical inset while preserving at least44pt hit areas. Keep the same circle and grip; retain all text wrapping and row wording.",
+      "confidence": "high",
+      "basis": "observed + source-derived",
+      "check": "Capture one-line, multiline and XXXL rows in both appearances; measure control top/center against first-line region and ensure>=44pt targets. Run reordering unit tests plus completion/reorder UI smoke checks and existing suite."
+    },
+    {
+      "id": "SOL-04",
+      "severity": "medium",
+      "screen": "full-light-default-bottom-after-pull.png; full-dark-default-bottom-after-pull.png; long-text-dark-XXXL-bottom-after-pull.png",
+      "evidence": "Scrolled board shows no compact Your Board/count and leaves a sizable blank strip below status bar with only Account. Exact usable dark-bottom Reminders pair retains a compact title. UIViewRepresentable collection view is used beneath large-title navigation; the captures establish missing context, not its exact cause.",
+      "fix": "Integrate the collection scroll state with the navigation title so the existing Your Board title remains in compact form at bottom. Preserve wording and Account icon; avoid adding a separate title card.",
+      "confidence": "high",
+      "basis": "observed; integration cause unconfirmed",
+      "check": "After pull and long scroll, assert the existing navigation title is visible in compact mode, its frame clears safe area, Account remains>=44pt, and row/composer space is not reduced unnecessarily. Capture top and bottom default/XXXL both appearances and run existing suite."
+    },
+    {
+      "id": "SOL-05",
+      "severity": "medium",
+      "screen": "signin-light-default-top.png; signin-dark-default-top.png",
+      "evidence": "Rounded provider card encloses two rounded buttons; email card encloses field and multiple rounded button fills. The hierarchy reads as nested boxes. No exact sign-in reference exists: nearest usable reminders-sheet-dark.png is an item Details sheet, not authentication; light version also mismatches appearance.",
+      "fix": "Flatten sign-in into one grouped surface or unboxed sections, letting existing provider/input controls define interaction. Remove redundant surrounding rounded backgrounds and reduce secondary password-action fill prominence while preserving every label and the Apple control treatment.",
+      "confidence": "high",
+      "basis": "observed + source-derived",
+      "check": "Capture both appearances/default and XXXL, with email/password, inbox and error variants. Verify every existing action/wording is reachable, controls>=44pt, text wraps and focused field remains above keyboard. No new copy, icon or brand changes."
+    },
+    {
+      "id": "SOL-06",
+      "severity": "medium",
+      "screen": "account-light-default-top.png; account-dark-default-top.png",
+      "evidence": "At medium detent the blurred seeded paragraphs remain visible through the account sheet; grouped rows occupy only a small viewport. Paired dark reference reminders-sheet-dark.png uses quieter stable dark section surfaces. Its Details semantics differ, so it only supports surface/spacing comparison, not copying its layout; light sheet has no exact settled pair.",
+      "fix": "Give account content an opaque semantic grouped background so underlying task texture does not compete. Evaluate opening at large detent or a content-fitting initial height; retain medium/large affordances only if the first viewport remains coherent. Keep labels and icons.",
+      "confidence": "medium-high",
+      "basis": "observed + source-derived",
+      "check": "Capture Account over long boards at each supported detent in light/dark and Reduce Transparency. Scroll through lower actions, ensure all controls and footer remain reachable and Dynamic Type wraps. Run existing suite; do not treat unseen lower rows as absent."
+    },
+    {
+      "id": "SOL-07",
+      "severity": "medium",
+      "screen": "long-text-light-XXXL-top.png; long-text-dark-XXXL-top.png",
+      "evidence": "Capacity field placeholder ends Board full \u2014 combine lines i... at XXXL. Supplied text-height check measures reminder text, not placeholder completeness. Native reference is default-size top, so no same-size reference exists.",
+      "fix": "Allow the existing capacity placeholder to wrap fully or display the same existing text as an intrinsic-height label in the disabled input treatment. Preserve the wording exactly and keep add/dismiss target sizes.",
+      "confidence": "high",
+      "basis": "observed + source-derived test coverage limit",
+      "check": "Add a real rendered capacity-message completeness/height check at XXXL and accessibility sizes, with both appearances and longest locale strings if supported; attach screenshots. Keep long-row intrinsic height gate and existing suite."
+    },
+    {
+      "id": "SOL-08",
+      "severity": "low",
+      "screen": "empty-light-default-top.png; empty-dark-default-top.png; composer-light-default-top.png; composer-dark-default-top.png",
+      "evidence": "Setup guide carries three large instruction paragraphs below All Clear and becomes a partially faded block when keyboard opens. Exact light-empty reference is much quieter; dark-empty and dark-compose lack settled references. Source already persists dismiss state and uses a large tip block.",
+      "fix": "Keep all existing instructions but reduce their initial visual weight with simpler section styling and tighter icon/text alignment; when composing, scroll the guide wholly out of the reading region instead of leaving faded instruction fragments. Keep Dismiss tip accessible and44pt.",
+      "confidence": "medium-high",
+      "basis": "observed + source-derived",
+      "check": "Capture first-empty, dismissed-empty and focused composer default/XXXL in both appearances; verify instruction text remains reachable, dismissal persists, composer is immediately discoverable and guide text is either readable or wholly out of the visible content region."
+    },
+    {
+      "id": "SOL-09",
+      "severity": "medium",
+      "screen": "Source: ios/App/ReminderListView.swift composer/BoardScrollEdge; no Reduce Transparency capture",
+      "evidence": "Reduce Motion is checked for explicit mutations and tip animation; Reduce Transparency/increased contrast influences field border/error background. Composer gradient and soft scroll edge are unconditional. Stills do not establish either setting behavior.",
+      "fix": "Make decorative fade treatment honor Reduce Transparency/increased contrast or ensure it never covers readable content; keep meaningful changes instantaneous under Reduce Motion. Verify system and UIKit list transitions rather than assuming withAnimation covers them.",
+      "confidence": "medium",
+      "basis": "source-derived, runtime unobserved",
+      "check": "Capture and interact with both accessibility settings toggled on, in light/dark, full and XXXL boards. Require final-line contrast/readability unchanged, no text-through-material clutter and no custom motion under Reduce Motion. Run existing suite."
+    }
+  ],
+  "screenshots": [
+    "full-light-default-top.png",
+    "empty-light-default-top.png",
+    "composer-light-default-top.png",
+    "account-light-default-top.png",
+    "signin-light-default-top.png",
+    "long-text-light-default-top.png",
+    "full-light-default-bottom-after-pull.png",
+    "long-text-light-XXXL-top.png",
+    "long-text-light-XXXL-bottom-after-pull.png",
+    "full-dark-default-top.png",
+    "empty-dark-default-top.png",
+    "composer-dark-default-top.png",
+    "account-dark-default-top.png",
+    "signin-dark-default-top.png",
+    "long-text-dark-default-top.png",
+    "full-dark-default-bottom-after-pull.png",
+    "long-text-dark-XXXL-top.png",
+    "long-text-dark-XXXL-bottom-after-pull.png"
+  ],
+  "references": [
+    "../../reference/reminders-top-light.png",
+    "../../reference/reminders-empty-light.png",
+    "../../reference/reminders-compose-light.png",
+    "../../reference/reminders-sheet-dark.png",
+    "../../reference/reminders-bottom-dark.png"
+  ],
+  "evidence_gaps": [
+    "Apple Notes was unavailable/not installed; no Notes screenshots or comparisons were used.",
+    "Only five usable Apple Reminders references were inspected. Four transition_rejected captures were excluded completely. Missing exact states: light bottom/sheet; dark top/empty/compose; all sign-in semantics and same-size XXXL references.",
+    "Live Activity, Lock Screen and compact/expanded Dynamic Island were not captured. The offline fixture deliberately does not start ActivityKit or write shared board storage. Source review does not validate its runtime appearance or lifecycle.",
+    "Haptics, VoiceOver traversal/focus, animation continuity, physical touch response and performance feel are unobserved; scores for these are provisional source/test assessments, not runtime passes.",
+    "No loading/error/authentication success/inbox/password/account-lower-content captures; these paths were reviewed in source only.",
+    "XXXL means system xxxLarge, not the largest accessibility sizes. Dynamic Type, Reduce Motion, Reduce Transparency and increased contrast were not tested across all screens/settings.",
+    "Existing 247 tests passed, but combined baseline run failed because new UI gates failed/canceled. New measured failures are 22pt composer and 36pt Account. XXXL allocated-height/final-row bounds passed; this does not establish readability through gradient.",
+    "Full-board pull test timed out waiting for app idle before visibility assertion. It does not establish app lag or a successful final-row gate. Successful manual captures establish end state only; one failed synthesized scroll attempt is retained.",
+    "Fixture stability original failure was an XCTest 128-character query harness error. The repaired predicate test subsequently executed and passed: 1 test, 0 failed in ../../validation/offline-fixture-summary.json. Frozen checks.json pending status is historical; this specific gap is resolved.",
+    "Reviewer ran no runtime tests or device interactions. Commands below are executable recommendations; reported outcomes come from checks.json and supplied validation summaries at captured source SHA."
+  ]
+}

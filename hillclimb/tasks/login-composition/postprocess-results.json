@@ -1,0 +1,50 @@
+[
+  {
+    "script": "collect.py",
+    "arguments": [
+      "full-v2"
+    ],
+    "exit": 0,
+    "stdout": "SignInDensityUITests exported\nSignInChromeUITests exported\nAccessibilitySettingsUITests exported\nLoginCompositionUITests exported\nAccountDensityUITests exported\nBoardCapacityDensityUITests exported\n",
+    "stderr": ""
+  },
+  {
+    "script": "runtime.py",
+    "arguments": [
+      "full-v2"
+    ],
+    "exit": 0,
+    "stdout": "{\n  \"devicesAndConfigurations\": [\n    {\n      \"device\": {\n        \"architecture\": \"arm64\",\n        \"deviceId\": \"78F5A64F-7B2E-4562-8EF9-10F3312CC694\",\n        \"deviceName\": \"Hillclimb iPhone 17 Pro\",\n        \"modelName\": \"iPhone 17 Pro\",\n        \"osBuildNumber\": \"23C54\",\n        \"osVersion\": \"26.2\",\n        \"platform\": \"iOS Simulator\"\n      },\n      \"expectedFailures\": 0,\n      \"failedTests\": 0,\n      \"passedTests\": 317,\n      \"skippedTests\": 0,\n      \"testPlanConfiguration\": {\n        \"configurationId\": \"1\",\n        \"configurationName\": \"Test Scheme Action\"\n      }\n    }\n  ],\n  \"environmentDescription\": \"LazyMansReminders \\u00b7 Built with macOS 27.2\",\n  \"expectedFailures\": 0,\n  \"failedTests\": 0,\n  \"finishTime\": 1793885648.701,\n  \"passedTests\": 317,\n  \"result\": \"Passed\",\n  \"runtimeWarnings\": [],\n  \"skippedTests\": 0,\n  \"startTime\": 1793882965.77,\n  \"statistics\": [\n    {\n      \"subtitle\": \"3 test runs\",\n      \"title\": \"3 tests collected performance metrics\"\n    }\n  ],\n  \"testFailures\": [],\n  \"title\": \"Test - LazyMansReminders\",\n  \"topInsights\": [\n    {\n      \"category\": \"Longest Test Runs\",\n      \"impact\": \"12% of duration\",\n      \"text\": \"2 longest test runs with outlier durations exceeding 164.76s (three standard deviations)\"\n    },\n    {\n      \"category\": \"Longest Test Runs\",\n      \"impact\": \"29% of duration\",\n      \"text\": \"2 longest test runs with outlier durations exceeding 0.06s (three standard deviations)\"\n    }\n  ],\n  \"totalTestCount\": 317\n}\n",
+    "stderr": ""
+  },
+  {
+    "script": "metrics.py",
+    "arguments": [],
+    "exit": 0,
+    "stdout": "[\n  {\n    \"test\": \"PerformanceUITests/testSeededLaunchMetric()\",\n    \"name\": \"Duration (AppLaunch)\",\n    \"unit\": \"s\",\n    \"samples\": [\n      1.009641083,\n      0.9643635420000001,\n      0.9924132080000001,\n      0.950981708,\n      0.980880042\n    ],\n    \"mean\": 0.9796559166000001,\n    \"sampleSD\": 0.023018601883249584,\n    \"populationSD\": 0.020588463423180298,\n    \"populationRSDPercent\": 2.1016014984766027,\n    \"minimum\": 0.950981708,\n    \"maximum\": 1.009641083,\n    \"device\": {\n      \"deviceId\": \"78F5A64F-7B2E-4562-8EF9-10F3312CC694\",\n      \"deviceName\": \"Hillclimb iPhone 17 Pro\"\n    }\n  },\n  {\n    \"test\": \"PerformanceUITests/testSeededScrollElapsedMetric()\",\n    \"name\": \"Clock Monotonic Time\",\n    \"unit\": \"s\",\n    \"samples\": [\n      4.845685491,\n      4.868667426,\n      4.864498177000001,\n      4.860312446,\n      4.86105881\n    ],\n    \"mean\": 4.86004447,\n    \"sampleSD\": 0.008681472382528236,\n    \"populationSD\": 0.0077649449568480775,\n    \"populationRSDPercent\": 0.15977106803815064,\n    \"minimum\": 4.845685491,\n    \"maximum\": 4.868667426,\n    \"device\": {\n      \"deviceId\": \"78F5A64F-7B2E-4562-8EF9-10F3312CC694\",\n      \"deviceName\": \"Hillclimb iPhone 17 Pro\"\n    }\n  },\n  {\n    \"test\": \"PerformanceUITests/testSeededScrollSignpostMetric()\",\n    \"name\": \"Duration (Scroll_DraggingAndDeceleration)\",\n    \"unit\": \"s\",\n    \"samples\": [\n      2.350190209,\n      2.350945584,\n      2.3505975,\n      2.3339295420000004,\n      2.333461209\n    ],\n    \"mean\": 2.3438248088,\n    \"sampleSD\": 0.009252210696684707,\n    \"populationSD\": 0.008275428823975077,\n    \"populationRSDPercent\": 0.3530736936013559,\n    \"minimum\": 2.333461209,\n    \"maximum\": 2.350945584,\n    \"device\": {\n      \"deviceId\": \"78F5A64F-7B2E-4562-8EF9-10F3312CC694\",\n      \"deviceName\": \"Hillclimb iPhone 17 Pro\"\n    }\n  }\n]\n",
+    "stderr": ""
+  },
+  {
+    "script": "restoration.py",
+    "arguments": [
+      "full-v2"
+    ],
+    "exit": 0,
+    "stdout": "[\n  {\n    \"test\": \"AccessibilitySettingsUITests/testCombinedActualSettingsErrorContrast()\",\n    \"original\": {\n      \"Reduce Motion\": \"0\",\n      \"Auto-Play Message Effects\": \"1\",\n      \"Reduce Transparency\": \"0\",\n      \"Increase Contrast\": \"0\"\n    },\n    \"restored\": {\n      \"Reduce Motion\": \"0\",\n      \"Auto-Play Message Effects\": \"1\",\n      \"Reduce Transparency\": \"0\",\n      \"Increase Contrast\": \"0\"\n    },\n    \"allFourMatch\": true,\n    \"attachments\": {\n      \"Display & Text Size-restored\": {\n        \"Reduce Transparency\": \"0\",\n        \"Increase Contrast\": \"0\"\n      },\n      \"Display & Text Size-before-restore\": {\n        \"Reduce Transparency\": \"1\",\n        \"Increase Contrast\": \"1\"\n      },\n      \"Motion-restored\": {\n        \"Reduce Motion\": \"0\",\n        \"Auto-Play Message Effects\": \"1\"\n      },\n      \"Motion-before-restore\": {\n        \"Reduce Motion\": \"1\",\n        \"Auto-Play Message Effects\": \"1\"\n      },\n      \"Display & Text Size-enabled\": {\n        \"Reduce Transparency\": \"1\",\n        \"Increase Contrast\": \"1\"\n      },\n      \"Display & Text Size-original\": {\n        \"Reduce Transparency\": \"0\",\n        \"Increase Contrast\": \"0\"\n      },\n      \"Motion-enabled\": {\n        \"Reduce Motion\": \"1\",\n        \"Auto-Play Message Effects\": \"1\"\n      },\n      \"Motion-original\": {\n        \"Reduce Motion\": \"0\",\n        \"Auto-Play Message Effects\": \"1\"\n      }\n    }\n  },\n  {\n    \"test\": \"AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix()\",\n    \"original\": {\n      \"Reduce Motion\": \"0\",\n      \"Auto-Play Message Effects\": \"1\",\n      \"Reduce Transparency\": \"0\",\n      \"Increase Contrast\": \"0\"\n    },\n    \"restored\": {\n      \"Reduce Motion\": \"0\",\n      \"Auto-Play Message Effects\": \"1\",\n      \"Reduce Transparency\": \"0\",\n      \"Increase Contrast\": \"0\"\n    },\n    \"allFourMatch\": true,\n    \"attachments\": {\n      \"Display & Text Size-restored\": {\n        \"Reduce Transparency\": \"0\",\n        \"Increase Contrast\": \"0\"\n      },\n      \"Display & Text Size-before-restore\": {\n        \"Reduce Transparency\": \"1\",\n        \"Increase Contrast\": \"1\"\n      },\n      \"Motion-restored\": {\n        \"Reduce Motion\": \"0\",\n        \"Auto-Play Message Effects\": \"1\"\n      },\n      \"Motion-before-restore\": {\n        \"Reduce Motion\": \"1\",\n        \"Auto-Play Message Effects\": \"1\"\n      },\n      \"Display & Text Size-enabled\": {\n        \"Reduce Transparency\": \"1\",\n        \"Increase Contrast\": \"1\"\n      },\n      \"Display & Text Size-original\": {\n        \"Reduce Transparency\": \"0\",\n        \"Increase Contrast\": \"0\"\n      },\n      \"Motion-enabled\": {\n        \"Reduce Motion\": \"1\",\n        \"Auto-Play Message Effects\": \"1\"\n      },\n      \"Motion-original\": {\n        \"Reduce Motion\": \"0\",\n        \"Auto-Play Message Effects\": \"1\"\n      }\n    }\n  },\n  {\n    \"test\": \"SignInChromeUITests/testCombinedSettingsPopulatedPasswordKeepsVisualName()\",\n    \"original\": {\n      \"Reduce Motion\": \"0\",\n      \"Auto-Play Message Effects\": \"1\",\n      \"Reduce Transparency\": \"0\",\n      \"Increase Contrast\": \"0\"\n    },\n    \"restored\": {\n      \"Reduce Motion\": \"0\",\n      \"Auto-Play Message Effects\": \"1\",\n      \"Reduce Transparency\": \"0\",\n      \"Increase Contrast\": \"0\"\n    },\n    \"allFourMatch\": true,\n    \"attachments\": {\n      \"Display & Text Size-restored\": {\n        \"Reduce Transparency\": \"0\",\n        \"Increase Contrast\": \"0\"\n      },\n      \"Display & Text Size-before-restore\": {\n        \"Reduce Transparency\": \"1\",\n        \"Increase Contrast\": \"1\"\n      },\n      \"Motion-restored\": {\n        \"Reduce Motion\": \"0\",\n        \"Auto-Play Message Effects\": \"1\"\n      },\n      \"Motion-before-restore\": {\n        \"Reduce Motion\": \"1\",\n        \"Auto-Play Message Effects\": \"1\"\n      },\n      \"Display & Text Size-enabled\": {\n        \"Reduce Transparency\": \"1\",\n        \"Increase Contrast\": \"1\"\n      },\n      \"Display & Text Size-original\": {\n        \"Reduce Transparency\": \"0\",\n        \"Increase Contrast\": \"0\"\n      },\n      \"Motion-enabled\": {\n        \"Reduce Motion\": \"1\",\n        \"Auto-Play Message Effects\": \"1\"\n      },\n      \"Motion-original\": {\n        \"Reduce Motion\": \"0\",\n        \"Auto-Play Message Effects\": \"1\"\n      }\n    }\n  }\n]\n",
+    "stderr": ""
+  },
+  {
+    "script": "accept.py",
+    "arguments": [],
+    "exit": 0,
+    "stdout": "{'total': 317, 'unit': 263, 'ui': 54, 'allNamedTestsPassed': True, 'failed': 0, 'skipped': 0}\n",
+    "stderr": ""
+  },
+  {
+    "script": "identity.py",
+    "arguments": [],
+    "exit": 0,
+    "stdout": "Frozen sources/artifacts and installed binaries match\n",
+    "stderr": ""
+  }
+]

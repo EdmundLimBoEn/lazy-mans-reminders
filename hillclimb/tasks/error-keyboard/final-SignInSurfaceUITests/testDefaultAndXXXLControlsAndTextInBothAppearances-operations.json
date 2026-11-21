@@ -1,0 +1,1218 @@
+{
+  "testIdentifier" : "SignInSurfaceUITests/testDefaultAndXXXLControlsAndTextInBothAppearances()",
+  "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInSurfaceUITests/testDefaultAndXXXLControlsAndTextInBothAppearances",
+  "testName" : "testDefaultAndXXXLControlsAndTextInBothAppearances()",
+  "testRuns" : [
+    {
+      "activities" : [
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821723.774,
+          "title" : "Start Test at 2026-11-05 03:48:43.774"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821723.8,
+          "title" : "Set Up"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821723.803,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:98185"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821725.085,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821725.709,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821723.803,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821723.801,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821727.986,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821727.986,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821726.953,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.038,
+          "title" : "Checking existence of `\"Sign in with Google\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.05,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.063,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.076,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.088,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.099,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.107,
+          "title" : "Checking existence of `\"signin.emailTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.117,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.13,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.143,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.156,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.167,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.174,
+          "title" : "Checking existence of `\"Email address\" TextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.183,
+          "title" : "Checking existence of `\"Send Sign-In Link\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.192,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.205,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.218,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.231,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.244,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.252,
+          "title" : "Checking existence of `\"Use an Existing Password\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.261,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.274,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.287,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.3,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.312,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.319,
+          "title" : "Checking existence of `\"Your board on this iPhone, the web, and the Lock Screen.\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.335,
+          "title" : "Find the \"Your board on this iPhone, the web, and the Lock Screen.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.351,
+          "title" : "Find the \"Your board on this iPhone, the web, and the Lock Screen.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.363,
+          "title" : "Checking existence of `\"Use the same address as the web board.\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.372,
+          "title" : "Find the \"Use the same address as the web board.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.385,
+          "title" : "Find the \"Use the same address as the web board.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.397,
+          "title" : "Find the \"Notepad\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.409,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.421,
+          "title" : "Find the \"Email address\" TextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.432,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.439,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-light-default_0_82E506C5-4861-47D8-9ED2-E3FBBABBE555.png",
+              "payloadId" : "0~BtZ99JEJJ5Xs1gzMH0Jea-3r0y1XrO24rKiTAazNCbnzQPGUD1IzRXT0vMjyBvwHjM1Lg_9FPXjkY5qmKrlpRw==",
+              "timestamp" : 1793821728.506,
+              "uuid" : "61B26006-A583-454F-9C14-C97FF7989555"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821728.506,
+              "title" : "signin-light-default"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.506,
+          "title" : "Added attachment named 'signin-light-default'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821728.508,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:99625"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821729.781,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821730.397,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821728.508,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821728.507,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821732.682,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821732.681,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821731.632,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.736,
+          "title" : "Checking existence of `\"Sign in with Google\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.748,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.762,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.775,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.787,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.799,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.806,
+          "title" : "Checking existence of `\"signin.emailTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.816,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.828,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.84,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.853,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.868,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.876,
+          "title" : "Checking existence of `\"Email address\" TextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.886,
+          "title" : "Checking existence of `\"Send Sign-In Link\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.895,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.908,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.921,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.934,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.946,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.953,
+          "title" : "Checking existence of `\"Use an Existing Password\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.962,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.975,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821732.988,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.001,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.012,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.02,
+          "title" : "Checking existence of `\"Your board on this iPhone, the web, and the Lock Screen.\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.029,
+          "title" : "Find the \"Your board on this iPhone, the web, and the Lock Screen.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.042,
+          "title" : "Find the \"Your board on this iPhone, the web, and the Lock Screen.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.053,
+          "title" : "Checking existence of `\"Use the same address as the web board.\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.062,
+          "title" : "Find the \"Use the same address as the web board.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.075,
+          "title" : "Find the \"Use the same address as the web board.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.087,
+          "title" : "Find the \"Notepad\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.099,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.111,
+          "title" : "Find the \"Email address\" TextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.122,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.128,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-light-XXXL_0_7C8E5790-43C1-49E4-BE75-CDAE4F503A05.png",
+              "payloadId" : "0~S-eNiNIO9_jpJ4CYuxV3cV8oAaCwy18GarMIvhUoQCHYUULlhFLMKaSMxH2B7IJmF5LUzFF4XyvNc_YYT8IBBQ==",
+              "timestamp" : 1793821733.196,
+              "uuid" : "19CFF51E-97C5-476B-BE8C-1C24B20139D2"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821733.196,
+              "title" : "signin-light-XXXL"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.196,
+          "title" : "Added attachment named 'signin-light-XXXL'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821733.197,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:131"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821734.452,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821735.022,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821733.197,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821733.196,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821737.305,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821737.305,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821736.261,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.349,
+          "title" : "Checking existence of `\"Sign in with Google\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.362,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.375,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.388,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.401,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.413,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.421,
+          "title" : "Checking existence of `\"signin.emailTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.43,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.443,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.456,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.469,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.481,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.488,
+          "title" : "Checking existence of `\"Email address\" TextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.497,
+          "title" : "Checking existence of `\"Send Sign-In Link\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.507,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.52,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.533,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.545,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.557,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.564,
+          "title" : "Checking existence of `\"Use an Existing Password\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.574,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.586,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.599,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.612,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.623,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.631,
+          "title" : "Checking existence of `\"Your board on this iPhone, the web, and the Lock Screen.\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.641,
+          "title" : "Find the \"Your board on this iPhone, the web, and the Lock Screen.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.655,
+          "title" : "Find the \"Your board on this iPhone, the web, and the Lock Screen.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.667,
+          "title" : "Checking existence of `\"Use the same address as the web board.\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.676,
+          "title" : "Find the \"Use the same address as the web board.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.689,
+          "title" : "Find the \"Use the same address as the web board.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.7,
+          "title" : "Find the \"Notepad\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.711,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.722,
+          "title" : "Find the \"Email address\" TextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.733,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.74,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-dark-default_0_B085C186-BAB9-4BE9-86F6-0B200FA351E0.png",
+              "payloadId" : "0~7sH1h9KskAnnnxpY8ClyyklBshYyuMjvbgqXOJi3lY-uJqhpA1uRl1g5tV4MPlSGfYkWGBVnD_-DLYy7bg_fGA==",
+              "timestamp" : 1793821737.811,
+              "uuid" : "826DE10F-5894-485A-91E5-913315FB880A"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821737.811,
+              "title" : "signin-dark-default"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.811,
+          "title" : "Added attachment named 'signin-dark-default'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821737.812,
+                  "title" : "Terminate systems.edmundlim.NotepadHillclimb:424"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821739.084,
+                  "title" : "Setting up automation session"
+                },
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821739.66,
+                  "title" : "Wait for systems.edmundlim.NotepadHillclimb to idle"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821737.812,
+              "title" : "Launch systems.edmundlim.NotepadHillclimb"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821737.812,
+          "title" : "Open systems.edmundlim.NotepadHillclimb"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "childActivities" : [
+            {
+              "activityType" : "com.apple.dt.xctest.activity-type.internal",
+              "childActivities" : [
+                {
+                  "activityType" : "com.apple.dt.xctest.activity-type.internal",
+                  "isAssociatedWithFailure" : false,
+                  "startTime" : 1793821741.945,
+                  "title" : "Checking existence of `\"Sign In\" NavigationBar`"
+                }
+              ],
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821741.944,
+              "title" : "Checking `Expect predicate `existsNoRetry == 1` for object \"Sign In\" NavigationBar`"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821740.891,
+          "title" : "Waiting 10.0s for \"Sign In\" NavigationBar to exist"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821741.994,
+          "title" : "Checking existence of `\"Sign in with Google\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.006,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.02,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.033,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.047,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.059,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.067,
+          "title" : "Checking existence of `\"signin.emailTarget\" Other`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.077,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.092,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.106,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.121,
+          "title" : "Find the \"signin.emailTarget\" Other"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.134,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.143,
+          "title" : "Checking existence of `\"Email address\" TextField`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.154,
+          "title" : "Checking existence of `\"Send Sign-In Link\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.166,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.181,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.195,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.209,
+          "title" : "Find the \"Send Sign-In Link\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.222,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.23,
+          "title" : "Checking existence of `\"Use an Existing Password\" Button`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.24,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.254,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.269,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.284,
+          "title" : "Find the \"Use an Existing Password\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.296,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.304,
+          "title" : "Checking existence of `\"Your board on this iPhone, the web, and the Lock Screen.\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.314,
+          "title" : "Find the \"Your board on this iPhone, the web, and the Lock Screen.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.328,
+          "title" : "Find the \"Your board on this iPhone, the web, and the Lock Screen.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.34,
+          "title" : "Checking existence of `\"Use the same address as the web board.\" StaticText`"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.351,
+          "title" : "Find the \"Use the same address as the web board.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.364,
+          "title" : "Find the \"Use the same address as the web board.\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.376,
+          "title" : "Find the \"Notepad\" StaticText"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.389,
+          "title" : "Find the \"Sign in with Google\" Button"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.403,
+          "title" : "Find the \"Email address\" TextField"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.416,
+          "title" : "Find the NavigationBar (First Match)"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.423,
+          "title" : "Find the Target Application 'systems.edmundlim.NotepadHillclimb'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.attachmentContainer",
+          "attachments" : [
+            {
+              "lifetime" : "keepAlways",
+              "name" : "signin-dark-XXXL_0_0F971012-DD06-43E5-B477-7D1BE8100294.png",
+              "payloadId" : "0~U8UqsDo9AffGbe_U6fBb_6Fw5rx4eVXzQyK4IUpTcSu0nJGzGWqdXnHEhDDLXeRe5pCDFPZcOuIw-YjjlziYgA==",
+              "timestamp" : 1793821742.494,
+              "uuid" : "2DB27A31-7944-4A90-8F4D-50B9E6210671"
+            }
+          ],
+          "childActivities" : [
+            {
+              "isAssociatedWithFailure" : false,
+              "startTime" : 1793821742.494,
+              "title" : "signin-dark-XXXL"
+            }
+          ],
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.494,
+          "title" : "Added attachment named 'signin-dark-XXXL'"
+        },
+        {
+          "activityType" : "com.apple.dt.xctest.activity-type.internal",
+          "isAssociatedWithFailure" : false,
+          "startTime" : 1793821742.497,
+          "title" : "Tear Down"
+        }
+      ],
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+        "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ]
+}

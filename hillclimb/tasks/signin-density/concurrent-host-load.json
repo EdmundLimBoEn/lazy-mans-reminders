@@ -1,0 +1,1622 @@
+[
+  {
+    "time": "2026-11-05T08:15:11.388747+00:00",
+    "load": [
+      10.78759765625,
+      19.56982421875,
+      22.421875
+    ],
+    "CPUAtLeast5Percent": [
+      "    1  36.5 /sbin/launchd",
+      "  620  30.3 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778  18.4 /usr/sbin/coreaudiod",
+      " 1111   7.5 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 9839  36.3 /System/Library/PrivateFrameworks/MediaAnalysis.framework/Versions/A/mediaanalysisd",
+      "17595   6.0 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "17606   5.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   9.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "21509  33.7 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "23673   6.1 codex",
+      "25000   5.0 /Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)",
+      "36812  69.4 /usr/libexec/diskimagesiod",
+      "43545   5.5 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43568   6.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/1F750002-2E75-4918-9DAC-3DBAA6495980/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "43886   9.9 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/A7D8DF8D-E583-433D-ACCF-2C83E3052FEB/LazyMansReminders.app/LazyMansReminders",
+      "45395   7.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "48486 184.0 /var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/Applications/Preferences.app/Preferences",
+      "48490  35.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/WorkflowKit.framework/XPCServices/BackgroundShortcutRunner.xpc/BackgroundShortcutRunner",
+      "48504  94.9 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "48505   5.3 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mdworker_shared",
+      "51199   5.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51200   6.5 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51202   7.4 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229   5.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "75606   9.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/iconservicesagent",
+      "75667  15.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/Metal.framework/XPCServices/MTLCompilerService.xpc/MTLCompilerService",
+      "76062   5.2 /usr/libexec/diagnosticd",
+      "84025  11.5 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "84037   6.0 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)",
+      "84219   7.5 /Users/limboenedmund/bin/codedb",
+      "95323   5.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95325   8.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352   6.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:15:41.461185+00:00",
+    "load": [
+      8.98876953125,
+      18.3017578125,
+      21.86279296875
+    ],
+    "CPUAtLeast5Percent": [
+      "    1  34.7 /sbin/launchd",
+      "  616   6.0 /usr/libexec/corebrightnessd",
+      "  620  37.1 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  623   6.6 /usr/sbin/cfprefsd",
+      "  778  16.5 /usr/sbin/coreaudiod",
+      " 1058   6.7 /System/Library/PrivateFrameworks/CloudKitDaemon.framework/Support/cloudd",
+      " 1111  27.0 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 9839  38.1 /System/Library/PrivateFrameworks/MediaAnalysis.framework/Versions/A/mediaanalysisd",
+      "17724   8.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/mobileassetd",
+      "21509  27.2 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "28046  10.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "28130  16.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/testmanagerd",
+      "36812  51.5 /usr/libexec/diskimagesiod",
+      "43213  10.2 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43272  12.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/66326F57-F421-4217-95B4-88332DC8CF35/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "43545  25.7 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43568  24.0 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/1F750002-2E75-4918-9DAC-3DBAA6495980/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "48693  50.2 /var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/Applications/Preferences.app/Preferences",
+      "48746  45.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/A7D8DF8D-E583-433D-ACCF-2C83E3052FEB/LazyMansReminders.app/LazyMansReminders",
+      "48775  11.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/CoreSpotlight.framework/spotlightknowledged",
+      "48776  12.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/ModelCatalogRuntime.framework/modelcatalogd",
+      "48786  75.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "51199   8.9 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51202  15.1 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229   7.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "76062  11.0 /usr/libexec/diagnosticd",
+      "84025   9.3 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "95423   9.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:16:11.551314+00:00",
+    "load": [
+      14.7412109375,
+      18.96533203125,
+      21.98828125
+    ],
+    "CPUAtLeast5Percent": [
+      "    1  19.9 /sbin/launchd",
+      "  616  14.1 /usr/libexec/corebrightnessd",
+      "  620  40.6 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778  13.9 /usr/sbin/coreaudiod",
+      " 1058   7.6 /System/Library/PrivateFrameworks/CloudKitDaemon.framework/Support/cloudd",
+      " 1111   5.9 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1143   7.5 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter",
+      "19616  54.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/Applications/News.app/PlugIns/NewsToday2.appex/NewsToday2",
+      "21509  37.0 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "28046  24.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "43213  13.1 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43272  13.9 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/66326F57-F421-4217-95B4-88332DC8CF35/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "45482   5.3 /var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/Applications/WidgetRenderer_Default.app/WidgetRenderer_Default",
+      "48927  66.4 /var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/Applications/Preferences.app/Preferences",
+      "69150   7.9 /usr/libexec/PerfPowerServices",
+      "76062  44.0 /usr/libexec/diagnosticd",
+      "84219   6.8 /Users/limboenedmund/bin/codedb",
+      "84260   8.7 /Users/limboenedmund/bin/codedb",
+      "95324   9.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95333   6.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/runningboardd",
+      "95423  41.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd",
+      "95438  14.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/ChronoCore.framework/Support/chronod",
+      "95492  15.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/Applications/MobileCal.app/PlugIns/CalendarWidgetExtension.appex/CalendarWidgetExtension",
+      "95869  55.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/MapKit.framework/XPCServices/com.apple.MapKit.SnapshotService.xpc/com.apple.MapKit.SnapshotService"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:16:41.629241+00:00",
+    "load": [
+      13.0263671875,
+      18.14111328125,
+      21.58349609375
+    ],
+    "CPUAtLeast5Percent": [
+      "    1  23.1 /sbin/launchd",
+      "  620  36.0 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778  13.3 /usr/sbin/coreaudiod",
+      " 1111  17.3 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 9839  63.0 /System/Library/PrivateFrameworks/MediaAnalysis.framework/Versions/A/mediaanalysisd",
+      "17606   7.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "21509  33.2 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "28242  11.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/iconservicesagent",
+      "36812   8.4 /usr/libexec/diskimagesiod",
+      "49165  32.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/IntelligencePlatformCore.framework/knowledgeconstructiond",
+      "49366  31.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/IntelligencePlatformCore.framework/knowledgeconstructiond",
+      "49426 152.8 /var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/Applications/Preferences.app/Preferences",
+      "49459  29.5 xpcproxy_sim",
+      "62093   5.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/Applications/News.app/PlugIns/NewsToday2.appex/NewsToday2",
+      "76062   8.7 /usr/libexec/diagnosticd",
+      "95423   9.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:17:11.731852+00:00",
+    "load": [
+      11.33740234375,
+      17.2353515625,
+      21.1337890625
+    ],
+    "CPUAtLeast5Percent": [
+      "    1  13.1 /sbin/launchd",
+      "  620  38.8 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778  11.3 /usr/sbin/coreaudiod",
+      " 1058   5.6 /System/Library/PrivateFrameworks/CloudKitDaemon.framework/Support/cloudd",
+      " 1111  14.1 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      "21509  36.2 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "22983   6.1 /usr/libexec/diskimagesiod",
+      "25000   6.5 /Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)",
+      "28130   9.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/testmanagerd",
+      "48440  18.9 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "48484  20.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F1760085-46E2-4C62-8D4F-7900A18B3858/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "49378  13.9 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "49421   8.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/D2EBF53B-1AC7-4E3C-9357-EF1F29F46DB6/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "49563  33.1 /var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/Applications/Preferences.app/Preferences",
+      "49909  52.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "49956  14.0 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/bin/simctl",
+      "49975   9.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/HearingCore.framework/heard",
+      "51202  10.2 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229   7.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "52308  14.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/MapKit.framework/XPCServices/com.apple.MapKit.SnapshotService.xpc/com.apple.MapKit.SnapshotService",
+      "62093  19.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/Applications/News.app/PlugIns/NewsToday2.appex/NewsToday2",
+      "75542   9.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/testmanagerd",
+      "84025   6.5 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "84219   5.4 /Users/limboenedmund/bin/codedb"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:17:41.815533+00:00",
+    "load": [
+      9.6845703125,
+      16.283203125,
+      20.65380859375
+    ],
+    "CPUAtLeast5Percent": [
+      "    1   7.9 /sbin/launchd",
+      "  620  37.6 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  624   5.4 /System/Library/CoreServices/loginwindow.app/Contents/MacOS/loginwindow",
+      "  778   9.7 /usr/sbin/coreaudiod",
+      "17595   5.8 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "17606   5.5 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   6.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "21509  33.7 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "25856   9.6 /Applications/Stats.app/Contents/MacOS/Stats",
+      "28130   5.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/testmanagerd",
+      "50121   7.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:18:11.884320+00:00",
+    "load": [
+      9.83203125,
+      15.64501953125,
+      20.267578125
+    ],
+    "CPUAtLeast5Percent": [
+      "    1  13.5 /sbin/launchd",
+      "  620  35.1 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778  10.2 /usr/sbin/coreaudiod",
+      "17606  12.5 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   8.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "19185   9.3 /Users/limboenedmund/bin/codedb",
+      "21509  26.4 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "25335   6.8 /Users/limboenedmund/bin/codedb",
+      "25856   7.1 /Applications/Stats.app/Contents/MacOS/Stats",
+      "26268   8.4 /Users/limboenedmund/bin/codedb",
+      "33341   5.2 /Users/limboenedmund/bin/codedb",
+      "33493   5.6 /Users/limboenedmund/bin/codedb",
+      "38618   5.5 /Users/limboenedmund/bin/codedb",
+      "38740   5.4 /Users/limboenedmund/bin/codedb",
+      "48440  15.0 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "48484   6.0 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F1760085-46E2-4C62-8D4F-7900A18B3858/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "49378   5.1 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "49421   5.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/D2EBF53B-1AC7-4E3C-9357-EF1F29F46DB6/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "50362  18.5 /var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/Applications/Preferences.app/Preferences",
+      "50412  23.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "59770  11.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "78892   5.4 /Users/limboenedmund/bin/codedb",
+      "84219   9.1 /Users/limboenedmund/bin/codedb",
+      "84260   7.3 /Users/limboenedmund/bin/codedb",
+      "91689   5.9 /Users/limboenedmund/bin/codedb"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:18:41.959661+00:00",
+    "load": [
+      7.9033203125,
+      14.62548828125,
+      19.73681640625
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  33.2 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   8.7 /usr/sbin/coreaudiod",
+      "21509  24.3 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "25856   5.1 /Applications/Stats.app/Contents/MacOS/Stats",
+      "50685  19.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "50729  20.2 (heard)",
+      "50730  17.1 (heard)",
+      "50731   8.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/HearingCore.framework/heard",
+      "51199   5.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "76062   6.0 /usr/libexec/diagnosticd",
+      "84025   8.1 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "95323  11.4 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95325   6.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352  13.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:19:12.030466+00:00",
+    "load": [
+      7.43212890625,
+      13.85107421875,
+      19.27734375
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  36.1 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  626  23.9 /usr/libexec/runningboardd",
+      "  778   8.5 /usr/sbin/coreaudiod",
+      "17595   6.4 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "17606   6.4 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "21509  28.4 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "36812  15.9 /usr/libexec/diskimagesiod",
+      "43213  10.6 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "48440  21.1 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "48484  11.6 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F1760085-46E2-4C62-8D4F-7900A18B3858/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "50944  32.6 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "50948  14.5 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "50984 143.3 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "69150 114.5 /usr/libexec/PerfPowerServices",
+      "71328   9.0 /Users/limboenedmund/bin/codedb",
+      "76062   5.2 /usr/libexec/diagnosticd",
+      "84260   7.3 /Users/limboenedmund/bin/codedb",
+      "95423   5.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:19:42.113188+00:00",
+    "load": [
+      8.14453125,
+      13.41748046875,
+      18.9306640625
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  31.5 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   9.2 /usr/sbin/coreaudiod",
+      "17595   7.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "17606   8.0 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   8.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "21509  26.2 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "43213  10.0 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43272  10.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/66326F57-F421-4217-95B4-88332DC8CF35/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "49378   6.3 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "51065  18.6 /var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/Applications/Preferences.app/Preferences",
+      "51250  46.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/PairedSync.framework/Support/pairedsyncd",
+      "51251  31.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/PairedSync.framework/Support/pairedsyncd",
+      "59770   9.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "76062   8.1 /usr/libexec/diagnosticd",
+      "95323   6.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95325  13.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352   7.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "95423   6.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:20:12.198956+00:00",
+    "load": [
+      8.095703125,
+      12.93701171875,
+      18.56689453125
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  34.8 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   9.8 /usr/sbin/coreaudiod",
+      "17595   6.1 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "17606   6.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   7.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "19185   7.1 /Users/limboenedmund/bin/codedb",
+      "21509  25.7 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "33341   6.0 /Users/limboenedmund/bin/codedb",
+      "33493   5.8 /Users/limboenedmund/bin/codedb",
+      "45395  15.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "51202   7.2 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229   5.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "55901   8.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "55966 164.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "55980  63.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "59770   6.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "71328   6.0 /Users/limboenedmund/bin/codedb",
+      "76062   6.8 /usr/libexec/diagnosticd",
+      "84025   9.6 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "84260   5.1 /Users/limboenedmund/bin/codedb",
+      "95325   8.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352   6.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "95423   7.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:20:42.268626+00:00",
+    "load": [
+      7.552734375,
+      12.33740234375,
+      18.1533203125
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  31.7 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   7.1 /usr/sbin/coreaudiod",
+      "17595   8.4 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "17606   9.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   5.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "21509  25.1 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "28535  24.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/testmanagerd",
+      "43213  17.5 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43272  28.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/66326F57-F421-4217-95B4-88332DC8CF35/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "45395   7.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "49378   8.3 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "49421   5.0 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/D2EBF53B-1AC7-4E3C-9357-EF1F29F46DB6/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "56120  14.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "76062   8.7 /usr/libexec/diagnosticd",
+      "84219   6.7 /Users/limboenedmund/bin/codedb",
+      "95423   9.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:21:12.341200+00:00",
+    "load": [
+      7.58642578125,
+      11.888671875,
+      17.78857421875
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  37.2 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   7.7 /usr/sbin/coreaudiod",
+      "11437   6.5 /Applications/TokenTracker.app/Contents/MacOS/TokenTracker",
+      "21509  23.6 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "49378  21.7 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "49421  11.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/D2EBF53B-1AC7-4E3C-9357-EF1F29F46DB6/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "51199   7.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51202  16.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229  10.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "56411  10.6 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "56416  16.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "56445  84.9 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "56469  30.0 (pairedsyncd)",
+      "84025   9.4 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "95323   6.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95325  16.2 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352  11.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:21:42.411916+00:00",
+    "load": [
+      7.35595703125,
+      11.39453125,
+      17.40234375
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  35.5 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   6.9 /usr/sbin/coreaudiod",
+      "21509  26.6 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "38618   5.3 /Users/limboenedmund/bin/codedb",
+      "38740   5.2 /Users/limboenedmund/bin/codedb",
+      "48440   7.8 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "48484   5.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F1760085-46E2-4C62-8D4F-7900A18B3858/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "49378  26.0 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "49421  11.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/D2EBF53B-1AC7-4E3C-9357-EF1F29F46DB6/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "56589  36.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "56627  21.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "56647  82.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "75542  17.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/testmanagerd",
+      "78892   5.1 /Users/limboenedmund/bin/codedb",
+      "79630   5.4 /Users/limboenedmund/bin/codedb",
+      "90769   5.2 /Users/limboenedmund/bin/codedb",
+      "91689   5.5 /Users/limboenedmund/bin/codedb",
+      "93842   5.3 /Users/limboenedmund/bin/codedb",
+      "95323   7.0 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95325  12.8 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352   7.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:22:12.478612+00:00",
+    "load": [
+      7.27099609375,
+      10.97607421875,
+      17.041015625
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  34.8 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   7.6 /usr/sbin/coreaudiod",
+      "19185  10.5 /Users/limboenedmund/bin/codedb",
+      "21509  24.6 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "28046   9.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "28130  16.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/testmanagerd",
+      "49378   7.7 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "49421   6.7 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/D2EBF53B-1AC7-4E3C-9357-EF1F29F46DB6/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "51202   5.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229   9.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "57129  10.3 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "57140  33.6 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "84025   9.6 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "95323   6.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95325  16.9 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352   9.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:22:42.567097+00:00",
+    "load": [
+      7.38916015625,
+      10.6689453125,
+      16.7197265625
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  31.5 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   8.1 /usr/sbin/coreaudiod",
+      "17606   7.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   5.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "21509  23.5 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "51202   7.2 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229   8.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "57285  16.0 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "57389  15.3 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "84025   8.9 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "84260   8.6 /Users/limboenedmund/bin/codedb",
+      "95325  15.8 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352   9.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:23:12.637293+00:00",
+    "load": [
+      6.42822265625,
+      10.12451171875,
+      16.3115234375
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  30.0 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   7.9 /usr/sbin/coreaudiod",
+      "17606   9.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   7.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "21509  24.2 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "28046   7.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "43213   7.0 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43272   5.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/66326F57-F421-4217-95B4-88332DC8CF35/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "57471  31.6 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "57643  79.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "59770   7.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "84025  11.0 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "84037   5.1 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)",
+      "95325  14.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352  11.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:23:42.717518+00:00",
+    "load": [
+      6.580078125,
+      9.82080078125,
+      15.9873046875
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  32.3 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   8.1 /usr/sbin/coreaudiod",
+      "17069   9.9 /Applications/WhatsApp.app/Contents/MacOS/WhatsApp",
+      "17606   9.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   7.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "21509  25.4 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "26268   7.5 /Users/limboenedmund/bin/codedb",
+      "51202   8.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229  14.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "57708   5.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "57817  14.5 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "57818  13.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "84025   9.6 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "95323   5.0 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95325  12.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352  17.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:24:12.792409+00:00",
+    "load": [
+      6.69677734375,
+      9.52197265625,
+      15.66357421875
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  32.8 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   9.0 /usr/sbin/coreaudiod",
+      " 1198  11.9 /System/Library/PrivateFrameworks/CacheDelete.framework/deleted",
+      "17606   5.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "19185   5.2 /Users/limboenedmund/bin/codedb",
+      "21509  22.9 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "25856   7.6 /Applications/Stats.app/Contents/MacOS/Stats",
+      "43213   9.0 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43272   5.7 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/66326F57-F421-4217-95B4-88332DC8CF35/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "51202  12.1 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229  12.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "58026  14.0 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "58036  42.9 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "58123 141.0 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "59770   6.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "84025  11.7 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "84037   5.5 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)",
+      "95323   5.4 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95325  13.4 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352   8.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:24:42.873065+00:00",
+    "load": [
+      6.5634765625,
+      9.216796875,
+      15.3388671875
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  36.9 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   7.7 /usr/sbin/coreaudiod",
+      "17069   5.1 /Applications/WhatsApp.app/Contents/MacOS/WhatsApp",
+      "21509  24.6 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "25856   6.9 /Applications/Stats.app/Contents/MacOS/Stats",
+      "51199   9.1 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51202  19.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229  10.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "58263  14.6 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "58306  29.9 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "58324   8.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "84025  11.5 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "84037   5.5 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:25:12.945524+00:00",
+    "load": [
+      7.072265625,
+      9.09619140625,
+      15.08251953125
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  34.1 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   7.1 /usr/sbin/coreaudiod",
+      "21509  23.1 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "33493   5.2 /Users/limboenedmund/bin/codedb",
+      "48440  19.2 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "48484  11.9 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F1760085-46E2-4C62-8D4F-7900A18B3858/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "51202   7.2 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "62943  62.0 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "71328   5.3 /Users/limboenedmund/bin/codedb",
+      "84025   8.2 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:25:43.033856+00:00",
+    "load": [
+      6.955078125,
+      8.89013671875,
+      14.80078125
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  36.7 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778  14.1 /usr/sbin/coreaudiod",
+      "17595   5.0 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "21509  27.4 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "63152   5.7 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:26:13.117251+00:00",
+    "load": [
+      7.7802734375,
+      8.9375,
+      14.6142578125
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  37.6 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778  13.1 /usr/sbin/coreaudiod",
+      "17607   5.2 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   5.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "21509  24.5 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "25000   5.7 /Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)",
+      "45395  16.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "51199   6.0 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51202  13.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229  11.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "59770  24.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "63366  19.9 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "63426   6.1 xpcproxy_sim",
+      "84025  13.3 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "84037   6.6 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)",
+      "95323   7.2 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95325   5.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352  10.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:26:43.196750+00:00",
+    "load": [
+      7.3974609375,
+      8.72216796875,
+      14.337890625
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  43.3 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778  12.7 /usr/sbin/coreaudiod",
+      "11437  62.0 /Applications/TokenTracker.app/Contents/MacOS/TokenTracker",
+      "17651  15.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/sbin/notifyd",
+      "17678  19.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd",
+      "21509  24.0 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "28046  11.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "49378  80.8 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "49421  11.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/D2EBF53B-1AC7-4E3C-9357-EF1F29F46DB6/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "51199   7.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51202  14.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229   9.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "63602  78.0 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "63671 141.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "63675  64.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "84025   8.1 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "95323   5.5 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:27:13.276788+00:00",
+    "load": [
+      7.97021484375,
+      8.7060546875,
+      14.134765625
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  34.9 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778  11.1 /usr/sbin/coreaudiod",
+      "17606  15.4 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   9.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "21509  22.5 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "43213  12.6 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43272  10.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/66326F57-F421-4217-95B4-88332DC8CF35/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "49378  10.4 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "51199   5.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51202  15.9 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229   8.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "64062   9.0 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "64064  18.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "64099  14.0 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "76062   6.7 /usr/libexec/diagnosticd",
+      "84025  12.4 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "84037   6.0 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)",
+      "84219   9.3 /Users/limboenedmund/bin/codedb",
+      "95352   5.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "95423   5.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:27:43.350183+00:00",
+    "load": [
+      8.16455078125,
+      8.68408203125,
+      13.93798828125
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  36.1 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   9.8 /usr/sbin/coreaudiod",
+      "17595   8.0 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "17606  10.0 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   8.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "19185   9.0 /Users/limboenedmund/bin/codedb",
+      "21509  21.5 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "25000   5.6 /Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)",
+      "51199   6.4 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51202  20.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229   8.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "59770   9.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "64243  11.7 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "64286   9.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "64361 122.5 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "78892   7.5 /Users/limboenedmund/bin/codedb",
+      "84025  14.0 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "84037   6.6 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:28:13.418697+00:00",
+    "load": [
+      7.66064453125,
+      8.51953125,
+      13.69580078125
+    ],
+    "CPUAtLeast5Percent": [
+      "  778   8.8 /usr/sbin/coreaudiod",
+      " 1265  83.1 /usr/libexec/duetexpertd",
+      "20423  16.4 /usr/libexec/AssetCache/AssetCache",
+      "21509  19.2 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "28046  13.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "38618   8.2 /Users/limboenedmund/bin/codedb",
+      "38740   5.4 /Users/limboenedmund/bin/codedb",
+      "48440   5.9 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "49378  18.9 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "49421  14.3 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/D2EBF53B-1AC7-4E3C-9357-EF1F29F46DB6/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "51199   7.9 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51202  11.8 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229   5.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "64562  11.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "64638  53.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "79630   8.1 /Users/limboenedmund/bin/codedb",
+      "84025   5.0 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "91689   7.4 /Users/limboenedmund/bin/codedb",
+      "93150   8.4 /Users/limboenedmund/bin/codedb",
+      "93842   8.4 /Users/limboenedmund/bin/codedb"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:28:43.499406+00:00",
+    "load": [
+      7.07470703125,
+      8.31884765625,
+      13.4443359375
+    ],
+    "CPUAtLeast5Percent": [
+      "  778   7.9 /usr/sbin/coreaudiod",
+      "17595   8.0 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "17606   6.8 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   8.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "21509  19.8 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "43213   9.7 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43272   6.5 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/66326F57-F421-4217-95B4-88332DC8CF35/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "51199   9.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51202   8.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229  11.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "64776  11.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "64788   9.3 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "64815  25.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "64861  48.1 (pairedsyncd)",
+      "64870  16.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/HearingCore.framework/heard",
+      "64871  15.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/HearingCore.framework/heard",
+      "64872  15.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/HearingCore.framework/heard",
+      "71328   5.2 /Users/limboenedmund/bin/codedb",
+      "76062   6.4 /usr/libexec/diagnosticd",
+      "84025  11.1 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:29:13.589239+00:00",
+    "load": [
+      7.15234375,
+      8.1845703125,
+      13.21533203125
+    ],
+    "CPUAtLeast5Percent": [
+      "    1  10.1 /sbin/launchd",
+      "  576   5.0 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mds",
+      "  778   7.9 /usr/sbin/coreaudiod",
+      " 1036   5.5 /System/Library/PrivateFrameworks/TCC.framework/Support/tccd",
+      " 1098  10.6 /usr/libexec/triald",
+      " 1198  26.5 /System/Library/PrivateFrameworks/CacheDelete.framework/deleted",
+      " 1420  16.3 /System/Library/PrivateFrameworks/CoreFP.framework/Versions/A/fairplayd",
+      "15509  11.4 /usr/libexec/mobileassetd",
+      "16365   5.8 /System/Library/CoreServices/TimeMachine/backupd-helper",
+      "21509  17.4 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "28046   6.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "48098  10.5 /usr/libexec/triald_system",
+      "49378  14.3 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "49421  10.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/D2EBF53B-1AC7-4E3C-9357-EF1F29F46DB6/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "51202   5.8 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "64931  31.7 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "65022  11.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "65092 138.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "65100  35.1 /System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/Contents/PlugIns/CacheDeleteExtension.appex/Contents/MacOS/CacheDeleteExtension",
+      "65101  26.9 /System/Library/PrivateFrameworks/AMPLibrary.framework/Versions/A/Support/AMPLibraryAgent",
+      "95323   6.9 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95352   5.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:29:43.674087+00:00",
+    "load": [
+      7.14990234375,
+      8.123046875,
+      13.0205078125
+    ],
+    "CPUAtLeast5Percent": [
+      "  778   6.9 /usr/sbin/coreaudiod",
+      " 1111 117.1 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      "17595   7.0 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "17606   7.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   5.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "21509  15.8 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "28046  12.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "43213  13.9 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43272  12.5 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/66326F57-F421-4217-95B4-88332DC8CF35/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "51199   5.1 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51202  16.8 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229   7.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "65227  19.9 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "65316  82.3 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "76062   5.1 /usr/libexec/diagnosticd",
+      "84025   7.0 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "95423   5.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:30:13.739391+00:00",
+    "load": [
+      7.57177734375,
+      8.1396484375,
+      12.85595703125
+    ],
+    "CPUAtLeast5Percent": [
+      "  778   7.0 /usr/sbin/coreaudiod",
+      " 1111 112.1 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      "17678   5.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd",
+      "21509  15.6 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "25335   6.0 /Users/limboenedmund/bin/codedb",
+      "28130  11.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/testmanagerd",
+      "28535   6.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/testmanagerd",
+      "33341   6.1 /Users/limboenedmund/bin/codedb",
+      "33493   5.4 /Users/limboenedmund/bin/codedb",
+      "43213  24.8 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43272  22.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/66326F57-F421-4217-95B4-88332DC8CF35/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "48440  34.7 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "48484  46.7 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F1760085-46E2-4C62-8D4F-7900A18B3858/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "49378  47.6 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "49421  40.7 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/D2EBF53B-1AC7-4E3C-9357-EF1F29F46DB6/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "52308  11.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/MapKit.framework/XPCServices/com.apple.MapKit.SnapshotService.xpc/com.apple.MapKit.SnapshotService",
+      "65429  32.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "65452  29.6 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "69934  27.5 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "71328   5.7 /Users/limboenedmund/bin/codedb",
+      "75542  13.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/testmanagerd",
+      "76062   7.0 /usr/libexec/diagnosticd",
+      "95423   8.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:30:43.809561+00:00",
+    "load": [
+      8.1640625,
+      8.2099609375,
+      12.7158203125
+    ],
+    "CPUAtLeast5Percent": [
+      "  778   7.1 /usr/sbin/coreaudiod",
+      " 1111 114.2 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      "21509  15.4 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "25335   5.8 /Users/limboenedmund/bin/codedb",
+      "25856   5.8 /Applications/Stats.app/Contents/MacOS/Stats",
+      "33341   7.7 /Users/limboenedmund/bin/codedb",
+      "33493   8.3 /Users/limboenedmund/bin/codedb",
+      "48440   8.4 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "48484   6.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F1760085-46E2-4C62-8D4F-7900A18B3858/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "51202   6.1 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "70132  17.5 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "70142   9.7 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "70183   6.1 (xpcproxy_sim)",
+      "70184   7.2 (xpcproxy_sim)",
+      "71328   8.6 /Users/limboenedmund/bin/codedb",
+      "76062   6.1 /usr/libexec/diagnosticd",
+      "95323   8.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95325  11.5 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352   9.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "95423   7.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:38:09.763868+00:00",
+    "load": [
+      35.01171875,
+      13.8037109375,
+      14.509765625
+    ],
+    "CPUAtLeast5Percent": [
+      "21509  25.2 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "45395   7.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "76355  12.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "76357  16.6 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "76385  13.5 (xpcproxy_sim)",
+      "76386   7.9 (xpcproxy_sim)",
+      "76387   9.1 (xpcproxy_sim)",
+      "76389  11.1 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mdworker_shared",
+      "76390  16.6 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mdworker_shared",
+      "76391  13.6 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mdworker_shared",
+      "76392  12.9 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mdworker_shared",
+      "76393  13.5 (heard)",
+      "76394   8.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/HearingCore.framework/heard",
+      "76395  20.2 (xpcproxy_sim)",
+      "76396   7.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/HearingCore.framework/heard",
+      "78892   6.3 /Users/limboenedmund/bin/codedb",
+      "79630   8.8 /Users/limboenedmund/bin/codedb",
+      "91157   8.0 /Applications/Wispr Flow.app/Contents/MacOS/Wispr Flow",
+      "95423  10.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:43:46.173640+00:00",
+    "load": [
+      256.9912109375,
+      68.02099609375,
+      33.99462890625
+    ],
+    "CPUAtLeast5Percent": [
+      "  700  32.1 /usr/libexec/airportd",
+      "  778  17.3 /usr/sbin/coreaudiod",
+      " 1026   5.6 /usr/libexec/networkserviceproxy",
+      " 1338  22.1 /Applications/Tailscale.app/Contents/MacOS/Tailscale",
+      " 1418   5.4 /Library/SystemExtensions/DCCD737A-4CF5-4E0D-B636-B6A550E8C6BC/io.tailscale.ipn.macsys.network-extension.systemextension/Contents/MacOS/io.tailscale.ipn.macsys.network-extension",
+      "21509  25.2 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "74193  18.3 /Applications/Zen.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container",
+      "81142  13.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "81167   7.7 (xpcproxy_sim)",
+      "81169   7.2 (xpcproxy_sim)",
+      "81174   6.3 (xpcproxy_sim)",
+      "84037  10.4 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)",
+      "84127   9.4 /Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)",
+      "91815  65.7 /usr/sbin/spindump"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:52:59.774309+00:00",
+    "load": [
+      249.74169921875,
+      87.9775390625,
+      42.70263671875
+    ],
+    "CPUAtLeast5Percent": [
+      "  778  30.2 /usr/sbin/coreaudiod",
+      " 1143   9.4 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter",
+      "21509  26.0 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "26268   5.1 /Users/limboenedmund/bin/codedb",
+      "33493   5.1 /Users/limboenedmund/bin/codedb",
+      "82124   8.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "82134  22.8 (managedappdistri)",
+      "82135   7.6 (heard)",
+      "82136  14.5 (heard)",
+      "82137  22.0 (heard)",
+      "82138  21.7 (facetimemessages)",
+      "82139  12.9 (xpcproxy_sim)",
+      "82140  13.8 (xpcproxy_sim)"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:55:10.908333+00:00",
+    "load": [
+      313.91259765625,
+      123.66162109375,
+      57.94580078125
+    ],
+    "CPUAtLeast5Percent": [
+      "  778  12.5 /usr/sbin/coreaudiod",
+      " 1143   9.2 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter",
+      " 1330   6.4 /System/Applications/Mail.app/Contents/MacOS/Mail",
+      "21509  26.0 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "82243   8.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "86940  84.7 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "86942  26.8 (xpcproxy_sim)"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:57:32.803600+00:00",
+    "load": [
+      304.92333984375,
+      138.71875,
+      65.62939453125
+    ],
+    "CPUAtLeast5Percent": [
+      "  560   5.0 /usr/libexec/configd",
+      "  594   6.0 /usr/sbin/securityd",
+      "  596   8.9 /usr/libexec/locationd",
+      "  620   5.0 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  700  85.4 /usr/libexec/airportd",
+      "  888   7.9 /System/Library/DriverExtensions/com.apple.DriverKit-AppleBCMWLAN.dext/com.apple.DriverKit-AppleBCMWLAN",
+      " 1005   6.2 /usr/libexec/secd",
+      " 1064   6.5 /usr/libexec/sharingd",
+      " 1143   7.5 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter",
+      " 1336   6.1 /System/Applications/Passwords.app/Contents/MacOS/Passwords",
+      " 1338  14.0 /Applications/Tailscale.app/Contents/MacOS/Tailscale",
+      "17069 111.5 /Applications/WhatsApp.app/Contents/MacOS/WhatsApp",
+      "17595   8.8 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "17606   7.4 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   8.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "21509  15.3 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "38740   7.9 /Users/limboenedmund/bin/codedb",
+      "48440   6.2 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "48484   5.3 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F1760085-46E2-4C62-8D4F-7900A18B3858/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "58239  41.2 /Users/limboenedmund/.t3/tools/cloudflared/2026.10.4/darwin-arm64/cloudflared",
+      "76467  10.4 /usr/libexec/diagnosticd",
+      "88356  10.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "88461  20.5 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "88485  28.1 (managedappdistri)",
+      "88487  26.1 (proactiveeventtr)",
+      "88488  25.1 (facetimemessages)",
+      "88489  96.5 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "88490  22.9 (proactiveeventtr)",
+      "88491  21.8 (heard)",
+      "88493  20.7 (mlhostd)",
+      "88496  24.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/HearingCore.framework/heard",
+      "95423   5.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T08:59:50.248125+00:00",
+    "load": [
+      249.251953125,
+      141.87646484375,
+      69.35205078125
+    ],
+    "CPUAtLeast5Percent": [
+      "  684  12.8 /usr/sbin/mDNSResponder",
+      "  700   8.0 /usr/libexec/airportd",
+      "  778  20.7 /usr/sbin/coreaudiod",
+      " 1005   5.3 /usr/libexec/secd",
+      "25856   7.7 /Applications/Stats.app/Contents/MacOS/Stats",
+      "51199   5.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51202   8.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229   5.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "84127  12.8 /Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)"
+    ]
+  },
+  {
+    "time": "2026-11-05T09:01:37.003765+00:00",
+    "load": [
+      192.54833984375,
+      138.42626953125,
+      70.61328125
+    ],
+    "CPUAtLeast5Percent": [
+      "  608  19.5 /System/Library/PrivateFrameworks/GenerationalStorage.framework/Versions/A/Support/revisiond",
+      " 1111 106.6 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1143   6.8 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter",
+      "21509  14.7 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "49421   5.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/D2EBF53B-1AC7-4E3C-9357-EF1F29F46DB6/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "51202  11.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "51229   7.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "84025   8.9 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "93463   7.2 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders"
+    ]
+  },
+  {
+    "time": "2026-11-05T09:17:43.189334+00:00",
+    "load": [
+      141.35498046875,
+      130.3896484375,
+      70.34716796875
+    ],
+    "CPUAtLeast5Percent": [
+      "    1   6.7 /sbin/launchd",
+      "  620   5.3 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  700  20.3 /usr/libexec/airportd",
+      "  778  18.3 /usr/sbin/coreaudiod",
+      " 1143  13.2 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter",
+      "21509  26.3 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "26268   6.2 /Users/limboenedmund/bin/codedb",
+      "32088  24.2 /usr/libexec/wifivelocityd",
+      "43272   5.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/66326F57-F421-4217-95B4-88332DC8CF35/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "78892  12.1 /Users/limboenedmund/bin/codedb",
+      "93597   9.6 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "98620  65.7 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "98623   8.0 (heard)",
+      "98625   6.9 (facetimemessages)",
+      "98626   6.0 (mlhostd)",
+      "98627  11.8 (heard)",
+      "98628   8.6 (proactiveeventtr)",
+      "98629  13.0 (facetimemessages)",
+      "98632   7.2 (xpcproxy_sim)"
+    ]
+  },
+  {
+    "time": "2026-11-05T09:19:01.416358+00:00",
+    "load": [
+      182.5068359375,
+      143.3642578125,
+      77.25
+    ],
+    "CPUAtLeast5Percent": [
+      "  620   5.7 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  624   6.8 /System/Library/CoreServices/loginwindow.app/Contents/MacOS/loginwindow",
+      " 1111 104.3 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1143   6.7 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter",
+      "21509  14.3 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "25856   6.1 /Applications/Stats.app/Contents/MacOS/Stats",
+      "26268   9.1 /Users/limboenedmund/bin/codedb",
+      "33341   6.1 /Users/limboenedmund/bin/codedb",
+      "33493   8.7 /Users/limboenedmund/bin/codedb",
+      "36812   9.0 /usr/libexec/diskimagesiod",
+      "38618   6.5 /Users/limboenedmund/bin/codedb",
+      "38740   9.9 /Users/limboenedmund/bin/codedb",
+      "43213  84.1 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43272  22.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/66326F57-F421-4217-95B4-88332DC8CF35/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "48440  11.3 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "48484   6.7 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F1760085-46E2-4C62-8D4F-7900A18B3858/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "71328  10.3 /Users/limboenedmund/bin/codedb",
+      "76467  45.3 /usr/libexec/diagnosticd",
+      "84037   5.7 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)",
+      "84219  12.2 /Users/limboenedmund/bin/codedb",
+      "84260   8.5 /Users/limboenedmund/bin/codedb",
+      "90769   6.5 /Users/limboenedmund/bin/codedb",
+      "91815  86.7 /usr/sbin/spindump",
+      "93150   9.1 /Users/limboenedmund/bin/codedb",
+      "93842   9.2 /Users/limboenedmund/bin/codedb",
+      "95368  13.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/sbin/notifyd",
+      "95423  63.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd",
+      "98938  62.5 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "98948  38.7 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "98949   8.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/PairedSync.framework/Support/pairedsyncd",
+      "98971  11.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/PairedSync.framework/Support/pairedsyncd",
+      "98972   6.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/PairedSync.framework/Support/pairedsyncd"
+    ]
+  },
+  {
+    "time": "2026-11-05T09:21:47.786381+00:00",
+    "load": [
+      254.80029296875,
+      161.52978515625,
+      85.9423828125
+    ],
+    "CPUAtLeast5Percent": [
+      "  546   5.8 /usr/libexec/logd",
+      "  560  14.6 /usr/libexec/configd",
+      "  624   8.7 /System/Library/CoreServices/loginwindow.app/Contents/MacOS/loginwindow",
+      "  626   6.8 /usr/libexec/runningboardd",
+      "  684  11.1 /usr/sbin/mDNSResponder",
+      "  700  38.7 /usr/libexec/airportd",
+      "  778   6.0 /usr/sbin/coreaudiod",
+      "  888  20.8 /System/Library/DriverExtensions/com.apple.DriverKit-AppleBCMWLAN.dext/com.apple.DriverKit-AppleBCMWLAN",
+      "  894   7.6 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mds_stores",
+      " 1026   5.5 /usr/libexec/networkserviceproxy",
+      " 1042   5.1 /usr/libexec/nsurlsessiond",
+      " 1058   7.1 /System/Library/PrivateFrameworks/CloudKitDaemon.framework/Support/cloudd",
+      " 1111  51.4 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1338  16.9 /Applications/Tailscale.app/Contents/MacOS/Tailscale",
+      "21509  16.1 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "33341  13.0 /Users/limboenedmund/bin/codedb",
+      "33493  13.1 /Users/limboenedmund/bin/codedb",
+      "36812  11.2 /usr/libexec/diskimagesiod",
+      "84219   9.5 /Users/limboenedmund/bin/codedb",
+      "99346  26.9 /usr/libexec/corecaptured",
+      "99484  65.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders"
+    ]
+  },
+  {
+    "time": "2026-11-05T09:24:19.638545+00:00",
+    "load": [
+      254.30615234375,
+      172.087890625,
+      92.86083984375
+    ],
+    "CPUAtLeast5Percent": [
+      "  620   6.8 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  624  10.7 /System/Library/CoreServices/loginwindow.app/Contents/MacOS/loginwindow",
+      "  684   7.5 /usr/sbin/mDNSResponder",
+      "  700  40.8 /usr/libexec/airportd",
+      "  778  18.8 /usr/sbin/coreaudiod",
+      " 5741   6.7 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      " 5799  15.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      " 5889   5.1 /usr/libexec/proactiveeventtrackerd",
+      "17606   7.5 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "21509   6.4 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "45395   5.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "59770   8.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "84037   8.8 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)",
+      "91815   7.6 /usr/sbin/spindump"
+    ]
+  },
+  {
+    "time": "2026-11-05T09:24:49.707482+00:00",
+    "load": [
+      192.52734375,
+      165.43896484375,
+      93.220703125
+    ],
+    "CPUAtLeast5Percent": [
+      "  778   8.2 /usr/sbin/coreaudiod",
+      " 1111 105.9 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1178   9.2 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/corespotlightd",
+      " 6158   6.3 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      " 6171 130.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "17595   5.1 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "17606   7.1 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "21509  14.3 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "28046   5.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "35510  81.1 /usr/libexec/spotlightknowledged.updater",
+      "51199   6.0 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51202   6.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "71328   7.3 /Users/limboenedmund/bin/codedb",
+      "84025   6.9 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "84037  11.8 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)"
+    ]
+  },
+  {
+    "time": "2026-11-05T09:25:19.835229+00:00",
+    "load": [
+      119.47705078125,
+      150.32373046875,
+      90.24365234375
+    ],
+    "CPUAtLeast5Percent": [
+      "  560  21.7 /usr/libexec/configd",
+      "  594   7.4 /usr/sbin/securityd",
+      "  596  21.0 /usr/libexec/locationd",
+      "  597   5.6 /usr/libexec/nesessionmanager",
+      "  684  23.3 /usr/sbin/mDNSResponder",
+      "  700  58.1 /usr/libexec/airportd",
+      "  778   9.6 /usr/sbin/coreaudiod",
+      "  888   7.6 /System/Library/DriverExtensions/com.apple.DriverKit-AppleBCMWLAN.dext/com.apple.DriverKit-AppleBCMWLAN",
+      " 1111  31.6 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1143   8.9 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter",
+      " 1336   7.0 /System/Applications/Passwords.app/Contents/MacOS/Passwords",
+      " 1338  20.2 /Applications/Tailscale.app/Contents/MacOS/Tailscale",
+      " 1342  34.1 /System/Library/CoreServices/Finder.app/Contents/MacOS/Finder",
+      " 6442   7.5 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      " 6449  30.5 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "17069  99.1 /Applications/WhatsApp.app/Contents/MacOS/WhatsApp",
+      "17606  11.8 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634   9.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "21509  15.8 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "28046  23.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "48440   7.7 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "51199   8.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "59770   5.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "75542   6.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/testmanagerd",
+      "84037   8.7 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)",
+      "84127   6.2 /Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)",
+      "95323   5.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95352   6.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd"
+    ]
+  },
+  {
+    "time": "2026-11-05T09:27:02.777179+00:00",
+    "load": [
+      105.64013671875,
+      143.6923828125,
+      89.89990234375
+    ],
+    "CPUAtLeast5Percent": [
+      "  778   5.5 /usr/sbin/coreaudiod",
+      " 1111 122.3 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1143   6.7 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter",
+      " 6846 131.6 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      " 6851  17.9 (heard)",
+      "17069 100.0 /Applications/WhatsApp.app/Contents/MacOS/WhatsApp",
+      "21509  14.4 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "25856   5.7 /Applications/Stats.app/Contents/MacOS/Stats",
+      "84025   5.4 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "91815  89.2 /usr/sbin/spindump"
+    ]
+  },
+  {
+    "time": "2026-11-05T09:27:32.851359+00:00",
+    "load": [
+      66.37451171875,
+      130.53173828125,
+      86.99169921875
+    ],
+    "CPUAtLeast5Percent": [
+      "  608   8.3 /System/Library/PrivateFrameworks/GenerationalStorage.framework/Versions/A/Support/revisiond",
+      "  778   7.4 /usr/sbin/coreaudiod",
+      " 1111 106.6 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1143   8.3 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter",
+      " 6442  10.9 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      " 7155  26.3 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "21509  18.0 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "25856   7.6 /Applications/Stats.app/Contents/MacOS/Stats",
+      "43213   9.6 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "43272   7.4 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/66326F57-F421-4217-95B4-88332DC8CF35/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "51199   6.3 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51229   5.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "95323   7.1 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95325   7.6 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352   9.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "95423   6.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T09:28:02.925849+00:00",
+    "load": [
+      44.33642578125,
+      119.044921875,
+      84.33447265625
+    ],
+    "CPUAtLeast5Percent": [
+      "  778   5.6 /usr/sbin/coreaudiod",
+      " 1111 131.3 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1143   6.4 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter",
+      " 7419  45.9 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "17069 100.0 /Applications/WhatsApp.app/Contents/MacOS/WhatsApp",
+      "17651   8.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/sbin/notifyd",
+      "17678   9.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd",
+      "21509  14.7 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "49378  55.7 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "49421  18.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/D2EBF53B-1AC7-4E3C-9357-EF1F29F46DB6/HillclimbUITests-Runner.app/HillclimbUITests-Runner"
+    ]
+  },
+  {
+    "time": "2026-11-05T09:28:32.990293+00:00",
+    "load": [
+      28.98974609375,
+      108.203125,
+      81.60693359375
+    ],
+    "CPUAtLeast5Percent": [
+      " 1111 121.7 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1143   8.2 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter",
+      " 7692   5.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/EA4AB1B4-779B-43BD-B561-7E8FC103981A/LazyMansReminders.app/LazyMansReminders",
+      "21509  17.7 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "51229   5.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "71328   5.7 /Users/limboenedmund/bin/codedb",
+      "95323  10.8 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "95352   5.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd"
+    ]
+  },
+  {
+    "time": "2026-11-05T09:44:49.269157+00:00",
+    "load": [
+      146.04833984375,
+      125.693359375,
+      88.67529296875
+    ],
+    "CPUAtLeast5Percent": [
+      "  582  31.0 /usr/libexec/coreduetd",
+      "  778  15.6 /usr/sbin/coreaudiod",
+      "  888   6.5 /System/Library/DriverExtensions/com.apple.DriverKit-AppleBCMWLAN.dext/com.apple.DriverKit-AppleBCMWLAN",
+      " 1043  25.4 /usr/sbin/usernoted",
+      " 1143   8.0 /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter",
+      " 1418  23.1 /Library/SystemExtensions/DCCD737A-4CF5-4E0D-B636-B6A550E8C6BC/io.tailscale.ipn.macsys.network-extension.systemextension/Contents/MacOS/io.tailscale.ipn.macsys.network-extension",
+      "17069  50.3 /Applications/WhatsApp.app/Contents/MacOS/WhatsApp",
+      "21509  19.4 /Applications/SDR++.app/Contents/MacOS/sdrpp",
+      "25000  15.1 /Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)",
+      "33341   7.2 /Users/limboenedmund/bin/codedb",
+      "33493   7.3 /Users/limboenedmund/bin/codedb",
+      "38618   6.9 /Users/limboenedmund/bin/codedb",
+      "38740  10.2 /Users/limboenedmund/bin/codedb",
+      "84037  49.6 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)",
+      "91689   6.4 /Users/limboenedmund/bin/codedb",
+      "91815  77.1 /usr/sbin/spindump"
+    ]
+  },
+  {
+    "time": "2026-11-05T10:01:25.442479+00:00",
+    "load": [
+      383.78173828125,
+      183.78369140625,
+      110.91796875
+    ],
+    "CPUAtLeast5Percent": [
+      "  596   6.6 /usr/libexec/locationd",
+      "  620  47.4 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  700  10.4 /usr/libexec/airportd",
+      "  778  10.5 /usr/sbin/coreaudiod",
+      "  888   7.3 /System/Library/DriverExtensions/com.apple.DriverKit-AppleBCMWLAN.dext/com.apple.DriverKit-AppleBCMWLAN",
+      " 1067   5.6 /System/Library/PrivateFrameworks/HomeKitDaemon.framework/Support/homed",
+      " 1111  20.4 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1178   7.0 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/corespotlightd",
+      " 1275   6.2 /System/Library/PrivateFrameworks/CalendarDaemon.framework/Support/calaccessd",
+      " 1330   8.5 /System/Applications/Mail.app/Contents/MacOS/Mail",
+      " 1342   6.1 /System/Library/CoreServices/Finder.app/Contents/MacOS/Finder",
+      " 1418  27.2 /Library/SystemExtensions/DCCD737A-4CF5-4E0D-B636-B6A550E8C6BC/io.tailscale.ipn.macsys.network-extension.systemextension/Contents/MacOS/io.tailscale.ipn.macsys.network-extension",
+      " 9501  16.0 /usr/libexec/biomesyncd",
+      "10620  98.7 /System/Library/Frameworks/Contacts.framework/Support/contactsd",
+      "17595   5.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "23673  18.5 codex",
+      "48884   5.3 /Applications/Zen.app/Contents/MacOS/gpu-helper.app/Contents/MacOS/Zen GPU Helper",
+      "51199   6.4 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "51229   6.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "51963   5.1 /System/Library/PrivateFrameworks/IMDPersistence.framework/XPCServices/IMDPersistenceAgent.xpc/Contents/MacOS/IMDPersistenceAgent",
+      "58953   6.4 /System/Library/PrivateFrameworks/ScreenTimeCore.framework/Versions/A/ScreenTimeAgent",
+      "81549   7.5 /Applications/Zen.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container",
+      "84025   6.1 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "84037   8.1 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)"
+    ]
+  },
+  {
+    "time": "2026-11-05T10:01:55.529292+00:00",
+    "load": [
+      349.4208984375,
+      197.0947265625,
+      118.41845703125
+    ],
+    "CPUAtLeast5Percent": [
+      "  620   9.4 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   6.9 /usr/sbin/coreaudiod",
+      " 1058   7.3 /System/Library/PrivateFrameworks/CloudKitDaemon.framework/Support/cloudd",
+      " 1111  97.5 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1178   5.5 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/corespotlightd",
+      " 1668  41.7 /System/Library/ExtensionKit/Extensions/TGOnDeviceInferenceProviderService.appex/Contents/MacOS/TGOnDeviceInferenceProviderService",
+      " 9355  72.7 /System/Library/ExtensionKit/Extensions/TGOnDeviceInferenceProviderService.appex/Contents/MacOS/TGOnDeviceInferenceProviderService",
+      "16217  29.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "16218  21.9 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "25335  10.5 /Users/limboenedmund/bin/codedb",
+      "36812   7.8 /usr/libexec/diskimagesiod",
+      "38618   9.1 /Users/limboenedmund/bin/codedb",
+      "38740   6.0 /Users/limboenedmund/bin/codedb",
+      "52308  22.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/MapKit.framework/XPCServices/com.apple.MapKit.SnapshotService.xpc/com.apple.MapKit.SnapshotService",
+      "61588   5.0 /System/Library/PrivateFrameworks/PhotoLibraryServices.framework/Versions/A/Support/photolibraryd",
+      "69150   6.5 /usr/libexec/PerfPowerServices",
+      "78892   6.0 /Users/limboenedmund/bin/codedb",
+      "79630   5.8 /Users/limboenedmund/bin/codedb",
+      "82151  35.3 /System/Library/PrivateFrameworks/ModelCatalogRuntime.framework/Versions/A/modelcatalogd",
+      "84037   5.0 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)",
+      "84260   5.7 /Users/limboenedmund/bin/codedb",
+      "90769  10.2 /Users/limboenedmund/bin/codedb",
+      "91689   8.2 /Users/limboenedmund/bin/codedb",
+      "93150   6.8 /Users/limboenedmund/bin/codedb",
+      "93842   6.0 /Users/limboenedmund/bin/codedb"
+    ]
+  },
+  {
+    "time": "2026-11-05T10:02:25.616466+00:00",
+    "load": [
+      228.80712890625,
+      182.927734375,
+      116.0400390625
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  10.7 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   9.4 /usr/sbin/coreaudiod",
+      "16530   5.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data/Containers/Bundle/Application/F9FCBC6C-24E5-4CA5-966B-BFB0C2AE20FB/LazyMansReminders.app/LazyMansReminders",
+      "28535  28.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/testmanagerd",
+      "43213   5.6 /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild",
+      "45395  19.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "76467  13.5 /usr/libexec/diagnosticd",
+      "84260   5.1 /Users/limboenedmund/bin/codedb",
+      "95325   9.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95326   6.2 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "95352   6.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "95423  13.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd"
+    ]
+  },
+  {
+    "time": "2026-11-05T10:02:55.681441+00:00",
+    "load": [
+      142.1220703125,
+      166.2490234375,
+      112.30810546875
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  38.8 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778   9.5 /usr/sbin/coreaudiod",
+      " 1027   6.8 /System/Library/PrivateFrameworks/iCloudDriveCore.framework/Versions/A/Support/bird",
+      " 1058  19.3 /System/Library/PrivateFrameworks/CloudKitDaemon.framework/Support/cloudd",
+      " 1066   5.3 /System/Library/PrivateFrameworks/UniversalAccess.framework/Versions/A/Resources/AXVisualSupportAgent.app/Contents/MacOS/AXVisualSupportAgent",
+      " 1111  40.1 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1342   7.0 /System/Library/CoreServices/Finder.app/Contents/MacOS/Finder",
+      "16669  12.1 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/F9FD246D-91B3-4DB3-8F9D-9A1677B1E6A9/LazyMansReminders.app/LazyMansReminders",
+      "17249  23.9 /System/Library/Frameworks/CoreMedia.framework/Versions/A/XPCServices/com.apple.CMExtensionBroker.xpc/Contents/MacOS/com.apple.CMExtensionBroker",
+      "17250  13.7 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mdworker_shared",
+      "17251  26.2 /System/Library/Frameworks/CoreMedia.framework/Versions/A/XPCServices/com.apple.CMExtensionBroker.xpc/Contents/MacOS/com.apple.CMExtensionBroker",
+      "17595  17.5 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimRenderServer.xpc/Contents/MacOS/SimRenderServer",
+      "17606  12.7 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "17634  17.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backboardd",
+      "28499   5.5 /System/Library/Frameworks/VideoToolbox.framework/Versions/A/XPCServices/VTEncoderXPCService.xpc/Contents/MacOS/VTEncoderXPCService",
+      "71328   7.9 /Users/limboenedmund/bin/codedb",
+      "84016   9.6 /Applications/T3 Code (Nightly).app/Contents/MacOS/T3 Code (Nightly)",
+      "84025  24.2 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper.app/Contents/MacOS/T3 Code (Nightly) Helper",
+      "84037  15.8 /Applications/T3 Code (Nightly).app/Contents/Frameworks/T3 Code (Nightly) Helper (Renderer).app/Contents/MacOS/T3 Code (Nightly) Helper (Renderer)",
+      "84260  11.4 /Users/limboenedmund/bin/codedb"
+    ]
+  },
+  {
+    "time": "2026-11-05T10:03:25.722298+00:00",
+    "load": [
+      180.0498046875,
+      172.67431640625,
+      116.46875
+    ],
+    "CPUAtLeast5Percent": [
+      "  620  42.9 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  626  34.5 /usr/libexec/runningboardd",
+      "  778   6.4 /usr/sbin/coreaudiod",
+      "  894 102.5 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mds_stores",
+      " 1058   6.3 /System/Library/PrivateFrameworks/CloudKitDaemon.framework/Support/cloudd",
+      " 1093  15.4 /System/Library/PrivateFrameworks/CoreSuggestions.framework/Versions/A/Support/suggestd",
+      " 1111   7.9 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd",
+      " 1173   6.3 /System/Library/CoreServices/WindowManager.app/Contents/MacOS/WindowManager",
+      " 1178 174.1 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/corespotlightd",
+      " 1350 298.8 /System/Applications/Siri AI.app/Contents/MacOS/Siri AI",
+      " 1359  15.8 /System/Library/PrivateFrameworks/TextInputUIMacHelper.framework/Versions/A/XPCServices/CursorUIViewService.xpc/Contents/MacOS/CursorUIViewService",
+      " 9839   5.0 /System/Library/PrivateFrameworks/MediaAnalysis.framework/Versions/A/mediaanalysisd",
+      "10620  33.0 /System/Library/Frameworks/Contacts.framework/Support/contactsd",
+      "15142  11.2 /System/Library/CoreServices/iconservicesagent",
+      "17841   5.4 /System/Library/PrivateFrameworks/ContinuousDialogManagerService.framework/assistant_cdmd",
+      "21493   9.9 /System/Library/PrivateFrameworks/CoreParsec.framework/parsecd",
+      "35510  15.2 /usr/libexec/spotlightknowledged.updater",
+      "39681  26.0 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/managedcorespotlightd",
+      "71328   7.6 /Users/limboenedmund/bin/codedb",
+      "84260   8.8 /Users/limboenedmund/bin/codedb",
+      "96903  16.0 /usr/libexec/hybridsearchd"
+    ]
+  },
+  {
+    "time": "2026-11-05T10:03:55.944401+00:00",
+    "load": [
+      324.7197265625,
+      204.216796875,
+      129.59716796875
+    ],
+    "CPUAtLeast5Percent": [
+      "  551   9.5 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/FSEvents.framework/Versions/A/Support/fseventsd",
+      "  620  14.7 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer",
+      "  778  10.2 /usr/sbin/coreaudiod",
+      "18585  19.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "18626   6.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd",
+      "18640   6.5 /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/Resources/SimRenderingServices.simdeviceio/Contents/XPCServices/SimMetalHost.xpc/Contents/MacOS/SimMetalHost",
+      "18658  10.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/Accounts.framework/accountsd",
+      "18662   8.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/HealthKit.framework/healthd",
+      "18707   6.9 xpcproxy_sim",
+      "18708   7.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/HealthKit.framework/healthd",
+      "18729   7.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/PassKitCore.framework/passd",
+      "18742   8.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd",
+      "18746   8.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticd",
+      "18797   6.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/HomeKitDaemon.framework/Support/homed",
+      "18822  65.2 pmset",
+      "18834  12.0 /Library/SystemExtensions/A8883E96-19D6-405A-86EC-74824DAE8C38/io.tailscale.ipn.macsys.network-extension.systemextension/Contents/MacOS/io.tailscale.ipn.macsys.network-extension",
+      "18851   6.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/iconservicesagent",
+      "18874  16.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "18878  26.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/SpringBoard.app/SpringBoard",
+      "18883   6.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/HomeKitDaemon.framework/Support/homed",
+      "18885  12.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/mobileassetd",
+      "18906  10.4 /var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/Applications/WidgetRenderer_Default.app/WidgetRenderer_Default",
+      "18909  13.8 /Users/limboenedmund/Library/Developer/CoreSimulator/Devices/066ECE57-46B4-414A-B53E-523775329360/data/Containers/Bundle/Application/D2EBF53B-1AC7-4E3C-9357-EF1F29F46DB6/HillclimbUITests-Runner.app/HillclimbUITests-Runner",
+      "18910  15.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/HomeKitDaemon.framework/Support/homed",
+      "18931   7.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/gamed",
+      "18941  14.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/mobileassetd",
+      "18949   6.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/gamed",
+      "18958   5.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/appleaccountd",
+      "19005  11.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/FitnessCoachingServices.framework/fitnesscoachingd",
+      "19130   5.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/CalendarDaemon.framework/Support/calaccessd",
+      "19140   6.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Cryptexes/App/System/Library/CoreServices/SafariSupport.bundle/SafariBookmarksSyncAgent",
+      "19148   5.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/CoreServices/iconservicesagent",
+      "19149   8.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/gamed",
+      "19201  12.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/appleaccountd",
+      "19231  10.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/DVTInstrumentsFoundation.framework/DTServiceHub",
+      "19240   6.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AvatarPersistence.framework/Support/avatarsd",
+      "19249   7.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/appleaccountd",
+      "19250  10.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Cryptexes/App/System/Library/CoreServices/SafariSupport.bundle/SafariBookmarksSyncAgent",
+      "19253   7.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/EmailDaemon.framework/maild",
+      "19255   6.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticextensionsd",
+      "19261   8.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/FitnessCoachingServices.framework/fitnesscoachingd",
+      "19265   9.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/findmylocated",
+      "19268   6.5 assetsd",
+      "19272  10.5 assetsd",
+      "19276   7.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AvatarPersistence.framework/Support/avatarsd",
+      "19278   6.8 /usr/libexec/proactiveeventtrackerd",
+      "19279   6.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/adprivacyd",
+      "19280   9.9 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/EmailDaemon.framework/maild",
+      "19284   8.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/FileProvider.framework/Support/fileproviderd",
+      "19287  14.8 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Cryptexes/App/System/Library/CoreServices/SafariSupport.bundle/SafariBookmarksSyncAgent",
+      "19288  13.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/ManagedAppDistribution.framework/Support/managedappdistributiond",
+      "19291   5.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/backgroundassets.user",
+      "19292   6.1 /usr/libexec/assetsubscriptiond",
+      "19294  10.7 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UsageTracking.framework/UsageTrackingAgent",
+      "19295   8.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Cryptexes/OS/System/Library/Frameworks/WebKit.framework/Daemons/adattributiond",
+      "19296  13.0 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/FaceTimeMessageStore.framework/facetimemessagestored",
+      "19297  11.2 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/CloudSubscriptionFeatures.framework/featureaccessd",
+      "19298   5.6 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/diagnosticextensionsd",
+      "19300  11.4 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/feedbackd",
+      "19301   5.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/ManagedAppDistribution.framework/Support/managedappdistributiond",
+      "19303   8.4 /usr/libexec/assetsubscriptiond",
+      "19304   6.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/FitnessCoachingServices.framework/fitnesscoachingd",
+      "19305   5.3 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/DataAccess.framework/Support/dataaccessd",
+      "19306  10.1 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/countryd",
+      "19308  17.5 /private/var/run/com.apple.security.cryptexd/mnt/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AssetCacheServices.framework/XPCServices/AssetCacheLocatorService.xpc/AssetCacheLocatorService",
+      "19313   5.4 xpcproxy_sim",
+      "19318   5.1 /Applications/Xcode-beta.app/Contents/SharedFrameworks/DVTInstrumentsFoundation.framework/Resources/DTServiceHub",
+      "19320   7.5 xpcproxy_sim",
+      "19321  12.6 xpcproxy_sim",
+      "25856   6.3 /Applications/Stats.app/Contents/MacOS/Stats",
+      "48882  14.1 /Applications/Zen.app/Contents/MacOS/zen",
+      "48884  18.2 /Applications/Zen.app/Contents/MacOS/gpu-helper.app/Contents/MacOS/Zen GPU Helper",
+      "76467  26.4 /usr/libexec/diagnosticd",
+      "81549   8.7 /Applications/Zen.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container",
+      "93150   5.4 /Users/limboenedmund/bin/codedb"
+    ]
+  }
+]

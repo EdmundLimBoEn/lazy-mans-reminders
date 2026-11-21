@@ -1,0 +1,129 @@
+2026-11-05 20:50:41 +0800 
+Assertion status system-wide:
+   BackgroundTask                 0
+   ApplePushServiceTask           0
+   UserIsActive                   0
+   PreventUserIdleDisplaySleep    0
+   SoftwareUpdateTask             0
+   PreventSystemSleep             0
+   PreventSystemSleepSecurityIndicator 0
+   ExternalMedia                  0
+   PreventUserIdleSystemSleep     1
+   NetworkClientActive            0
+Listed by owning process:
+   pid 5012(mdsync): [0x0001f57d000b898c] 01:18:38 BackgroundTask named: "com.apple.metadata.mds.scan"  
+   pid 90379(backupd): [0x0001fda200018bc5] 00:43:53 PreventUserIdleSystemSleep named: "Backup Job"  
+   pid 64031(caffeinate): [0x0002079e000197cf] 00:01:16 PreventUserIdleSystemSleep named: "caffeinate command-line tool"  
+	Details: caffeinate asserting on behalf of 'xcodebuild' (pid 64030)
+	Localized=THE CAFFEINATE TOOL IS PREVENTING SLEEP.
+   pid 64030(xcodebuild): [0x000207a0000197d3] 00:01:15 PreventUserIdleSystemSleep named: "Xcode running tests."  
+   pid 1058(cloudd): [0x000207e7000c9962] 00:00:03 SystemIsActive named: "NSURLSessionTask 448EC6DB-8462-4927-99A8-B4A0BBBB4087"  
+	Timeout will fire in 10796 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e8000c9963] 00:00:03 SystemIsActive named: "NSURLSessionTask 33610CF0-1C16-42A9-A40E-3ADC9FAD0B20"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e8000c9964] 00:00:03 SystemIsActive named: "NSURLSessionTask 8C633698-C9D8-40E2-A6B6-406A07CB5F37"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e8000c9965] 00:00:02 SystemIsActive named: "NSURLSessionTask 61F546CA-B03B-4C5E-9B4E-98585284EEFC"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e8000c9966] 00:00:02 SystemIsActive named: "NSURLSessionTask 74E54881-45B9-47AB-9977-0A0BCE1A3002"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e8000c9968] 00:00:02 SystemIsActive named: "NSURLSessionTask B5453384-9B5A-49BD-B04D-8C24C8DAA6B0"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e8000c9969] 00:00:02 SystemIsActive named: "NSURLSessionTask 6DCC3C81-EF49-4E1A-9E37-8C285E91376C"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e8000c996a] 00:00:02 SystemIsActive named: "NSURLSessionTask A2FB3726-1BDA-46AF-8D98-2D28DE7DAA78"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e8000c996b] 00:00:02 SystemIsActive named: "NSURLSessionTask 201B81D5-AAF8-46BD-9835-C805A72C6D18"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c996c] 00:00:02 SystemIsActive named: "NSURLSessionTask AE831502-8A4B-4338-9D98-524D976F6A05"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c996d] 00:00:02 SystemIsActive named: "NSURLSessionTask 425CC3D9-623F-41CA-B972-2EF0C4A79DDF"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c996e] 00:00:02 SystemIsActive named: "NSURLSessionTask A2B4160E-7A58-4572-A540-CFAA8A7AFFBA"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c996f] 00:00:02 SystemIsActive named: "NSURLSessionTask 1EC78C19-4997-4707-8262-2EE985D0C098"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c9970] 00:00:02 SystemIsActive named: "NSURLSessionTask 517E99C4-421E-44FE-8748-51AB767DB0CF"  
+	Timeout will fire in 10797 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c9971] 00:00:02 SystemIsActive named: "NSURLSessionTask 3B3963B0-AF15-4FC7-A7DF-666CACF37AEB"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c9972] 00:00:02 SystemIsActive named: "NSURLSessionTask 6DC615CC-29D6-4D90-9488-A07CDD399DC6"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c9973] 00:00:02 SystemIsActive named: "NSURLSessionTask EA9CEB03-4F88-4089-945D-FD6D5F83441B"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c9974] 00:00:02 SystemIsActive named: "NSURLSessionTask 7BCBD2FD-E036-411B-95DF-8E6CB4165894"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c9975] 00:00:02 SystemIsActive named: "NSURLSessionTask BF0A06E8-F411-4C9E-88C6-75956182F460"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c9976] 00:00:02 SystemIsActive named: "NSURLSessionTask 58B8BA7B-541A-4E19-ACE8-BC56FB800D97"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c9977] 00:00:02 SystemIsActive named: "NSURLSessionTask 79EF69F7-B968-4689-AB32-91584A14DEC2"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c9978] 00:00:02 SystemIsActive named: "NSURLSessionTask D7CE1B07-C492-4EB2-9395-56AC522AB07B"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c9979] 00:00:02 SystemIsActive named: "NSURLSessionTask CE922850-1FDE-4645-88B5-B302FB0EE18B"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c997a] 00:00:02 SystemIsActive named: "NSURLSessionTask 08AD290B-29C2-48FA-A129-DB131FFFA6F9"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207e9000c997b] 00:00:01 SystemIsActive named: "NSURLSessionTask 9DC087E8-8AE9-44B5-A2EA-D96E97338824"  
+	Timeout will fire in 10798 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c997c] 00:00:01 SystemIsActive named: "NSURLSessionTask 75D8AFA5-6A44-4B09-8A39-D0DD8FA79EC9"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c997d] 00:00:01 SystemIsActive named: "NSURLSessionTask 5BF4980E-166D-4C17-833B-1A26CE8C8092"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c997e] 00:00:01 SystemIsActive named: "NSURLSessionTask 2798ECDE-F7B0-4864-B4C3-114A113C8620"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c997f] 00:00:01 SystemIsActive named: "NSURLSessionTask 78CAADE0-66C3-4844-96BF-5EE444527BBA"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c9980] 00:00:01 SystemIsActive named: "NSURLSessionTask D61EBA41-1F51-4CCD-A3D4-B824EA9EF4CA"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c9983] 00:00:01 SystemIsActive named: "NSURLSessionTask 44B812C0-344F-4E73-A555-FFBBBCE0941E"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c9984] 00:00:01 SystemIsActive named: "NSURLSessionTask 870FC90F-CB3B-43F2-B289-324344F0AE9B"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c9985] 00:00:01 SystemIsActive named: "NSURLSessionTask 1AFB8432-A03D-417B-A2E5-F784A21F899F"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c9986] 00:00:00 SystemIsActive named: "NSURLSessionTask B238688A-FDF3-48B7-8759-C9572095450E"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c9987] 00:00:00 SystemIsActive named: "NSURLSessionTask 7DEAB113-D3D7-4448-BFEC-3F6B8B9E69D8"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c9988] 00:00:00 SystemIsActive named: "NSURLSessionTask D27A97BA-846B-423C-BA4A-37DAD0B509D6"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c9989] 00:00:00 SystemIsActive named: "NSURLSessionTask EB7AF827-7D90-42FB-A413-3551ABF3011A"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c998a] 00:00:00 SystemIsActive named: "NSURLSessionTask 470E7967-7611-464A-8F61-FC01F8252CBB"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c998b] 00:00:00 SystemIsActive named: "NSURLSessionTask E8E0F08B-D86E-4CE0-A46B-9AA47019102E"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c998c] 00:00:00 SystemIsActive named: "NSURLSessionTask 3E49FA38-4AEA-43E5-99FA-9E3A119036B5"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c998d] 00:00:00 SystemIsActive named: "NSURLSessionTask 30D9EA0A-6179-4107-ADF0-61B9BBBF87C1"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c998e] 00:00:00 SystemIsActive named: "NSURLSessionTask 5B9B93DD-C8CE-4359-AC76-DA8DDA64DF16"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c998f] 00:00:00 SystemIsActive named: "NSURLSessionTask C1B34BD8-4E20-4711-B3DB-19EC0492CD47"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207ea000c9990] 00:00:00 SystemIsActive named: "NSURLSessionTask 8F7981B7-750D-48C7-A5F0-370F2E838DDA"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207eb000c9991] 00:00:00 SystemIsActive named: "NSURLSessionTask 23A21D35-242B-4DC2-BAEB-14336599E2CC"  
+	Timeout will fire in 10799 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207eb000c9992] 00:00:00 SystemIsActive named: "NSURLSessionTask 9EAD233F-3C24-4F36-9D1E-6B056DA7A0D7"  
+	Timeout will fire in 10800 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207eb000c9993] 00:00:00 SystemIsActive named: "NSURLSessionTask 361B07AA-D233-47C0-8747-0C6FA960C5B1"  
+	Timeout will fire in 10800 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207eb000c9994] 00:00:00 SystemIsActive named: "NSURLSessionTask 635C0C4F-9F6F-4F99-8345-87AA7DC17BE0"  
+	Timeout will fire in 10800 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207eb000c9995] 00:00:00 SystemIsActive named: "NSURLSessionTask D114B727-807D-4425-B743-5A218395984C"  
+	Timeout will fire in 10800 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207eb000c9996] 00:00:00 SystemIsActive named: "NSURLSessionTask 2930FF35-232C-494D-88FB-5AA9AE6967AC"  
+	Timeout will fire in 10800 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207eb000c9997] 00:00:00 SystemIsActive named: "NSURLSessionTask 75193D04-6C7E-43D4-AB1F-67925FE847B5"  
+	Timeout will fire in 10800 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207eb000c9998] 00:00:00 SystemIsActive named: "NSURLSessionTask 50C2F180-2B49-4409-9F03-940D89C0AF62"  
+	Timeout will fire in 10800 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207eb000c9999] 00:00:00 SystemIsActive named: "NSURLSessionTask FC876472-179B-475C-8777-DB7B3A000005"  
+	Timeout will fire in 10800 secs Action=TimeoutActionTurnOff
+   pid 1058(cloudd): [0x000207eb000c999a] 00:00:00 SystemIsActive named: "NSURLSessionTask 61C6FDF8-6ADA-449E-A07F-5665C2825B8C"  
+	Timeout will fire in 10800 secs Action=TimeoutActionTurnOff
+Kernel Assertions: 0x100=MAGICWAKE
+   id=556  level=255 0x100=MAGICWAKE creat=3/11/26, 02:23  mod=5/11/26, 17:59 description=en0 owner=IOSkywalkNetworkBSDClient

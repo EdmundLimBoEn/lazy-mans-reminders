@@ -1,0 +1,37 @@
+[
+  {
+    "command": [
+      "xcodebuild",
+      "-version"
+    ],
+    "output": "Xcode 27.1\nBuild version 27A9269\n"
+  },
+  {
+    "command": [
+      "xcrun",
+      "swift",
+      "--version"
+    ],
+    "output": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.2.0\n"
+  },
+  {
+    "command": [
+      "xcodegen",
+      "--version"
+    ],
+    "output": "Version: 2.46.0\n"
+  },
+  {
+    "command": [
+      "uname",
+      "-m"
+    ],
+    "output": "arm64\n"
+  },
+  {
+    "command": [
+      "sw_vers"
+    ],
+    "output": "ProductName:\t\tmacOS\nProductVersion:\t\t27.2\nBuildVersion:\t\t26B123\n"
+  }
+]

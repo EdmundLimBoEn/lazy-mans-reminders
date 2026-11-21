@@ -1,0 +1,21 @@
+[
+  {
+    "command": [
+      "python3",
+      "hillclimb/validation/round4/analyze-board.py"
+    ],
+    "exit": 0,
+    "result": "8 native board measurements passed; capacity+hint contrast and four true-bottom geometries"
+  },
+  {
+    "command": [
+      "python3",
+      "hillclimb/validation/round4/analyze-account.py"
+    ],
+    "exit": 0,
+    "result": "54 native helper/footer checks passed; minimum contrast13.936646469407957",
+    "warnings": [
+      "Pillow Image.getdata deprecation warning; retained in worker transcript"
+    ]
+  }
+]

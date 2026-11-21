@@ -1,0 +1,39 @@
+Attributes: Application, 0x1062433f0, pid: 13547, label: 'Notepad'
+Element subtree:
+ →Application, 0x1062433f0, pid: 13547, label: 'Notepad'
+    Window (Main), 0x106229c00, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x10622cbc0, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x106244d80, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x1062464d0, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x10623fe90, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x106237280, {{0.0, 0.0}, {402.0, 874.0}}
+                NavigationBar, 0x1062345f0, {{0.0, 62.0}, {402.0, 54.0}}, identifier: 'Your Board'
+                  StaticText, 0x10623cc20, {{152.3, 65.3}, {97.3, 23.3}}, label: 'Your Board'
+                  Other, 0x106247280, {{338.0, 66.0}, {44.0, 36.0}}, label: 'Account'
+                    Other, 0x10622eb20, {{338.0, 66.0}, {44.0, 36.0}}
+                      Button, 0x106237600, {{338.0, 62.0}, {44.0, 44.0}}, label: 'Account'
+                  StaticText, 0x10622fff0, {{185.7, 88.3}, {30.7, 14.3}}, label: '0 of 7'
+                Other, 0x1062391d0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x10622e250, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x1062363e0, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x10622d0e0, {{0.0, 0.0}, {402.0, 874.0}}
+                        ActivityIndicator, 0x106232980, {{108.8, 395.0}, {184.5, 85.0}}, identifier: 'board.loading', label: 'Loading reminders', value: 1
+                          ActivityIndicator, 0x106239a60, {{176.7, 395.0}, {48.7, 48.7}}, value: 1
+                          StaticText, 0x106234eb0, {{0.0, 0.0}, {0.0, 0.0}}, label: 'Loading reminders'
+                        Other, 0x1062213b0, {{0.0, 759.0}, {402.0, 81.0}}
+                          Other, 0x106240710, {{30.0, 776.7}, {290.0, 44.0}}, label: 'New reminder', value: New reminder
+                            TextField, 0x106254120, {{30.0, 784.0}, {290.0, 29.0}}, placeholderValue: 'New reminder'
+                              Other, 0x106251b20, {{31.0, 795.5}, {289.0, 14.5}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                                Other, 0x106259f60, {{33.0, 807.0}, {284.0, 3.0}}
+                          Button, 0x10625a080, {{328.0, 772.0}, {53.0, 53.0}}, label: 'Add reminder', Disabled
+                            Image, 0x10625a1a0, {{328.0, 772.0}, {53.0, 53.0}}, identifier: 'arrow.up', label: 'Up', Disabled
+                Other, 0x10625a2c0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x10625a3e0, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x10625a500, {{0.0, 62.0}, {1.0, 1.0}}, identifier: 'hillclimb.geometry', value: {"authState":[0,0,...
+Path to element:
+ →Application, 0x1062433f0, pid: 13547, label: 'Notepad'
+Query chain:
+ →Find: Target Application 'systems.edmundlim.NotepadHillclimb'
+  Output: {
+    Application, 0x10646d960, pid: 13547, label: 'Notepad'
+  }

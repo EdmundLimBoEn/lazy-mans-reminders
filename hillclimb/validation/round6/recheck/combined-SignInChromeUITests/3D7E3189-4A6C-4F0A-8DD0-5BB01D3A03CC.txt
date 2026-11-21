@@ -1,0 +1,57 @@
+ordinary=[(99.66666666666667, 760.3333333333334, 44.33333333333333, 15.666666666666515), (180.0, 760.3333333333334, 37.33333333333334, 15.666666666666515), (253.33333333333334, 760.3333333333334, 48.99999999999997, 15.666666666666515)] enabledPaint=[(99.66666666666667, 801.9999999999999, 44.33333333333333, 15.666666666666629), (180.0, 801.9999999999999, 37.33333333333334, 15.666666666666629), (253.33333333333334, 801.9999999999999, 48.99999999999997, 15.666666666666629)]; compare dimensions and relative layout; color differs
+Attributes: Application, 0x1062eefb0, pid: 86279, label: 'Notepad'
+Element subtree:
+ →Application, 0x1062eefb0, pid: 86279, label: 'Notepad'
+    Window (Main), 0x1062f0010, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x1062ef3b0, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x1062ee970, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x1062ef7d0, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x1062efbf0, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x1062ee550, {{0.0, 0.0}, {402.0, 874.0}}
+                NavigationBar, 0x1062ee130, {{0.0, 62.0}, {402.0, 106.0}}, identifier: 'Sign In'
+                  StaticText, 0x1062edd10, {{16.0, 109.3}, {107.7, 40.7}}, label: 'Sign In'
+                Other, 0x1062ed760, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x1062ea5f0, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x1062f0650, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x1062f0770, {{0.0, 0.0}, {402.0, 874.0}}
+                        ScrollView, 0x1062f0890, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x1062f09b0, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x1062f0ad0, {{0.0, 0.0}, {402.0, 106.0}}
+                          Other, 0x1062f0bf0, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x1062f0d10, {{0.0, 0.0}, {402.0, 106.0}}
+                              Other, 0x1062f0e30, {{0.0, 0.0}, {402.0, 106.0}}
+                              Other, 0x1062f0f50, {{0.0, 0.0}, {402.0, 106.0}}
+                                Other, 0x1062f1070, {{0.0, 0.0}, {402.0, 106.0}}
+                          Other, 0x1062f1190, {{0.0, 157.7}, {402.0, 706.3}}
+                            StaticText, 0x1062f12b0, {{20.0, 165.7}, {61.3, 18.0}}, label: 'Notepad'
+                            StaticText, 0x1062f13d0, {{20.0, 191.7}, {335.3, 42.3}}, label: 'Your board on this iPhone, the web, and the Lock Screen.'
+                            Button, 0x1062f14f0, {{20.0, 258.0}, {362.0, 44.0}}, identifier: 'signin.apple', label: 'Sign in with Apple'
+                            Button, 0x1062f1610, {{20.0, 314.0}, {362.0, 52.0}}, label: 'Sign in with Google'
+                              StaticText, 0x1062f1730, {{127.8, 329.8}, {146.3, 20.3}}, label: 'Sign in with Google'
+                            StaticText, 0x1062f1850, {{20.0, 390.0}, {43.0, 20.3}}, label: 'Email'
+                            StaticText, 0x1062f1970, {{20.0, 422.3}, {246.3, 15.7}}, label: 'Use the same address as the web board.'
+                            Other, 0x1062f1a90, {{20.0, 450.0}, {362.0, 44.0}}, identifier: 'signin.emailTarget'
+                              TextField, 0x1062f1bb0, {{20.0, 450.0}, {362.0, 44.0}}, label: 'Email address', placeholderValue: 'you@example.com'
+                            Other, 0x1062f1cd0, {{20.0, 538.3}, {362.0, 48.0}}, identifier: 'signin.passwordTarget'
+                              SecureTextField, 0x1062f1df0, {{20.0, 538.3}, {362.0, 48.0}}, label: 'Password', placeholderValue: 'Password'
+                            StaticText, 0x1062f1f10, {{20.0, 598.3}, {362.0, 33.7}}, label: 'For an existing account with a password. You can also use a sign-in link.'
+                            Button, 0x1064bede0, {{20.0, 644.0}, {362.0, 52.0}}, label: 'Sign In with Password', Disabled
+                              StaticText, 0x1064be9c0, {{118.2, 659.8}, {165.7, 20.3}}, label: 'Sign In with Password', Disabled
+                            Button, 0x1064b4900, {{20.0, 708.0}, {362.0, 48.0}}, label: 'Use a Sign-In Link Instead'
+                            Button, 0x1064be060, {{99.7, 802.0}, {44.3, 15.7}}, label: 'Privacy'
+                            Button, 0x1064be180, {{180.0, 802.0}, {37.3, 15.7}}, label: 'Terms'
+                            Button, 0x1064b6260, {{253.3, 802.0}, {49.0, 15.7}}, label: 'Support'
+                          Other, 0x1064b6380, {{369.0, 116.0}, {30.0, 696.0}}, label: 'Vertical scroll bar, 2 pages', value: 24%
+                            Other, 0x1064b64a0, {{396.0, 126.7}, {3.0, 658.0}}
+                          Other, 0x1064b65c0, {{369.0, 116.0}, {30.0, 696.0}}, label: 'Vertical scroll bar, 2 pages', value: 24%
+                            Other, 0x1064b66e0, {{396.0, 126.7}, {3.0, 658.0}}
+                Other, 0x1064b6800, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x1064b6920, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x1064b6a40, {{0.0, 62.0}, {1.0, 1.0}}, identifier: 'hillclimb.geometry', value: {"authState":[0,0,...
+Path to element:
+ →Application, 0x1062eefb0, pid: 86279, label: 'Notepad'
+Query chain:
+ →Find: Target Application 'systems.edmundlim.NotepadHillclimb'
+  Output: {
+    Application, 0x1062ef8f0, pid: 86279, label: 'Notepad'
+  }

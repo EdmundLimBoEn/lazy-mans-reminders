@@ -1,0 +1,72 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "deviceName" : "Hillclimb iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 322,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "LazyMansReminders · Built with macOS 27.2",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1793900430.745,
+  "passedTests" : 322,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793897099.854,
+  "statistics" : [
+    {
+      "subtitle" : "3 test runs",
+      "title" : "3 tests collected performance metrics"
+    }
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "XCTAssertGreaterThanOrEqual failed: (\"110.33333333333331\") is less than (\"116.0\")",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 312,
+      "testIdentifierString" : "SignInChromeUITests/testCombinedSettingsPopulatedPasswordKeepsVisualName()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInChromeUITests/testCombinedSettingsPopulatedPasswordKeepsVisualName",
+      "testName" : "testCombinedSettingsPopulatedPasswordKeepsVisualName()"
+    },
+    {
+      "failureText" : "XCTAssertGreaterThanOrEqual failed: (\"110.33333333333331\") is less than (\"116.0\")",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 317,
+      "testIdentifierString" : "SignInChromeUITests/testPopulatedPasswordKeepsVisualNameAndOneSecureField()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInChromeUITests/testPopulatedPasswordKeepsVisualNameAndOneSecureField",
+      "testName" : "testPopulatedPasswordKeepsVisualNameAndOneSecureField()"
+    }
+  ],
+  "title" : "Test - LazyMansReminders",
+  "topInsights" : [
+    {
+      "category" : "Common Failures",
+      "impact" : "100% of failures",
+      "text" : "2 runs of 2 tests failed with XCTAssertGreaterThanOrEqual failed: (\"110.33333333333331\") is less than (\"116.0\")"
+    },
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "35% of duration",
+      "text" : "3 longest test runs with outlier durations exceeding 0.07s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 324
+}

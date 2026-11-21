@@ -1,0 +1,46 @@
+{
+  "open": [
+    "open",
+    "systems.edmundlim.NotepadHillclimb",
+    "--relaunch",
+    "--launch-args=--hillclimb-demo",
+    "--launch-args={state}",
+    "--launch-args=--hillclimb-style",
+    "--launch-args={style}",
+    "--launch-args=--hillclimb-size",
+    "--launch-args={size}"
+  ],
+  "screenshot": [
+    "screenshot",
+    "{path}",
+    "--pixel-density",
+    "3",
+    "--normalize-status-bar"
+  ],
+  "pull": [
+    "swipe",
+    "180",
+    "250",
+    "180",
+    "550"
+  ],
+  "bottom": [
+    "swipe",
+    "180",
+    "650",
+    "180",
+    "260",
+    "--count",
+    "12",
+    "--pause-ms",
+    "200"
+  ],
+  "focus": [
+    "click",
+    "label='New reminder'"
+  ],
+  "close": [
+    "close",
+    "systems.edmundlim.NotepadHillclimb"
+  ]
+}

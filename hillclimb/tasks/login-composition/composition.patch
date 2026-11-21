@@ -1,0 +1,250 @@
+--- a/ios/App/SignInView.swift
++++ b/ios/App/SignInView.swift
+@@ -5,7 +5,7 @@
+ struct SignInView: View {
+     @EnvironmentObject private var auth: AuthManager
+     @Environment(\.colorScheme) private var colorScheme
+-    @ScaledMetric(relativeTo: .body) private var signInButtonHeight: CGFloat = 44
++    @ScaledMetric(relativeTo: .body) private var signInButtonHeight: CGFloat = 48
+     @State private var email = ""
+     @State private var password = ""
+     @State private var usesPassword = false
+@@ -70,7 +70,7 @@
+                 VStack(alignment: .leading, spacing: 24) {
+                     VStack(alignment: .leading, spacing: 8) {
+                         Text("Notepad")
+-                            .font(.subheadline.weight(.semibold))
++                            .font(.title2.weight(.semibold))
+                             .foregroundStyle(.primary)
+                         Text("Your board on this iPhone, the web, and the Lock Screen.")
+                             .font(.body)
+@@ -115,7 +115,7 @@
+             }
+             }
+             .navigationTitle("Sign In")
+-            .navigationBarTitleDisplayMode(.large)
++            .navigationBarTitleDisplayMode(.inline)
+             .safeAreaInset(edge: .bottom, spacing: 8) {
+                 if emailFocused || passwordFocused {
+                     HStack {
+@@ -141,6 +141,10 @@
+             if fixtureVariant == "password" || fixtureVariant == "password-keyboard" {
+                 usesPassword = true
+             }
++            if appearanceFixture && HillclimbDemo.argument("--hillclimb-signin-filled") == "yes" {
++                email = "you@example.com"
++                if usesPassword { password = "Demo-password" }
++            }
+             if fixtureVariant == "loading" { pending = .magicLink }
+             if fixtureVariant == "keyboard" || fixtureVariant == "password-keyboard" {
+                 try? await Task.sleep(for: .milliseconds(300))
+@@ -211,6 +215,10 @@
+         SignInEmail.isPlausible(normalizedEmail)
+     }
+ 
++    private var submitIsDisabled: Bool {
++        disablesDemoControls || !emailIsPlausible || busy || (usesPassword && password.isEmpty)
++    }
++
+     private var providerSection: some View {
+         SignInSection {
+             SignInWithAppleButton(.signIn) { request in
+@@ -245,11 +253,12 @@
+                     showsProgress: pending == .google
+                 )
+             }
+-            .buttonStyle(.bordered)
+-            .buttonBorderShape(.roundedRectangle)
+-            .controlSize(.large)
++            .buttonStyle(.plain)
++            .foregroundStyle(.primary)
+             .frame(maxWidth: .infinity)
+             .frame(minHeight: max(44, signInButtonHeight))
++            .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 6))
++            .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.primary, lineWidth: 1))
+             .disabled(busy || disablesDemoControls)
+             .accessibilityHint("Opens Google sign-in in a secure browser sheet")
+         }
+@@ -288,7 +297,7 @@
+                         .modifier(SignInDensityProbe(key: "emailHeading"))
+                     Text("Use the same address as the web board.")
+                         .font(.footnote)
+-                        .foregroundStyle(.primary)
++                        .foregroundStyle(.primary.opacity(0.75))
+                         .fixedSize(horizontal: false, vertical: true)
+                         .modifier(SignInDensityProbe(key: "emailHelper"))
+                     emailField
+@@ -311,7 +320,7 @@
+                             .modifier(SignInDensityProbe(key: "passwordField"))
+                         Text("For an existing account with a password. You can also use a sign-in link.")
+                             .font(.footnote)
+-                            .foregroundStyle(.primary)
++                            .foregroundStyle(.primary.opacity(0.75))
+                             .fixedSize(horizontal: false, vertical: true)
+                             .modifier(SignInDensityProbe(key: "passwordHelper"))
+                     }
+@@ -329,13 +338,13 @@
+                             title: usesPassword ? "Sign In with Password" : "Send Sign-In Link",
+                             showsProgress: pending == .magicLink || pending == .password
+                         )
++                        .foregroundColor(colorScheme == .dark && !submitIsDisabled ? Color(.systemBackground) : nil)
+                     }
+                     .buttonStyle(.borderedProminent)
+                     .buttonBorderShape(.roundedRectangle)
+                     .controlSize(.large)
+                     .frame(maxWidth: .infinity)
+-                    .disabled(
+-                        disablesDemoControls || !emailIsPlausible || busy || (usesPassword && password.isEmpty))
++                    .disabled(submitIsDisabled)
+                     Button {
+                         usesPassword.toggle()
+                         password = ""
+@@ -362,13 +371,13 @@
+ 
+     private var emailField: some View {
+         HStack(spacing: 0) {
+-            TextField("you@example.com", text: $email)
++            TextField("you@example.com", text: $email, prompt: Text(verbatim: "you@example.com").foregroundColor(Color(.secondaryLabel)))
+                 .textContentType(usesPassword ? .username : .emailAddress)
+                 .keyboardType(.emailAddress)
+                 .textInputAutocapitalization(.never)
+                 .autocorrectionDisabled()
+                 .font(.body)
+-                .frame(minHeight: 44)
++                .frame(minHeight: 48)
+                 .contentShape(Rectangle())
+                 .focused($emailFocused)
+                 .submitLabel(usesPassword ? .next : .send)
+@@ -398,7 +407,7 @@
+         }
+         .padding(.leading, 12)
+         .padding(.trailing, email.isEmpty ? 12 : 0)
+-        .frame(minHeight: 44)
++        .frame(minHeight: 48)
+         .background(Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+         .contentShape(Rectangle())
+         .onTapGesture { if !busy { emailFocused = true } }
+--- a/ios/UITests/SignInDensityUITests.swift
++++ b/ios/UITests/SignInDensityUITests.swift
+@@ -76,6 +76,7 @@
+                 XCTAssertEqual(
+                     try frame("actionGroup").minY - frame("passwordGroup").maxY, 20, accuracy: 0.5)
+                 XCTAssertGreaterThanOrEqual(try frame("passwordField").height, 48)
++                XCTAssertGreaterThanOrEqual(try frame("emailField").height, 48)
+                 XCTAssertEqual(
+                     try frame("emailHeading").minY - app.buttons["Sign in with Google"].frame.maxY, 24,
+                     accuracy: 1)
+--- /dev/null
++++ b/ios/UITests/LoginCompositionUITests.swift
+@@ -0,0 +1,111 @@
++import XCTest
++import UIKit
++
++final class LoginCompositionUITests: XCTestCase {
++    private let app = XCUIApplication()
++    override func setUpWithError() throws { continueAfterFailure = false }
++    override func tearDownWithError() throws { app.terminate() }
++
++    private func launch(_ style: String, _ size: String, password: Bool, filled: Bool) {
++        app.terminate()
++        app.launchArguments = ["--hillclimb-demo", "signin", "--hillclimb-style", style,
++            "--hillclimb-size", size, "--hillclimb-signin-variant", password ? "password" : "default",
++            "--hillclimb-signin-appearance", "enabled"]
++        if filled { app.launchArguments += ["--hillclimb-signin-filled", "yes"] }
++        app.launch()
++        XCTAssertTrue(app.navigationBars["Sign In"].waitForExistence(timeout: 10))
++    }
++
++    func testNativeInlineHierarchyAndFilledPrimaryActionMatrix() throws {
++        for style in ["light", "dark"] {
++            for size in ["default", "XXXL"] {
++                for password in [false, true] {
++                    for filled in [false, true] {
++                        launch(style, size, password: password, filled: filled)
++                        let nav = app.navigationBars["Sign In"]
++                        let brand = app.staticTexts["Notepad"]
++                        let apple = app.buttons["signin.apple"]
++                        let google = app.buttons["Sign in with Google"]
++                        let submit = app.buttons[password ? "Sign In with Password" : "Send Sign-In Link"]
++                        XCTAssertLessThanOrEqual(nav.frame.height, 60)
++                        XCTAssertGreaterThanOrEqual(brand.frame.minY, nav.frame.maxY)
++                        XCTAssertGreaterThanOrEqual(brand.frame.height, size == "XXXL" ? 30 : 26)
++                        XCTAssertEqual(apple.frame.minX, google.frame.minX, accuracy: 1)
++                        XCTAssertEqual(apple.frame.width, google.frame.width, accuracy: 1)
++                        XCTAssertEqual(apple.frame.height, google.frame.height, accuracy: 1)
++                        XCTAssertEqual(app.otherElements["signin.emailTarget"].frame.height, 48, accuracy: 1e-9)
++                        XCTAssertEqual(submit.isEnabled, filled)
++                        XCTAssertEqual(app.textFields["Email address"].value as? String, "you@example.com")
++                        XCTAssertEqual(app.buttons["Clear text"].exists, filled)
++                        XCTAssertEqual(app.secureTextFields.count, password ? 1 : 0)
++                        let proof = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
++                        proof.name = "composition-\(style)-\(size)-\(password ? "password" : "default")-\(filled ? "filled" : "empty")"
++                        proof.lifetime = .keepAlways
++                        add(proof)
++                        if !filled { try assertNeutralPrompt(app.textFields["Email address"].frame) }
++                        if filled {
++                            try assertPrimaryContrast(submit.frame, name: try XCTUnwrap(proof.name))
++                            submit.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
++                            XCTAssertTrue(nav.exists)
++                            XCTAssertFalse(app.keyboards.firstMatch.exists)
++                            XCTAssertEqual(submit.isEnabled, true)
++                        }
++                    }
++                }
++            }
++        }
++    }
++    private func assertPrimaryContrast(_ frame: CGRect, name: String) throws {
++        let histogram = try nativeHistogram(frame.insetBy(dx: 16, dy: 5))
++        func luminance(_ rgb: Int) -> Double {
++            let c = [rgb >> 16 & 255, rgb >> 8 & 255, rgb & 255].map { value -> Double in
++                let s = Double(value) / 255
++                return s <= 0.04045 ? s / 12.92 : pow((s + 0.055) / 1.055, 2.4)
++            }
++            return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
++        }
++        let background = try XCTUnwrap(histogram.max { $0.value < $1.value }).key
++        let bg = luminance(background)
++        let ink = try XCTUnwrap(histogram.filter { rgb, _ in
++            let c = [rgb >> 16 & 255, rgb >> 8 & 255, rgb & 255]
++            return (c.max()! - c.min()!) < 10 && abs(luminance(rgb) - bg) > 0.05
++        }.max { $0.value < $1.value })
++        XCTAssertGreaterThan(ink.value, 100, "Native solid label glyphs")
++        let fg = luminance(ink.key)
++        let contrast = (max(bg, fg) + 0.05) / (min(bg, fg) + 0.05)
++        XCTAssertGreaterThanOrEqual(contrast, 4.5)
++        let proof = XCTAttachment(string: "background=\(background) ink=\(ink.key) pixels=\(ink.value) contrast=\(contrast) frame=\(frame)")
++        proof.name = name + "-primary-contrast"; proof.lifetime = .keepAlways; add(proof)
++    }
++
++    private func nativeHistogram(_ frame: CGRect) throws -> [Int: Int] {
++        let image = try XCTUnwrap(app.screenshot().image.cgImage)
++        let scale = CGFloat(image.width) / app.frame.width
++        let crop = try XCTUnwrap(image.cropping(to: frame.applying(CGAffineTransform(scaleX: scale, y: scale))))
++        var pixels = [UInt8](repeating: 0, count: crop.width * crop.height * 4)
++        let context = try XCTUnwrap(CGContext(data: &pixels, width: crop.width, height: crop.height,
++            bitsPerComponent: 8, bytesPerRow: crop.width * 4, space: CGColorSpaceCreateDeviceRGB(),
++            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
++        context.draw(crop, in: CGRect(x: 0, y: 0, width: crop.width, height: crop.height))
++        var colors: [Int: Int] = [:]
++        for i in stride(from: 0, to: pixels.count, by: 4) {
++            colors[Int(pixels[i]) << 16 | Int(pixels[i + 1]) << 8 | Int(pixels[i + 2]), default: 0] += 1
++        }
++        return colors
++    }
++
++    private func assertNeutralPrompt(_ frame: CGRect) throws {
++        let colors = try nativeHistogram(frame.insetBy(dx: 5, dy: 5))
++        let background = try XCTUnwrap(colors.max { $0.value < $1.value }).key
++        func channels(_ rgb: Int) -> [Int] { [rgb >> 16 & 255, rgb >> 8 & 255, rgb & 255] }
++        let bg = channels(background).reduce(0, +) / 3
++        let ink = try XCTUnwrap(colors.filter { abs(channels($0.key).reduce(0, +) / 3 - bg) > 30 }
++            .max { $0.value < $1.value })
++        let rgb = channels(ink.key)
++        XCTAssertGreaterThan(ink.value, 100)
++        XCTAssertLessThanOrEqual(try XCTUnwrap(rgb.max()) - XCTUnwrap(rgb.min()), 10)
++        let proof = XCTAttachment(string: "background=\(background) promptRGB=\(rgb) solidPixels=\(ink.value) frame=\(frame)")
++        proof.name = "composition-neutral-prompt"; proof.lifetime = .keepAlways; add(proof)
++    }
++
++}

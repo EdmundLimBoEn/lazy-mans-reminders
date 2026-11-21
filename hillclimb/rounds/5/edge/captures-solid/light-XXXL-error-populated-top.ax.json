@@ -1,0 +1,489 @@
+{
+  "success": true,
+  "data": {
+    "nodes": [
+      {
+        "index": 0,
+        "type": "Other",
+        "role": "_TtC7SwiftUIP33_ACC2C5639A7D76F611E170E831FCA49118SwiftUIApplication",
+        "subrole": "UIApplication",
+        "label": "Notepad",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 402,
+          "height": 874
+        },
+        "enabled": true,
+        "depth": 0,
+        "pid": 12237,
+        "hittable": false,
+        "ref": "e1",
+        "kind": "other"
+      },
+      {
+        "index": 1,
+        "parentIndex": 0,
+        "type": "NavigationBar",
+        "role": "SwiftUI.UIKitNavigationBar",
+        "subrole": "UINavigationBar",
+        "identifier": "Your Board",
+        "rect": {
+          "x": 0,
+          "y": 62,
+          "width": 402,
+          "height": 54
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e2",
+        "kind": "navigation-bar"
+      },
+      {
+        "index": 2,
+        "parentIndex": 1,
+        "type": "StaticText",
+        "role": "UILabel",
+        "label": "Your Board",
+        "rect": {
+          "x": 152.33333333333334,
+          "y": 65.33333333333333,
+          "width": 97.33333333333334,
+          "height": 23.33333333333333
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e3",
+        "kind": "text"
+      },
+      {
+        "index": 3,
+        "parentIndex": 1,
+        "type": "Other",
+        "role": "_TtGC7SwiftUI16UIKitBarItemHostVS_11BarItemView_",
+        "subrole": "UIView",
+        "label": "Account",
+        "rect": {
+          "x": 338,
+          "y": 66,
+          "width": 44,
+          "height": 36
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e4",
+        "kind": "other"
+      },
+      {
+        "index": 4,
+        "parentIndex": 3,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Account",
+        "rect": {
+          "x": 338,
+          "y": 62,
+          "width": 44,
+          "height": 44
+        },
+        "enabled": true,
+        "depth": 3,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e5",
+        "kind": "button"
+      },
+      {
+        "index": 5,
+        "parentIndex": 1,
+        "type": "StaticText",
+        "role": "UILabel",
+        "label": "7 of 7",
+        "rect": {
+          "x": 185.66666666666666,
+          "y": 88.33333333333334,
+          "width": 30.666666666666686,
+          "height": 14.333333333333329
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e6",
+        "kind": "text"
+      },
+      {
+        "index": 6,
+        "parentIndex": 0,
+        "type": "CollectionView",
+        "role": "_TtC17LazyMansRemindersP33_5CFC1DC08C1B718D86CF21530DD6931219BoardCollectionView",
+        "subrole": "UICollectionView",
+        "rect": {
+          "x": 0,
+          "y": 259,
+          "width": 402,
+          "height": 420.66666666666663
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 12237,
+        "hittable": true,
+        "hiddenContentBelow": true,
+        "ref": "e7",
+        "kind": "collection"
+      },
+      {
+        "index": 7,
+        "parentIndex": 6,
+        "type": "Cell",
+        "role": "UICollectionViewListCell",
+        "rect": {
+          "x": 0,
+          "y": 259,
+          "width": 402,
+          "height": 218.33333333333337
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 12237,
+        "hittable": true,
+        "label": "Demo 1: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.",
+        "ref": "e8",
+        "kind": "cell"
+      },
+      {
+        "index": 8,
+        "parentIndex": 7,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Demo 1: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. ",
+        "value": "Active",
+        "identifier": "circle",
+        "rect": {
+          "x": 16,
+          "y": 263,
+          "width": 44,
+          "height": 44
+        },
+        "enabled": true,
+        "depth": 3,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e9",
+        "kind": "button"
+      },
+      {
+        "index": 9,
+        "parentIndex": 7,
+        "type": "Other",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Reorder Demo 1: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. ",
+        "value": "Position 1 of 7",
+        "rect": {
+          "x": 350,
+          "y": 263,
+          "width": 44,
+          "height": 44
+        },
+        "enabled": true,
+        "depth": 3,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e10",
+        "kind": "other"
+      },
+      {
+        "index": 10,
+        "parentIndex": 6,
+        "type": "Cell",
+        "role": "UICollectionViewListCell",
+        "rect": {
+          "x": 0,
+          "y": 477.3333333333333,
+          "width": 402,
+          "height": 202.33333333333331
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 12237,
+        "hittable": true,
+        "label": "Demo 2: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.",
+        "ref": "e11",
+        "kind": "cell"
+      },
+      {
+        "index": 11,
+        "parentIndex": 10,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Demo 2: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. ",
+        "value": "Active",
+        "identifier": "circle",
+        "rect": {
+          "x": 16,
+          "y": 481.3333333333333,
+          "width": 44,
+          "height": 43.99999999999994
+        },
+        "enabled": true,
+        "depth": 3,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e12",
+        "kind": "button"
+      },
+      {
+        "index": 12,
+        "parentIndex": 10,
+        "type": "Other",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Reorder Demo 2: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. ",
+        "value": "Position 2 of 7",
+        "rect": {
+          "x": 350,
+          "y": 481.3333333333333,
+          "width": 44,
+          "height": 43.99999999999994
+        },
+        "enabled": true,
+        "depth": 3,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e13",
+        "kind": "other"
+      },
+      {
+        "index": 13,
+        "parentIndex": 0,
+        "type": "StaticText",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Hint: This board is more like a post-it note. Combine reminders into one line, or find other ways to keep it short.",
+        "rect": {
+          "x": 18,
+          "y": 685.6666666666666,
+          "width": 344,
+          "height": 67.66666666666663
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e14",
+        "kind": "text"
+      },
+      {
+        "index": 14,
+        "parentIndex": 0,
+        "type": "StaticText",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Board full — combine lines instead",
+        "identifier": "board.capacity",
+        "rect": {
+          "x": 30,
+          "y": 768.3333333333333,
+          "width": 290,
+          "height": 56.66666666666663
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e15",
+        "kind": "text"
+      },
+      {
+        "index": 15,
+        "parentIndex": 0,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Add reminder",
+        "rect": {
+          "x": 328,
+          "y": 770.3333333333333,
+          "width": 53,
+          "height": 53
+        },
+        "enabled": false,
+        "depth": 1,
+        "pid": 12237,
+        "hittable": false,
+        "ref": "e16",
+        "kind": "button"
+      },
+      {
+        "index": 16,
+        "parentIndex": 0,
+        "type": "Image",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Warning",
+        "identifier": "exclamationmark.triangle.fill",
+        "rect": {
+          "x": 18.333333333333332,
+          "y": 131.33333333333331,
+          "width": 23.66666793823242,
+          "height": 21.666667938232422
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e17",
+        "kind": "image"
+      },
+      {
+        "index": 17,
+        "parentIndex": 0,
+        "type": "StaticText",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Couldn’t Load Board",
+        "rect": {
+          "x": 54.33333333333333,
+          "y": 128.16666666666666,
+          "width": 212.33333333333331,
+          "height": 27.666666666666657
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e18",
+        "kind": "text"
+      },
+      {
+        "index": 18,
+        "parentIndex": 0,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Dismiss",
+        "identifier": "xmark.circle.fill",
+        "rect": {
+          "x": 354,
+          "y": 120,
+          "width": 44,
+          "height": 44
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e19",
+        "kind": "button"
+      },
+      {
+        "index": 19,
+        "parentIndex": 0,
+        "type": "StaticText",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "The operation couldn’t be completed. (NSURLErrorDomain error -1009.)",
+        "rect": {
+          "x": 16,
+          "y": 164,
+          "width": 322,
+          "height": 47
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e20",
+        "kind": "text"
+      },
+      {
+        "index": 20,
+        "parentIndex": 0,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Try Again",
+        "rect": {
+          "x": 16,
+          "y": 211,
+          "width": 92.66666666666666,
+          "height": 44
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e21",
+        "kind": "button"
+      },
+      {
+        "index": 21,
+        "parentIndex": 0,
+        "type": "Other",
+        "role": "_TtCV17LazyMansReminders23HillclimbGeometryExport10ExportView",
+        "subrole": "UIView",
+        "value": "{\"00000000-0000-4000-8000-000000000001\":[16,263,334,210.33333333333331],\"00000000-0000-4000-8000-000000000002\":[16,481.33333333333331,334,210.33333333333331],\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[1,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"bottomFade\":[0,679.66666666666663,402,0],\"capacity\":[29.999999999999986,768.33333333333337,214.66666666666663,56.666666666666629],\"capacityHint\":[18,685.66666666666674,344,67.666666666666629],\"capacityIdeal\":[0,0,214.66666666666666,56.666666666666664],\"circle-00000000-0000-4000-8000-000000000001\":[16,263,44,44],\"circle-00000000-0000-4000-8000-000000000002\":[16,481.33333333333331,44,44.000000000000057],\"composer\":[0,679.66666666666674,402,160.33333333333326],\"fixtureCount\":[7,0,0,0],\"grip-00000000-0000-4000-8000-000000000001\":[350,263,44,44],\"grip-00000000-0000-4000-8000-000000000002\":[350,481.33333333333331,44,44.000000000000057],\"ideal-00000000-0000-4000-8000-000000000001\":[0,0,282,201.66666666666666],\"ideal-00000000-0000-4000-8000-000000000002\":[0,0,282,201.66666666666666],\"listViewport\":[0,259,402,420.66666666666663],\"refreshState\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"scrollOffset\":[0,0,0,0],\"text-00000000-0000-4000-8000-000000000001\":[68,271.66666666666669,282,201.66666666666669],\"text-00000000-0000-4000-8000-000000000002\":[68,490,282,201.66666666666663],\"typeSize\":[23,17,0,0]}",
+        "identifier": "hillclimb.geometry",
+        "rect": {
+          "x": 0,
+          "y": 62,
+          "width": 1,
+          "height": 1
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 12237,
+        "hittable": true,
+        "ref": "e22",
+        "kind": "other"
+      }
+    ],
+    "truncated": false,
+    "appName": "systems.edmundlim.NotepadHillclimb",
+    "appBundleId": "systems.edmundlim.NotepadHillclimb",
+    "visibility": {
+      "partial": true,
+      "visibleNodeCount": 22,
+      "totalNodeCount": 22,
+      "reasons": [
+        "scroll-hidden-below"
+      ]
+    },
+    "viewport": {
+      "width": 402,
+      "height": 874
+    },
+    "presentedSurface": "absent",
+    "snapshotQualityNotes": [
+      {
+        "code": "regular-geometry-clipped",
+        "clippedNodeCount": 6,
+        "droppedNodeCount": 0
+      }
+    ],
+    "snapshotDiagnostics": {
+      "stats": {
+        "count": 3071,
+        "p50Ms": 76,
+        "p95Ms": 128,
+        "maxMs": 711,
+        "slowThresholdMs": 1500,
+        "platform": "ios",
+        "backends": {
+          "xctest": 3071
+        }
+      }
+    },
+    "refsGeneration": 126778
+  }
+}

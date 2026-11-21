@@ -1,0 +1,13 @@
+{
+  "officialSources": [
+    "https://developer.apple.com/documentation/xctest/xctapplicationlaunchmetric",
+    "https://developer.apple.com/documentation/xctest/xctossignpostmetric/scrollinganddecelerationmetric"
+  ],
+  "sdkHeaders": "/Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCTest.framework/Headers",
+  "iterations": 5,
+  "warmup": "XCTest discards first of six invocations per public header",
+  "launchBoundary": "startMeasuring immediately before app.launch; stop immediately after; XCTApplicationLaunchMetric uses OS launch events; fixture assertions outside measured region",
+  "scrollBoundary": "fresh seeded long-text light/default launch and geometry readiness outside region; one slow up and one slow down in region; functional checks after stop",
+  "scope": "Simulator baseline only. Clock metric includes XCTest dispatch, event injection and quiescence; never frame pacing or hardware feel. Public signpost failures retained, no fallback pretending frames.",
+  "threshold": "No speed threshold or historical improvement claim; exact samples, units and validity checked from result export."
+}

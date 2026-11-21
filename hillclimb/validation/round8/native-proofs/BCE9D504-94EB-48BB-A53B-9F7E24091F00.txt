@@ -1,0 +1,51 @@
+Attributes: Application, 0x101fb6c70, pid: 28453, label: 'Notepad'
+Element subtree:
+ →Application, 0x101fb6c70, pid: 28453, label: 'Notepad'
+    Window (Main), 0x101f14fb0, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x101f6db90, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x101f38530, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x101f414e0, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x101f3dc90, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x101f40980, {{0.0, 0.0}, {402.0, 874.0}}
+                NavigationBar, 0x101f4ee00, {{0.0, 62.0}, {402.0, 54.0}}, identifier: 'Sign In'
+                  StaticText, 0x101f39b90, {{168.3, 71.3}, {65.0, 25.3}}, label: 'Sign In'
+                Other, 0x101f51c40, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x101ff6220, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x101f50640, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x101f3c350, {{0.0, 0.0}, {402.0, 874.0}}
+                        ScrollView, 0x101f6f200, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x101f4f7a0, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x101f73730, {{0.0, 0.0}, {402.0, 106.0}}
+                          Other, 0x101f73f90, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x101f73410, {{0.0, 0.0}, {402.0, 106.0}}
+                              Other, 0x101f70390, {{0.0, 0.0}, {402.0, 96.7}}
+                              Other, 0x101f6fb50, {{0.0, 0.0}, {402.0, 106.0}}
+                              Other, 0x101f6ff70, {{0.0, 0.0}, {402.0, 106.0}}
+                                Other, 0x101f6f730, {{0.0, 0.0}, {402.0, 106.0}}
+                          Other, 0x101f72110, {{0.0, 116.0}, {402.0, 587.7}}
+                            StaticText, 0x101f707b0, {{20.0, 124.0}, {109.7, 33.7}}, label: 'Notepad'
+                            StaticText, 0x101f4f160, {{20.0, 165.7}, {351.0, 56.7}}, label: 'Your board on this iPhone, the web, and the Lock Screen.'
+                            StaticText, 0x101f3f680, {{23.0, 248.0}, {220.7, 27.7}}, label: 'Check Your Inbox'
+                            StaticText, 0x101f3f260, {{20.0, 287.6}, {222.3, 51.3}}, label: 'We sent a sign-in link to you@example.com.'
+                            Button, 0x1020d0fb0, {{78.0, 351.0}, {246.0, 57.7}}, label: 'Use a Different Email'
+                            Button, 0x10207aca0, {{20.0, 457.0}, {362.0, 63.3}}, identifier: 'signin.apple', label: 'Sign in with Apple', Disabled
+                            Button, 0x1020a94f0, {{20.0, 532.3}, {362.0, 63.3}}, label: 'Sign in with Google', Disabled
+                              StaticText, 0x1020544f0, {{105.7, 550.1}, {190.7, 27.7}}, label: 'Sign in with Google', Disabled
+                            Button, 0x102052c90, {{72.7, 638.0}, {61.3, 23.0}}, label: 'Privacy', Disabled
+                            Button, 0x102091750, {{171.7, 638.0}, {52.3, 23.0}}, label: 'Terms', Disabled
+                            Button, 0x102073310, {{261.3, 638.0}, {68.0, 23.0}}, label: 'Support', Disabled
+                          Other, 0x10206b1b0, {{369.0, 116.0}, {30.0, 696.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                            Other, 0x10204beb0, {{396.0, 247.3}, {3.0, 561.7}}
+                          Other, 0x10209b2d0, {{369.0, 116.0}, {30.0, 696.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                            Other, 0x10206aac0, {{396.0, 247.3}, {3.0, 561.7}}
+                Other, 0x1020a3090, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x102082190, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x102067c40, {{0.0, 62.0}, {1.0, 1.0}}, identifier: 'signin.densityFrames', value: {}
+              Other, 0x102063460, {{0.0, 62.0}, {1.0, 1.0}}, identifier: 'hillclimb.geometry', value: {"authState":[0,0,...
+Path to element:
+ →Application, 0x101fb6c70, pid: 28453, label: 'Notepad'
+Query chain:
+ →Find: Target Application 'systems.edmundlim.NotepadHillclimb'
+  Output: {
+    Application, 0x10170da20, pid: 28453, label: 'Notepad'
+  }

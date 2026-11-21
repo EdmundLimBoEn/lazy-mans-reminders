@@ -1,0 +1,390 @@
+{
+  "schema_version": 1,
+  "purpose": "Preparatory Apple polish references; no grades or layout-copy claim.",
+  "source_sha": "b3b77c017fa9884b3ab97b7e4d3a4b9a306ee447",
+  "device": {
+    "host_id": "local",
+    "id": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+    "name": "Hillclimb iPhone 17 Pro",
+    "device_type": "regular iPhone 17 Pro simulator",
+    "runtime": "iOS 26.2",
+    "runtime_build": "23C54",
+    "logical_size": [
+      402,
+      874
+    ],
+    "capture_pixels": [
+      1206,
+      2622
+    ]
+  },
+  "apps": {
+    "reminders": {
+      "bundle_id": "com.apple.reminders",
+      "version": "7.0",
+      "build": "3856.14",
+      "version_source": "matching runtime Reminders.app/Info.plist"
+    },
+    "notes": {
+      "bundle_id": "com.apple.mobilenotes",
+      "installed": false,
+      "version": null
+    }
+  },
+  "seed": {
+    "file": "reminders-seed.txt",
+    "rows": [
+      "Buy oats",
+      "Water the plants",
+      "Review the weekend plan and bring a notebook with enough space for sketches and a few longer observations",
+      "Charge headphones",
+      "Pack a reusable bottle",
+      "Return library books",
+      "Walk by the river",
+      "Check the pantry before making the next shopping list so nothing useful is forgotten",
+      "Tidy the desk",
+      "Choose a recipe",
+      "Prepare tomorrow's bag",
+      "Save a quiet hour for reading and write down three ideas to revisit later",
+      "Fold laundry",
+      "Plan a short walk",
+      "Refill the pencil case",
+      "Final demo reminder"
+    ],
+    "all_incomplete": true,
+    "account": "Local; iCloud Not Now; no Apple ID"
+  },
+  "captures": [
+    {
+      "file": "reminders-bottom-dark.png",
+      "app": "reminders",
+      "bundle_id": "com.apple.reminders",
+      "state": "bottom",
+      "appearance": "dark",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "pixel_density": 3,
+      "sha256": "4c22960d1096e8be16871dab6ee8cebba3f02e8d5eac08fd64c529ba47b1b0d3",
+      "capture_time_utc": "2026-11-04T12:34:48.714383+00:00",
+      "capture_time_source": "filesystem mtime immediately after screenshot",
+      "content": "Same list scrolled bottom; Final demo reminder fully visible above add control; no keyboard; collapsed navigation title.",
+      "inspection": "saved PNG visually inspected via view_image",
+      "reference_status": "usable",
+      "limitation": null
+    },
+    {
+      "file": "reminders-bottom-light.png",
+      "app": "reminders",
+      "bundle_id": "com.apple.reminders",
+      "state": "bottom",
+      "appearance": "light",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "pixel_density": 3,
+      "sha256": "466b7843b43e3b60bb232274786ebadc0a661db2c834731f5c96067e94dbe7e5",
+      "capture_time_utc": "2026-11-04T12:34:49.679103+00:00",
+      "capture_time_source": "filesystem mtime immediately after screenshot",
+      "content": "Same list scrolled bottom; Final demo reminder fully visible above add control; no keyboard; collapsed navigation title.",
+      "inspection": "saved PNG visually inspected via view_image",
+      "reference_status": "transition_rejected",
+      "limitation": "Immediate appearance-switch screenshot shows intermediate tint/dimming; exclude from contrast and pairing; recapture needed."
+    },
+    {
+      "file": "reminders-compose-dark.png",
+      "app": "reminders",
+      "bundle_id": "com.apple.reminders",
+      "state": "compose",
+      "appearance": "dark",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "pixel_density": 3,
+      "sha256": "d79ab3d3d09e8f98a71e0bd90a867730ab9619c2376cb71f5f9bb4db741c19be",
+      "capture_time_utc": "2026-11-04T12:34:42.755097+00:00",
+      "capture_time_source": "filesystem mtime immediately after screenshot",
+      "content": "Inline creation of final seeded row Final demo reminder, caret at end, keyboard visible; preceding rows visible.",
+      "inspection": "saved PNG visually inspected via view_image",
+      "reference_status": "transition_rejected",
+      "limitation": "Immediate appearance-switch screenshot shows intermediate tint/dimming; exclude from contrast and pairing; recapture needed."
+    },
+    {
+      "file": "reminders-compose-light.png",
+      "app": "reminders",
+      "bundle_id": "com.apple.reminders",
+      "state": "compose",
+      "appearance": "light",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "pixel_density": 3,
+      "sha256": "9bb39e05f2903af8680faef8d3421479040bec8e8dcf79046ca7af1f107b2b04",
+      "capture_time_utc": "2026-11-04T12:34:41.690414+00:00",
+      "capture_time_source": "filesystem mtime immediately after screenshot",
+      "content": "Inline creation of final seeded row Final demo reminder, caret at end, keyboard visible; preceding rows visible.",
+      "inspection": "saved PNG visually inspected via view_image",
+      "reference_status": "usable",
+      "limitation": null
+    },
+    {
+      "file": "reminders-empty-light.png",
+      "app": "reminders",
+      "bundle_id": "com.apple.reminders",
+      "state": "empty",
+      "appearance": "light",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "pixel_density": 3,
+      "sha256": "40e7276818dd8242eecdf7cc201a93594bc8adb2222ca0f6da517a3ceeb7547f",
+      "capture_time_utc": "2026-11-04T12:33:38.774356+00:00",
+      "capture_time_source": "filesystem mtime immediately after screenshot",
+      "content": "Default local Reminders list, No Reminders, before seeding; no keyboard.",
+      "inspection": "saved PNG visually inspected via view_image",
+      "reference_status": "usable",
+      "limitation": null
+    },
+    {
+      "file": "reminders-sheet-dark.png",
+      "app": "reminders",
+      "bundle_id": "com.apple.reminders",
+      "state": "sheet",
+      "appearance": "dark",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "pixel_density": 3,
+      "sha256": "5cf364339a33db8d2c00ace35e5ab37e751ad591d8986faf5856347f96f9a37a",
+      "capture_time_utc": "2026-11-04T12:35:35.376334+00:00",
+      "capture_time_source": "filesystem mtime immediately after screenshot",
+      "content": "Buy oats item Details sheet; Notes empty, Date/Time/Location off, Priority None, default Reminders list; no keyboard.",
+      "inspection": "saved PNG visually inspected via view_image",
+      "reference_status": "usable",
+      "limitation": null
+    },
+    {
+      "file": "reminders-sheet-light.png",
+      "app": "reminders",
+      "bundle_id": "com.apple.reminders",
+      "state": "sheet",
+      "appearance": "light",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "pixel_density": 3,
+      "sha256": "7ef817877f2bbbaa8c208442f47c3a6959dde2146f66cfa9896eaeb84ddcc7f2",
+      "capture_time_utc": "2026-11-04T12:35:36.353581+00:00",
+      "capture_time_source": "filesystem mtime immediately after screenshot",
+      "content": "Buy oats item Details sheet; Notes empty, Date/Time/Location off, Priority None, default Reminders list; no keyboard.",
+      "inspection": "saved PNG visually inspected via view_image",
+      "reference_status": "transition_rejected",
+      "limitation": "Immediate appearance-switch screenshot shows intermediate tint/dimming; exclude from contrast and pairing; recapture needed."
+    },
+    {
+      "file": "reminders-top-dark.png",
+      "app": "reminders",
+      "bundle_id": "com.apple.reminders",
+      "state": "top",
+      "appearance": "dark",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "pixel_density": 3,
+      "sha256": "4b7a44acd03c9046deffd2fa3c351eb5d20572fdb2a14db91d9647c4e2fa0474",
+      "capture_time_utc": "2026-11-04T12:34:59.627552+00:00",
+      "capture_time_source": "filesystem mtime immediately after screenshot",
+      "content": "Default local Reminders list, 16 incomplete demo rows, scrolled top with Buy oats first; no keyboard. Native bottom fade under add control.",
+      "inspection": "saved PNG visually inspected via view_image",
+      "reference_status": "transition_rejected",
+      "limitation": "Immediate appearance-switch screenshot shows intermediate tint/dimming; exclude from contrast and pairing; recapture needed."
+    },
+    {
+      "file": "reminders-top-light.png",
+      "app": "reminders",
+      "bundle_id": "com.apple.reminders",
+      "state": "top",
+      "appearance": "light",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "pixel_density": 3,
+      "sha256": "a495e9b46ef153d8fb917f46f3bf6f4550f4688070cda3d4f7fb3b1686e18df9",
+      "capture_time_utc": "2026-11-04T12:34:58.677404+00:00",
+      "capture_time_source": "filesystem mtime immediately after screenshot",
+      "content": "Default local Reminders list, 16 incomplete demo rows, scrolled top with Buy oats first; no keyboard. Native bottom fade under add control.",
+      "inspection": "saved PNG visually inspected via view_image",
+      "reference_status": "usable",
+      "limitation": null
+    }
+  ],
+  "counts": {
+    "pngs": 9,
+    "core_pngs": 8,
+    "usable_core_references": 4,
+    "usable_extra_references": 1,
+    "rejected_transition_pngs": 4,
+    "missing_notes_core": 8
+  },
+  "missing_states": [
+    {
+      "app": "notes",
+      "state": "top",
+      "appearance": "light",
+      "reason": "Pinned open com.apple.mobilenotes failed COMMAND_FAILED: Simulator device failed to launch com.apple.mobilenotes. Hint: app bundle is not installed; run install before open. Following advice once with matching runtime MobileNotes.app failed COMMAND_FAILED: Uploaded app bundle archive cannot contain symlinks or hard links (INVALID_ARGS). Stopped device work after failed recovery. apps --all omitted Notes; runtime directory exists but Info.plist unavailable. No substitute runtime or screenshots used."
+    },
+    {
+      "app": "notes",
+      "state": "top",
+      "appearance": "dark",
+      "reason": "Pinned open com.apple.mobilenotes failed COMMAND_FAILED: Simulator device failed to launch com.apple.mobilenotes. Hint: app bundle is not installed; run install before open. Following advice once with matching runtime MobileNotes.app failed COMMAND_FAILED: Uploaded app bundle archive cannot contain symlinks or hard links (INVALID_ARGS). Stopped device work after failed recovery. apps --all omitted Notes; runtime directory exists but Info.plist unavailable. No substitute runtime or screenshots used."
+    },
+    {
+      "app": "notes",
+      "state": "bottom",
+      "appearance": "light",
+      "reason": "Pinned open com.apple.mobilenotes failed COMMAND_FAILED: Simulator device failed to launch com.apple.mobilenotes. Hint: app bundle is not installed; run install before open. Following advice once with matching runtime MobileNotes.app failed COMMAND_FAILED: Uploaded app bundle archive cannot contain symlinks or hard links (INVALID_ARGS). Stopped device work after failed recovery. apps --all omitted Notes; runtime directory exists but Info.plist unavailable. No substitute runtime or screenshots used."
+    },
+    {
+      "app": "notes",
+      "state": "bottom",
+      "appearance": "dark",
+      "reason": "Pinned open com.apple.mobilenotes failed COMMAND_FAILED: Simulator device failed to launch com.apple.mobilenotes. Hint: app bundle is not installed; run install before open. Following advice once with matching runtime MobileNotes.app failed COMMAND_FAILED: Uploaded app bundle archive cannot contain symlinks or hard links (INVALID_ARGS). Stopped device work after failed recovery. apps --all omitted Notes; runtime directory exists but Info.plist unavailable. No substitute runtime or screenshots used."
+    },
+    {
+      "app": "notes",
+      "state": "compose",
+      "appearance": "light",
+      "reason": "Pinned open com.apple.mobilenotes failed COMMAND_FAILED: Simulator device failed to launch com.apple.mobilenotes. Hint: app bundle is not installed; run install before open. Following advice once with matching runtime MobileNotes.app failed COMMAND_FAILED: Uploaded app bundle archive cannot contain symlinks or hard links (INVALID_ARGS). Stopped device work after failed recovery. apps --all omitted Notes; runtime directory exists but Info.plist unavailable. No substitute runtime or screenshots used."
+    },
+    {
+      "app": "notes",
+      "state": "compose",
+      "appearance": "dark",
+      "reason": "Pinned open com.apple.mobilenotes failed COMMAND_FAILED: Simulator device failed to launch com.apple.mobilenotes. Hint: app bundle is not installed; run install before open. Following advice once with matching runtime MobileNotes.app failed COMMAND_FAILED: Uploaded app bundle archive cannot contain symlinks or hard links (INVALID_ARGS). Stopped device work after failed recovery. apps --all omitted Notes; runtime directory exists but Info.plist unavailable. No substitute runtime or screenshots used."
+    },
+    {
+      "app": "notes",
+      "state": "sheet",
+      "appearance": "light",
+      "reason": "Pinned open com.apple.mobilenotes failed COMMAND_FAILED: Simulator device failed to launch com.apple.mobilenotes. Hint: app bundle is not installed; run install before open. Following advice once with matching runtime MobileNotes.app failed COMMAND_FAILED: Uploaded app bundle archive cannot contain symlinks or hard links (INVALID_ARGS). Stopped device work after failed recovery. apps --all omitted Notes; runtime directory exists but Info.plist unavailable. No substitute runtime or screenshots used."
+    },
+    {
+      "app": "notes",
+      "state": "sheet",
+      "appearance": "dark",
+      "reason": "Pinned open com.apple.mobilenotes failed COMMAND_FAILED: Simulator device failed to launch com.apple.mobilenotes. Hint: app bundle is not installed; run install before open. Following advice once with matching runtime MobileNotes.app failed COMMAND_FAILED: Uploaded app bundle archive cannot contain symlinks or hard links (INVALID_ARGS). Stopped device work after failed recovery. apps --all omitted Notes; runtime directory exists but Info.plist unavailable. No substitute runtime or screenshots used."
+    },
+    {
+      "app": "reminders",
+      "state": "compose",
+      "appearance": "dark",
+      "reason": "Captured PNG rejected as appearance transition; settled reference missing."
+    },
+    {
+      "app": "reminders",
+      "state": "bottom",
+      "appearance": "light",
+      "reason": "Captured PNG rejected as appearance transition; settled reference missing."
+    },
+    {
+      "app": "reminders",
+      "state": "top",
+      "appearance": "dark",
+      "reason": "Captured PNG rejected as appearance transition; settled reference missing."
+    },
+    {
+      "app": "reminders",
+      "state": "sheet",
+      "appearance": "light",
+      "reason": "Captured PNG rejected as appearance transition; settled reference missing."
+    },
+    {
+      "app": "reminders",
+      "state": "empty",
+      "appearance": "dark",
+      "reason": "Optional state skipped after seeding; no data deleted to recreate it."
+    }
+  ],
+  "pairing": {
+    "empty": {
+      "light": {
+        "reminders": "reminders-empty-light.png",
+        "notes": null
+      },
+      "dark": {
+        "reminders": null,
+        "notes": null
+      }
+    },
+    "top": {
+      "light": {
+        "reminders": "reminders-top-light.png",
+        "notes": null
+      },
+      "dark": {
+        "reminders": null,
+        "notes": null
+      }
+    },
+    "bottom": {
+      "light": {
+        "reminders": null,
+        "notes": null
+      },
+      "dark": {
+        "reminders": "reminders-bottom-dark.png",
+        "notes": null
+      }
+    },
+    "compose": {
+      "light": {
+        "reminders": "reminders-compose-light.png",
+        "notes": null
+      },
+      "dark": {
+        "reminders": null,
+        "notes": null
+      }
+    },
+    "sheet": {
+      "light": {
+        "reminders": null,
+        "notes": null
+      },
+      "dark": {
+        "reminders": "reminders-sheet-dark.png",
+        "notes": null
+      }
+    }
+  },
+  "semantic_limits": [
+    "Reminders top/bottom show individual task rows in one local list.",
+    "Reminders compose is inline creation with native keyboard; sheet is item Details.",
+    "Notes list-of-notes versus note-body scrolling are distinct semantics; neither observed here.",
+    "Still images establish no haptics, animation, Dynamic Type, VoiceOver or Live Activity behavior."
+  ],
+  "verification": [
+    "All 9 saved PNGs opened with view_image.",
+    "Live device_screenshot inspected onboarding, settled top dark and settled sheet light.",
+    "reference-capture.py --verify validates signatures, dimensions and hashes."
+  ],
+  "device_handoff": {
+    "session_closed": true,
+    "result": "Closed: t3-90eed171af70c5218664cbf8",
+    "shutdown": false,
+    "last_requested_appearance": "light",
+    "last_app_state": "Reminders Details sheet; keyboard absent",
+    "local_demo_data_retained": true
+  },
+  "author": "Written by gpt-6.1-sol in Codex on behalf of Edmund"
+}

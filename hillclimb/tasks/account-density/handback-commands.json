@@ -1,0 +1,66 @@
+[
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-8b0005e197055093cc6e1f36/agent-device",
+      "settings",
+      "appearance",
+      "light"
+    ],
+    "exit": 0,
+    "stdout": "Updated setting: appearance\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-8b0005e197055093cc6e1f36/agent-device",
+      "settings",
+      "text-size",
+      "large"
+    ],
+    "exit": 0,
+    "stdout": "Text size set to large\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-8b0005e197055093cc6e1f36/agent-device",
+      "settings",
+      "text-size"
+    ],
+    "exit": 0,
+    "stdout": "Text size is large\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-8b0005e197055093cc6e1f36/agent-device",
+      "screenshot",
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-800c5513/hillclimb/tasks/account-density/handback-account-light-Large.png",
+      "--pixel-density",
+      "3"
+    ],
+    "exit": 0,
+    "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-800c5513/hillclimb/tasks/account-density/handback-account-light-Large.png (1206x2622 @3x)\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-8b0005e197055093cc6e1f36/agent-device",
+      "close",
+      "com.apple.Preferences"
+    ],
+    "exit": 0,
+    "stdout": "Closed: t3-8b0005e197055093cc6e1f36\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-8b0005e197055093cc6e1f36/agent-device",
+      "close",
+      "systems.edmundlim.NotepadHillclimb"
+    ],
+    "exit": 0,
+    "stdout": "Closed: t3-8b0005e197055093cc6e1f36\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "commonFailureInsights" : [
+
+  ],
+  "failureDistributionInsights" : [
+
+  ],
+  "longestTestRunsInsights" : [
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests/testPopulatedRetryRecoversLocallyOnceWithoutFocusOrDuplicateAnnouncement",
+        "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix"
+      ],
+      "deviceName" : "Hillclimb iPhone 17 Pro",
+      "durationOfSlowTests" : 346.34415102005005,
+      "impact" : "(15%)",
+      "meanTime" : "49s across 44 test runs",
+      "osNameAndVersion" : "iOS Simulator 26.2",
+      "targetName" : "HillclimbUITests",
+      "testPlanConfigurationName" : "Test Scheme Action",
+      "title" : "2 longest test runs with outlier durations exceeding 165.50s (three standard deviations)"
+    },
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionClientTests/testConstructingClientDoesNotStartAnSDKInitialRefreshOutsideGate",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityLayoutTests/testRenderedLastLineFitsBothNativeSurfaceBudgets",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testDelayedCreateCannotRestoreCacheAfterSignOut"
+      ],
+      "deviceName" : "Hillclimb iPhone 17 Pro",
+      "durationOfSlowTests" : 0.4875699281692505,
+      "impact" : "(33%)",
+      "meanTime" : "0.0055s across 263 test runs",
+      "osNameAndVersion" : "iOS Simulator 26.2",
+      "targetName" : "LazyMansRemindersTests",
+      "testPlanConfigurationName" : "Test Scheme Action",
+      "title" : "3 longest test runs with outlier durations exceeding 0.06s (three standard deviations)"
+    }
+  ]
+}

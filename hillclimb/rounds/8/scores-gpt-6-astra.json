@@ -1,0 +1,1233 @@
+{
+  "model": "gpt-6-astra",
+  "reasoning_effort": "high",
+  "harness": "Codex",
+  "round": 8,
+  "source_sha": "20ae77e29019444a499e9e47c98d6b656ef56819",
+  "sourceIdentity": "sha256:a2449d961c428fc781cea0c751f3406e3e0e499350000d32bc4eca2fbfa0d76f",
+  "production_revision": "46c1a5b7ebd9ad29be3f2ffb754b8e8f347c45b4",
+  "metadata_head": "ca1307e",
+  "overall": 8.4,
+  "minimum_category": {
+    "name": "Sign-in/onboarding",
+    "score": 7.3
+  },
+  "arithmetic": {
+    "category_count": 30,
+    "sum": 252.1,
+    "unrounded_mean": 8.403333333333332,
+    "rounding": "arithmetic mean rounded to two decimal places"
+  },
+  "summary": "The board and Account have a solid native foundation. Email-first ordering, measured password-focus settlement and fixed loading footprint improve sign-in, but its overall hierarchy still feels crowded. Native polish is uneven rather than blocked by a demonstrated functional failure. Geometry/tests are evidence of correctness, not aesthetic acceptance.",
+  "categories": [
+    {
+      "name": "Visual hierarchy",
+      "score": 7.6,
+      "rationale": "Board hierarchy is clear; sign-in still splits attention among several similarly prominent horizontal bands.",
+      "screenshot_assessment": "Default empty and filled login originals show the email flow first, but the centered alternate method, divider and outlined provider pair compete; dark empty/loading states emphasize Apple most.",
+      "source_assessment": "SignInView gives major groups uniform 24-point spacing and makes the alternate method full-width. Board uses a clear title/count, rows and pinned composer."
+    },
+    {
+      "name": "Spacing/grid",
+      "score": 7.8,
+      "rationale": "Alignment is consistent, but grouping is less intentional on sign-in and expanded Account.",
+      "screenshot_assessment": "Common left edges are clean. Login fields, action, alternate, divider and providers have a repetitive ladder rhythm; expanded guidance becomes a tall slab.",
+      "source_assessment": "20-point form margins and separate 8/20/24-point stacks are predictable. Native Account sections avoid nested cards, though explanatory rows inherit substantial repeated row spacing."
+    },
+    {
+      "name": "Typography scale",
+      "score": 8.5,
+      "rationale": "System text is readable and scales coherently, with a little too much equal emphasis in login.",
+      "screenshot_assessment": "Board body and headers are clear. Notepad branding, Email/Password headings and CTA/link labels compete in XXXL; Home/Lock prefixes improve scanability.",
+      "source_assessment": "Semantic title2, headline, body and footnote styles are used. Attributed prefix emphasis preserves strings; main alternate authentication action could be visually more subordinate."
+    },
+    {
+      "name": "Dynamic Type",
+      "score": 8.5,
+      "rationale": "Default and XXXL are convincingly covered; larger accessibility categories remain unproven.",
+      "screenshot_assessment": "Long rows, Account instructions and auth helpers wrap without lost final lines in inspected states. Password heading remains visible in full keyboard XXXL captures.",
+      "source_assessment": "UIKit trait override makes row tests meaningful; fixedSize supports multiline content. Expanded Island explicitly caps at xxxLarge, so this does not establish AX1\u2013AX5 support."
+    },
+    {
+      "name": "Light contrast",
+      "score": 8.7,
+      "rationale": "Active text and actions read well; pending feedback is weak.",
+      "screenshot_assessment": "Primary board and Account text are crisp on white/grouped surfaces. Enabled login preview is distinct from deliberately disabled fixtures; loading spinner is visually faint.",
+      "source_assessment": "Semantic foreground/background choices and Account explanatory-ink tests support contrast. Disabled appearance should not be mistaken for active-text failure; pending spinner needs separate assessment."
+    },
+    {
+      "name": "Dark contrast",
+      "score": 8.6,
+      "rationale": "Strong primary text and neutral surfaces work, but pending-state emphasis is uneven.",
+      "screenshot_assessment": "Board text remains clear; the white Apple asset dominates empty/loading login while the small spinner recedes into its gray action.",
+      "source_assessment": "System colors adapt correctly. Native whiteOutline Apple asset is deliberately retained; any hierarchy fix should change surrounding composition, not redraw the Apple asset."
+    },
+    {
+      "name": "Iconography",
+      "score": 9,
+      "rationale": "Native and restrained symbols communicate roles well.",
+      "screenshot_assessment": "Completion rings, account symbol, keyboard dismiss, warning and widget symbols are recognizable. No decorative red/orange treatment was seen.",
+      "source_assessment": "SF Symbols and the native Apple button are preserved. Destructive red is semantic; custom six-dot reorder grip is modest, with a larger interaction target."
+    },
+    {
+      "name": "Safe area / Dynamic Island",
+      "score": 9,
+      "rationale": "Main controls and Activity content respect the measured device geometry.",
+      "screenshot_assessment": "No title/account collision with the Island; final board rows clear the footer. Expanded Activity text remains inside the black system shape.",
+      "source_assessment": "Safe-area insets, native navigation and explicit Activity layout margins support observed results. Only the regular iPhone 17 Pro geometry is established."
+    },
+    {
+      "name": "Scroll/pull-down / last row",
+      "score": 9,
+      "rationale": "Last-row legibility and refresh settlement are strong; top-edge fade is slightly untidy.",
+      "screenshot_assessment": "Both themes and sizes retain the final row above the capacity footer after pull/scroll. Some preceding-row glyphs remain faintly visible at the upper edge.",
+      "source_assessment": "Native UICollectionView refresh and measured final-ink tests address real risks. Custom 24-point gradient top mask explains the residual fade, rather than a missing bottom inset."
+    },
+    {
+      "name": "List rows",
+      "score": 8.7,
+      "rationale": "Rows are readable, spacious and mechanically coherent.",
+      "screenshot_assessment": "Long paragraphs retain alignment, separation and full text; completion rings align to first lines. Persistent grips add a little visual noise compared with Reminders.",
+      "source_assessment": "UIHostingConfiguration in native list cells, multiline body text and explicit completion/reorder accessibility actions are sound. Drag behavior is source/test-supported, not hands-on reviewed."
+    },
+    {
+      "name": "Empty states",
+      "score": 8.3,
+      "rationale": "The next action is clear, but setup instructions dominate the otherwise calm empty board.",
+      "screenshot_assessment": "All Clear plus bottom composer is legible. The long three-step setup tip occupies more visual attention than the empty-state invitation, especially XXXL.",
+      "source_assessment": "ContentUnavailableView and dismissible persisted setup guidance are native-minded. Guidance is hidden during composition, which protects the active task."
+    },
+    {
+      "name": "Composer ergonomics",
+      "score": 8.9,
+      "rationale": "Composer is accessible and well separated from the list.",
+      "screenshot_assessment": "Typed multiline draft, dismiss key and add action remain visible above the keyboard; capacity state is clearly noneditable.",
+      "source_assessment": "SafeAreaInset, 1\u20134-line input, 44-point targets and capacity replacement are appropriate. The tests exercise edge taps and final-row geometry."
+    },
+    {
+      "name": "Keyboard handling",
+      "score": 8.2,
+      "rationale": "Focus settlement works, while the provider/Done boundary is visually awkward.",
+      "screenshot_assessment": "Actual first-focus and refocus XXXL frames preserve Password heading, field and alternate action. The opaque Done strip cuts off the lower Apple button border; email variants can expose part of Google.",
+      "source_assessment": "Measured focus frames, idle settlement and keyboardDidShow handling are more robust than guessed offsets. Safe-area Done inset creates a hard visual cutoff below the primary work area."
+    },
+    {
+      "name": "Sheet presentation/detents",
+      "score": 8.9,
+      "rationale": "Account uses a coherent native sheet with appropriate expansion.",
+      "screenshot_assessment": "Medium and large detents, grabber, pinned Done and scrolled content are convincing. Long guidance scrolls rather than squeezing.",
+      "source_assessment": "Native presentationDetents, scroll interaction and insetGrouped List are appropriate. Expanded long guidance still requires substantial traversal at medium size."
+    },
+    {
+      "name": "Navigation clarity",
+      "score": 8.8,
+      "rationale": "The limited navigation is understandable.",
+      "screenshot_assessment": "Board account affordance, Account Done, method-switch actions and inbox confirmation are explicit. Providers remain Apple then Google.",
+      "source_assessment": "NavigationStack, explicit dismissal and method state changes preserve a simple structure. External and authenticated navigation is not established by inert fixtures."
+    },
+    {
+      "name": "Touch targets",
+      "score": 9,
+      "rationale": "Measured targets and visible spacing are strong within tested states.",
+      "screenshot_assessment": "Completion, add, Done, clear and main login actions have generous apparent targets. Full keyboard captures do not show focused field/action collision.",
+      "source_assessment": "44-point minimums, 48-point sign-in Done and provider height, native rows and edge-tap UI tests support the score. No claim of arbitrary-device or motor-accessibility testing."
+    },
+    {
+      "name": "Haptics",
+      "score": 7.5,
+      "rationale": "Intent is sensible, but physical feel cannot be established from this packet.",
+      "screenshot_assessment": "No still image or sampled video can establish tactile strength, timing or duplication.",
+      "source_assessment": "Success/error sensory feedback and drag selection feedback are present. Physical-device confirmation of add/complete/reorder/auth feedback remains absent; score is provisional."
+    },
+    {
+      "name": "Animation/transitions",
+      "score": 7.8,
+      "rationale": "Sampled transitions show no gross layout failure, but motion quality is only partially evidenced.",
+      "screenshot_assessment": "All 16 movies were represented by three actual sampled frames each. Focus and Activity state changes look coherent in those samples; full playback/frame pacing was not reviewed.",
+      "source_assessment": "Reduced-motion branches and native presentation are sensible. The historical XCTest timeout is not evidence of an app animation hang, nor do passed tests establish smoothness."
+    },
+    {
+      "name": "Loading states",
+      "score": 8.1,
+      "rationale": "Fixed action geometry is an improvement; busy feedback needs more visual presence.",
+      "screenshot_assessment": "Filled/loading/baseline triplets retain neighboring positions. Small muted spinner within a large disabled-looking action is less evident than the nearby Apple asset.",
+      "source_assessment": "Invisible retained title plus overlay spinner preserves layout and accessible progress wording. Geometry/spinner-pixel tests verify stability and existence, not perceived prominence."
+    },
+    {
+      "name": "Error states",
+      "score": 8.8,
+      "rationale": "Errors are visible, recoverable and avoid destructive-looking decoration.",
+      "screenshot_assessment": "Board empty/populated errors, retry/dismiss, Account refresh failure and sign-in error are legible in both themes and combined settings.",
+      "source_assessment": "Announcements are deduplicated without forced focus movement. Raw board network-error wording is explicitly retained by user instruction and is not a finding."
+    },
+    {
+      "name": "VoiceOver/labels",
+      "score": 8,
+      "rationale": "Source and label tests are thoughtful, but spoken traversal remains unobserved.",
+      "screenshot_assessment": "Raster evidence cannot prove reading order, announcements or rotor usability.",
+      "source_assessment": "Unique Password field label, hidden duplicate heading, progress labels, completion/reorder actions and deduplicated error announcements are appropriate. Spoken VoiceOver sessions remain a gap."
+    },
+    {
+      "name": "iOS HIG consistency",
+      "score": 8.4,
+      "rationale": "Native components give a strong foundation; login composition feels more assembled than polished.",
+      "screenshot_assessment": "Account and board resemble native list/sheet idioms. Login combines native Apple, custom Google border, rounded input/action and independent centered link into a busier composition.",
+      "source_assessment": "NavigationStack, ContentUnavailableView, native collection list and Apple authorization button are appropriate. Custom masks and keyboard inset deserve careful visual review."
+    },
+    {
+      "name": "Lock Screen / Live Activity",
+      "score": 8.3,
+      "rationale": "Captured banner and expanded Island states are readable within a deliberately limited line budget.",
+      "screenshot_assessment": "Long text tails truncate and +more counts are clear. Sampled expansion/banner changes do not show collisions; the wallpaper is only one tested background.",
+      "source_assessment": "Explicit line budgeting and hidden-count handling are coherent, with xxxLarge cap on Island. True locked-device, Always-On, alternate wallpaper and exact Apple Activity references are absent."
+    },
+    {
+      "name": "Sign-in/onboarding",
+      "score": 7.3,
+      "rationale": "Email-first is a real improvement, but the screen still feels crowded and lacks a clear secondary hierarchy.",
+      "screenshot_assessment": "All 60 same-state pairs were inspected. Empty and filled default originals retain too many competing bands; XXXL password pushes providers/legal into scrolling. The latter is reachable, not a lost-content claim.",
+      "source_assessment": "Contiguous email/password work area, preserved provider order, isolated fixtures and fixed pending footprint are good. Uniform group spacing and a prominent alternate method leave the central composition unresolved."
+    },
+    {
+      "name": "Settings/account",
+      "score": 8.2,
+      "rationale": "Native grouping and stronger prefixes help, while expanded explanations remain dense.",
+      "screenshot_assessment": "Statuses and actions are clear; Home Screen/Lock Screen prefix weight is visible. Expanded instruction rows plus permanent multi-paragraph footer fill much of the sheet.",
+      "source_assessment": "BoardPersistenceSection changes preserve words and improve prefix hierarchy. DisclosureGroup and insetGrouped List are appropriate; footnote text still needs better subdivision without deleting copy."
+    },
+    {
+      "name": "Performance feel",
+      "score": 8,
+      "rationale": "Available evidence supports functioning transitions, not hardware-level responsiveness.",
+      "screenshot_assessment": "Sampled films and settled screenshots show no gross stall; they cannot establish input latency or frame consistency.",
+      "source_assessment": "Five-sample public launch/scroll metrics are simulator/host/XCTest evidence. Full-suite passes and binary binding support reproducibility; no physical profiling or arbitrary slowdown diagnosis is claimed."
+    },
+    {
+      "name": "Delight",
+      "score": 7.7,
+      "rationale": "The app is calm and direct, but polished composition is uneven.",
+      "screenshot_assessment": "Readable board and quiet palette are pleasing. Login's repetitive boxes and expanded Account's instruction mass reduce the feeling of a finished native tool.",
+      "source_assessment": "Simple interactions and restrained feedback create a good base. The remaining opportunity is spacing, emphasis and transitions, not decorative color, new branding or extra cards."
+    },
+    {
+      "name": "Long text",
+      "score": 9,
+      "rationale": "Long-content treatment is strong in the tested board and Account states.",
+      "screenshot_assessment": "Full final paragraphs are visible after traversal at XXXL; helpers wrap. Activity truncation is intentional and accompanied by hidden-line counts.",
+      "source_assessment": "Unbounded row text, fixed vertical sizing and independent ideal-height/ink checks support the board. Long real account identities and localized strings are not demonstrated."
+    },
+    {
+      "name": "Reduced Motion / Transparency",
+      "score": 8.7,
+      "rationale": "Actual combined settings provide stronger evidence than environment overrides alone.",
+      "screenshot_assessment": "Combined-setting login and Account/error captures remain readable and stable, including full first-focus/refocus witnesses.",
+      "source_assessment": "All five methods independently restored four original switches 0/1/0/0. Reduced-motion branches and solid edge-mask fallback exist; full subjective motion comfort is unobserved."
+    },
+    {
+      "name": "Palette / minimalism",
+      "score": 8.8,
+      "rationale": "Restrained colors and absence of nested cards fit the requested direction.",
+      "screenshot_assessment": "Neutral board and Account surfaces, sparse functional purple and semantic destructive red are consistent. Login's visual density comes from structure rather than decorative colors.",
+      "source_assessment": "System colors and native asset preservation are appropriate. Continue reducing competing framing/spacing, without changing words, branding, icons or adding red/orange decoration."
+    }
+  ],
+  "findings": [
+    {
+      "id": "R8-ASTRA-01",
+      "severity": "medium",
+      "screen": "Sign In: default empty/filled and XXXL password",
+      "title": "Email-first ordering has improved the flow, but the composition still has too many competing bands",
+      "basis": "observed and source-derived",
+      "confidence": "high",
+      "evidence": [
+        {
+          "path": "native/LoginCompositionUITests/787638D3-71C9-4C7B-82A7-0AED93E1460E.png",
+          "name": "composition-dark-default-default-filled_0_775A7306-3159-4334-83BF-A3B0619AC809.png"
+        },
+        {
+          "path": "native/LoginCompositionUITests/B4F5313C-7E8C-400C-8074-55CBC7C0E1F5.png",
+          "name": "composition-dark-default-default-empty_0_FE63E52A-30AD-4DA5-9C5D-51D15C666C2F.png"
+        },
+        {
+          "path": "native/LoginCompositionUITests/7AB844CA-C9E6-4DDD-87E4-6DA909C858BA.png",
+          "name": "composition-light-default-password-filled_0_626FE4A2-A82E-46B0-9E42-282486E2DC74.png"
+        },
+        {
+          "path": "native/LoginCompositionUITests/230381CC-F88F-4937-A9CB-0AE20FDD2DE4.png",
+          "name": "composition-light-default-password-empty_0_FDC219AA-C2E5-44B9-9187-5276C370BC80.png"
+        },
+        {
+          "path": "native/LoginCompositionUITests/77E91E1D-B982-40F5-8AF2-AD0E900D6951.png",
+          "name": "composition-light-default-default-filled_0_04C90CCE-88D9-40E3-8842-5877C140C536.png"
+        },
+        {
+          "path": "native/LoginCompositionUITests/8123BBD3-0830-4980-9D0D-457AE321FD45.png",
+          "name": "composition-light-default-default-empty_0_0900D717-DDA2-4233-962B-4662EA128559.png"
+        },
+        {
+          "path": "native/LoginCompositionUITests/2E1050E6-DDAE-42E7-A64A-D64F485CFA12.png",
+          "name": "composition-dark-XXXL-password-filled_0_D8E1A21D-62E7-421B-BD84-6B6E763277AC.png"
+        },
+        {
+          "path": "native/LoginCompositionUITests/C913ABC7-7621-421D-8683-3FF306659815.png",
+          "name": "composition-light-XXXL-password-filled_0_7E5DB272-A87B-4F39-BBC2-03FBB32C200A.png"
+        }
+      ],
+      "source": [
+        "ios/App/SignInView.swift:67",
+        "ios/App/SignInView.swift:84",
+        "ios/App/SignInView.swift:244"
+      ],
+      "observation": "The page repeats broad field, broad action, centered full-width alternate method, a divider with generous surrounding gaps, two outlined provider controls and a separate legal row. The email action becomes clear when filled, but empty/pending states let the native Apple asset become the strongest object. This is composition and hierarchy, not a request to modify Apple's asset or hide required words.",
+      "concrete_fix": "Keep the contiguous email-first flow. Make the existing alternate-method text a leading-aligned callout within that flow, retaining a minimum 44-point target. Replace uniform large inter-group gaps with explicit field/action and section gaps; start by reducing spacing around the divider from 24 to 16 points while keeping the Apple/Google pair together at its existing order and native Apple styling. Keep legal links in a quieter, reachable footer. Compare complete default empty and filled screens before accepting the change; do not add cards.",
+      "regression_check": "Recapture the same 60 paired states, especially both default empty/filled themes and XXXL password. Assert every original string and native Apple asset/order remain, targets stay >=44 points, default field/CTA/alternate/provider/footer bounds do not overlap, and XXXL legal links remain reachable by a real gesture. Run the existing iOS suite; visual side-by-side review must separately accept the new hierarchy."
+    },
+    {
+      "id": "R8-ASTRA-02",
+      "severity": "low",
+      "screen": "Sign In: settled empty-password keyboard, first focus/refocus",
+      "title": "The opaque Done strip cuts through a provider control at the settled keyboard boundary",
+      "basis": "observed and source-derived",
+      "confidence": "high for appearance; medium for proposed layout adjustment",
+      "evidence": [
+        {
+          "path": "keyboard-video-frames/first-focus-combined-dark-XXXL-1.png",
+          "name": "first-focus-combined-dark-XXXL-1"
+        },
+        {
+          "path": "keyboard-video-frames/first-focus-combined-dark-XXXL-0.png",
+          "name": "first-focus-combined-dark-XXXL-0"
+        },
+        {
+          "path": "keyboard-video-frames/first-focus-combined-light-XXXL-1.png",
+          "name": "first-focus-combined-light-XXXL-1"
+        },
+        {
+          "path": "keyboard-video-frames/first-focus-combined-light-XXXL-0.png",
+          "name": "first-focus-combined-light-XXXL-0"
+        },
+        {
+          "path": "keyboard-video-frames/first-focus-normal-dark-XXXL-1.png",
+          "name": "first-focus-normal-dark-XXXL-1"
+        },
+        {
+          "path": "keyboard-video-frames/first-focus-normal-dark-XXXL-0.png",
+          "name": "first-focus-normal-dark-XXXL-0"
+        },
+        {
+          "path": "keyboard-video-frames/first-focus-normal-light-XXXL-1.png",
+          "name": "first-focus-normal-light-XXXL-1"
+        },
+        {
+          "path": "keyboard-video-frames/first-focus-normal-light-XXXL-0.png",
+          "name": "first-focus-normal-light-XXXL-0"
+        },
+        {
+          "path": "native/AccessibilitySettingsUITests/0EFFC803-58F8-48A8-83E6-DAF721F2453B.png",
+          "name": "combined-full-screen-signin-light-XXXL-keyboard_0_8C3CC70A-60FF-4691-BCAE-4955DDAFA5E7.png"
+        }
+      ],
+      "source": [
+        "ios/App/SignInView.swift:131",
+        "ios/App/SignInView.swift:219"
+      ],
+      "observation": "Actual full-screen first-focus/refocus XXXL witnesses keep Password, input, helper and alternate method clear, which is a successful fix. Below that work area, the Apple button's lower border is cut off by the Done strip; some email captures expose only part of Google. This is a small polish defect at automatic settlement, not proof that the provider is unreachable and not a protected-screenshot artifact.",
+      "concrete_fix": "Make the automatic focus settlement respect the boundary after the primary form group as well as the focused heading. When a provider cannot fit wholly above Done, add focused-state separation so that the initial resting viewport ends in the gap before the provider group; keep the complete group in the same scroll view and reachable by user scrolling or keyboard dismissal. Do not shrink the native Apple control or force all controls into the keyboard viewport.",
+      "regression_check": "Use actual unmodified full-screen frames for first focus and refocus, light/dark, default/XXXL, normal/combined settings. Require full heading, field, helper and primary/alternate actions inside the viewport, >=44-point targets, and no provider label or border intersecting the Done strip at automatic settled positions. Exercise manual scroll and Done so providers/legal remain reachable; preserve existing focus/geometry assertions and run the iOS suite."
+    },
+    {
+      "id": "R8-ASTRA-03",
+      "severity": "low",
+      "screen": "Sign In: pending email/password action",
+      "title": "Stable pending geometry leaves an overly faint busy indicator",
+      "basis": "observed and source-derived",
+      "confidence": "medium-high",
+      "evidence": [
+        {
+          "path": "native/LoginLoadingGeometryUITests/3E2E1D78-5B0F-4294-957B-861358FF8E8F.png",
+          "name": "loading-stability-dark-XXXL-loading_0_32CE5976-95F4-43E1-B3ED-EADCE0CD2254.png"
+        },
+        {
+          "path": "native/LoginLoadingGeometryUITests/9901281C-8C8D-43DC-B88D-7B99179176AB.png",
+          "name": "loading-stability-light-XXXL-password-loading_0_7460E018-A556-40ED-9BE8-E8C6E06F33ED.png"
+        }
+      ],
+      "source": [
+        "ios/App/SignInView.swift:509"
+      ],
+      "observation": "The new overlay retains the button footprint, but the small muted spinner recedes into a large gray disabled-looking surface while the nearby Apple asset stays visually forceful. The current tests show stable geometry and spinner pixels, not readable progress prominence. No numerical contrast failure is asserted here.",
+      "concrete_fix": "Keep the invisible retained title and fixed footprint, but style the progress indicator explicitly with a stronger semantic foreground that remains visible under the disabled button environment. Keep the existing accessible in-progress wording and do not enlarge surrounding chrome or change copy.",
+      "regression_check": "Retain baseline/loading/baseline y/width/height tolerance checks for both methods, sizes and themes. Add a raster check that the spinner's strongest visible strokes reach at least 3:1 against the measured button fill in both themes, and inspect the whole screen to confirm pending work is apparent. Run the existing iOS suite."
+    },
+    {
+      "id": "R8-ASTRA-04",
+      "severity": "low",
+      "screen": "Account: expanded Add a lasting widget guidance",
+      "title": "Prefix emphasis helps, but the expanded guidance remains visually dense",
+      "basis": "observed and source-derived",
+      "confidence": "high",
+      "evidence": [
+        {
+          "path": "native/AccountChromeUITests/F0C4672F-A70D-4B53-888B-A21AD3B7E46D.png",
+          "name": "dark-XXXL-medium-guidance_0_9BD60A6C-4652-40A9-AF4B-F5CC7F8A66C3.png"
+        },
+        {
+          "path": "native/AccountChromeUITests/746699CA-A7B0-412C-BD2D-E1DCBC1830E7.png",
+          "name": "light-default-large-guidance_0_4B208C34-6382-4351-AF29-684BA59AFFD0.png"
+        },
+        {
+          "path": "native/AccountDensityUITests/E328EB2C-D2C5-4EDD-90A7-EA20BC7FE7BA.png",
+          "name": "dark-XXXL-widget_0_A001DDED-B0EF-41EE-8DFA-0F229D1E88D1.helper"
+        },
+        {
+          "path": "native/AccountDensityUITests/40927732-C4AF-409B-8E75-C820D1735212.png",
+          "name": "light-default-widget_0_EBE90A93-3AB5-4555-B443-DF88D7B4461B.helper"
+        }
+      ],
+      "source": [
+        "ios/App/BoardPersistenceSection.swift:50",
+        "ios/App/BoardPersistenceSection.swift:54",
+        "ios/App/BoardPersistenceSection.swift:68"
+      ],
+      "observation": "Home Screen and Lock Screen prefixes now scan better. The two long instruction rows, widget caveat and permanent multi-paragraph footer still read as a continuous instructional block and push the next task far below the fold, especially at XXXL/medium detent. This is density, not clipping or insufficient measured text contrast.",
+      "concrete_fix": "Preserve every string but place each emphasized Home Screen:/Lock Screen: prefix on its own line above its instruction body, with a small internal gap and consistent inter-instruction spacing. Keep the widget caveat visibly subordinate within the disclosure and separate the permanent footer from subsequent action sections using the existing native section structure. Avoid additional card backgrounds.",
+      "regression_check": "Recapture expanded/collapsed Account at both detents, themes and sizes. Require exact original concatenated strings, >=7:1 explanatory-text contrast, first/final-line ink, and existing >=16-point inter-section boundary checks. Verify both instruction prefixes are visually distinct without reducing body size, and all lower actions remain reachable. Run the iOS suite."
+    },
+    {
+      "id": "R8-ASTRA-05",
+      "severity": "low",
+      "screen": "Board: partially scrolled long/full rows, normal and populated error",
+      "title": "Faint preceding-row fragments make the custom upper fade slightly untidy",
+      "basis": "observed and source-derived",
+      "confidence": "medium",
+      "evidence": [
+        {
+          "path": "native/BoardCapacityDensityUITests/F0D4E455-FE21-4E39-A867-AB8583431D30.png",
+          "name": "capacity-dark-XXXL-bottom-after-pull_0_1EE99A30-6C27-4FA6-9969-7BA3F528F407.png"
+        },
+        {
+          "path": "native/BoardCapacityDensityUITests/FFDFD024-F2A7-44B0-A9E9-F258678BD739.png",
+          "name": "capacity-light-XXXL-bottom-after-pull_0_88775972-3FF6-4B75-8C51-EAE7B2C5F15C.png"
+        },
+        {
+          "path": "native/BoardMultilineUITests/315F5E33-8EB9-4997-83B5-7E2B42707693.png",
+          "name": "populated-error-bottom-true-true_0_8C7B98A2-B193-444D-86E6-90CBE6E6464E.png"
+        },
+        {
+          "path": "native/HillclimbCaptureUITests/8DDB9F64-FC68-4399-B3CB-02D5B3BB4F13.png",
+          "name": "canonical-long-text-dark-XXXL-bottom-after-pull_0_8C84C40E-A74E-4045-A034-800BB1BFBC83.png"
+        },
+        {
+          "path": "native/HillclimbCaptureUITests/49407B0F-075C-4EF0-9928-EDEA176AE644.png",
+          "name": "canonical-long-text-light-XXXL-bottom-after-pull_0_F1BFB019-E8DE-479E-83E8-561DF31EE0D1.png"
+        }
+      ],
+      "source": [
+        "ios/App/ReorderableReminderList.swift:251",
+        "ios/App/ReorderableReminderList.swift:264"
+      ],
+      "observation": "Faded text fragments remain directly below the navigation/error boundary after settling. Native Reminders also uses scroll-edge translucency, so this is a modest integration difference, not a general ban on partially visible rows or a safe-area failure. The final row and footer are clear.",
+      "concrete_fix": "Tune the existing custom top mask so its fully transparent strip aligns with the actual native scroll-edge boundary before the transition begins, rather than fading half a glyph immediately beneath a hard boundary. Compare with the matched Reminders top/bottom references; preserve pull refresh, native edge behavior and the solid fallback for accessibility settings.",
+      "regression_check": "Repeat real pull then 83/47/61-point partial drags in both themes/sizes and populated-error states. Extend the existing upper-band raster witness to inspect the mask transition boundary and confirm no isolated crisp glyph fragments appear at the boundary, while the next complete line remains readable. Re-run final-row ink/geometry, refresh settlement and the iOS suite; judge the fade against native references separately."
+    }
+  ],
+  "screenshot_path_base": "hillclimb/rounds/8",
+  "screenshots": [
+    "native/AccessibilitySettingsUITests/32713334-5984-4D95-AAE4-4E4D75976CBA.png",
+    "native/AccessibilitySettingsUITests/53A23D5E-093F-409D-8BC5-CD1BEA4606FF.png",
+    "native/AccessibilitySettingsUITests/4E34F9FC-3D72-4993-8027-91C1E06D39C4.png",
+    "native/AccessibilitySettingsUITests/0DD8B317-E0A4-4202-BC3F-1C392B365EC7.png",
+    "native/AccessibilitySettingsUITests/2DFB0AF9-3999-4FD1-9028-325CD8599037.png",
+    "native/AccessibilitySettingsUITests/8308421B-D58B-4C57-9DF2-4B77045E6C35.png",
+    "native/AccessibilitySettingsUITests/C81B2E77-6A1C-4E28-B4E0-AE944E398749.png",
+    "native/AccessibilitySettingsUITests/C787A2D0-0C1F-4371-94EC-52836678CFF9.png",
+    "native/AccessibilitySettingsUITests/94BC1ADA-58E9-41C0-88E6-D9B98A696BC0.png",
+    "native/AccessibilitySettingsUITests/63B496F6-0867-428A-AA0D-40A2BAB40468.png",
+    "native/AccessibilitySettingsUITests/E3C71C93-E1A3-4A5C-A18D-07C9912790C2.png",
+    "native/AccessibilitySettingsUITests/5C123A75-7526-4B99-9E39-9950DE1BF0C8.png",
+    "native/AccessibilitySettingsUITests/0206659B-64C1-485C-9165-CB08C5E8B5BC.png",
+    "native/AccessibilitySettingsUITests/46281133-3156-414E-A576-B0FD08D8D710.png",
+    "native/AccessibilitySettingsUITests/0EFFC803-58F8-48A8-83E6-DAF721F2453B.png",
+    "native/AccessibilitySettingsUITests/2804AC6A-4C88-4372-B210-6C4DD494E76A.png",
+    "native/AccountChromeUITests/F0C4672F-A70D-4B53-888B-A21AD3B7E46D.png",
+    "native/AccountChromeUITests/724E32CD-193D-44AF-8B6B-61CB8737783B.png",
+    "native/AccountChromeUITests/0166A69A-B2C1-4DF7-AB7D-63259BE7781C.png",
+    "native/AccountChromeUITests/A1F7EC4E-7979-4DD1-BD81-1586AB128806.png",
+    "native/AccountChromeUITests/94E744C3-0CA5-4AC2-A6C0-092A024F4A30.png",
+    "native/AccountChromeUITests/5CF80A09-9D78-4D3E-8245-1CFC248FEBA6.png",
+    "native/AccountChromeUITests/CB3615B6-3FF8-4653-89BB-619DE32D93B8.png",
+    "native/AccountChromeUITests/746699CA-A7B0-412C-BD2D-E1DCBC1830E7.png",
+    "native/AccountChromeUITests/2BFCFD5C-78B3-4EF6-BF83-8A20835EB1DD.png",
+    "native/AccountChromeUITests/1B549A3F-E7D6-4840-843A-FEC9AE2287BD.png",
+    "native/AccountChromeUITests/FA68DE65-EE45-459B-8520-E70E95902570.png",
+    "native/AccountChromeUITests/580275A8-D718-4D8C-914C-678F0A015C8E.png",
+    "native/AccountChromeUITests/7A5B2D0B-CD8B-4710-9A0E-11744FA5F964.png",
+    "native/AccountChromeUITests/B22B229F-A80E-4A98-AF21-A56D47599468.png",
+    "native/AccountChromeUITests/7856515B-5F84-44DC-A7E2-A695991D78D0.png",
+    "native/AccountChromeUITests/D5C55C69-52F2-49F3-BE62-45FD13282F72.png",
+    "native/AccountChromeUITests/70A81ABE-4607-46C2-9EBA-1944ACC074FE.png",
+    "native/AccountChromeUITests/D3D49528-776C-4BFE-B042-2CCCD694DF5F.png",
+    "native/AccountChromeUITests/BF210285-1B7B-4106-948B-B752457E1AB1.png",
+    "native/AccountChromeUITests/E8C35D3B-DCC8-4EF0-AB5A-15F2795506ED.png",
+    "native/AccountChromeUITests/6AEBE89E-3FDA-4864-816F-B5A12A5EA384.png",
+    "native/AccountChromeUITests/55C72C6E-0E02-4D55-A7CD-1B1105D660D4.png",
+    "native/AccountChromeUITests/E92073B2-F557-4DA0-97EF-FDA854126C56.png",
+    "native/AccountChromeUITests/29A08ED5-9626-4E9B-977D-D7DBD2E2931C.png",
+    "native/AccountChromeUITests/D103EE13-9C0D-4E9A-87BE-FE23EA444A1D.png",
+    "native/AccountChromeUITests/E0F85C06-0FBD-4168-BDDF-EE48399B101E.png",
+    "native/AccountChromeUITests/95DB55E2-971C-4B45-8F19-1E50BC0A760E.png",
+    "native/AccountChromeUITests/77BEEB4D-0DAC-405F-A5F5-6CD5C1D46B93.png",
+    "native/AccountChromeUITests/1C184D6C-A84D-46E1-9428-B3FADE288715.png",
+    "native/AccountChromeUITests/5737F031-2149-4BD6-AF34-042060865AE0.png",
+    "native/AccountChromeUITests/653E5362-A751-4405-A534-EA4BFE5475E4.png",
+    "native/AccountChromeUITests/C3CAFC85-2289-4CCF-8B80-BB067E551B00.png",
+    "native/AccountChromeUITests/6EFB5320-3EA2-4A08-9CD9-BD39D7F8AA6F.png",
+    "native/AccountChromeUITests/137AC6C7-8E51-40A7-96DF-B693ECB42383.png",
+    "native/AccountChromeUITests/C31BAE32-DABD-4A98-BA02-C36931BFD229.png",
+    "native/AccountChromeUITests/2D87E50E-6A36-4CD5-A611-08E8E1AA69A6.png",
+    "native/AccountDensityUITests/F8014EBE-1349-49F9-9F37-29947458177A.png",
+    "native/AccountDensityUITests/DBA13147-B2BE-4454-8871-78D54BCED8B7.png",
+    "native/AccountDensityUITests/9A583E0F-92C1-4D1E-A1EE-BAD570AA83B0.png",
+    "native/AccountDensityUITests/B39E3C76-7E86-4BE1-A077-EE82B4631B1F.png",
+    "native/AccountPresentationTests/713CF95A-A78B-425C-A6AA-EB7EDEF098EE.png",
+    "native/AccountPresentationTests/7D770BBA-661D-4495-9ADC-89F51475780D.png",
+    "native/AccountPresentationTests/1FC19E8A-AC90-4B12-9CCD-8A224ACD1A77.png",
+    "native/AccountPresentationTests/373F27D7-38FC-434D-933D-5963F2E1FC6C.png",
+    "native/ActivityCaptureUITests/57EE6F57-2FD2-4926-9FCE-AD45C0D98B2F.png",
+    "native/ActivityCaptureUITests/1DF90069-897C-427E-9866-1C5350B9C83F.png",
+    "native/ActivityCaptureUITests/827252E9-464B-4E4C-B980-CE17B0B01E3C.png",
+    "native/ActivityCaptureUITests/66959589-13C1-4EE5-8E0A-1C3BD5D210A2.png",
+    "native/ActivityCaptureUITests/C589E706-651C-47EF-8551-185F765ABA48.png",
+    "native/ActivityCaptureUITests/C70AD637-DADF-48FC-8DB3-114B8E7FF37D.png",
+    "native/ActivityCaptureUITests/CFB9CE7A-FD70-4350-B9ED-BB212F9C47C8.png",
+    "native/ActivityCaptureUITests/20C90248-471B-4B2B-BD6D-30EF384B8AAB.png",
+    "native/BoardCapacityDensityUITests/F786B0DE-EE28-4639-A8DB-DA27BB179F42.png",
+    "native/BoardCapacityDensityUITests/3565E45F-09B8-4A49-82B7-5F9F36FBCB1B.png",
+    "native/BoardCapacityDensityUITests/3214B51E-3FBF-4E66-9DE0-67996B1DB175.png",
+    "native/BoardCapacityDensityUITests/07EFF923-5A34-4027-972C-6B18E0B9B9CB.png",
+    "native/BoardCapacityDensityUITests/F9D1090F-133B-4BB8-8889-278E939B075E.png",
+    "native/BoardCapacityDensityUITests/723E3D52-F21D-4B03-A93A-2C6DA3AD7365.png",
+    "native/BoardCapacityDensityUITests/F0D4E455-FE21-4E39-A867-AB8583431D30.png",
+    "native/BoardCapacityDensityUITests/27CA8287-CE2B-4D28-92BB-4656BF2EA91F.png",
+    "native/BoardCapacityDensityUITests/D00C9EBD-B2B2-44FF-BD7F-2DEDE5F96AF2.png",
+    "native/BoardCapacityDensityUITests/09BEDD8A-F04D-446B-8F95-D575A4DD01BF.png",
+    "native/BoardCapacityDensityUITests/877010EC-C322-44A4-9675-E646BDDF0245.png",
+    "native/BoardCapacityDensityUITests/F3487F98-144E-41BB-94E7-B191CED8E257.png",
+    "native/BoardCapacityDensityUITests/F6B2DBF6-92BB-4F58-91E7-6482365CA98F.png",
+    "native/BoardCapacityDensityUITests/C23023B4-4E48-4275-A8D9-19F58730FCF2.png",
+    "native/BoardCapacityDensityUITests/FFDFD024-F2A7-44B0-A9E9-F258678BD739.png",
+    "native/BoardCapacityDensityUITests/84D0DF13-7C9E-4C7B-AF77-C4E9D9741667.png",
+    "native/BoardEdgeAccessibilityUITests/B1935595-86D5-484C-B9D0-440EB73FC116.png",
+    "native/BoardEdgeAccessibilityUITests/8D407908-5CDB-4BA7-A687-6DD846F8B7A6.png",
+    "native/BoardEdgeAccessibilityUITests/E5010152-0436-4FAB-A511-0845976587FA.png",
+    "native/BoardEdgeAccessibilityUITests/D453EC45-A5BB-4B6A-A1A3-DCA858D06847.png",
+    "native/BoardEdgeAccessibilityUITests/806C0860-1267-4B3F-B429-5F6CF7A04EA1.png",
+    "native/BoardEdgeAccessibilityUITests/2BB2B97F-67AE-4339-9C63-F1C393683ADC.png",
+    "native/BoardEdgeAccessibilityUITests/58C187F5-356D-4BF3-8ABE-EF78AD508F74.png",
+    "native/BoardEdgeAccessibilityUITests/D64A00F5-AECA-4BC3-B39B-D75F52FC0C42.png",
+    "native/BoardEdgeAccessibilityUITests/B3472AFA-4300-4490-9C87-EEDC0AFA04AC.png",
+    "native/BoardEdgeAccessibilityUITests/0824A5CB-B8A7-495A-ABE5-4C3509F63A7E.png",
+    "native/BoardEdgeAccessibilityUITests/2ED41B73-DCEA-4831-B736-6DEC15A4009E.png",
+    "native/BoardEdgeAccessibilityUITests/B00442EB-AA69-4DD0-8819-A5D40012ED50.png",
+    "native/BoardEdgeAccessibilityUITests/8D08D961-1C46-4462-A4FB-20F6D4818F73.png",
+    "native/BoardEdgeAccessibilityUITests/D288BAD7-BA2C-4A22-B58B-0054541A2C8C.png",
+    "native/BoardEdgeAccessibilityUITests/336F132F-979F-40F9-98B4-192DAEF31654.png",
+    "native/BoardEdgeAccessibilityUITests/400A4A67-B6EF-4795-9828-9226B9F6DDAF.png",
+    "native/BoardEdgeAccessibilityUITests/70227A78-7F65-4BEC-B521-501D39F835EA.png",
+    "native/BoardEdgeAccessibilityUITests/4A104C49-EC16-4DAF-9E63-D2B5D2A33FFA.png",
+    "native/BoardEdgeAccessibilityUITests/22F059CB-5C30-4FE3-8D3D-7BE7D7ADC691.png",
+    "native/BoardEdgeAccessibilityUITests/EF935D57-B10D-44FD-B597-E1B35DEC3432.png",
+    "native/BoardEdgeAccessibilityUITests/A22AC8AC-7821-4F5C-BFB6-B5A41BC7FA8D.png",
+    "native/BoardEdgeAccessibilityUITests/BA37FFE3-B77A-47CC-B17D-FB8A82321A5A.png",
+    "native/BoardEdgeAccessibilityUITests/150BCD26-B776-4273-B500-38E5285A6F5E.png",
+    "native/BoardEdgeAccessibilityUITests/B19CA6E0-926E-4B2B-8151-6194A4524252.png",
+    "native/BoardEdgeAccessibilityUITests/180F2774-A43B-410A-BC5A-8666D3A5101F.png",
+    "native/BoardEdgeAccessibilityUITests/65F58BFD-2E86-43EC-BB2D-70D3D291F6C2.png",
+    "native/BoardEdgeAccessibilityUITests/1E6B17C9-A138-496C-8ABA-5474AE810152.png",
+    "native/BoardEdgeAccessibilityUITests/A245AC85-7606-4384-A3DF-40213F251584.png",
+    "native/BoardEdgeAccessibilityUITests/2B7134F1-6A29-4E0A-AD3A-F6BAE3F19282.png",
+    "native/BoardEdgeAccessibilityUITests/40AE02AB-BE08-4F5B-8BD9-90E31EB6E880.png",
+    "native/BoardEdgeAccessibilityUITests/4AB6685C-6CE0-40A2-BDD4-C5F12C82769D.png",
+    "native/BoardEdgeAccessibilityUITests/33DB04C8-0727-4D25-8FA7-1C30EAE5AF1F.png",
+    "native/BoardEdgeAccessibilityUITests/AF9E31BE-B967-48E6-994C-D4179F74B1D2.png",
+    "native/BoardEdgeAccessibilityUITests/B0A121C3-434D-4BD2-9603-2804763C3481.png",
+    "native/BoardEdgeAccessibilityUITests/CA557228-6E3D-4BD0-A7E3-D0DBD8CAA2BB.png",
+    "native/BoardEdgeAccessibilityUITests/432FDE95-E47C-4CAC-AB2D-06B06DCB7314.png",
+    "native/BoardEdgeAccessibilityUITests/55F5D108-DAD3-41A1-A177-7819DD0209D9.png",
+    "native/BoardEdgeAccessibilityUITests/3FFF47D9-79D1-4BD1-B0AA-0C8A153DEB4B.png",
+    "native/BoardEdgeAccessibilityUITests/BBAF494B-34D8-4513-BB7E-CCF6AAA8D59A.png",
+    "native/BoardEdgeAccessibilityUITests/3442FD2B-38E7-4B68-BC86-8E318FA108A7.png",
+    "native/BoardMultilineUITests/BDE32E01-FC8A-4D86-91B1-1001EA9C2D7A.png",
+    "native/BoardMultilineUITests/A62E99E9-D968-4E0A-ADA9-147E3B4A54A5.png",
+    "native/BoardMultilineUITests/9D35E305-1386-43FA-97E2-6DE1D6B22DBB.png",
+    "native/BoardMultilineUITests/C4CAD200-9DE7-4AF9-9295-E087E7047A18.png",
+    "native/BoardMultilineUITests/5295FB3B-71DC-4F61-8788-33C56927689F.png",
+    "native/BoardMultilineUITests/A7488A83-80D2-49B6-848F-07CCA2860AB3.png",
+    "native/BoardMultilineUITests/533589B2-568C-45BC-8B74-19E240D8676E.png",
+    "native/BoardMultilineUITests/1B459EC3-6722-4E64-A8E2-3BC147FD4AEE.png",
+    "native/BoardMultilineUITests/899721B5-AB4C-4DEC-A53D-B71364B68B89.png",
+    "native/BoardMultilineUITests/CC1D9674-5C9B-4A9C-A128-4E417AA5683B.png",
+    "native/BoardMultilineUITests/89DC693C-D4CE-46E4-A303-BD473D473530.png",
+    "native/BoardMultilineUITests/0B9E4F56-955F-474C-BB32-C3DC9866D2AC.png",
+    "native/BoardMultilineUITests/CBF08130-3FB5-48FC-8256-929DC165D1EF.png",
+    "native/BoardMultilineUITests/76792073-9ED7-4682-BAF2-C43537CC9499.png",
+    "native/BoardMultilineUITests/4DA31C84-7A21-4867-8A55-4C54F4EA9B4F.png",
+    "native/BoardMultilineUITests/D8D9F28F-C72E-41D6-8B24-C6992B0AEDD0.png",
+    "native/BoardMultilineUITests/810D490E-8671-4180-BA1B-CD5F7CC40913.png",
+    "native/BoardMultilineUITests/75479683-6C22-4A05-BF08-21728C6FA6FB.png",
+    "native/BoardMultilineUITests/6FF58EFF-F3F7-4536-9B8A-E0C12A59D84B.png",
+    "native/BoardMultilineUITests/428C36EB-1706-4302-BB25-06AFF896EA48.png",
+    "native/BoardMultilineUITests/1C28F735-286D-4E37-BA61-19950270DA25.png",
+    "native/BoardMultilineUITests/0D2DA307-798C-4360-91F0-F157A89C521D.png",
+    "native/BoardMultilineUITests/883E763F-DDD3-4050-BB35-5DD6F844185F.png",
+    "native/BoardMultilineUITests/DCAA4E0E-DB2C-486E-A01E-0ECB2175A06E.png",
+    "native/BoardMultilineUITests/B47E54B9-3E30-4180-B8A6-759463CC9443.png",
+    "native/BoardMultilineUITests/6FC2BF34-9633-4789-AE72-C449D2D81B2E.png",
+    "native/BoardMultilineUITests/AF2DC7BF-0FEA-4C35-A671-98E9DF0770BD.png",
+    "native/BoardMultilineUITests/CEAFA1F6-3477-4F46-B760-3EB8150F6966.png",
+    "native/BoardMultilineUITests/18E39030-5815-4542-87B5-9E30F07B27C3.png",
+    "native/BoardMultilineUITests/0FD0E604-7031-4275-ACF8-12647647C246.png",
+    "native/BoardMultilineUITests/B30E4AA4-BE51-42DF-8580-024D9A27488E.png",
+    "native/BoardMultilineUITests/3109F0E0-FEE6-4106-83F3-5F7F4FEF6E75.png",
+    "native/BoardMultilineUITests/5F2FCAB7-0535-46E1-8971-F643ED7A387C.png",
+    "native/BoardMultilineUITests/315F5E33-8EB9-4997-83B5-7E2B42707693.png",
+    "native/BoardMultilineUITests/FDB08F53-98FC-4632-961C-373B835DDF1C.png",
+    "native/BoardMultilineUITests/2DB369A3-1E33-4774-839F-59914082E6A0.png",
+    "native/BoardMultilineUITests/EAD4219A-D8B4-4C4F-AD98-50F60576BEE6.png",
+    "native/BoardMultilineUITests/37ABD5D0-B674-4FBB-BA5A-692FCE721E57.png",
+    "native/BoardMultilineUITests/8E2C9FAF-A3CC-455A-8B43-77D3F5282FDB.png",
+    "native/BoardMultilineUITests/434F9FFE-755C-4B59-8249-32288CC8A966.png",
+    "native/ErrorContrastUITests/FA1F7112-E571-4B82-B73D-B8A99D0D755F.png",
+    "native/ErrorContrastUITests/7BAC1112-F322-4D2C-9DDA-CE236FA38E9E.png",
+    "native/ErrorContrastUITests/EE64DC6F-2D45-4E73-A735-51AECAB33D05.png",
+    "native/ErrorContrastUITests/129437D3-20C8-4CC1-8E4E-406CF5E5DDEA.png",
+    "native/ErrorContrastUITests/CDB29761-E4DF-4772-A99E-256E3929C22D.png",
+    "native/ErrorContrastUITests/A7B3497B-6FA0-4170-AEC3-783AD8277498.png",
+    "native/ErrorContrastUITests/B50FB35F-A2B9-4F71-A5D0-E31F600477A3.png",
+    "native/ErrorContrastUITests/5EE298A8-75F0-4DB8-AD6E-83FA8B3716B5.png",
+    "native/ErrorContrastUITests/595C7F4C-A2FE-41CA-AEE3-A4FA7064AA4F.png",
+    "native/ErrorContrastUITests/FCB23BEA-7A03-469B-BF69-1C58ED72B834.png",
+    "native/ErrorContrastUITests/CB5454DC-1F18-4F07-98E7-27EEF6CAE2F5.png",
+    "native/ErrorContrastUITests/7FFD7FAF-FAFD-48EE-BE62-EC4C2E434898.png",
+    "native/HillclimbCaptureUITests/FC13C9D6-AA80-4689-AA2C-55B73B2C20BB.png",
+    "native/HillclimbCaptureUITests/5C6BA59D-C340-4E21-8B7B-7F2DEE065023.png",
+    "native/HillclimbCaptureUITests/8DDB9F64-FC68-4399-B3CB-02D5B3BB4F13.png",
+    "native/HillclimbCaptureUITests/56470283-E3B1-4088-BD2C-C253C5365D68.png",
+    "native/HillclimbCaptureUITests/E8853F62-390E-4CB6-99D1-95A317A45134.png",
+    "native/HillclimbCaptureUITests/6B878645-4B21-497E-869B-64128E78E021.png",
+    "native/HillclimbCaptureUITests/12A93D9F-CE94-4A3C-96DB-86EECCF614F9.png",
+    "native/HillclimbCaptureUITests/6F7FB0B5-7D63-4875-8B06-16FF3A401203.png",
+    "native/HillclimbCaptureUITests/2CAF5704-A3CC-4341-AA88-43A91C86F39E.png",
+    "native/HillclimbCaptureUITests/89A5BF5C-883A-4DBD-8C89-7FE7B50D2B16.png",
+    "native/HillclimbCaptureUITests/CA2D2E22-C060-4A2D-A006-A025CEE8D328.png",
+    "native/HillclimbCaptureUITests/DEB81AEF-E84E-4A97-9FE0-254EDAE468A5.png",
+    "native/HillclimbCaptureUITests/C0FD1C26-5984-43B7-942F-D2D29BAFC75F.png",
+    "native/HillclimbCaptureUITests/B6DFA12D-D434-4E61-B8E0-0A142F5740F6.png",
+    "native/HillclimbCaptureUITests/72386204-DC68-418E-9AD2-F2DF574155F4.png",
+    "native/HillclimbCaptureUITests/35EB2770-E2AB-4F8D-ABE2-B6BCB70C30CC.png",
+    "native/HillclimbCaptureUITests/49407B0F-075C-4EF0-9928-EDEA176AE644.png",
+    "native/HillclimbCaptureUITests/1F52E8F4-B7FF-4CF2-A1C6-0901B2716E48.png",
+    "native/HillclimbCaptureUITests/E58C0049-B269-4FDA-894F-2F52C0EF30F6.png",
+    "native/HillclimbCaptureUITests/C84EF961-EB87-4474-B6C4-1BEC5C124065.png",
+    "native/HillclimbCaptureUITests/B730DB8C-70BF-4B65-A71F-54F7BE183844.png",
+    "native/HillclimbCaptureUITests/BCAFB825-F2A1-4E50-A6FC-00152B458F48.png",
+    "native/HillclimbCaptureUITests/F0960C94-D806-4E18-ADB4-BC98D434F048.png",
+    "native/HillclimbCaptureUITests/D640F36D-BCB2-40A2-A137-C9CAFF20103D.png",
+    "native/HillclimbCaptureUITests/52FB3356-A947-474D-BCDB-95B03D358596.png",
+    "native/HillclimbCaptureUITests/1F937908-7FF8-4A32-B4B5-40ADA05C9B2D.png",
+    "native/HillclimbCaptureUITests/ED042051-1AC6-4874-864D-CEDF0B32FC27.png",
+    "native/HillclimbCaptureUITests/EB1CA966-E0D9-4085-8947-4874A6CE4A92.png",
+    "native/HillclimbUITests/9DF57632-5992-4510-95CA-211069CDCE8B.png",
+    "native/HillclimbUITests/771813E2-81D0-406F-8549-800BB75871C8.png",
+    "native/HillclimbUITests/DAECA475-822D-404E-B821-0D6B0EA4FBAE.png",
+    "native/HillclimbUITests/8C28554E-9CCA-4645-9F8A-D489BEF512A2.png",
+    "native/LoginCompositionUITests/2E1050E6-DDAE-42E7-A64A-D64F485CFA12.png",
+    "native/LoginCompositionUITests/A058D1E1-019C-44A6-942E-6326C23EB712.png",
+    "native/LoginCompositionUITests/EBC8FD7F-6B1D-4DDF-86F3-D4292E86F50F.png",
+    "native/LoginCompositionUITests/8F68AC04-5BFD-405E-8E70-AB911F881C0F.png",
+    "native/LoginCompositionUITests/EEF994FC-6C4D-49D1-B886-90F319E6B232.png",
+    "native/LoginCompositionUITests/7EBE4805-309B-4186-99E7-E993758FC90C.png",
+    "native/LoginCompositionUITests/787638D3-71C9-4C7B-82A7-0AED93E1460E.png",
+    "native/LoginCompositionUITests/B4F5313C-7E8C-400C-8074-55CBC7C0E1F5.png",
+    "native/LoginCompositionUITests/C913ABC7-7621-421D-8683-3FF306659815.png",
+    "native/LoginCompositionUITests/BC397F47-93BC-4A9D-8B1D-37FF2C879666.png",
+    "native/LoginCompositionUITests/222BDB2A-AF42-422B-AF15-836537ADF2B2.png",
+    "native/LoginCompositionUITests/819E0FB5-206E-4108-B936-3659F122C93D.png",
+    "native/LoginCompositionUITests/7AB844CA-C9E6-4DDD-87E4-6DA909C858BA.png",
+    "native/LoginCompositionUITests/230381CC-F88F-4937-A9CB-0AE20FDD2DE4.png",
+    "native/LoginCompositionUITests/77E91E1D-B982-40F5-8AF2-AD0E900D6951.png",
+    "native/LoginCompositionUITests/8123BBD3-0830-4980-9D0D-457AE321FD45.png",
+    "native/LoginLoadingGeometryUITests/4A8CE724-C166-43A4-B3EF-903FFF4D0F79.png",
+    "native/LoginLoadingGeometryUITests/608AA77D-E382-4476-83E8-3960C229F698.png",
+    "native/LoginLoadingGeometryUITests/C61F8069-8368-42BA-9642-3DA70D80DC78.png",
+    "native/LoginLoadingGeometryUITests/AE233F94-0F6C-4329-8E52-4D999D7AF209.png",
+    "native/LoginLoadingGeometryUITests/3E2E1D78-5B0F-4294-957B-861358FF8E8F.png",
+    "native/LoginLoadingGeometryUITests/35CDD199-3741-4C5A-8AD7-C1590A36E0BE.png",
+    "native/LoginLoadingGeometryUITests/9971AD49-A16B-4537-988E-1F278FFD5534.png",
+    "native/LoginLoadingGeometryUITests/B2F194D6-B962-4842-BC01-DF621950FEFB.png",
+    "native/LoginLoadingGeometryUITests/491AB6C4-53EC-4456-A286-046743B7A9BF.png",
+    "native/LoginLoadingGeometryUITests/4EDDAD73-63D7-472E-BC12-BA294CDA4A67.png",
+    "native/LoginLoadingGeometryUITests/A5185864-8CB0-4E6F-BC86-BF01E16C08E1.png",
+    "native/LoginLoadingGeometryUITests/CCBDA7C1-628D-4C1C-B06D-E3D10854511B.png",
+    "native/LoginLoadingGeometryUITests/BDC769E8-5003-4B09-A3E1-E5DEEC8A1ABA.png",
+    "native/LoginLoadingGeometryUITests/9901281C-8C8D-43DC-B88D-7B99179176AB.png",
+    "native/LoginLoadingGeometryUITests/702506F0-2CFC-42D2-A83E-483F40EDEED0.png",
+    "native/LoginLoadingGeometryUITests/4CB46843-CC39-4339-A82E-4987279AF9D9.png",
+    "native/LoginLoadingGeometryUITests/5DE99FA2-739F-4351-89B0-A12B6A2AF23F.png",
+    "native/LoginLoadingGeometryUITests/4A7CFF22-79AE-445D-B8C0-6BA2F6C1C17B.png",
+    "native/LoginLoadingGeometryUITests/86C21005-E48B-4ECF-892C-B8CB4A716698.png",
+    "native/LoginLoadingGeometryUITests/80703FDB-A7E5-4F96-AA33-5EF26BDA7022.png",
+    "native/LoginLoadingGeometryUITests/C086536B-2BA4-47D4-8982-C4EB10FB3743.png",
+    "native/LoginLoadingGeometryUITests/C31BC202-91ED-4336-8B55-57B6E5D39D90.png",
+    "native/LoginLoadingGeometryUITests/F3EAE986-41C7-4469-9483-FF1DCD5BF0CC.png",
+    "native/LoginLoadingGeometryUITests/E9428700-EF1A-4F7C-A57E-23D5F10D7C7F.png",
+    "native/SignInChromeUITests/07186A07-B14B-42FB-9404-36A420493318.png",
+    "native/SignInChromeUITests/FE534797-F915-46DE-898A-44AEE0BE8F38.png",
+    "native/SignInChromeUITests/AA39C104-D335-4CA9-8399-E9129C024FBB.png",
+    "native/SignInChromeUITests/DC3E6DE3-B360-46DC-9474-9B6A22D67B8F.png",
+    "native/SignInChromeUITests/2BB6EAB9-68D6-48F8-90C5-934983CB76FB.png",
+    "native/SignInChromeUITests/133D647F-EC23-48CF-8178-FAF1C2CE2E1A.png",
+    "native/SignInChromeUITests/771B541C-8D72-49B6-B36C-4951A1AD4DAC.png",
+    "native/SignInChromeUITests/A613E23E-76F2-40C8-B159-0FB6D342B890.png",
+    "native/SignInChromeUITests/7B54FF4A-8878-48EB-BC18-201890116780.png",
+    "native/SignInChromeUITests/6D465D6E-A33C-4E99-B88C-D017766EC2D4.png",
+    "native/SignInChromeUITests/1CA04AC4-1226-48FE-BE3B-C3F1CC8E788D.png",
+    "native/SignInChromeUITests/30C365E5-B8B9-4294-8E30-E9E684D117D4.png",
+    "native/SignInDensityUITests/AC8BB050-D71F-4B2A-92F3-AEA7A90861CC.png",
+    "native/SignInDensityUITests/FB299B1B-11CF-485E-8DBF-27A375048D43.png",
+    "native/SignInDensityUITests/73BD02B0-F567-43CF-A69B-AC318D590D98.png",
+    "native/SignInDensityUITests/C2153AA3-43CE-4607-BF26-CAB747B8A5C5.png",
+    "native/SignInSurfaceUITests/9DCB8691-1755-4B3F-AACC-179C4A192130.png",
+    "native/SignInSurfaceUITests/C7FF1A83-6690-46CD-96E0-5DF677338475.png",
+    "native/SignInSurfaceUITests/37602C63-460A-4B62-982A-1657656B431C.png",
+    "native/SignInSurfaceUITests/08ADFDE5-E3F9-47F5-8274-AB265DF5C286.png",
+    "native/SignInChromeUITests/FA6D805C-44BC-4700-B647-0B76945F2B08.png",
+    "native/SignInChromeUITests/363B3B2B-3A8E-4CA5-BA03-DBFB3A215DF4.png",
+    "native/SignInChromeUITests/E549657C-3E47-4128-B8F0-299300778DDE.png",
+    "native/SignInChromeUITests/3CE8F5FD-29FE-4BF3-8680-BB42EABF6480.png",
+    "native/SignInChromeUITests/F5D9B610-A436-4DD9-A83C-5CA5DAC6BEAD.png",
+    "native/SignInChromeUITests/41F1DD71-E22D-4B92-9B22-9B779D9FA0F7.png",
+    "native/SignInChromeUITests/ACC39887-05D2-47E4-B0A8-35DFE16775AE.png",
+    "native/SignInChromeUITests/1B892095-60B2-44F9-B72F-22394F843C12.png",
+    "native/SignInChromeUITests/7B48CFDA-E9B3-4551-8280-B4F7BAED07E6.png",
+    "native/SignInChromeUITests/3FB7179A-F382-4AEB-AE10-3E9A647ECF7D.png",
+    "native/SignInChromeUITests/C02F50F2-E9BC-40BA-AE23-A7AE47EB5445.png",
+    "native/SignInChromeUITests/BA545ABE-58F9-4353-B997-13D0ABD9B2E4.png",
+    "native/SignInChromeUITests/82EE8A9E-D762-43C3-8CAC-E827F103F602.png",
+    "native/SignInChromeUITests/3F780BED-A817-461F-BAB3-8F69D372E30D.png",
+    "native/SignInChromeUITests/638ED116-A8CC-4A3C-A4EF-B146F9392A8C.png",
+    "native/SignInChromeUITests/7CBAD035-B864-4E67-8979-D1E1B80FB3FB.png",
+    "native/AccountDensityUITests/68B863B8-21FF-4CF0-AB47-CFD33670067F.png",
+    "native/AccountDensityUITests/D2CB3DD1-8062-4937-822E-9783BDC4FDDA.png",
+    "native/AccountDensityUITests/E328EB2C-D2C5-4EDD-90A7-EA20BC7FE7BA.png",
+    "native/AccountDensityUITests/008657F6-3F9F-4607-8191-22B38C7DC43A.png",
+    "native/AccountDensityUITests/89EFBA13-CEE9-4F4B-85E8-D1893C2161CF.png",
+    "native/AccountDensityUITests/EBAAEC35-8EF1-4D60-9A62-C73BE83069D3.png",
+    "native/AccountDensityUITests/08A3E3C1-E897-4031-AFBB-F4B9EC6BFD65.png",
+    "native/AccountDensityUITests/9D4B5B52-C7AF-43E3-A293-A778444D4111.png",
+    "native/AccountDensityUITests/464E9E3B-8295-425F-979B-5115038E7E22.png",
+    "native/AccountDensityUITests/77F6AD05-8350-4467-B4A5-BA9A2DA4190E.png",
+    "native/AccountDensityUITests/15E8334E-2023-40F0-86E4-4067666E5741.png",
+    "native/AccountDensityUITests/4CD80440-F80B-441A-99EF-08629FCAEE6B.png",
+    "native/AccountDensityUITests/9BB0E175-A61E-47E7-A265-5F37D1451325.png",
+    "native/AccountDensityUITests/975B3FD3-4929-4F8E-BA4B-F1C3769EB04E.png",
+    "native/AccountDensityUITests/300C19F0-9E72-458C-8C29-040FB186A6BB.png",
+    "native/AccountDensityUITests/B69C6722-1AC5-4E7A-9E73-0C6BA746A43D.png",
+    "native/AccountDensityUITests/9ECEFC08-1679-4B14-A587-C4D72D17C1DA.png",
+    "native/AccountDensityUITests/28EDCFF4-FA8F-4EC8-8032-EBB884405D66.png",
+    "native/AccountDensityUITests/7BBA86E4-3BC9-4F88-8FA9-AC6DE3371BC3.png",
+    "native/AccountDensityUITests/29A56FCC-CB7E-46F9-8925-F8D47E924A77.png",
+    "native/AccountDensityUITests/40927732-C4AF-409B-8E75-C820D1735212.png",
+    "native/AccountDensityUITests/F2A8B153-8B26-458C-B4BF-F1BEE5CE7393.png",
+    "native/AccountDensityUITests/4886A549-94ED-4AF7-ABD7-4AE546B3AB39.png",
+    "native/AccountDensityUITests/98177AC9-8932-45B8-B949-AC3CACB3AE24.png",
+    "video/activity-long-dark-XXXL-island-2s.png",
+    "video/activity-long-light-XXXL-island-2s.png",
+    "video/activity-long-dark-default-island-2s.png",
+    "video/activity-long-light-default-island-2s.png",
+    "video/activity-multiline-dark-XXXL-island-2s.png",
+    "video/activity-multiline-light-XXXL-island-2s.png",
+    "video/activity-multiline-dark-default-island-2s.png",
+    "video/activity-multiline-light-default-island-2s.png",
+    "keyboard-video-frames/first-focus-combined-dark-XXXL-1.png",
+    "keyboard-video-frames/first-focus-combined-dark-XXXL-0.png",
+    "keyboard-video-frames/first-focus-combined-dark-default-1.png",
+    "keyboard-video-frames/first-focus-combined-dark-default-0.png",
+    "keyboard-video-frames/first-focus-combined-light-XXXL-1.png",
+    "keyboard-video-frames/first-focus-combined-light-XXXL-0.png",
+    "keyboard-video-frames/first-focus-combined-light-default-1.png",
+    "keyboard-video-frames/first-focus-combined-light-default-0.png",
+    "keyboard-video-frames/first-focus-normal-dark-XXXL-1.png",
+    "keyboard-video-frames/first-focus-normal-dark-XXXL-0.png",
+    "keyboard-video-frames/first-focus-normal-dark-default-1.png",
+    "keyboard-video-frames/first-focus-normal-dark-default-0.png",
+    "keyboard-video-frames/first-focus-normal-light-XXXL-1.png",
+    "keyboard-video-frames/first-focus-normal-light-XXXL-0.png",
+    "keyboard-video-frames/first-focus-normal-light-default-1.png",
+    "keyboard-video-frames/first-focus-normal-light-default-0.png"
+  ],
+  "reference_path_base": "hillclimb/rounds/8",
+  "references": [
+    "../../reference/reminders-bottom-dark.png",
+    "../../reference/reminders-compose-light.png",
+    "../../reference/reminders-empty-light.png",
+    "../../reference/reminders-sheet-dark.png",
+    "../../reference/reminders-top-light.png",
+    "../../reference/round2/reminders-bottom-light.png",
+    "../../reference/round2/reminders-compose-dark.png",
+    "../../reference/round2/reminders-sheet-light.png",
+    "../../reference/round2/reminders-top-dark.png",
+    "../../reference/round3/reminders-bottom-dark-XXXL.png",
+    "../../reference/round3/reminders-bottom-light-XXXL.png",
+    "../../reference/round3/reminders-compose-dark-XXXL.png",
+    "../../reference/round3/reminders-compose-light-XXXL.png",
+    "../../reference/round3/reminders-sheet-dark-XXXL.png",
+    "../../reference/round3/reminders-sheet-light-XXXL.png",
+    "../../reference/round3/reminders-top-dark-XXXL.png",
+    "../../reference/round3/reminders-top-light-XXXL.png"
+  ],
+  "evidence_gaps": [
+    "No Notes references. The 17 actual Reminders originals provide closest native hierarchy/list/composer/sheet comparisons, not exact auth, Activity, capacity or combined-accessibility-settings counterparts.",
+    "Only regular iPhone 17 Pro simulator evidence is established; physical devices, other widths, landscape, Display Zoom and AX1\u2013AX5 are not established.",
+    "Protected XCTest keyboard screenshots are partial. Full keyboard judgments use separately labelled actual movie-derived frames; neither source-only frames nor protected stills establish the complete keyboard composition.",
+    "All 16 movies were inspected through their three actual sampled frames (48 total) in four supplied inspection sheets. This is not full playback, measured frame pacing or input-latency review.",
+    "No physical haptic verification or spoken VoiceOver traversal/rotor session. Those categories rely partly on source and remain provisional.",
+    "No true locked-device, Always-On, arbitrary wallpaper, physical Activity lifecycle, live push delivery or exact native Activity reference.",
+    "Enabled-looking authentication/Account fixtures are inert previews. No live Apple/Google/password/magic-link authentication, production destructive account action or external-link success is demonstrated.",
+    "Five-sample launch/scroll metrics include simulator, host and XCTest overhead. Historical timeout causes are not diagnosed as host load or an app hang.",
+    "New filled loading states lack exact Round 7 counterparts; same-state comparison credit is limited to the recorded 60 pairs.",
+    "Long real account identities and localization expansion are not covered. Activity single-line truncation is intentional; source caps expanded Island type size at xxxLarge."
+  ],
+  "coverage": {
+    "canonical_screenshots": 332,
+    "raw_native_acquisitions": 522,
+    "raw_acquisition_credit": "332 canonical paths are the reviewed app matrix; repeats/Settings bookkeeping are not additional quality votes.",
+    "unit_renders_excluded": 12,
+    "unit_renders_status": "Kept separate from canonical native evidence; not credited as native screenshots.",
+    "canonical_contact_sheets": [
+      "hillclimb/rounds/8/contact-sheets/page-01.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-02.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-03.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-04.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-05.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-06.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-07.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-08.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-09.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-10.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-11.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-12.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-13.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-14.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-15.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-16.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-17.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-18.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-19.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-20.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-21.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-22.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-23.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-24.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-25.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-26.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-27.jpg",
+      "hillclimb/rounds/8/contact-sheets/page-28.jpg"
+    ],
+    "full_resolution_originals_inspected": [
+      {
+        "path": "native/LoginCompositionUITests/787638D3-71C9-4C7B-82A7-0AED93E1460E.png",
+        "name": "composition-dark-default-default-filled_0_775A7306-3159-4334-83BF-A3B0619AC809.png"
+      },
+      {
+        "path": "native/LoginCompositionUITests/B4F5313C-7E8C-400C-8074-55CBC7C0E1F5.png",
+        "name": "composition-dark-default-default-empty_0_FE63E52A-30AD-4DA5-9C5D-51D15C666C2F.png"
+      },
+      {
+        "path": "native/LoginCompositionUITests/77E91E1D-B982-40F5-8AF2-AD0E900D6951.png",
+        "name": "composition-light-default-default-filled_0_04C90CCE-88D9-40E3-8842-5877C140C536.png"
+      },
+      {
+        "path": "native/LoginCompositionUITests/8123BBD3-0830-4980-9D0D-457AE321FD45.png",
+        "name": "composition-light-default-default-empty_0_0900D717-DDA2-4233-962B-4662EA128559.png"
+      },
+      {
+        "path": "native/LoginCompositionUITests/EEF994FC-6C4D-49D1-B886-90F319E6B232.png",
+        "name": "composition-dark-default-password-filled_0_A55C09C5-5408-4898-A14A-F4432AA2528C.png"
+      },
+      {
+        "path": "native/LoginCompositionUITests/7EBE4805-309B-4186-99E7-E993758FC90C.png",
+        "name": "composition-dark-default-password-empty_0_CB4C42A1-78B6-44B2-8865-073E19CE5695.png"
+      },
+      {
+        "path": "native/LoginCompositionUITests/7AB844CA-C9E6-4DDD-87E4-6DA909C858BA.png",
+        "name": "composition-light-default-password-filled_0_626FE4A2-A82E-46B0-9E42-282486E2DC74.png"
+      },
+      {
+        "path": "native/LoginCompositionUITests/230381CC-F88F-4937-A9CB-0AE20FDD2DE4.png",
+        "name": "composition-light-default-password-empty_0_FDC219AA-C2E5-44B9-9187-5276C370BC80.png"
+      },
+      {
+        "path": "native/LoginCompositionUITests/2E1050E6-DDAE-42E7-A64A-D64F485CFA12.png",
+        "name": "composition-dark-XXXL-password-filled_0_D8E1A21D-62E7-421B-BD84-6B6E763277AC.png"
+      },
+      {
+        "path": "native/LoginCompositionUITests/C913ABC7-7621-421D-8683-3FF306659815.png",
+        "name": "composition-light-XXXL-password-filled_0_7E5DB272-A87B-4F39-BBC2-03FBB32C200A.png"
+      },
+      {
+        "path": "keyboard-video-frames/first-focus-combined-dark-XXXL-1.png",
+        "name": "first-focus-combined-dark-XXXL-1"
+      },
+      {
+        "path": "keyboard-video-frames/first-focus-combined-dark-XXXL-0.png",
+        "name": "first-focus-combined-dark-XXXL-0"
+      },
+      {
+        "path": "keyboard-video-frames/first-focus-combined-light-XXXL-1.png",
+        "name": "first-focus-combined-light-XXXL-1"
+      },
+      {
+        "path": "keyboard-video-frames/first-focus-combined-light-XXXL-0.png",
+        "name": "first-focus-combined-light-XXXL-0"
+      },
+      {
+        "path": "keyboard-video-frames/first-focus-normal-dark-XXXL-1.png",
+        "name": "first-focus-normal-dark-XXXL-1"
+      },
+      {
+        "path": "keyboard-video-frames/first-focus-normal-dark-XXXL-0.png",
+        "name": "first-focus-normal-dark-XXXL-0"
+      },
+      {
+        "path": "keyboard-video-frames/first-focus-normal-light-XXXL-1.png",
+        "name": "first-focus-normal-light-XXXL-1"
+      },
+      {
+        "path": "keyboard-video-frames/first-focus-normal-light-XXXL-0.png",
+        "name": "first-focus-normal-light-XXXL-0"
+      },
+      {
+        "path": "native/AccessibilitySettingsUITests/32713334-5984-4D95-AAE4-4E4D75976CBA.png",
+        "name": "combined-account-refresh-error-dark-XXXL_0_9DC479D9-95ED-4F6D-B0BB-D30D99C3D69E.png"
+      },
+      {
+        "path": "native/AccessibilitySettingsUITests/C787A2D0-0C1F-4371-94EC-52836678CFF9.png",
+        "name": "combined-account-error-light-XXXL_0_A7845559-4C4E-4178-A2F2-2F487CE0018D.png"
+      },
+      {
+        "path": "native/AccessibilitySettingsUITests/0EFFC803-58F8-48A8-83E6-DAF721F2453B.png",
+        "name": "combined-full-screen-signin-light-XXXL-keyboard_0_8C3CC70A-60FF-4691-BCAE-4955DDAFA5E7.png"
+      },
+      {
+        "path": "native/AccountChromeUITests/F0C4672F-A70D-4B53-888B-A21AD3B7E46D.png",
+        "name": "dark-XXXL-medium-guidance_0_9BD60A6C-4652-40A9-AF4B-F5CC7F8A66C3.png"
+      },
+      {
+        "path": "native/AccountChromeUITests/746699CA-A7B0-412C-BD2D-E1DCBC1830E7.png",
+        "name": "light-default-large-guidance_0_4B208C34-6382-4351-AF29-684BA59AFFD0.png"
+      },
+      {
+        "path": "native/AccountChromeUITests/1B549A3F-E7D6-4840-843A-FEC9AE2287BD.png",
+        "name": "dark-XXXL-error_0_F66851FC-5E7A-4EC2-9341-8AEE26774188.png"
+      },
+      {
+        "path": "native/ActivityCaptureUITests/57EE6F57-2FD2-4926-9FCE-AD45C0D98B2F.png",
+        "name": "activity-long-dark-XXXL-banner_0_FDFB56E6-052F-45AA-9A3D-49C3884E2765.png"
+      },
+      {
+        "path": "native/ActivityCaptureUITests/C589E706-651C-47EF-8551-185F765ABA48.png",
+        "name": "activity-multiline-dark-XXXL-banner_0_64C9ED8D-A864-4114-90A6-C939EA51028F.png"
+      },
+      {
+        "path": "native/BoardCapacityDensityUITests/F0D4E455-FE21-4E39-A867-AB8583431D30.png",
+        "name": "capacity-dark-XXXL-bottom-after-pull_0_1EE99A30-6C27-4FA6-9969-7BA3F528F407.png"
+      },
+      {
+        "path": "native/BoardCapacityDensityUITests/FFDFD024-F2A7-44B0-A9E9-F258678BD739.png",
+        "name": "capacity-light-XXXL-bottom-after-pull_0_88775972-3FF6-4B75-8C51-EAE7B2C5F15C.png"
+      },
+      {
+        "path": "native/BoardEdgeAccessibilityUITests/B1935595-86D5-484C-B9D0-440EB73FC116.png",
+        "name": "diagnostic-error-empty-true-true_0_178C50F4-A6A5-4C99-ACBA-EE9C5AF7D6F5.png"
+      },
+      {
+        "path": "native/BoardEdgeAccessibilityUITests/2BB2B97F-67AE-4339-9C63-F1C393683ADC.png",
+        "name": "diagnostic-loading-false-true_0_86C705DB-170D-4655-8A84-AAE3198BBB90.png"
+      },
+      {
+        "path": "native/BoardMultilineUITests/9D35E305-1386-43FA-97E2-6DE1D6B22DBB.png",
+        "name": "board-light-XXXL-top_0_B4020C19-4F65-49FC-A0F9-572BC6F80E51.png"
+      },
+      {
+        "path": "native/BoardMultilineUITests/CBF08130-3FB5-48FC-8256-929DC165D1EF.png",
+        "name": "nonempty-focused-true-true_0_4C1B4154-3D68-491A-BB8B-6CF31AC8D492.png"
+      },
+      {
+        "path": "native/BoardMultilineUITests/315F5E33-8EB9-4997-83B5-7E2B42707693.png",
+        "name": "populated-error-bottom-true-true_0_8C7B98A2-B193-444D-86E6-90CBE6E6464E.png"
+      },
+      {
+        "path": "native/ErrorContrastUITests/7FFD7FAF-FAFD-48EE-BE62-EC4C2E434898.png",
+        "name": "signin-light-XXXL-error_0_72364751-043C-4DA6-A113-7820025E6C7E.png"
+      },
+      {
+        "path": "native/HillclimbCaptureUITests/8DDB9F64-FC68-4399-B3CB-02D5B3BB4F13.png",
+        "name": "canonical-long-text-dark-XXXL-bottom-after-pull_0_8C84C40E-A74E-4045-A034-800BB1BFBC83.png"
+      },
+      {
+        "path": "native/HillclimbCaptureUITests/12A93D9F-CE94-4A3C-96DB-86EECCF614F9.png",
+        "name": "canonical-empty-dark-XXXL-top_0_5E27CEB0-882F-4209-90A0-02AD4E34ACF7.png"
+      },
+      {
+        "path": "native/HillclimbCaptureUITests/49407B0F-075C-4EF0-9928-EDEA176AE644.png",
+        "name": "canonical-long-text-light-XXXL-bottom-after-pull_0_F1BFB019-E8DE-479E-83E8-561DF31EE0D1.png"
+      },
+      {
+        "path": "native/HillclimbCaptureUITests/B730DB8C-70BF-4B65-A71F-54F7BE183844.png",
+        "name": "canonical-empty-light-XXXL-top_0_52335D08-A18B-4181-BD7C-1F324A4A24AD.png"
+      },
+      {
+        "path": "native/HillclimbCaptureUITests/EB1CA966-E0D9-4085-8947-4874A6CE4A92.png",
+        "name": "canonical-empty-light-default-top_0_07E65658-B34D-4CFA-A859-0A0CD532018E.png"
+      },
+      {
+        "path": "native/LoginLoadingGeometryUITests/3E2E1D78-5B0F-4294-957B-861358FF8E8F.png",
+        "name": "loading-stability-dark-XXXL-loading_0_32CE5976-95F4-43E1-B3ED-EADCE0CD2254.png"
+      },
+      {
+        "path": "native/LoginLoadingGeometryUITests/9901281C-8C8D-43DC-B88D-7B99179176AB.png",
+        "name": "loading-stability-light-XXXL-password-loading_0_7460E018-A556-40ED-9BE8-E8C6E06F33ED.png"
+      },
+      {
+        "path": "native/SignInChromeUITests/07186A07-B14B-42FB-9404-36A420493318.png",
+        "name": "gesture-dark-XXXL-paint-comparison_0_9CDBD319-A725-4FA9-94FE-668DFD2FF65F.png"
+      },
+      {
+        "path": "native/SignInDensityUITests/C2153AA3-43CE-4607-BF26-CAB747B8A5C5.png",
+        "name": "density-light-default-inbox_0_5ABC4D66-F079-483F-8E7F-509494FC1B21.png"
+      },
+      {
+        "path": "native/AccountDensityUITests/E328EB2C-D2C5-4EDD-90A7-EA20BC7FE7BA.png",
+        "name": "dark-XXXL-widget_0_A001DDED-B0EF-41EE-8DFA-0F229D1E88D1.helper"
+      },
+      {
+        "path": "native/AccountDensityUITests/40927732-C4AF-409B-8E75-C820D1735212.png",
+        "name": "light-default-widget_0_EBE90A93-3AB5-4555-B443-DF88D7B4461B.helper"
+      },
+      {
+        "path": "video/activity-long-dark-XXXL-island-2s.png",
+        "name": "activity-long-dark-XXXL-island-2s"
+      },
+      {
+        "path": "video/activity-multiline-light-XXXL-island-2s.png",
+        "name": "activity-multiline-light-XXXL-island-2s"
+      }
+    ],
+    "full_resolution_original_count": 47,
+    "login_same_state_pairs": 60,
+    "login_pair_sheets": [
+      "hillclimb/rounds/8/login-pairs/page-01.jpg",
+      "hillclimb/rounds/8/login-pairs/page-02.jpg",
+      "hillclimb/rounds/8/login-pairs/page-03.jpg",
+      "hillclimb/rounds/8/login-pairs/page-04.jpg",
+      "hillclimb/rounds/8/login-pairs/page-05.jpg",
+      "hillclimb/rounds/8/login-pairs/page-06.jpg",
+      "hillclimb/rounds/8/login-pairs/page-07.jpg",
+      "hillclimb/rounds/8/login-pairs/page-08.jpg",
+      "hillclimb/rounds/8/login-pairs/page-09.jpg",
+      "hillclimb/rounds/8/login-pairs/page-10.jpg",
+      "hillclimb/rounds/8/login-pairs/page-11.jpg",
+      "hillclimb/rounds/8/login-pairs/page-12.jpg",
+      "hillclimb/rounds/8/login-pairs/page-13.jpg",
+      "hillclimb/rounds/8/login-pairs/page-14.jpg",
+      "hillclimb/rounds/8/login-pairs/page-15.jpg"
+    ],
+    "reference_originals_inspected": 17,
+    "reference_pairings": "hillclimb/validation/round8/reference-pairings.json",
+    "paired_canonical_paths": 332,
+    "video_movies": 16,
+    "actual_frames_per_movie": 3,
+    "total_actual_sampled_frames": 48,
+    "video_sheets": [
+      "hillclimb/validation/round8/video-inspection-1.jpg",
+      "hillclimb/validation/round8/video-inspection-2.jpg",
+      "hillclimb/validation/round8/video-inspection-3.jpg",
+      "hillclimb/validation/round8/video-inspection-4.jpg"
+    ],
+    "video_manifest": "hillclimb/validation/round8/video-sample-inspection.json",
+    "families": [
+      "Board full/long/empty/top/bottom/pull/partial-scroll",
+      "Capacity/composer/keyboard/draft",
+      "Board loading/empty error/populated error",
+      "Sign-in empty/filled/email/password/error/inbox/loading/legal/keyboard",
+      "Normal and combined-settings empty-password first-focus/refocus",
+      "Account medium/large/expanded/collapsed/lower actions/status/error/refresh failure",
+      "Live Activity banner and expanded Island long/multiline"
+    ],
+    "source_files_reviewed": [
+      "ios/App/SignInView.swift",
+      "ios/App/BoardPersistenceSection.swift",
+      "ios/App/ReminderListView.swift",
+      "ios/App/ReorderableReminderList.swift",
+      "ios/App/AccountView.swift",
+      "ios/App/LMRChrome.swift",
+      "ios/App/BoardSetupTip.swift",
+      "ios/App/HillclimbGeometry.swift",
+      "ios/App/HillclimbDemo.swift",
+      "ios/App/HillclimbActivityDemo.swift",
+      "ios/App/SignInErrorAnnouncementPolicy.swift",
+      "ios/App/AccountErrorAnnouncementPolicy.swift",
+      "ios/Widget/ReminderLiveActivity.swift",
+      "ios/Shared/LockScreenLineBudget.swift",
+      "ios/UITests/LoginLoadingGeometryUITests.swift",
+      "ios/UITests/SignInChromeUITests.swift",
+      "ios/UITests/AccountDensityUITests.swift",
+      "ios/UITests/BoardEdgeAccessibilityUITests.swift",
+      "ios/UITests/AccessibilitySettingsUITests.swift",
+      "ios/UITests/HillclimbUITests.swift"
+    ],
+    "independence": "No peer/prior numerical reports, state.md, REPORT.md, decisions.md or questions.md read. No builds, device operations, Git operations or application edits performed. Only this review's two report files written."
+  },
+  "validation": {
+    "required_checks_status": "All required checks passed in supplied checks.json; not rerun by this reviewer.",
+    "checks_manifest": "hillclimb/rounds/8/checks.json",
+    "source_binding": "hillclimb/validation/round8/source-binding.json",
+    "reviewer_checks": {
+      "source_hashes": "Independently SHA-256 verified all 96 frozen inputs: 94 tracked plus 2 generated, zero mismatches.",
+      "canonical_hashes": "Independently SHA-256 verified all 332 canonical files against inventory.json, zero missing/mismatched.",
+      "pairing_coverage": "Verified 332 distinct canonical screen pairings and all 17 reference paths.",
+      "report_schema": "Exact 30 rubric names/order, score mean/minimum, path presence and counts validated after writing."
+    },
+    "supplied_suite": {
+      "passed": 325,
+      "unit": 263,
+      "ui": 62,
+      "failed": 0,
+      "skipped": 0,
+      "retained_prior_named_ids": 317,
+      "transitive_baselines": [
+        308,
+        307,
+        304,
+        293
+      ],
+      "release": "passed",
+      "python": 23,
+      "deno": 52,
+      "deno_overflow": 4,
+      "settings_methods_independently_restored": 5,
+      "original_switches": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "binary_binding": "Debug restored/installed hashes and qualified widget reuse recorded; acquisition revisions remain explicit."
+    },
+    "supplied_commands": [
+      {
+        "proof": "hillclimb/tasks/login-focus-polish/bounded-matrix-full-process.json",
+        "command": [
+          "xcodebuild",
+          "test-without-building",
+          "-xctestrun",
+          "/tmp/hillclimb-focus-PM-DD/Build/Products/LazyMansReminders_iphonesimulator27.1-arm64.xctestrun",
+          "-destination",
+          "id=78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+          "-parallel-testing-enabled",
+          "NO",
+          "-collect-test-diagnostics",
+          "never",
+          "-test-timeouts-enabled",
+          "YES",
+          "-default-test-execution-time-allowance",
+          "240",
+          "-maximum-test-execution-time-allowance",
+          "300",
+          "-resultBundlePath",
+          "/tmp/hillclimb-focus-PM-bounded-matrix-full.xcresult"
+        ],
+        "source_sha": "20ae77e29019444a499e9e47c98d6b656ef56819",
+        "result": "325/325 passed, zero failures/skips",
+        "executed_by_this_reviewer": false
+      },
+      {
+        "proof": "hillclimb/tasks/login-focus-polish/bounded-matrix-release-process.json",
+        "command": [
+          "xcodebuild",
+          "-project",
+          "ios/LazyMansReminders.xcodeproj",
+          "-scheme",
+          "LazyMansReminders",
+          "-derivedDataPath",
+          "/tmp/hillclimb-focus-PM-DD",
+          "-destination",
+          "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+          "-disableAutomaticPackageResolution",
+          "-skipPackageUpdates",
+          "CODE_SIGNING_ALLOWED=NO",
+          "ARCHS=arm64",
+          "ONLY_ACTIVE_ARCH=YES",
+          "-configuration",
+          "Release",
+          "build"
+        ],
+        "source_sha": "20ae77e29019444a499e9e47c98d6b656ef56819",
+        "result": "Release build passed",
+        "executed_by_this_reviewer": false
+      },
+      {
+        "proof": "hillclimb/tasks/login-focus-polish/round8-python-process.json",
+        "command": [
+          "python3",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts/tests",
+          "-p",
+          "test_ios*.py"
+        ],
+        "source_sha": "20ae77e29019444a499e9e47c98d6b656ef56819",
+        "result": "23 passed",
+        "executed_by_this_reviewer": false
+      },
+      {
+        "proof": "hillclimb/tasks/login-focus-polish/round8-deno-process.json",
+        "command": [
+          "deno",
+          "test",
+          "--cached-only",
+          "supabase/functions/_shared/live_activity_test.ts",
+          "supabase/functions/_shared/board_loader_test.ts",
+          "supabase/functions/_shared/device_delivery_test.ts"
+        ],
+        "source_sha": "20ae77e29019444a499e9e47c98d6b656ef56819",
+        "result": "52 passed",
+        "executed_by_this_reviewer": false
+      },
+      {
+        "proof": "hillclimb/tasks/login-focus-polish/round8-deno-overflow-process.json",
+        "command": [
+          "deno",
+          "test",
+          "--cached-only",
+          "hillclimb/tasks/activity-overflow/offline-apns_test.ts"
+        ],
+        "source_sha": "20ae77e29019444a499e9e47c98d6b656ef56819",
+        "result": "4 passed",
+        "executed_by_this_reviewer": false
+      }
+    ],
+    "historical_failures": [
+      "Original 322-pass/2-fail suite remains failed: synthetic Password heading estimate did not match the real heading. Test corrected to use the measured heading; later passes do not relabel the failed run.",
+      "Original 323-pass/1-fail suite remains failed: combined eight-case method exceeded 240 seconds with two recorded 60-second XCTest animation-notification waits. No failed layout assertion or diagnosed app hang/host-load cause.",
+      "The timeout bypassed Settings teardown; later methods inherited 1/1/1/1. Explicit recovery restored recorded 0/1/0/0; the current split matrix retains all eight cases/assertions and 240\u2013300-second limits. All five current Settings methods independently restore the originals.",
+      "Nonrequired manual pinned-driver access failed/stopped on stale-owner claim; project runner was used. Earlier movie sampling failures remain historical; usable sampled sheets are explicitly documented."
+    ],
+    "acceptance_limit": "No test, pixel threshold, screenshot count or source inspection is treated as proof of aesthetic acceptance. No stop-gate decision made."
+  },
+  "attribution": "Written by gpt-6-astra in Codex on behalf of Edmund"
+}

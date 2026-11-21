@@ -1,0 +1,135 @@
+{
+  "total": 317,
+  "unit": 263,
+  "ui": 54,
+  "failed": 0,
+  "skipped": 0,
+  "retained": {
+    "308": 308,
+    "307": 307,
+    "293": 293,
+    "304": 304
+  },
+  "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+  "fullRun": {
+    "start": "2026-11-05T12:49:24.403391+00:00",
+    "end": "2026-11-05T13:34:09.392970+00:00",
+    "exit": 0,
+    "unfiltered": true,
+    "serial": true,
+    "diagnostics": "never",
+    "allowancesSeconds": [
+      240,
+      300
+    ]
+  },
+  "hostLoad": {
+    "start": [
+      5.310546875,
+      9.9169921875,
+      11.4912109375
+    ],
+    "end": [
+      5.763671875,
+      7.056640625,
+      11.751953125
+    ]
+  },
+  "publicMetricScope": "Unsigned arm64 Debug, seeded long-text/light/default, original17 iOS26.2/23C54",
+  "publicMetricLimits": "Five samples each include simulator/host/XCTest overhead; no hardware, frame-pacing, hitch-rate or improvement claim.",
+  "runtimeLog": "full-v2-runtime-log.json.gz",
+  "runtimeCategories": "full-v2-runtime-categories.json",
+  "settingsRestorationMethods": 3,
+  "sourceFrozenBeforeFinalBuild": true,
+  "parentVisualReviewRequired": true,
+  "reviewerGate": {
+    "required": false,
+    "status": "Informational pending actual parent/user visual review; no score"
+  },
+  "gitCommitBlocked": true,
+  "allRequiredChecksPassed": false,
+  "nativeMatrixStatus": "21protocols completed;808final matrix originals plus52separate login originals;44matched pairs",
+  "branch": "t3/login-composition-density",
+  "head": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+  "finalSourceSHA": null,
+  "nativeMatrixCount": 808,
+  "protectedPartialXCTestFrames": 80,
+  "matchedLoginPairs": 44,
+  "unmatchedFilledEnabledPreviews": 8,
+  "referenceCount": 17,
+  "recordings": 9,
+  "activityUnmodified2sFrames": 6,
+  "contactSheetsInspected": 80,
+  "allExecutedImplementationAndNativeGatesPassed": true,
+  "validationPending": false,
+  "finalSourceCommitBlocked": true,
+  "cleanWorktree": false,
+  "parentMergeAuthorized": false,
+  "deviceHandback": {
+    "device": {
+      "dataPath": "/Users/limboenedmund/Library/Developer/CoreSimulator/Devices/78F5A64F-7B2E-4562-8EF9-10F3312CC694/data",
+      "dataPathSize": 2911531008,
+      "logPath": "/Users/limboenedmund/Library/Logs/CoreSimulator/78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+      "udid": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+      "lastUsedAt": "2026-11-05T10:20:44Z",
+      "isAvailable": true,
+      "logPathSize": 495616,
+      "deviceTypeIdentifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
+      "state": "Booted",
+      "name": "Hillclimb iPhone 17 Pro"
+    },
+    "hostId": "local",
+    "booted": true,
+    "shutdown": false,
+    "appearance": "Light",
+    "textSize": "Large",
+    "appearanceAndSizeProof": "manual-operations.jsonl final successful settings commands",
+    "switches": {
+      "original": {
+        "Reduce Motion": "0",
+        "Auto-Play Message Effects": "1",
+        "Reduce Transparency": "0",
+        "Increase Contrast": "0"
+      },
+      "restored": {
+        "Reduce Motion": "0",
+        "Auto-Play Message Effects": "1",
+        "Reduce Transparency": "0",
+        "Increase Contrast": "0"
+      },
+      "allFourMatch": true
+    },
+    "ownedActivityIDs": [],
+    "ownAppClose": "final-app-cleanup.json",
+    "settingsClosed": "manual-settings.py restore final successful close com.apple.Preferences; no later Settings launch",
+    "panelAndSessionClose": "final-device-close.json",
+    "finalBinaryIdentity": "hillclimb/tasks/login-composition/final-installed-identity.json",
+    "atUTC": "2026-11-05T15:05:44.016385+00:00"
+  },
+  "measurements": {
+    "accountSpacing": [
+      35,
+      23.6666666666667
+    ],
+    "accountNativeMinimumHelperContrast": 8.509240228178706,
+    "capacityFooterSavedPoints": 16,
+    "signInGroups": [
+      8,
+      20,
+      24
+    ],
+    "emailAndPasswordTargetPoints": 48,
+    "ordinaryXXXLFooterClearance": 50.33333333333337,
+    "ordinaryXXXLGestureMovement": 92,
+    "explicitPaintMinimumLegalClearance": 28.0,
+    "minimumPrimaryContrast": 6.290713847412594
+  },
+  "remainingConcerns": [
+    "Shared Git pack/tree failure: last HEAD is not tested corrected source; use bounded patch/freeze and do not merge the obsolete composition commit",
+    "Exact frozen-S filled-enabled before state unavailable;44matched shared states include12password-populated frames,8new seeded enabled-action previews are unmatched",
+    "Additional8ordinary fully-filled pairs stopped after driver input/close failures; zero new frames, no fabricated pairs",
+    "Raw simulator AX/haptic diagnostics retained; no physical true-lock, haptics, spoken VoiceOver, hardware/frame-pacing/improvement claim"
+  ],
+  "awakeOwnership": "Parent owns caffeinate -disu -t43200, recorded at /tmp/hillclimb-awake-20261105.json, and its cleanup. No parent process terminated; no global power or security setting changed.",
+  "updatedUTC": "2026-11-05T15:19:12.813734+00:00"
+}

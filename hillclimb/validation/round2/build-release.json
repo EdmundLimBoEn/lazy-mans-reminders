@@ -1,0 +1,26 @@
+{
+  "command": [
+    "xcodebuild",
+    "build",
+    "-project",
+    "ios/LazyMansReminders.xcodeproj",
+    "-scheme",
+    "LazyMansReminders",
+    "-configuration",
+    "Release",
+    "-destination",
+    "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+    "-derivedDataPath",
+    "/tmp/notepad-round2-dd",
+    "-disableAutomaticPackageResolution",
+    "-skipPackageUpdates",
+    "CODE_SIGNING_ALLOWED=NO",
+    "-quiet"
+  ],
+  "exit": 0,
+  "status": "passed",
+  "diagnostics": [
+    "SwiftCompile normal x86_64 and arm64 each emitted: error: the following command failed with exit code 0 but produced no further output. Overall xcodebuild exit was 0; artifact exists."
+  ],
+  "binary_sha256": "c0c4b0af7cda700ceba3b2681e897bdc90724f74fb1fcec63d2d3efcca5df76d"
+}

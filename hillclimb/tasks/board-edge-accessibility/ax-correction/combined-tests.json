@@ -1,0 +1,63 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "066ECE57-46B4-414A-B53E-523775329360",
+      "deviceName" : "Hillclimb Board iPhone 17 Pro",
+      "modelName" : "iPhone 17 Pro",
+      "osBuildNumber" : "23C54",
+      "osVersion" : "26.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "children" : [
+                    {
+                      "name" : "XCTAssertFalse failed - Visible paragraph must not create a duplicate reading stop",
+                      "nodeType" : "Failure Message",
+                      "sourceLocation" : {
+                        "filePath" : "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-8b1b439e/ios/UITests/BoardMultilineUITests.swift",
+                        "lineNumber" : 176
+                      }
+                    }
+                  ],
+                  "duration" : "4s",
+                  "durationInSeconds" : 4.986322999000549,
+                  "name" : "testOnlyCircleCompletesLocalFixtureAndGripStillReordersMatrix()",
+                  "nodeIdentifier" : "BoardMultilineUITests/testOnlyCircleCompletesLocalFixtureAndGripStillReordersMatrix()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests/testOnlyCircleCompletesLocalFixtureAndGripStillReordersMatrix",
+                  "nodeType" : "Test Case",
+                  "result" : "Failed"
+                }
+              ],
+              "name" : "BoardMultilineUITests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests",
+              "nodeType" : "Test Suite",
+              "result" : "Failed"
+            }
+          ],
+          "name" : "HillclimbUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Failed"
+        }
+      ],
+      "name" : "LazyMansReminders",
+      "nodeType" : "Test Plan",
+      "result" : "Failed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}

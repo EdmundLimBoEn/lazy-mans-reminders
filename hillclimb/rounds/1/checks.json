@@ -1,0 +1,37 @@
+{
+  "source_sha": "de6cb90349ccc77af90c0fbf4870af3e39977ec5",
+  "checks": [
+    {
+      "name": "Existing iOS XCTest suite",
+      "status": "passed",
+      "count": 247,
+      "evidence": "../../validation/baseline-test-summary.json"
+    },
+    {
+      "name": "Composer target minimum44pt",
+      "status": "failed",
+      "observed_height": 22
+    },
+    {
+      "name": "Account target minimum44pt and top safe area",
+      "status": "failed",
+      "observed_width": 36
+    },
+    {
+      "name": "XXXL text and final-row geometry",
+      "status": "passed",
+      "evidence": "../../validation/bounded-ui-baseline-summary.json"
+    },
+    {
+      "name": "Full board pull then bottom",
+      "status": "failed",
+      "reason": "Test timed out waiting for app idle after pull; not a completed visibility assertion"
+    },
+    {
+      "name": "Offline fixture stability",
+      "status": "passed",
+      "count": 1,
+      "evidence": "../../validation/offline-fixture-summary.json"
+    }
+  ]
+}

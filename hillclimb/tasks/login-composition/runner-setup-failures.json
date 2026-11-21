@@ -1,0 +1,15 @@
+[
+  {
+    "command": "python3 hillclimb/tasks/login-composition/run.py composition-measurement -only-testing:HillclimbUITests/LoginCompositionUITests",
+    "error": "IndentationError: unexpected indent at run.py line19 after output-filter change",
+    "testsStarted": false,
+    "correction": "Restored proper multiline if indentation; next invocation used a fresh result path because no result existed"
+  },
+  {
+    "command": "build-v2-preview",
+    "error": "LoginCompositionUITests proof.name optional String required unwrap",
+    "testsStarted": false,
+    "evidence": "build-v2-preview-process.json",
+    "correction": "XCTUnwrap of attachment name; no assertion relaxed"
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "observed": "Assigned simulator unexpectedly observed Shutdown after natural final run; cause unproven; no task shutdown issued",
+  "attempts": [
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "get_app_container",
+        "066ECE57-46B4-414A-B53E-523775329360",
+        "systems.edmundlim.NotepadHillclimb",
+        "app"
+      ],
+      "exit": 149,
+      "stderr": "Unable to lookup in current state: Shutdown"
+    },
+    {
+      "action": "Scoped simctl spawn log show (exact command retained in final-runtime-summary.json)",
+      "exit": 149,
+      "reason": "Shutdown"
+    }
+  ],
+  "recovery": "device_open on own assigned device booted it; one subsequent installed-hash read and scoped-log read succeeded; no UI failure/retry"
+}

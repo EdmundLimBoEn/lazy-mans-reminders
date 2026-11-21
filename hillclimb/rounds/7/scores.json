@@ -1,0 +1,543 @@
+{
+  "graders": {
+    "gpt-6.1-sol": {
+      "overall": 8.5,
+      "minimum": 7,
+      "errors": [],
+      "evidence_gaps": [
+        "Notes reference captures are unavailable. The 17 usable references are Apple Reminders; no exact auth, Activity, capacity, medium-detent or combined-system-setting reference exists. Comparisons inform native spacing/type/behavior, not copied layouts.",
+        "The 808 matrix images are acquisitions across 29 families, not 808 distinct screens or independent quality votes: 398 XCTest acquisitions and 410 manual native acquisitions. Eighty protected XCTest keyboard frames are partial. Sixteen clean full-device normal/combined keyboard supplements plus eight populated-focus supplements provide additional evidence.",
+        "The separate final login set has 44 matched before/after states plus eight unmatched seeded filled/enabled inert previews. The latter have no exact S-before. The optional additional ordinary fully filled comparison stopped with a driver failure and produced zero frames; it is not passed evidence.",
+        "Ordinary offline fixtures disable external provider/legal actions. Enabled inert appearance previews show enabled paint but do not establish live authentication, web-sheet behavior, AutoFill or actual submission success.",
+        "True Lock Screen, physical-device haptics, spoken VoiceOver, AX1\u2013AX5, live auth/recovery, and hardware interaction performance remain unobserved. These are confidence limits, not fabricated observed defects.",
+        "Nine recordings were reviewed through three distributed frames each on three inspection sheets. This is 27 sampled encoded frames, not continuous playback or a frame-time study. Five metrics samples are simulator Debug host XCTest only; no hardware or improvement claim follows.",
+        "Long native Activity evidence is light at default/XXXL; short native Activity covers light/dark and both sizes. Intentional tail ellipsis and intentionally empty compact/minimal regions are not defects.",
+        "Final source and captures are bound by the sourceIdentity/freeze manifest. Historical uncommitted/pack-blocked and earlier R/T/S failures remain acquisition history. The normalized checks and source-binding supersede those handoff-status flags without claiming a new capture. Parent acceptance is permission for independent grading, not user visual acceptance."
+      ],
+      "source_sha": "e9f7ace58b493dd4aa3acb27325eaea7cf0ed352",
+      "categories": [
+        {
+          "name": "Visual hierarchy",
+          "score": 8.2,
+          "rationale": "Screens: Board status and Account sections scan clearly. Default login still gives several full-width rectangles similar visual emphasis; the brand-to-form relationship is competent but not exceptional. Source: Source separates provider, email, password, alternate, and legal groups, but uses similar full-width control footprints. Numerical spacing alone does not settle composition.",
+          "screenshot_assessment": "Board status and Account sections scan clearly. Default login still gives several full-width rectangles similar visual emphasis; the brand-to-form relationship is competent but not exceptional.",
+          "source_assessment": "Source separates provider, email, password, alternate, and legal groups, but uses similar full-width control footprints. Numerical spacing alone does not settle composition."
+        },
+        {
+          "name": "Spacing/grid",
+          "score": 8.6,
+          "rationale": "Screens: Board footer shares the row gutter and Account has comfortable native section gaps. Login has clearer groups, though the repeated slabs remain visually dense. Source: Eight-point internal, 20-point group, and 24-point provider boundary spacing is explicit; the capacity footer aligns to an 18-point gutter.",
+          "screenshot_assessment": "Board footer shares the row gutter and Account has comfortable native section gaps. Login has clearer groups, though the repeated slabs remain visually dense.",
+          "source_assessment": "Eight-point internal, 20-point group, and 24-point provider boundary spacing is explicit; the capacity footer aligns to an 18-point gutter."
+        },
+        {
+          "name": "Typography scale",
+          "score": 8.5,
+          "rationale": "Screens: Inline Sign In and title2 Notepad improve the opening scale. Body, footnote, and caption tiers are legible; the login's stacked labels still compete somewhat. Source: Semantic fonts and scaled dimensions support a coherent hierarchy. No arbitrary miniature text is used to force content to fit.",
+          "screenshot_assessment": "Inline Sign In and title2 Notepad improve the opening scale. Body, footnote, and caption tiers are legible; the login's stacked labels still compete somewhat.",
+          "source_assessment": "Semantic fonts and scaled dimensions support a coherent hierarchy. No arbitrary miniature text is used to force content to fit."
+        },
+        {
+          "name": "Dynamic Type",
+          "score": 8.8,
+          "rationale": "Screens: XXXL originals preserve readable fields, legal links, Account guidance, final rows, and short Activity words. More scrolling is required naturally. Source: Scaled metrics, wrapping text, ViewThatFits legal layout, and scrollable content support the observed XXXL states; AX1\u2013AX5 remain unobserved.",
+          "screenshot_assessment": "XXXL originals preserve readable fields, legal links, Account guidance, final rows, and short Activity words. More scrolling is required naturally.",
+          "source_assessment": "Scaled metrics, wrapping text, ViewThatFits legal layout, and scrollable content support the observed XXXL states; AX1\u2013AX5 remain unobserved."
+        },
+        {
+          "name": "Light contrast",
+          "score": 9,
+          "rationale": "Screens: Final light states have clear primary ink, neutral prompts, and identifiable disabled controls. Small helper text is deliberately subdued but readable. Source: System semantic colors and explicit helper opacity support contrast. Final enabled primary minimum reported raster contrast is 6.29; rejected V1 is excluded.",
+          "screenshot_assessment": "Final light states have clear primary ink, neutral prompts, and identifiable disabled controls. Small helper text is deliberately subdued but readable.",
+          "source_assessment": "System semantic colors and explicit helper opacity support contrast. Final enabled primary minimum reported raster contrast is 6.29; rejected V1 is excluded."
+        },
+        {
+          "name": "Dark contrast",
+          "score": 9,
+          "rationale": "Screens: Final dark enabled and filled login states remain readable. Original-pixel inspection confirms the native Apple label is present; thumbnail omissions are not blank controls. Source: Dark enabled submit foreground has an explicit contrast guard; Account guidance/help reported minima are 9.72/8.51. Framework-disabled offline paint differs from enabled preview paint.",
+          "screenshot_assessment": "Final dark enabled and filled login states remain readable. Original-pixel inspection confirms the native Apple label is present; thumbnail omissions are not blank controls.",
+          "source_assessment": "Dark enabled submit foreground has an explicit contrast guard; Account guidance/help reported minima are 9.72/8.51. Framework-disabled offline paint differs from enabled preview paint."
+        },
+        {
+          "name": "Iconography",
+          "score": 8.8,
+          "rationale": "Screens: Completion circles, Account symbols, provider branding, and arrows are consistent. The understated icons do not add decorative noise. Source: Existing words, brand marks, and icons are retained. SF Symbols and native Apple button are appropriate to their roles.",
+          "screenshot_assessment": "Completion circles, Account symbols, provider branding, and arrows are consistent. The understated icons do not add decorative noise.",
+          "source_assessment": "Existing words, brand marks, and icons are retained. SF Symbols and native Apple button are appropriate to their roles."
+        },
+        {
+          "name": "Safe area / Dynamic Island",
+          "score": 9,
+          "rationale": "Screens: Native top/Island and bottom originals show no content collision. Expanded Island content stays within its allocated region. Source: Safe-area insets and Activity region budgets are explicit. Source cannot prove geometry beyond the captured simulator.",
+          "screenshot_assessment": "Native top/Island and bottom originals show no content collision. Expanded Island content stays within its allocated region.",
+          "source_assessment": "Safe-area insets and Activity region budgets are explicit. Source cannot prove geometry beyond the captured simulator."
+        },
+        {
+          "name": "Scroll/pull-down / last row",
+          "score": 9.1,
+          "rationale": "Screens: Pulled and true-bottom board captures retain the final reminder above the composer. Status-first capacity footer uses less vertical space. Source: Native refresh/reorder list and bottom inset establish sensible behavior; existing native geometry gates corroborate the captured final row.",
+          "screenshot_assessment": "Pulled and true-bottom board captures retain the final reminder above the composer. Status-first capacity footer uses less vertical space.",
+          "source_assessment": "Native refresh/reorder list and bottom inset establish sensible behavior; existing native geometry gates corroborate the captured final row."
+        },
+        {
+          "name": "List rows",
+          "score": 8.6,
+          "rationale": "Screens: Rows feel native and multiline alignment is calm. Dense long paragraphs are necessarily less effortless than Apple's short reference reminders. Source: Native collection-list rows retain 44-point completion and reorder controls with top-aligned multiline text.",
+          "screenshot_assessment": "Rows feel native and multiline alignment is calm. Dense long paragraphs are necessarily less effortless than Apple's short reference reminders.",
+          "source_assessment": "Native collection-list rows retain 44-point completion and reorder controls with top-aligned multiline text."
+        },
+        {
+          "name": "Empty states",
+          "score": 8.3,
+          "rationale": "Screens: Empty board is understandable and restrained. Its setup explanation is useful but gives the initial screen more instructional weight than the reference. Source: ContentUnavailableView and a dismissible setup guide provide a sensible empty-state structure. Guide hides while composing.",
+          "screenshot_assessment": "Empty board is understandable and restrained. Its setup explanation is useful but gives the initial screen more instructional weight than the reference.",
+          "source_assessment": "ContentUnavailableView and a dismissible setup guide provide a sensible empty-state structure. Guide hides while composing."
+        },
+        {
+          "name": "Composer ergonomics",
+          "score": 8.8,
+          "rationale": "Screens: Composer remains reachable, readable, and visually attached to the board. Add control and input retain ample space even near capacity. Source: Multiline input, one-to-four-line growth, bottom inset, and minimum 44-point Add target support the visual result.",
+          "screenshot_assessment": "Composer remains reachable, readable, and visually attached to the board. Add control and input retain ample space even near capacity.",
+          "source_assessment": "Multiline input, one-to-four-line growth, bottom inset, and minimum 44-point Add target support the visual result."
+        },
+        {
+          "name": "Keyboard handling",
+          "score": 8.6,
+          "rationale": "Screens: Clean full-device normal/combined and populated-focus supplements show accessible active fields and actions. Protected XCTest crops alone cannot establish keyboard geometry. Source: Focus handling, interactive dismissal, keyboard Done inset, and scroll-to-action are present. Live AutoFill and ordinary fully filled comparison are not established.",
+          "screenshot_assessment": "Clean full-device normal/combined and populated-focus supplements show accessible active fields and actions. Protected XCTest crops alone cannot establish keyboard geometry.",
+          "source_assessment": "Focus handling, interactive dismissal, keyboard Done inset, and scroll-to-action are present. Live AutoFill and ordinary fully filled comparison are not established."
+        },
+        {
+          "name": "Sheet presentation/detents",
+          "score": 8.9,
+          "rationale": "Screens: Account medium/large states read as native sheets with a stable title and Done action. Longer guidance scrolls naturally. Source: Native medium/large detents and scrollable inset-grouped List are appropriate; actual presentation state is supported by native captures.",
+          "screenshot_assessment": "Account medium/large states read as native sheets with a stable title and Done action. Longer guidance scrolls naturally.",
+          "source_assessment": "Native medium/large detents and scrollable inset-grouped List are appropriate; actual presentation state is supported by native captures."
+        },
+        {
+          "name": "Navigation clarity",
+          "score": 8.6,
+          "rationale": "Screens: Board, Account, and Sign In titles make location clear. Login's multiple routes still demand a little more scanning than an exceptional first-run screen. Source: Explicit titles, Account action, and alternate authentication mode are coherent; legal links wrap without changing their words.",
+          "screenshot_assessment": "Board, Account, and Sign In titles make location clear. Login's multiple routes still demand a little more scanning than an exceptional first-run screen.",
+          "source_assessment": "Explicit titles, Account action, and alternate authentication mode are coherent; legal links wrap without changing their words."
+        },
+        {
+          "name": "Touch targets",
+          "score": 9.1,
+          "rationale": "Screens: Visible controls have generous targets without giant decorative chrome. Legal links retain usable spacing at default and XXXL. Source: Scaled minimum 44-point targets and captured geometry/AX gates are strong. Passing target checks does not itself establish tasteful composition.",
+          "screenshot_assessment": "Visible controls have generous targets without giant decorative chrome. Legal links retain usable spacing at default and XXXL.",
+          "source_assessment": "Scaled minimum 44-point targets and captured geometry/AX gates are strong. Passing target checks does not itself establish tasteful composition."
+        },
+        {
+          "name": "Haptics",
+          "score": 7,
+          "rationale": "Screens: Still images cannot establish tactile quality. There is no physical-device haptic evidence. Source: Success/error sensory feedback paths exist. Intensity, timing, and actual physical response remain unobserved.",
+          "screenshot_assessment": "Still images cannot establish tactile quality. There is no physical-device haptic evidence.",
+          "source_assessment": "Success/error sensory feedback paths exist. Intensity, timing, and actual physical response remain unobserved."
+        },
+        {
+          "name": "Animation/transitions",
+          "score": 8,
+          "rationale": "Screens: Distributed recorded frames show stable endpoints without obvious broken visual states. They do not establish continuous motion quality. Source: Reduced-motion branches and restrained transitions are sensible. No continuous frame-time or interactive gesture recording was graded.",
+          "screenshot_assessment": "Distributed recorded frames show stable endpoints without obvious broken visual states. They do not establish continuous motion quality.",
+          "source_assessment": "Reduced-motion branches and restrained transitions are sensible. No continuous frame-time or interactive gesture recording was graded."
+        },
+        {
+          "name": "Loading states",
+          "score": 7.8,
+          "rationale": "Screens: Loading retains readable context, but the submit button grows and pushes alternate/legal controls down when its spinner appears. Source: ZStack preserves hidden label text, but unconstrained ProgressView inherits large control size and increases intrinsic height (F2).",
+          "screenshot_assessment": "Loading retains readable context, but the submit button grows and pushes alternate/legal controls down when its spinner appears.",
+          "source_assessment": "ZStack preserves hidden label text, but unconstrained ProgressView inherits large control size and increases intrinsic height (F2)."
+        },
+        {
+          "name": "Error states",
+          "score": 8.7,
+          "rationale": "Screens: Long board and Account errors remain readable with clear actions. Preserved network wording is treated as a constraint, not a defect. Source: Error banners wrap, preserve retry/dismiss targets, and have announcement policies. Live service failures and recovery remain unobserved.",
+          "screenshot_assessment": "Long board and Account errors remain readable with clear actions. Preserved network wording is treated as a constraint, not a defect.",
+          "source_assessment": "Error banners wrap, preserve retry/dismiss targets, and have announcement policies. Live service failures and recovery remain unobserved."
+        },
+        {
+          "name": "VoiceOver/labels",
+          "score": 8,
+          "rationale": "Screens: Visual labels are explicit and complete. Screenshots cannot establish reading order, announcement timing, or spoken output. Source: Accessibility labels, error announcement policies, and native semantics are present. Spoken VoiceOver and full navigation order were not exercised.",
+          "screenshot_assessment": "Visual labels are explicit and complete. Screenshots cannot establish reading order, announcement timing, or spoken output.",
+          "source_assessment": "Accessibility labels, error announcement policies, and native semantics are present. Spoken VoiceOver and full navigation order were not exercised."
+        },
+        {
+          "name": "iOS HIG consistency",
+          "score": 8.6,
+          "rationale": "Screens: Native lists, sheets, toolbar actions, system type, and Apple authentication help. Repeated custom login slabs feel a little more form-like than Apple-polished. Source: Native primitives and neutral materials are well chosen. Custom authentication control composition still needs an intentional hierarchy pass.",
+          "screenshot_assessment": "Native lists, sheets, toolbar actions, system type, and Apple authentication help. Repeated custom login slabs feel a little more form-like than Apple-polished.",
+          "source_assessment": "Native primitives and neutral materials are well chosen. Custom authentication control composition still needs an intentional hierarchy pass."
+        },
+        {
+          "name": "Lock Screen / Live Activity",
+          "score": 8.1,
+          "rationale": "Screens: Short expanded Island/banner content is complete at both sizes and styles. Long native examples visibly ellipsize within a deliberate budget. Source: Shared line budgets and explicit EmptyView compact/minimal regions match intended behavior. True Lock Screen and live production Activity delivery remain unobserved.",
+          "screenshot_assessment": "Short expanded Island/banner content is complete at both sizes and styles. Long native examples visibly ellipsize within a deliberate budget.",
+          "source_assessment": "Shared line budgets and explicit EmptyView compact/minimal regions match intended behavior. True Lock Screen and live production Activity delivery remain unobserved."
+        },
+        {
+          "name": "Sign-in/onboarding",
+          "score": 8,
+          "rationale": "Screens: The final default login is substantially calmer than its matched before. Nevertheless its provider/email/action hierarchy still lacks a confident visual focal point. Source: Inline title, stronger brand, neutral Google outline, 48-point fields, and neutral prompt are substantive changes. Default composition remains the main taste priority.",
+          "screenshot_assessment": "The final default login is substantially calmer than its matched before. Nevertheless its provider/email/action hierarchy still lacks a confident visual focal point.",
+          "source_assessment": "Inline title, stronger brand, neutral Google outline, 48-point fields, and neutral prompt are substantive changes. Default composition remains the main taste priority."
+        },
+        {
+          "name": "Settings/account",
+          "score": 8.7,
+          "rationale": "Screens: Natural section gaps, passive identity, full guidance paragraphs, and quiet footer improve Account considerably. Some actionable rows resemble passive status rows. Source: Identity is unchromed, List uses natural gaps, help is full-length and high contrast, and destructive styling is functional.",
+          "screenshot_assessment": "Natural section gaps, passive identity, full guidance paragraphs, and quiet footer improve Account considerably. Some actionable rows resemble passive status rows.",
+          "source_assessment": "Identity is unchromed, List uses natural gaps, help is full-length and high contrast, and destructive styling is functional."
+        },
+        {
+          "name": "Performance feel",
+          "score": 7.5,
+          "rationale": "Screens: Static and sampled encoded evidence feels stable, but cannot prove interaction latency, frame pacing, or performance on hardware. Source: Five public metrics are simulator Debug host XCTest measurements, not hardware/frame metrics or an established improvement. Code and passing tests cannot prove feel.",
+          "screenshot_assessment": "Static and sampled encoded evidence feels stable, but cannot prove interaction latency, frame pacing, or performance on hardware.",
+          "source_assessment": "Five public metrics are simulator Debug host XCTest measurements, not hardware/frame metrics or an established improvement. Code and passing tests cannot prove feel."
+        },
+        {
+          "name": "Delight",
+          "score": 7.8,
+          "rationale": "Screens: The board's restrained chrome and compact status feel considered. Login still feels assembled from controls rather than unusually refined. Source: Purposeful restraint is present in source. Functional density and repeated login shapes limit distinctiveness without any need for extra decoration.",
+          "screenshot_assessment": "The board's restrained chrome and compact status feel considered. Login still feels assembled from controls rather than unusually refined.",
+          "source_assessment": "Purposeful restraint is present in source. Functional density and repeated login shapes limit distinctiveness without any need for extra decoration."
+        },
+        {
+          "name": "Long text",
+          "score": 9,
+          "rationale": "Screens: XXXL board, Account, error, legal-bottom, and Activity originals preserve important content. Long Activity tail ellipsis is intentional. Source: Fixed vertical wrapping for errors/guidance and explicit single-line Activity budgeting avoid accidental squeeze. Beyond-XXXL remains a gap.",
+          "screenshot_assessment": "XXXL board, Account, error, legal-bottom, and Activity originals preserve important content. Long Activity tail ellipsis is intentional.",
+          "source_assessment": "Fixed vertical wrapping for errors/guidance and explicit single-line Activity budgeting avoid accidental squeeze. Beyond-XXXL remains a gap."
+        },
+        {
+          "name": "Reduced Motion / Transparency",
+          "score": 8.8,
+          "rationale": "Screens: Combined accessibility originals remain readable and usable. Static captures cannot prove all reduced-motion transitions. Source: Reduce Motion/Transparency/contrast handling is explicit, and all four settings restoration is recorded. Motion behavior is only partly observed.",
+          "screenshot_assessment": "Combined accessibility originals remain readable and usable. Static captures cannot prove all reduced-motion transitions.",
+          "source_assessment": "Reduce Motion/Transparency/contrast handling is explicit, and all four settings restoration is recorded. Motion behavior is only partly observed."
+        },
+        {
+          "name": "Palette / minimalism",
+          "score": 9,
+          "rationale": "Screens: Neutral backgrounds, system ink, and sparse functional color meet the brief. No nested decorative cards or decorative red/orange palette appear. Source: System palette and semantic destructive color honor the constraints. Existing branding and copy are unchanged.",
+          "screenshot_assessment": "Neutral backgrounds, system ink, and sparse functional color meet the brief. No nested decorative cards or decorative red/orange palette appear.",
+          "source_assessment": "System palette and semantic destructive color honor the constraints. Existing branding and copy are unchanged."
+        }
+      ],
+      "findings": [
+        {
+          "id": "R7-SOL-01",
+          "severity": "medium",
+          "screen": "Default Sign In, light/dark, empty and filled",
+          "evidence": [
+            "../../tasks/login-composition/after-complete/light-default-enabled-default.png",
+            "../../tasks/login-composition/after-complete/dark-default-enabled-default.png",
+            "../../tasks/login-composition/after-complete/light-default-default.png",
+            "../../tasks/login-composition/after-complete/dark-default-default.png",
+            "../../tasks/login-composition/after-complete/light-default-filled-default.png",
+            "../../tasks/login-composition/after-complete/dark-default-filled-default.png"
+          ],
+          "description": "The final opening is substantially clearer than its matched before, but Apple, Google, email input and submit still form a sequence of similarly wide, similarly prominent rectangles. The eye scans a stack of alternatives rather than a strongly composed first task. This is a taste judgment on actual default originals, not a clipping, target-size or contrast failure; passed geometry gates do not resolve it.",
+          "fix": "Prototype a substantive alternative default composition: a compact brand introduction followed by one contiguous email/helper/field/submit work area, with provider choices in a visibly secondary unboxed block below, separated by space or a hairline. Keep every original word, brand/icon, native Apple treatment, and at least 44-point targets. Compare default light/dark empty and filled renders side by side before selecting the composition; do not accept spacing adjustments alone as proof of polish.",
+          "confidence": 0.86,
+          "basis": "observed + source-derived; subjective visual hierarchy",
+          "source": [
+            "ios/App/SignInView.swift:222",
+            "ios/App/SignInView.swift:292",
+            "ios/App/SignInView.swift:329"
+          ],
+          "check": {
+            "performed": "Independent original-pixel review of all 52 final login images and all 44 matched pairs; source structure inspected. No automated taste assertion was used.",
+            "required_regression": "After any composition change, retain copy/provider integrity and native 44-point/XXXL/keyboard/contrast checks, rerun the existing iOS suite, and obtain a default-size visual comparison. This proposed change and its regression checks were not run."
+          }
+        },
+        {
+          "id": "R7-SOL-02",
+          "severity": "medium",
+          "screen": "Sign In submit loading state, default and XXXL",
+          "evidence": [
+            "../../tasks/login-composition/after-complete/dark-default-default.png",
+            "../../tasks/login-composition/after-complete/dark-default-loading.png",
+            "../../tasks/login-composition/after-complete/light-default-default.png",
+            "../../tasks/login-composition/after-complete/light-default-loading.png",
+            "../../tasks/login-composition/after-complete/dark-XXXL-default.png",
+            "../../tasks/login-composition/after-complete/dark-XXXL-loading.png"
+          ],
+          "description": "The loading spinner increases submit height and moves the alternate action and legal footer downward. A read-only pixel scan at x=120 of the 3x native default captures found the same submit background from y=1430..1585 idle (156 px, 52 pt) and y=1430..1630 loading (201 px, 67 pt): a 15-point reflow. XXXL originals show approximately 21 points of growth. The source ZStack hides the label with opacity but lets the inherited large ProgressView enlarge intrinsic height.",
+          "fix": "Place a regular-sized spinner in a constrained overlay on the label\u2019s existing layout footprint, rather than allowing ProgressView to size the ZStack. Preserve scaled multiline labels, loading accessibility text, disabled semantics, and the minimum touch target.",
+          "confidence": 0.99,
+          "basis": "observed + source-derived; programmatically measured native pixels",
+          "source": [
+            "ios/App/SignInView.swift:337",
+            "ios/App/SignInView.swift:345",
+            "ios/App/SignInView.swift:475"
+          ],
+          "check": {
+            "performed": "Read-only Python/Pillow native-pixel comparison: same light/dark default rounded-button fill run at x=120 was 156 px idle versus 201 px loading; dark XXXL was about 173 versus 234 px at that rounded-edge sample. This verifies reflow, not live animation timing.",
+            "required_regression": "Add a native geometry regression comparing idle/busy submit bounds and following alternate/footer positions, in light/dark default/XXXL, allowing at most one physical pixel of rounding variance. Confirm spinner visibility and at least 44-point targets; rerun the existing iOS suite. New regression not run.",
+            "command": "python3 - <<'PY'\nfrom pathlib import Path\nfrom PIL import Image\nroot=Path('/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/tasks/login-composition/after-complete')\nfor name in ['light-default-default','light-default-loading','dark-default-default','dark-default-loading']:\n im=Image.open(root/(name+'.png')).convert('RGB'); x,y=120,1500; ink=im.getpixel((x,y)); lo=hi=y\n while lo>0 and im.getpixel((x,lo-1))==ink:lo-=1\n while hi+1<im.height and im.getpixel((x,hi+1))==ink:hi+=1\n print(name, 'run',lo,hi+1,'height_px',hi-lo+1,'height_pt',(hi-lo+1)/3,'fill',ink)\nPY",
+            "source_sha": "e9f7ace58b493dd4aa3acb27325eaea7cf0ed352"
+          }
+        }
+      ]
+    },
+    "gpt-6-astra": {
+      "overall": 8.13,
+      "minimum": 7,
+      "errors": [],
+      "evidence_gaps": [
+        "No Apple Notes references; no exact authentication, Activity, capacity, medium-detent or combined-system-configuration counterpart. Apple references inform native hierarchy and spacing, not copied layout or equivalent functionality.",
+        "True Lock Screen while locked, physical haptics, spoken VoiceOver/rotor traversal, AX1\u2013AX5, live provider authentication and AutoFill completion were not observed.",
+        "80 protected XCTest keyboard captures are partial. Keyboard judgments use clean full-device captures and populated focus supplements, not missing keyboard pixels in protected frames.",
+        "Eight final filled enabled previews lack exact matched S-before states; the extra ordinary fully-filled comparison driver failed with zero frames. Existing 44 matched pairs remain useful without filling that gap.",
+        "Enabled appearance previews are inert at the root and block authentication and external URLs. Ordinary demo fixtures disable providers. Neither proves live sign-in success.",
+        "Nine recordings were inspected through three distributed frames each, not continuous real-time playback. This supports transitions and settled composition, not frame pacing.",
+        "Five simulator Debug timing samples include host/XCTest overhead. No physical-device latency, hitch metric or hardware performance improvement is claimed.",
+        "Unit ImageRenderer evidence is separate from the 808 native matrix images and is not used as proof of full-device geometry."
+      ],
+      "source_sha": "e9f7ace58b493dd4aa3acb27325eaea7cf0ed352",
+      "categories": [
+        {
+          "name": "Visual hierarchy",
+          "score": 8,
+          "rationale": "Default login now has a readable inline title, modest Notepad heading, distinct provider group and quieter email help. Account guidance still takes substantial visual weight."
+        },
+        {
+          "name": "Spacing/grid",
+          "score": 8,
+          "rationale": "Consistent login gutters and 8/20/24-point relationships improve grouping; natural Account section gaps and the shorter capacity footer help. Provider outlines and loading geometry remain uneven."
+        },
+        {
+          "name": "Typography scale",
+          "score": 8.5,
+          "rationale": "System text styles create a clear title/body/help distinction. Board rows retain a comfortable body size and Account secondary text remains readable."
+        },
+        {
+          "name": "Dynamic Type",
+          "score": 8,
+          "rationale": "Default and XXXL content reflows without destructive truncation; password/legal content is scrollable. XXXL focus alignment is inconsistent, and AX1\u2013AX5 were not observed."
+        },
+        {
+          "name": "Light contrast",
+          "score": 8.5,
+          "rationale": "Final enabled text, helper text and filled primary actions are legible; final V2 raster gates report at least 6.29:1 for primary labels. Disabled fixture ink is not treated as enabled content."
+        },
+        {
+          "name": "Dark contrast",
+          "score": 8.5,
+          "rationale": "Final dark primary uses dark ink on the light purple fill, resolving the rejected V1 issue. White Apple branding and Account helpers remain readable in original evidence."
+        },
+        {
+          "name": "Iconography",
+          "score": 8.5,
+          "rationale": "Native Apple branding, SF Symbols, completion circles and quiet external-link arrows are coherent. No missing Apple label is inferred from downsampled display artifacts."
+        },
+        {
+          "name": "Safe area / Dynamic Island",
+          "score": 8.5,
+          "rationale": "Board, footer and expanded Island content clear their boundaries. Settled short Island text stays inside the pill; compact emptiness is deliberate. Focus-heading overlap is scored under keyboard handling."
+        },
+        {
+          "name": "Scroll/pull-down / last row",
+          "score": 8.5,
+          "rationale": "Long final rows remain fully readable above the capacity footer after pull and bottom scroll, including error and combined settings cases. Native geometry checks corroborate the visible result."
+        },
+        {
+          "name": "List rows",
+          "score": 8.5,
+          "rationale": "Top-aligned completion circles, stable text columns and restrained separators make long reminders understandable. Reorder affordances consume some width but communicate their function."
+        },
+        {
+          "name": "Empty states",
+          "score": 8,
+          "rationale": "All Clear and retry states have clear hierarchy and a reachable composer. Setup guidance adds useful context but produces a busier first-use canvas than the sparse reference."
+        },
+        {
+          "name": "Composer ergonomics",
+          "score": 8.5,
+          "rationale": "Focused composer stays directly above the keyboard with separate dismiss and add controls; populated text and submission affordance remain clear."
+        },
+        {
+          "name": "Keyboard handling",
+          "score": 7.5,
+          "rationale": "Clean full-device and populated supplements show usable fields and Done. Some XXXL empty-password captures clip the heading beneath navigation; populated captures use a better scroll position."
+        },
+        {
+          "name": "Sheet presentation/detents",
+          "score": 8.5,
+          "rationale": "Native rounded sheets, grabber, inline title and Done remain coherent at medium and large detents. Scrolling exposes lower actions without nested cards."
+        },
+        {
+          "name": "Navigation clarity",
+          "score": 8.5,
+          "rationale": "Your Board, Account, Sign In and alternate authentication actions are easy to locate. Legal/external links have clear destinations in source; live destination execution was not tested here."
+        },
+        {
+          "name": "Touch targets",
+          "score": 8.5,
+          "rationale": "Source and native gates support 44-point or larger controls; email/password surfaces are 48 points and Done remains reachable. Evidence supports geometry, not a physical finger test."
+        },
+        {
+          "name": "Haptics",
+          "score": 7,
+          "rationale": "Success/error feedback is wired in source, but no physical haptic experience was observed. Implementation evidence supports adequacy, not exceptional tactile polish."
+        },
+        {
+          "name": "Animation/transitions",
+          "score": 7.5,
+          "rationale": "Distributed recording frames show sensible Island expansion, Account scrolling and composer transitions. Sparse samples cannot establish frame pacing, and loading changes login layout height."
+        },
+        {
+          "name": "Loading states",
+          "score": 7.5,
+          "rationale": "Native progress and accessibility labels communicate work and prevent repeat submission. The large spinner increases the submit button height and shifts controls below it."
+        },
+        {
+          "name": "Error states",
+          "score": 8.5,
+          "rationale": "Errors remain readable with distinct retry/dismiss affordances and saved-board context. The requested raw network-error wording is retained and is not an open finding."
+        },
+        {
+          "name": "VoiceOver/labels",
+          "score": 8,
+          "rationale": "Source supplies field labels, progress labels, announcements and reorder actions; recorded AX checks support these. Spoken traversal, timing and rotor experience were not heard."
+        },
+        {
+          "name": "iOS HIG consistency",
+          "score": 8,
+          "rationale": "Native navigation, grouped Account sections, sheets and keyboards broadly match the reference vocabulary. Login custom provider geometry and long guidance prevent a fully unified native finish."
+        },
+        {
+          "name": "Lock Screen / Live Activity",
+          "score": 8,
+          "rationale": "Short expanded Island and Notification Center banners preserve complete words and correct hidden counts; long rows use native ellipsis. A true locked-device presentation and live updates remain unobserved."
+        },
+        {
+          "name": "Sign-in/onboarding",
+          "score": 8,
+          "rationale": "The whole default screen is materially calmer than the matched before composition, including empty, filled and password variants. Branding/copy are intact; provider geometry and loading movement remain visible polish work."
+        },
+        {
+          "name": "Settings/account",
+          "score": 8,
+          "rationale": "Unchromed identity, natural section gaps and quieter helpers improve scanability. Expanded widget instructions and the long persistence footer still interrupt the flow toward account actions."
+        },
+        {
+          "name": "Performance feel",
+          "score": 7.5,
+          "rationale": "Recordings show settled usable states and five Debug simulator samples exist. Host/XCTest timing does not prove hardware latency, hitch rate or a performance improvement."
+        },
+        {
+          "name": "Delight",
+          "score": 7.5,
+          "rationale": "Restraint, clear empty states and direct composition make the app pleasant. The login control mix and Account instructional density keep the finish functional rather than exceptional."
+        },
+        {
+          "name": "Long text",
+          "score": 8.5,
+          "rationale": "Long board rows and Account paragraphs retain their full text through scrolling. Island truncation is native and accompanied by accurate counts; legal content remains reachable at XXXL."
+        },
+        {
+          "name": "Reduced Motion / Transparency",
+          "score": 8.5,
+          "rationale": "Combined settings captures retain readable solid surfaces and controls; source respects reduced motion and restoration evidence covers all four switches. Broader physical-device motion behavior remains unobserved."
+        },
+        {
+          "name": "Palette / minimalism",
+          "score": 8.5,
+          "rationale": "Neutral surfaces with restrained purple actions fit the requested taste. Semantic destructive red is appropriate; there are no decorative red/orange panels or nested cards."
+        }
+      ],
+      "findings": [
+        {
+          "id": "R7-ASTRA-01",
+          "severity": "medium",
+          "title": "XXXL password focus can leave its heading under navigation",
+          "screen": "Sign In, empty password focused, XXXL, normal dark and combined light",
+          "evidence": [
+            "keyboards/signin-dark-XXXL-password-keyboard.png",
+            "combined-keyboards/manual-light-XXXL-password-keyboard.png",
+            "../../tasks/login-composition/after-complete/dark-XXXL-populated-focused.png"
+          ],
+          "observation": "The first two clean full-device captures cut the upper part of Password at the hard navigation edge. The actual secure field and Done remain visible. The populated supplement positions the heading correctly, so the defect is inconsistent focus alignment rather than an unusable field.",
+          "concrete_fix": "Make focus scrolling prioritize the active field together with its heading, and only scroll farther to show submit/alternate controls when space permits. Avoid unconditionally using the alternate-action bottom as the focus anchor.",
+          "confidence": "high for observed alignment; medium for the proposed causal explanation",
+          "basis": "observed and source-derived",
+          "source": [
+            "ios/App/SignInView.swift keyboardDidShow scrollTo(signin.alternateTarget)"
+          ],
+          "check": "Add a native regression capture/assertion for the heading and field bounds after first password focus and after keyboard dismissal/refocus at default and XXXL, both appearances and combined settings. Require both to clear the navigation edge; retain the existing strict SignInSurface checks and run the full iOS suite. Proposed check was not run by this reviewer."
+        },
+        {
+          "id": "R7-ASTRA-02",
+          "severity": "low",
+          "title": "Loading changes the login action height",
+          "screen": "Sign In, default and XXXL loading, both appearances",
+          "evidence": [
+            "../../tasks/login-composition/after-complete/light-default-default.png",
+            "../../tasks/login-composition/after-complete/light-default-loading.png",
+            "../../tasks/login-composition/after-complete/dark-default-default.png",
+            "../../tasks/login-composition/after-complete/dark-default-loading.png",
+            "../../tasks/login-composition/after-complete/light-XXXL-loading.png"
+          ],
+          "observation": "With the email group fixed in place, the loading submit rectangle becomes visibly taller and moves the alternate action and legal links down. The progress indicator is also large relative to the text it replaces.",
+          "concrete_fix": "Keep the text-derived button footprint stable and overlay a smaller native spinner that does not participate in intrinsic height, while retaining the accessible in-progress label and disabled semantics.",
+          "confidence": "high",
+          "basis": "observed and source-derived",
+          "source": [
+            "ios/App/SignInView.swift:475 signInButtonLabel",
+            "ios/App/SignInView.swift:345 controlSize(.large)"
+          ],
+          "check": "Assert native submit bounds and alternate/legal vertical positions remain stable between filled, pending and settled states at default and XXXL. Capture both appearances and run the existing iOS suite; this new regression check has not been run."
+        },
+        {
+          "id": "R7-ASTRA-03",
+          "severity": "low",
+          "title": "The default login provider pair has uneven visual weight",
+          "screen": "Sign In, default light enabled and filled",
+          "evidence": [
+            "../../tasks/login-composition/after-complete/light-default-enabled-default.png",
+            "../../tasks/login-composition/after-complete/light-default-filled-default.png",
+            "../../tasks/login-composition/after-complete/light-default-filled-password.png"
+          ],
+          "observation": "The custom Google outline is visibly heavier than the official Apple outline. Together with differently rounded filled fields and the prominent submit, the default screen still reads as several control treatments assembled into one stack, despite much better grouping.",
+          "concrete_fix": "Tune only the custom Google stroke and corner treatment to sit quietly alongside the unchanged native Apple control. Review the entire default empty and filled screen together, keeping all words, branding, icon, touch geometry and existing section relationships.",
+          "confidence": "medium; visual-taste judgment",
+          "basis": "observed and source-derived",
+          "source": [
+            "ios/App/SignInView.swift googleButton",
+            "ios/App/LMRChrome.swift SignInAppleFill"
+          ],
+          "check": "Compare native default light/dark empty and filled whole-screen captures, plus XXXL, after adjusting custom geometry. Retain provider ink/contrast, 44-point hit-target and copy-integrity checks and the existing iOS suite. No claim that this taste judgment is established by a numeric test."
+        },
+        {
+          "id": "R7-ASTRA-04",
+          "severity": "low",
+          "title": "Account instructions remain difficult to scan at XXXL",
+          "screen": "Account, expanded widget guidance and persistence footer",
+          "evidence": [
+            "account-enabled/screens/normal-dark-XXXL-expanded-guidance.png",
+            "account-combined/screens/normal3-dark-XXXL-persistence-centered.png",
+            "account-dark-default-top.png"
+          ],
+          "observation": "The expanded instructions occupy three full-width paragraph rows followed by another long footer. Contrast and paragraph separation are improved, but action scanning still pauses for a large block of similarly weighted prose, especially at XXXL.",
+          "concrete_fix": "Preserve every word while giving the existing Home Screen and Lock Screen prefixes a modest semibold emphasis and clearer paragraph rhythm. Keep the current native section structure, disclosure and separate actions; do not add cards or lower helper contrast.",
+          "confidence": "medium; visual-taste judgment",
+          "basis": "observed and source-derived",
+          "source": [
+            "ios/App/BoardPersistenceSection.swift DisclosureGroup and footer"
+          ],
+          "check": "Review normal/combined, light/dark, default/XXXL expanded and collapsed Account captures at both detents. Preserve existing helper contrast floors, native section gaps, complete text and bottom access, and run the existing iOS suite."
+        }
+      ]
+    }
+  },
+  "gate_passed": false,
+  "errors": [
+    "Missing scores-claude-opus-5.5.json"
+  ],
+  "opus_eligible": false
+}

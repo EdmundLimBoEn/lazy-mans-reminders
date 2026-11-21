@@ -1,0 +1,30 @@
+{
+  "measurements": [
+    {
+      "path": "candidate-light-XXXL-keyboard.png",
+      "bandPoints": [
+        20,
+        62,
+        140,
+        106
+      ],
+      "nativeTitleExcluded": true,
+      "nonTitlePixelsAbove1_5": 0,
+      "maxContrast": 1.1096206341839607
+    },
+    {
+      "path": "focused2/D5DA7E42-90DF-453C-A9AB-A17389BFA429.png",
+      "bandPoints": [
+        20,
+        62,
+        140,
+        106
+      ],
+      "nativeTitleExcluded": true,
+      "nonTitlePixelsAbove1_5": 3251,
+      "maxContrast": 2.6149807046958116
+    }
+  ],
+  "limitation": "Native full-device hard/empty versus XCTest soft/populated; same label/field44 source layout. Protected lower-screen content differs. Not an exact binary-only A/B.",
+  "disposition": "Measured hard sample passes1.5:1; soft fails. Retain hard only after final native matrix passes."
+}

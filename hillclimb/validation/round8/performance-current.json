@@ -1,0 +1,61 @@
+{
+  "sourceSHA": "20ae77e29019444a499e9e47c98d6b656ef56819",
+  "result": "/tmp/hillclimb-focus-PM-bounded-matrix-full.xcresult",
+  "metrics": [
+    {
+      "test": "PerformanceUITests/testSeededLaunchMetric()",
+      "metric": "Duration (AppLaunch)",
+      "unit": "s",
+      "samples": [
+        1.047473458,
+        0.964831583,
+        0.9532653750000001,
+        0.952178834,
+        1.021096709
+      ],
+      "mean": 0.9877691918,
+      "sampleSD": 0.04375683845057414,
+      "device": {
+        "deviceId": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "deviceName": "Hillclimb iPhone 17 Pro"
+      }
+    },
+    {
+      "test": "PerformanceUITests/testSeededScrollElapsedMetric()",
+      "metric": "Clock Monotonic Time",
+      "unit": "s",
+      "samples": [
+        4.878208782000001,
+        4.515793013000001,
+        4.866899383000001,
+        4.866800573,
+        4.842064207
+      ],
+      "mean": 4.7939531916,
+      "sampleSD": 0.1560565979795935,
+      "device": {
+        "deviceId": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "deviceName": "Hillclimb iPhone 17 Pro"
+      }
+    },
+    {
+      "test": "PerformanceUITests/testSeededScrollSignpostMetric()",
+      "metric": "Duration (Scroll_DraggingAndDeceleration)",
+      "unit": "s",
+      "samples": [
+        2.3512805830000003,
+        2.350730334,
+        2.3333395830000003,
+        2.351280667,
+        2.35085225
+      ],
+      "mean": 2.3474966834,
+      "sampleSD": 0.00791795812084056,
+      "device": {
+        "deviceId": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "deviceName": "Hillclimb iPhone 17 Pro"
+      }
+    }
+  ],
+  "scope": "Public five-sample simulator Debug/XCTest/host observations;no measured frame pacing,hardware feel,or improvement claim"
+}

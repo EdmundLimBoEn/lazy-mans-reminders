@@ -1,0 +1,82 @@
+[
+  {
+    "action": "Reference integrity schema inspection",
+    "failure": "AttributeError: 'list' object has no attribute 'items'",
+    "effect": "Read-only helper failed before verification or file mutation; corrected using actual list schema"
+  },
+  {
+    "action": "Production inventory helper",
+    "failure": "Two AssertionErrors from assuming54 Swift files rather than inspecting actual inventory",
+    "effect": "Read-only count assumptions failed; all45 Swift and54 total production files hash-match assigned revision. No source mismatch."
+  },
+  {
+    "action": "Initial combined run",
+    "failure": "Generated project omitted PerformanceUITests.swift because XcodeGen preceded file creation",
+    "exit": 75,
+    "interruption": "SIGINT after combined Settings teardown passed, during non-Settings Apple loading test; never a completed/full pass",
+    "rawResult": "/tmp/hillclimb-round6-65d9521e-initial-project-omission.xcresult",
+    "correction": "Regenerate project from unchanged frozen source; rebuild serially with resolution disabled; repeat focused Settings and full307 run."
+  },
+  {
+    "action": "Additional exact48pt raw-Double diagnostic",
+    "failure": "AssertionError: XXXL AX height is47.99999999999997 from fractional-coordinate subtraction",
+    "evidence": "combined-SignInChromeUITests native geometry attachments",
+    "disposition": "Preserved raw values. Original17 is3x: rounded native top739px andbottom883px span144px, exactly48pt. Strict physical-pixel span gate added, with unchanged existing44pt tests; no arbitrary epsilon and no app/test changes."
+  },
+  {
+    "action": "Native Account medium refresh capture",
+    "failure": "Error (COMMAND_FAILED): Selector did not match: label=\"Refresh Board Now\"",
+    "diagnosticID": "mw2x78vi-d7392994",
+    "diagnosticsLog": "/Users/limboenedmund/.agent-device/remote-diagnostics/t3-016b7667478b6f251b147cff/requests/52e166d3d7af10ec.ndjson",
+    "advice": "Run snapshot -i",
+    "followedOnce": true,
+    "snapshot": "manual-operations.json: snapshot after failure",
+    "evidence": "hillclimb/rounds/6/account-enabled/captures-errors.json retains failed command and pre-settle/settled AX differences",
+    "cause": "Broad scroll reported target visible before settling, then row moved above viewport",
+    "correction": "Bounded small settled scrolling; fresh AX reference must be hittable before press; resume incomplete cases, preserve completed PNGs. No app/test change."
+  },
+  {
+    "action": "Populated darkXXXL native fill",
+    "failure": "Error (COMMAND_FAILED): Selector role=securetextfield label=\"Password\" is behind the visible keyboard and cannot be filled safely",
+    "diagnosticID": "mw2xmjkm-f19f382b",
+    "diagnosticsLog": "/Users/limboenedmund/.agent-device/remote-diagnostics/t3-016b7667478b6f251b147cff/requests/82bc33e8a5129458.ndjson",
+    "advice": "End editing with the app Done control first",
+    "followedOnce": true,
+    "result": "Done succeeded; one fill retry succeeded with12 chars and visible keyboard; finish missing screenshots without repeating completed cases",
+    "evidence": "manual-operations.json"
+  },
+  {
+    "action": "Error-raster export parser",
+    "failure": "AssertionError from zero matches for assumed contrast= field",
+    "correction": "Actual attachment uses ratio=; corrected parser validates44 actual native ratios, minimum12.0577:1; raw result/attachments unchanged"
+  },
+  {
+    "action": "Native Activity OCR footer parser",
+    "failure": "AssertionError: no exact +N more match in lightXXXL banner",
+    "rawOCR": "+ 6 more",
+    "nativeEvidence": "hillclimb/rounds/6/activity/multiline-light-XXXL-notification-center.png",
+    "inspection": "Native original clearly shows4 complete Demo lines and+6 more",
+    "correction": "Allow only OCR whitespace between+ and numeric count; preserve raw OCR and require exact count, glyph height, native bounds and raster clearance. No app/image/test change."
+  },
+  {
+    "action": "Enabled-inert legal footer, lightXXXL real pan",
+    "failure": "Error (COMMAND_FAILED): Selector did not match: label=\"Privacy\"",
+    "diagnosticID": "mw2z2cfd-b84e0450",
+    "diagnosticsLog": "/Users/limboenedmund/.agent-device/remote-diagnostics/t3-016b7667478b6f251b147cff/requests/76955ec1aa23208f.ndjson",
+    "advice": "Run snapshot -i",
+    "followedOnce": true,
+    "followupFailure": "Error (COMMAND_FAILED): scroll bottom moved nothing across 3 passes: the container still reports hidden content but its contents never shifted",
+    "followupDiagnosticID": "mw2z3iyj-c44416c8",
+    "followupDiagnosticsLog": "/Users/limboenedmund/.agent-device/remote-diagnostics/t3-016b7667478b6f251b147cff/requests/916fcbc50b725a7d.ndjson",
+    "secondSelectorFailure": "Error (COMMAND_FAILED): Selector did not match: label=\"Privacy\"",
+    "secondSelectorDiagnosticID": "mw2z3lk6-e15c4c2b",
+    "secondSelectorDiagnosticsLog": "/Users/limboenedmund/.agent-device/remote-diagnostics/t3-016b7667478b6f251b147cff/requests/8c38c7dbac15585b.ndjson",
+    "disposition": "Stopped failed action; no further legal-pan attempts. Only lightdefault passed; dark cases unattempted. Required actual enabled-footer gesture coverage remains unmet. XCTest launch-bottom fixture passes separately.",
+    "evidence": "hillclimb/rounds/6/rejected/legal-pan-failure/light-XXXL-failed-reachability.png"
+  },
+  {
+    "action": "Redundant app close after successful device_close",
+    "failure": "FileNotFoundError: [Errno 2] No such file or directory: '/Users/limboenedmund/.t3/userdata/device/targets/t3-016b7667478b6f251b147cff/agent-device'",
+    "disposition": "device_close already removed owned pinned executable/session target. No retry/reopen or foreign-session use; prior app/Settings closure and final SpringBoard inspected; panel closed and original17 remains booted."
+  }
+]

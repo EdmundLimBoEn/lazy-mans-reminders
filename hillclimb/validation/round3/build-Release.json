@@ -1,0 +1,32 @@
+{
+  "command": [
+    "xcodebuild",
+    "build",
+    "-project",
+    "ios/LazyMansReminders.xcodeproj",
+    "-scheme",
+    "LazyMansReminders",
+    "-destination",
+    "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+    "-derivedDataPath",
+    "/tmp/notepad-round3-original17-dd",
+    "ARCHS=arm64",
+    "ONLY_ACTIVE_ARCH=YES",
+    "CODE_SIGNING_ALLOWED=NO",
+    "-disableAutomaticPackageResolution",
+    "-skipPackageUpdates",
+    "-configuration",
+    "Release"
+  ],
+  "exit": 0,
+  "startedUTC": "2026-11-04T15:37:14.696972+00:00",
+  "observations": [
+    "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-45d3c452/ios/App/AuthManager.swift:90:81: warning: 'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]",
+    "|                                                                                 |- warning: 'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]",
+    "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-45d3c452/ios/App/AuthManager.swift:242:25: warning: result of 'try?' is unused [#NoUsage]",
+    "|                         `- warning: result of 'try?' is unused [#NoUsage]",
+    "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-45d3c452/ios/App/AuthManager.swift:428:9: warning: result of 'try?' is unused [#NoUsage]",
+    "|         `- warning: result of 'try?' is unused [#NoUsage]",
+    "** BUILD SUCCEEDED **"
+  ]
+}

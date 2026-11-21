@@ -1,0 +1,27 @@
+{
+  "commonFailureInsights" : [
+
+  ],
+  "failureDistributionInsights" : [
+
+  ],
+  "longestTestRunsInsights" : [
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testMutationsStillSucceedWhenOnlyTheAccessTokenChanges",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionClientTests/testConstructingClientDoesNotStartAnSDKInitialRefreshOutsideGate",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testFailedAuthRefreshDoesNotFallBackToOriginalAfterRotationToExpiredTokens",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testDelayedCreateCannotRestoreCacheAfterSameAccountSignsInAgain",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityLayoutTests/testRenderedLastLineFitsBothNativeSurfaceBudgets"
+      ],
+      "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+      "durationOfSlowTests" : 0.7246401309967041,
+      "impact" : "(41%)",
+      "meanTime" : "0.0067s across 263 test runs",
+      "osNameAndVersion" : "iOS Simulator 26.2",
+      "targetName" : "LazyMansRemindersTests",
+      "testPlanConfigurationName" : "Test Scheme Action",
+      "title" : "5 longest test runs with outlier durations exceeding 0.07s (three standard deviations)"
+    }
+  ]
+}

@@ -1,0 +1,2486 @@
+{
+  "sourceSHA": "b5d9bb3df1b20d765ae5efff438190f396827456",
+  "device": {
+    "hostId": "local",
+    "id": "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+    "name": "Hillclimb iPhone 17 Pro",
+    "version": "iOS 26.2",
+    "build": "23C54",
+    "points": [
+      402,
+      874
+    ],
+    "pixels": [
+      1206,
+      2622
+    ]
+  },
+  "operations": [
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 17 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [editable]\n@e12 [button] \"Send Sign-In Link\" [disabled]\n@e13 [button] \"Use an Existing Password\"\n@e14 [link] \"Privacy\" [disabled]\n@e15 [link] \"Terms\" [disabled]\n@e16 [link] \"Support\" [disabled]\n@e17 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-default.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-default.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=password",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 20 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [editable]\n@e12 [other] \"signin.passwordTarget\"\n@e13 [securetextfield] \"Password\"\n@e14 [text] \"For an existing account with a password. You can also use a sign-in link.\"\n@e15 [button] \"Sign In with Password\" [disabled]\n@e16 [button] \"Use a Sign-In Link Instead\"\n@e17 [link] \"Privacy\" [disabled]\n@e18 [link] \"Terms\" [disabled]\n@e19 [link] \"Support\" [disabled]\n@e20 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-password.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-password.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=inbox",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 14 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Check Your Inbox\"\n@e9 [text] \"We sent a sign-in link to you@example.com.\"\n@e10 [button] \"Use a Different Email\"\n@e11 [link] \"Privacy\" [disabled]\n@e12 [link] \"Terms\" [disabled]\n@e13 [link] \"Support\" [disabled]\n@e14 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-inbox.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-inbox.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=error",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 18 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [editable]\n@e12 [button] \"Send Sign-In Link\" [disabled]\n@e13 [button] \"Use an Existing Password\"\n@e14 [text] \"Couldn\u2019t sign in. Check your email and password, or use a sign-in link. If you\u2019re offline, reconnect and try again.\"\n@e15 [link] \"Privacy\" [disabled]\n@e16 [link] \"Terms\" [disabled]\n@e17 [link] \"Support\" [disabled]\n@e18 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-error.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-error.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=loading",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 19 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\" [disabled]\n@e7 [button] \"Sign in with Google\" [disabled]\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [disabled] [editable]\n@e12 [button] \"Send Sign-In Link, in progress\" [disabled]\n@e13 [activity-indicator] \"In progress\" [disabled]\n@e14 [activity-indicator] \"1\"\n@e15 [button] \"Use an Existing Password\" [disabled]\n@e16 [link] \"Privacy\" [disabled]\n@e17 [link] \"Terms\" [disabled]\n@e18 [link] \"Support\" [disabled]\n@e19 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-loading.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-loading.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=keyboard",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "text",
+        "Done",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 63 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content above scroll-area hidden]\n  [content below scroll-area hidden]\n@e5 [button] \"Sign in with Apple\"\n@e6 [button] \"Sign in with Google\"\n@e7 [text] \"Email\"\n@e8 [text] \"Use the same address as the web board.\"\n@e9 [other] \"signin.emailTarget\"\n@e10 [text-field] \"you@example.com\" [focused] [editable]\n@e11 [button] \"Send Sign-In Link\" [disabled]\n@e12 [button] \"Use an Existing Password\"\n@e13 [link] \"Privacy\" [disabled]\n@e14 [link] \"Terms\" [disabled]\n@e15 [link] \"Support\" [disabled]\n@e16 [button] \"Done\"\n@e17 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n@e18 [other] \"inputView\"\n@e19 [keyboard]\n@e20 [other] \"UIKeyboardLayoutStar Preview\"\n@e21 [key] \"Padding-Left\"\n@e22 [key] \"q\"\n@e23 [key] \"w\"\n@e24 [key] \"e\"\n@e25 [key] \"r\"\n@e26 [key] \"t\"\n@e27 [key] \"y\"\n@e28 [key] \"u\"\n@e29 [key] \"i\"\n@e30 [key] \"o\"\n@e31 [key] \"p\"\n@e32 [key] \"Padding-Right\"\n@e33 [key] \"Padding-Left\"\n@e34 [key] \"a\"\n@e35 [key] \"s\"\n@e36 [key] \"d\"\n@e37 [key] \"f\"\n@e38 [key] \"g\"\n@e39 [key] \"h\"\n@e40 [key] \"j\"\n@e41 [key] \"k\"\n@e42 [key] \"l\"\n@e43 [key] \"Padding-Right\"\n@e44 [key] \"shift\"\n@e45 [key] \"Padding-Left\"\n@e46 [key] \"z\"\n@e47 [key] \"x\"\n@e48 [key] \"c\"\n@e49 [key] \"v\"\n@e50 [key] \"b\"\n@e51 [key] \"n\"\n@e52 [key] \"m\"\n@e53 [key] \"Padding-Right\"\n@e54 [key] \"delete\"\n@e55 [key] \"numbers\"\n@e56 [key] \"Emoji\"\n@e57 [key] \"space\"\n@e58 [key] \"@\"\n@e59 [key] \".\"\n@e60 [key] \"send\"\n@e61 [button] \"Next keyboard\"\n@e62 [button] \"Dictate\"\n@e63 [button] \"Dictate\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-keyboard.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-keyboard.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=password-keyboard",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "text",
+        "Done",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 62 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content above scroll-area hidden]\n  [content below scroll-area hidden]\n@e5 [button] \"Sign in with Google\"\n@e6 [text] \"Email\"\n@e7 [text] \"Use the same address as the web board.\"\n@e8 [other] \"signin.emailTarget\"\n@e9 [text-field] \"you@example.com\" [editable]\n@e10 [other] \"signin.passwordTarget\"\n@e11 [securetextfield] \"Password\" [focused]\n@e12 [text] \"For an existing account with a password. You can also use a sign-in link.\"\n@e13 [button] \"Sign In with Password\" [disabled]\n@e14 [button] \"Use a Sign-In Link Instead\"\n@e15 [button] \"Done\"\n@e16 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n@e17 [other] \"inputView\"\n@e18 [other] \"SystemInputAssistantView\"\n@e19 [other] \"CenterPageView\"\n@e20 [scroll-area] [scrollable]\n@e21 [other] \"Typing Predictions\"\n@e22 [button] \"Passwords\"\n@e23 [keyboard]\n@e24 [other] \"UIKeyboardLayoutStar Preview\"\n@e25 [key] \"Padding-Left\"\n@e26 [key] \"q\"\n@e27 [key] \"w\"\n@e28 [key] \"e\"\n@e29 [key] \"r\"\n@e30 [key] \"t\"\n@e31 [key] \"y\"\n@e32 [key] \"u\"\n@e33 [key] \"i\"\n@e34 [key] \"o\"\n@e35 [key] \"p\"\n@e36 [key] \"Padding-Right\"\n@e37 [key] \"Padding-Left\"\n@e38 [key] \"a\"\n@e39 [key] \"s\"\n@e40 [key] \"d\"\n@e41 [key] \"f\"\n@e42 [key] \"g\"\n@e43 [key] \"h\"\n@e44 [key] \"j\"\n@e45 [key] \"k\"\n@e46 [key] \"l\"\n@e47 [key] \"Padding-Right\"\n@e48 [key] \"shift\"\n@e49 [key] \"Padding-Left\"\n@e50 [key] \"z\"\n@e51 [key] \"x\"\n@e52 [key] \"c\"\n@e53 [key] \"v\"\n@e54 [key] \"b\"\n@e55 [key] \"n\"\n@e56 [key] \"m\"\n@e57 [key] \"Padding-Right\"\n@e58 [key] \"delete\"\n@e59 [key] \"numbers\"\n@e60 [key] \"space\"\n@e61 [key] \"go\"\n@e62 [button] \"Dictate\" [disabled]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-password-keyboard.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-default-password-keyboard.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "settings",
+        "text-size",
+        "extra-extra-extra-large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to extra-extra-extra-large\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 17 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [editable]\n@e12 [button] \"Send Sign-In Link\" [disabled]\n@e13 [button] \"Use an Existing Password\"\n@e14 [link] \"Privacy\" [disabled]\n@e15 [link] \"Terms\" [disabled]\n@e16 [link] \"Support\" [disabled]\n@e17 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-default.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-default.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=password",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 17 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [editable]\n@e12 [other] \"signin.passwordTarget\"\n@e13 [securetextfield] \"Password\"\n@e14 [text] \"For an existing account with a password. You can also use a sign-in link.\"\n@e15 [button] \"Sign In with Password\" [disabled]\n@e16 [button] \"Use a Sign-In Link Instead\"\n@e17 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-password.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-password.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=inbox",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 14 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Check Your Inbox\"\n@e9 [text] \"We sent a sign-in link to you@example.com.\"\n@e10 [button] \"Use a Different Email\"\n@e11 [link] \"Privacy\" [disabled]\n@e12 [link] \"Terms\" [disabled]\n@e13 [link] \"Support\" [disabled]\n@e14 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-inbox.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-inbox.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=error",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 15 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [editable]\n@e12 [button] \"Send Sign-In Link\" [disabled]\n@e13 [button] \"Use an Existing Password\"\n@e14 [text] \"Couldn\u2019t sign in. Check your email and password, or use a sign-in link. If you\u2019re offline, reconnect and try again.\"\n@e15 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-error.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-error.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=loading",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 19 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\" [disabled]\n@e7 [button] \"Sign in with Google\" [disabled]\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [disabled] [editable]\n@e12 [button] \"Send Sign-In Link, in progress\" [disabled]\n@e13 [activity-indicator] \"In progress\" [disabled]\n@e14 [activity-indicator] \"1\"\n@e15 [button] \"Use an Existing Password\" [disabled]\n@e16 [link] \"Privacy\" [disabled]\n@e17 [link] \"Terms\" [disabled]\n@e18 [link] \"Support\" [disabled]\n@e19 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-loading.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-loading.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=keyboard",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "text",
+        "Done",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 62 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content above scroll-area hidden]\n  [content below scroll-area hidden]\n@e5 [button] \"Sign in with Google\"\n@e6 [text] \"Email\"\n@e7 [text] \"Use the same address as the web board.\"\n@e8 [other] \"signin.emailTarget\"\n@e9 [text-field] \"you@example.com\" [focused] [editable]\n@e10 [button] \"Send Sign-In Link\" [disabled]\n@e11 [button] \"Use an Existing Password\"\n@e12 [link] \"Privacy\" [disabled]\n@e13 [link] \"Terms\" [disabled]\n@e14 [link] \"Support\" [disabled]\n@e15 [button] \"Done\"\n@e16 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n@e17 [other] \"inputView\"\n@e18 [keyboard]\n@e19 [other] \"UIKeyboardLayoutStar Preview\"\n@e20 [key] \"Padding-Left\"\n@e21 [key] \"q\"\n@e22 [key] \"w\"\n@e23 [key] \"e\"\n@e24 [key] \"r\"\n@e25 [key] \"t\"\n@e26 [key] \"y\"\n@e27 [key] \"u\"\n@e28 [key] \"i\"\n@e29 [key] \"o\"\n@e30 [key] \"p\"\n@e31 [key] \"Padding-Right\"\n@e32 [key] \"Padding-Left\"\n@e33 [key] \"a\"\n@e34 [key] \"s\"\n@e35 [key] \"d\"\n@e36 [key] \"f\"\n@e37 [key] \"g\"\n@e38 [key] \"h\"\n@e39 [key] \"j\"\n@e40 [key] \"k\"\n@e41 [key] \"l\"\n@e42 [key] \"Padding-Right\"\n@e43 [key] \"shift\"\n@e44 [key] \"Padding-Left\"\n@e45 [key] \"z\"\n@e46 [key] \"x\"\n@e47 [key] \"c\"\n@e48 [key] \"v\"\n@e49 [key] \"b\"\n@e50 [key] \"n\"\n@e51 [key] \"m\"\n@e52 [key] \"Padding-Right\"\n@e53 [key] \"delete\"\n@e54 [key] \"numbers\"\n@e55 [key] \"Emoji\"\n@e56 [key] \"space\"\n@e57 [key] \"@\"\n@e58 [key] \".\"\n@e59 [key] \"send\"\n@e60 [button] \"Next keyboard\"\n@e61 [button] \"Dictate\"\n@e62 [button] \"Dictate\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-keyboard.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-keyboard.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=password-keyboard",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "text",
+        "Done",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 61 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content above scroll-area hidden]\n  [content below scroll-area hidden]\n@e5 [text] \"Email\"\n@e6 [text] \"Use the same address as the web board.\"\n@e7 [other] \"signin.emailTarget\"\n@e8 [text-field] \"you@example.com\" [editable]\n@e9 [other] \"signin.passwordTarget\"\n@e10 [securetextfield] \"Password\" [focused]\n@e11 [text] \"For an existing account with a password. You can also use a sign-in link.\"\n@e12 [button] \"Sign In with Password\" [disabled]\n@e13 [button] \"Use a Sign-In Link Instead\"\n@e14 [button] \"Done\"\n@e15 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n@e16 [other] \"inputView\"\n@e17 [other] \"SystemInputAssistantView\"\n@e18 [other] \"CenterPageView\"\n@e19 [scroll-area] [scrollable]\n@e20 [other] \"Typing Predictions\"\n@e21 [button] \"Passwords\"\n@e22 [keyboard]\n@e23 [other] \"UIKeyboardLayoutStar Preview\"\n@e24 [key] \"Padding-Left\"\n@e25 [key] \"q\"\n@e26 [key] \"w\"\n@e27 [key] \"e\"\n@e28 [key] \"r\"\n@e29 [key] \"t\"\n@e30 [key] \"y\"\n@e31 [key] \"u\"\n@e32 [key] \"i\"\n@e33 [key] \"o\"\n@e34 [key] \"p\"\n@e35 [key] \"Padding-Right\"\n@e36 [key] \"Padding-Left\"\n@e37 [key] \"a\"\n@e38 [key] \"s\"\n@e39 [key] \"d\"\n@e40 [key] \"f\"\n@e41 [key] \"g\"\n@e42 [key] \"h\"\n@e43 [key] \"j\"\n@e44 [key] \"k\"\n@e45 [key] \"l\"\n@e46 [key] \"Padding-Right\"\n@e47 [key] \"shift\"\n@e48 [key] \"Padding-Left\"\n@e49 [key] \"z\"\n@e50 [key] \"x\"\n@e51 [key] \"c\"\n@e52 [key] \"v\"\n@e53 [key] \"b\"\n@e54 [key] \"n\"\n@e55 [key] \"m\"\n@e56 [key] \"Padding-Right\"\n@e57 [key] \"delete\"\n@e58 [key] \"numbers\"\n@e59 [key] \"space\"\n@e60 [key] \"go\"\n@e61 [button] \"Dictate\" [disabled]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-password-keyboard.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-light-XXXL-password-keyboard.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "settings",
+        "appearance",
+        "dark"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 17 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [editable]\n@e12 [button] \"Send Sign-In Link\" [disabled]\n@e13 [button] \"Use an Existing Password\"\n@e14 [link] \"Privacy\" [disabled]\n@e15 [link] \"Terms\" [disabled]\n@e16 [link] \"Support\" [disabled]\n@e17 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-default.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-default.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=password",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 20 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [editable]\n@e12 [other] \"signin.passwordTarget\"\n@e13 [securetextfield] \"Password\"\n@e14 [text] \"For an existing account with a password. You can also use a sign-in link.\"\n@e15 [button] \"Sign In with Password\" [disabled]\n@e16 [button] \"Use a Sign-In Link Instead\"\n@e17 [link] \"Privacy\" [disabled]\n@e18 [link] \"Terms\" [disabled]\n@e19 [link] \"Support\" [disabled]\n@e20 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-password.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-password.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=inbox",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 14 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Check Your Inbox\"\n@e9 [text] \"We sent a sign-in link to you@example.com.\"\n@e10 [button] \"Use a Different Email\"\n@e11 [link] \"Privacy\" [disabled]\n@e12 [link] \"Terms\" [disabled]\n@e13 [link] \"Support\" [disabled]\n@e14 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-inbox.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-inbox.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=error",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 18 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [editable]\n@e12 [button] \"Send Sign-In Link\" [disabled]\n@e13 [button] \"Use an Existing Password\"\n@e14 [text] \"Couldn\u2019t sign in. Check your email and password, or use a sign-in link. If you\u2019re offline, reconnect and try again.\"\n@e15 [link] \"Privacy\" [disabled]\n@e16 [link] \"Terms\" [disabled]\n@e17 [link] \"Support\" [disabled]\n@e18 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-error.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-error.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=loading",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 19 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\" [disabled]\n@e7 [button] \"Sign in with Google\" [disabled]\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [disabled] [editable]\n@e12 [button] \"Send Sign-In Link, in progress\" [disabled]\n@e13 [activity-indicator] \"In progress\" [disabled]\n@e14 [activity-indicator] \"1\"\n@e15 [button] \"Use an Existing Password\" [disabled]\n@e16 [link] \"Privacy\" [disabled]\n@e17 [link] \"Terms\" [disabled]\n@e18 [link] \"Support\" [disabled]\n@e19 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-loading.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-loading.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=keyboard",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "text",
+        "Done",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 61 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content above scroll-area hidden]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [focused] [editable]\n@e12 [button] \"Send Sign-In Link\" [disabled]\n@e13 [button] \"Use an Existing Password\"\n@e14 [button] \"Done\"\n@e15 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n@e16 [other] \"inputView\"\n@e17 [keyboard]\n@e18 [other] \"UIKeyboardLayoutStar Preview\"\n@e19 [key] \"Padding-Left\"\n@e20 [key] \"q\"\n@e21 [key] \"w\"\n@e22 [key] \"e\"\n@e23 [key] \"r\"\n@e24 [key] \"t\"\n@e25 [key] \"y\"\n@e26 [key] \"u\"\n@e27 [key] \"i\"\n@e28 [key] \"o\"\n@e29 [key] \"p\"\n@e30 [key] \"Padding-Right\"\n@e31 [key] \"Padding-Left\"\n@e32 [key] \"a\"\n@e33 [key] \"s\"\n@e34 [key] \"d\"\n@e35 [key] \"f\"\n@e36 [key] \"g\"\n@e37 [key] \"h\"\n@e38 [key] \"j\"\n@e39 [key] \"k\"\n@e40 [key] \"l\"\n@e41 [key] \"Padding-Right\"\n@e42 [key] \"shift\"\n@e43 [key] \"Padding-Left\"\n@e44 [key] \"z\"\n@e45 [key] \"x\"\n@e46 [key] \"c\"\n@e47 [key] \"v\"\n@e48 [key] \"b\"\n@e49 [key] \"n\"\n@e50 [key] \"m\"\n@e51 [key] \"Padding-Right\"\n@e52 [key] \"delete\"\n@e53 [key] \"numbers\"\n@e54 [key] \"Emoji\"\n@e55 [key] \"space\"\n@e56 [key] \"@\"\n@e57 [key] \".\"\n@e58 [key] \"send\"\n@e59 [button] \"Next keyboard\"\n@e60 [button] \"Dictate\"\n@e61 [button] \"Dictate\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-keyboard.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-keyboard.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=password-keyboard",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "text",
+        "Done",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 62 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content above scroll-area hidden]\n  [content below scroll-area hidden]\n@e5 [button] \"Sign in with Google\"\n@e6 [text] \"Email\"\n@e7 [text] \"Use the same address as the web board.\"\n@e8 [other] \"signin.emailTarget\"\n@e9 [text-field] \"you@example.com\" [editable]\n@e10 [other] \"signin.passwordTarget\"\n@e11 [securetextfield] \"Password\" [focused]\n@e12 [text] \"For an existing account with a password. You can also use a sign-in link.\"\n@e13 [button] \"Sign In with Password\" [disabled]\n@e14 [button] \"Use a Sign-In Link Instead\"\n@e15 [button] \"Done\"\n@e16 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[17,17,0,0]}\"\n@e17 [other] \"inputView\"\n@e18 [other] \"SystemInputAssistantView\"\n@e19 [other] \"CenterPageView\"\n@e20 [scroll-area] [scrollable]\n@e21 [other] \"Typing Predictions\"\n@e22 [button] \"Passwords\"\n@e23 [keyboard]\n@e24 [other] \"UIKeyboardLayoutStar Preview\"\n@e25 [key] \"Padding-Left\"\n@e26 [key] \"q\"\n@e27 [key] \"w\"\n@e28 [key] \"e\"\n@e29 [key] \"r\"\n@e30 [key] \"t\"\n@e31 [key] \"y\"\n@e32 [key] \"u\"\n@e33 [key] \"i\"\n@e34 [key] \"o\"\n@e35 [key] \"p\"\n@e36 [key] \"Padding-Right\"\n@e37 [key] \"Padding-Left\"\n@e38 [key] \"a\"\n@e39 [key] \"s\"\n@e40 [key] \"d\"\n@e41 [key] \"f\"\n@e42 [key] \"g\"\n@e43 [key] \"h\"\n@e44 [key] \"j\"\n@e45 [key] \"k\"\n@e46 [key] \"l\"\n@e47 [key] \"Padding-Right\"\n@e48 [key] \"shift\"\n@e49 [key] \"Padding-Left\"\n@e50 [key] \"z\"\n@e51 [key] \"x\"\n@e52 [key] \"c\"\n@e53 [key] \"v\"\n@e54 [key] \"b\"\n@e55 [key] \"n\"\n@e56 [key] \"m\"\n@e57 [key] \"Padding-Right\"\n@e58 [key] \"delete\"\n@e59 [key] \"numbers\"\n@e60 [key] \"space\"\n@e61 [key] \"go\"\n@e62 [button] \"Dictate\" [disabled]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-password-keyboard.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-default-password-keyboard.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "settings",
+        "text-size",
+        "extra-extra-extra-large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to extra-extra-extra-large\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 17 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [editable]\n@e12 [button] \"Send Sign-In Link\" [disabled]\n@e13 [button] \"Use an Existing Password\"\n@e14 [link] \"Privacy\" [disabled]\n@e15 [link] \"Terms\" [disabled]\n@e16 [link] \"Support\" [disabled]\n@e17 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-default.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-default.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=password",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 17 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [editable]\n@e12 [other] \"signin.passwordTarget\"\n@e13 [securetextfield] \"Password\"\n@e14 [text] \"For an existing account with a password. You can also use a sign-in link.\"\n@e15 [button] \"Sign In with Password\" [disabled]\n@e16 [button] \"Use a Sign-In Link Instead\"\n@e17 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-password.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-password.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=inbox",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 14 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Check Your Inbox\"\n@e9 [text] \"We sent a sign-in link to you@example.com.\"\n@e10 [button] \"Use a Different Email\"\n@e11 [link] \"Privacy\" [disabled]\n@e12 [link] \"Terms\" [disabled]\n@e13 [link] \"Support\" [disabled]\n@e14 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-inbox.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-inbox.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=error",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 15 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\"\n@e7 [button] \"Sign in with Google\"\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [editable]\n@e12 [button] \"Send Sign-In Link\" [disabled]\n@e13 [button] \"Use an Existing Password\"\n@e14 [text] \"Couldn\u2019t sign in. Check your email and password, or use a sign-in link. If you\u2019re offline, reconnect and try again.\"\n@e15 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-error.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-error.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=loading",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 19 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content below scroll-area hidden]\n@e5 [text] \"Your board on this iPhone, the web, and the Lock Screen.\"\n@e6 [button] \"Sign in with Apple\" [disabled]\n@e7 [button] \"Sign in with Google\" [disabled]\n@e8 [text] \"Email\"\n@e9 [text] \"Use the same address as the web board.\"\n@e10 [other] \"signin.emailTarget\"\n@e11 [text-field] \"you@example.com\" [disabled] [editable]\n@e12 [button] \"Send Sign-In Link, in progress\" [disabled]\n@e13 [activity-indicator] \"In progress\" [disabled]\n@e14 [activity-indicator] \"1\"\n@e15 [button] \"Use an Existing Password\" [disabled]\n@e16 [link] \"Privacy\" [disabled]\n@e17 [link] \"Terms\" [disabled]\n@e18 [link] \"Support\" [disabled]\n@e19 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-loading.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-loading.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=keyboard",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "text",
+        "Done",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 60 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content above scroll-area hidden]\n  [content below scroll-area hidden]\n@e5 [button] \"Sign in with Apple\"\n@e6 [button] \"Sign in with Google\"\n@e7 [text] \"Email\"\n@e8 [text] \"Use the same address as the web board.\"\n@e9 [other] \"signin.emailTarget\"\n@e10 [text-field] \"you@example.com\" [focused] [editable]\n@e11 [button] \"Send Sign-In Link\" [disabled]\n@e12 [button] \"Use an Existing Password\"\n@e13 [button] \"Done\"\n@e14 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n@e15 [other] \"inputView\"\n@e16 [keyboard]\n@e17 [other] \"UIKeyboardLayoutStar Preview\"\n@e18 [key] \"Padding-Left\"\n@e19 [key] \"q\"\n@e20 [key] \"w\"\n@e21 [key] \"e\"\n@e22 [key] \"r\"\n@e23 [key] \"t\"\n@e24 [key] \"y\"\n@e25 [key] \"u\"\n@e26 [key] \"i\"\n@e27 [key] \"o\"\n@e28 [key] \"p\"\n@e29 [key] \"Padding-Right\"\n@e30 [key] \"Padding-Left\"\n@e31 [key] \"a\"\n@e32 [key] \"s\"\n@e33 [key] \"d\"\n@e34 [key] \"f\"\n@e35 [key] \"g\"\n@e36 [key] \"h\"\n@e37 [key] \"j\"\n@e38 [key] \"k\"\n@e39 [key] \"l\"\n@e40 [key] \"Padding-Right\"\n@e41 [key] \"shift\"\n@e42 [key] \"Padding-Left\"\n@e43 [key] \"z\"\n@e44 [key] \"x\"\n@e45 [key] \"c\"\n@e46 [key] \"v\"\n@e47 [key] \"b\"\n@e48 [key] \"n\"\n@e49 [key] \"m\"\n@e50 [key] \"Padding-Right\"\n@e51 [key] \"delete\"\n@e52 [key] \"numbers\"\n@e53 [key] \"Emoji\"\n@e54 [key] \"space\"\n@e55 [key] \"@\"\n@e56 [key] \".\"\n@e57 [key] \"send\"\n@e58 [button] \"Next keyboard\"\n@e59 [button] \"Dictate\"\n@e60 [button] \"Dictate\"\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-keyboard.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-keyboard.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=signin",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-signin-variant",
+        "--launch-args=password-keyboard",
+        "--launch-args=--hillclimb-signin-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-caa222dd4a63ee4f2b92619f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "text",
+        "Done",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "snapshot",
+        "-i"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 61 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Sign In\"\n@e3 [text] \"Sign In\"\n@e4 [scroll-area] [scrollable]\n  [content above scroll-area hidden]\n  [content below scroll-area hidden]\n@e5 [text] \"Email\"\n@e6 [text] \"Use the same address as the web board.\"\n@e7 [other] \"signin.emailTarget\"\n@e8 [text-field] \"you@example.com\" [editable]\n@e9 [other] \"signin.passwordTarget\"\n@e10 [securetextfield] \"Password\" [focused]\n@e11 [text] \"For an existing account with a password. You can also use a sign-in link.\"\n@e12 [button] \"Sign In with Password\" [disabled]\n@e13 [button] \"Use a Sign-In Link Instead\"\n@e14 [button] \"Done\"\n@e15 [other] \"{\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"fixtureCount\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"typeSize\":[23,17,0,0]}\"\n@e16 [other] \"inputView\"\n@e17 [other] \"SystemInputAssistantView\"\n@e18 [other] \"CenterPageView\"\n@e19 [scroll-area] [scrollable]\n@e20 [other] \"Typing Predictions\"\n@e21 [button] \"Passwords\"\n@e22 [keyboard]\n@e23 [other] \"UIKeyboardLayoutStar Preview\"\n@e24 [key] \"Padding-Left\"\n@e25 [key] \"q\"\n@e26 [key] \"w\"\n@e27 [key] \"e\"\n@e28 [key] \"r\"\n@e29 [key] \"t\"\n@e30 [key] \"y\"\n@e31 [key] \"u\"\n@e32 [key] \"i\"\n@e33 [key] \"o\"\n@e34 [key] \"p\"\n@e35 [key] \"Padding-Right\"\n@e36 [key] \"Padding-Left\"\n@e37 [key] \"a\"\n@e38 [key] \"s\"\n@e39 [key] \"d\"\n@e40 [key] \"f\"\n@e41 [key] \"g\"\n@e42 [key] \"h\"\n@e43 [key] \"j\"\n@e44 [key] \"k\"\n@e45 [key] \"l\"\n@e46 [key] \"Padding-Right\"\n@e47 [key] \"shift\"\n@e48 [key] \"Padding-Left\"\n@e49 [key] \"z\"\n@e50 [key] \"x\"\n@e51 [key] \"c\"\n@e52 [key] \"v\"\n@e53 [key] \"b\"\n@e54 [key] \"n\"\n@e55 [key] \"m\"\n@e56 [key] \"Padding-Right\"\n@e57 [key] \"delete\"\n@e58 [key] \"numbers\"\n@e59 [key] \"space\"\n@e60 [key] \"go\"\n@e61 [button] \"Dictate\" [disabled]\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-password-keyboard.png",
+        "--pixel-density",
+        "3",
+        "--normalize-status-bar"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-f77acd12/hillclimb/rounds/4/signin-enabled/signin-dark-XXXL-password-keyboard.png (1206x2622 @3x)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-caa222dd4a63ee4f2b92619f/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": ""
+    }
+  ],
+  "captures": [
+    {
+      "file": "signin-light-default-default.png",
+      "status": "captured",
+      "sha256": "d4bc42a242cc2f8d992167634d042074872407e820d94b26144c662b186adc3d",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:19:03.501982+00:00"
+    },
+    {
+      "file": "signin-light-default-password.png",
+      "status": "captured",
+      "sha256": "47f21b1a12565f5ad65a84fb8357b804418f7bec1bde725a0da9d550b4e406a8",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:19:08.210602+00:00"
+    },
+    {
+      "file": "signin-light-default-inbox.png",
+      "status": "captured",
+      "sha256": "238cc2dfcc8ac1252e5fbd8963da7d4ce7719bb9f9e39542a7043337626409b8",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:19:12.862799+00:00"
+    },
+    {
+      "file": "signin-light-default-error.png",
+      "status": "captured",
+      "sha256": "71b6170ccff1a622a62fa0ab20156124b3d0558328c8e1dc309cf67b73cfc976",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:19:17.539793+00:00"
+    },
+    {
+      "file": "signin-light-default-loading.png",
+      "status": "captured",
+      "sha256": "e55146a7a021ad602d57862ee02b2687ab02831ddf902a2342d6a7fa24843930",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:19:22.630488+00:00"
+    },
+    {
+      "file": "signin-light-default-keyboard.png",
+      "status": "captured",
+      "sha256": "5d1992153bdc46afc88c03bace02ab93c55fe67bb25c4c699ceaa17f41d6c30f",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:19:30.024490+00:00"
+    },
+    {
+      "file": "signin-light-default-password-keyboard.png",
+      "status": "captured",
+      "sha256": "24dfbbc18ddec11abe125276362e4b4ba58a748267d45ce91557c7e92f0c4470",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:19:36.805936+00:00"
+    },
+    {
+      "file": "signin-light-XXXL-default.png",
+      "status": "captured",
+      "sha256": "eb3113401c25365adc7575e28daabf06912d84675ac7ab29e3c097a8144de6ad",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:19:41.818118+00:00"
+    },
+    {
+      "file": "signin-light-XXXL-password.png",
+      "status": "captured",
+      "sha256": "cb235ed2e5926357723f06591a0b8285b51ded166146b65d7716c99b811b40b0",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:19:46.430327+00:00"
+    },
+    {
+      "file": "signin-light-XXXL-inbox.png",
+      "status": "captured",
+      "sha256": "98530c0fad6ddf84ba010dbc5241705c65c8b76f3a40576171817aca4ac6c191",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:19:51.122134+00:00"
+    },
+    {
+      "file": "signin-light-XXXL-error.png",
+      "status": "captured",
+      "sha256": "2168aca81ef9b7c90bceb51eddd47ce0560a7c7f058c5d15f8d3c518f34858d3",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:19:55.774824+00:00"
+    },
+    {
+      "file": "signin-light-XXXL-loading.png",
+      "status": "captured",
+      "sha256": "daf9c4a3c760c6ead82ffc08e2bc8d233cd6e5854032c1c40fb53bb326b677f9",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:20:00.964926+00:00"
+    },
+    {
+      "file": "signin-light-XXXL-keyboard.png",
+      "status": "captured",
+      "sha256": "12e82243c15733981fd421edfffdf3e8516b3d1c1a7701ede247f2b8f15b0aac",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:20:08.071988+00:00"
+    },
+    {
+      "file": "signin-light-XXXL-password-keyboard.png",
+      "status": "captured",
+      "sha256": "e08a2cce3c4c78b36f731c5fbb723f050ad2e8ac0619a63e1746c9b67f2c7bf3",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:20:15.187422+00:00"
+    },
+    {
+      "file": "signin-dark-default-default.png",
+      "status": "captured",
+      "sha256": "3ecc77349e9293175515311587954f7dae8d2519d13702e1d16ede0baa2ffcc9",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:20:20.545282+00:00"
+    },
+    {
+      "file": "signin-dark-default-password.png",
+      "status": "captured",
+      "sha256": "5e4979fd84ebf0e545a225644f5a37beec0d57f2619bc64c904327bcf367f6cd",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:20:25.203338+00:00"
+    },
+    {
+      "file": "signin-dark-default-inbox.png",
+      "status": "captured",
+      "sha256": "67cb5f69dec9e23243bea4dcfb506d7d777830f7bd7cb3908b67299f07447f7d",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:20:29.866899+00:00"
+    },
+    {
+      "file": "signin-dark-default-error.png",
+      "status": "captured",
+      "sha256": "f99cf374525295b22dd255598624bf60e3623203c408bd93d059b5df6524e464",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:20:34.479802+00:00"
+    },
+    {
+      "file": "signin-dark-default-loading.png",
+      "status": "captured",
+      "sha256": "34ec0cc78f8707d73edd51157379394de0ee0531d3c991ef2734e22e76976d63",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:20:39.572191+00:00"
+    },
+    {
+      "file": "signin-dark-default-keyboard.png",
+      "status": "captured",
+      "sha256": "ecafd0eb403a7c4fc06e4722d2f17f1a7077d0bb73109ebdaef3dd244d4aa0e6",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:20:46.648677+00:00"
+    },
+    {
+      "file": "signin-dark-default-password-keyboard.png",
+      "status": "captured",
+      "sha256": "39540b4d0b541170c46d6b731f4fd7e792d6cf50179f11a59af1fec03cf2f8e7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:20:53.443954+00:00"
+    },
+    {
+      "file": "signin-dark-XXXL-default.png",
+      "status": "captured",
+      "sha256": "9110b62f990931fb48d2263870b878b7dd98b85dbf57b214481d2724bb26e8e7",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:20:58.446817+00:00"
+    },
+    {
+      "file": "signin-dark-XXXL-password.png",
+      "status": "captured",
+      "sha256": "07d0724958e288ed38413c70140e6b59fe38efa029048fe7a91debca0e5e679b",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:21:03.190260+00:00"
+    },
+    {
+      "file": "signin-dark-XXXL-inbox.png",
+      "status": "captured",
+      "sha256": "1bb9c34fc9692d5223319fbbf86754b4abc5145377659963bd1ea7427d1f75f2",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:21:07.825908+00:00"
+    },
+    {
+      "file": "signin-dark-XXXL-error.png",
+      "status": "captured",
+      "sha256": "4616193416ab973db1801c5464b271793eeb063bbedea2514264e334ef32f460",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:21:12.509894+00:00"
+    },
+    {
+      "file": "signin-dark-XXXL-loading.png",
+      "status": "captured",
+      "sha256": "8c775e48b96a4a8a3f74743e02a6a7a0529d4600bffe68694f71af45a9a30d89",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:21:17.590940+00:00"
+    },
+    {
+      "file": "signin-dark-XXXL-keyboard.png",
+      "status": "captured",
+      "sha256": "89f01d11297e0907218314bb592cd1a438dcc03e875b4f473493ce55a19c303d",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:21:24.746527+00:00"
+    },
+    {
+      "file": "signin-dark-XXXL-password-keyboard.png",
+      "status": "captured",
+      "sha256": "5777624d61f7f6ac4a6e37be80386e80d35b1651c2cb426f088c986394ad1d2e",
+      "dimensions": [
+        1206,
+        2622
+      ],
+      "UTC": "2026-11-04T18:21:31.917320+00:00"
+    }
+  ]
+}

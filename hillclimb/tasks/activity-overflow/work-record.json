@@ -1,0 +1,24 @@
+{
+  "scope": "Task G / activity-overflow",
+  "branch": "hillclimb/activity-overflow",
+  "base": "10fb05e",
+  "nativeSourceSHA": "8b634e0",
+  "read": [
+    "hillclimb/rubric.md",
+    "hillclimb/rounds/2/scores-gpt-6.1-sol.md",
+    "hillclimb/rounds/2/scores-gpt-6-astra.md"
+  ],
+  "scoreAssigned": false,
+  "dependencySetup": "scripts/hillclimb/setup.sh in this isolated worktree, from Config.example.xcconfig; xcodegen generated project; one derived data directory /tmp/activity-overflow-dd; initial resolvePackageDependencies then disabled resolution/updates",
+  "constraints": {
+    "pushed": false,
+    "PR": false,
+    "merged": false,
+    "deployed": false,
+    "liveServiceTests": false,
+    "liveDataMutations": false,
+    "subagents": false
+  },
+  "denoExistingLimit": "std@0.224.0/assert/mod.ts absent from local cache; --cached-only correctly fails before running tests. No network dependency download or assertion replacement used.",
+  "previousRuns": "Initial and second runs retained with actual failures and intentional cancellation after identifying raster assertion issue; passing run uses final rebuilt xctestrun."
+}

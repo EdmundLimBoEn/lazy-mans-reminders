@@ -217,7 +217,7 @@ Deno.test("a completed reminder suppresses a delayed alert after acquiring the s
     ...f,
     alertCandidate: { id: "reminder", user_id: "owner", text: "Old" },
     deliver: (_device, content) => {
-      assertEquals(content, { lines: [], alertRecord: undefined });
+      assertEquals(content, { lines: [], hiddenLineCount: 0, alertRecord: undefined });
       return Promise.resolve([]);
     },
   });

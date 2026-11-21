@@ -1,0 +1,256 @@
+[
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "open",
+      "systems.edmundlim.NotepadHillclimb",
+      "--relaunch",
+      "--launch-args=--hillclimb-demo",
+      "--launch-args=long-text",
+      "--launch-args=--hillclimb-style",
+      "--launch-args=light",
+      "--launch-args=--hillclimb-size",
+      "--launch-args=XXXL"
+    ],
+    "exit": 0,
+    "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-49f05c5d73f02a2e8a20b585\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "wait",
+      "stable",
+      "1000",
+      "10000"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "swipe",
+      "180",
+      "250",
+      "180",
+      "550"
+    ],
+    "exit": 0,
+    "stdout": "Flung\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "gesture",
+      "fling",
+      "up",
+      "180",
+      "650",
+      "300"
+    ],
+    "exit": 0,
+    "stdout": "Flung up\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "wait",
+      "stable",
+      "1000",
+      "10000"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "snapshot",
+      "-i"
+    ],
+    "exit": 0,
+    "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 18 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Your Board\"\n@e3 [text] \"Your Board\"\n@e4 [other] \"Account\"\n@e5 [button] \"Account\"\n@e6 [text] \"7 of 7\"\n@e7 [collection]\n  [content above collection hidden]\n  [content below collection hidden]\n@e8 [cell] \"Demo 3: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e9 [cell] \"Demo 4: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e10 [button] \"Demo 4: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e11 [other] \"Reorder Demo 4: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e12 [cell] \"Demo 5: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e13 [button] \"Demo 5: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e14 [other] \"Reorder Demo 5: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e15 [text] \"Hint: This board is more like a post-it note. Combine reminders into one line, or find other ways to keep it short.\"\n@e16 [text] \"Board full \u2014 combine lines instead\"\n@e17 [button] \"Add reminder\" [disabled]\n@e18 [other] \"{\"00000000-0000-4000-8000-000000000001\":[16,-232,334,355.33333333333331],\"00000000-0000-4000-8000-000000000002\":[16,-238.33333333333326,334,355.33333333333331],\"00000000-0000-4000-8000-000000000003\":[16,-154,334,355.33333333333331],\"00000000-0000-4000-8000-000000000004\":[16,209.33333333333337,334,355.33333333333337],\"00000000-0000-4000-8000-000000000005\":[16,572.66666666666663,334,355.33333333333337],\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"bottomFade\":[0,679.66666666666663,402,0],\"capacity\":[29.999999999999986,768.33333333333337,214.66666666666663,56.666666666666629],\"capacityHint\":[18,685.66666666666674,344,67.666666666666629],\"capacityIdeal\":[0,0,214.66666666666666,56.666666666666664],\"circle-00000000-0000-4000-8000-000000000001\":[16,-232,44,44],\"circle-00000000-0000-4000-8000-000000000002\":[16,-238.33333333333326,44,44],\"circle-00000000-0000-4000-8000-000000000003\":[16,-154,44,44],\"circle-00000000-0000-4000-8000-000000000004\":[16,209.33333333333337,44,44],\"circle-00000000-0000-4000-8000-000000000005\":[16,572.66666666666663,44,44],\"composer\":[0,679.66666666666674,402,160.33333333333326],\"fixtureCount\":[7,0,0,0],\"grip-00000000-0000-4000-8000-000000000001\":[350,-232,44,44],\"grip-00000000-0000-4000-8000-000000000002\":[350,-238.33333333333326,44,44],\"grip-00000000-0000-4000-8000-000000000003\":[350,-154,44,44],\"grip-00000000-0000-4000-8000-000000000004\":[350,209.33333333333337,44,44],\"grip-00000000-0000-4000-8000-000000000005\":[350,572.66666666666663,44,44],\"ideal-00000000-0000-4000-8000-000000000001\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000002\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000003\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000004\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000005\":[0,0,282,346.66666666666663],\"listViewport\":[0,116,402,563.66666666666663],\"refreshState\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"scrollOffset\":[1000.6666666666666,0,0,0],\"text-00000000-0000-4000-8000-000000000001\":[68,-223.33333333333334,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000002\":[68,-229.6666666666666,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000003\":[68,-145.33333333333334,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000004\":[68,218.00000000000003,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000005\":[68,581.33333333333326,282,346.66666666666663],\"typeSize\":[23,17,0,0]}\"\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "gesture",
+      "fling",
+      "up",
+      "180",
+      "650",
+      "300"
+    ],
+    "exit": 0,
+    "stdout": "Flung up\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "wait",
+      "stable",
+      "1000",
+      "10000"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "snapshot",
+      "-i"
+    ],
+    "exit": 0,
+    "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 15 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Your Board\"\n@e3 [text] \"Your Board\"\n@e4 [other] \"Account\"\n@e5 [button] \"Account\"\n@e6 [text] \"7 of 7\"\n@e7 [collection]\n  [content above collection hidden]\n@e8 [cell] \"Demo 6: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e9 [cell] \"Demo 7: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e10 [button] \"Demo 7: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e11 [other] \"Reorder Demo 7: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e12 [text] \"Hint: This board is more like a post-it note. Combine reminders into one line, or find other ways to keep it short.\"\n@e13 [text] \"Board full \u2014 combine lines instead\"\n@e14 [button] \"Add reminder\" [disabled]\n@e15 [other] \"{\"00000000-0000-4000-8000-000000000001\":[16,-232,334,355.33333333333331],\"00000000-0000-4000-8000-000000000002\":[16,-238.33333333333326,334,355.33333333333331],\"00000000-0000-4000-8000-000000000003\":[16,-204.66666666666663,334,355.33333333333331],\"00000000-0000-4000-8000-000000000004\":[16,-232,334,355.33333333333331],\"00000000-0000-4000-8000-000000000005\":[16,-236.33333333333348,334,355.33333333333331],\"00000000-0000-4000-8000-000000000006\":[16,-43,334,355.33333333333331],\"00000000-0000-4000-8000-000000000007\":[16,320.33333333333326,334,355.33333333333326],\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"bottomFade\":[0,679.66666666666674,402,0],\"capacity\":[29.999999999999986,768.33333333333337,214.66666666666663,56.666666666666629],\"capacityHint\":[18,685.66666666666674,344,67.666666666666629],\"capacityIdeal\":[0,0,214.66666666666666,56.666666666666664],\"circle-00000000-0000-4000-8000-000000000001\":[16,-232,44,44],\"circle-00000000-0000-4000-8000-000000000002\":[16,-238.33333333333326,44,44],\"circle-00000000-0000-4000-8000-000000000003\":[16,-204.66666666666663,44,44],\"circle-00000000-0000-4000-8000-000000000004\":[16,-232,44,44],\"circle-00000000-0000-4000-8000-000000000005\":[16,-236.33333333333348,44,44],\"circle-00000000-0000-4000-8000-000000000006\":[16,-43,44,44],\"circle-00000000-0000-4000-8000-000000000007\":[16,320.33333333333326,44,44],\"composer\":[0,679.66666666666674,402,160.33333333333326],\"fixtureCount\":[7,0,0,0],\"grip-00000000-0000-4000-8000-000000000001\":[350,-232,44,44],\"grip-00000000-0000-4000-8000-000000000002\":[350,-238.33333333333326,44,44],\"grip-00000000-0000-4000-8000-000000000003\":[350,-204.66666666666663,44,44],\"grip-00000000-0000-4000-8000-000000000004\":[350,-232,44,44],\"grip-00000000-0000-4000-8000-000000000005\":[350,-236.33333333333348,44,44],\"grip-00000000-0000-4000-8000-000000000006\":[350,-43,44,44],\"grip-00000000-0000-4000-8000-000000000007\":[350,320.33333333333326,44,44],\"ideal-00000000-0000-4000-8000-000000000001\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000002\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000003\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000004\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000005\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000006\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000007\":[0,0,282,346.66666666666663],\"listViewport\":[0,116,402,563.66666666666674],\"refreshState\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"scrollOffset\":[1979.6666666666667,0,0,0],\"text-00000000-0000-4000-8000-000000000001\":[68,-223.33333333333334,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000002\":[68,-229.6666666666666,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000003\":[68,-195.99999999999997,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000004\":[68,-223.33333333333334,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000005\":[68,-227.66666666666683,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000006\":[68,-34.333333333333343,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000007\":[68,328.99999999999989,282,346.66666666666663],\"typeSize\":[23,17,0,0]}\"\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "screenshot",
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/long-text-light-XXXL-bottom-after-pull.png",
+      "--pixel-density",
+      "3",
+      "--normalize-status-bar"
+    ],
+    "exit": 0,
+    "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/long-text-light-XXXL-bottom-after-pull.png (1206x2622 @3x)\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "open",
+      "systems.edmundlim.NotepadHillclimb",
+      "--relaunch",
+      "--launch-args=--hillclimb-demo",
+      "--launch-args=long-text",
+      "--launch-args=--hillclimb-style",
+      "--launch-args=dark",
+      "--launch-args=--hillclimb-size",
+      "--launch-args=XXXL"
+    ],
+    "exit": 0,
+    "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-49f05c5d73f02a2e8a20b585\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "wait",
+      "stable",
+      "1000",
+      "10000"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "swipe",
+      "180",
+      "250",
+      "180",
+      "550"
+    ],
+    "exit": 0,
+    "stdout": "Flung\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "gesture",
+      "fling",
+      "up",
+      "180",
+      "650",
+      "300"
+    ],
+    "exit": 0,
+    "stdout": "Flung up\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "wait",
+      "stable",
+      "1000",
+      "10000"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "snapshot",
+      "-i"
+    ],
+    "exit": 0,
+    "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 18 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Your Board\"\n@e3 [text] \"Your Board\"\n@e4 [other] \"Account\"\n@e5 [button] \"Account\"\n@e6 [text] \"7 of 7\"\n@e7 [collection]\n  [content above collection hidden]\n  [content below collection hidden]\n@e8 [cell] \"Demo 3: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e9 [cell] \"Demo 4: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e10 [button] \"Demo 4: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e11 [other] \"Reorder Demo 4: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e12 [cell] \"Demo 5: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e13 [button] \"Demo 5: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e14 [other] \"Reorder Demo 5: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e15 [text] \"Hint: This board is more like a post-it note. Combine reminders into one line, or find other ways to keep it short.\"\n@e16 [text] \"Board full \u2014 combine lines instead\"\n@e17 [button] \"Add reminder\" [disabled]\n@e18 [other] \"{\"00000000-0000-4000-8000-000000000001\":[16,-230.66666666666669,334,355.33333333333331],\"00000000-0000-4000-8000-000000000002\":[16,-226,334,355.33333333333331],\"00000000-0000-4000-8000-000000000003\":[16,-189.00000000000011,334,355.33333333333331],\"00000000-0000-4000-8000-000000000004\":[16,174.33333333333326,334,355.33333333333326],\"00000000-0000-4000-8000-000000000005\":[16,537.66666666666652,334,355.33333333333326],\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"bottomFade\":[0,679.66666666666674,402,0],\"capacity\":[29.999999999999986,768.33333333333337,214.66666666666663,56.666666666666629],\"capacityHint\":[18,685.66666666666674,344,67.666666666666629],\"capacityIdeal\":[0,0,214.66666666666666,56.666666666666664],\"circle-00000000-0000-4000-8000-000000000001\":[16,-230.66666666666669,44,44],\"circle-00000000-0000-4000-8000-000000000002\":[16,-226,44,44],\"circle-00000000-0000-4000-8000-000000000003\":[16,-189.00000000000011,44,44],\"circle-00000000-0000-4000-8000-000000000004\":[16,174.33333333333326,44,44],\"circle-00000000-0000-4000-8000-000000000005\":[16,537.66666666666652,44,44],\"composer\":[0,679.66666666666674,402,160.33333333333326],\"fixtureCount\":[7,0,0,0],\"grip-00000000-0000-4000-8000-000000000001\":[350,-230.66666666666669,44,44],\"grip-00000000-0000-4000-8000-000000000002\":[350,-226,44,44],\"grip-00000000-0000-4000-8000-000000000003\":[350,-189.00000000000011,44,44],\"grip-00000000-0000-4000-8000-000000000004\":[350,174.33333333333326,44,44],\"grip-00000000-0000-4000-8000-000000000005\":[350,537.66666666666652,44,44],\"ideal-00000000-0000-4000-8000-000000000001\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000002\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000003\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000004\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000005\":[0,0,282,346.66666666666663],\"listViewport\":[0,116,402,563.66666666666674],\"refreshState\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"scrollOffset\":[1035.6666666666667,0,0,0],\"text-00000000-0000-4000-8000-000000000001\":[68,-222.00000000000003,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000002\":[68,-217.33333333333334,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000003\":[68,-180.33333333333346,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000004\":[68,182.99999999999991,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000005\":[68,546.33333333333314,282,346.66666666666663],\"typeSize\":[23,17,0,0]}\"\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "gesture",
+      "fling",
+      "up",
+      "180",
+      "650",
+      "300"
+    ],
+    "exit": 0,
+    "stdout": "Flung up\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "wait",
+      "stable",
+      "1000",
+      "10000"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "snapshot",
+      "-i"
+    ],
+    "exit": 0,
+    "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 15 visible nodes\n@e1 [other] \"Notepad\"\n@e2 [navigation-bar] \"Your Board\"\n@e3 [text] \"Your Board\"\n@e4 [other] \"Account\"\n@e5 [button] \"Account\"\n@e6 [text] \"7 of 7\"\n@e7 [collection]\n  [content above collection hidden]\n@e8 [cell] \"Demo 6: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e9 [cell] \"Demo 7: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e10 [button] \"Demo 7: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e11 [other] \"Reorder Demo 7: Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow. Review the sample notes and gather the details for tomorrow.\"\n@e12 [text] \"Hint: This board is more like a post-it note. Combine reminders into one line, or find other ways to keep it short.\"\n@e13 [text] \"Board full \u2014 combine lines instead\"\n@e14 [button] \"Add reminder\" [disabled]\n@e15 [other] \"{\"00000000-0000-4000-8000-000000000001\":[16,-230.66666666666669,334,355.33333333333331],\"00000000-0000-4000-8000-000000000002\":[16,-226,334,355.33333333333331],\"00000000-0000-4000-8000-000000000003\":[16,-243.00000000000011,334,355.33333333333331],\"00000000-0000-4000-8000-000000000004\":[16,-227.66666666666674,334,355.33333333333331],\"00000000-0000-4000-8000-000000000005\":[16,-241.66666666666674,334,355.33333333333331],\"00000000-0000-4000-8000-000000000006\":[16,-43,334,355.33333333333331],\"00000000-0000-4000-8000-000000000007\":[16,320.33333333333326,334,355.33333333333326],\"authState\":[0,0,0,0],\"boardCompletions\":[0,0,0,0],\"boardErrorAnnouncements\":[0,0,0,0],\"boardMoves\":[0,0,0,0],\"boardRetryAttempts\":[0,0,0,0],\"bottomFade\":[0,679.66666666666674,402,0],\"capacity\":[29.999999999999986,768.33333333333337,214.66666666666663,56.666666666666629],\"capacityHint\":[18,685.66666666666674,344,67.666666666666629],\"capacityIdeal\":[0,0,214.66666666666666,56.666666666666664],\"circle-00000000-0000-4000-8000-000000000001\":[16,-230.66666666666669,44,44],\"circle-00000000-0000-4000-8000-000000000002\":[16,-226,44,44],\"circle-00000000-0000-4000-8000-000000000003\":[16,-243.00000000000011,44,44],\"circle-00000000-0000-4000-8000-000000000004\":[16,-227.66666666666674,44,44],\"circle-00000000-0000-4000-8000-000000000005\":[16,-241.66666666666674,44,44],\"circle-00000000-0000-4000-8000-000000000006\":[16,-43,44,44],\"circle-00000000-0000-4000-8000-000000000007\":[16,320.33333333333326,44,44],\"composer\":[0,679.66666666666674,402,160.33333333333326],\"fixtureCount\":[7,0,0,0],\"grip-00000000-0000-4000-8000-000000000001\":[350,-230.66666666666669,44,44],\"grip-00000000-0000-4000-8000-000000000002\":[350,-226,44,44],\"grip-00000000-0000-4000-8000-000000000003\":[350,-243.00000000000011,44,44],\"grip-00000000-0000-4000-8000-000000000004\":[350,-227.66666666666674,44,44],\"grip-00000000-0000-4000-8000-000000000005\":[350,-241.66666666666674,44,44],\"grip-00000000-0000-4000-8000-000000000006\":[350,-43,44,44],\"grip-00000000-0000-4000-8000-000000000007\":[350,320.33333333333326,44,44],\"ideal-00000000-0000-4000-8000-000000000001\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000002\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000003\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000004\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000005\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000006\":[0,0,282,346.66666666666663],\"ideal-00000000-0000-4000-8000-000000000007\":[0,0,282,346.66666666666663],\"listViewport\":[0,116,402,563.66666666666674],\"refreshState\":[0,0,0,0],\"safeArea\":[0,62,402,778],\"scrollOffset\":[1979.6666666666667,0,0,0],\"text-00000000-0000-4000-8000-000000000001\":[68,-222.00000000000003,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000002\":[68,-217.33333333333334,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000003\":[68,-234.33333333333346,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000004\":[68,-219.00000000000009,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000005\":[68,-233.00000000000009,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000006\":[68,-34.333333333333343,282,346.66666666666663],\"text-00000000-0000-4000-8000-000000000007\":[68,328.99999999999989,282,346.66666666666663],\"typeSize\":[23,17,0,0]}\"\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-49f05c5d73f02a2e8a20b585/agent-device",
+      "screenshot",
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/long-text-dark-XXXL-bottom-after-pull.png",
+      "--pixel-density",
+      "3",
+      "--normalize-status-bar"
+    ],
+    "exit": 0,
+    "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-048fb58b/hillclimb/rounds/5/long-text-dark-XXXL-bottom-after-pull.png (1206x2622 @3x)\n",
+    "stderr": ""
+  }
+]

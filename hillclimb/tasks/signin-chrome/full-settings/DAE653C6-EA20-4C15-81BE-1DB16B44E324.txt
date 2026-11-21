@@ -1,0 +1,119 @@
+page=Motion stage=before-restore originals=["Reduce Motion": false, "Reduce Transparency": false, "Increase Contrast": false, "Auto-Play Message Effects": true]
+Reduce Motion=1
+Prefer Cross-Fade Transitions=0
+Dim Flashing Lights=0
+Auto-Play Animated Images=1
+Auto-Play Video Previews=1
+Auto-Play Message Effects=1
+Prefer Non-Blinking Cursor=0
+Limit Frame Rate=0
+=1
+=0
+=0
+=1
+=1
+=1
+=0
+=0
+Attributes: Application, 0x105a4b900, pid: 27843, label: 'Settings'
+Element subtree:
+ →Application, 0x105a4b900, pid: 27843, label: 'Settings'
+    Window (Main), 0x105a4ae80, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x105a4c1e0, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x105a4c300, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x105a4bf40, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x105a4c060, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x105a4c420, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x105a4c540, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x105a4c660, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x105a4c780, {{0.0, 0.0}, {402.0, 874.0}}
+                      NavigationBar, 0x105a4c8a0, {{0.0, 62.0}, {402.0, 54.0}}, identifier: 'Motion'
+                        Button, 0x105a4c9c0, {{16.0, 62.0}, {44.0, 44.0}}, identifier: 'BackButton', label: 'Accessibility'
+                        StaticText, 0x105a4cae0, {{173.3, 73.7}, {55.3, 20.7}}, label: 'Motion'
+                      Other, 0x105a4cc00, {{0.0, 0.0}, {402.0, 874.0}}
+                        Other, 0x105a4cd20, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x105a4ce40, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x105a4cf60, {{0.0, 0.0}, {402.0, 874.0}}
+                              Other, 0x105a4d080, {{0.0, 116.0}, {402.0, 724.0}}
+                                Table, 0x105a4d1a0, {{0.0, 0.0}, {402.0, 874.0}}
+                                  Other, 0x105a4d2c0, {{0.0, 116.0}, {402.0, 17.7}}
+                                  Cell, 0x105a4d3e0, {{20.0, 133.7}, {362.0, 53.0}}, identifier: 'REDUCE_MOTION'
+                                    Other, 0x105a4d500, {{20.0, 133.7}, {362.0, 53.0}}
+                                      Other, 0x105a4d620, {{20.0, 133.7}, {362.0, 53.0}}
+                                        Switch, 0x105a4d740, {{36.0, 146.3}, {330.0, 28.0}}, identifier: 'REDUCE_MOTION', label: 'Reduce Motion', value: 1
+                                          Button, 0x105a4d860, {{36.0, 150.0}, {114.7, 20.3}}, identifier: 'REDUCE_MOTION', label: 'Reduce Motion'
+                                          Switch, 0x105a4d980, {{305.0, 146.3}, {63.0, 28.0}}, value: 1
+                                  Other, 0x105a4daa0, {{0.0, 186.7}, {402.0, 46.0}}, identifier: 'Reduce the motion of the user interface, including the parallax effect of icons.'
+                                    Other, 0x105a4dbc0, {{20.0, 186.7}, {362.0, 46.0}}, label: 'Reduce the motion of the user interface, including the parallax effect of icons.'
+                                  Other, 0x105a4dce0, {{0.0, 232.7}, {402.0, 17.7}}
+                                  Cell, 0x105a4de00, {{20.0, 250.3}, {362.0, 53.0}}, identifier: 'REDUCE_MOTION_REDUCE_SLIDE_ANIMATIONS'
+                                    Other, 0x105a4df20, {{20.0, 250.3}, {362.0, 53.0}}
+                                      Other, 0x105a4e040, {{20.0, 250.3}, {362.0, 53.0}}
+                                        Switch, 0x105a4e160, {{36.0, 263.0}, {330.0, 28.0}}, identifier: 'REDUCE_MOTION_REDUCE_SLIDE_ANIMATIONS', label: 'Prefer Cross-Fade Transitions', value: 0
+                                          Button, 0x105a4e280, {{36.0, 266.7}, {226.3, 20.3}}, identifier: 'REDUCE_MOTION_REDUCE_SLIDE_ANIMATIONS', label: 'Prefer Cross-Fade Transitions'
+                                          Switch, 0x105a4e3a0, {{305.0, 263.0}, {63.0, 28.0}}, value: 0
+                                  Other, 0x105a4e4c0, {{0.0, 303.3}, {402.0, 62.0}}, identifier: 'Reduces the movement of onscreen elements and screen actions, such as launching or moving between apps, to help with motion sensitivity.'
+                                    Other, 0x105a4e5e0, {{20.0, 303.3}, {362.0, 62.0}}, label: 'Reduces the movement of onscreen elements and screen actions, such as launching or moving between apps, to help with motion sensitivity.'
+                                  Other, 0x105a4e700, {{0.0, 365.3}, {402.0, 17.7}}
+                                  Cell, 0x105a4e820, {{20.0, 383.0}, {362.0, 53.0}}, identifier: 'PHOTOSENSITIVE_MITIGATION'
+                                    Other, 0x105a4e940, {{20.0, 383.0}, {362.0, 53.0}}
+                                      Other, 0x105a4ea60, {{20.0, 383.0}, {362.0, 53.0}}
+                                        Switch, 0x105a4eb80, {{36.0, 395.7}, {330.0, 28.0}}, identifier: 'PHOTOSENSITIVE_MITIGATION', label: 'Dim Flashing Lights', value: 0
+                                          Button, 0x105a4eca0, {{36.0, 399.3}, {148.7, 20.3}}, identifier: 'PHOTOSENSITIVE_MITIGATION', label: 'Dim Flashing Lights'
+                                          Switch, 0x105a4edc0, {{305.0, 395.7}, {63.0, 28.0}}, value: 0
+                                  Other, 0x105a4eee0, {{0.0, 436.0}, {402.0, 46.0}}, identifier: 'Video content that depicts repeated flashing or strobing lights will be automatically dimmed.'
+                                    Other, 0x105a4f000, {{20.0, 436.0}, {362.0, 46.0}}, label: 'Video content that depicts repeated flashing or strobing lights will be automatically dimmed.'
+                                  Other, 0x105a4f120, {{0.0, 482.0}, {402.0, 17.7}}
+                                  Cell, 0x105a4f240, {{20.0, 499.7}, {362.0, 53.0}}, identifier: 'REDUCE_MOTION_AUTOPLAY_ANIMATED_IMAGES'
+                                    Other, 0x105a4f360, {{20.0, 499.7}, {362.0, 53.0}}
+                                      Other, 0x105a4f480, {{20.0, 499.7}, {362.0, 53.0}}
+                                        Switch, 0x105a4f5a0, {{36.0, 512.3}, {330.0, 28.0}}, identifier: 'REDUCE_MOTION_AUTOPLAY_ANIMATED_IMAGES', label: 'Auto-Play Animated Images', value: 1
+                                          Button, 0x105a4f6c0, {{36.0, 516.0}, {211.0, 20.3}}, identifier: 'REDUCE_MOTION_AUTOPLAY_ANIMATED_IMAGES', label: 'Auto-Play Animated Images'
+                                          Switch, 0x105a4f7e0, {{305.0, 512.3}, {63.0, 28.0}}, value: 1
+                                  Cell, 0x105a4f900, {{20.0, 552.7}, {362.0, 53.0}}, identifier: 'REDUCE_MOTION_AUTOPLAY_VIDEO_PREVIEWS'
+                                    Other, 0x105a4fa20, {{20.0, 552.7}, {362.0, 53.0}}
+                                      Other, 0x105a4fb40, {{20.0, 552.7}, {362.0, 53.0}}
+                                        Switch, 0x105a4fc60, {{36.0, 565.3}, {330.0, 28.0}}, identifier: 'REDUCE_MOTION_AUTOPLAY_VIDEO_PREVIEWS', label: 'Auto-Play Video Previews', value: 1
+                                          Button, 0x105a4fd80, {{36.0, 569.0}, {195.3, 20.3}}, identifier: 'REDUCE_MOTION_AUTOPLAY_VIDEO_PREVIEWS', label: 'Auto-Play Video Previews'
+                                          Switch, 0x105a4fea0, {{305.0, 565.3}, {63.0, 28.0}}, value: 1
+                                  Cell, 0x105a4ffc0, {{20.0, 605.7}, {362.0, 53.0}}, identifier: 'ReduceMotionAutoplayMessagesEffects'
+                                    Other, 0x105a500e0, {{20.0, 605.7}, {362.0, 53.0}}
+                                      Other, 0x105a50200, {{20.0, 605.7}, {362.0, 53.0}}
+                                        Switch, 0x105a50320, {{36.0, 618.3}, {330.0, 28.0}}, identifier: 'ReduceMotionAutoplayMessagesEffects', label: 'Auto-Play Message Effects', value: 1
+                                          Button, 0x105a50440, {{36.0, 622.0}, {205.3, 20.3}}, identifier: 'ReduceMotionAutoplayMessagesEffects', label: 'Auto-Play Message Effects'
+                                          Switch, 0x105a50560, {{305.0, 618.3}, {63.0, 28.0}}, value: 1
+                                  Other, 0x105a50680, {{0.0, 658.7}, {402.0, 46.0}}, identifier: 'Control if videos, animated images, and full screen effects in messages play automatically.'
+                                    Other, 0x105a507a0, {{20.0, 658.7}, {362.0, 46.0}}, label: 'Control if videos, animated images, and full screen effects in messages play automatically.'
+                                  Other, 0x105a508c0, {{0.0, 704.7}, {402.0, 17.7}}
+                                  Cell, 0x105a509e0, {{20.0, 722.3}, {362.0, 53.0}}, identifier: 'PREFER_NONBLINKING_CURSOR'
+                                    Other, 0x105a50b00, {{20.0, 722.3}, {362.0, 53.0}}
+                                      Other, 0x105a50c20, {{20.0, 722.3}, {362.0, 53.0}}
+                                        Switch, 0x105a50d40, {{36.0, 735.0}, {330.0, 28.0}}, identifier: 'PREFER_NONBLINKING_CURSOR', label: 'Prefer Non-Blinking Cursor', value: 0
+                                          Button, 0x105a50e60, {{36.0, 738.7}, {205.0, 20.3}}, identifier: 'PREFER_NONBLINKING_CURSOR', label: 'Prefer Non-Blinking Cursor'
+                                          Switch, 0x105a50f80, {{305.0, 735.0}, {63.0, 28.0}}, value: 0
+                                  Other, 0x105a510a0, {{0.0, 775.3}, {402.0, 30.0}}, identifier: 'Prefer the cursor indicator in text does not blink.'
+                                    Other, 0x105a511c0, {{20.0, 775.3}, {362.0, 30.0}}, label: 'Prefer the cursor indicator in text does not blink.'
+                                  Other, 0x105a512e0, {{0.0, 805.3}, {402.0, 17.7}}
+                                  Cell, 0x105a51400, {{20.0, 823.0}, {362.0, 53.0}}, identifier: 'REFRESH_RATE'
+                                    Other, 0x105a51520, {{20.0, 823.0}, {362.0, 53.0}}
+                                      Other, 0x105a51640, {{20.0, 823.0}, {362.0, 53.0}}
+                                        Switch, 0x105a51760, {{36.0, 835.7}, {330.0, 28.0}}, identifier: 'REFRESH_RATE', label: 'Limit Frame Rate', value: 0
+                                          Button, 0x105a51880, {{36.0, 839.3}, {128.3, 20.3}}, identifier: 'REFRESH_RATE', label: 'Limit Frame Rate'
+                                          Switch, 0x105a519a0, {{305.0, 835.7}, {63.0, 28.0}}, value: 0
+                                  Other, 0x105a51ac0, {{0.0, 823.0}, {402.0, 46.0}}
+                                    StaticText, 0x105a51be0, {{0.0, 823.0}, {402.0, 46.0}}, label: 'Sets the maximum frame rate of the display to 60 frames per second.'
+                                  Other, 0x105a51d00, {{369.0, 116.0}, {30.0, 696.0}}, label: 'Vertical scroll bar, 2 pages', value: 0%
+                                    Other, 0x105a51e20, {{396.0, 119.0}, {3.0, 618.0}}
+                                  Other, 0x105a51f40, {{62.0, 841.0}, {278.0, 30.0}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                                    Other, 0x105a52060, {{65.0, 868.0}, {272.0, 3.0}}
+                      Other, 0x105a52180, {{0.0, 0.0}, {402.0, 874.0}}
+                        Other, 0x105a522a0, {{0.0, 0.0}, {402.0, 874.0}}
+                Other, 0x105a523c0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x105a524e0, {{0.0, 0.0}, {402.0, 874.0}}
+Path to element:
+ →Application, 0x105a4b900, pid: 27843, label: 'Settings'
+Query chain:
+ →Find: Application 'com.apple.Preferences'
+  Output: {
+    Application, 0x1059555e0, pid: 27843, label: 'Settings'
+  }

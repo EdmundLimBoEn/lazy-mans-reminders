@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "xcodebuild",
+    "build-for-testing",
+    "-project",
+    "ios/LazyMansReminders.xcodeproj",
+    "-scheme",
+    "LazyMansReminders",
+    "-configuration",
+    "Debug",
+    "-destination",
+    "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+    "-derivedDataPath",
+    "/tmp/notepad-account-j-dd",
+    "-arch",
+    "arm64",
+    "-disableAutomaticPackageResolution",
+    "-skipPackageUpdates",
+    "CODE_SIGNING_ALLOWED=NO"
+  ],
+  "exit": 70,
+  "elapsed": 2.5053679943084717
+}

@@ -1,0 +1,215 @@
+{
+  "source_sha": "20ae77e29019444a499e9e47c98d6b656ef56819",
+  "sourceIdentity": "sha256:a2449d961c428fc781cea0c751f3406e3e0e499350000d32bc4eca2fbfa0d76f",
+  "checks": [
+    {
+      "name": "325/325 unfiltered;263unit+62UI;zero failures/skips",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/acceptance.json",
+      "required": true
+    },
+    {
+      "name": "All317baseline IDs retained;308/307/304/293 transitive coverage",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/acceptance.json",
+      "required": true
+    },
+    {
+      "name": "94tracked+2generated inputs exact committed revision",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/bounded-matrix-freeze.json",
+      "required": true
+    },
+    {
+      "name": "bounded-matrix-build",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/bounded-matrix-build-process.json",
+      "required": true
+    },
+    {
+      "name": "bounded-matrix-full",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/bounded-matrix-full-process.json",
+      "required": true
+    },
+    {
+      "name": "bounded-matrix-release",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/bounded-matrix-release-process.json",
+      "required": true
+    },
+    {
+      "name": "bounded-matrix-debug-restore",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/bounded-matrix-debug-restore-process.json",
+      "required": true
+    },
+    {
+      "name": "round8-python",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/round8-python-process.json",
+      "required": true
+    },
+    {
+      "name": "round8-deno",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/round8-deno-process.json",
+      "required": true
+    },
+    {
+      "name": "round8-deno-overflow",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/round8-deno-overflow-process.json",
+      "required": true
+    },
+    {
+      "name": "All5Settings methods independently restore actual four originals",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/bounded-matrix-full-restoration.json",
+      "required": true
+    },
+    {
+      "name": "Explicit timeout recovery restores recorded originals",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/recorded-settings-recovery-proof.json",
+      "required": true
+    },
+    {
+      "name": "Debug restored artifacts and installed six executable hashes",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/debug-restoration-identity.json;final-installed-identity.json",
+      "required": true
+    },
+    {
+      "name": "Only2owned production files;all original words/branding retained",
+      "status": "passed",
+      "proof": "../../validation/round8/scope-copy-integrity.json",
+      "required": true
+    },
+    {
+      "name": "Account instruction original strings,bounds and>=7contrast",
+      "status": "passed",
+      "proof": "../../validation/round8/account-instruction-gates.json",
+      "required": true
+    },
+    {
+      "name": "LoginLoadingGeometryUITests/testPendingActionDoesNotReflowFollowingControls",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/acceptance.json",
+      "required": true
+    },
+    {
+      "name": "SignInChromeUITests/testEmptyPasswordFirstFocusAndRefocusKeepsHeading",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/acceptance.json",
+      "required": true
+    },
+    {
+      "name": "SignInChromeUITests/testCombinedEmptyPasswordFirstFocusAndRefocusKeepsHeading",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/acceptance.json",
+      "required": true
+    },
+    {
+      "name": "AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/acceptance.json",
+      "required": true
+    },
+    {
+      "name": "AccessibilitySettingsUITests/testCombinedActualSettingsDarkKeyboardMatrix",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/acceptance.json",
+      "required": true
+    },
+    {
+      "name": "HillclimbUITests/testFullBoardBottomAboveComposerAfterPullAndScroll",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/acceptance.json",
+      "required": true
+    },
+    {
+      "name": "HillclimbUITests/testTopControlsAvoidIslandAndHave44PointTargets",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/acceptance.json",
+      "required": true
+    },
+    {
+      "name": "HillclimbUITests/testXXXLTextFitsAllocatedHeightAtBottom",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/acceptance.json",
+      "required": true
+    },
+    {
+      "name": "ActivityCaptureUITests/testNativeShortActivityMatrix",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/acceptance.json",
+      "required": true
+    },
+    {
+      "name": "ActivityCaptureUITests/testNativeLongActivityMatrix",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/acceptance.json",
+      "required": true
+    },
+    {
+      "name": "332canonical native hashes/dimensions/source bindings",
+      "status": "passed",
+      "proof": "inventory.json",
+      "required": true
+    },
+    {
+      "name": "16native movie hashes;8unmodified2s pixel witnesses",
+      "status": "passed",
+      "proof": "../../validation/round8/activity-video-artifacts.json;keyboard-video-artifacts.json",
+      "required": true
+    },
+    {
+      "name": "332closest Apple pairs;all17usable references;gaps explicit",
+      "status": "passed",
+      "proof": "../../validation/round8/reference-pairings.json",
+      "required": true
+    },
+    {
+      "name": "60same-state actual login comparison pairs",
+      "status": "passed",
+      "proof": "../../validation/round8/login-pairings.json",
+      "required": true
+    },
+    {
+      "name": "Parent inspected canonical states and real motion samples",
+      "status": "passed",
+      "proof": "../../validation/round8/parent-inspection.json",
+      "required": true
+    },
+    {
+      "name": "Original17 remains booted;only own demo IDs empty;switches/light/Large restored;own panel closed",
+      "status": "passed",
+      "proof": "../../tasks/login-focus-polish/final-cleanup.json",
+      "required": true
+    },
+    {
+      "name": "Manual pinned-driver access",
+      "status": "failed",
+      "proof": "../../tasks/login-focus-polish/README.md:stopped stale-owner claim;project runner used",
+      "required": false
+    }
+  ],
+  "allRequiredChecksPassed": true,
+  "fullSuite": {
+    "passed": 325,
+    "unit": 263,
+    "ui": 62,
+    "failed": 0,
+    "skipped": 0
+  },
+  "remainingGaps": [
+    "No true lock, physical haptics, spoken VoiceOver, AX1\u2013AX5 or live authentication evidence",
+    "Protected keyboard stills are partial; actual video frames are separately labeled",
+    "No Notes reference or exact Apple auth/Activity/capacity/combined-settings counterpart"
+  ],
+  "historicalFailureEvidence": [
+    "../../tasks/login-focus-polish/full-final-summary.json",
+    "../../tasks/login-focus-polish/measured-heading-full-summary.json"
+  ]
+}

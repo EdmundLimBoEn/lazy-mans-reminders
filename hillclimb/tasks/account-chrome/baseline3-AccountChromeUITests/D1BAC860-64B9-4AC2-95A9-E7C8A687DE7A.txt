@@ -1,0 +1,32 @@
+title=(168.99336650082918, 441.592039800995, 63.6932006633499, 19.844112769485946) bar=(8.0, 430.3897180762852, 386.0, 51.850746268656735) AX=Attributes: NavigationBar, 0x10223d630, {{8.0, 430.4}, {386.0, 51.9}}, identifier: 'Account'
+Element subtree:
+ →NavigationBar, 0x10223d630, {{8.0, 430.4}, {386.0, 51.9}}, identifier: 'Account'
+    StaticText, 0x10223d750, {{169.0, 441.6}, {63.7, 19.8}}, label: 'Account'
+    Other, 0x10223d870, {{332.5, 434.2}, {42.2, 34.6}}, label: 'Done'
+      Other, 0x10223d990, {{332.5, 434.2}, {42.2, 34.6}}
+        Button, 0x10223dab0, {{332.5, 430.4}, {42.2, 42.2}}, label: 'Done'
+Path to element:
+ →Application, 0x102417300, pid: 68887, label: 'Notepad'
+  ↳Window (Main), 0x102416f80, {{0.0, 0.0}, {402.0, 874.0}}
+   ↳Other, 0x10223cc10, {{0.0, 0.0}, {402.0, 874.0}}
+    ↳Other, 0x10223ce50, {{8.0, 415.0}, {386.0, 451.0}}
+     ↳Other, 0x10223d090, {{8.0, 415.0}, {386.0, 451.0}}
+      ↳Other, 0x10223d1b0, {{8.0, 415.0}, {386.0, 451.0}}
+       ↳Other, 0x10223d2d0, {{8.0, 415.0}, {386.0, 451.0}}
+        ↳Other, 0x10223d3f0, {{8.0, 415.0}, {386.0, 451.0}}
+         ↳Other, 0x10223d510, {{8.0, 415.0}, {386.0, 451.0}}
+          ↳NavigationBar, 0x10223d630, {{8.0, 430.4}, {386.0, 51.9}}, identifier: 'Account'
+Query chain:
+ →Find: Target Application 'systems.edmundlim.NotepadHillclimb'
+  Output: {
+    Application, 0x102c32840, pid: 68887, label: 'Notepad'
+  }
+  ↪︎Find: Descendants matching type NavigationBar
+    Output: {
+      NavigationBar, 0x101b46fe0, {{0.0, 62.0}, {402.0, 54.0}}, identifier: 'Your Board'
+      NavigationBar, 0x101b509c0, {{8.0, 430.4}, {386.0, 51.9}}, identifier: 'Account'
+    }
+    ↪︎Find: Elements matching predicate '"Account" IN identifiers'
+      Output: {
+        NavigationBar, 0x102537760, {{8.0, 430.4}, {386.0, 51.9}}, identifier: 'Account'
+      }

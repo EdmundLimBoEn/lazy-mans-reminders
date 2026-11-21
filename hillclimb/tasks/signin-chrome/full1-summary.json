@@ -1,0 +1,64 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+        "deviceName" : "Hillclimb Auth iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 270,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "LazyMansReminders · Built with macOS 27.2",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1793830530.538,
+  "passedTests" : 270,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793830009.436,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "XCTAssertGreaterThanOrEqual failed: (\"43.99999999999997\") is less than (\"44.0\")",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 265,
+      "testIdentifierString" : "AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix",
+      "testName" : "testCombinedActualSettingsKeyboardMatrix()"
+    },
+    {
+      "failureText" : "Testing was canceled",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 272,
+      "testIdentifierString" : "BoardEdgeAccessibilityUITests/testTopBandAfterRealPullAndPartialScrollMatrix()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardEdgeAccessibilityUITests/testTopBandAfterRealPullAndPartialScrollMatrix",
+      "testName" : "testTopBandAfterRealPullAndPartialScrollMatrix()"
+    }
+  ],
+  "title" : "Test - LazyMansReminders",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "38% of duration",
+      "text" : "4 longest test runs with outlier durations exceeding 0.07s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 272
+}

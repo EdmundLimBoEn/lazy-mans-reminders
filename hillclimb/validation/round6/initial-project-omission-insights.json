@@ -1,0 +1,38 @@
+{
+  "commonFailureInsights" : [
+
+  ],
+  "failureDistributionInsights" : [
+
+  ],
+  "longestTestRunsInsights" : [
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix",
+        "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardMultilineUITests/testPopulatedRetryRecoversLocallyOnceWithoutFocusOrDuplicateAnnouncement"
+      ],
+      "deviceName" : "Hillclimb iPhone 17 Pro",
+      "durationOfSlowTests" : 345.9713810682297,
+      "impact" : "(21%)",
+      "meanTime" : "46s across 35 test runs",
+      "osNameAndVersion" : "iOS Simulator 26.2",
+      "targetName" : "HillclimbUITests",
+      "testPlanConfigurationName" : "Test Scheme Action",
+      "title" : "2 longest test runs with outlier durations exceeding 167.98s (three standard deviations)"
+    },
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityLayoutTests/testRenderedLastLineFitsBothNativeSurfaceBudgets",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionClientTests/testConstructingClientDoesNotStartAnSDKInitialRefreshOutsideGate"
+      ],
+      "deviceName" : "Hillclimb iPhone 17 Pro",
+      "durationOfSlowTests" : 0.39820408821105957,
+      "impact" : "(30%)",
+      "meanTime" : "0.005s across 263 test runs",
+      "osNameAndVersion" : "iOS Simulator 26.2",
+      "targetName" : "LazyMansRemindersTests",
+      "testPlanConfigurationName" : "Test Scheme Action",
+      "title" : "2 longest test runs with outlier durations exceeding 0.06s (three standard deviations)"
+    }
+  ]
+}

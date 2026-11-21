@@ -1,0 +1,333 @@
+{
+  "model": "gpt-6.1-sol",
+  "source_sha": "6959de17bb4d74fa1518914988645a3ea0313a68",
+  "overall": 8.78,
+  "categories": [
+    {
+      "name": "Visual hierarchy",
+      "score": 9.1,
+      "rationale": "The board puts reminder text first, with quiet inline navigation and a separate composer. Flattened setup guidance and sign-in sections preserve a clear reading order; the full-board status remains visually too muted."
+    },
+    {
+      "name": "Spacing/grid",
+      "score": 9.0,
+      "rationale": "Consistent horizontal insets, first-line control alignment and full-width separators give long paragraphs a deliberate rhythm. Native grouped Account spacing works across both detents; the technical error banner is less refined."
+    },
+    {
+      "name": "Typography scale",
+      "score": 9.0,
+      "rationale": "System text styles, restrained weights and wrapping captions produce a coherent native scale. Large sign-in titles and compact board titles suit different tasks; no custom display treatment is needed for this utility."
+    },
+    {
+      "name": "Dynamic Type",
+      "score": 8.8,
+      "rationale": "Native default/XXXL boards, guide, sign-in and Account retain complete text and reachable controls. Capacity text now wraps intrinsically. XXXL is not an accessibility category, and larger native settings remain unverified."
+    },
+    {
+      "name": "Light contrast",
+      "score": 8.2,
+      "rationale": "Primary board content and active alternate actions are clear. The static default-size capacity message measures about 3.29:1 against its light composer fill, below a 4.5:1 normal-text target. Disabled fixture controls are excluded from this finding."
+    },
+    {
+      "name": "Dark contrast",
+      "score": 9.1,
+      "rationale": "Primary text, first-line circles, grips and neutral elevated surfaces remain legible against black. The sampled dark capacity label is substantially clearer than its light counterpart; arbitrary Activity wallpapers are not certified."
+    },
+    {
+      "name": "Iconography",
+      "score": 9.1,
+      "rationale": "Existing completion circles, account symbol, setup glyphs and six-dot grips are consistent and functional. Their first-line placement now connects controls to the correct reminder; no ornamental color or replacement icon is needed."
+    },
+    {
+      "name": "Safe area / Dynamic Island",
+      "score": 9.2,
+      "rationale": "Observed app states clear the status region; expanded native Island text and footer fit inside the pill. Compact/minimal emptiness is the existing intentional contract. Physical sensor and truly locked-device geometry remain outside this evidence."
+    },
+    {
+      "name": "Scroll/pull-down / last row",
+      "score": 9.2,
+      "rationale": "All four accepted bottom-after-pull captures show the complete final reminder above the composer. XXXL geometry places final text bottom around675.67pt and composer top679.67pt; native tests cover refresh settlement and bottom visibility."
+    },
+    {
+      "name": "List rows",
+      "score": 9.1,
+      "rationale": "Plain native collection rows retain complete paragraph height, separators and 44pt first-line controls. Reordering and accessible move actions exist. The repeated demo paragraphs are content stress fixtures, not a reason to penalize the layout."
+    },
+    {
+      "name": "Empty states",
+      "score": 9.0,
+      "rationale": "All Clear and the flat dismissible guide form a useful first-empty state. Every instruction remains present before/restored, while the focused state cleanly removes the guide; the Apple empty counterpart is quieter but has different semantics."
+    },
+    {
+      "name": "Composer ergonomics",
+      "score": 8.8,
+      "rationale": "The bottom field is reachable, grows to four lines, and keeps add/dismiss controls separate. Capacity is correctly represented as static wrapping text. The light status contrast and absence of a native long populated-draft capture limit the score."
+    },
+    {
+      "name": "Keyboard handling",
+      "score": 9.1,
+      "rationale": "Eight post-scroll native recheck states show separated Done and alternate actions. The strengthened suite and three dedicated matrices complete32 cases with independent edge taps and zero scoped invalid-frame events; normal interactive dismissal is handled."
+    },
+    {
+      "name": "Sheet presentation/detents",
+      "score": 9.1,
+      "rationale": "Native medium/large Account sheets retain clear Done controls and scrollable lower content at default/XXXL. No clipping blocks lower actions. References are reminder Details sheets rather than semantic Account equivalents."
+    },
+    {
+      "name": "Navigation clarity",
+      "score": 9.1,
+      "rationale": "Your Board, Account and Sign In remain clearly titled; modal dismissal and alternate sign-in paths are explicit. Native inline title collapse after scrolling is consistent with the supplied Apple compose references."
+    },
+    {
+      "name": "Touch targets",
+      "score": 9.1,
+      "rationale": "Source specifies44pt board controls, retry, sheet Done and fields, plus48pt sign-in Done/alternate controls. Passing native geometry and edge-tap checks support the important paths. This is not a complete enabled-production accessibility hit-region audit."
+    },
+    {
+      "name": "Haptics",
+      "score": 7.8,
+      "rationale": "Success/error sensory feedback and drag-start selection feedback are wired in source. Physical intensity, timing and consistency cannot be judged from simulator stills or test pass counts; this category remains provisional."
+    },
+    {
+      "name": "Animation/transitions",
+      "score": 8.0,
+      "rationale": "Board changes use a short0.2s transition and explicit Reduce Motion guards. Native Activity endpoint frames are tidy. Focus/sheet/list continuity and reloadData animation quality were not watched in a reviewer interaction session."
+    },
+    {
+      "name": "Loading states",
+      "score": 8.8,
+      "rationale": "Native initial loading and sign-in progress retain stable layout; retry/submission guards and named progress are present in source. Actual network wait duration and delayed completion behavior remain unobserved."
+    },
+    {
+      "name": "Error states",
+      "score": 8.2,
+      "rationale": "Initial and populated failures are visible, wrap at XXXL and retain local recovery/dismissal. Board/auth announcement policies are explicit. The exposed NSURLErrorDomain string is technical, and account failure announcement remains source-only risk."
+    },
+    {
+      "name": "VoiceOver/labels",
+      "score": 8.3,
+      "rationale": "Explicit labels, row state, reorder positions/actions, success announcements and new deduplicated board/auth error policies are sound. Account failures still rely on updatesFrequently/haptics; spoken announcements, traversal and focus preservation were not observed."
+    },
+    {
+      "name": "iOS HIG consistency",
+      "score": 9.0,
+      "rationale": "System navigation, native collection rows, keyboards, grouped lists and sheet detents give the app an Apple-native foundation without copying Reminders layout. The muted static status treatment and technical error presentation are remaining polish issues."
+    },
+    {
+      "name": "Lock Screen / Live Activity",
+      "score": 8.6,
+      "rationale": "Eight native Activity surfaces preserve visible-plus-hidden totals through the actual production payload pipeline: banner5+5/default and4+6/XXXL; Island3+7 and2+8. Intentional tail ellipsis is not hidden-count loss. True lock, wallpapers and lifecycle remain unverified."
+    },
+    {
+      "name": "Sign-in/onboarding",
+      "score": 8.7,
+      "rationale": "Unboxed provider/email sections, wrapped inbox/error variants and a dedicated Done inset are clear. Local demo editing/recovery is exercised while external actions remain blocked. Enabled provider appearance and successful live authentication are not certified."
+    },
+    {
+      "name": "Settings/account",
+      "score": 8.8,
+      "rationale": "Account status, grouped actions, lower footer and confirmations are coherent at both sizes/detents. Existing operational guidance is dense but readable. Demo-disabled rows do not establish production contrast; account error presentation needs accessibility follow-up."
+    },
+    {
+      "name": "Performance feel",
+      "score": 8.0,
+      "rationale": "Native virtualization and duplicate-operation guards are sensible; the completed scheme reaches idle and scoped layout diagnostics are clean. No frame-time, launch-time or real perceived response measurements were provided or run by this reviewer."
+    },
+    {
+      "name": "Delight",
+      "score": 8.5,
+      "rationale": "Quiet surfaces, precise first-line controls, complete capacity copy and a clean focused empty state make the utility feel considered. Muted full-board status, technical errors and unobserved tactile/motion quality keep it short of exceptional delight."
+    },
+    {
+      "name": "Long text",
+      "score": 9.0,
+      "rationale": "Long native paragraphs, final-row text, capacity wrapping, Account footers and auth messages survive XXXL. Activity overflow is structured and correctly recomposed. Native largest accessibility sizes and a long typed draft remain gaps."
+    },
+    {
+      "name": "Reduced Motion / Transparency",
+      "score": 8.2,
+      "rationale": "Source removes explicit board/tip motion under Reduce Motion and supplies solid error/composer alternatives for reduced transparency/increased contrast. Native setting toggles, Activity system material adaptation and full interaction coverage are unobserved."
+    },
+    {
+      "name": "Palette / minimalism",
+      "score": 9.4,
+      "rationale": "Flat board/guide/sign-in surfaces, monochrome rows and restrained native tint meet the minimal direction. No nested decorative cards or added red/orange palette is present; existing red only communicates genuine errors."
+    }
+  ],
+  "findings": [
+    {
+      "id": "SOL3-01",
+      "severity": "medium",
+      "screen": "full-light-default-bottom-after-pull.png; full-light-default-top.png; long-text-light-XXXL-bottom-after-pull.png",
+      "evidence": "The exact static Board full — combine lines instead status is now complete, but at default light it visually reads as a disabled field. Original1206x2622 raster sample x90..900,y2300..2450 contains5620 solid glyph pixels RGB(133,133,139) against RGB(242,242,247), yielding3.287:1. Source composer uses body text with foregroundStyle(.secondary) on secondarySystemBackground, and this Text is static rather than a disabled control. This finding excludes the intentionally disabled add arrow, sign-in providers and Account demo actions.",
+      "fix": "Keep every word, icon, intrinsic wrapping height and neutral palette. Give the static capacity label a stronger neutral foreground, preferably the existing primary style or an adaptive neutral meeting4.5:1 for normal body text. Keep the add button disabled. Recheck the separate hint without reducing type size.",
+      "confidence": "high",
+      "basis": "observed native raster and source-derived styling; measured contrast at default light, not a claim about every appearance",
+      "check": "Add a native raster contrast regression for static capacity text at default/XXXL in light/dark and increased contrast. Require>=4.5:1 for normal text and preserve full exact string, capacityIdeal height,44pt targets and final-row clearance. Use solid glyph/background samples rather than antialias-edge minima. Run the complete existing iOS suite after the change."
+    },
+    {
+      "id": "SOL3-02",
+      "severity": "medium",
+      "screen": "Account failure after Sign Out/Delete Account; context: extras/account-dark-XXXL-large-lower.png; source ios/App/AccountView.swift and ios/App/BoardPersistenceSection.swift",
+      "evidence": "AccountView inserts its error section near the top and supplies updatesFrequently plus error sensory feedback, but does not post an error announcement or apply an accessibility focus policy. Delete failures can arrive after the user worked near the lower end of a long sheet. Board and sign-in now have explicit deduplicated announcement policies, so the previous risk remains specifically on Account. BoardPersistenceSection also reports refresh failure by inserting result text. The provided Account screenshots contain no failure, and no spoken VoiceOver session establishes an actual missed announcement.",
+      "fix": "Apply a deduplicated announcement policy to new Account errors and refresh results, using the exact existing message strings. Preserve editing/reading context and avoid moving focus away from local recovery. Keep all section names, wording and icons unchanged.",
+      "confidence": "medium-high for source gap; user impact unobserved",
+      "basis": "source-derived conditional accessibility risk; not an observed VoiceOver failure",
+      "check": "Add policy tests for first error, repeated identical visible error, clear/re-present and changed error. Add safe local failure fixtures for Account sign-out/delete/refresh without service calls. With VoiceOver enabled verify the existing message is spoken once, is reachable after failure, and focus remains predictable after retry/dismissal; run the complete existing iOS suite. Automated policy tests alone cannot certify speech."
+    },
+    {
+      "id": "SOL3-03",
+      "severity": "low",
+      "screen": "extras/board-error-empty-light-XXXL.png; extras/board-error-populated-dark-XXXL.png; corresponding default/light/dark error states",
+      "evidence": "The native error description exposes The operation couldn’t be completed. (NSURLErrorDomain error -1009.). It wraps without clipping, but platform/domain syntax takes substantial space, especially in the populated top banner. Source propagates error.localizedDescription into failedBoard and BoardErrorBanner. Try Again and cached reminders remain available, so this is presentation/recovery clarity rather than data loss. No exact Apple failure fixture exists.",
+      "fix": "Preserve the complete existing error string and existing title/action/icon. Separate the technical parenthetical into subordinate diagnostic typography or existing expandable detail treatment, while keeping Couldn’t Load Board and Try Again visually primary where those existing controls apply. Do not invent replacement copy or add decorative cards/colors.",
+      "confidence": "high for observed presentation; medium for proposed hierarchy improvement",
+      "basis": "observed native screenshots plus source-derived propagation",
+      "check": "Capture default/XXXL light/dark initial and populated errors with the same exact string. Assert complete diagnostic text remains reachable, recovery/dismiss targets remain>=44pt, and populated reminders still scroll to the last row above the composer. Retain existing error-announcement deduplication and run the complete existing iOS suite."
+    }
+  ],
+  "screenshots": [
+    "account-dark-default-top.png",
+    "account-light-default-top.png",
+    "activity/multiline-dark-XXXL-collapsed.png",
+    "activity/multiline-dark-XXXL-expanded.png",
+    "activity/multiline-dark-XXXL-notification-center.png",
+    "activity/multiline-dark-default-collapsed.png",
+    "activity/multiline-dark-default-expanded.png",
+    "activity/multiline-dark-default-notification-center.png",
+    "activity/multiline-light-XXXL-collapsed.png",
+    "activity/multiline-light-XXXL-expanded.png",
+    "activity/multiline-light-XXXL-notification-center.png",
+    "activity/multiline-light-default-collapsed.png",
+    "activity/multiline-light-default-expanded.png",
+    "activity/multiline-light-default-notification-center.png",
+    "composer-dark-default-top.png",
+    "composer-light-default-top.png",
+    "empty-dark-default-top.png",
+    "empty-light-default-top.png",
+    "extras/account-dark-XXXL-large-lower.png",
+    "extras/account-dark-XXXL-large-top.png",
+    "extras/account-dark-XXXL-medium-lower.png",
+    "extras/account-dark-XXXL-medium-top.png",
+    "extras/account-dark-default-large-lower.png",
+    "extras/account-dark-default-large-top.png",
+    "extras/account-dark-default-medium-lower.png",
+    "extras/account-dark-default-medium-top.png",
+    "extras/account-light-XXXL-large-lower.png",
+    "extras/account-light-XXXL-large-top.png",
+    "extras/account-light-XXXL-medium-lower.png",
+    "extras/account-light-XXXL-medium-top.png",
+    "extras/account-light-default-large-lower.png",
+    "extras/account-light-default-large-top.png",
+    "extras/account-light-default-medium-lower.png",
+    "extras/account-light-default-medium-top.png",
+    "extras/board-error-empty-dark-XXXL.png",
+    "extras/board-error-empty-dark-default.png",
+    "extras/board-error-empty-light-XXXL.png",
+    "extras/board-error-empty-light-default.png",
+    "extras/board-error-populated-dark-XXXL-recovered.png",
+    "extras/board-error-populated-dark-XXXL.png",
+    "extras/board-error-populated-dark-default-recovered.png",
+    "extras/board-error-populated-dark-default.png",
+    "extras/board-error-populated-light-XXXL-recovered.png",
+    "extras/board-error-populated-light-XXXL.png",
+    "extras/board-error-populated-light-default-recovered.png",
+    "extras/board-error-populated-light-default.png",
+    "extras/board-loading-dark-XXXL.png",
+    "extras/board-loading-dark-default.png",
+    "extras/board-loading-light-XXXL.png",
+    "extras/board-loading-light-default.png",
+    "extras/guide-dark-XXXL-before.png",
+    "extras/guide-dark-XXXL-focused.png",
+    "extras/guide-dark-XXXL-restored.png",
+    "extras/guide-dark-default-before.png",
+    "extras/guide-dark-default-focused.png",
+    "extras/guide-dark-default-restored.png",
+    "extras/guide-light-XXXL-before.png",
+    "extras/guide-light-XXXL-focused.png",
+    "extras/guide-light-XXXL-restored.png",
+    "extras/guide-light-default-before.png",
+    "extras/guide-light-default-focused.png",
+    "extras/guide-light-default-restored.png",
+    "extras/signin-dark-XXXL-default.png",
+    "extras/signin-dark-XXXL-error.png",
+    "extras/signin-dark-XXXL-inbox.png",
+    "extras/signin-dark-XXXL-keyboard.png",
+    "extras/signin-dark-XXXL-loading.png",
+    "extras/signin-dark-XXXL-password-keyboard.png",
+    "extras/signin-dark-XXXL-password.png",
+    "extras/signin-dark-default-default.png",
+    "extras/signin-dark-default-error.png",
+    "extras/signin-dark-default-inbox.png",
+    "extras/signin-dark-default-keyboard.png",
+    "extras/signin-dark-default-loading.png",
+    "extras/signin-dark-default-password-keyboard.png",
+    "extras/signin-dark-default-password.png",
+    "extras/signin-light-XXXL-default.png",
+    "extras/signin-light-XXXL-error.png",
+    "extras/signin-light-XXXL-inbox.png",
+    "extras/signin-light-XXXL-keyboard.png",
+    "extras/signin-light-XXXL-loading.png",
+    "extras/signin-light-XXXL-password-keyboard.png",
+    "extras/signin-light-XXXL-password.png",
+    "extras/signin-light-default-default.png",
+    "extras/signin-light-default-error.png",
+    "extras/signin-light-default-inbox.png",
+    "extras/signin-light-default-keyboard.png",
+    "extras/signin-light-default-loading.png",
+    "extras/signin-light-default-password-keyboard.png",
+    "extras/signin-light-default-password.png",
+    "full-dark-default-bottom-after-pull.png",
+    "full-dark-default-top.png",
+    "full-light-default-bottom-after-pull.png",
+    "full-light-default-top.png",
+    "long-text-dark-XXXL-bottom-after-pull.png",
+    "long-text-dark-XXXL-top.png",
+    "long-text-dark-default-top.png",
+    "long-text-light-XXXL-bottom-after-pull.png",
+    "long-text-light-XXXL-top.png",
+    "long-text-light-default-top.png",
+    "signin-dark-default-top.png",
+    "signin-light-default-top.png",
+    "recheck/signin-light-default-keyboard.png",
+    "recheck/signin-light-default-password-keyboard.png",
+    "recheck/signin-light-XXXL-keyboard.png",
+    "recheck/signin-light-XXXL-password-keyboard.png",
+    "recheck/signin-dark-default-keyboard.png",
+    "recheck/signin-dark-default-password-keyboard.png",
+    "recheck/signin-dark-XXXL-keyboard.png",
+    "recheck/signin-dark-XXXL-password-keyboard.png"
+  ],
+  "references": [
+    "../../reference/reminders-bottom-dark.png",
+    "../../reference/reminders-compose-light.png",
+    "../../reference/reminders-empty-light.png",
+    "../../reference/reminders-sheet-dark.png",
+    "../../reference/reminders-top-light.png",
+    "../../reference/round2/reminders-bottom-light.png",
+    "../../reference/round2/reminders-compose-dark.png",
+    "../../reference/round2/reminders-sheet-light.png",
+    "../../reference/round2/reminders-top-dark.png",
+    "../../reference/round3/reminders-bottom-dark-XXXL.png",
+    "../../reference/round3/reminders-bottom-light-XXXL.png",
+    "../../reference/round3/reminders-compose-dark-XXXL.png",
+    "../../reference/round3/reminders-compose-light-XXXL.png",
+    "../../reference/round3/reminders-sheet-dark-XXXL.png",
+    "../../reference/round3/reminders-sheet-light-XXXL.png",
+    "../../reference/round3/reminders-top-dark-XXXL.png",
+    "../../reference/round3/reminders-top-light-XXXL.png"
+  ],
+  "evidence_gaps": [
+    "All110 inventoried native images were reviewed through nine historical contact sheets plus the eight-case recheck sheet; meaningful original-resolution samples included all four accepted board bottoms, board tops/control alignment, both-appearance XXXL guide before/focused/restored, composer, all eight post-scroll keyboards, sign-in inbox/error/loading/password, Account detents/top/lower and native Activity banner/Island. Contact sheets are derived inspection aids and are not additional native captures.",
+    "The110 native images comprise98 app simulator states,8 visible native Activity surfaces and4 intentionally empty compact/minimal states. Twelve app-rendered unit Activity rasters are excluded. Rejected transition/short-scroll captures were not used.",
+    "All17 usable paired Apple Reminders references were inspected at original resolution, including eight new matching XXXL top/bottom/compose/Details references. Notes is unavailable. Dark empty, guide, loading/error, authentication, Account-vs-Details and Activity-vs-list comparisons have semantic gaps; exact per-state mappings and type mismatches are disclosed in pairings.json/md.",
+    "True physical Lock Screen, hardware sensor geometry, arbitrary wallpapers, always-on presentation and authenticated Activity start/update/renewal lifecycle are unverified. Notification Center is native evidence, not true locked-device certification. Compact/minimal Island emptiness is intentional and is not graded as missing copy.",
+    "Physical haptics, spoken VoiceOver/traversal/focus after list reloads or sheet failures, and reviewer-observed animation/performance timing remain unverified. Stills, source and test outcomes do not certify them; those category scores remain provisional.",
+    "Native XXXL means extraExtraExtraLarge, not the largest accessibility category. Native accessibility sizes, Bold Text, Increase Contrast and actual Reduce Motion/Transparency interaction matrices are absent. Unit-rendered accessibility Activity checks cannot substitute for native coverage.",
+    "External authentication/providers/legal links and most Account controls are deliberately disabled in safe demo captures. Their dimming is not an enabled-production contrast defect. No live authentication, account deletion, sign-out service operation, notification prompt or backend request was performed by this reviewer.",
+    "Native populated long-draft editing, enabled provider appearance, Account error/progress fixtures and Home Screen/accessory widget views are not supplied. Source was inspected for these relevant behaviors; no success is inferred from source alone.",
+    "Fresh combined recheck276/276 and three dedicated eight-case matrices are reported in retained artifacts, with0 failures/skips,0 runtime warnings and0 scoped invalid-frame events. The historical275/1 baseline remains failed. Combined log contains7836 other error/fault events; compiler, APNs, IOSurface and debugger diagnostics are retained, so no global warning-free claim is made.",
+    "Release and cached Deno52+4 passes are reused from historical production-identical inputs; no fresh Release/backend run is claimed. Fresh Debug build and Python23 belong to the recheck. Broader Python discovery remains limited by missing initdb.",
+    "Reviewer ran only local read-only integrity/raster checks, not builds, iOS tests or device interactions. All53 local production hashes match inventory source6959de17bb4d74fa1518914988645a3ea0313a68. Captures/test artifacts are attributed to that production source with test revision542b9f7 and validation revision7561336; current git HEAD is not asserted to equal capture SHA."
+  ]
+}

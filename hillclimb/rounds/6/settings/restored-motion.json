@@ -1,0 +1,923 @@
+{
+  "success": true,
+  "data": {
+    "nodes": [
+      {
+        "index": 0,
+        "type": "Other",
+        "role": "_TtC7SwiftUIP33_ACC2C5639A7D76F611E170E831FCA49118SwiftUIApplication",
+        "subrole": "UIApplication",
+        "label": "Settings",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 402,
+          "height": 874
+        },
+        "enabled": true,
+        "depth": 0,
+        "pid": 4546,
+        "hittable": false,
+        "ref": "e1",
+        "kind": "other"
+      },
+      {
+        "index": 1,
+        "parentIndex": 0,
+        "type": "NavigationBar",
+        "role": "SwiftUI.UIKitNavigationBar",
+        "subrole": "UINavigationBar",
+        "identifier": "Motion",
+        "rect": {
+          "x": 0,
+          "y": 62,
+          "width": 402,
+          "height": 54
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e2",
+        "kind": "navigation-bar"
+      },
+      {
+        "index": 2,
+        "parentIndex": 1,
+        "type": "Button",
+        "role": "UIAccessibilityBackButtonElement",
+        "subrole": "UIAccessibilityElement",
+        "label": "Accessibility",
+        "identifier": "BackButton",
+        "rect": {
+          "x": 16,
+          "y": 62,
+          "width": 44,
+          "height": 44
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e3",
+        "kind": "button"
+      },
+      {
+        "index": 3,
+        "parentIndex": 1,
+        "type": "StaticText",
+        "role": "UILabel",
+        "label": "Motion",
+        "rect": {
+          "x": 173.33333333333334,
+          "y": 73.66666666666666,
+          "width": 55.33333333333334,
+          "height": 20.66666666666667
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e4",
+        "kind": "text"
+      },
+      {
+        "index": 4,
+        "parentIndex": 0,
+        "type": "Table",
+        "role": "UITableView",
+        "rect": {
+          "x": 0,
+          "y": 116,
+          "width": 402,
+          "height": 696
+        },
+        "enabled": true,
+        "depth": 1,
+        "pid": 4546,
+        "hittable": true,
+        "hiddenContentBelow": true,
+        "ref": "e5",
+        "kind": "table"
+      },
+      {
+        "index": 5,
+        "parentIndex": 4,
+        "type": "Cell",
+        "role": "UITableViewCellAccessibilityElement",
+        "subrole": "UIAccessibilityElement",
+        "identifier": "REDUCE_MOTION",
+        "rect": {
+          "x": 20,
+          "y": 133.6666660308838,
+          "width": 362,
+          "height": 53
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e6",
+        "kind": "cell"
+      },
+      {
+        "index": 6,
+        "parentIndex": 5,
+        "type": "Switch",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Reduce Motion",
+        "value": "0",
+        "identifier": "REDUCE_MOTION",
+        "rect": {
+          "x": 36,
+          "y": 146.3333282470703,
+          "width": 330,
+          "height": 28
+        },
+        "enabled": true,
+        "depth": 3,
+        "checked": false,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e7",
+        "kind": "switch"
+      },
+      {
+        "index": 7,
+        "parentIndex": 6,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Reduce Motion",
+        "identifier": "REDUCE_MOTION",
+        "rect": {
+          "x": 36,
+          "y": 149.99999936421713,
+          "width": 114.66666666666666,
+          "height": 20.333333333333343
+        },
+        "enabled": true,
+        "depth": 4,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e8",
+        "kind": "button"
+      },
+      {
+        "index": 8,
+        "parentIndex": 6,
+        "type": "Switch",
+        "role": "UISwitch",
+        "value": "0",
+        "rect": {
+          "x": 305,
+          "y": 146.33333269755045,
+          "width": 63,
+          "height": 28
+        },
+        "enabled": true,
+        "depth": 4,
+        "checked": false,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e9",
+        "kind": "switch"
+      },
+      {
+        "index": 9,
+        "parentIndex": 4,
+        "type": "Other",
+        "role": "UITableViewSectionElement",
+        "subrole": "UIAccessibilityElement",
+        "identifier": "Reduce the motion of the user interface, including the parallax effect of icons.",
+        "rect": {
+          "x": 0,
+          "y": 186.66666666666669,
+          "width": 402,
+          "height": 46
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e10",
+        "kind": "other"
+      },
+      {
+        "index": 10,
+        "parentIndex": 9,
+        "type": "Other",
+        "role": "UITableViewHeaderFooterView",
+        "subrole": "UIAccessibilityElement",
+        "label": "Reduce the motion of the user interface, including the parallax effect of icons.",
+        "rect": {
+          "x": 20,
+          "y": 186.66666666666669,
+          "width": 362,
+          "height": 46
+        },
+        "enabled": true,
+        "depth": 3,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e11",
+        "kind": "other"
+      },
+      {
+        "index": 11,
+        "parentIndex": 4,
+        "type": "Cell",
+        "role": "UITableViewCellAccessibilityElement",
+        "subrole": "UIAccessibilityElement",
+        "identifier": "PHOTOSENSITIVE_MITIGATION",
+        "rect": {
+          "x": 20,
+          "y": 250.33333206176758,
+          "width": 362,
+          "height": 53
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e12",
+        "kind": "cell"
+      },
+      {
+        "index": 12,
+        "parentIndex": 11,
+        "type": "Switch",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Dim Flashing Lights",
+        "value": "0",
+        "rect": {
+          "x": 36,
+          "y": 263,
+          "width": 330,
+          "height": 28
+        },
+        "enabled": true,
+        "depth": 3,
+        "checked": false,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e13",
+        "kind": "switch",
+        "inheritsIdentifier": true
+      },
+      {
+        "index": 13,
+        "parentIndex": 12,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Dim Flashing Lights",
+        "rect": {
+          "x": 36,
+          "y": 266.6666653951009,
+          "width": 148.66666666666666,
+          "height": 20.33333333333337
+        },
+        "enabled": true,
+        "depth": 4,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e14",
+        "kind": "button",
+        "inheritsIdentifier": true
+      },
+      {
+        "index": 14,
+        "parentIndex": 12,
+        "type": "Switch",
+        "role": "UISwitch",
+        "value": "0",
+        "rect": {
+          "x": 305,
+          "y": 262.9999987284342,
+          "width": 63,
+          "height": 28
+        },
+        "enabled": true,
+        "depth": 4,
+        "checked": false,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e15",
+        "kind": "switch"
+      },
+      {
+        "index": 15,
+        "parentIndex": 4,
+        "type": "Other",
+        "role": "UITableViewSectionElement",
+        "subrole": "UIAccessibilityElement",
+        "identifier": "Video content that depicts repeated flashing or strobing lights will be automatically dimmed.",
+        "rect": {
+          "x": 0,
+          "y": 303.3333326975505,
+          "width": 402,
+          "height": 46
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e16",
+        "kind": "other"
+      },
+      {
+        "index": 16,
+        "parentIndex": 15,
+        "type": "Other",
+        "role": "UITableViewHeaderFooterView",
+        "subrole": "UIAccessibilityElement",
+        "label": "Video content that depicts repeated flashing or strobing lights will be automatically dimmed.",
+        "rect": {
+          "x": 20,
+          "y": 303.3333326975505,
+          "width": 362,
+          "height": 46
+        },
+        "enabled": true,
+        "depth": 3,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e17",
+        "kind": "other"
+      },
+      {
+        "index": 17,
+        "parentIndex": 4,
+        "type": "Cell",
+        "role": "UITableViewCellAccessibilityElement",
+        "subrole": "UIAccessibilityElement",
+        "identifier": "REDUCE_MOTION_AUTOPLAY_ANIMATED_IMAGES",
+        "rect": {
+          "x": 20,
+          "y": 366.99999809265137,
+          "width": 362,
+          "height": 53
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e18",
+        "kind": "cell"
+      },
+      {
+        "index": 18,
+        "parentIndex": 17,
+        "type": "Switch",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Auto-Play Animated Images",
+        "value": "1",
+        "rect": {
+          "x": 36,
+          "y": 379.6666564941406,
+          "width": 330,
+          "height": 28
+        },
+        "enabled": true,
+        "depth": 3,
+        "checked": true,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e19",
+        "kind": "switch",
+        "inheritsIdentifier": true
+      },
+      {
+        "index": 19,
+        "parentIndex": 18,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "rect": {
+          "x": 36,
+          "y": 383.3333314259847,
+          "width": 211,
+          "height": 20.33333333333337
+        },
+        "enabled": true,
+        "depth": 4,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e20",
+        "kind": "button",
+        "inheritsLabel": true,
+        "inheritsIdentifier": true
+      },
+      {
+        "index": 20,
+        "parentIndex": 18,
+        "type": "Switch",
+        "role": "UISwitch",
+        "value": "1",
+        "rect": {
+          "x": 305,
+          "y": 379.66666475931805,
+          "width": 63,
+          "height": 28
+        },
+        "enabled": true,
+        "depth": 4,
+        "checked": true,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e21",
+        "kind": "switch"
+      },
+      {
+        "index": 21,
+        "parentIndex": 4,
+        "type": "Cell",
+        "role": "UITableViewCellAccessibilityElement",
+        "subrole": "UIAccessibilityElement",
+        "identifier": "REDUCE_MOTION_AUTOPLAY_VIDEO_PREVIEWS",
+        "rect": {
+          "x": 20,
+          "y": 419.99999809265137,
+          "width": 362,
+          "height": 53
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e22",
+        "kind": "cell"
+      },
+      {
+        "index": 22,
+        "parentIndex": 21,
+        "type": "Switch",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Auto-Play Video Previews",
+        "value": "1",
+        "rect": {
+          "x": 36,
+          "y": 432.6666564941406,
+          "width": 330,
+          "height": 28
+        },
+        "enabled": true,
+        "depth": 3,
+        "checked": true,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e23",
+        "kind": "switch",
+        "inheritsIdentifier": true
+      },
+      {
+        "index": 23,
+        "parentIndex": 22,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "rect": {
+          "x": 36,
+          "y": 436.3333314259847,
+          "width": 195.33333333333331,
+          "height": 20.33333333333337
+        },
+        "enabled": true,
+        "depth": 4,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e24",
+        "kind": "button",
+        "inheritsLabel": true,
+        "inheritsIdentifier": true
+      },
+      {
+        "index": 24,
+        "parentIndex": 22,
+        "type": "Switch",
+        "role": "UISwitch",
+        "value": "1",
+        "rect": {
+          "x": 305,
+          "y": 432.66666475931805,
+          "width": 63,
+          "height": 28
+        },
+        "enabled": true,
+        "depth": 4,
+        "checked": true,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e25",
+        "kind": "switch"
+      },
+      {
+        "index": 25,
+        "parentIndex": 4,
+        "type": "Cell",
+        "role": "UITableViewCellAccessibilityElement",
+        "subrole": "UIAccessibilityElement",
+        "identifier": "ReduceMotionAutoplayMessagesEffects",
+        "rect": {
+          "x": 20,
+          "y": 472.99999809265137,
+          "width": 362,
+          "height": 53
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e26",
+        "kind": "cell"
+      },
+      {
+        "index": 26,
+        "parentIndex": 25,
+        "type": "Switch",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Auto-Play Message Effects",
+        "value": "1",
+        "rect": {
+          "x": 36,
+          "y": 485.6666564941406,
+          "width": 330,
+          "height": 28.000030517578125
+        },
+        "enabled": true,
+        "depth": 3,
+        "checked": true,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e27",
+        "kind": "switch",
+        "inheritsIdentifier": true
+      },
+      {
+        "index": 27,
+        "parentIndex": 26,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "rect": {
+          "x": 36,
+          "y": 489.3333314259847,
+          "width": 205.33333333333331,
+          "height": 20.33333333333337
+        },
+        "enabled": true,
+        "depth": 4,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e28",
+        "kind": "button",
+        "inheritsLabel": true,
+        "inheritsIdentifier": true
+      },
+      {
+        "index": 28,
+        "parentIndex": 26,
+        "type": "Switch",
+        "role": "UISwitch",
+        "value": "1",
+        "rect": {
+          "x": 305,
+          "y": 485.66666475931805,
+          "width": 63,
+          "height": 28.000000000000057
+        },
+        "enabled": true,
+        "depth": 4,
+        "checked": true,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e29",
+        "kind": "switch"
+      },
+      {
+        "index": 29,
+        "parentIndex": 4,
+        "type": "Other",
+        "role": "UITableViewSectionElement",
+        "subrole": "UIAccessibilityElement",
+        "identifier": "Control if videos, animated images, and full screen effects in messages play automatically.",
+        "rect": {
+          "x": 0,
+          "y": 525.9999987284343,
+          "width": 402,
+          "height": 46
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e30",
+        "kind": "other"
+      },
+      {
+        "index": 30,
+        "parentIndex": 29,
+        "type": "Other",
+        "role": "UITableViewHeaderFooterView",
+        "subrole": "UIAccessibilityElement",
+        "label": "Control if videos, animated images, and full screen effects in messages play automatically.",
+        "rect": {
+          "x": 20,
+          "y": 525.9999987284343,
+          "width": 362,
+          "height": 46
+        },
+        "enabled": true,
+        "depth": 3,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e31",
+        "kind": "other"
+      },
+      {
+        "index": 31,
+        "parentIndex": 4,
+        "type": "Cell",
+        "role": "UITableViewCellAccessibilityElement",
+        "subrole": "UIAccessibilityElement",
+        "identifier": "PREFER_NONBLINKING_CURSOR",
+        "rect": {
+          "x": 20,
+          "y": 589.6666641235352,
+          "width": 362,
+          "height": 53
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e32",
+        "kind": "cell"
+      },
+      {
+        "index": 32,
+        "parentIndex": 31,
+        "type": "Switch",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Prefer Non-Blinking Cursor",
+        "value": "0",
+        "rect": {
+          "x": 36,
+          "y": 602.3333129882812,
+          "width": 330,
+          "height": 28
+        },
+        "enabled": true,
+        "depth": 3,
+        "checked": false,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e33",
+        "kind": "switch",
+        "inheritsIdentifier": true
+      },
+      {
+        "index": 33,
+        "parentIndex": 32,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "rect": {
+          "x": 36,
+          "y": 605.9999974568685,
+          "width": 205,
+          "height": 20.333333333333258
+        },
+        "enabled": true,
+        "depth": 4,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e34",
+        "kind": "button",
+        "inheritsLabel": true,
+        "inheritsIdentifier": true
+      },
+      {
+        "index": 34,
+        "parentIndex": 32,
+        "type": "Switch",
+        "role": "UISwitch",
+        "value": "0",
+        "rect": {
+          "x": 305,
+          "y": 602.3333307902019,
+          "width": 63,
+          "height": 28
+        },
+        "enabled": true,
+        "depth": 4,
+        "checked": false,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e35",
+        "kind": "switch"
+      },
+      {
+        "index": 35,
+        "parentIndex": 4,
+        "type": "Other",
+        "role": "UITableViewSectionElement",
+        "subrole": "UIAccessibilityElement",
+        "identifier": "Prefer the cursor indicator in text does not blink.",
+        "rect": {
+          "x": 0,
+          "y": 642.666664759318,
+          "width": 402,
+          "height": 30
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e36",
+        "kind": "other"
+      },
+      {
+        "index": 36,
+        "parentIndex": 35,
+        "type": "Other",
+        "role": "UITableViewHeaderFooterView",
+        "subrole": "UIAccessibilityElement",
+        "label": "Prefer the cursor indicator in text does not blink.",
+        "rect": {
+          "x": 20,
+          "y": 642.666664759318,
+          "width": 362,
+          "height": 30
+        },
+        "enabled": true,
+        "depth": 3,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e37",
+        "kind": "other"
+      },
+      {
+        "index": 37,
+        "parentIndex": 4,
+        "type": "Cell",
+        "role": "UITableViewCellAccessibilityElement",
+        "subrole": "UIAccessibilityElement",
+        "identifier": "REFRESH_RATE",
+        "rect": {
+          "x": 20,
+          "y": 690.333330154419,
+          "width": 362,
+          "height": 53
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e38",
+        "kind": "cell"
+      },
+      {
+        "index": 38,
+        "parentIndex": 37,
+        "type": "Switch",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Limit Frame Rate",
+        "value": "0",
+        "identifier": "REFRESH_RATE",
+        "rect": {
+          "x": 36,
+          "y": 703,
+          "width": 330,
+          "height": 28
+        },
+        "enabled": true,
+        "depth": 3,
+        "checked": false,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e39",
+        "kind": "switch"
+      },
+      {
+        "index": 39,
+        "parentIndex": 38,
+        "type": "Button",
+        "role": "SwiftUI.AccessibilityNode",
+        "subrole": "UIResponder",
+        "label": "Limit Frame Rate",
+        "identifier": "REFRESH_RATE",
+        "rect": {
+          "x": 36,
+          "y": 706.6666634877523,
+          "width": 128.33333333333331,
+          "height": 20.333333333333258
+        },
+        "enabled": true,
+        "depth": 4,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e40",
+        "kind": "button"
+      },
+      {
+        "index": 40,
+        "parentIndex": 38,
+        "type": "Switch",
+        "role": "UISwitch",
+        "value": "0",
+        "rect": {
+          "x": 305,
+          "y": 702.9999968210856,
+          "width": 63,
+          "height": 28
+        },
+        "enabled": true,
+        "depth": 4,
+        "checked": false,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e41",
+        "kind": "switch"
+      },
+      {
+        "index": 41,
+        "parentIndex": 4,
+        "type": "Other",
+        "role": "UITableViewSectionElement",
+        "subrole": "UIAccessibilityElement",
+        "identifier": "Sets the maximum frame rate of the display to 60 frames per second.",
+        "rect": {
+          "x": 0,
+          "y": 743.3333307902018,
+          "width": 402,
+          "height": 46
+        },
+        "enabled": true,
+        "depth": 2,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e42",
+        "kind": "other"
+      },
+      {
+        "index": 42,
+        "parentIndex": 41,
+        "type": "Other",
+        "role": "UITableViewHeaderFooterView",
+        "subrole": "UIAccessibilityElement",
+        "label": "Sets the maximum frame rate of the display to 60 frames per second.",
+        "rect": {
+          "x": 20,
+          "y": 743.3333307902018,
+          "width": 362,
+          "height": 46
+        },
+        "enabled": true,
+        "depth": 3,
+        "pid": 4546,
+        "hittable": true,
+        "ref": "e43",
+        "kind": "other"
+      }
+    ],
+    "truncated": false,
+    "appName": "com.apple.Preferences",
+    "appBundleId": "com.apple.Preferences",
+    "visibility": {
+      "partial": true,
+      "visibleNodeCount": 43,
+      "totalNodeCount": 43,
+      "reasons": [
+        "scroll-hidden-below"
+      ]
+    },
+    "viewport": {
+      "width": 402,
+      "height": 874
+    },
+    "presentedSurface": "absent",
+    "snapshotDiagnostics": {
+      "stats": {
+        "count": 315,
+        "p50Ms": 59,
+        "p95Ms": 135,
+        "maxMs": 5325,
+        "slowThresholdMs": 1500,
+        "platform": "ios",
+        "backends": {
+          "xctest": 315
+        }
+      }
+    },
+    "refsGeneration": 198544
+  }
+}

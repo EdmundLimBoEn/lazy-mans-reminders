@@ -1,0 +1,21 @@
+{
+  "runtimeWarnings": [],
+  "invalidFrameEvents": 0,
+  "allErrorFaultEvents": 15220,
+  "command": [
+    "xcrun",
+    "simctl",
+    "spawn",
+    "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+    "log",
+    "show",
+    "--start",
+    "2026-11-05 03:30:26",
+    "--end",
+    "2026-11-05 03:53:19",
+    "--style",
+    "json",
+    "--predicate",
+    "process == \"LazyMansReminders\" AND (messageType == fault OR messageType == error OR eventMessage CONTAINS[c] \"Invalid frame\")"
+  ]
+}

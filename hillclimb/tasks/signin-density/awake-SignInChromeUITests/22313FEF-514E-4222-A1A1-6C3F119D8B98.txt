@@ -1,0 +1,126 @@
+field=(20.0, 246.33333333333334, 362.0, 47.99999999999997) label=(20.0, 206.33333333333334, 150.0, 28.0) ink=5514
+Attributes: Application, 0x10aa073e0, pid: 5519, label: 'Notepad'
+Element subtree:
+ →Application, 0x10aa073e0, pid: 5519, label: 'Notepad'
+    Window (Main), 0x10aa08420, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x10aa07ee0, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x10aa08000, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x10aa07d90, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x10aa08120, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x10252a830, {{0.0, 0.0}, {402.0, 874.0}}
+                NavigationBar, 0x10252ad40, {{0.0, 62.0}, {402.0, 54.0}}, identifier: 'Sign In'
+                  StaticText, 0x10252cd00, {{168.3, 71.3}, {65.0, 25.3}}, label: 'Sign In'
+                Other, 0x10252ce20, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x10252cf40, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x10252d060, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x10252d180, {{0.0, 0.0}, {402.0, 874.0}}
+                        ScrollView, 0x10252d2a0, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x10252d3c0, {{0.0, -194.0}, {402.0, 785.0}}
+                            StaticText, 0x10252d4e0, {{20.0, -186.0}, {82.7, 25.3}}, label: 'Notepad'
+                            StaticText, 0x10252d600, {{20.0, -152.7}, {351.0, 56.7}}, label: 'Your board on this iPhone, the web, and the Lock Screen.'
+                            Button, 0x10252d720, {{20.0, -72.0}, {362.0, 58.0}}, identifier: 'signin.apple', label: 'Sign in with Apple', Disabled
+                            Button, 0x10252d840, {{20.0, -1.7}, {362.0, 57.7}}, label: 'Sign in with Google', Disabled
+                              StaticText, 0x10252d960, {{105.7, 13.2}, {190.7, 27.7}}, label: 'Sign in with Google', Disabled
+                            StaticText, 0x10252da80, {{20.0, 80.0}, {56.7, 27.7}}, label: 'Email'
+                            StaticText, 0x10252dba0, {{20.0, 115.7}, {343.3, 23.0}}, label: 'Use the same address as the web board.'
+                            Other, 0x10252dcc0, {{20.0, 146.7}, {362.0, 44.0}}, identifier: 'signin.emailTarget'
+                              TextField, 0x10252dde0, {{20.0, 146.7}, {362.0, 44.0}}, label: 'Email address', placeholderValue: 'you@example.com'
+                            Other, 0x10252df00, {{20.0, 246.3}, {362.0, 48.0}}, identifier: 'signin.passwordTarget'
+                              SecureTextField, 0x10254cac0, {{20.0, 246.3}, {362.0, 48.0}}, label: 'Password', placeholderValue: 'Password', value: ••••••••••••, Keyboard Focused
+                            StaticText, 0x10254cbe0, {{20.0, 302.3}, {346.7, 47.0}}, label: 'For an existing account with a password. You can also use a sign-in link.'
+                            Button, 0x10254cd00, {{20.0, 369.3}, {362.0, 57.7}}, label: 'Sign In with Password', Disabled
+                              StaticText, 0x10254ce20, {{93.3, 384.3}, {215.3, 27.7}}, label: 'Sign In with Password', Disabled
+                            Button, 0x10254cf40, {{20.0, 435.0}, {362.0, 48.0}}, label: 'Use a Sign-In Link Instead'
+                            Button, 0x10254d060, {{72.7, 525.7}, {61.3, 23.0}}, label: 'Privacy', Disabled
+                            Button, 0x10254d180, {{171.7, 525.7}, {52.3, 23.0}}, label: 'Terms', Disabled
+                            Button, 0x10254d2a0, {{261.3, 525.7}, {68.0, 23.0}}, label: 'Support', Disabled
+                          Other, 0x10254d3c0, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x10254d4e0, {{0.0, 0.0}, {402.0, 116.0}}
+                          Other, 0x10254d600, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x10254d720, {{0.0, 0.0}, {402.0, 116.0}}
+                              Other, 0x10254d840, {{0.0, 0.0}, {402.0, 96.7}}
+                              Other, 0x10254d960, {{0.0, 0.0}, {402.0, 116.0}}
+                              Other, 0x10254da80, {{0.0, 0.0}, {402.0, 116.0}}
+                                Other, 0x10254dba0, {{0.0, 0.0}, {402.0, 116.0}}
+                          Other, 0x10254dcc0, {{369.0, 116.0}, {30.0, 367.0}}, label: 'Vertical scroll bar, 3 pages', value: 74%
+                            Other, 0x10254dde0, {{396.0, 205.7}, {3.0, 244.3}}
+                          Other, 0x10254df00, {{369.0, 116.0}, {30.0, 367.0}}, label: 'Vertical scroll bar, 3 pages', value: 74%
+                            Other, 0x10254e020, {{396.0, 205.7}, {3.0, 244.3}}
+                        Button, 0x10254e140, {{329.0, 491.0}, {53.0, 48.0}}, label: 'Done'
+                Other, 0x10254e260, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x10254e380, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x10254e4a0, {{0.0, 62.0}, {1.0, 1.0}}, identifier: 'signin.densityFrames', value: {"actionGroup":[20...
+              Other, 0x10251b520, {{0.0, 62.0}, {1.0, 1.0}}, identifier: 'hillclimb.geometry', value: {"authState":[0,0,...
+    Window, 0x10251b640, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x10251b760, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x10251b880, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x10251b9a0, {{0.0, 539.0}, {402.0, 335.0}}
+          Other, 0x10251bac0, {{0.0, 539.0}, {402.0, 335.0}}, identifier: 'inputView'
+    Window, 0x1025207e0, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x102520900, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x102520a20, {{0.0, 539.0}, {402.0, 335.0}}
+          Other, 0x102520b40, {{0.0, 539.0}, {402.0, 44.0}}, identifier: 'SystemInputAssistantView'
+            Other, 0x102520c60, {{0.0, 539.0}, {402.0, 44.0}}
+              Other, 0x102520d80, {{0.0, 539.0}, {402.0, 44.0}}, identifier: 'CenterPageView'
+                Other, 0x102520ea0, {{0.0, -61.0}, {402.0, 1244.0}}
+                  ScrollView, 0x10251bd40, {{0.0, 539.0}, {402.0, 44.0}}
+                Other, 0x10251be60, {{0.0, 539.0}, {402.0, 44.0}}
+                  Other, 0x10251bf80, {{0.0, 539.0}, {402.0, 44.0}}, label: 'Typing Predictions'
+                    Other, 0x10251c0a0, {{0.0, 539.0}, {402.0, 44.0}}
+                      Other, 0x10251c1c0, {{30.0, 539.0}, {342.0, 44.0}}
+                        Button, 0x10251c2e0, {{30.0, 539.0}, {342.0, 44.0}}, label: 'Passwords'
+                          Image, 0x10251c400, {{150.5, 553.0}, {13.0, 23.0}}, identifier: 'kb-autofill-key'
+          Other, 0x10251c520, {{0.0, 539.0}, {402.0, 335.0}}
+            Other, 0x10251c640, {{0.0, 539.0}, {402.0, 335.0}}
+              Other, 0x10251c760, {{0.0, 539.0}, {402.0, 335.0}}
+          Other, 0x10251c880, {{0.0, 583.0}, {402.0, 233.0}}
+            Keyboard, 0x10251c9a0, {{0.0, 583.0}, {402.0, 233.0}}
+              Other, 0x10251cac0, {{0.0, 583.0}, {402.0, 233.0}}
+                Other, 0x10251cbe0, {{0.0, 583.0}, {402.0, 233.0}}, identifier: 'UIKeyboardLayoutStar Preview'
+                  Key, 0x10251cd00, {{0.0, 583.0}, {0.0, 0.0}}, label: 'Padding-Left'
+                  Key, 0x10251ce20, {{4.7, 590.0}, {39.3, 54.0}}, label: 'q'
+                  Key, 0x10251cf40, {{44.0, 590.0}, {39.7, 54.0}}, label: 'w'
+                  Key, 0x10251d060, {{83.7, 590.0}, {39.3, 54.0}}, label: 'e'
+                  Key, 0x10251d180, {{123.0, 590.0}, {39.7, 54.0}}, label: 'r'
+                  Key, 0x10251d2a0, {{162.7, 590.0}, {39.3, 54.0}}, label: 't'
+                  Key, 0x102530000, {{202.0, 590.0}, {39.7, 54.0}}, label: 'y'
+                  Key, 0x102530120, {{241.7, 590.0}, {39.3, 54.0}}, label: 'u'
+                  Key, 0x102530240, {{281.0, 590.0}, {39.7, 54.0}}, label: 'i'
+                  Key, 0x102530360, {{320.7, 590.0}, {39.3, 54.0}}, label: 'o'
+                  Key, 0x102530480, {{360.0, 590.0}, {39.7, 54.0}}, label: 'p'
+                  Key, 0x1025305a0, {{0.0, 583.0}, {0.0, 0.0}}, label: 'Padding-Right'
+                  Key, 0x1025306c0, {{0.0, 583.0}, {0.0, 0.0}}, label: 'Padding-Left'
+                  Key, 0x1025307e0, {{24.3, 644.0}, {39.3, 54.0}}, label: 'a'
+                  Key, 0x102530900, {{63.7, 644.0}, {39.7, 54.0}}, label: 's'
+                  Key, 0x102530a20, {{103.3, 644.0}, {39.3, 54.0}}, label: 'd'
+                  Key, 0x102530b40, {{142.7, 644.0}, {39.7, 54.0}}, label: 'f'
+                  Key, 0x102530c60, {{182.3, 644.0}, {39.3, 54.0}}, label: 'g'
+                  Key, 0x102530d80, {{221.7, 644.0}, {39.7, 54.0}}, label: 'h'
+                  Key, 0x102530ea0, {{261.3, 644.0}, {39.3, 54.0}}, label: 'j'
+                  Key, 0x102530fc0, {{300.7, 644.0}, {39.7, 54.0}}, label: 'k'
+                  Key, 0x1025310e0, {{340.3, 644.0}, {39.3, 54.0}}, label: 'l'
+                  Key, 0x102531200, {{0.0, 583.0}, {0.0, 0.0}}, label: 'Padding-Right'
+                  Button, 0x102531320, {{4.7, 698.0}, {51.3, 54.0}}, identifier: 'shift', label: 'shift'
+                  Key, 0x102531440, {{0.0, 583.0}, {0.0, 0.0}}, label: 'Padding-Left'
+                  Key, 0x102531560, {{63.7, 698.0}, {39.7, 54.0}}, label: 'z'
+                  Key, 0x102531680, {{103.3, 698.0}, {39.3, 54.0}}, label: 'x'
+                  Key, 0x10254b310, {{142.7, 698.0}, {39.7, 54.0}}, label: 'c'
+                  Key, 0x10254b430, {{182.3, 698.0}, {39.3, 54.0}}, label: 'v'
+                  Key, 0x10254b550, {{221.7, 698.0}, {39.7, 54.0}}, label: 'b'
+                  Key, 0x10254b670, {{261.3, 698.0}, {39.3, 54.0}}, label: 'n'
+                  Key, 0x10254b790, {{300.7, 698.0}, {39.7, 54.0}}, label: 'm'
+                  Key, 0x10254b8b0, {{0.0, 583.0}, {0.0, 0.0}}, label: 'Padding-Right'
+                  Key, 0x10254b9d0, {{348.0, 698.0}, {51.7, 54.0}}, identifier: 'delete', label: 'delete'
+                  Key, 0x10254baf0, {{4.7, 752.0}, {98.7, 54.0}}, identifier: 'more', label: 'numbers'
+                  Key, 0x10254bc10, {{103.3, 752.0}, {197.3, 54.0}}, identifier: 'space', label: ' '
+                  Button, 0x10254bd30, {{300.7, 752.0}, {99.0, 54.0}}, identifier: 'Go', label: 'go'
+          Other, 0x10254c050, {{0.0, 583.0}, {402.0, 291.0}}
+            Button, 0x10251d5c0, {{325.4, 805.4}, {68.1, 68.7}}, identifier: 'dictation', label: 'Dictate', Disabled
+              StaticText, 0x10251d6e0, {{325.4, 805.4}, {0.0, 0.0}}
+Path to element:
+ →Application, 0x10aa073e0, pid: 5519, label: 'Notepad'
+Query chain:
+ →Find: Target Application 'systems.edmundlim.NotepadHillclimb'
+  Output: {
+    Application, 0x10a80e640, pid: 5519, label: 'Notepad'
+  }

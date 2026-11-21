@@ -1,0 +1,18 @@
+Round2 fresh combined-source evidence, built from `8dbf6a8e07a5b88dd6748b77a5c8030740eb5309` on `t3/hillclimb-round2-verification`.
+
+48 native PNGs: main 18-state matrix in this directory; 20 focused extras under extras/ (8 sign-in, 8 Account, 4 empty/composer); 10 actual ActivityKit states under activity/ plus four native recordings. All PNGs are 1206×2622, 3x on original regular Hillclimb iPhone 17 Pro, iOS26.2 build23C54, UDID78F5A64F-7B2E-4562-8EF9-10F3312CC694. No Duo or cloned simulator was used. inventory.json lists source SHA, production content hashes, per-image hashes/dimensions. Main manifest.json and submanifests retain state/operation details; pairings.json and pairings.md match only usable references and identify comparison gaps.
+
+All images were visually inspected through contact sheets; long-text XXXL bottom and initial native Island were also inspected at full size. Bottom Demo7 final-line ink remains visible in both appearances. Empty/composer XXXL retain real keyboards where requested. Account opens large; medium and large/lower captures use real gestures, showing opaque sheet backgrounds and reachable footer/version. Disabled Account fixture actions are intentional and do not demonstrate enabled-production contrast. The XXXL floating keyboard Done control crowds/overlaps the secondary sign-in action in dark password-keyboard evidence; retain this concern for grading. No app fix was made.
+
+Activity PNGs are actual native UI: short/default collapsed, expanded, Notification Center in both appearances; long/XXXL expanded and Notification Center in both. Expanded images are unmodified frames at2s from device-scope recordings because simulator still screenshots omit the Island overlay. Compact/minimal remains empty, and collapsed stills do not establish physical cutout geometry. Final overflow ink is readable; long titles truncate horizontally as designed. Notification Center is an actual native banner, not a claimed locked-device capture. Supported simulator hardware-button help refuses sleep/power; locked-device state remains unavailable. An initial edge swipe failed viewport validation; one inset retry succeeded, retained in navigation.json. SpringBoard AX snapshots report fallback to XCTest; no bypass or fabricated UI was used.
+
+Verification: 249 existing unit +12 current UI=261 passed, zero failures/skips. Native footer frame passes unchanged bounds; all board pull/44pt/final-line pixel checks pass. See ../../validation/round2/README.md and checks.json. Known sign-in invalid-frame runtime warning recurred once despite its test passing. Release overall build exit0 includes unusual compiler exit-zero diagnostic, documented there. Captures use the restored tested Debug app after Release build, isolated offline fixtures only. Twelve unit-rendered Activity artifacts live separately under validation/round2/rendered-unit and are excluded from the48 native images.
+
+No scores, source/test changes, push, PR, deployment, TestFlight, or live data writes. Parent reviews/merges, then grades fresh same-round Sol/Astra before any Opus eligibility decision.
+
+
+Four fresh settled Reminders references are in ../../reference/round2/ (light bottom/Details, dark top/blank composer). Historical references remain untouched, with transition_rejected images excluded from all pairings. Notes remains unavailable and installation was not retried. Final Reminders snapshot confirms All16 and local list16 after dismissing the blank row.
+
+Handback complete: light appearance, large system text size, no owned demo Activities, Reminders still16 rows; own app/session closed without shutting down original17. See validation/round2/handback.json.
+
+Written by gpt-6.1-sol in Codex on behalf of Edmund

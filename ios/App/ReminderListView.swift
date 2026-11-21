@@ -16,12 +16,14 @@ struct ReminderListView: View {
     @State private var isLoading = true
     @State private var hasLoaded = false
     @State private var error: String?
+    @State private var errorAnnouncementPolicy = BoardErrorAnnouncementPolicy()
     @State private var completingIDs: Set<UUID> = []
     @State private var isReordering = false
     @State private var boardRevision = 0
     @State private var isDragging = false
     @State private var hasDeferredBoardUpdate = false
     @State private var showAccount = false
+    @State private var accountDetent: PresentationDetent = .large
     @AppStorage(BoardSetupTip.storageKey) private var setupTipDismissed = false
     @AppStorage(BoardDiscoveryNudge.web.shownKey) private var webNudgeShown = false
     @AppStorage(BoardDiscoveryNudge.web.dismissedKey) private var webNudgeDismissed = false
@@ -36,11 +38,43 @@ struct ReminderListView: View {
     @FocusState private var composerFocused: Bool
     @ScaledMetric(relativeTo: .body) private var addVisualSize: CGFloat = 28
 
+#if DEBUG
+    init(hillclimb mode: HillclimbDemo.Mode? = nil) {
+        if let mode {
+            _reminders = State(initialValue: HillclimbDemo.reminders(for: mode))
+            _isLoading = State(initialValue: false)
+            _hasLoaded = State(initialValue: true)
+            _showAccount = State(initialValue: mode == .account)
+            switch HillclimbDemo.argument("--hillclimb-board-state") {
+            case "loading":
+                _reminders = State(initialValue: [])
+                _isLoading = State(initialValue: true)
+                _hasLoaded = State(initialValue: false)
+            case "error-empty", "error-populated":
+                if HillclimbDemo.argument("--hillclimb-board-state") == "error-empty" {
+                    _reminders = State(initialValue: [])
+                }
+                _error = State(initialValue: URLError(.notConnectedToInternet).localizedDescription)
+            default: break
+            }
+        }
+    }
+#endif
+
     var body: some View {
         NavigationStack {
             Group {
                 if isLoading && !hasLoaded && reminders.isEmpty {
-                    AccessibleProgressView("Loading reminders")
+                    VStack {
+                        AccessibleProgressView()
+                            .accessibilityHidden(true)
+                        Text("Loading reminders")
+                            .foregroundStyle(Color.primary)
+                            .modifier(HillclimbFrameProbe(key: "loadingLabel"))
+                    }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityIdentifier("board.loading")
+                        .accessibilityLabel("Loading reminders")
                         .controlSize(.large)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if reminders.isEmpty, let error {
@@ -54,16 +88,16 @@ struct ReminderListView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(.systemBackground))
             .navigationTitle("Your Board")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .modifier(BoardNavigationSubtitle(text: boardSubtitle))
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 composer
             }
             .safeAreaInset(edge: .top, spacing: 0) {
                 if let error, !reminders.isEmpty {
-                    BoardErrorBanner(message: error) {
-                        self.error = nil
-                    }
+                    BoardErrorBanner(message: error, isLoading: isLoading, onRetry: {
+                        Task { await retryBoard() }
+                    }, onDismiss: { self.error = nil })
                 }
             }
             .toolbar {
@@ -72,11 +106,13 @@ struct ReminderListView: View {
                         showAccount = true
                     } label: {
                         Label("Account", systemImage: "person.crop.circle")
+                            .frame(minWidth: 44, minHeight: 44)
+                            .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
                     .accessibilityHint("Sign out, privacy, and delete account")
                 }
             }
-            .refreshable { await refresh() }
             .task(id: scenePhase == .active && auth.isSharedSessionReady) {
                 guard scenePhase == .active, auth.isSharedSessionReady else { return }
                 if needsNudgeVisit {
@@ -91,6 +127,8 @@ struct ReminderListView: View {
                 }
                 await refresh()
             }
+            .onAppear { announceBoardError(error) }
+            .onChange(of: error) { _, message in announceBoardError(message) }
             .onChange(of: scenePhase) { _, phase in
                 if phase == .background { needsNudgeVisit = true }
             }
@@ -109,10 +147,13 @@ struct ReminderListView: View {
             .task(id: isDragging || isReordering) {
                 await replayDeferredBoardUpdate()
             }
+            .onChange(of: showAccount) { _, presented in
+                if !presented { accountDetent = .large }
+            }
             .sheet(isPresented: $showAccount) {
                 AccountView()
                     .environmentObject(auth)
-                    .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.large] : [.medium, .large])
+                    .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.large] : [.medium, .large], selection: $accountDetent)
                     .presentationDragIndicator(.visible)
                     .presentationContentInteraction(.scrolls)
             }
@@ -137,8 +178,9 @@ struct ReminderListView: View {
                     Label("All Clear", systemImage: "checkmark.circle")
                 } description: {
                     Text("Nothing on your board. Add a reminder below.")
+                        .foregroundStyle(.primary.opacity(0.75))
                 }
-                if BoardSetupTip.shouldShow(
+                if !composerFocused && BoardSetupTip.shouldShow(
                     hasLoaded: hasLoaded,
                     isBoardEmpty: reminders.isEmpty,
                     hasError: error != nil,
@@ -149,14 +191,16 @@ struct ReminderListView: View {
                             setupTipDismissed = true
                         }
                     }
+                    .foregroundStyle(.primary.opacity(0.75))
                     .padding(.horizontal, 20)
                     .transition(.opacity)
                 }
                 discoveryNudge
-                boardSiriTip
+                if !composerFocused { boardSiriTip }
             }
             .frame(maxWidth: .infinity, minHeight: 320)
         }
+        .refreshable { await refresh() }
     }
 
     private var visibleDiscoveryNudge: BoardDiscoveryNudge? {
@@ -217,16 +261,22 @@ struct ReminderListView: View {
                 Label("Couldn’t Load Board", systemImage: "exclamationmark.triangle")
             } description: {
                 Text(message)
+                    .foregroundStyle(Color.primary)
+                    .modifier(HillclimbFrameProbe(key: "errorDescription"))
             } actions: {
                 Button {
-                    Task { await refresh() }
+                    Task { await retryBoard() }
                 } label: {
-                    if isLoading {
-                        AccessibleProgressView()
-                            .controlSize(.regular)
-                    } else {
-                        Text("Try Again")
+                    Group {
+                        if isLoading {
+                            AccessibleProgressView()
+                                .controlSize(.regular)
+                        } else {
+                            Text("Try Again")
+                        }
                     }
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
                 }
                 .disabled(isLoading)
                 .accessibilityLabel("Try Again")
@@ -234,6 +284,7 @@ struct ReminderListView: View {
             }
             .frame(maxWidth: .infinity, minHeight: 320)
         }
+        .refreshable { await refresh() }
     }
 
     private var reminderList: some View {
@@ -260,6 +311,7 @@ struct ReminderListView: View {
                 Task { await markDone(reminder) }
             }
             .reminderOnscreenIdentity(reminder.id)
+            .modifier(HillclimbRowProbe(id: reminder.id, text: reminder.text))
         } footer: {
             discoveryNudge
         }
@@ -269,104 +321,119 @@ struct ReminderListView: View {
     private var composer: some View {
         VStack(alignment: .leading, spacing: 8) {
             if atCapacity {
-                Text(ReminderBoardLimits.postItHint)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal, 2)
-                    .accessibilityAddTraits(.isStaticText)
-            }
-
-            HStack(alignment: .center, spacing: 8) {
-                TextField(
-                    atCapacity ? "Board full — combine lines instead" : "New reminder",
-                    text: Binding(get: { draft.text }, set: { draft.edit($0) }),
-                    axis: .vertical
-                )
-                .font(.body)
-                .tint(.primary)
-                .lineLimit(1...(dynamicTypeSize.isAccessibilitySize ? 2 : 4))
-                .textInputAutocapitalization(.sentences)
-                .focused($composerFocused)
-                .disabled(atCapacity || isReordering || isDragging || draft.isSubmitting)
-                .submitLabel(.return)
-                .accessibilityLabel("New reminder")
-                .accessibilityHint(
-                    atCapacity
-                        ? "Board is full. Complete a reminder or combine lines."
-                        : "Adds a reminder to your board and Lock Screen"
-                )
-                .onSubmit { Task { await addReminder() } }
-
-                if ComposerKeyboardDismiss.isVisible(focused: composerFocused) {
-                    Button { composerFocused = false } label: {
-                        Image(systemName: "keyboard.chevron.compact.down")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .frame(width: 32, height: 44)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Done")
-                    .accessibilityHint("Dismisses the keyboard")
-                    .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
-                    .transition(.opacity)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Board full — combine lines instead")
+                        .font(.body)
+                        .foregroundStyle(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .modifier(HillclimbCapacityProbe())
+                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                        .contentShape(Rectangle())
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("Board full — combine lines instead")
+                        .accessibilityAddTraits(.isStaticText)
+                        .accessibilityIdentifier("board.capacity")
+                        .accessibilityHint("Board is full. Complete a reminder or combine lines.")
+                    Text(ReminderBoardLimits.postItHint)
+                        .modifier(HillclimbFrameProbe(key: "capacityHint"))
+                        .font(.caption)
+                        .foregroundStyle(.primary.opacity(0.75))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isStaticText)
                 }
-
-                Button {
-                    Task { await addReminder() }
-                } label: {
-                    Group {
-                        if draft.isSubmitting {
-                            AccessibleProgressView()
-                                .controlSize(.small)
-                                .accessibilityHidden(true)
-                        } else {
-                            Image(systemName: "arrow.up")
-                                .font(.subheadline.weight(.semibold))
-                                .foregroundStyle(canAdd ? Color(.systemBackground) : Color(.tertiaryLabel))
-                                .accessibilityHidden(true)
+                .padding(.horizontal, 2)
+            } else {
+                HStack(alignment: .center, spacing: 8) {
+                    TextField(
+                        "New reminder",
+                        text: Binding(get: { draft.text }, set: { draft.edit($0) }),
+                        axis: .vertical
+                    )
+                    .font(.body)
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        if !atCapacity && !isReordering && !isDragging && !draft.isSubmitting {
+                            composerFocused = true
                         }
                     }
-                    .frame(width: min(44, addVisualSize), height: min(44, addVisualSize))
-                    .background {
-                        Circle()
-                            .fill(canAdd ? Color.primary : Color(.quaternarySystemFill))
+                    .accessibilityElement(children: .combine)
+                    .tint(.primary)
+                    .lineLimit(1...(dynamicTypeSize.isAccessibilitySize ? 2 : 4))
+                    .textInputAutocapitalization(.sentences)
+                    .focused($composerFocused)
+                    .disabled(atCapacity || isReordering || isDragging || draft.isSubmitting)
+                    .submitLabel(.return)
+                    .accessibilityLabel("New reminder")
+                    .accessibilityHint(
+                        atCapacity
+                            ? "Board is full. Complete a reminder or combine lines."
+                            : "Adds a reminder to your board and Lock Screen"
+                    )
+                    .onSubmit { Task { await addReminder() } }
+
+                    if ComposerKeyboardDismiss.isVisible(focused: composerFocused) {
+                        Button { composerFocused = false } label: {
+                            Image(systemName: "keyboard.chevron.compact.down")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .frame(width: 44, height: 44)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Done")
+                        .accessibilityHint("Dismisses the keyboard")
+                        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                        .transition(.opacity)
                     }
-                    .frame(width: addHitSize, height: addHitSize)
-                    .contentShape(Rectangle())
+
+                    if !atCapacity {
+                        Button {
+                            Task { await addReminder() }
+                        } label: {
+                            Group {
+                                if draft.isSubmitting {
+                                    AccessibleProgressView()
+                                        .controlSize(.small)
+                                        .accessibilityHidden(true)
+                                } else {
+                                    Image(systemName: "arrow.up")
+                                        .font(.subheadline.weight(.semibold))
+                                        .foregroundStyle(canAdd ? Color(.systemBackground) : Color(.tertiaryLabel))
+                                        .accessibilityHidden(true)
+                                }
+                            }
+                            .frame(width: addVisualSize, height: addVisualSize)
+                            .background {
+                                Circle()
+                                    .fill(canAdd ? Color.primary : Color(.quaternarySystemFill))
+                            }
+                            .frame(width: addHitSize, height: addHitSize)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(!canAdd)
+                        .accessibilityLabel(draft.isSubmitting ? "Adding reminder" : "Add reminder")
+                        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                        .accessibilityValue(ReminderAccessibility.progressValue(isBusy: draft.isSubmitting))
+                        .accessibilityHint("Saves the text as a new reminder")
+                    }
                 }
-                .buttonStyle(.plain)
-                .disabled(!canAdd)
-                .accessibilityLabel("Add reminder")
-                .accessibilityValue(ReminderAccessibility.progressValue(isBusy: draft.isSubmitting))
-                .accessibilityHint("Saves the text as a new reminder")
-                .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+                .padding(.leading, 14)
+                .padding(.trailing, 5)
+                .padding(.vertical, 7)
+                .background {
+                    if !atCapacity { composerFieldBackground }
+                }
+                .accessibilityElement(children: .contain)
             }
-            .padding(.leading, 14)
-            .padding(.trailing, 5)
-            .padding(.vertical, 7)
-            .background {
-                composerFieldBackground
-            }
-            .accessibilityElement(children: .contain)
         }
         .padding(.horizontal, 16)
         .padding(.top, 6)
         .padding(.bottom, 8)
-        .background(alignment: .top) {
-            LinearGradient(
-                colors: [Color(.systemBackground).opacity(0), Color(.systemBackground)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .frame(height: 36)
-            .offset(y: -36)
-            .allowsHitTesting(false)
-            .accessibilityHidden(true)
-        }
         .background(Color(.systemBackground).allowsHitTesting(false))
         .accessibilityElement(children: .contain)
+        .modifier(HillclimbComposerProbe())
     }
 
     @ViewBuilder
@@ -404,6 +471,14 @@ struct ReminderListView: View {
     }
 
     private func moveReminders(from offsets: IndexSet, to destination: Int) {
+#if DEBUG
+        if HillclimbDemo.isActive {
+            guard HillclimbDemo.argument("--hillclimb-board-interaction") == "local", !reorderDisabled else { return }
+            reminders.move(fromOffsets: offsets, toOffset: destination)
+            HillclimbGeometry.shared.boardMoves += 1
+            return
+        }
+#endif
         guard !reorderDisabled else { return }
         let previousIDs = reminders.map(\.id)
         reminders.move(fromOffsets: offsets, toOffset: destination)
@@ -428,6 +503,9 @@ struct ReminderListView: View {
     }
 
     private func replayDeferredBoardUpdate() async {
+#if DEBUG
+        guard !HillclimbDemo.isActive else { return }
+#endif
         while hasDeferredBoardUpdate && !isDragging && !isReordering {
             let revision = boardRevision
             let cached = await ReminderStore.shared.cached()
@@ -447,16 +525,44 @@ struct ReminderListView: View {
         }
     }
 
-    private func presentError(_ message: String) {
-        let isNewError = error != message
-        error = message
-        errorTick += 1
-        if isNewError {
-            UIAccessibility.post(notification: .announcement, argument: message)
+    private func announceBoardError(_ message: String?) {
+        if let announcement = errorAnnouncementPolicy.update(message) {
+            UIAccessibility.post(notification: .announcement, argument: announcement)
+#if DEBUG
+            if HillclimbDemo.isActive {
+                HillclimbGeometry.shared.boardErrorAnnouncements.append(announcement)
+            }
+#endif
         }
     }
 
+    private func presentError(_ message: String) {
+        error = message
+        errorTick += 1
+    }
+
+    private func retryBoard() async {
+        guard !isLoading else { return }
+#if DEBUG
+        if HillclimbDemo.isActive {
+            guard HillclimbDemo.argument("--hillclimb-board-retry") == "recover" else { return }
+            HillclimbGeometry.shared.boardRetryAttempts += 1
+            isLoading = true
+            defer { isLoading = false }
+            await Task.yield()
+            error = nil
+            return
+        }
+#endif
+        isLoading = true
+        defer { isLoading = false }
+        await refresh()
+    }
+
     private func refresh() async {
+#if DEBUG
+        guard !HillclimbDemo.isActive else { return }
+#endif
         guard auth.isSharedSessionReady else { return }
         guard !isReordering && !isDragging else { return }
         // Unlike the initial-load spinner, this covers every refresh and clears
@@ -469,6 +575,7 @@ struct ReminderListView: View {
         } else if reminders.isEmpty && error != nil {
             isLoading = true
         }
+        defer { isLoading = false }
         do {
             let refreshed = try await ReminderBoardSync.refreshForeground()
             guard revision == boardRevision, !isReordering, !isDragging else { return }
@@ -486,6 +593,9 @@ struct ReminderListView: View {
     }
 
     private func addReminder() async {
+#if DEBUG
+        guard !HillclimbDemo.isActive else { return }
+#endif
         if atCapacity {
             presentError(ReminderBoardLimits.postItHint)
             return
@@ -512,6 +622,17 @@ struct ReminderListView: View {
     }
 
     private func markDone(_ reminder: Reminder) async {
+#if DEBUG
+        if HillclimbDemo.isActive {
+            guard HillclimbDemo.argument("--hillclimb-board-interaction") == "local",
+                  !isReordering, !isDragging, reminders.contains(where: { $0.id == reminder.id }) else { return }
+            animateBoard { reminders.removeAll { $0.id == reminder.id } }
+            HillclimbGeometry.shared.boardCompletions += 1
+            hapticTick += 1
+            UIAccessibility.post(notification: .announcement, argument: "Completed \(reminder.text)")
+            return
+        }
+#endif
         guard !isReordering, !isDragging, !completingIDs.contains(reminder.id) else { return }
         completingIDs.insert(reminder.id)
         defer { completingIDs.remove(reminder.id) }
@@ -533,31 +654,45 @@ struct ReminderListView: View {
 
 private struct BoardErrorBanner: View {
     let message: String
+    let isLoading: Bool
+    let onRetry: () -> Void
     let onDismiss: () -> Void
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.colorSchemeContrast) private var colorSchemeContrast
 
     var body: some View {
-        HStack(alignment: .center, spacing: 10) {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(.primary)
-                .symbolRenderingMode(.hierarchical)
-                .accessibilityHidden(true)
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .center, spacing: 10) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundStyle(.primary)
+                    .symbolRenderingMode(.hierarchical)
+                    .accessibilityHidden(true)
+                Text("Couldn’t Load Board")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Button(action: onDismiss) {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Dismiss error")
+            }
             Text(message)
                 .font(.footnote)
                 .foregroundStyle(.primary)
                 .textSelection(.enabled)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            Button(action: onDismiss) {
-                Image(systemName: "xmark.circle.fill")
-                    .font(.body)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 44, height: 44)
+            Button(action: onRetry) {
+                Text("Try Again")
+                    .frame(minWidth: 44, minHeight: 44)
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Dismiss error")
+            .disabled(isLoading)
         }
         .padding(.leading, 16)
         .padding(.trailing, 4)
@@ -576,14 +711,14 @@ private struct BoardErrorBanner: View {
             Divider()
         }
         .accessibilityElement(children: .contain)
-        .accessibilityAddTraits(.updatesFrequently)
+
     }
 }
 
 private struct BoardScrollEdge: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26.0, *) {
-            content.scrollEdgeEffectStyle(.soft, for: .bottom)
+            content.scrollEdgeEffectHidden(true, for: .bottom)
         } else {
             content
         }
@@ -595,36 +730,41 @@ private struct ReminderRow: View {
     let reminder: Reminder
     let isCompleting: Bool
     let onComplete: () -> Void
+    @ScaledMetric(relativeTo: .body) private var firstLineHeight: CGFloat = 20.3
 
     var body: some View {
-        Button(action: onComplete) {
-            Label {
-                Text(reminder.text)
-                    .font(.body)
-                    .kerning(-0.1)
-                    .foregroundStyle(isCompleting ? .secondary : .primary)
-                    .strikethrough(isCompleting)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            } icon: {
+        HStack(alignment: .top, spacing: 8) {
+            Button(action: onComplete) {
                 Image(systemName: ReminderAccessibility.completionSymbol(isCompleting: isCompleting))
                     .font(.title3.weight(contrast == .increased ? .semibold : .light))
                     .foregroundStyle(contrast == .increased ? Color.primary
-                        : (isCompleting ? Color.accentColor : Color(.tertiaryLabel)))
+                        : (isCompleting ? Color.accentColor : Color(.secondaryLabel)))
                     .frame(minWidth: 44, minHeight: 44, alignment: .center)
                     .contentShape(Rectangle())
+                    .modifier(HillclimbFrameProbe(key: "circle-" + reminder.id.uuidString))
             }
+            .buttonStyle(.plain)
+            .disabled(isCompleting)
+            .accessibilityElement(children: .ignore)
+            .accessibilityAddTraits(.isButton)
+            .accessibilityLabel(reminder.text)
+            .accessibilityInputLabels([reminder.text])
+            .accessibilityValue(ReminderAccessibility.completionValue(isCompleting: isCompleting))
+            .accessibilityHint("Marks this reminder complete")
+            .accessibilityAction(named: "Complete", onComplete)
+            Text(reminder.text)
+                .font(.body)
+                .kerning(-0.1)
+                .foregroundStyle(isCompleting ? .secondary : .primary)
+                .strikethrough(isCompleting)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .modifier(HillclimbTextProbe(id: reminder.id, text: reminder.text))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, max(0, (44 - firstLineHeight) / 2))
+                .accessibilityHidden(true)
         }
-        .buttonStyle(.plain)
-        .disabled(isCompleting)
         .opacity(isCompleting && contrast != .increased ? 0.55 : 1)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(reminder.text)
-        .accessibilityInputLabels([reminder.text])
-        .accessibilityValue(ReminderAccessibility.completionValue(isCompleting: isCompleting))
-        .accessibilityHint("Marks this reminder complete")
-        .accessibilityAddTraits(.isButton)
     }
 }
 
@@ -637,5 +777,15 @@ private struct BoardNavigationSubtitle: ViewModifier {
         } else {
             content
         }
+    }
+}
+
+struct BoardErrorAnnouncementPolicy {
+    private var visibleMessage: String?
+
+    mutating func update(_ message: String?) -> String? {
+        defer { visibleMessage = message }
+        guard let message, message != visibleMessage else { return nil }
+        return message
     }
 }

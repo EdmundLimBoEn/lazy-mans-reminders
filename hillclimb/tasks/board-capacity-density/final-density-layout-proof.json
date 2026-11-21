@@ -1,0 +1,20 @@
+{
+  "command": [
+    "xcrun",
+    "xcresulttool",
+    "export",
+    "attachments",
+    "--path",
+    "/tmp/hillclimb-capacity-density-T-final.xcresult",
+    "--output-path",
+    "/tmp/hillclimb-capacity-density-T-final-density-attachments",
+    "--test-id",
+    "BoardCapacityDensityUITests"
+  ],
+  "values": {
+    "density-layout-dark-default_0_3D86C5EF-73D9-4D3E-BE55-8AE4A03401CC.txt": "baselineFooterHeight=110.33333333333337 actualFooterHeight=94.33333333333337 status=(18.0, 751.6666666666666, 366.0, 44.0) hint=(18.0, 801.6666666666666, 358.0, 30.33333333333337) idealHint=(358.0, 30.333333333333332) statusInk=(19.333333333333332, 767.5, 257.6666666666667, 13.0) hintInk=(19.0, 804.0, 352.6666666666667, 27.333333333333332)",
+    "density-layout-dark-XXXL_0_FE713D50-3898-49BF-BBA1-6C43163F7784.txt": "baselineFooterHeight=147.66666666666663 actualFooterHeight=131.66666666666663 status=(18.0, 714.3333333333334, 366.0, 44.0) hint=(18.0, 764.3333333333334, 344.0, 67.66666666666663) idealHint=(344.0, 67.66666666666666) statusInk=(19.666666666666668, 728.1666666666666, 334.3333333333333, 17.0) hintInk=(19.0, 768.0, 337.0, 62.666666666666664)",
+    "density-layout-light-default_0_B63A4EE9-7344-48B1-BA5B-2CD04BBDBBF1.txt": "baselineFooterHeight=110.33333333333337 actualFooterHeight=94.33333333333337 status=(18.0, 751.6666666666666, 366.0, 44.0) hint=(18.0, 801.6666666666666, 358.0, 30.33333333333337) idealHint=(358.0, 30.333333333333332) statusInk=(19.333333333333332, 767.5, 257.6666666666667, 13.0) hintInk=(18.666666666666668, 804.0, 353.0, 27.333333333333332)",
+    "density-layout-light-XXXL_0_32644C90-A0FB-4F52-9AF5-3C100561559F.txt": "baselineFooterHeight=147.66666666666663 actualFooterHeight=131.66666666666663 status=(18.0, 714.3333333333334, 366.0, 44.0) hint=(18.0, 764.3333333333334, 344.0, 67.66666666666663) idealHint=(344.0, 67.66666666666666) statusInk=(19.666666666666668, 728.1666666666666, 334.3333333333333, 17.0) hintInk=(19.0, 768.0, 337.0, 62.666666666666664)"
+  }
+}

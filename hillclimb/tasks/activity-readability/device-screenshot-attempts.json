@@ -1,0 +1,11 @@
+[
+  {
+    "operation": "device_screenshot",
+    "error": "Device screenshot failed: Could not communicate with device support. Try refreshing devices.",
+    "advice": "device_list refresh once, then retry device_screenshot without opening a replacement session"
+  },
+  {
+    "operation": "device_list refresh then device_screenshot",
+    "result": "succeeded; original17 local 1206x2622 PNG inspected, same owned session retained"
+  }
+]

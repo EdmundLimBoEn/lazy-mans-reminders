@@ -1,0 +1,64 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "deviceName" : "Hillclimb iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 256,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "LazyMansReminders · Built with macOS 27.2",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1793804574.896,
+  "passedTests" : 256,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793804432.783,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Testing was canceled",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 258,
+      "testIdentifierString" : "HillclimbUITests/testComposerKeyboardDismissTarget()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/HillclimbUITests/testComposerKeyboardDismissTarget",
+      "testName" : "testComposerKeyboardDismissTarget()"
+    },
+    {
+      "failureText" : "XCTAssertEqual failed: (\"7\") is not equal to (\"6\") - Missing or clipped text row in rendered lockScreen, large, light",
+      "targetName" : "LazyMansRemindersTests",
+      "testIdentifier" : 1,
+      "testIdentifierString" : "ActivityLayoutTests/testRenderedLastLineFitsBothNativeSurfaceBudgets()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityLayoutTests/testRenderedLastLineFitsBothNativeSurfaceBudgets",
+      "testName" : "testRenderedLastLineFitsBothNativeSurfaceBudgets()"
+    }
+  ],
+  "title" : "Test - LazyMansReminders",
+  "topInsights" : [
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "41% of duration",
+      "text" : "4 longest test runs with outlier durations exceeding 0.07s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 258
+}

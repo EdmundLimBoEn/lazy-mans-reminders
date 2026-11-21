@@ -1,0 +1,2040 @@
+[{
+  "timezoneName" : "",
+  "messageType" : "Fault",
+  "eventType" : "logEvent",
+  "source" : null,
+  "formatString" : "Invalid frame dimension (negative or non-finite).",
+  "userID" : 501,
+  "activityIdentifier" : 11286990,
+  "subsystem" : "com.apple.runtime-issues",
+  "category" : "SwiftUI",
+  "threadID" : 2371022,
+  "senderImageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4",
+  "backtrace" : {
+    "frames" : [
+      {
+        "imageOffset" : 8016428,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 8006864,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11347992,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 4077520,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4076036,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4077808,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5289088,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5288140,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 2611424,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 79180,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 176588,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 1403392,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1544208,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 76888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 177420,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 11735632,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11727228,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11714664,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11707328,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1452208,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 13969176,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 13969264,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 23562240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11347016,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5689028,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 15860240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11762880,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11757808,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11756368,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 100260,
+        "imageUUID" : "AF87E7D6-1068-3D45-93D5-100C754A495F"
+      },
+      {
+        "imageOffset" : 11760476,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11760556,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11749136,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 16422444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 115888,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 25972,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 103816,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69900,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69228,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 601816,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 598192,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 576748,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 10684,
+        "imageUUID" : "4E5B0462-6170-3367-9475-4FF8B8DFE4E6"
+      },
+      {
+        "imageOffset" : 18523508,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 18540444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 8099360,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 8098664,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5534764,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 653772,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 654400,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  },
+  "bootUUID" : "C46F1BD2-B86A-419F-B544-61811D5EEF9D",
+  "processImagePath" : "\/Users\/limboenedmund\/Library\/Developer\/CoreSimulator\/Devices\/8E8380DE-364D-4899-99B8-D15ED0494FFD\/data\/Containers\/Bundle\/Application\/6F7E2C0D-EEDF-463F-9810-83862767E02A\/LazyMansReminders.app\/LazyMansReminders",
+  "senderImagePath" : "\/System\/Library\/Frameworks\/SwiftUICore.framework\/SwiftUICore",
+  "timestamp" : "2026-11-04 22:55:50.614288+0800",
+  "machTimestamp" : 3862689597968,
+  "eventMessage" : "Invalid frame dimension (negative or non-finite).",
+  "processImageUUID" : "447C4517-F646-3335-B9FE-1D71A5B8DDAC",
+  "traceID" : 6605656815399407876,
+  "processID" : 81112,
+  "senderProgramCounter" : 8016428,
+  "parentActivityIdentifier" : 0
+},{
+  "timezoneName" : "",
+  "messageType" : "Fault",
+  "eventType" : "logEvent",
+  "source" : null,
+  "formatString" : "Invalid frame dimension (negative or non-finite).",
+  "userID" : 501,
+  "activityIdentifier" : 11289389,
+  "subsystem" : "com.apple.runtime-issues",
+  "category" : "SwiftUI",
+  "threadID" : 2372214,
+  "senderImageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4",
+  "backtrace" : {
+    "frames" : [
+      {
+        "imageOffset" : 8016428,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 8006864,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11347992,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 4077520,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4076036,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4077808,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5289088,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5288140,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 2611424,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 79180,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 176588,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 1403392,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1544208,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 76888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 177420,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 11735632,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11727228,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11714664,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11707328,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1452208,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 13969176,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 13969264,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 23562240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11347016,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5689028,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 15860240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11762880,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11757808,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11756368,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 100260,
+        "imageUUID" : "AF87E7D6-1068-3D45-93D5-100C754A495F"
+      },
+      {
+        "imageOffset" : 11760476,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11760556,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11749136,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 16422444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 115888,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 25972,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 103816,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69900,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69228,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 601816,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 598192,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 576748,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 10684,
+        "imageUUID" : "4E5B0462-6170-3367-9475-4FF8B8DFE4E6"
+      },
+      {
+        "imageOffset" : 18523508,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 18540444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 8099360,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 8098664,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5534764,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 653772,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 654400,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  },
+  "bootUUID" : "C46F1BD2-B86A-419F-B544-61811D5EEF9D",
+  "processImagePath" : "\/Users\/limboenedmund\/Library\/Developer\/CoreSimulator\/Devices\/8E8380DE-364D-4899-99B8-D15ED0494FFD\/data\/Containers\/Bundle\/Application\/6F7E2C0D-EEDF-463F-9810-83862767E02A\/LazyMansReminders.app\/LazyMansReminders",
+  "senderImagePath" : "\/System\/Library\/Frameworks\/SwiftUICore.framework\/SwiftUICore",
+  "timestamp" : "2026-11-04 22:55:57.011247+0800",
+  "machTimestamp" : 3862843124990,
+  "eventMessage" : "Invalid frame dimension (negative or non-finite).",
+  "processImageUUID" : "447C4517-F646-3335-B9FE-1D71A5B8DDAC",
+  "traceID" : 6605656815399407876,
+  "processID" : 81320,
+  "senderProgramCounter" : 8016428,
+  "parentActivityIdentifier" : 0
+},{
+  "timezoneName" : "",
+  "messageType" : "Fault",
+  "eventType" : "logEvent",
+  "source" : null,
+  "formatString" : "Invalid frame dimension (negative or non-finite).",
+  "userID" : 501,
+  "activityIdentifier" : 11291901,
+  "subsystem" : "com.apple.runtime-issues",
+  "category" : "SwiftUI",
+  "threadID" : 2373438,
+  "senderImageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4",
+  "backtrace" : {
+    "frames" : [
+      {
+        "imageOffset" : 8016428,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 8006864,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11347992,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 4077520,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4076036,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4077808,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5289088,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5288140,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 2611424,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 79180,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 176588,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 1403392,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1544208,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 76888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 177420,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 11735632,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11727228,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11714664,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11707328,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1452208,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 13969176,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 13969264,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 23562240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11347016,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5689028,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 15860240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11762880,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11757808,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11756368,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 100260,
+        "imageUUID" : "AF87E7D6-1068-3D45-93D5-100C754A495F"
+      },
+      {
+        "imageOffset" : 11760476,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11760556,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11749136,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 16422444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 115888,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 25972,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 103816,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69900,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69228,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 601816,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 598192,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 576748,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 10684,
+        "imageUUID" : "4E5B0462-6170-3367-9475-4FF8B8DFE4E6"
+      },
+      {
+        "imageOffset" : 18523508,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 18540444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 8099360,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 8098664,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5534764,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 653772,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 654400,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  },
+  "bootUUID" : "C46F1BD2-B86A-419F-B544-61811D5EEF9D",
+  "processImagePath" : "\/Users\/limboenedmund\/Library\/Developer\/CoreSimulator\/Devices\/8E8380DE-364D-4899-99B8-D15ED0494FFD\/data\/Containers\/Bundle\/Application\/6F7E2C0D-EEDF-463F-9810-83862767E02A\/LazyMansReminders.app\/LazyMansReminders",
+  "senderImagePath" : "\/System\/Library\/Frameworks\/SwiftUICore.framework\/SwiftUICore",
+  "timestamp" : "2026-11-04 22:56:03.717191+0800",
+  "machTimestamp" : 3863004067638,
+  "eventMessage" : "Invalid frame dimension (negative or non-finite).",
+  "processImageUUID" : "447C4517-F646-3335-B9FE-1D71A5B8DDAC",
+  "traceID" : 6605656815399407876,
+  "processID" : 81667,
+  "senderProgramCounter" : 8016428,
+  "parentActivityIdentifier" : 0
+},{
+  "timezoneName" : "",
+  "messageType" : "Fault",
+  "eventType" : "logEvent",
+  "source" : null,
+  "formatString" : "Invalid frame dimension (negative or non-finite).",
+  "userID" : 501,
+  "activityIdentifier" : 11292941,
+  "subsystem" : "com.apple.runtime-issues",
+  "category" : "SwiftUI",
+  "threadID" : 2373845,
+  "senderImageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4",
+  "backtrace" : {
+    "frames" : [
+      {
+        "imageOffset" : 8016428,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 8006864,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11347992,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 4077520,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4076036,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4077808,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5289088,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5288140,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 2611424,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 79180,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 176588,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 1403392,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1544208,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 76888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 177420,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 11735632,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11727228,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11714664,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11707328,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1452208,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 13969176,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 13969264,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 23562240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11347016,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5689028,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 15860240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11762880,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11757808,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11756368,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 100260,
+        "imageUUID" : "AF87E7D6-1068-3D45-93D5-100C754A495F"
+      },
+      {
+        "imageOffset" : 11760476,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11760556,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11749136,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 16422444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 115888,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 25972,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 103816,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69900,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69228,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 601816,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 598192,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 576748,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 10684,
+        "imageUUID" : "4E5B0462-6170-3367-9475-4FF8B8DFE4E6"
+      },
+      {
+        "imageOffset" : 18523508,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 18540444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 8099360,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 8098664,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5534764,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 653772,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 654400,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  },
+  "bootUUID" : "C46F1BD2-B86A-419F-B544-61811D5EEF9D",
+  "processImagePath" : "\/Users\/limboenedmund\/Library\/Developer\/CoreSimulator\/Devices\/8E8380DE-364D-4899-99B8-D15ED0494FFD\/data\/Containers\/Bundle\/Application\/6F7E2C0D-EEDF-463F-9810-83862767E02A\/LazyMansReminders.app\/LazyMansReminders",
+  "senderImagePath" : "\/System\/Library\/Frameworks\/SwiftUICore.framework\/SwiftUICore",
+  "timestamp" : "2026-11-04 22:56:10.418483+0800",
+  "machTimestamp" : 3863164898643,
+  "eventMessage" : "Invalid frame dimension (negative or non-finite).",
+  "processImageUUID" : "447C4517-F646-3335-B9FE-1D71A5B8DDAC",
+  "traceID" : 6605656815399407876,
+  "processID" : 81760,
+  "senderProgramCounter" : 8016428,
+  "parentActivityIdentifier" : 0
+},{
+  "timezoneName" : "",
+  "messageType" : "Fault",
+  "eventType" : "logEvent",
+  "source" : null,
+  "formatString" : "Invalid frame dimension (negative or non-finite).",
+  "userID" : 501,
+  "activityIdentifier" : 11293869,
+  "subsystem" : "com.apple.runtime-issues",
+  "category" : "SwiftUI",
+  "threadID" : 2374163,
+  "senderImageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4",
+  "backtrace" : {
+    "frames" : [
+      {
+        "imageOffset" : 8016428,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 8006864,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11347992,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 4077520,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4076036,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4077808,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5289088,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5288140,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 2611424,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 79180,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 176588,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 1403392,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1544208,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 76888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 177420,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 11735632,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11727228,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11714664,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11707328,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1452208,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 13969176,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 13969264,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 23562240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11347016,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5689028,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 15860240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11762880,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11757808,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11756368,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 100260,
+        "imageUUID" : "AF87E7D6-1068-3D45-93D5-100C754A495F"
+      },
+      {
+        "imageOffset" : 11760476,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11760556,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11749136,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 16422444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 115888,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 25972,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 103816,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69900,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69228,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 601816,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 598192,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 576748,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 10684,
+        "imageUUID" : "4E5B0462-6170-3367-9475-4FF8B8DFE4E6"
+      },
+      {
+        "imageOffset" : 18523508,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 18540444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 8099360,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 8098664,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5534764,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 653772,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 654400,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  },
+  "bootUUID" : "C46F1BD2-B86A-419F-B544-61811D5EEF9D",
+  "processImagePath" : "\/Users\/limboenedmund\/Library\/Developer\/CoreSimulator\/Devices\/8E8380DE-364D-4899-99B8-D15ED0494FFD\/data\/Containers\/Bundle\/Application\/6F7E2C0D-EEDF-463F-9810-83862767E02A\/LazyMansReminders.app\/LazyMansReminders",
+  "senderImagePath" : "\/System\/Library\/Frameworks\/SwiftUICore.framework\/SwiftUICore",
+  "timestamp" : "2026-11-04 22:56:17.146116+0800",
+  "machTimestamp" : 3863326361835,
+  "eventMessage" : "Invalid frame dimension (negative or non-finite).",
+  "processImageUUID" : "447C4517-F646-3335-B9FE-1D71A5B8DDAC",
+  "traceID" : 6605656815399407876,
+  "processID" : 81791,
+  "senderProgramCounter" : 8016428,
+  "parentActivityIdentifier" : 0
+},{
+  "timezoneName" : "",
+  "messageType" : "Fault",
+  "eventType" : "logEvent",
+  "source" : null,
+  "formatString" : "Invalid frame dimension (negative or non-finite).",
+  "userID" : 501,
+  "activityIdentifier" : 11294925,
+  "subsystem" : "com.apple.runtime-issues",
+  "category" : "SwiftUI",
+  "threadID" : 2374447,
+  "senderImageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4",
+  "backtrace" : {
+    "frames" : [
+      {
+        "imageOffset" : 8016428,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 8006864,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11347992,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 4077520,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4076036,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4077808,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5289088,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5288140,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 2611424,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 79180,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 176588,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 1403392,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1544208,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 76888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 177420,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 11735632,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11727228,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11714664,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11707328,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1452208,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 13969176,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 13969264,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 23562240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11347016,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5689028,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 15860240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11762880,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11757808,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11756368,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 100260,
+        "imageUUID" : "AF87E7D6-1068-3D45-93D5-100C754A495F"
+      },
+      {
+        "imageOffset" : 11760476,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11760556,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11749136,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 16422444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 115888,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 25972,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 103816,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69900,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69228,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 601816,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 598192,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 576748,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 10684,
+        "imageUUID" : "4E5B0462-6170-3367-9475-4FF8B8DFE4E6"
+      },
+      {
+        "imageOffset" : 18523508,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 18540444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 8099360,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 8098664,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5534764,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 653772,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 654400,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  },
+  "bootUUID" : "C46F1BD2-B86A-419F-B544-61811D5EEF9D",
+  "processImagePath" : "\/Users\/limboenedmund\/Library\/Developer\/CoreSimulator\/Devices\/8E8380DE-364D-4899-99B8-D15ED0494FFD\/data\/Containers\/Bundle\/Application\/6F7E2C0D-EEDF-463F-9810-83862767E02A\/LazyMansReminders.app\/LazyMansReminders",
+  "senderImagePath" : "\/System\/Library\/Frameworks\/SwiftUICore.framework\/SwiftUICore",
+  "timestamp" : "2026-11-04 22:56:23.766688+0800",
+  "machTimestamp" : 3863485255570,
+  "eventMessage" : "Invalid frame dimension (negative or non-finite).",
+  "processImageUUID" : "447C4517-F646-3335-B9FE-1D71A5B8DDAC",
+  "traceID" : 6605656815399407876,
+  "processID" : 81831,
+  "senderProgramCounter" : 8016428,
+  "parentActivityIdentifier" : 0
+},{
+  "timezoneName" : "",
+  "messageType" : "Fault",
+  "eventType" : "logEvent",
+  "source" : null,
+  "formatString" : "Invalid frame dimension (negative or non-finite).",
+  "userID" : 501,
+  "activityIdentifier" : 11295549,
+  "subsystem" : "com.apple.runtime-issues",
+  "category" : "SwiftUI",
+  "threadID" : 2374648,
+  "senderImageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4",
+  "backtrace" : {
+    "frames" : [
+      {
+        "imageOffset" : 8016428,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 8006864,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11347992,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 4077520,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4076036,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4077808,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5289088,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5288140,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 2611424,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 79180,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 176588,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 1403392,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1544208,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 76888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 177420,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 11735632,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11727228,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11714664,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11707328,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1452208,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 13969176,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 13969264,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 23562240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11347016,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5689028,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 15860240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11762880,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11757808,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11756368,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 100260,
+        "imageUUID" : "AF87E7D6-1068-3D45-93D5-100C754A495F"
+      },
+      {
+        "imageOffset" : 11760476,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11760556,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11749136,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 16422444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 115888,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 25972,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 103816,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69900,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69228,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 601816,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 598192,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 576748,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 10684,
+        "imageUUID" : "4E5B0462-6170-3367-9475-4FF8B8DFE4E6"
+      },
+      {
+        "imageOffset" : 18523508,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 18540444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 8099360,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 8098664,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5534764,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 653772,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 654400,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  },
+  "bootUUID" : "C46F1BD2-B86A-419F-B544-61811D5EEF9D",
+  "processImagePath" : "\/Users\/limboenedmund\/Library\/Developer\/CoreSimulator\/Devices\/8E8380DE-364D-4899-99B8-D15ED0494FFD\/data\/Containers\/Bundle\/Application\/6F7E2C0D-EEDF-463F-9810-83862767E02A\/LazyMansReminders.app\/LazyMansReminders",
+  "senderImagePath" : "\/System\/Library\/Frameworks\/SwiftUICore.framework\/SwiftUICore",
+  "timestamp" : "2026-11-04 22:56:30.498668+0800",
+  "machTimestamp" : 3863646823086,
+  "eventMessage" : "Invalid frame dimension (negative or non-finite).",
+  "processImageUUID" : "447C4517-F646-3335-B9FE-1D71A5B8DDAC",
+  "traceID" : 6605656815399407876,
+  "processID" : 81848,
+  "senderProgramCounter" : 8016428,
+  "parentActivityIdentifier" : 0
+},{
+  "timezoneName" : "",
+  "messageType" : "Fault",
+  "eventType" : "logEvent",
+  "source" : null,
+  "formatString" : "Invalid frame dimension (negative or non-finite).",
+  "userID" : 501,
+  "activityIdentifier" : 11297789,
+  "subsystem" : "com.apple.runtime-issues",
+  "category" : "SwiftUI",
+  "threadID" : 2375232,
+  "senderImageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4",
+  "backtrace" : {
+    "frames" : [
+      {
+        "imageOffset" : 8016428,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 8006864,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11347992,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 4077520,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4076036,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 4077808,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5289088,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 5288140,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 2611424,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 79180,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 176588,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 1403392,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1544208,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 46888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 48664,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 76888,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 177420,
+        "imageUUID" : "BFBC22B3-F2D6-39CF-8D0E-1D09FBCCA27C"
+      },
+      {
+        "imageOffset" : 11735632,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11727228,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11714664,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 11707328,
+        "imageUUID" : "F7E2BB37-D266-38FC-B8CC-80664C89F0B4"
+      },
+      {
+        "imageOffset" : 1452208,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 13969176,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 13969264,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 23562240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11347016,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5689028,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 15860240,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11762880,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11757808,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11756368,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 100260,
+        "imageUUID" : "AF87E7D6-1068-3D45-93D5-100C754A495F"
+      },
+      {
+        "imageOffset" : 11760476,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11760556,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 11749136,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 16422444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 115888,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 25972,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 103816,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69900,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 69228,
+        "imageUUID" : "EC9ECF10-959D-3DA1-A055-6DE970159B9D"
+      },
+      {
+        "imageOffset" : 601816,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 598192,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 576748,
+        "imageUUID" : "4F6D050D-95EE-3A95-969C-3A98B29DF6FF"
+      },
+      {
+        "imageOffset" : 10684,
+        "imageUUID" : "4E5B0462-6170-3367-9475-4FF8B8DFE4E6"
+      },
+      {
+        "imageOffset" : 18523508,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 18540444,
+        "imageUUID" : "196154FF-BA04-33CD-9277-98F9AA0B7499"
+      },
+      {
+        "imageOffset" : 8099360,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 8098664,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 5534764,
+        "imageUUID" : "719CF349-8C4A-3054-9536-23EB53648EE0"
+      },
+      {
+        "imageOffset" : 653772,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 654400,
+        "imageUUID" : "D7D5C4F9-6684-31CD-8948-D935B3F41893"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      },
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  },
+  "bootUUID" : "C46F1BD2-B86A-419F-B544-61811D5EEF9D",
+  "processImagePath" : "\/Users\/limboenedmund\/Library\/Developer\/CoreSimulator\/Devices\/8E8380DE-364D-4899-99B8-D15ED0494FFD\/data\/Containers\/Bundle\/Application\/6F7E2C0D-EEDF-463F-9810-83862767E02A\/LazyMansReminders.app\/LazyMansReminders",
+  "senderImagePath" : "\/System\/Library\/Frameworks\/SwiftUICore.framework\/SwiftUICore",
+  "timestamp" : "2026-11-04 22:56:37.220355+0800",
+  "machTimestamp" : 3863808143574,
+  "eventMessage" : "Invalid frame dimension (negative or non-finite).",
+  "processImageUUID" : "447C4517-F646-3335-B9FE-1D71A5B8DDAC",
+  "traceID" : 6605656815399407876,
+  "processID" : 81897,
+  "senderProgramCounter" : 8016428,
+  "parentActivityIdentifier" : 0
+},{
+  "timezoneName" : "",
+  "messageType" : "Default",
+  "eventType" : "logEvent",
+  "source" : null,
+  "formatString" : "",
+  "userID" : 2863311530,
+  "activityIdentifier" : 0,
+  "subsystem" : "com.apple.log",
+  "category" : "",
+  "threadID" : 0,
+  "senderImageUUID" : "166D8E26-9002-3F15-A75F-437ED453909E",
+  "backtrace" : {
+    "frames" : [
+      {
+        "imageOffset" : 0,
+        "imageUUID" : "166D8E26-9002-3F15-A75F-437ED453909E"
+      }
+    ]
+  },
+  "bootUUID" : "C46F1BD2-B86A-419F-B544-61811D5EEF9D",
+  "processImagePath" : "\/private\/var\/run\/com.apple.security.cryptexd\/mnt\/iOS_23C54\/Library\/Developer\/CoreSimulator\/Profiles\/Runtimes\/iOS 26.2.simruntime\/Contents\/Resources\/RuntimeRoot\/usr\/bin\/log",
+  "senderImagePath" : "\/private\/var\/run\/com.apple.security.cryptexd\/mnt\/iOS_23C54\/Library\/Developer\/CoreSimulator\/Profiles\/Runtimes\/iOS 26.2.simruntime\/Contents\/Resources\/RuntimeRoot\/usr\/bin\/log",
+  "timestamp" : "2026-11-04 23:02:27.163697+0800",
+  "machTimestamp" : 3872206783789,
+  "eventMessage" : "log run noninteractively, parent: 95327 (launchd_sim), args: 'log' 'show' '--last' '15m' '--style' 'json' '--predicate' 'eventMessage CONTAINS \"Invalid frame\"'",
+  "processImageUUID" : "166D8E26-9002-3F15-A75F-437ED453909E",
+  "traceID" : 0,
+  "processID" : 90911,
+  "senderProgramCounter" : 0,
+  "parentActivityIdentifier" : 0
+}]

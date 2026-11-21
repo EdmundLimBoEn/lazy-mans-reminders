@@ -1,0 +1,30 @@
+[
+  {
+    "command": [
+      "python3",
+      "scripts/hillclimb/capture-account.py",
+      "--command",
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-016b7667478b6f251b147cff/agent-device",
+      "--out",
+      "hillclimb/rounds/6/account-enabled",
+      "errors"
+    ],
+    "exit": 1,
+    "startedUTC": "2026-11-05T02:19:22.481717+00:00",
+    "endedUTC": "2026-11-05T02:22:22.822086+00:00"
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/hillclimb/capture-account.py",
+      "--command",
+      "/Users/limboenedmund/.t3/userdata/device/targets/t3-016b7667478b6f251b147cff/agent-device",
+      "--out",
+      "hillclimb/rounds/6/account-enabled",
+      "errors"
+    ],
+    "exit": 0,
+    "startedUTC": "2026-11-05T02:26:10.290996+00:00",
+    "endedUTC": "2026-11-05T02:28:18.741903+00:00"
+  }
+]

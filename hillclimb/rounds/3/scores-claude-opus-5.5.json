@@ -1,0 +1,401 @@
+{
+  "model": "claude-opus-5.5",
+  "source_sha": "6959de17bb4d74fa1518914988645a3ea0313a68",
+  "overall": 8.25,
+  "categories": [
+    {
+      "name": "Visual hierarchy",
+      "score": 8.5,
+      "rationale": "Board puts reminder text first under a quiet inline title with live count; composer is clearly separated. Flat setup guide and flat sign-in sections read in order. Account sheet loses hierarchy in captures because nearly every row is dimmed by demo read-only mode while Delete Account... renders at full contrast, inverting emphasis."
+    },
+    {
+      "name": "Spacing/grid",
+      "score": 8.3,
+      "rationale": "Consistent 16-20pt margins, 44pt rows and 56pt separator inset aligned to text. Delete Account... trash glyph is larger and its title starts ~22px right of the AccountRow titles above (observed account-dark-XXXL-large-lower). Sign-in keyboard Done floats with a large gap above the keyboard."
+    },
+    {
+      "name": "Typography scale",
+      "score": 8.2,
+      "rationale": "Body for rows/composer, caption hint, headline section labels are Apple-like. 'Add a lasting widget' DisclosureGroup is footnote while sibling rows are body, a visible size break inside one inset group. Navigation subtitle '7 of 7' stays very small next to XXXL content."
+    },
+    {
+      "name": "Dynamic Type",
+      "score": 8.6,
+      "rationale": "XXXL board, composer capacity copy, account, guide and sign-in all reflow without truncation; Island caps at xxxLarge deliberately. Only default and XXXL were exercised; accessibility sizes (AX1-AX5) unobserved."
+    },
+    {
+      "name": "Light contrast",
+      "score": 8.4,
+      "rationale": "Primary text and separators read well in light. Board-full status and hint in secondary on secondarySystemBackground read faint but legible; demo-disabled Account/Sign-in rows are intentionally dim and excluded from scoring but make the evidence weaker."
+    },
+    {
+      "name": "Dark contrast",
+      "score": 8.0,
+      "rationale": "Dark board/account are clean. Measured: dark Sign in with Apple uses the .black style on a pure black background; the button region x70-330,y820-920 has max channel 0, so the button has no visible bounds while the Google button below has a filled RGB(38,38,41) container."
+    },
+    {
+      "name": "Iconography",
+      "score": 8.6,
+      "rationale": "SF Symbols throughout with consistent secondary weights; grip dots, light circle and arrow.up.right accessories are restrained. Delete trash glyph scale mismatches other row glyphs."
+    },
+    {
+      "name": "Safe area / Dynamic Island",
+      "score": 8.8,
+      "rationale": "Status bar, inline title, account button and composer stay clear of system areas in every capture; expanded Island text keeps clearance from corner curvature with added bottom margin. Compact/minimal intentionally empty."
+    },
+    {
+      "name": "Scroll/pull-down / last row",
+      "score": 8.4,
+      "rationale": "After pull, the final row and its separator sit fully above hint and composer at default and XXXL in both appearances. At the top edge, clipped glyph fragments of the previous row sit hard against the header (measured dark pixels at y344-356 in full-light-default-bottom-after-pull) with no soft scroll-edge, unlike Reminders."
+    },
+    {
+      "name": "List rows",
+      "score": 7.8,
+      "rationale": "Rows are clean and readable with leading circle, trailing grip and inset separators. Source: the entire row (circle and text) is one Button that completes the reminder immediately, with no undo; Reminders reserves completion for the circle and uses text tap for edit. Accidental completion risk on a post-it board is real."
+    },
+    {
+      "name": "Empty states",
+      "score": 8.8,
+      "rationale": "ContentUnavailableView 'All Clear' plus flat guide with dismiss; guide hides while composing and restores after. Native and calm."
+    },
+    {
+      "name": "Composer ergonomics",
+      "score": 8.6,
+      "rationale": "Pill field with hairline, 44pt hit targets, keyboard-dismiss glyph only when empty, intrinsic multi-line capacity copy. Board-full status still visually resembles a disabled text field."
+    },
+    {
+      "name": "Keyboard handling",
+      "score": 8.5,
+      "rationale": "Recheck images show keyboard, Done, and alternate action visible with interactive dismissal; 3x8 matrix + combined 8 passed with zero invalid-frame events. Custom Done bar rather than system keyboard toolbar leaves a tall empty band above keys."
+    },
+    {
+      "name": "Sheet presentation/detents",
+      "score": 8.5,
+      "rationale": "Medium/large detents, visible grabber, opaque grouped background, content scrolls under a native soft edge. At XXXL large-lower, ghosted footer text under the 'Account' title is busy but is the system edge effect."
+    },
+    {
+      "name": "Navigation clarity",
+      "score": 8.7,
+      "rationale": "Single board screen, one account entry, inline titles, Done confirmation placement. Clear."
+    },
+    {
+      "name": "Touch targets",
+      "score": 8.4,
+      "rationale": "44pt circles, grips, dismiss, add, Done 48pt, legal links 44pt confirmed in source and tests. Conversely the whole multi-line row is a completion target (oversized destructive target)."
+    },
+    {
+      "name": "Haptics",
+      "score": 7.5,
+      "rationale": "Source wires success/error sensoryFeedback and selection on drag start. No physical device, so no haptic was felt; unobserved."
+    },
+    {
+      "name": "Animation/transitions",
+      "score": 7.6,
+      "rationale": "Reduce-motion aware board animations and opacity transitions in source; only stills and four Island recordings were reviewed. No measured motion evidence."
+    },
+    {
+      "name": "Loading states",
+      "score": 8.5,
+      "rationale": "Centered large ProgressView with label; button spinners replace labels in place on sign-in. Simple and native."
+    },
+    {
+      "name": "Error states",
+      "score": 7.6,
+      "rationale": "Banner and full-screen error are structured well with dismiss and Try Again, and announcement de-duplication is in source. Observed copy shows raw 'The operation couldn't be completed. (NSURLErrorDomain error -1009.)' from localizedDescription, which is not user-grade language."
+    },
+    {
+      "name": "VoiceOver/labels",
+      "score": 8.2,
+      "rationale": "Thorough labels, hints, values, custom Move up/down actions, header traits. Spoken output and traversal order were never heard; source-derived only."
+    },
+    {
+      "name": "iOS HIG consistency",
+      "score": 8.1,
+      "rationale": "Largely native (UICollectionView list, insetGrouped settings, ContentUnavailableView, SignInWithAppleButton). Deviations: black Apple button on black background, row-tap completes, custom keyboard Done bar."
+    },
+    {
+      "name": "Lock Screen / Live Activity",
+      "score": 7.8,
+      "rationale": "Notification Center and expanded Island frames are clean glass/black with structured +N more counts. No true locked-device capture; at XXXL the Island shows only 2 lines with a mid-word ellipsis before '+8 more', low information density."
+    },
+    {
+      "name": "Sign-in/onboarding",
+      "score": 8.0,
+      "rationale": "Flat, honest layout with clear email/password toggle, inbox and error states. Dark Apple button lacks visible bounds; provider buttons are demo-disabled so enabled appearance is unobserved."
+    },
+    {
+      "name": "Settings/account",
+      "score": 8.1,
+      "rationale": "Clear grouping with status values and explanatory footer. Typography break on 'Add a lasting widget', destructive row misalignment, long dense footer paragraph; enabled row appearance unobserved because demo disables the whole list."
+    },
+    {
+      "name": "Performance feel",
+      "score": 7.6,
+      "rationale": "No frame-time or launch measurement. Tests and runtime logs show zero invalid frames, but feel is not measured."
+    },
+    {
+      "name": "Delight",
+      "score": 7.8,
+      "rationale": "Quiet and competent; little personality beyond the post-it hint and success haptic. Appropriate for minimal brief, not memorable."
+    },
+    {
+      "name": "Long text",
+      "score": 8.7,
+      "rationale": "Seven long paragraphs wrap cleanly at default and XXXL; no truncation in-app; capacity copy wraps intrinsically."
+    },
+    {
+      "name": "Reduced Motion / Transparency",
+      "score": 8.0,
+      "rationale": "Source honors reduceMotion, reduceTransparency and increased contrast (solid chrome, thicker hairlines). None of these settings were exercised on device."
+    },
+    {
+      "name": "Palette / minimalism",
+      "score": 9.0,
+      "rationale": "Neutral monochrome with system accent only for links; semantic red reserved for errors; no nested cards or decorative color."
+    }
+  ],
+  "findings": [
+    {
+      "id": "OPUS3-01",
+      "severity": "medium",
+      "screen": "signin-dark-default-top.png; extras/signin-dark-*.png; recheck/signin-dark-*.png",
+      "evidence": "Observed and measured: SignInAppleFill.fill returns .black in dark mode (ios/App/LMRChrome.swift:27-28). On systemBackground black, pixels x70-330,y820-920 around the Apple button have max channel 0; the control has no visible bounds while the Google button directly below has a RGB(38,38,41) fill. Apple's guidance is to avoid a black button on a black/dark background.",
+      "fix": "Return .white (or .whiteOutline) for dark scheme; keep title, order and height. Add a unit assertion on SignInAppleFill.fill(.dark) and a pixel check that the button region contains non-background pixels.",
+      "confidence": "high",
+      "basis": "observed + source-derived",
+      "programmatic_check": "Sample button rect in dark capture; require >=1% pixels differing from background by >20 levels."
+    },
+    {
+      "id": "OPUS3-02",
+      "severity": "medium",
+      "screen": "full-*-top.png; long-text-*.png (rows)",
+      "evidence": "Source: ReminderRow wraps circle and text in one Button(action: onComplete) (ios/App/ReminderListView.swift ReminderRow) and markDone runs immediately with no undo. Any tap on a multi-line paragraph completes it. Apple Reminders limits completion to the circle. Not exercised on device in this round.",
+      "fix": "Make only the 44pt circle the completion Button; make text non-interactive (or reserved for future edit) and keep the leading swipe Complete. Alternatively add a brief undo toast. Keep VoiceOver row action 'Marks this reminder complete' via accessibilityAction.",
+      "confidence": "high",
+      "basis": "source-derived",
+      "programmatic_check": "UI test: tap text center of row 1 and assert row count unchanged; tap circle and assert completion."
+    },
+    {
+      "id": "OPUS3-03",
+      "severity": "medium",
+      "screen": "extras/board-error-*.png",
+      "evidence": "Observed banner and full-screen error show 'The operation couldn't be completed. (NSURLErrorDomain error -1009.)'. Source passes error.localizedDescription straight through (presentError). Real devices may show the friendlier system string, but this capture shows the raw domain/code.",
+      "fix": "Map URLError codes (notConnectedToInternet, timedOut, networkConnectionLost) to a short human message; fall back to localizedDescription. Product question: new copy needs owner approval since existing wording is preserved.",
+      "confidence": "medium",
+      "basis": "observed + source-derived",
+      "programmatic_check": "Unit test mapping URLError(.notConnectedToInternet) to a string without 'NSURLErrorDomain'."
+    },
+    {
+      "id": "OPUS3-04",
+      "severity": "low",
+      "screen": "full-light-default-bottom-after-pull.png; full-dark-default-bottom-after-pull.png",
+      "evidence": "Measured: dark glyph pixels at y344-356 directly below the 'Your Board'/'7 of 7' header are clipped fragments of the previous row ('for tomorrow.'), drawn at full contrast with no soft top edge. The UICollectionView hosted via UIViewRepresentable keeps its top edge effect default but the clipped fragments remain crisp.",
+      "fix": "Verify the nav bar is tracking the collection view as its content scroll view (e.g. .scrollEdgeEffectStyle(.soft, for: .top) or set topEdgeEffect explicitly); or snap the post-pull resting offset to a row boundary.",
+      "confidence": "medium",
+      "basis": "observed",
+      "programmatic_check": "Sample 20px band below header after pull; require max contrast < 3:1 vs background or no partial glyph rows."
+    },
+    {
+      "id": "OPUS3-05",
+      "severity": "low",
+      "screen": "account-*-top.png; extras/account-*-large-top.png",
+      "evidence": "'Add a lasting widget' DisclosureGroup is .font(.footnote) (BoardPersistenceSection.swift:41) while sibling rows are body; visibly smaller row in the same group.",
+      "fix": "Apply .font(.footnote) only to the disclosed Text children, leaving the DisclosureGroup label at body.",
+      "confidence": "high",
+      "basis": "observed + source-derived",
+      "programmatic_check": "Snapshot assertion that row label font sizes in the section are equal."
+    },
+    {
+      "id": "OPUS3-06",
+      "severity": "low",
+      "screen": "extras/account-dark-XXXL-large-lower.png; extras/account-*-lower.png",
+      "evidence": "Delete Account... uses Label with an unconstrained trash glyph while other rows use AccountRow with a 24pt icon frame and 14pt spacing; trash is larger and title starts ~22px further right. In captures it also renders at full contrast while every other row is demo-disabled.",
+      "fix": "Render delete with AccountRow-like layout (24pt icon frame, 14pt spacing) keeping role .destructive, wording and icon. Confirm in a non-demo capture that it disables consistently.",
+      "confidence": "high",
+      "basis": "observed + source-derived",
+      "programmatic_check": "Geometry probe: title minX equal across Account rows."
+    },
+    {
+      "id": "OPUS3-07",
+      "severity": "low",
+      "screen": "activity/multiline-*-XXXL-expanded.png",
+      "evidence": "At XXXL the expanded Island shows 2 lines with the second ending 'not...' then '+8 more'. Count conservation is correct but density is low and mid-word ellipsis reads rough.",
+      "fix": "Allow one more line in the island budget at XXXL or cap island type at .xLarge so 3 lines fit; keep structured hidden count.",
+      "confidence": "medium",
+      "basis": "observed",
+      "programmatic_check": "LockScreenLineBudget unit test for island surface at xxxLarge >= 3 visible lines."
+    },
+    {
+      "id": "OPUS3-08",
+      "severity": "low",
+      "screen": "recheck/signin-*-keyboard.png",
+      "evidence": "Custom Done bar in a bottom safeAreaInset leaves a tall empty band between content/links and the keyboard, and duplicates a system convention (keyboard toolbar).",
+      "fix": "Use ToolbarItemGroup(placement: .keyboard) with Spacer + Done, preserving 48pt target and the tested alternate-action clearance.",
+      "confidence": "medium",
+      "basis": "observed",
+      "programmatic_check": "Existing keyboard matrix clearance assertions."
+    },
+    {
+      "id": "OPUS3-09",
+      "severity": "low",
+      "screen": "full-*-bottom-after-pull.png; long-text-*-XXXL-*.png",
+      "evidence": "Board-full status text (body, secondary) inside the pill reads like a disabled text field placeholder rather than a status.",
+      "fix": "Keep wording; render without the field pill (plain secondary text with the existing hint) or use .primary weight for the status with secondary hint.",
+      "confidence": "medium",
+      "basis": "observed",
+      "programmatic_check": "Contrast sample >= 4.5:1 for status text."
+    },
+    {
+      "id": "OPUS3-10",
+      "severity": "info",
+      "screen": "account-*.png; extras/account-*; extras/signin-*",
+      "evidence": "Demo read-only mode disables the entire Account list and sign-in providers, so the enabled appearance of these rows was never captured.",
+      "fix": "Add one non-interactive capture variant that renders enabled styling while blocking actions in handlers (as sign-in already does) rather than .disabled on the whole Group.",
+      "confidence": "high",
+      "basis": "source-derived",
+      "programmatic_check": "n/a (evidence gap)"
+    }
+  ],
+  "screenshots": [
+    "account-dark-default-top.png",
+    "account-light-default-top.png",
+    "activity/multiline-dark-XXXL-collapsed.png",
+    "activity/multiline-dark-XXXL-expanded.png",
+    "activity/multiline-dark-XXXL-notification-center.png",
+    "activity/multiline-dark-default-collapsed.png",
+    "activity/multiline-dark-default-expanded.png",
+    "activity/multiline-dark-default-notification-center.png",
+    "activity/multiline-light-XXXL-collapsed.png",
+    "activity/multiline-light-XXXL-expanded.png",
+    "activity/multiline-light-XXXL-notification-center.png",
+    "activity/multiline-light-default-collapsed.png",
+    "activity/multiline-light-default-expanded.png",
+    "activity/multiline-light-default-notification-center.png",
+    "composer-dark-default-top.png",
+    "composer-light-default-top.png",
+    "empty-dark-default-top.png",
+    "empty-light-default-top.png",
+    "extras/account-dark-XXXL-large-lower.png",
+    "extras/account-dark-XXXL-large-top.png",
+    "extras/account-dark-XXXL-medium-lower.png",
+    "extras/account-dark-XXXL-medium-top.png",
+    "extras/account-dark-default-large-lower.png",
+    "extras/account-dark-default-large-top.png",
+    "extras/account-dark-default-medium-lower.png",
+    "extras/account-dark-default-medium-top.png",
+    "extras/account-light-XXXL-large-lower.png",
+    "extras/account-light-XXXL-large-top.png",
+    "extras/account-light-XXXL-medium-lower.png",
+    "extras/account-light-XXXL-medium-top.png",
+    "extras/account-light-default-large-lower.png",
+    "extras/account-light-default-large-top.png",
+    "extras/account-light-default-medium-lower.png",
+    "extras/account-light-default-medium-top.png",
+    "extras/board-error-empty-dark-XXXL.png",
+    "extras/board-error-empty-dark-default.png",
+    "extras/board-error-empty-light-XXXL.png",
+    "extras/board-error-empty-light-default.png",
+    "extras/board-error-populated-dark-XXXL-recovered.png",
+    "extras/board-error-populated-dark-XXXL.png",
+    "extras/board-error-populated-dark-default-recovered.png",
+    "extras/board-error-populated-dark-default.png",
+    "extras/board-error-populated-light-XXXL-recovered.png",
+    "extras/board-error-populated-light-XXXL.png",
+    "extras/board-error-populated-light-default-recovered.png",
+    "extras/board-error-populated-light-default.png",
+    "extras/board-loading-dark-XXXL.png",
+    "extras/board-loading-dark-default.png",
+    "extras/board-loading-light-XXXL.png",
+    "extras/board-loading-light-default.png",
+    "extras/guide-dark-XXXL-before.png",
+    "extras/guide-dark-XXXL-focused.png",
+    "extras/guide-dark-XXXL-restored.png",
+    "extras/guide-dark-default-before.png",
+    "extras/guide-dark-default-focused.png",
+    "extras/guide-dark-default-restored.png",
+    "extras/guide-light-XXXL-before.png",
+    "extras/guide-light-XXXL-focused.png",
+    "extras/guide-light-XXXL-restored.png",
+    "extras/guide-light-default-before.png",
+    "extras/guide-light-default-focused.png",
+    "extras/guide-light-default-restored.png",
+    "extras/signin-dark-XXXL-default.png",
+    "extras/signin-dark-XXXL-error.png",
+    "extras/signin-dark-XXXL-inbox.png",
+    "extras/signin-dark-XXXL-keyboard.png",
+    "extras/signin-dark-XXXL-loading.png",
+    "extras/signin-dark-XXXL-password-keyboard.png",
+    "extras/signin-dark-XXXL-password.png",
+    "extras/signin-dark-default-default.png",
+    "extras/signin-dark-default-error.png",
+    "extras/signin-dark-default-inbox.png",
+    "extras/signin-dark-default-keyboard.png",
+    "extras/signin-dark-default-loading.png",
+    "extras/signin-dark-default-password-keyboard.png",
+    "extras/signin-dark-default-password.png",
+    "extras/signin-light-XXXL-default.png",
+    "extras/signin-light-XXXL-error.png",
+    "extras/signin-light-XXXL-inbox.png",
+    "extras/signin-light-XXXL-keyboard.png",
+    "extras/signin-light-XXXL-loading.png",
+    "extras/signin-light-XXXL-password-keyboard.png",
+    "extras/signin-light-XXXL-password.png",
+    "extras/signin-light-default-default.png",
+    "extras/signin-light-default-error.png",
+    "extras/signin-light-default-inbox.png",
+    "extras/signin-light-default-keyboard.png",
+    "extras/signin-light-default-loading.png",
+    "extras/signin-light-default-password-keyboard.png",
+    "extras/signin-light-default-password.png",
+    "full-dark-default-bottom-after-pull.png",
+    "full-dark-default-top.png",
+    "full-light-default-bottom-after-pull.png",
+    "full-light-default-top.png",
+    "long-text-dark-XXXL-bottom-after-pull.png",
+    "long-text-dark-XXXL-top.png",
+    "long-text-dark-default-top.png",
+    "long-text-light-XXXL-bottom-after-pull.png",
+    "long-text-light-XXXL-top.png",
+    "long-text-light-default-top.png",
+    "recheck/signin-dark-XXXL-keyboard.png",
+    "recheck/signin-dark-XXXL-password-keyboard.png",
+    "recheck/signin-dark-default-keyboard.png",
+    "recheck/signin-dark-default-password-keyboard.png",
+    "recheck/signin-light-XXXL-keyboard.png",
+    "recheck/signin-light-XXXL-password-keyboard.png",
+    "recheck/signin-light-default-keyboard.png",
+    "recheck/signin-light-default-password-keyboard.png",
+    "signin-dark-default-top.png",
+    "signin-light-default-top.png"
+  ],
+  "references": [
+    "../../reference/reminders-bottom-dark.png",
+    "../../reference/reminders-compose-light.png",
+    "../../reference/reminders-empty-light.png",
+    "../../reference/reminders-sheet-dark.png",
+    "../../reference/reminders-top-light.png",
+    "../../reference/round2/reminders-bottom-light.png",
+    "../../reference/round2/reminders-compose-dark.png",
+    "../../reference/round2/reminders-sheet-light.png",
+    "../../reference/round2/reminders-top-dark.png",
+    "../../reference/round3/reminders-bottom-dark-XXXL.png",
+    "../../reference/round3/reminders-bottom-light-XXXL.png",
+    "../../reference/round3/reminders-compose-dark-XXXL.png",
+    "../../reference/round3/reminders-compose-light-XXXL.png",
+    "../../reference/round3/reminders-sheet-dark-XXXL.png",
+    "../../reference/round3/reminders-sheet-light-XXXL.png",
+    "../../reference/round3/reminders-top-dark-XXXL.png",
+    "../../reference/round3/reminders-top-light-XXXL.png"
+  ],
+  "evidence_gaps": [
+    "No physical device: haptics, true Lock Screen, arbitrary wallpapers unobserved.",
+    "Spoken VoiceOver output and traversal order never heard.",
+    "Only default and XXXL sizes; AX1-AX5, Bold Text, Increase Contrast, Reduce Motion/Transparency unexercised on device.",
+    "No measured motion/frame-time/launch performance.",
+    "No Apple sign-in, Activity, loading/error or Notes counterparts; Account compared against Reminders Details semantically mismatched.",
+    "Account and sign-in actions demo-disabled; enabled appearance unobserved.",
+    "Row tap-to-complete not exercised; finding is source-derived.",
+    "Unit-rendered Activity rasters excluded; Notification Center is not true locked-device evidence.",
+    "Historical Release and backend results reused by hash identity, not rerun."
+  ]
+}

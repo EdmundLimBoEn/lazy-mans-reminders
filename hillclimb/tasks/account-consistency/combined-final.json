@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "xcodebuild",
+    "test-without-building",
+    "-xctestrun",
+    "/tmp/notepad-account-j-dd/Build/Products/LazyMansReminders_iphonesimulator27.1-arm64.xctestrun",
+    "-destination",
+    "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694,arch=arm64",
+    "-parallel-testing-enabled",
+    "NO",
+    "-test-timeouts-enabled",
+    "YES",
+    "-default-test-execution-time-allowance",
+    "180",
+    "-maximum-test-execution-time-allowance",
+    "240",
+    "-collect-test-diagnostics",
+    "never",
+    "-disableAutomaticPackageResolution",
+    "-skipPackageUpdates",
+    "-resultBundlePath",
+    "/tmp/notepad-account-j-combined-final.xcresult",
+    "CODE_SIGNING_ALLOWED=NO"
+  ],
+  "exit": 0,
+  "elapsed": 678.9705789089203
+}

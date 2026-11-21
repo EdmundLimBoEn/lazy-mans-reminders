@@ -1,0 +1,32 @@
+[
+  {
+    "command": [
+      "xcodebuild",
+      "-version"
+    ],
+    "output": "Xcode 27.1\nBuild version 27A9269\n"
+  },
+  {
+    "command": [
+      "sw_vers"
+    ],
+    "output": "ProductName:\t\tmacOS\nProductVersion:\t\t27.2\nBuildVersion:\t\t26B123\n"
+  },
+  {
+    "command": [
+      "sysctl",
+      "-n",
+      "hw.model",
+      "hw.ncpu",
+      "hw.memsize"
+    ],
+    "output": "Mac16,8\n12\n25769803776\n"
+  },
+  {
+    "command": [
+      "uname",
+      "-m"
+    ],
+    "output": "arm64\n"
+  }
+]

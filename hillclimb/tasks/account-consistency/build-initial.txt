@@ -1,0 +1,22 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild build-for-testing -project ios/LazyMansReminders.xcodeproj -scheme LazyMansReminders -configuration Debug -destination "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694" -derivedDataPath /tmp/notepad-account-j-dd -arch arm64 -disableAutomaticPackageResolution -skipPackageUpdates CODE_SIGNING_ALLOWED=NO
+
+Build settings from command line:
+    ARCHS = arm64
+    CODE_SIGNING_ALLOWED = NO
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  Supabase: https://github.com/supabase/supabase-swift.git @ 2.54.1
+  swift-concurrency-extras: https://github.com/pointfreeco/swift-concurrency-extras @ 1.4.3
+  xctest-dynamic-overlay: https://github.com/pointfreeco/xctest-dynamic-overlay @ 1.13.1
+  swift-issue-reporting: https://github.com/pointfreeco/swift-issue-reporting @ 2.1.2
+  swift-crypto: https://github.com/apple/swift-crypto.git @ 4.5.2
+  swift-asn1: https://github.com/apple/swift-asn1.git @ 1.7.4
+  swift-http-types: https://github.com/apple/swift-http-types.git @ 1.8.0
+  swift-clocks: https://github.com/pointfreeco/swift-clocks @ 1.1.1
+
+2026-11-05 01:00:46.969 xcodebuild[26137:2977719] Writing error result bundle to /var/folders/17/_2s_s21533zg6pnz5k13s6vh0000gn/T/ResultBundle_2026-05-11_01-00-0046.xcresult
+xcodebuild: error: destination implies architecture, architecture must not also be specified.

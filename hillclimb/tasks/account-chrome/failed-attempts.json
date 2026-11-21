@@ -1,0 +1,112 @@
+[
+  {
+    "name": "baseline",
+    "command": [
+      "xcodebuild",
+      "test-without-building",
+      "-xctestrun",
+      "/tmp/account-q-7e805644-DD/Build/Products/LazyMansReminders_iphonesimulator27.1-arm64.xctestrun",
+      "-parallel-testing-enabled",
+      "NO",
+      "-test-timeouts-enabled",
+      "YES",
+      "-default-test-execution-time-allowance",
+      "240",
+      "-maximum-test-execution-time-allowance",
+      "300",
+      "-collect-test-diagnostics",
+      "never",
+      "-resultBundlePath",
+      "/tmp/account-q-baseline.xcresult",
+      "-only-testing:HillclimbUITests/AccountChromeUITests/testNativeTitleBands",
+      "-destination",
+      "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694,arch=arm64",
+      "-disableAutomaticPackageResolution",
+      "-skipPackageUpdates",
+      "CODE_SIGNING_ALLOWED=NO"
+    ],
+    "exit": 65,
+    "observations": [
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-7e805644/ios/UITests/AccountChromeUITests.swift:26: error: -[HillclimbUITests.AccountChromeUITests testNativeTitleBands] : XCTAssertGreaterThanOrEqual failed: (\"42.2487562189055\") is less than (\"44.0\")"
+    ],
+    "evidence": "hillclimb/tasks/account-chrome/baseline-AccountChromeUITests/manifest.json"
+  },
+  {
+    "name": "baseline2",
+    "command": [
+      "xcodebuild",
+      "test-without-building",
+      "-xctestrun",
+      "/tmp/account-q-7e805644-DD/Build/Products/LazyMansReminders_iphonesimulator27.1-arm64.xctestrun",
+      "-parallel-testing-enabled",
+      "NO",
+      "-test-timeouts-enabled",
+      "YES",
+      "-default-test-execution-time-allowance",
+      "240",
+      "-maximum-test-execution-time-allowance",
+      "300",
+      "-collect-test-diagnostics",
+      "never",
+      "-resultBundlePath",
+      "/tmp/account-q-baseline2.xcresult",
+      "-only-testing:HillclimbUITests/AccountChromeUITests/testNativeTitleBands",
+      "-destination",
+      "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694,arch=arm64",
+      "-disableAutomaticPackageResolution",
+      "-skipPackageUpdates",
+      "CODE_SIGNING_ALLOWED=NO"
+    ],
+    "exit": 65,
+    "observations": [
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-7e805644/ios/UITests/AccountChromeUITests.swift:27: error: -[HillclimbUITests.AccountChromeUITests testNativeTitleBands] : XCTAssertGreaterThanOrEqual failed: (\"42.2487562189055\") is less than (\"44.0\")"
+    ],
+    "evidence": "hillclimb/tasks/account-chrome/baseline2-AccountChromeUITests/manifest.json"
+  },
+  {
+    "name": "guidance",
+    "command": [
+      "xcodebuild",
+      "test-without-building",
+      "-xctestrun",
+      "/tmp/account-q-7e805644-DD/Build/Products/LazyMansReminders_iphonesimulator27.1-arm64.xctestrun",
+      "-parallel-testing-enabled",
+      "NO",
+      "-test-timeouts-enabled",
+      "YES",
+      "-default-test-execution-time-allowance",
+      "240",
+      "-maximum-test-execution-time-allowance",
+      "300",
+      "-collect-test-diagnostics",
+      "never",
+      "-resultBundlePath",
+      "/tmp/account-q-guidance.xcresult",
+      "-only-testing:HillclimbUITests/AccountChromeUITests/testGuidanceContentGeometryAndInk",
+      "-destination",
+      "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694,arch=arm64",
+      "-disableAutomaticPackageResolution",
+      "-skipPackageUpdates",
+      "CODE_SIGNING_ALLOWED=NO"
+    ],
+    "exit": 65,
+    "observations": [
+      "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-7e805644/ios/UITests/AccountChromeUITests.swift:72: error: -[HillclimbUITests.AccountChromeUITests testGuidanceContentGeometryAndInk] : XCTAssertLessThanOrEqual failed: (\"901.8474295190713\") is greater than (\"832.0\")"
+    ],
+    "evidence": "hillclimb/tasks/account-chrome/guidance-AccountChromeUITests/manifest.json"
+  },
+  {
+    "name": "manual-verify first analysis",
+    "command": "python3 hillclimb/tasks/account-chrome/manual-verify.py",
+    "exit": 1,
+    "error": "StopIteration: native Account navigation bar uses identifier rather than label",
+    "fix": "Match kind navigation-bar plus Account identifier; same native captures pass"
+  },
+  {
+    "name": "dependent manual pairing",
+    "command": "python3 hillclimb/tasks/account-chrome/pair.py before full manual",
+    "exit": 1,
+    "error": "FileNotFoundError manual-images.json after prior verifier stopped",
+    "fix": "Run corrected verifier first, then pairing;60 images pass"
+  }
+]

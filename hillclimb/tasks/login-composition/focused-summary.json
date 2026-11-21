@@ -1,0 +1,60 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "deviceName" : "Hillclimb iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 2,
+      "passedTests" : 10,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "LazyMansReminders · Built with macOS 27.2",
+  "expectedFailures" : 0,
+  "failedTests" : 2,
+  "finishTime" : 1793877928.479,
+  "passedTests" : 10,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793877472.714,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "XCTAssertGreaterThanOrEqual failed: (\"43.99999999999997\") is less than (\"44.0\") - Sign in with Apple",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 12,
+      "testIdentifierString" : "SignInSurfaceUITests/testEnabledAppearanceIsInertAndAppleBoundaryIsVisible()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInSurfaceUITests/testEnabledAppearanceIsInertAndAppleBoundaryIsVisible",
+      "testName" : "testEnabledAppearanceIsInertAndAppleBoundaryIsVisible()"
+    },
+    {
+      "failureText" : "XCTAssertEqualWithAccuracy failed: (\"43.99999999999997\") is not equal to (\"45.0\") +/- (\"1.0\")",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 7,
+      "testIdentifierString" : "LoginCompositionUITests/testNativeInlineHierarchyAndFilledPrimaryActionMatrix()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/LoginCompositionUITests/testNativeInlineHierarchyAndFilledPrimaryActionMatrix",
+      "testName" : "testNativeInlineHierarchyAndFilledPrimaryActionMatrix()"
+    }
+  ],
+  "title" : "Test - LazyMansReminders",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 12
+}

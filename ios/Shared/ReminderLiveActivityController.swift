@@ -50,8 +50,8 @@ enum ReminderLiveActivityController {
 
     static func sync(reminders: [Reminder], allowStart: Bool = true) async {
         startObservingTokens()
-        let lines = ReminderActivityPresentation.lines(from: reminders)
-        let state = ReminderAttributes.ContentState(lines: lines)
+        let state = ReminderActivityPresentation.state(from: reminders)
+        let lines = state.lines
         let existing = activeActivities
         let content = ActivityContent(state: state, staleDate: Date().addingTimeInterval(8 * 60 * 60))
         let hasActivity = lines.isEmpty

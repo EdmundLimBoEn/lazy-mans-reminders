@@ -1,0 +1,56 @@
+apple=(20.0, 292.0, 362.0, 58.0) titleInk=9715
+Attributes: Application, 0x1015715c0, pid: 87700, label: 'Notepad'
+Element subtree:
+ →Application, 0x1015715c0, pid: 87700, label: 'Notepad'
+    Window (Main), 0x101571d70, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x101573310, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x101573430, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x101573070, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x101573190, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x101573550, {{0.0, 0.0}, {402.0, 874.0}}
+                NavigationBar, 0x101573670, {{0.0, 62.0}, {402.0, 108.0}}, identifier: 'Sign In'
+                  StaticText, 0x101573790, {{16.0, 116.0}, {126.0, 48.0}}, label: 'Sign In'
+                Other, 0x1015738b0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x1015739d0, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x101573af0, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x101573c10, {{0.0, 0.0}, {402.0, 874.0}}
+                        ScrollView, 0x101573d30, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x101573e50, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x101573f70, {{0.0, 0.0}, {402.0, 106.0}}
+                          Other, 0x101574090, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x1015741b0, {{0.0, 0.0}, {402.0, 106.0}}
+                              Other, 0x1015742d0, {{0.0, 0.0}, {402.0, 106.0}}
+                              Other, 0x1015743f0, {{0.0, 0.0}, {402.0, 106.0}}
+                                Other, 0x101574510, {{0.0, 0.0}, {402.0, 106.0}}
+                          Other, 0x101574630, {{0.0, 170.0}, {402.0, 651.3}}
+                            StaticText, 0x101574750, {{20.0, 178.0}, {82.7, 25.3}}, label: 'Notepad'
+                            StaticText, 0x101574870, {{20.0, 211.3}, {351.0, 56.7}}, label: 'Your board on this iPhone, the web, and the Lock Screen.'
+                            Button, 0x101574990, {{20.0, 292.0}, {362.0, 58.0}}, identifier: 'signin.apple', label: 'Sign in with Apple', Disabled
+                            Button, 0x101574ab0, {{20.0, 362.3}, {362.0, 57.7}}, label: 'Sign in with Google', Disabled
+                              StaticText, 0x101574bd0, {{105.7, 377.2}, {190.7, 27.7}}, label: 'Sign in with Google', Disabled
+                            StaticText, 0x101574cf0, {{20.0, 444.0}, {56.7, 27.7}}, label: 'Email'
+                            StaticText, 0x101574e10, {{20.0, 483.7}, {343.3, 23.0}}, label: 'Use the same address as the web board.'
+                            Other, 0x101574f30, {{20.0, 518.7}, {362.0, 44.0}}, identifier: 'signin.emailTarget'
+                              TextField, 0x101575050, {{20.0, 518.7}, {362.0, 44.0}}, label: 'Email address', placeholderValue: 'you@example.com', Disabled
+                            Button, 0x101575170, {{20.0, 574.7}, {362.0, 78.7}}, label: 'Send Sign-In Link, in progress', Disabled
+                              StaticText, 0x101575290, {{113.3, 600.2}, {175.3, 27.7}}, label: 'Send Sign-In Link', Disabled
+                              ActivityIndicator, 0x1015753b0, {{176.7, 589.7}, {48.7, 48.7}}, value: 1, Disabled
+                                ActivityIndicator, 0x1015754d0, {{176.7, 589.7}, {48.7, 48.7}}, value: 1
+                            Button, 0x1015755f0, {{20.0, 665.3}, {362.0, 48.0}}, label: 'Use an Existing Password', Disabled
+                            Button, 0x101575710, {{72.7, 755.7}, {61.3, 23.0}}, label: 'Privacy'
+                            Button, 0x101575830, {{171.7, 755.7}, {52.3, 23.0}}, label: 'Terms'
+                            Button, 0x101575950, {{261.3, 755.7}, {68.0, 23.0}}, label: 'Support'
+                          Other, 0x101575a70, {{369.0, 116.0}, {30.0, 696.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                            Other, 0x101575b90, {{396.0, 150.7}, {3.0, 658.3}}
+                          Other, 0x101575cb0, {{369.0, 116.0}, {30.0, 696.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                            Other, 0x101575dd0, {{396.0, 150.7}, {3.0, 658.3}}
+                Other, 0x101575ef0, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x101576010, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x101576130, {{0.0, 62.0}, {1.0, 1.0}}, identifier: 'hillclimb.geometry', value: {"authState":[0,0,...
+Path to element:
+ →Application, 0x1015715c0, pid: 87700, label: 'Notepad'
+Query chain:
+ →Find: Target Application 'systems.edmundlim.NotepadHillclimb'
+  Output: {
+    Application, 0x101d7bae0, pid: 87700, label: 'Notepad'
+  }

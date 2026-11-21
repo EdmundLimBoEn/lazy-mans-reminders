@@ -1,0 +1,8 @@
+"""Hash exact sources/products. Written by gpt-6.1-sol in Codex on behalf of Edmund."""
+import pathlib,subprocess,json,hashlib,datetime
+p=pathlib.Path(__file__).parent;dd=pathlib.Path('/tmp/activity-readability-DD');h=lambda f:hashlib.sha256(f.read_bytes()).hexdigest()
+files=[f for folder in ['ios/App','ios/Shared','ios/Widget','ios/Tests','ios/UITests'] for f in pathlib.Path(folder).rglob('*.swift')]
+products=dd/'Build/Products';runs=list(products.glob('*.xctestrun'));assert len(runs)==1
+binaries=[products/'Debug-iphonesimulator/LazyMansReminders.app/LazyMansReminders',products/'Debug-iphonesimulator/LazyMansReminders.app/PlugIns/ReminderWidgetExtension.appex/ReminderWidgetExtension']
+(p/'provenance.json').write_text(json.dumps({'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'branch':subprocess.check_output(['git','branch','--show-current'],text=True).strip(),'base':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'sources':{str(f):h(f) for f in files},'products':{str(f):h(f) for f in binaries+runs},'config':{'origin':'scripts/hillclimb/setup.sh from own ios/Config.example.xcconfig','sha256':h(pathlib.Path('ios/Config.xcconfig'))},'host':subprocess.check_output(['sw_vers'],text=True),'toolchain':subprocess.check_output(['xcodebuild','-version'],text=True),'concurrency':'Other workers may build/test disjoint checkouts and devices concurrently; exclusive original17 lease. Fresh owned DerivedData, shared host package caches; simulator warm after unit/full tests. No physical performance inference.'},indent=2))
+(p/'generated.xctestrun').write_bytes(runs[0].read_bytes())

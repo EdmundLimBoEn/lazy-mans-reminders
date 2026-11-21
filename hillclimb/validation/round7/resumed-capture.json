@@ -1,0 +1,21 @@
+{
+  "reason": "Single documented native screenshot timeout; prescribed --debug retry succeeded. Existing PNGs/manifests preserved, subsequent acquisition resumes remaining protocol, not a project-test rerun.",
+  "retainedFailure": "capture-account-detents.json attempt0",
+  "retry": "device-timeout-retry.json",
+  "command": [
+    "caffeinate",
+    "-i",
+    "python3",
+    "hillclimb/validation/round7/capture.py",
+    "account-detents",
+    "account-guidance",
+    "account-errors",
+    "activity",
+    "long-activity",
+    "signin-chrome-normal",
+    "paint-normal",
+    "edge"
+  ],
+  "startedUTC": "2026-11-05T14:25:43.498026+00:00",
+  "priorQueue": "queue-normal-tail.py stopped on failed prerequisite; no duplicate UI pipeline remains"
+}

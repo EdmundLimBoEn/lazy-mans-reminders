@@ -1,0 +1,21 @@
+{
+  "commands": [
+    [
+      "scripts/hillclimb/setup.sh"
+    ],
+    [
+      "xcodebuild",
+      "-resolvePackageDependencies",
+      "-project",
+      "ios/LazyMansReminders.xcodeproj",
+      "-scheme",
+      "LazyMansReminders",
+      "-derivedDataPath",
+      "/tmp/hillclimb-round5-048fb58b-DD"
+    ]
+  ],
+  "observed": "Both completed successfully before first build. Tool transcript retains setup output. No later package resolution/update.",
+  "exampleDerivedConfigHash": "7e307b373e7a1f77be85901ae61fdb279631f54352ac4de3792f063fb5dd6976",
+  "privateConfigurationRead": false,
+  "freezeCommit": "c60288dae3173383442723e70f7874b8878d891d 2026-11-05T04:23:50+08:00"
+}

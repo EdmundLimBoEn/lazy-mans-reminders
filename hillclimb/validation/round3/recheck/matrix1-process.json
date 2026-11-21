@@ -1,0 +1,42 @@
+{
+  "command": [
+    "xcodebuild",
+    "test-without-building",
+    "-xctestrun",
+    "/tmp/notepad-round3-recheck-86f22b1d-dd/Build/Products/LazyMansReminders_iphonesimulator27.1-arm64.xctestrun",
+    "-destination",
+    "platform=iOS Simulator,id=78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+    "-parallel-testing-enabled",
+    "NO",
+    "-test-timeouts-enabled",
+    "YES",
+    "-default-test-execution-time-allowance",
+    "180",
+    "-maximum-test-execution-time-allowance",
+    "240",
+    "-collect-test-diagnostics",
+    "never",
+    "-disableAutomaticPackageResolution",
+    "-skipPackageUpdates",
+    "-resultBundlePath",
+    "/tmp/notepad-round3-recheck-86f22b1d-matrix1.xcresult",
+    "CODE_SIGNING_ALLOWED=NO",
+    "-only-testing:HillclimbUITests/SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances"
+  ],
+  "exit": 0,
+  "startedUTC": "2026-11-04T16:16:51.885081+00:00",
+  "observations": [
+    "2026-11-05 00:16:57.441 xcodebuild[69188:2824618] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 00:17:14.897 xcodebuild[69188:2824618] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 00:17:30.440 xcodebuild[69188:2824618] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 00:17:47.281 xcodebuild[69188:2824618] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 00:18:02.455 xcodebuild[69188:2824618] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 00:18:19.315 xcodebuild[69188:2824618] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 00:18:34.516 xcodebuild[69188:2824618] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 00:18:51.202 xcodebuild[69188:2824618] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "Executed 1 test, with 0 failures (0 unexpected) in 128.581 (128.583) seconds",
+    "Executed 1 test, with 0 failures (0 unexpected) in 128.581 (128.583) seconds",
+    "Executed 1 test, with 0 failures (0 unexpected) in 128.581 (128.584) seconds",
+    "** TEST EXECUTE SUCCEEDED **"
+  ]
+}

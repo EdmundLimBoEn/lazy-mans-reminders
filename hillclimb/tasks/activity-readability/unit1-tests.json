@@ -1,0 +1,80 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+      "deviceName" : "Hillclimb iPhone 17 Pro",
+      "modelName" : "iPhone 17 Pro",
+      "osBuildNumber" : "23C54",
+      "osVersion" : "26.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "0.007s",
+                  "durationInSeconds" : 0.006952047348022461,
+                  "name" : "testByteAndSurfaceCapsConserveEveryOriginalWithoutParsingCopy()",
+                  "nodeIdentifier" : "ActivityReadabilityTests/testByteAndSurfaceCapsConserveEveryOriginalWithoutParsingCopy()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityReadabilityTests/testByteAndSurfaceCapsConserveEveryOriginalWithoutParsingCopy",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.02s",
+                  "durationInSeconds" : 0.019621968269348145,
+                  "name" : "testFittingTextAndSummaryLikeUserTextRemainVerbatim()",
+                  "nodeIdentifier" : "ActivityReadabilityTests/testFittingTextAndSummaryLikeUserTextRemainVerbatim()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityReadabilityTests/testFittingTextAndSummaryLikeUserTextRemainVerbatim",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.11s",
+                  "durationInSeconds" : 0.11300396919250488,
+                  "name" : "testLongWordAndUnicodePreserveGraphemesAndWidth()",
+                  "nodeIdentifier" : "ActivityReadabilityTests/testLongWordAndUnicodePreserveGraphemesAndWidth()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityReadabilityTests/testLongWordAndUnicodePreserveGraphemesAndWidth",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "0.00054s",
+                  "durationInSeconds" : 0.0005449056625366211,
+                  "name" : "testRenderedPrefixEndsAtCompleteWord()",
+                  "nodeIdentifier" : "ActivityReadabilityTests/testRenderedPrefixEndsAtCompleteWord()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityReadabilityTests/testRenderedPrefixEndsAtCompleteWord",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "ActivityReadabilityTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityReadabilityTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "LazyMansRemindersTests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests",
+          "nodeType" : "Unit test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "LazyMansReminders",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}

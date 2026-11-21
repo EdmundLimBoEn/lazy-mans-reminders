@@ -1,0 +1,3 @@
+"""Only this task's pinned session. Written by gpt-6.1-sol in Codex on behalf of Edmund."""
+import subprocess,json,pathlib,sys,datetime
+p=pathlib.Path(__file__).parent;f=p/'session-operations.json';rows=json.loads(f.read_text()) if f.exists() else [];cmd=[json.loads((p/'device.json').read_text())['command'],*sys.argv[1:]];r=subprocess.run(cmd,capture_output=True,text=True);rows.append(dict(command=cmd,exit=r.returncode,stdout=r.stdout,stderr=r.stderr,utc=datetime.datetime.now(datetime.timezone.utc).isoformat()));f.write_text(json.dumps(rows,indent=2));print(r.stdout,r.stderr);sys.exit(r.returncode)

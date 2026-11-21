@@ -1,0 +1,37 @@
+{
+  "total": 276,
+  "results": [
+    {
+      "target": "unit",
+      "result": "Passed",
+      "count": 260
+    },
+    {
+      "target": "UI",
+      "result": "Passed",
+      "count": 15
+    },
+    {
+      "target": "UI",
+      "result": "Failed",
+      "count": 1
+    }
+  ],
+  "failed": [
+    {
+      "children": [
+        {
+          "name": "Failed to get matching snapshot: No matches found for first query match sequence: `Descendants matching type Keyboard`, given input App element pid: 64462",
+          "nodeType": "Failure Message"
+        }
+      ],
+      "duration": "23s",
+      "durationInSeconds": 23.553849935531616,
+      "name": "testFocusedEmailAndPasswordClearKeyboardInBothAppearances()",
+      "nodeIdentifier": "SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances()",
+      "nodeIdentifierURL": "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances",
+      "nodeType": "Test Case",
+      "result": "Failed"
+    }
+  ]
+}

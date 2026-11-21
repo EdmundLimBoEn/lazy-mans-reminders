@@ -1,0 +1,12 @@
+{
+  "command": [
+    "deno",
+    "test",
+    "--cached-only",
+    "hillclimb/tasks/activity-overflow/offline-apns_test.ts"
+  ],
+  "exit": 0,
+  "startedUTC": "2026-11-04T20:24:32.025947+00:00",
+  "stdout": "running 4 tests from ./hillclimb/tasks/activity-overflow/offline-apns_test.ts\nten multiline originals retain five hidden lines in legacy-compatible APNs ... ok (3ms)\npayload cap counts metadata, Unicode and huge alerts for every event ... ok (23ms)\nliteral summary and empty lines remain text, legacy input stays additive-free ... ok (0ms)\nmock board loader carries metadata with no service calls ... ok (0ms)\n\nok | 4 passed | 0 failed (28ms)\n\n",
+  "stderr": "Check hillclimb/tasks/activity-overflow/offline-apns_test.ts\n"
+}

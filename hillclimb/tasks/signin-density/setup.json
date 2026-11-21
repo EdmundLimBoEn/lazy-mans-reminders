@@ -1,0 +1,24 @@
+{
+  "commands": [
+    [
+      "xcodegen",
+      "generate",
+      "--spec",
+      "ios/project.yml"
+    ],
+    [
+      "xcodebuild",
+      "-resolvePackageDependencies",
+      "-project",
+      "ios/LazyMansReminders.xcodeproj",
+      "-scheme",
+      "LazyMansReminders",
+      "-derivedDataPath",
+      "/tmp/hillclimb-signin-density-DD"
+    ]
+  ],
+  "observedExit": 0,
+  "note": "Initial resolve stdout filtered directly, not written to a log. One initial resolve only.",
+  "pinsSHA256": "8abaa92cc75beda2009582349680b2c75e0365df1428e193f379acb42ac17508",
+  "configSHA256": "1bf91a7386cfccdcf4986966733cbbb8309fb3cbb549512a72087c06eb69e05e"
+}

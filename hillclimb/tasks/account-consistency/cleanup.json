@@ -1,0 +1,61 @@
+{
+  "operations": [
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-3004342518d3c38a14978736/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=account",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-3004342518d3c38a14978736\n",
+      "stderr": "",
+      "time": 1793813972.7111628
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-3004342518d3c38a14978736/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": "",
+      "time": 1793813973.023276
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-3004342518d3c38a14978736/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": "",
+      "time": 1793813973.429296
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-3004342518d3c38a14978736/agent-device",
+        "close",
+        "systems.edmundlim.NotepadHillclimb"
+      ],
+      "exit": 0,
+      "stdout": "Closed: t3-3004342518d3c38a14978736\n",
+      "stderr": "",
+      "time": 1793813974.188452
+    }
+  ],
+  "createdActivityIDs": [],
+  "clearedActivityIDs": [],
+  "shutdownRequested": false,
+  "deviceStillBooted": true
+}

@@ -1,0 +1,15 @@
+{
+  "candidateVersion": 2,
+  "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+  "lastSuccessfulCommit": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+  "correctedSourceUncommitted": true,
+  "fullSuite": "running: full-v2",
+  "requiredChecksPassed": false,
+  "reviewerGate": {
+    "required": false,
+    "status": "pending parent reviews"
+  },
+  "knownExternalBlocker": "Shared Git pack read errors and invalid AccountView object prevent committing; no root pack repair authorized or attempted",
+  "sourcePatch": "composition.patch",
+  "RTPreservedByteForByte": true
+}

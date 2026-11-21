@@ -1,0 +1,28 @@
+{
+  "commonFailureInsights" : [
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityDensityUITests/testDarkXXXLTitleAndFinalInkCapacityDensity",
+        "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityDensityUITests/testLightXXXLTitleAndFinalInkCapacityDensity"
+      ],
+      "description" : "XCTAssertGreaterThanOrEqual failed: (\"68.16666666666663\") is less than (\"69.0\")",
+      "failuresCount" : 2,
+      "impact" : "(50%)"
+    },
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityDensityUITests/testDarkDefaultCapacityDensity",
+        "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/BoardCapacityDensityUITests/testLightDefaultCapacityDensity"
+      ],
+      "description" : "XCTAssertGreaterThanOrEqual failed: (\"30.83333333333337\") is less than (\"32.0\")",
+      "failuresCount" : 2,
+      "impact" : "(50%)"
+    }
+  ],
+  "failureDistributionInsights" : [
+
+  ],
+  "longestTestRunsInsights" : [
+
+  ]
+}

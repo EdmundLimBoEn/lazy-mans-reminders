@@ -1,0 +1,45 @@
+{
+  "commands": [
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "get_app_container",
+        "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+        "systems.edmundlim.NotepadHillclimb",
+        "app"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/F6906C8C-67C3-41E4-9F3B-54E8296A38BD/LazyMansReminders.app\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "xcrun",
+        "simctl",
+        "get_app_container",
+        "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+        "systems.edmundlim.NotepadHillclimb",
+        "data"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Data/Application/7B177575-9E67-4E2E-B138-FDBCBBCB2BEA\n",
+      "stderr": ""
+    }
+  ],
+  "hashes": {
+    "LazyMansReminders": {
+      "installed": "5f648760d91db51f321b28fdb2eecfb0a55fbf4f9fd31cd69d0c90de4813ccd0",
+      "built": "5f648760d91db51f321b28fdb2eecfb0a55fbf4f9fd31cd69d0c90de4813ccd0",
+      "match": true
+    },
+    "LazyMansReminders.debug.dylib": {
+      "installed": "03c09e32e14d64a66ca5e51cc9d5b0b964ecea8764d84e4b58e8da3fcb6b613a",
+      "built": "03c09e32e14d64a66ca5e51cc9d5b0b964ecea8764d84e4b58e8da3fcb6b613a",
+      "match": true
+    }
+  },
+  "remainingOwnedActivityIDs": [],
+  "app": "/Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/F6906C8C-67C3-41E4-9F3B-54E8296A38BD/LazyMansReminders.app",
+  "data": "/Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Data/Application/7B177575-9E67-4E2E-B138-FDBCBBCB2BEA"
+}

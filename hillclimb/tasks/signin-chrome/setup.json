@@ -1,0 +1,20 @@
+{
+  "base": "cfc7954",
+  "branch": "t3/signin-chrome-polish",
+  "config": "Created only absent ios/Config.xcconfig from this checkout Config.example.xcconfig; removed team placeholder and replaced systems.edmundlim.LazyMansReminders with systems.edmundlim.NotepadHillclimb throughout.",
+  "xcodegen": {
+    "command": [
+      "xcodegen",
+      "generate",
+      "--spec",
+      "ios/project.yml"
+    ],
+    "exit": 0,
+    "result": "Created LazyMansReminders.xcodeproj; no tracked generated-file change"
+  },
+  "packageResolution": "resolve-process.json; initial only",
+  "device": "local/8E8380DE-364D-4899-99B8-D15ED0494FFD",
+  "initialFreeDisk": "13GiB",
+  "ownDD": "/tmp/hillclimb-O-signin-DD",
+  "restrictions": "No other caches/builds/private configs touched; no remote git or delivery actions."
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "command": [
+      "lipo",
+      "-info",
+      "/tmp/hillclimb-round5-048fb58b-DD/Build/Products/Debug-iphonesimulator/LazyMansReminders.app/LazyMansReminders"
+    ],
+    "stdout": "Non-fat file: /tmp/hillclimb-round5-048fb58b-DD/Build/Products/Debug-iphonesimulator/LazyMansReminders.app/LazyMansReminders is architecture: arm64\n"
+  },
+  {
+    "command": [
+      "lipo",
+      "-info",
+      "/tmp/hillclimb-round5-048fb58b-DD/Build/Products/Debug-iphonesimulator/LazyMansReminders.app/LazyMansReminders.debug.dylib"
+    ],
+    "stdout": "Non-fat file: /tmp/hillclimb-round5-048fb58b-DD/Build/Products/Debug-iphonesimulator/LazyMansReminders.app/LazyMansReminders.debug.dylib is architecture: arm64\n"
+  },
+  {
+    "command": [
+      "lipo",
+      "-info",
+      "/tmp/hillclimb-round5-048fb58b-DD/Build/Products/Release-iphonesimulator/LazyMansReminders.app/LazyMansReminders"
+    ],
+    "stdout": "Non-fat file: /tmp/hillclimb-round5-048fb58b-DD/Build/Products/Release-iphonesimulator/LazyMansReminders.app/LazyMansReminders is architecture: arm64\n"
+  }
+]

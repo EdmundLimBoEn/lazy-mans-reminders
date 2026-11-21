@@ -3,8 +3,8 @@ import XCTest
 @testable import LazyMansReminders
 
 final class LMRChromeTests: XCTestCase {
-    func testAppleFillIsBlackInDarkMode() {
-        XCTAssertEqual(SignInAppleFill.fill(for: .dark), .black)
+    func testAppleFillHasVisibleNativeOutlineInDarkMode() {
+        XCTAssertEqual(SignInAppleFill.fill(for: .dark), .whiteOutline)
     }
 
     func testAppleFillIsWhiteOutlineInLightMode() {

@@ -1,0 +1,77 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+        "deviceName" : "Hillclimb iPhone 17 Pro",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 3,
+      "passedTests" : 265,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "LazyMansReminders · Built with macOS 27.2",
+  "expectedFailures" : 0,
+  "failedTests" : 3,
+  "finishTime" : 1793854308.627,
+  "passedTests" : 265,
+  "result" : "Failed",
+  "runtimeWarnings" : [
+
+  ],
+  "skippedTests" : 0,
+  "startTime" : 1793853550.947,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+    {
+      "failureText" : "Test exceeded execution time allowance of 2 minutes",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 264,
+      "testIdentifierString" : "AccessibilitySettingsUITests/testCombinedActualSettingsErrorContrast()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests/testCombinedActualSettingsErrorContrast",
+      "testName" : "testCombinedActualSettingsErrorContrast()"
+    },
+    {
+      "failureText" : "Test exceeded execution time allowance of 2 minutes",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 265,
+      "testIdentifierString" : "AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix",
+      "testName" : "testCombinedActualSettingsKeyboardMatrix()"
+    },
+    {
+      "failureText" : "Testing was canceled",
+      "targetName" : "HillclimbUITests",
+      "testIdentifier" : 268,
+      "testIdentifierString" : "AccountChromeUITests/testNativeTitleBands()",
+      "testIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountChromeUITests/testNativeTitleBands",
+      "testName" : "testNativeTitleBands()"
+    }
+  ],
+  "title" : "Test - LazyMansReminders",
+  "topInsights" : [
+    {
+      "category" : "Common Failures",
+      "impact" : "66% of failures",
+      "text" : "2 runs of 2 tests failed with Test exceeded execution time allowance of 2 minutes"
+    },
+    {
+      "category" : "Longest Test Runs",
+      "impact" : "28% of duration",
+      "text" : "2 longest test runs with outlier durations exceeding 0.06s (three standard deviations)"
+    }
+  ],
+  "totalTestCount" : 268
+}

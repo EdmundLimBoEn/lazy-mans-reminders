@@ -1,0 +1,56 @@
+Attributes: Application, 0x1020649d0, pid: 966, label: 'Notepad'
+Element subtree:
+ →Application, 0x1020649d0, pid: 966, label: 'Notepad'
+    Window (Main), 0x10205c5b0, {{0.0, 0.0}, {402.0, 874.0}}
+      Other, 0x10209b9e0, {{0.0, 0.0}, {402.0, 874.0}}
+        Other, 0x1020b5b50, {{0.0, 0.0}, {402.0, 874.0}}
+          Other, 0x10206dc30, {{0.0, 0.0}, {402.0, 874.0}}
+            Other, 0x10206c350, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x102034d10, {{0.0, 0.0}, {402.0, 874.0}}
+                NavigationBar, 0x1020bc370, {{0.0, 62.0}, {402.0, 54.0}}, identifier: 'Your Board'
+                  StaticText, 0x1020a7bf0, {{152.3, 65.3}, {97.3, 23.3}}, label: 'Your Board'
+                  Other, 0x102043a40, {{338.0, 66.0}, {44.0, 36.0}}, label: 'Account'
+                    Other, 0x1020aaaa0, {{338.0, 66.0}, {44.0, 36.0}}
+                      Button, 0x10204a950, {{338.0, 62.0}, {44.0, 44.0}}, label: 'Account'
+                  StaticText, 0x10206e340, {{185.7, 88.3}, {30.7, 14.3}}, label: '0 of 7'
+                Other, 0x102081350, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x102094fb0, {{0.0, 0.0}, {402.0, 874.0}}
+                    Other, 0x1020a4e30, {{0.0, 0.0}, {402.0, 874.0}}
+                      Other, 0x1020b7420, {{0.0, 0.0}, {402.0, 874.0}}
+                        ScrollView, 0x1020408c0, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x1020ad900, {{0.0, 0.0}, {402.0, 874.0}}
+                            Other, 0x1020720c0, {{0.0, 0.0}, {402.0, 170.8}}
+                          Other, 0x10204d780, {{0.0, 0.0}, {402.0, 874.0}}
+                          Other, 0x1020abfe0, {{0.0, 116.0}, {402.0, 560.7}}
+                            StaticText, 0x10207e960, {{146.0, 136.0}, {110.0, 110.7}}, label: 'All Clear'
+                            StaticText, 0x102083790, {{65.2, 249.7}, {271.7, 51.3}}, label: 'Nothing on your board. Add a reminder below.'
+                            Other, 0x1020a5570, {{20.0, 359.0}, {372.0, 309.6}}
+                              StaticText, 0x102068380, {{20.0, 369.2}, {232.0, 25.3}}, label: 'Keep Your Board in View'
+                              Button, 0x1020ab1c0, {{348.0, 359.0}, {44.0, 44.0}}, identifier: 'xmark.circle.fill', label: 'Dismiss tip'
+                              Image, 0x1020bb1a0, {{23.0, 408.3}, {28.0, 23.0}}, identifier: 'lock.rectangle.on.rectangle', label: 'lock.rectangle.on.rectangle'
+                              StaticText, 0x10208b6e0, {{23.0, 407.1}, {349.0, 103.3}}, label: 'Add the Notepad widget to your Lock Screen: touch and hold the Lock Screen, tap Customize, then Add Widgets.'
+                              Image, 0x1020a7880, {{22.3, 524.0}, {21.7, 25.0}}, identifier: 'bell.badge', label: 'bell.badge'
+                              StaticText, 0x10209dca0, {{22.3, 524.0}, {352.3, 78.4}}, label: 'Allow Live Activities so your board stays on the Lock Screen (Settings → Notepad → Live Activities).'
+                              Image, 0x102044f40, {{23.0, 616.0}, {24.3, 24.3}}, identifier: 'app.badge', label: 'Notifications'
+                              StaticText, 0x10207c630, {{23.0, 616.0}, {351.0, 52.6}}, label: 'Keep notifications on so reminders and board updates reach you.'
+                          Other, 0x1020b1750, {{369.0, 116.0}, {30.0, 643.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                            Other, 0x10205efb0, {{396.0, 201.3}, {3.0, 554.7}}
+                          Other, 0x1020a8a30, {{369.0, 116.0}, {30.0, 643.0}}, label: 'Vertical scroll bar, 1 page', value: 0%
+                            Other, 0x1020793f0, {{396.0, 201.3}, {3.0, 554.7}}
+                        Other, 0x102074ff0, {{0.0, 759.0}, {402.0, 81.0}}
+                          Other, 0x10208ba50, {{30.0, 776.7}, {290.0, 44.0}}, label: 'New reminder', value: New reminder
+                            TextField, 0x102058370, {{30.0, 784.0}, {290.0, 29.0}}, placeholderValue: 'New reminder'
+                              Other, 0x1020808a0, {{31.0, 795.5}, {289.0, 14.5}}, label: 'Horizontal scroll bar, 1 page', value: 0%
+                                Other, 0x1020aa380, {{34.0, 807.0}, {283.0, 3.0}}
+                          Button, 0x1020ae000, {{328.0, 772.0}, {53.0, 53.0}}, label: 'Add reminder', Disabled
+                            Image, 0x10205aea0, {{328.0, 772.0}, {53.0, 53.0}}, identifier: 'arrow.up', label: 'Up', Disabled
+                Other, 0x102040c60, {{0.0, 0.0}, {402.0, 874.0}}
+                  Other, 0x10209bd90, {{0.0, 0.0}, {402.0, 874.0}}
+              Other, 0x1020af2c0, {{0.0, 62.0}, {1.0, 1.0}}, identifier: 'hillclimb.geometry', value: {"authState":[0,0,...
+Path to element:
+ →Application, 0x1020649d0, pid: 966, label: 'Notepad'
+Query chain:
+ →Find: Target Application 'systems.edmundlim.NotepadHillclimb'
+  Output: {
+    Application, 0x102044850, pid: 966, label: 'Notepad'
+  }

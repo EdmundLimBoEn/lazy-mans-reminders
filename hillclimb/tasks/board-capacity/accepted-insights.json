@@ -1,0 +1,26 @@
+{
+  "commonFailureInsights" : [
+
+  ],
+  "failureDistributionInsights" : [
+
+  ],
+  "longestTestRunsInsights" : [
+    {
+      "associatedTestIdentifiers" : [
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testSameUserNewJWTSessionRejectsOutstandingMutationsWithoutClearingData",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ActivityLayoutTests/testRenderedLastLineFitsBothNativeSurfaceBudgets",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/AuthSessionClientTests/testConstructingClientDoesNotStartAnSDKInitialRefreshOutsideGate",
+        "test://com.apple.xcode/LazyMansReminders/LazyMansRemindersTests/ReminderStoreIdentityTests/testFailedNearExpiryRefreshRejectsCreateAfterSameAccountSignsInAgain"
+      ],
+      "deviceName" : "Hillclimb Board iPhone 17 Pro",
+      "durationOfSlowTests" : 0.6073160171508789,
+      "impact" : "(39%)",
+      "meanTime" : "0.0058s across 263 test runs",
+      "osNameAndVersion" : "iOS Simulator 26.2",
+      "targetName" : "LazyMansRemindersTests",
+      "testPlanConfigurationName" : "Test Scheme Action",
+      "title" : "4 longest test runs with outlier durations exceeding 0.07s (three standard deviations)"
+    }
+  ]
+}

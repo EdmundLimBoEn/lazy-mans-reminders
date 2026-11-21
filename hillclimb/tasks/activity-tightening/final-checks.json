@@ -1,0 +1,15 @@
+{
+  "taskPythonAST": "passed",
+  "diffCheck": "passed",
+  "fullCommandUnfiltered": true,
+  "full293IDsPassed": true,
+  "allNamed285And293BaselinesRetained": true,
+  "candidatePatchSHA256": "435d1202af3484986e9639b4cde213f6f403f95ceda267dfc6df44132f604ae1",
+  "initialDiagnosticFailures": [
+    "unsupported non-mutating appearance read; help advice followed once",
+    "overstrict exact cross-recording crop equality assertion; retained as failed diagnostic, not a functional test",
+    "final artifact preflight AssertionError found early empty candidate.patch (captured before candidate mutation); regenerated from immutable tested source commit; no source or test change"
+  ],
+  "patchRegenerationCommand": "git diff cfc7954 9b3aea13ecc2c9b8485e1b4cf3c06b7066a2ee7c -- ios/Shared/LockScreenLineBudget.swift > hillclimb/tasks/activity-tightening/candidate.patch",
+  "PillowWarning": "Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead."
+}

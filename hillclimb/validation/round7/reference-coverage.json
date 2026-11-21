@@ -1,0 +1,837 @@
+{
+  "count": 17,
+  "pairs": [
+    {
+      "reference": {
+        "path": "hillclimb/reference/reminders-bottom-dark.png",
+        "sha256": "4c22960d1096e8be16871dab6ee8cebba3f02e8d5eac08fd64c529ba47b1b0d3",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-bottom-dark.png",
+          "app": "reminders",
+          "bundle_id": "com.apple.reminders",
+          "state": "bottom",
+          "appearance": "dark",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "pixel_density": 3,
+          "sha256": "4c22960d1096e8be16871dab6ee8cebba3f02e8d5eac08fd64c529ba47b1b0d3",
+          "capture_time_utc": "2026-11-04T12:34:48.714383+00:00",
+          "capture_time_source": "filesystem mtime immediately after screenshot",
+          "content": "Same list scrolled bottom; Final demo reminder fully visible above add control; no keyboard; collapsed navigation title.",
+          "inspection": "saved PNG visually inspected via view_image",
+          "reference_status": "usable",
+          "limitation": null
+        }
+      },
+      "closestNative": {
+        "file": "board/dark-default-true-bottom-after-pull.png",
+        "sha256": "96e1a8439104cc54ea2fd92f386c194e71f1860325ea9471d079cdf2ceee8e88",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "board",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "dark",
+        "size": "default",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Seeded app paragraphs differ from shorter Apple reminder content"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/reminders-compose-light.png",
+        "sha256": "9bb39e05f2903af8680faef8d3421479040bec8e8dcf79046ca7af1f107b2b04",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-compose-light.png",
+          "app": "reminders",
+          "bundle_id": "com.apple.reminders",
+          "state": "compose",
+          "appearance": "light",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "pixel_density": 3,
+          "sha256": "9bb39e05f2903af8680faef8d3421479040bec8e8dcf79046ca7af1f107b2b04",
+          "capture_time_utc": "2026-11-04T12:34:41.690414+00:00",
+          "capture_time_source": "filesystem mtime immediately after screenshot",
+          "content": "Inline creation of final seeded row Final demo reminder, caret at end, keyboard visible; preceding rows visible.",
+          "inspection": "saved PNG visually inspected via view_image",
+          "reference_status": "usable",
+          "limitation": null
+        }
+      },
+      "closestNative": {
+        "file": "keyboards/signin-light-default-keyboard.png",
+        "sha256": "ad1695a0097772809959db36d96795b5ccbc03a0cc4b1f251961bbf785a3ddbd",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "keyboards",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "light",
+        "size": "default",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Apple reminder composer and Notepad authentication/composer differ semantically; native keyboard/form treatment only"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/reminders-empty-light.png",
+        "sha256": "40e7276818dd8242eecdf7cc201a93594bc8adb2222ca0f6da517a3ceeb7547f",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-empty-light.png",
+          "app": "reminders",
+          "bundle_id": "com.apple.reminders",
+          "state": "empty",
+          "appearance": "light",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "pixel_density": 3,
+          "sha256": "40e7276818dd8242eecdf7cc201a93594bc8adb2222ca0f6da517a3ceeb7547f",
+          "capture_time_utc": "2026-11-04T12:33:38.774356+00:00",
+          "capture_time_source": "filesystem mtime immediately after screenshot",
+          "content": "Default local Reminders list, No Reminders, before seeding; no keyboard.",
+          "inspection": "saved PNG visually inspected via view_image",
+          "reference_status": "usable",
+          "limitation": null
+        }
+      },
+      "closestNative": {
+        "file": "empty-light-default-top.png",
+        "sha256": "a1965398906f349ea64e06de908a91ff5be42949e964db94db6236f1f1a78e11",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "core",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "light",
+        "size": "default",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Notepad setup guide and controls differ from Apple empty list"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/reminders-sheet-dark.png",
+        "sha256": "5cf364339a33db8d2c00ace35e5ab37e751ad591d8986faf5856347f96f9a37a",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-sheet-dark.png",
+          "app": "reminders",
+          "bundle_id": "com.apple.reminders",
+          "state": "sheet",
+          "appearance": "dark",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "pixel_density": 3,
+          "sha256": "5cf364339a33db8d2c00ace35e5ab37e751ad591d8986faf5856347f96f9a37a",
+          "capture_time_utc": "2026-11-04T12:35:35.376334+00:00",
+          "capture_time_source": "filesystem mtime immediately after screenshot",
+          "content": "Buy oats item Details sheet; Notes empty, Date/Time/Location off, Priority None, default Reminders list; no keyboard.",
+          "inspection": "saved PNG visually inspected via view_image",
+          "reference_status": "usable",
+          "limitation": null
+        }
+      },
+      "closestNative": {
+        "file": "account-enabled/screens/normal-dark-default-large-top.png",
+        "sha256": "a41f83f704d032b8b71d1575bb7700a97eded5afdc41f7792aa189ab7cce76ce",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "account-enabled",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "dark",
+        "size": "default",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Apple Details and Notepad Account differ in controls, paragraphs and purpose; no exact medium detent counterpart"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/reminders-top-light.png",
+        "sha256": "a495e9b46ef153d8fb917f46f3bf6f4550f4688070cda3d4f7fb3b1686e18df9",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-top-light.png",
+          "app": "reminders",
+          "bundle_id": "com.apple.reminders",
+          "state": "top",
+          "appearance": "light",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "pixel_density": 3,
+          "sha256": "a495e9b46ef153d8fb917f46f3bf6f4550f4688070cda3d4f7fb3b1686e18df9",
+          "capture_time_utc": "2026-11-04T12:34:58.677404+00:00",
+          "capture_time_source": "filesystem mtime immediately after screenshot",
+          "content": "Default local Reminders list, 16 incomplete demo rows, scrolled top with Buy oats first; no keyboard. Native bottom fade under add control.",
+          "inspection": "saved PNG visually inspected via view_image",
+          "reference_status": "usable",
+          "limitation": null
+        }
+      },
+      "closestNative": {
+        "file": "board/light-default-top.png",
+        "sha256": "02009fe22c5a9e709cd11bf66c1706863b1bf1980c81b41e0094155ab614a58a",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "board",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "light",
+        "size": "default",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Seeded app paragraphs differ from shorter Apple reminder content"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/round2/reminders-bottom-light.png",
+        "sha256": "2d1738a934818f9ea8774f3917df571b8719b1e458e25a45a73b87011fc7eb5d",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-bottom-light.png",
+          "state": "bottom",
+          "appearance": "light",
+          "reference_status": "usable",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "pixel_density": 3,
+          "sha256": "2d1738a934818f9ea8774f3917df571b8719b1e458e25a45a73b87011fc7eb5d",
+          "settling": "after navigation/style command and fresh snapshot; visually inspected saved PNG",
+          "capture_time_utc": "2026-11-04T14:11:50.610582+00:00",
+          "content": "Existing 16-row list; Final demo reminder fully visible"
+        }
+      },
+      "closestNative": {
+        "file": "board/light-default-true-bottom-after-pull.png",
+        "sha256": "4eb29d69a177fd3b484922049f5c33568da36387c7bcafcadebd264d780516fc",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "board",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "light",
+        "size": "default",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Seeded app paragraphs differ from shorter Apple reminder content"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/round2/reminders-compose-dark.png",
+        "sha256": "78160a2896c1f1516a618502b70bb524e9c082003c9e2c14b6063eef23e87062",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-compose-dark.png",
+          "state": "compose",
+          "appearance": "dark",
+          "reference_status": "usable",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "pixel_density": 3,
+          "sha256": "78160a2896c1f1516a618502b70bb524e9c082003c9e2c14b6063eef23e87062",
+          "settling": "after navigation/style command and fresh snapshot; visually inspected saved PNG",
+          "capture_time_utc": "2026-11-04T14:14:47.125291+00:00",
+          "content": "Blank new row with real keyboard; no text entered; Done dismisses empty row"
+        }
+      },
+      "closestNative": {
+        "file": "keyboards/signin-dark-default-keyboard.png",
+        "sha256": "7a187f5006b3890c02458f2425e9a0e6651c52fbc98245c55e10eb6a71cb63a4",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "keyboards",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "dark",
+        "size": "default",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Apple reminder composer and Notepad authentication/composer differ semantically; native keyboard/form treatment only"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/round2/reminders-sheet-light.png",
+        "sha256": "41af5c21715eba6fae23b6881ebec10e940c1816b863cc39f6ac542c431d2c65",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-sheet-light.png",
+          "state": "sheet",
+          "appearance": "light",
+          "reference_status": "usable",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "pixel_density": 3,
+          "sha256": "41af5c21715eba6fae23b6881ebec10e940c1816b863cc39f6ac542c431d2c65",
+          "settling": "after navigation/style command and fresh snapshot; visually inspected saved PNG",
+          "capture_time_utc": "2026-11-04T14:12:51.092842+00:00",
+          "content": "Details on existing Buy oats; canceled without editing"
+        }
+      },
+      "closestNative": {
+        "file": "account-enabled/screens/normal-light-default-large-top.png",
+        "sha256": "0578be2799634729cfc819bc4127195e5542d1d93e2f0ba52c95ffbfa15b0c3d",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "account-enabled",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "light",
+        "size": "default",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Apple Details and Notepad Account differ in controls, paragraphs and purpose; no exact medium detent counterpart"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/round2/reminders-top-dark.png",
+        "sha256": "2f2fa6c8c2d289d7eb3b675efc4783c467bf54fab04f432f7a38c28274ab3943",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-top-dark.png",
+          "state": "top",
+          "appearance": "dark",
+          "reference_status": "usable",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "pixel_density": 3,
+          "sha256": "2f2fa6c8c2d289d7eb3b675efc4783c467bf54fab04f432f7a38c28274ab3943",
+          "settling": "after navigation/style command and fresh snapshot; visually inspected saved PNG",
+          "capture_time_utc": "2026-11-04T14:14:11.889269+00:00",
+          "content": "Existing seeded list at top; Buy oats first"
+        }
+      },
+      "closestNative": {
+        "file": "board/dark-default-top.png",
+        "sha256": "5b00a586dec970fc13f4219efeb18e33017870a072ef097598a4b1dd1b719490",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "board",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "dark",
+        "size": "default",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Seeded app paragraphs differ from shorter Apple reminder content"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/round3/reminders-top-light-XXXL.png",
+        "sha256": "7516899f5cda16a4fff290f73680543f5b7d77d259e8c1dc7633662475afc7c0",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-top-light-XXXL.png",
+          "state": "top",
+          "appearance": "light",
+          "size": "XXXL",
+          "reference_status": "usable",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "sha256": "7516899f5cda16a4fff290f73680543f5b7d77d259e8c1dc7633662475afc7c0",
+          "capture_time_utc": "2026-11-04T16:05:45.478089+00:00",
+          "inspection": "Visually inspected final8-image contact sheet; actual XXXL system text setting on original17; stable snapshot before screenshot."
+        }
+      },
+      "closestNative": {
+        "file": "board/light-XXXL-top.png",
+        "sha256": "139cdea27eb2c72f3b0c1db46afa5272794f20383d620ed270cf5ffbdbb7c3ac",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "board",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "light",
+        "size": "XXXL",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Seeded app paragraphs differ from shorter Apple reminder content"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/round3/reminders-top-dark-XXXL.png",
+        "sha256": "d01b4ed86c8a655487d4e07c529c5aafe28b410470ad957197cc3102c3f4677b",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-top-dark-XXXL.png",
+          "state": "top",
+          "appearance": "dark",
+          "size": "XXXL",
+          "reference_status": "usable",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "sha256": "d01b4ed86c8a655487d4e07c529c5aafe28b410470ad957197cc3102c3f4677b",
+          "capture_time_utc": "2026-11-04T16:05:48.757260+00:00",
+          "inspection": "Visually inspected final8-image contact sheet; actual XXXL system text setting on original17; stable snapshot before screenshot."
+        }
+      },
+      "closestNative": {
+        "file": "board/dark-XXXL-top.png",
+        "sha256": "390211c7d8bb54a7041788e111324e68c1745bebf809cb6ffa261473fc4300bb",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "board",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "dark",
+        "size": "XXXL",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Seeded app paragraphs differ from shorter Apple reminder content"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/round3/reminders-bottom-dark-XXXL.png",
+        "sha256": "4e5d11ec9bc57b20725695a6a8966af1bb5e2eaecef7b961343db017cd51b908",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-bottom-dark-XXXL.png",
+          "state": "bottom",
+          "appearance": "dark",
+          "size": "XXXL",
+          "reference_status": "usable",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "sha256": "4e5d11ec9bc57b20725695a6a8966af1bb5e2eaecef7b961343db017cd51b908",
+          "capture_time_utc": "2026-11-04T16:06:38.434646+00:00",
+          "inspection": "Visually inspected final8-image contact sheet; actual XXXL system text setting on original17; stable snapshot before screenshot."
+        }
+      },
+      "closestNative": {
+        "file": "board/dark-XXXL-true-bottom-after-pull.png",
+        "sha256": "113689d5cb24f99d83c982db9bea4549a2d1299bb7f98bec16b8b9a8e6e5dbdc",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "board",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "dark",
+        "size": "XXXL",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Seeded app paragraphs differ from shorter Apple reminder content"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/round3/reminders-bottom-light-XXXL.png",
+        "sha256": "096f7e3d070efd08e1a202143261d7dfc1e2f3a611fa1e4da67189b22a6e52cf",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-bottom-light-XXXL.png",
+          "state": "bottom",
+          "appearance": "light",
+          "size": "XXXL",
+          "reference_status": "usable",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "sha256": "096f7e3d070efd08e1a202143261d7dfc1e2f3a611fa1e4da67189b22a6e52cf",
+          "capture_time_utc": "2026-11-04T16:06:41.736778+00:00",
+          "inspection": "Visually inspected final8-image contact sheet; actual XXXL system text setting on original17; stable snapshot before screenshot."
+        }
+      },
+      "closestNative": {
+        "file": "board/light-XXXL-true-bottom-after-pull.png",
+        "sha256": "130c0328e1cb9c7d6423c4bf257c47f1353e8c2e605bfdfb088b80a07d28b49c",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "board",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "light",
+        "size": "XXXL",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Seeded app paragraphs differ from shorter Apple reminder content"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/round3/reminders-compose-light-XXXL.png",
+        "sha256": "5aedfe314925c98fb4b2b1836114eceaa4e3738cc17c06d3ccd3fd5d2a9bcdc5",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-compose-light-XXXL.png",
+          "state": "compose",
+          "appearance": "light",
+          "size": "XXXL",
+          "reference_status": "usable",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "sha256": "5aedfe314925c98fb4b2b1836114eceaa4e3738cc17c06d3ccd3fd5d2a9bcdc5",
+          "capture_time_utc": "2026-11-04T16:07:06.415131+00:00",
+          "inspection": "Visually inspected final8-image contact sheet; actual XXXL system text setting on original17; stable snapshot before screenshot."
+        }
+      },
+      "closestNative": {
+        "file": "keyboards/signin-light-XXXL-keyboard.png",
+        "sha256": "19064071460789f8717e645f229be78b5c6f3f5fc90247d87f03f121e5ad6bdb",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "keyboards",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "light",
+        "size": "XXXL",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Apple reminder composer and Notepad authentication/composer differ semantically; native keyboard/form treatment only"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/round3/reminders-compose-dark-XXXL.png",
+        "sha256": "0a24fd4dae272585157d1b2fcbd41ed42ad74d910e77235da1ed2e02650c30e3",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-compose-dark-XXXL.png",
+          "state": "compose",
+          "appearance": "dark",
+          "size": "XXXL",
+          "reference_status": "usable",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "sha256": "0a24fd4dae272585157d1b2fcbd41ed42ad74d910e77235da1ed2e02650c30e3",
+          "capture_time_utc": "2026-11-04T16:07:09.724280+00:00",
+          "inspection": "Visually inspected final8-image contact sheet; actual XXXL system text setting on original17; stable snapshot before screenshot."
+        }
+      },
+      "closestNative": {
+        "file": "keyboards/signin-dark-XXXL-keyboard.png",
+        "sha256": "2e9e0b2016e7f1bdea08587d6508f1a875d0af0a011263d88ab027da15ddadf2",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "keyboards",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "dark",
+        "size": "XXXL",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Apple reminder composer and Notepad authentication/composer differ semantically; native keyboard/form treatment only"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/round3/reminders-sheet-dark-XXXL.png",
+        "sha256": "24c7aa6c208c4302157e885ce87d5bf241804640dcbb3d84465a8dcd49f79e04",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-sheet-dark-XXXL.png",
+          "state": "sheet",
+          "appearance": "dark",
+          "size": "XXXL",
+          "reference_status": "usable",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "sha256": "24c7aa6c208c4302157e885ce87d5bf241804640dcbb3d84465a8dcd49f79e04",
+          "capture_time_utc": "2026-11-04T16:08:10.273823+00:00",
+          "inspection": "Visually inspected final8-image contact sheet; actual XXXL system text setting on original17; stable snapshot before screenshot."
+        }
+      },
+      "closestNative": {
+        "file": "account-enabled/screens/normal-dark-XXXL-large-top.png",
+        "sha256": "6815bc50b3f4e6b64a4cb8dc26066eb07fbac080bf9a193d079ac4af07f5668a",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "account-enabled",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "dark",
+        "size": "XXXL",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Apple Details and Notepad Account differ in controls, paragraphs and purpose; no exact medium detent counterpart"
+      ]
+    },
+    {
+      "reference": {
+        "path": "hillclimb/reference/round3/reminders-sheet-light-XXXL.png",
+        "sha256": "fc94c4147776b50cb58722f101ce8761d4bf1a443945c61e734eaf53c26ec4df",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "metadata": {
+          "file": "reminders-sheet-light-XXXL.png",
+          "state": "sheet",
+          "appearance": "light",
+          "size": "XXXL",
+          "reference_status": "usable",
+          "dimensions": [
+            1206,
+            2622
+          ],
+          "sha256": "fc94c4147776b50cb58722f101ce8761d4bf1a443945c61e734eaf53c26ec4df",
+          "capture_time_utc": "2026-11-04T16:08:13.587939+00:00",
+          "inspection": "Visually inspected final8-image contact sheet; actual XXXL system text setting on original17; stable snapshot before screenshot."
+        }
+      },
+      "closestNative": {
+        "file": "account-enabled/screens/normal-light-XXXL-large-top.png",
+        "sha256": "af804fa64407f2b2a2d766828102ee2f612cc4bfeea8ff01d35b2848b8506375",
+        "dimensions": [
+          1206,
+          2622
+        ],
+        "status": "captured",
+        "sourceSHA": null,
+        "family": "account-enabled",
+        "origin": "owned pinned agent-device capture",
+        "appearance": "light",
+        "size": "XXXL",
+        "protectedPartial": false,
+        "configuration": "Original system switch values; app case size/appearance as labelled",
+        "kind": "native-app",
+        "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+        "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+        "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+      },
+      "gaps": [
+        "Apple Details and Notepad Account differ in controls, paragraphs and purpose; no exact medium detent counterpart"
+      ]
+    }
+  ],
+  "globalGaps": [
+    "No exact Apple auth, Activity, capacity, medium-detent, combined-system-configuration or Notes reference"
+  ],
+  "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434"
+}

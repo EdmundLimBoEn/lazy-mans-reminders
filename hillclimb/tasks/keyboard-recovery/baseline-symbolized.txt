@@ -1,0 +1,73 @@
+(lldb) command source -s 0 '/tmp/keyboard-symbolize.lldb'
+Executing commands in '/tmp/keyboard-symbolize.lldb'.
+(lldb) process attach --pid 92512
+Process 92512 stopped
+* thread #1, queue = 'com.apple.main-thread', stop reason = signal SIGSTOP
+       frame #0: 0x00000001046a4b5c libsystem_kernel.dylib`mach_msg2_trap + 8
+libsystem_kernel.dylib`mach_msg2_trap:
+->  0x1046a4b5c <+8>: ret    
+
+libsystem_kernel.dylib`macx_swapon:
+    0x1046a4b60 <+0>: mov    x16, #-0x30               ; =-48 
+    0x1046a4b64 <+4>: svc    #0x80
+    0x1046a4b68 <+8>: ret    
+Target 0: (LazyMansReminders) stopped.
+Executable binary set to "/Users/limboenedmund/Library/Developer/CoreSimulator/Devices/8E8380DE-364D-4899-99B8-D15ED0494FFD/data/Containers/Bundle/Application/42051935-2136-4ED7-99CA-11F3B77156B2/LazyMansReminders.app/LazyMansReminders".
+Architecture set to: arm64-apple-ios-simulator.
+(lldb) script import lldb,json; data=json.load(open('hillclimb/tasks/keyboard-recovery/runtime-invalid-frame-log.json')); frames=data[0]['backtrace']['frames']; t=lldb.debugger.GetSelectedTarget(); mods={str(m.GetUUIDString()).upper():m for m in t.modules}; [(print(str(i)+': '+str(mods[f['imageUUID']].ResolveFileAddress(mods[f['imageUUID']].GetObjectFileHeaderAddress().GetFileAddress()+f['imageOffset'])))) for i,f in enumerate(frames) if f['imageUUID'] in mods]
+0: SwiftUICore`function signature specialization <Arg[3] = Dead> of SwiftUI._FrameLayout.init(width: Swift.Optional<CoreGraphics.CGFloat>, height: Swift.Optional<CoreGraphics.CGFloat>, alignment: SwiftUI.Alignment) -> SwiftUI._FrameLayout + 396
+1: SwiftUICore`SwiftUI._FrameLayout.init(width: Swift.Optional<CoreGraphics.CGFloat>, height: Swift.Optional<CoreGraphics.CGFloat>, alignment: SwiftUI.Alignment) -> SwiftUI._FrameLayout + 36
+2: SwiftUI`SwiftUI.InputAccessoryBar.body.getter : some + 176
+3: SwiftUICore`closure #1 @Swift.MainActor () -> () in SwiftUI.ViewBodyAccessor.updateBody(of: τ_0_0, changed: Swift.Bool) -> () + 1436
+4: SwiftUICore`SwiftUI.ViewBodyAccessor.updateBody(of: τ_0_0, changed: Swift.Bool) -> () + 180
+5: SwiftUICore`protocol witness for SwiftUI.BodyAccessor.updateBody(of: τ_0_0.Container, changed: Swift.Bool) -> () in conformance SwiftUI.ViewBodyAccessor<τ_0_0> : SwiftUI.BodyAccessor in SwiftUI + 12
+6: SwiftUICore`closure #1 () -> () in SwiftUI.StaticBody.updateValue() -> () + 276
+7: SwiftUICore`SwiftUI.StaticBody.updateValue() -> () + 572
+8: SwiftUICore`partial apply forwarder for implicit closure #1 (Swift.UnsafeMutableRawPointer, __C.AGAttribute) -> () in closure #1 () -> (Swift.UnsafeMutableRawPointer, __C.AGAttribute) -> () in closure #1 (Swift.UnsafePointer<τ_1_0>) -> AttributeGraph.Attribute<τ_0_0> in AttributeGraph.Attribute.init<τ_0_0 where τ_0_0 == τ_1_0.Value, τ_1_0: AttributeGraph.StatefulRule>(τ_1_0) -> AttributeGraph.Attribute<τ_0_0> + 28
+9: AttributeGraph`AG::Graph::UpdateStack::update() + 492
+10: AttributeGraph`AG::Graph::update_attribute(AG::data::ptr<AG::Node>, unsigned int) + 352
+11: AttributeGraph`AG::Graph::input_value_ref_slow(AG::data::ptr<AG::Node>, AG::AttributeID, unsigned int, unsigned int, AGSwiftMetadata const*, unsigned char&, long) + 668
+12: AttributeGraph`AGGraphGetValue + 236
+13: SwiftUICore`generic specialization <SwiftUI._FrameLayout> of SwiftUI.UnaryLayoutComputer.updateValue() -> () + 80
+14: SwiftUICore`generic specialization <SwiftUI.LayoutComputer, SwiftUI.UnaryLayoutComputer<SwiftUI._FrameLayout>> of implicit closure #1 (Swift.UnsafeMutableRawPointer, __C.AGAttribute) -> () in closure #1 () -> (Swift.UnsafeMutableRawPointer, __C.AGAttribute) -> () in closure #1 (Swift.UnsafePointer<τ_1_0>) -> AttributeGraph.Attribute<τ_0_0> in AttributeGraph.Attribute.init<τ_0_0 where τ_0_0 == τ_1_0.Value, τ_1_0: AttributeGraph.StatefulRule>(τ_1_0) -> AttributeGraph.Attribute<τ_0_0> + 20
+15: AttributeGraph`AG::Graph::UpdateStack::update() + 492
+16: AttributeGraph`AG::Graph::update_attribute(AG::data::ptr<AG::Node>, unsigned int) + 352
+17: AttributeGraph`AG::Graph::value_ref(AG::AttributeID, unsigned int, AGSwiftMetadata const*, unsigned char&) + 260
+18: AttributeGraph`AGGraphGetWeakValue + 368
+19: SwiftUICore`SwiftUI.ViewGraph.sizeThatFits(SwiftUI._ProposedSize) -> __C.CGSize + 108
+20: SwiftUICore`partial apply forwarder for closure #1 (SwiftUI.ViewGraph) -> __C.CGSize in SwiftUI.ViewGraphRootValueUpdater._sizeThatFits(SwiftUI.ProposedViewSize) -> __C.CGSize + 68
+21: SwiftUICore`SwiftUI.ViewGraphRootValueUpdater._updateViewGraph<τ_0_0>(body: (SwiftUI.ViewGraph) -> τ_1_0) -> Swift.Optional<τ_1_0> + 200
+22: SwiftUICore`SwiftUI.ViewGraphRootValueUpdater._sizeThatFits(SwiftUI.ProposedViewSize) -> __C.CGSize + 92
+23: UIKitCore`___lldb_unnamed_symbol_1627b4 + 252
+24: SwiftUI`SwiftUI._UIHostingView._layoutSizeThatFits(_: __C.CGSize, fixedAxes: __C._UILayoutAxes) -> __C.CGSize + 52
+25: SwiftUI`@objc SwiftUI._UIHostingView._layoutSizeThatFits(_: __C.CGSize, fixedAxes: __C._UILayoutAxes) -> __C.CGSize + 52
+26: UIKitCore`-[UIView(UIConstraintBasedLayout) intrinsicContentSize] + 68
+27: SwiftUI`@objc SwiftUI.InputAccessoryGenerator.RootUIView.intrinsicContentSize.getter : __C.CGSize + 36
+28: UIKitCore`-[UIInputViewSet onscreenSizeOfViewsInSetIncludingIAV:] + 464
+29: UIKitCore`-[UIInputViewSetPlacement remoteIntrinsicContentSizeForInputViewInSet:includingIAV:] + 100
+30: UIKitCore`-[UIKeyboardSceneDelegate prepareToMoveKeyboardForInputViewSet:animationStyle:] + 468
+31: UIKitCore`-[UIKeyboardSceneDelegate setKeyWindowSceneInputViews:animationStyle:] + 1396
+32: UIKitCore`-[UIKeyboardSceneDelegate setInputViews:animationStyle:] + 184
+33: UIKit`-[UIKeyboardSceneDelegateAccessibility setInputViews:animationStyle:] + 120
+34: UIKitCore`-[UIKeyboardSceneDelegate setInputViews:animated:] + 72
+35: UIKitCore`-[UIKeyboardSceneDelegate setInputViews:] + 52
+36: UIKitCore`__102-[UIKeyboardSceneDelegate _reloadInputViewsForKeyWindowSceneResponder:force:fromBecomeFirstResponder:]_block_invoke.563 + 32
+37: UIKitCore`__65-[UIPeripheralHost(UIKitInternal) queueDelayedTask:forKey:delay:]_block_invoke + 152
+38: libdispatch.dylib`_dispatch_client_callout + 12
+39: libdispatch.dylib`_dispatch_continuation_pop + 776
+40: libdispatch.dylib`_dispatch_source_invoke + 1808
+41: libdispatch.dylib`_dispatch_main_queue_drain + 656
+42: libdispatch.dylib`_dispatch_main_queue_callback_4CF + 40
+43: CoreFoundation`__CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE__ + 12
+44: CoreFoundation`__CFRunLoopRun + 1884
+45: CoreFoundation`_CFRunLoopRunSpecificWithOptions + 496
+46: GraphicsServices`GSEventRunModal + 116
+47: UIKitCore`-[UIApplication _run] + 772
+48: UIKitCore`UIApplicationMain + 124
+49: SwiftUI`closure #1 (Swift.UnsafeMutablePointer<Swift.Optional<Swift.UnsafeMutablePointer<Swift.Int8>>>) -> Swift.Never in SwiftUI.KitRendererCommon(Swift.AnyObject.Type) -> Swift.Never + 164
+50: SwiftUI`SwiftUI.runApp<τ_0_0 where τ_0_0: SwiftUI.App>(τ_0_0) -> Swift.Never + 180
+51: SwiftUI`static SwiftUI.App.main() -> () + 148
+[None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]
+(lldb) process detach
+Process 92512 detached
+(lldb) quit

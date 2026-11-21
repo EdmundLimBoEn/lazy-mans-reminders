@@ -1,0 +1,18 @@
+{
+  "command": "bash scripts/hillclimb/setup.sh",
+  "exit": 0,
+  "source": "ios/Config.example.xcconfig",
+  "isolatedBundle": "systems.edmundlim.NotepadHillclimb",
+  "isolatedGroup": "group.systems.edmundlim.NotepadHillclimb",
+  "xcodegenAfterSourceAndTestFiles": true,
+  "resolution": "resolve.json (setup only)",
+  "DD": "/tmp/notepad-signin-native-90ae0aca-dd",
+  "installCommand": [
+    "xcrun",
+    "simctl",
+    "install",
+    "8E8380DE-364D-4899-99B8-D15ED0494FFD",
+    "/tmp/notepad-signin-native-90ae0aca-dd/Build/Products/Debug-iphonesimulator/LazyMansReminders.app"
+  ],
+  "installExit": 0
+}

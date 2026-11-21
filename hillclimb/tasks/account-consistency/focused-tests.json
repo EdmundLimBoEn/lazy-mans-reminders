@@ -1,0 +1,80 @@
+{
+  "devices" : [
+    {
+      "architecture" : "arm64",
+      "deviceId" : "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+      "deviceName" : "Hillclimb iPhone 17 Pro",
+      "modelName" : "iPhone 17 Pro",
+      "osBuildNumber" : "23C54",
+      "osVersion" : "26.2",
+      "platform" : "iOS Simulator"
+    }
+  ],
+  "testNodes" : [
+    {
+      "children" : [
+        {
+          "children" : [
+            {
+              "children" : [
+                {
+                  "duration" : "1m",
+                  "durationInSeconds" : 60.00920796394348,
+                  "name" : "testDefaultAccountPresentation()",
+                  "nodeIdentifier" : "AccountPresentationTests/testDefaultAccountPresentation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountPresentationTests/testDefaultAccountPresentation",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "1m 6s",
+                  "durationInSeconds" : 66.43528509140015,
+                  "name" : "testEnabledAccountTypographyAndAlignment()",
+                  "nodeIdentifier" : "AccountPresentationTests/testEnabledAccountTypographyAndAlignment()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountPresentationTests/testEnabledAccountTypographyAndAlignment",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "18s",
+                  "durationInSeconds" : 18.712456107139587,
+                  "name" : "testSafeAccountErrorsClearAndReappear()",
+                  "nodeIdentifier" : "AccountPresentationTests/testSafeAccountErrorsClearAndReappear()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountPresentationTests/testSafeAccountErrorsClearAndReappear",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                },
+                {
+                  "duration" : "58s",
+                  "durationInSeconds" : 58.13591396808624,
+                  "name" : "testXXXLAccountPresentation()",
+                  "nodeIdentifier" : "AccountPresentationTests/testXXXLAccountPresentation()",
+                  "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountPresentationTests/testXXXLAccountPresentation",
+                  "nodeType" : "Test Case",
+                  "result" : "Passed"
+                }
+              ],
+              "name" : "AccountPresentationTests",
+              "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests/AccountPresentationTests",
+              "nodeType" : "Test Suite",
+              "result" : "Passed"
+            }
+          ],
+          "name" : "HillclimbUITests",
+          "nodeIdentifierURL" : "test://com.apple.xcode/LazyMansReminders/HillclimbUITests",
+          "nodeType" : "UI test bundle",
+          "result" : "Passed"
+        }
+      ],
+      "name" : "LazyMansReminders",
+      "nodeType" : "Test Plan",
+      "result" : "Passed"
+    }
+  ],
+  "testPlanConfigurations" : [
+    {
+      "configurationId" : "1",
+      "configurationName" : "Test Scheme Action"
+    }
+  ]
+}

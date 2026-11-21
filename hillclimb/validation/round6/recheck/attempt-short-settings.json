@@ -1,0 +1,76 @@
+[
+  {
+    "test": "AccessibilitySettingsUITests/testCombinedActualSettingsErrorContrast()",
+    "values": [
+      {
+        "name": "settings-values-Display & Text Size-enabled_0_5F0D295C-A00C-4F8D-A029-504FE8A38ABE.txt",
+        "header": "page=Display & Text Size stage=enabled originals=[\"Increase Contrast\": false, \"Auto-Play Message Effects\": true, \"Reduce Motion\": false, \"Reduce Transparency\": false]",
+        "values": {
+          "Reduce Transparency": "1",
+          "Increase Contrast": "1"
+        }
+      },
+      {
+        "name": "settings-values-Display & Text Size-original_0_0E34DDC2-4024-4E75-B3A8-EE92C8362361.txt",
+        "header": "page=Display & Text Size stage=original originals=[\"Auto-Play Message Effects\": true, \"Reduce Motion\": false]",
+        "values": {
+          "Reduce Transparency": "0",
+          "Increase Contrast": "0"
+        }
+      },
+      {
+        "name": "settings-values-Motion-enabled_0_C9DE926C-EA5A-437D-A04E-F3D2CC2327E6.txt",
+        "header": "page=Motion stage=enabled originals=[\"Auto-Play Message Effects\": true, \"Reduce Motion\": false]",
+        "values": {
+          "Reduce Motion": "1",
+          "Auto-Play Message Effects": "1"
+        }
+      },
+      {
+        "name": "settings-values-Motion-original_0_E3B99BC6-01AE-4F17-925F-6F94774E35ED.txt",
+        "header": "page=Motion stage=original originals=[:]",
+        "values": {
+          "Reduce Motion": "0",
+          "Auto-Play Message Effects": "1"
+        }
+      }
+    ]
+  },
+  {
+    "test": "AccessibilitySettingsUITests/testCombinedActualSettingsKeyboardMatrix()",
+    "values": [
+      {
+        "name": "settings-values-Display & Text Size-enabled_0_4A6F30D8-CFB3-46FD-8711-4876E266C328.txt",
+        "header": "page=Display & Text Size stage=enabled originals=[\"Reduce Transparency\": true, \"Reduce Motion\": true, \"Increase Contrast\": true, \"Auto-Play Message Effects\": true]",
+        "values": {
+          "Reduce Transparency": "1",
+          "Increase Contrast": "1"
+        }
+      },
+      {
+        "name": "settings-values-Display & Text Size-original_0_0C258359-960C-4D98-B33B-794AA639BFED.txt",
+        "header": "page=Display & Text Size stage=original originals=[\"Auto-Play Message Effects\": true, \"Reduce Motion\": true]",
+        "values": {
+          "Reduce Transparency": "1",
+          "Increase Contrast": "1"
+        }
+      },
+      {
+        "name": "settings-values-Motion-enabled_0_0A350707-D5C5-4E5D-BD82-F37D599DC5C0.txt",
+        "header": "page=Motion stage=enabled originals=[\"Auto-Play Message Effects\": true, \"Reduce Motion\": true]",
+        "values": {
+          "Reduce Motion": "1",
+          "Auto-Play Message Effects": "1"
+        }
+      },
+      {
+        "name": "settings-values-Motion-original_0_6BBC70D5-7C96-470C-84A5-D1107976B052.txt",
+        "header": "page=Motion stage=original originals=[:]",
+        "values": {
+          "Reduce Motion": "1",
+          "Auto-Play Message Effects": "1"
+        }
+      }
+    ]
+  }
+]

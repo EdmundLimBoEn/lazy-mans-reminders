@@ -1,0 +1,1191 @@
+{
+  "device": {
+    "hostId": "local",
+    "id": "78F5A64F-7B2E-4562-8EF9-10F3312CC694"
+  },
+  "command": "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+  "sourceInputs": null,
+  "operations": [
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": "",
+      "time": 1793888164.5585191
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": "",
+      "time": 1793888164.842068
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=account",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-account-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-23bb48939566ebc32a337197\n",
+      "stderr": "",
+      "time": 1793888166.530605
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888167.9074938
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 47 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    @e8 [cell]\n      @e9 [text] \"Account, signed in\"\n        @e10 [text] \"S\"\n        @e11 [text] \"Signed In\"\n    @e12 [cell]\n      @e13 [button] \"Allow Notifications\"\n    @e14 [cell]\n      @e15 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e16 [cell]\n      @e17 [text] \"Keep Your Board Visible\"\n    @e18 [cell]\n      @e19 [text] \"Live Activities\"\n      @e20 [text] \"Live Activities, Allowed\"\n    @e21 [cell]\n      @e22 [text] \"Background App Refresh\"\n      @e23 [text] \"Background App Refresh, Available\"\n    @e24 [cell]\n      @e25 [button] \"Refresh Board Now\"\n    @e26 [cell]\n      @e27 [button] \"Open App Settings\"\n    @e28 [cell]\n      @e29 [button] \"Add a lasting widget\"\n        @e30 [disclosuretriangle] \"Add a lasting widget\"\n        @e31 [button]\n          @e32 [image] \"collapsed\"\n    @e33 [cell]\n      @e34 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n      @e35 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e36 [cell]\n      @e37 [button] \"Sign Out\"\n        @e38 [image] \"rectangle.portrait.and.arrow.right\"\n        @e39 [text] \"Sign Out\"\n    @e40 [cell]\n      @e41 [link] \"Privacy\"\n        @e42 [image] \"Block\"\n        @e43 [text] \"Privacy\"\n        @e44 [image] \"arrow.up.right\"\n    @e45 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    @e46 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    [content below collection hidden]\n  @e47 [other] \"{\"disclosure.title\":[32,578,154.33333333333331,20.333333333333371],\"identity.row\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\"notifications.footer\":[32,283.66666666666663,296,31.666666666666686],\"persistence.activity\":[32,621.33333333333326,320.33333333333331,31.666666666666629],\"persistence.background\":[32,658.99999999999989,338,63.666666666666742],\"persistence.footer\":[32,621.33333333333326,338,101.33333333333337],\"Privacy.icon\":[32,846.66666666666663,24,20.333333333333371],\"Privacy.title\":[70,846.66666666666663,55.666666666666657,20.333333333333371],\"refresh.title\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\"Sign Out.icon\":[32,761.5,24,20],\"Sign Out.title\":[70,761.33333333333337,66,20.333333333333371]}\"\n",
+      "stderr": "",
+      "time": 1793888168.203378
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 46,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,578,154.33333333333331,20.333333333333371],\\\"identity.row\\\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\\\"notifications.footer\\\":[32,283.66666666666663,296,31.666666666666686],\\\"persistence.activity\\\":[32,621.33333333333326,320.33333333333331,31.666666666666629],\\\"persistence.background\\\":[32,658.99999999999989,338,63.666666666666742],\\\"persistence.footer\\\":[32,621.33333333333326,338,101.33333333333337],\\\"Privacy.icon\\\":[32,846.66666666666663,24,20.333333333333371],\\\"Privacy.title\\\":[70,846.66666666666663,55.666666666666657,20.333333333333371],\\\"refresh.title\\\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\\\"Sign Out.icon\\\":[32,761.5,24,20],\\\"Sign Out.title\\\":[70,761.33333333333337,66,20.333333333333371]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 83638,\n  \"hittable\": true,\n  \"ref\": \"e47\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888168.379909
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-default-large-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-default-large-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888169.070264
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "press",
+        "role=button label=\"Add a lasting widget\"",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Tapped role=button label=\"Add a lasting widget\" (201, 588)\nsettled after 913ms: +4 -4 (~26 unchanged)\n- @e27 [cell] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n- @e28 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n- @e29 [cell] \"Sign Out\"\n- @e30 [other] \"{\"disclosure.title\":[32,578,154.33333333333331,20.333333333333371],\"identity.row\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\"notifications.footer\":[32,283.66666666666663,296,31.666666666666686],\"persistence.activity\":[32,621.33333333333326,320.33333333333331,31.666666666666629],\"persistence.background\":[32,658.99999999999989,338,63.666666666666742],\"persistence.footer\":[32,621.33333333333326,338,101.33333333333337],\"Privacy.icon\":[32,846.66666666666663,24,20.333333333333371],\"Privacy.title\":[70,846.66666666666663,55.666666666666657,20.333333333333371],\"refresh.title\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\"Sign Out.icon\":[32,761.5,24,20],\"Sign Out.title\":[70,761.33333333333337,66,20.333333333333371]}\"\n+ @e27~s738001 [cell] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n+ @e28~s738001 [cell] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n+ @e29~s738001 [cell] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n+ @e30~s738001 [other] \"{\"disclosure.title\":[32,578,154.33333333333331,20.333333333333371],\"home.helper\":[52,628.33333333333326,309.33333333333331,33.666666666666629],\"identity.row\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\"lock.helper\":[52,692,306.66666666666663,33.666666666666629],\"notifications.footer\":[32,283.66666666666663,296,31.666666666666686],\"persistence.activity\":[32,830.33333333333337,320.33333333333331,31.666666666666629],\"persistence.background\":[32,868,338,63.666666666666742],\"persistence.footer\":[32,830.33333333333337,338,101.33333333333337],\"refresh.title\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\"widget.helper\":[52,755.66666666666663,298.33333333333331,51.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793888170.8554308
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888172.249707
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 44 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    @e8 [cell]\n      @e9 [text] \"Account, signed in\"\n        @e10 [text] \"S\"\n        @e11 [text] \"Signed In\"\n    @e12 [cell]\n      @e13 [button] \"Allow Notifications\"\n    @e14 [cell]\n      @e15 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e16 [cell]\n      @e17 [text] \"Keep Your Board Visible\"\n    @e18 [cell]\n      @e19 [text] \"Live Activities\"\n      @e20 [text] \"Live Activities, Allowed\"\n    @e21 [cell]\n      @e22 [text] \"Background App Refresh\"\n      @e23 [text] \"Background App Refresh, Available\"\n    @e24 [cell]\n      @e25 [button] \"Refresh Board Now\"\n    @e26 [cell]\n      @e27 [button] \"Open App Settings\"\n    @e28 [cell]\n      @e29 [button] \"Add a lasting widget\"\n        @e30 [disclosuretriangle] \"Add a lasting widget\"\n        @e31 [button]\n          @e32 [image] \"expanded\"\n    @e33 [cell]\n      @e34 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n    @e35 [cell]\n      @e36 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n    @e37 [cell]\n      @e38 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n    @e39 [cell]\n      @e40 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n      @e41 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e42 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    @e43 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    [content below collection hidden]\n  @e44 [other] \"{\"disclosure.title\":[32,578,154.33333333333331,20.333333333333371],\"home.helper\":[52,628.33333333333326,309.33333333333331,33.666666666666629],\"identity.row\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\"lock.helper\":[52,692,306.66666666666663,33.666666666666629],\"notifications.footer\":[32,283.66666666666663,296,31.666666666666686],\"persistence.activity\":[32,830.33333333333337,320.33333333333331,31.666666666666629],\"persistence.background\":[32,868,338,63.666666666666742],\"persistence.footer\":[32,830.33333333333337,338,101.33333333333337],\"refresh.title\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\"widget.helper\":[52,755.66666666666663,298.33333333333331,51.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793888172.508735
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 43,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,578,154.33333333333331,20.333333333333371],\\\"home.helper\\\":[52,628.33333333333326,309.33333333333331,33.666666666666629],\\\"identity.row\\\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\\\"lock.helper\\\":[52,692,306.66666666666663,33.666666666666629],\\\"notifications.footer\\\":[32,283.66666666666663,296,31.666666666666686],\\\"persistence.activity\\\":[32,830.33333333333337,320.33333333333331,31.666666666666629],\\\"persistence.background\\\":[32,868,338,63.666666666666742],\\\"persistence.footer\\\":[32,830.33333333333337,338,101.33333333333337],\\\"refresh.title\\\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\\\"widget.helper\\\":[52,755.66666666666663,298.33333333333331,51.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 83638,\n  \"hittable\": true,\n  \"ref\": \"e44\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888172.6690319
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-default-expanded-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-default-expanded-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888173.342761
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "scroll",
+        "down",
+        "0.5",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled down by 0.5 of the viewport (437px)\nsettled after 2349ms: +17 -29 (~15 unchanged)\n- @e9 [text] \"Account, signed in\"\n- @e10 [text] \"S\"\n- @e11 [text] \"Signed In\"\n- @e12 [cell]\n- @e13 [button] \"Allow Notifications\"\n- @e14 [cell]\n- @e15 [text] \"Allow notifications so new reminders can appear as banners.\"\n- @e16 [cell]\n- @e17 [text] \"Keep Your Board Visible\"\n- @e18 [cell]\n- @e19 [text] \"Live Activities\"\n- @e20 [text] \"Live Activities, Allowed\"\n- @e21 [cell]\n- @e22 [text] \"Background App Refresh\"\n- @e23 [text] \"Background App Refresh, Available\"\n- @e24 [cell]\n- @e32 [image] \"expanded\"\n- @e33 [cell]\n- @e34 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n- @e35 [cell]\n- @e36 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n- @e37 [cell]\n- @e38 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n- @e39 [cell]\n- @e40 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n- @e41 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n- @e42 [other] \"Vertical scroll bar, 2 pages\"\n- @e43 [other] \"Vertical scroll bar, 2 pages\"\n- @e44 [other] \"{\"disclosure.title\":[32,578,154.33333333333331,20.333333333333371],\"home.helper\":[52,628.33333333333326,309.33333333333331,33.666666666666629],\"identity.row\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\"lock.helper\":[52,692,306.66666666666663,33.666666666666629],\"notifications.footer\":[32,283.66666666666663,296,31.666666666666686],\"persistence.activity\":[32,830.33333333333337,320.33333333333331,31.666666666666629],\"persistence.background\":[32,868,338,63.666666666666742],\"persistence.footer\":[32,830.33333333333337,338,101.33333333333337],\"refresh.title\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\"widget.helper\":[52,755.66666666666663,298.33333333333331,51.666666666666629]}\"\n+ @e16~s738011 [cell] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n+ @e17~s738011 [cell] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n+ @e18~s738011 [cell] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n+ @e19~s738011 [cell] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n+ @e20~s738011 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n+ @e21~s738011 [cell] \"Sign Out\"\n+ @e22~s738011 [cell] \"Privacy\"\n+ @e23~s738011 [link] \"Privacy\"\n+ @e24~s738011 [image] \"Block\"\n+ @e25~s738011 [image] \"arrow.up.right\"\n+ @e26~s738011 [cell] \"Terms\"\n+ @e27~s738011 [link] \"Terms\"\n+ @e28~s738011 [image] \"Plain Text\"\n+ @e29~s738011 [image] \"arrow.up.right\"\n+ @e30~s738011 [cell] \"Support\"\n+ @e31~s738011 [link] \"Support\"\n+ @e32~s738011 [other] \"{\"disclosure.title\":[32,240.66666666666669,154.33333333333331,20.333333333333314],\"Download My Data.icon\":[32,869.33333333333348,24,21.333333333333371],\"Download My Data.title\":[70,869.83333333333348,143.66666666666666,20.333333333333371],\"home.helper\":[52,291,309.33333333333331,33.666666666666686],\"lock.helper\":[52,354.66666666666669,306.66666666666663,33.666666666666686],\"persistence.activity\":[32,493.00000000000006,320.33333333333331,31.666666666666686],\"persistence.background\":[32,530.66666666666674,338,63.666666666666629],\"persistence.footer\":[32,493.00000000000006,338,101.33333333333331],\"Privacy.icon\":[32,718.33333333333326,24,20.333333333333371],\"Privacy.title\":[70,718.33333333333326,55.666666666666657,20.333333333333371],\"refresh.title\":[32,140,146.66666666666666,20.333333333333314],\"Sign Out.icon\":[32,633.16666666666663,24,20],\"Sign Out.title\":[70,633,66,20.333333333333371],\"Support.icon\":[32,819.66666666666663,24,19],\"Support.title\":[70,819,61.666666666666657,20.333333333333371],\"Terms.icon\":[32,768.83333333333337,24,20],\"Terms.title\":[70,768.66666666666674,47,20.333333333333371],\"widget.helper\":[52,418.33333333333331,298.33333333333331,51.666666666666686]}\"\n",
+      "stderr": "",
+      "time": 1793888176.560082
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888177.9730392
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 56 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e8 [cell]\n      @e9 [text] \"Live Activities, Allowed\"\n    @e10 [cell]\n      @e11 [text] \"Background App Refresh\"\n      @e12 [text] \"Background App Refresh, Available\"\n    @e13 [cell]\n      @e14 [button] \"Refresh Board Now\"\n    @e15 [cell]\n      @e16 [button] \"Open App Settings\"\n    @e17 [cell]\n      @e18 [button] \"Add a lasting widget\"\n        @e19 [disclosuretriangle] \"Add a lasting widget\"\n        @e20 [button]\n          @e21 [image] \"expanded\"\n    @e22 [cell]\n      @e23 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n    @e24 [cell]\n      @e25 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n    @e26 [cell]\n      @e27 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n    @e28 [cell]\n      @e29 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n      @e30 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e31 [cell]\n      @e32 [button] \"Sign Out\"\n        @e33 [image] \"rectangle.portrait.and.arrow.right\"\n        @e34 [text] \"Sign Out\"\n    @e35 [cell]\n      @e36 [link] \"Privacy\"\n        @e37 [image] \"Block\"\n        @e38 [text] \"Privacy\"\n        @e39 [image] \"arrow.up.right\"\n    @e40 [cell]\n      @e41 [link] \"Terms\"\n        @e42 [image] \"Plain Text\"\n        @e43 [text] \"Terms\"\n        @e44 [image] \"arrow.up.right\"\n    @e45 [cell]\n      @e46 [link] \"Support\"\n        @e47 [image] \"questionmark.circle\"\n        @e48 [text] \"Support\"\n        @e49 [image] \"arrow.up.right\"\n    @e50 [cell]\n      @e51 [link] \"Download My Data\"\n        @e52 [image] \"Download\"\n        @e53 [text] \"Download My Data\"\n    @e54 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    @e55 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    [content below collection hidden]\n  @e56 [other] \"{\"disclosure.title\":[32,240.66666666666669,154.33333333333331,20.333333333333314],\"Download My Data.icon\":[32,869.33333333333348,24,21.333333333333371],\"Download My Data.title\":[70,869.83333333333348,143.66666666666666,20.333333333333371],\"home.helper\":[52,291,309.33333333333331,33.666666666666686],\"lock.helper\":[52,354.66666666666669,306.66666666666663,33.666666666666686],\"persistence.activity\":[32,493.00000000000006,320.33333333333331,31.666666666666686],\"persistence.background\":[32,530.66666666666674,338,63.666666666666629],\"persistence.footer\":[32,493.00000000000006,338,101.33333333333331],\"Privacy.icon\":[32,718.33333333333326,24,20.333333333333371],\"Privacy.title\":[70,718.33333333333326,55.666666666666657,20.333333333333371],\"refresh.title\":[32,140,146.66666666666666,20.333333333333314],\"Sign Out.icon\":[32,633.16666666666663,24,20],\"Sign Out.title\":[70,633,66,20.333333333333371],\"Support.icon\":[32,819.66666666666663,24,19],\"Support.title\":[70,819,61.666666666666657,20.333333333333371],\"Terms.icon\":[32,768.83333333333337,24,20],\"Terms.title\":[70,768.66666666666674,47,20.333333333333371],\"widget.helper\":[52,418.33333333333331,298.33333333333331,51.666666666666686]}\"\n",
+      "stderr": "",
+      "time": 1793888178.266751
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 55,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,240.66666666666669,154.33333333333331,20.333333333333314],\\\"Download My Data.icon\\\":[32,869.33333333333348,24,21.333333333333371],\\\"Download My Data.title\\\":[70,869.83333333333348,143.66666666666666,20.333333333333371],\\\"home.helper\\\":[52,291,309.33333333333331,33.666666666666686],\\\"lock.helper\\\":[52,354.66666666666669,306.66666666666663,33.666666666666686],\\\"persistence.activity\\\":[32,493.00000000000006,320.33333333333331,31.666666666666686],\\\"persistence.background\\\":[32,530.66666666666674,338,63.666666666666629],\\\"persistence.footer\\\":[32,493.00000000000006,338,101.33333333333331],\\\"Privacy.icon\\\":[32,718.33333333333326,24,20.333333333333371],\\\"Privacy.title\\\":[70,718.33333333333326,55.666666666666657,20.333333333333371],\\\"refresh.title\\\":[32,140,146.66666666666666,20.333333333333314],\\\"Sign Out.icon\\\":[32,633.16666666666663,24,20],\\\"Sign Out.title\\\":[70,633,66,20.333333333333371],\\\"Support.icon\\\":[32,819.66666666666663,24,19],\\\"Support.title\\\":[70,819,61.666666666666657,20.333333333333371],\\\"Terms.icon\\\":[32,768.83333333333337,24,20],\\\"Terms.title\\\":[70,768.66666666666674,47,20.333333333333371],\\\"widget.helper\\\":[52,418.33333333333331,298.33333333333331,51.666666666666686]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 83638,\n  \"hittable\": true,\n  \"ref\": \"e56\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888178.4336278
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-default-expanded-guidance.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-default-expanded-guidance.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888179.111626
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "scroll",
+        "bottom",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled to bottom with 1 down passes\nsettled after 2350ms: +18 -39 (~17 unchanged)\n- @e8 [cell]\n- @e9 [text] \"Live Activities, Allowed\"\n- @e10 [cell]\n- @e11 [text] \"Background App Refresh\"\n- @e12 [text] \"Background App Refresh, Available\"\n- @e13 [cell]\n- @e14 [button] \"Refresh Board Now\"\n- @e15 [cell]\n- @e16 [button] \"Open App Settings\"\n- @e17 [cell]\n- @e18 [button] \"Add a lasting widget\"\n- @e19 [disclosuretriangle] \"Add a lasting widget\"\n- @e20 [button]\n- @e21 [image] \"expanded\"\n- @e22 [cell]\n- @e23 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n- @e24 [cell]\n- @e25 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n- @e26 [cell]\n- @e27 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n- @e28 [cell]\n- @e29 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n+ @e8~s738021 [cell] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n+ @e9~s738021 [cell] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n- @e31 [cell]\n- @e32 [button] \"Sign Out\"\n- @e33 [image] \"rectangle.portrait.and.arrow.right\"\n- @e34 [text] \"Sign Out\"\n- @e35 [cell]\n+ @e11~s738021 [cell] \"Sign Out\"\n+ @e12~s738021 [cell] \"Privacy\"\n- @e38 [text] \"Privacy\"\n- @e40 [cell]\n+ @e16~s738021 [cell] \"Terms\"\n- @e43 [text] \"Terms\"\n- @e45 [cell]\n+ @e20~s738021 [cell] \"Support\"\n- @e48 [text] \"Support\"\n- @e50 [cell]\n- @e51 [link] \"Download My Data\"\n- @e52 [image] \"Download\"\n- @e53 [text] \"Download My Data\"\n- @e54 [other] \"Vertical scroll bar, 2 pages\"\n- @e55 [other] \"Vertical scroll bar, 2 pages\"\n- @e56 [other] \"{\"disclosure.title\":[32,240.66666666666669,154.33333333333331,20.333333333333314],\"Download My Data.icon\":[32,869.33333333333348,24,21.333333333333371],\"Download My Data.title\":[70,869.83333333333348,143.66666666666666,20.333333333333371],\"home.helper\":[52,291,309.33333333333331,33.666666666666686],\"lock.helper\":[52,354.66666666666669,306.66666666666663,33.666666666666686],\"persistence.activity\":[32,493.00000000000006,320.33333333333331,31.666666666666686],\"persistence.background\":[32,530.66666666666674,338,63.666666666666629],\"persistence.footer\":[32,493.00000000000006,338,101.33333333333331],\"Privacy.icon\":[32,718.33333333333326,24,20.333333333333371],\"Privacy.title\":[70,718.33333333333326,55.666666666666657,20.333333333333371],\"refresh.title\":[32,140,146.66666666666666,20.333333333333314],\"Sign Out.icon\":[32,633.16666666666663,24,20],\"Sign Out.title\":[70,633,66,20.333333333333371],\"Support.icon\":[32,819.66666666666663,24,19],\"Support.title\":[70,819,61.666666666666657,20.333333333333371],\"Terms.icon\":[32,768.83333333333337,24,20],\"Terms.title\":[70,768.66666666666674,47,20.333333333333371],\"widget.helper\":[52,418.33333333333331,298.33333333333331,51.666666666666686]}\"\n+ @e24~s738021 [cell] \"Download My Data\"\n+ @e25~s738021 [link] \"Download My Data\"\n+ @e26~s738021 [image] \"Download\"\n+ @e27~s738021 [image] \"arrow.up.right\"\n+ @e28~s738021 [cell] \"Send Feedback\"\n+ @e29~s738021 [link] \"Send Feedback\"\n+ @e30~s738021 [image] \"Get Mail\"\n+ @e31~s738021 [image] \"arrow.up.right\"\n+ @e32~s738021 [cell] \"Or email hello@edmundlim.systems\"\n+ @e33~s738021 [cell] \"Delete Account\u2026\"\n+ @e34~s738021 [cell] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n+ @e35~s738021 [other] \"{\"Delete Account\u2026.icon\":[32,730.83333333333326,24,20.666666666666742],\"Delete Account\u2026.title\":[70,731,130,20.333333333333258],\"delete.footer\":[32,774.66666666666663,319.33333333333331,31.666666666666629],\"Download My Data.icon\":[32,547.00000000000011,24,21.333333333333371],\"Download My Data.title\":[70,547.50000000000011,143.66666666666666,20.333333333333371],\"feedback.footer\":[32,676.66666666666663,215.66666666666666,15.666666666666629],\"lock.helper\":[52,32.333333333333371,306.66666666666663,33.666666666666671],\"persistence.activity\":[32,170.66666666666674,320.33333333333331,31.666666666666657],\"persistence.background\":[32,208.33333333333343,338,63.666666666666686],\"persistence.footer\":[32,170.66666666666674,338,101.33333333333331],\"Privacy.icon\":[32,396,24,20.333333333333314],\"Privacy.title\":[70,396,55.666666666666657,20.333333333333314],\"Send Feedback.icon\":[32,635.33333333333337,24,16.333333333333371],\"Send Feedback.title\":[70,633.33333333333337,118.33333333333331,20.333333333333371],\"Sign Out.icon\":[32,310.83333333333343,24,20],\"Sign Out.title\":[70,310.66666666666674,66,20.333333333333314],\"Support.icon\":[32,497.33333333333343,24,18.999999999999943],\"Support.title\":[70,496.66666666666674,61.666666666666657,20.333333333333371],\"Terms.icon\":[32,446.50000000000006,24,20],\"Terms.title\":[70,446.33333333333337,47,20.333333333333314],\"version.footer\":[32,818.33333333333326,91,15.666666666666742],\"widget.helper\":[52,96,298.33333333333331,51.666666666666657]}\"\n",
+      "stderr": "",
+      "time": 1793888183.8733819
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888185.257153
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 55 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e8 [cell]\n      @e9 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n    @e10 [cell]\n      @e11 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n    @e12 [cell]\n      @e13 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n      @e14 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e15 [cell]\n      @e16 [button] \"Sign Out\"\n        @e17 [image] \"rectangle.portrait.and.arrow.right\"\n        @e18 [text] \"Sign Out\"\n    @e19 [cell]\n      @e20 [link] \"Privacy\"\n        @e21 [image] \"Block\"\n        @e22 [text] \"Privacy\"\n        @e23 [image] \"arrow.up.right\"\n    @e24 [cell]\n      @e25 [link] \"Terms\"\n        @e26 [image] \"Plain Text\"\n        @e27 [text] \"Terms\"\n        @e28 [image] \"arrow.up.right\"\n    @e29 [cell]\n      @e30 [link] \"Support\"\n        @e31 [image] \"questionmark.circle\"\n        @e32 [text] \"Support\"\n        @e33 [image] \"arrow.up.right\"\n    @e34 [cell]\n      @e35 [link] \"Download My Data\"\n        @e36 [image] \"Download\"\n        @e37 [text] \"Download My Data\"\n        @e38 [image] \"arrow.up.right\"\n    @e39 [cell]\n      @e40 [link] \"Send Feedback\"\n        @e41 [image] \"Get Mail\"\n        @e42 [text] \"Send Feedback\"\n        @e43 [image] \"arrow.up.right\"\n    @e44 [cell]\n      @e45 [text] \"Or email hello@edmundlim.systems\"\n    @e46 [cell]\n      @e47 [button] \"Delete Account\u2026\"\n        @e48 [image] \"Trash\"\n        @e49 [text] \"Delete Account\u2026\"\n    @e50 [cell]\n      @e51 [text] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n      @e52 [text] \"App Version 1.0 (11)\"\n    @e53 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    @e54 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n  @e55 [other] \"{\"Delete Account\u2026.icon\":[32,730.83333333333326,24,20.666666666666742],\"Delete Account\u2026.title\":[70,731,130,20.333333333333258],\"delete.footer\":[32,774.66666666666663,319.33333333333331,31.666666666666629],\"Download My Data.icon\":[32,547.00000000000011,24,21.333333333333371],\"Download My Data.title\":[70,547.50000000000011,143.66666666666666,20.333333333333371],\"feedback.footer\":[32,676.66666666666663,215.66666666666666,15.666666666666629],\"lock.helper\":[52,32.333333333333371,306.66666666666663,33.666666666666671],\"persistence.activity\":[32,170.66666666666674,320.33333333333331,31.666666666666657],\"persistence.background\":[32,208.33333333333343,338,63.666666666666686],\"persistence.footer\":[32,170.66666666666674,338,101.33333333333331],\"Privacy.icon\":[32,396,24,20.333333333333314],\"Privacy.title\":[70,396,55.666666666666657,20.333333333333314],\"Send Feedback.icon\":[32,635.33333333333337,24,16.333333333333371],\"Send Feedback.title\":[70,633.33333333333337,118.33333333333331,20.333333333333371],\"Sign Out.icon\":[32,310.83333333333343,24,20],\"Sign Out.title\":[70,310.66666666666674,66,20.333333333333314],\"Support.icon\":[32,497.33333333333343,24,18.999999999999943],\"Support.title\":[70,496.66666666666674,61.666666666666657,20.333333333333371],\"Terms.icon\":[32,446.50000000000006,24,20],\"Terms.title\":[70,446.33333333333337,47,20.333333333333314],\"version.footer\":[32,818.33333333333326,91,15.666666666666742],\"widget.helper\":[52,96,298.33333333333331,51.666666666666657]}\"\n",
+      "stderr": "",
+      "time": 1793888185.5215309
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 54,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[32,730.83333333333326,24,20.666666666666742],\\\"Delete Account\u2026.title\\\":[70,731,130,20.333333333333258],\\\"delete.footer\\\":[32,774.66666666666663,319.33333333333331,31.666666666666629],\\\"Download My Data.icon\\\":[32,547.00000000000011,24,21.333333333333371],\\\"Download My Data.title\\\":[70,547.50000000000011,143.66666666666666,20.333333333333371],\\\"feedback.footer\\\":[32,676.66666666666663,215.66666666666666,15.666666666666629],\\\"lock.helper\\\":[52,32.333333333333371,306.66666666666663,33.666666666666671],\\\"persistence.activity\\\":[32,170.66666666666674,320.33333333333331,31.666666666666657],\\\"persistence.background\\\":[32,208.33333333333343,338,63.666666666666686],\\\"persistence.footer\\\":[32,170.66666666666674,338,101.33333333333331],\\\"Privacy.icon\\\":[32,396,24,20.333333333333314],\\\"Privacy.title\\\":[70,396,55.666666666666657,20.333333333333314],\\\"Send Feedback.icon\\\":[32,635.33333333333337,24,16.333333333333371],\\\"Send Feedback.title\\\":[70,633.33333333333337,118.33333333333331,20.333333333333371],\\\"Sign Out.icon\\\":[32,310.83333333333343,24,20],\\\"Sign Out.title\\\":[70,310.66666666666674,66,20.333333333333314],\\\"Support.icon\\\":[32,497.33333333333343,24,18.999999999999943],\\\"Support.title\\\":[70,496.66666666666674,61.666666666666657,20.333333333333371],\\\"Terms.icon\\\":[32,446.50000000000006,24,20],\\\"Terms.title\\\":[70,446.33333333333337,47,20.333333333333314],\\\"version.footer\\\":[32,818.33333333333326,91,15.666666666666742],\\\"widget.helper\\\":[52,96,298.33333333333331,51.666666666666657]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 83638,\n  \"hittable\": true,\n  \"ref\": \"e55\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888185.689902
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-default-expanded-lower.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-default-expanded-lower.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888186.740767
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "settings",
+        "appearance",
+        "light"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": "",
+      "time": 1793888187.145865
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "settings",
+        "text-size",
+        "extra-extra-extra-large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to extra-extra-extra-large\n",
+      "stderr": "",
+      "time": 1793888187.426572
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=account",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=light",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-account-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-23bb48939566ebc32a337197\n",
+      "stderr": "",
+      "time": 1793888188.99018
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888190.346103
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 38 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    @e8 [cell]\n      @e9 [text] \"Account, signed in\"\n        @e10 [text] \"S\"\n        @e11 [text] \"Signed In\"\n    @e12 [cell]\n      @e13 [button] \"Allow Notifications\"\n    @e14 [cell]\n      @e15 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e16 [cell]\n      @e17 [text] \"Keep Your Board Visible\"\n    @e18 [cell]\n      @e19 [text] \"Live Activities\"\n      @e20 [text] \"Live Activities, Allowed\"\n    @e21 [cell]\n      @e22 [text] \"Background App Refresh\"\n      @e23 [text] \"Background App Refresh, Available\"\n    @e24 [cell]\n      @e25 [button] \"Refresh Board Now\"\n    @e26 [cell]\n      @e27 [button] \"Open App Settings\"\n    @e28 [cell]\n      @e29 [button] \"Add a lasting widget\"\n        @e30 [disclosuretriangle] \"Add a lasting widget\"\n        @e31 [button]\n          @e32 [image] \"collapsed\"\n    @e33 [cell]\n      @e34 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n      @e35 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e36 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    @e37 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    [content below collection hidden]\n  @e38 [other] \"{\"disclosure.title\":[32,674.33333333333337,201,27.666666666666629],\"identity.row\":[32,155,145,27.666666666666657],\"notifications.footer\":[32,298.33333333333337,312.66666666666663,45],\"persistence.activity\":[32,725,331.33333333333331,67],\"persistence.background\":[32,798,329.33333333333331,133],\"persistence.footer\":[32,725,331.33333333333331,206],\"refresh.title\":[32,559,191,27.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793888190.601867
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 37,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,674.33333333333337,201,27.666666666666629],\\\"identity.row\\\":[32,155,145,27.666666666666657],\\\"notifications.footer\\\":[32,298.33333333333337,312.66666666666663,45],\\\"persistence.activity\\\":[32,725,331.33333333333331,67],\\\"persistence.background\\\":[32,798,329.33333333333331,133],\\\"persistence.footer\\\":[32,725,331.33333333333331,206],\\\"refresh.title\\\":[32,559,191,27.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 87006,\n  \"hittable\": true,\n  \"ref\": \"e38\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888190.7640471
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-XXXL-large-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-XXXL-large-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888218.079583
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "press",
+        "role=button label=\"Add a lasting widget\"",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Tapped role=button label=\"Add a lasting widget\" (201, 688)\nsettled after 935ms: +2 -3 (~26 unchanged)\n- @e27 [cell] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n- @e28 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n- @e29 [other] \"{\"disclosure.title\":[32,674.33333333333337,201,27.666666666666629],\"identity.row\":[32,155,145,27.666666666666657],\"notifications.footer\":[32,298.33333333333337,312.66666666666663,45],\"persistence.activity\":[32,725,331.33333333333331,67],\"persistence.background\":[32,798,329.33333333333331,133],\"persistence.footer\":[32,725,331.33333333333331,206],\"refresh.title\":[32,559,191,27.666666666666629]}\"\n+ @e27~s738035 [cell] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n+ @e28~s738035 [other] \"{\"disclosure.title\":[32,674.33333333333337,201,27.666666666666629],\"home.helper\":[52,732,280.66666666666663,71],\"identity.row\":[32,155,145,27.666666666666657],\"lock.helper\":[52,833,313.33333333333331,71],\"notifications.footer\":[32,298.33333333333337,312.66666666666663,45],\"refresh.title\":[32,559,191,27.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793888219.875852
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888221.261394
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 39 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    @e8 [cell]\n      @e9 [text] \"Account, signed in\"\n        @e10 [text] \"S\"\n        @e11 [text] \"Signed In\"\n    @e12 [cell]\n      @e13 [button] \"Allow Notifications\"\n    @e14 [cell]\n      @e15 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e16 [cell]\n      @e17 [text] \"Keep Your Board Visible\"\n    @e18 [cell]\n      @e19 [text] \"Live Activities\"\n      @e20 [text] \"Live Activities, Allowed\"\n    @e21 [cell]\n      @e22 [text] \"Background App Refresh\"\n      @e23 [text] \"Background App Refresh, Available\"\n    @e24 [cell]\n      @e25 [button] \"Refresh Board Now\"\n    @e26 [cell]\n      @e27 [button] \"Open App Settings\"\n    @e28 [cell]\n      @e29 [button] \"Add a lasting widget\"\n        @e30 [disclosuretriangle] \"Add a lasting widget\"\n        @e31 [button]\n          @e32 [image] \"expanded\"\n    @e33 [cell]\n      @e34 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n    @e35 [cell]\n      @e36 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n    @e37 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    @e38 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    [content below collection hidden]\n  @e39 [other] \"{\"disclosure.title\":[32,674.33333333333337,201,27.666666666666629],\"home.helper\":[52,732,280.66666666666663,71],\"identity.row\":[32,155,145,27.666666666666657],\"lock.helper\":[52,833,313.33333333333331,71],\"notifications.footer\":[32,298.33333333333337,312.66666666666663,45],\"refresh.title\":[32,559,191,27.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793888221.5389178
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 38,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,674.33333333333337,201,27.666666666666629],\\\"home.helper\\\":[52,732,280.66666666666663,71],\\\"identity.row\\\":[32,155,145,27.666666666666657],\\\"lock.helper\\\":[52,833,313.33333333333331,71],\\\"notifications.footer\\\":[32,298.33333333333337,312.66666666666663,45],\\\"refresh.title\\\":[32,559,191,27.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 87006,\n  \"hittable\": true,\n  \"ref\": \"e39\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888221.720408
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-XXXL-expanded-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-XXXL-expanded-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888233.250807
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "scroll",
+        "down",
+        "0.5",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled down by 0.5 of the viewport (437px)\nsettled after 2252ms: +7 -23 (~16 unchanged)\n- @e8 [cell]\n- @e9 [text] \"Account, signed in\"\n- @e10 [text] \"S\"\n- @e11 [text] \"Signed In\"\n- @e12 [cell]\n- @e13 [button] \"Allow Notifications\"\n- @e14 [cell]\n- @e15 [text] \"Allow notifications so new reminders can appear as banners.\"\n- @e16 [cell]\n- @e17 [text] \"Keep Your Board Visible\"\n- @e18 [cell]\n- @e19 [text] \"Live Activities\"\n- @e20 [text] \"Live Activities, Allowed\"\n- @e21 [cell]\n- @e22 [text] \"Background App Refresh\"\n+ @e8~s738045 [cell] \"Background App Refresh\"\n- @e32 [image] \"expanded\"\n- @e33 [cell]\n- @e34 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n- @e35 [cell]\n- @e36 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n- @e37 [other] \"Vertical scroll bar, 3 pages\"\n- @e38 [other] \"Vertical scroll bar, 3 pages\"\n- @e39 [other] \"{\"disclosure.title\":[32,674.33333333333337,201,27.666666666666629],\"home.helper\":[52,732,280.66666666666663,71],\"identity.row\":[32,155,145,27.666666666666657],\"lock.helper\":[52,833,313.33333333333331,71],\"notifications.footer\":[32,298.33333333333337,312.66666666666663,45],\"refresh.title\":[32,559,191,27.666666666666629]}\"\n+ @e18~s738045 [cell] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n+ @e19~s738045 [cell] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n+ @e20~s738045 [cell] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n+ @e21~s738045 [cell] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n+ @e22~s738045 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n+ @e23~s738045 [other] \"{\"disclosure.title\":[32,337.00000000000006,201,27.666666666666686],\"home.helper\":[52,394.66666666666669,280.66666666666663,71],\"lock.helper\":[52,495.66666666666669,313.33333333333331,71.000000000000057],\"persistence.activity\":[32,714.66666666666674,331.33333333333331,67],\"persistence.background\":[32,787.66666666666674,329.33333333333331,133],\"persistence.footer\":[32,714.66666666666674,331.33333333333331,206],\"refresh.title\":[32,221.66666666666669,191,27.666666666666657],\"widget.helper\":[52,596.66666666666674,315.33333333333331,95]}\"\n",
+      "stderr": "",
+      "time": 1793888236.372431
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888237.7403069
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 34 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e8 [cell]\n      @e9 [text] \"Live Activities\"\n      @e10 [text] \"Live Activities, Allowed\"\n    @e11 [cell]\n      @e12 [text] \"Background App Refresh\"\n      @e13 [text] \"Background App Refresh, Available\"\n    @e14 [cell]\n      @e15 [button] \"Refresh Board Now\"\n    @e16 [cell]\n      @e17 [button] \"Open App Settings\"\n    @e18 [cell]\n      @e19 [button] \"Add a lasting widget\"\n        @e20 [disclosuretriangle] \"Add a lasting widget\"\n        @e21 [button]\n          @e22 [image] \"expanded\"\n    @e23 [cell]\n      @e24 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n    @e25 [cell]\n      @e26 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n    @e27 [cell]\n      @e28 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n    @e29 [cell]\n      @e30 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n      @e31 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e32 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    @e33 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    [content below collection hidden]\n  @e34 [other] \"{\"disclosure.title\":[32,337.00000000000006,201,27.666666666666686],\"home.helper\":[52,394.66666666666669,280.66666666666663,71],\"lock.helper\":[52,495.66666666666669,313.33333333333331,71.000000000000057],\"persistence.activity\":[32,714.66666666666674,331.33333333333331,67],\"persistence.background\":[32,787.66666666666674,329.33333333333331,133],\"persistence.footer\":[32,714.66666666666674,331.33333333333331,206],\"refresh.title\":[32,221.66666666666669,191,27.666666666666657],\"widget.helper\":[52,596.66666666666674,315.33333333333331,95]}\"\n",
+      "stderr": "",
+      "time": 1793888238.021065
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 33,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,337.00000000000006,201,27.666666666666686],\\\"home.helper\\\":[52,394.66666666666669,280.66666666666663,71],\\\"lock.helper\\\":[52,495.66666666666669,313.33333333333331,71.000000000000057],\\\"persistence.activity\\\":[32,714.66666666666674,331.33333333333331,67],\\\"persistence.background\\\":[32,787.66666666666674,329.33333333333331,133],\\\"persistence.footer\\\":[32,714.66666666666674,331.33333333333331,206],\\\"refresh.title\\\":[32,221.66666666666669,191,27.666666666666657],\\\"widget.helper\\\":[52,596.66666666666674,315.33333333333331,95]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 87006,\n  \"hittable\": true,\n  \"ref\": \"e34\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888238.1930492
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-XXXL-expanded-guidance.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-XXXL-expanded-guidance.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888245.082732
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "scroll",
+        "bottom",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled to bottom with 1 down passes\nsettled after 2258ms: +27 -27 (~7 unchanged)\n- @e8 [cell]\n- @e9 [text] \"Live Activities\"\n- @e10 [text] \"Live Activities, Allowed\"\n- @e11 [cell]\n- @e12 [text] \"Background App Refresh\"\n- @e13 [text] \"Background App Refresh, Available\"\n- @e14 [cell]\n- @e15 [button] \"Refresh Board Now\"\n- @e16 [cell]\n- @e17 [button] \"Open App Settings\"\n- @e18 [cell]\n- @e19 [button] \"Add a lasting widget\"\n- @e20 [disclosuretriangle] \"Add a lasting widget\"\n- @e21 [button]\n- @e22 [image] \"expanded\"\n- @e23 [cell]\n- @e24 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n- @e25 [cell]\n- @e26 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n- @e27 [cell]\n- @e28 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n- @e29 [cell]\n- @e30 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n- @e31 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n- @e32 [other] \"Vertical scroll bar, 3 pages\"\n- @e33 [other] \"Vertical scroll bar, 3 pages\"\n- @e34 [other] \"{\"disclosure.title\":[32,337.00000000000006,201,27.666666666666686],\"home.helper\":[52,394.66666666666669,280.66666666666663,71],\"lock.helper\":[52,495.66666666666669,313.33333333333331,71.000000000000057],\"persistence.activity\":[32,714.66666666666674,331.33333333333331,67],\"persistence.background\":[32,787.66666666666674,329.33333333333331,133],\"persistence.footer\":[32,714.66666666666674,331.33333333333331,206],\"refresh.title\":[32,221.66666666666669,191,27.666666666666657],\"widget.helper\":[52,596.66666666666674,315.33333333333331,95]}\"\n+ @e8~s738055 [cell] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n+ @e9~s738055 [cell] \"Sign Out\"\n+ @e10~s738055 [cell] \"Privacy\"\n+ @e11~s738055 [link] \"Privacy\"\n+ @e12~s738055 [image] \"Block\"\n+ @e13~s738055 [image] \"arrow.up.right\"\n+ @e14~s738055 [cell] \"Terms\"\n+ @e15~s738055 [link] \"Terms\"\n+ @e16~s738055 [image] \"Plain Text\"\n+ @e17~s738055 [image] \"arrow.up.right\"\n+ @e18~s738055 [cell] \"Support\"\n+ @e19~s738055 [link] \"Support\"\n+ @e20~s738055 [image] \"questionmark.circle\"\n+ @e21~s738055 [image] \"arrow.up.right\"\n+ @e22~s738055 [cell] \"Download My Data\"\n+ @e23~s738055 [link] \"Download My Data\"\n+ @e24~s738055 [image] \"Download\"\n+ @e25~s738055 [image] \"arrow.up.right\"\n+ @e26~s738055 [cell] \"Send Feedback\"\n+ @e27~s738055 [link] \"Send Feedback\"\n+ @e28~s738055 [image] \"Get Mail\"\n+ @e29~s738055 [image] \"arrow.up.right\"\n+ @e30~s738055 [cell] \"Or email hello@edmundlim.systems\"\n+ @e31~s738055 [cell] \"Delete Account\u2026\"\n+ @e32~s738055 [cell] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n+ @e33~s738055 [text] \"App Version 1.0 (11)\"\n+ @e34~s738055 [other] \"{\"Delete Account\u2026.icon\":[32,680.16666666666652,24,28.666666666666742],\"Delete Account\u2026.title\":[69.999999999999986,680.66666666666652,167.66666666666663,27.666666666666742],\"delete.footer\":[32,731.99999999999989,338,67],\"Download My Data.icon\":[32,473.16666666666657,24,29.666666666666629],\"Download My Data.title\":[70,474.16666666666657,188,27.666666666666629],\"feedback.footer\":[32,618.66666666666663,301.33333333333331,23],\"persistence.activity\":[32,-38.333333333333371,331.33333333333331,67],\"persistence.background\":[32,34.666666666666629,329.33333333333331,133],\"persistence.footer\":[32,-38.333333333333371,331.33333333333331,206],\"Privacy.icon\":[32,299.33333333333337,24,28],\"Privacy.title\":[70,299.50000000000006,72.666666666666657,27.666666666666629],\"Send Feedback.icon\":[32,570.33333333333326,24,23],\"Send Feedback.title\":[69.999999999999986,567.99999999999989,154.66666666666663,27.666666666666629],\"Sign Out.icon\":[32,206.50000000000003,24,27.666666666666686],\"Sign Out.title\":[70,206.50000000000003,86.333333333333314,27.666666666666657],\"Support.icon\":[32,416.00000000000006,24,26.333333333333314],\"Support.title\":[70,415.33333333333337,80.333333333333314,27.666666666666686],\"Terms.icon\":[32,357.50000000000006,24,27.666666666666629],\"Terms.title\":[70,357.50000000000006,60.666666666666657,27.666666666666629],\"version.footer\":[31.999999999999993,810.99999999999989,126.33333333333331,23]}\"\n",
+      "stderr": "",
+      "time": 1793888249.676466
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888251.065231
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 50 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e8 [cell]\n      @e9 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e10 [cell]\n      @e11 [button] \"Sign Out\"\n        @e12 [image] \"rectangle.portrait.and.arrow.right\"\n        @e13 [text] \"Sign Out\"\n    @e14 [cell]\n      @e15 [link] \"Privacy\"\n        @e16 [image] \"Block\"\n        @e17 [text] \"Privacy\"\n        @e18 [image] \"arrow.up.right\"\n    @e19 [cell]\n      @e20 [link] \"Terms\"\n        @e21 [image] \"Plain Text\"\n        @e22 [text] \"Terms\"\n        @e23 [image] \"arrow.up.right\"\n    @e24 [cell]\n      @e25 [link] \"Support\"\n        @e26 [image] \"questionmark.circle\"\n        @e27 [text] \"Support\"\n        @e28 [image] \"arrow.up.right\"\n    @e29 [cell]\n      @e30 [link] \"Download My Data\"\n        @e31 [image] \"Download\"\n        @e32 [text] \"Download My Data\"\n        @e33 [image] \"arrow.up.right\"\n    @e34 [cell]\n      @e35 [link] \"Send Feedback\"\n        @e36 [image] \"Get Mail\"\n        @e37 [text] \"Send Feedback\"\n        @e38 [image] \"arrow.up.right\"\n    @e39 [cell]\n      @e40 [text] \"Or email hello@edmundlim.systems\"\n    @e41 [cell]\n      @e42 [button] \"Delete Account\u2026\"\n        @e43 [image] \"Trash\"\n        @e44 [text] \"Delete Account\u2026\"\n    @e45 [cell]\n      @e46 [text] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n      @e47 [text] \"App Version 1.0 (11)\"\n    @e48 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    @e49 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n  @e50 [other] \"{\"Delete Account\u2026.icon\":[32,680.16666666666652,24,28.666666666666742],\"Delete Account\u2026.title\":[69.999999999999986,680.66666666666652,167.66666666666663,27.666666666666742],\"delete.footer\":[32,731.99999999999989,338,67],\"Download My Data.icon\":[32,473.16666666666657,24,29.666666666666629],\"Download My Data.title\":[70,474.16666666666657,188,27.666666666666629],\"feedback.footer\":[32,618.66666666666663,301.33333333333331,23],\"persistence.activity\":[32,-38.333333333333371,331.33333333333331,67],\"persistence.background\":[32,34.666666666666629,329.33333333333331,133],\"persistence.footer\":[32,-38.333333333333371,331.33333333333331,206],\"Privacy.icon\":[32,299.33333333333337,24,28],\"Privacy.title\":[70,299.50000000000006,72.666666666666657,27.666666666666629],\"Send Feedback.icon\":[32,570.33333333333326,24,23],\"Send Feedback.title\":[69.999999999999986,567.99999999999989,154.66666666666663,27.666666666666629],\"Sign Out.icon\":[32,206.50000000000003,24,27.666666666666686],\"Sign Out.title\":[70,206.50000000000003,86.333333333333314,27.666666666666657],\"Support.icon\":[32,416.00000000000006,24,26.333333333333314],\"Support.title\":[70,415.33333333333337,80.333333333333314,27.666666666666686],\"Terms.icon\":[32,357.50000000000006,24,27.666666666666629],\"Terms.title\":[70,357.50000000000006,60.666666666666657,27.666666666666629],\"version.footer\":[31.999999999999993,810.99999999999989,126.33333333333331,23]}\"\n",
+      "stderr": "",
+      "time": 1793888251.319548
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 49,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[32,680.16666666666652,24,28.666666666666742],\\\"Delete Account\u2026.title\\\":[69.999999999999986,680.66666666666652,167.66666666666663,27.666666666666742],\\\"delete.footer\\\":[32,731.99999999999989,338,67],\\\"Download My Data.icon\\\":[32,473.16666666666657,24,29.666666666666629],\\\"Download My Data.title\\\":[70,474.16666666666657,188,27.666666666666629],\\\"feedback.footer\\\":[32,618.66666666666663,301.33333333333331,23],\\\"persistence.activity\\\":[32,-38.333333333333371,331.33333333333331,67],\\\"persistence.background\\\":[32,34.666666666666629,329.33333333333331,133],\\\"persistence.footer\\\":[32,-38.333333333333371,331.33333333333331,206],\\\"Privacy.icon\\\":[32,299.33333333333337,24,28],\\\"Privacy.title\\\":[70,299.50000000000006,72.666666666666657,27.666666666666629],\\\"Send Feedback.icon\\\":[32,570.33333333333326,24,23],\\\"Send Feedback.title\\\":[69.999999999999986,567.99999999999989,154.66666666666663,27.666666666666629],\\\"Sign Out.icon\\\":[32,206.50000000000003,24,27.666666666666686],\\\"Sign Out.title\\\":[70,206.50000000000003,86.333333333333314,27.666666666666657],\\\"Support.icon\\\":[32,416.00000000000006,24,26.333333333333314],\\\"Support.title\\\":[70,415.33333333333337,80.333333333333314,27.666666666666686],\\\"Terms.icon\\\":[32,357.50000000000006,24,27.666666666666629],\\\"Terms.title\\\":[70,357.50000000000006,60.666666666666657,27.666666666666629],\\\"version.footer\\\":[31.999999999999993,810.99999999999989,126.33333333333331,23]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 87006,\n  \"hittable\": true,\n  \"ref\": \"e50\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888251.488676
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-XXXL-expanded-lower.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-light-XXXL-expanded-lower.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888254.272971
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "settings",
+        "appearance",
+        "dark"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": "",
+      "time": 1793888254.658106
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "settings",
+        "text-size",
+        "large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to large\n",
+      "stderr": "",
+      "time": 1793888256.3020558
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=account",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=default",
+        "--launch-args=--hillclimb-account-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-23bb48939566ebc32a337197\n",
+      "stderr": "",
+      "time": 1793888258.187844
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888259.5576808
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 47 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    @e8 [cell]\n      @e9 [text] \"Account, signed in\"\n        @e10 [text] \"S\"\n        @e11 [text] \"Signed In\"\n    @e12 [cell]\n      @e13 [button] \"Allow Notifications\"\n    @e14 [cell]\n      @e15 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e16 [cell]\n      @e17 [text] \"Keep Your Board Visible\"\n    @e18 [cell]\n      @e19 [text] \"Live Activities\"\n      @e20 [text] \"Live Activities, Allowed\"\n    @e21 [cell]\n      @e22 [text] \"Background App Refresh\"\n      @e23 [text] \"Background App Refresh, Available\"\n    @e24 [cell]\n      @e25 [button] \"Refresh Board Now\"\n    @e26 [cell]\n      @e27 [button] \"Open App Settings\"\n    @e28 [cell]\n      @e29 [button] \"Add a lasting widget\"\n        @e30 [disclosuretriangle] \"Add a lasting widget\"\n        @e31 [button]\n          @e32 [image] \"collapsed\"\n    @e33 [cell]\n      @e34 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n      @e35 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e36 [cell]\n      @e37 [button] \"Sign Out\"\n        @e38 [image] \"rectangle.portrait.and.arrow.right\"\n        @e39 [text] \"Sign Out\"\n    @e40 [cell]\n      @e41 [link] \"Privacy\"\n        @e42 [image] \"Block\"\n        @e43 [text] \"Privacy\"\n        @e44 [image] \"arrow.up.right\"\n    @e45 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    @e46 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    [content below collection hidden]\n  @e47 [other] \"{\"disclosure.title\":[32,578,154.33333333333331,20.333333333333371],\"identity.row\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\"notifications.footer\":[32,283.66666666666663,296,31.666666666666686],\"persistence.activity\":[32,621.33333333333326,320.33333333333331,31.666666666666629],\"persistence.background\":[32,658.99999999999989,338,63.666666666666742],\"persistence.footer\":[32,621.33333333333326,338,101.33333333333337],\"Privacy.icon\":[32,846.66666666666663,24,20.333333333333371],\"Privacy.title\":[70,846.66666666666663,55.666666666666657,20.333333333333371],\"refresh.title\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\"Sign Out.icon\":[32,761.5,24,20],\"Sign Out.title\":[70,761.33333333333337,66,20.333333333333371]}\"\n",
+      "stderr": "",
+      "time": 1793888259.8456588
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 46,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,578,154.33333333333331,20.333333333333371],\\\"identity.row\\\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\\\"notifications.footer\\\":[32,283.66666666666663,296,31.666666666666686],\\\"persistence.activity\\\":[32,621.33333333333326,320.33333333333331,31.666666666666629],\\\"persistence.background\\\":[32,658.99999999999989,338,63.666666666666742],\\\"persistence.footer\\\":[32,621.33333333333326,338,101.33333333333337],\\\"Privacy.icon\\\":[32,846.66666666666663,24,20.333333333333371],\\\"Privacy.title\\\":[70,846.66666666666663,55.666666666666657,20.333333333333371],\\\"refresh.title\\\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\\\"Sign Out.icon\\\":[32,761.5,24,20],\\\"Sign Out.title\\\":[70,761.33333333333337,66,20.333333333333371]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 91160,\n  \"hittable\": true,\n  \"ref\": \"e47\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888260.022967
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-default-large-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-default-large-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888260.717412
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "press",
+        "role=button label=\"Add a lasting widget\"",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Tapped role=button label=\"Add a lasting widget\" (201, 588)\nsettled after 975ms: +4 -4 (~26 unchanged)\n- @e27 [cell] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n- @e28 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n- @e29 [cell] \"Sign Out\"\n- @e30 [other] \"{\"disclosure.title\":[32,578,154.33333333333331,20.333333333333371],\"identity.row\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\"notifications.footer\":[32,283.66666666666663,296,31.666666666666686],\"persistence.activity\":[32,621.33333333333326,320.33333333333331,31.666666666666629],\"persistence.background\":[32,658.99999999999989,338,63.666666666666742],\"persistence.footer\":[32,621.33333333333326,338,101.33333333333337],\"Privacy.icon\":[32,846.66666666666663,24,20.333333333333371],\"Privacy.title\":[70,846.66666666666663,55.666666666666657,20.333333333333371],\"refresh.title\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\"Sign Out.icon\":[32,761.5,24,20],\"Sign Out.title\":[70,761.33333333333337,66,20.333333333333371]}\"\n+ @e27~s738069 [cell] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n+ @e28~s738069 [cell] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n+ @e29~s738069 [cell] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n+ @e30~s738069 [other] \"{\"disclosure.title\":[32,578,154.33333333333331,20.333333333333371],\"home.helper\":[52,628.33333333333326,309.33333333333331,33.666666666666629],\"identity.row\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\"lock.helper\":[52,692,306.66666666666663,33.666666666666629],\"notifications.footer\":[32,283.66666666666663,296,31.666666666666686],\"persistence.activity\":[32,830.33333333333337,320.33333333333331,31.666666666666629],\"persistence.background\":[32,868,338,63.666666666666742],\"persistence.footer\":[32,830.33333333333337,338,101.33333333333337],\"refresh.title\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\"widget.helper\":[52,755.66666666666663,298.33333333333331,51.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793888262.6037161
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888264.009591
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 44 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    @e8 [cell]\n      @e9 [text] \"Account, signed in\"\n        @e10 [text] \"S\"\n        @e11 [text] \"Signed In\"\n    @e12 [cell]\n      @e13 [button] \"Allow Notifications\"\n    @e14 [cell]\n      @e15 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e16 [cell]\n      @e17 [text] \"Keep Your Board Visible\"\n    @e18 [cell]\n      @e19 [text] \"Live Activities\"\n      @e20 [text] \"Live Activities, Allowed\"\n    @e21 [cell]\n      @e22 [text] \"Background App Refresh\"\n      @e23 [text] \"Background App Refresh, Available\"\n    @e24 [cell]\n      @e25 [button] \"Refresh Board Now\"\n    @e26 [cell]\n      @e27 [button] \"Open App Settings\"\n    @e28 [cell]\n      @e29 [button] \"Add a lasting widget\"\n        @e30 [disclosuretriangle] \"Add a lasting widget\"\n        @e31 [button]\n          @e32 [image] \"expanded\"\n    @e33 [cell]\n      @e34 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n    @e35 [cell]\n      @e36 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n    @e37 [cell]\n      @e38 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n    @e39 [cell]\n      @e40 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n      @e41 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e42 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    @e43 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    [content below collection hidden]\n  @e44 [other] \"{\"disclosure.title\":[32,578,154.33333333333331,20.333333333333371],\"home.helper\":[52,628.33333333333326,309.33333333333331,33.666666666666629],\"identity.row\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\"lock.helper\":[52,692,306.66666666666663,33.666666666666629],\"notifications.footer\":[32,283.66666666666663,296,31.666666666666686],\"persistence.activity\":[32,830.33333333333337,320.33333333333331,31.666666666666629],\"persistence.background\":[32,868,338,63.666666666666742],\"persistence.footer\":[32,830.33333333333337,338,101.33333333333337],\"refresh.title\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\"widget.helper\":[52,755.66666666666663,298.33333333333331,51.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793888264.27521
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 43,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,578,154.33333333333331,20.333333333333371],\\\"home.helper\\\":[52,628.33333333333326,309.33333333333331,33.666666666666629],\\\"identity.row\\\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\\\"lock.helper\\\":[52,692,306.66666666666663,33.666666666666629],\\\"notifications.footer\\\":[32,283.66666666666663,296,31.666666666666686],\\\"persistence.activity\\\":[32,830.33333333333337,320.33333333333331,31.666666666666629],\\\"persistence.background\\\":[32,868,338,63.666666666666742],\\\"persistence.footer\\\":[32,830.33333333333337,338,101.33333333333337],\\\"refresh.title\\\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\\\"widget.helper\\\":[52,755.66666666666663,298.33333333333331,51.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 91160,\n  \"hittable\": true,\n  \"ref\": \"e44\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888264.445021
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-default-expanded-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-default-expanded-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888265.511777
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "scroll",
+        "down",
+        "0.5",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled down by 0.5 of the viewport (437px)\nsettled after 2364ms: +14 -28 (~16 unchanged)\n- @e8 [cell]\n- @e9 [text] \"Account, signed in\"\n- @e10 [text] \"S\"\n- @e11 [text] \"Signed In\"\n- @e12 [cell]\n- @e13 [button] \"Allow Notifications\"\n- @e14 [cell]\n- @e15 [text] \"Allow notifications so new reminders can appear as banners.\"\n- @e16 [cell]\n- @e17 [text] \"Keep Your Board Visible\"\n- @e18 [cell]\n- @e19 [text] \"Live Activities\"\n- @e20 [text] \"Live Activities, Allowed\"\n- @e21 [cell]\n- @e22 [text] \"Background App Refresh\"\n+ @e8~s738079 [cell] \"Background App Refresh\"\n- @e32 [image] \"expanded\"\n- @e33 [cell]\n- @e34 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n- @e35 [cell]\n- @e36 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n- @e37 [cell]\n- @e38 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n- @e39 [cell]\n- @e40 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n- @e41 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n- @e42 [other] \"Vertical scroll bar, 2 pages\"\n- @e43 [other] \"Vertical scroll bar, 2 pages\"\n- @e44 [other] \"{\"disclosure.title\":[32,578,154.33333333333331,20.333333333333371],\"home.helper\":[52,628.33333333333326,309.33333333333331,33.666666666666629],\"identity.row\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\"lock.helper\":[52,692,306.66666666666663,33.666666666666629],\"notifications.footer\":[32,283.66666666666663,296,31.666666666666686],\"persistence.activity\":[32,830.33333333333337,320.33333333333331,31.666666666666629],\"persistence.background\":[32,868,338,63.666666666666742],\"persistence.footer\":[32,830.33333333333337,338,101.33333333333337],\"refresh.title\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\"widget.helper\":[52,755.66666666666663,298.33333333333331,51.666666666666629]}\"\n+ @e18~s738079 [cell] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n+ @e19~s738079 [cell] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n+ @e20~s738079 [cell] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n+ @e21~s738079 [cell] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n+ @e22~s738079 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n+ @e23~s738079 [cell] \"Sign Out\"\n+ @e24~s738079 [cell] \"Privacy\"\n+ @e25~s738079 [link] \"Privacy\"\n+ @e26~s738079 [image] \"Block\"\n+ @e27~s738079 [image] \"arrow.up.right\"\n+ @e28~s738079 [cell] \"Terms\"\n+ @e29~s738079 [link] \"Terms\"\n+ @e30~s738079 [other] \"{\"disclosure.title\":[32,284.66666666666663,154.33333333333331,20.333333333333314],\"home.helper\":[52,335,309.33333333333331,33.666666666666686],\"lock.helper\":[52,398.66666666666663,306.66666666666663,33.666666666666686],\"persistence.activity\":[32,537,320.33333333333331,31.666666666666629],\"persistence.background\":[32,574.66666666666663,338,63.666666666666742],\"persistence.footer\":[32,537,338,101.33333333333337],\"Privacy.icon\":[32,762.33333333333326,24,20.333333333333371],\"Privacy.title\":[70,762.33333333333326,55.666666666666657,20.333333333333371],\"refresh.title\":[32,183.99999999999997,146.66666666666666,20.333333333333343],\"Sign Out.icon\":[32,677.16666666666663,24,20],\"Sign Out.title\":[70,677,66,20.333333333333371],\"Support.icon\":[32,863.66666666666663,24,19],\"Support.title\":[70,863,61.666666666666657,20.333333333333371],\"Terms.icon\":[32,812.83333333333326,24,20],\"Terms.title\":[70,812.66666666666663,47,20.333333333333371],\"widget.helper\":[52,462.33333333333326,298.33333333333331,51.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793888268.768954
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888270.195883
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 55 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e8 [cell]\n      @e9 [text] \"Keep Your Board Visible\"\n    @e10 [cell]\n      @e11 [text] \"Live Activities\"\n      @e12 [text] \"Live Activities, Allowed\"\n    @e13 [cell]\n      @e14 [text] \"Background App Refresh\"\n      @e15 [text] \"Background App Refresh, Available\"\n    @e16 [cell]\n      @e17 [button] \"Refresh Board Now\"\n    @e18 [cell]\n      @e19 [button] \"Open App Settings\"\n    @e20 [cell]\n      @e21 [button] \"Add a lasting widget\"\n        @e22 [disclosuretriangle] \"Add a lasting widget\"\n        @e23 [button]\n          @e24 [image] \"expanded\"\n    @e25 [cell]\n      @e26 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n    @e27 [cell]\n      @e28 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n    @e29 [cell]\n      @e30 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n    @e31 [cell]\n      @e32 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n      @e33 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e34 [cell]\n      @e35 [button] \"Sign Out\"\n        @e36 [image] \"rectangle.portrait.and.arrow.right\"\n        @e37 [text] \"Sign Out\"\n    @e38 [cell]\n      @e39 [link] \"Privacy\"\n        @e40 [image] \"Block\"\n        @e41 [text] \"Privacy\"\n        @e42 [image] \"arrow.up.right\"\n    @e43 [cell]\n      @e44 [link] \"Terms\"\n        @e45 [image] \"Plain Text\"\n        @e46 [text] \"Terms\"\n        @e47 [image] \"arrow.up.right\"\n    @e48 [cell]\n      @e49 [link] \"Support\"\n        @e50 [image] \"questionmark.circle\"\n        @e51 [text] \"Support\"\n        @e52 [image] \"arrow.up.right\"\n    @e53 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    @e54 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    [content below collection hidden]\n  @e55 [other] \"{\"disclosure.title\":[32,284.66666666666663,154.33333333333331,20.333333333333314],\"home.helper\":[52,335,309.33333333333331,33.666666666666686],\"lock.helper\":[52,398.66666666666663,306.66666666666663,33.666666666666686],\"persistence.activity\":[32,537,320.33333333333331,31.666666666666629],\"persistence.background\":[32,574.66666666666663,338,63.666666666666742],\"persistence.footer\":[32,537,338,101.33333333333337],\"Privacy.icon\":[32,762.33333333333326,24,20.333333333333371],\"Privacy.title\":[70,762.33333333333326,55.666666666666657,20.333333333333371],\"refresh.title\":[32,183.99999999999997,146.66666666666666,20.333333333333343],\"Sign Out.icon\":[32,677.16666666666663,24,20],\"Sign Out.title\":[70,677,66,20.333333333333371],\"Support.icon\":[32,863.66666666666663,24,19],\"Support.title\":[70,863,61.666666666666657,20.333333333333371],\"Terms.icon\":[32,812.83333333333326,24,20],\"Terms.title\":[70,812.66666666666663,47,20.333333333333371],\"widget.helper\":[52,462.33333333333326,298.33333333333331,51.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793888270.489761
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 54,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,284.66666666666663,154.33333333333331,20.333333333333314],\\\"home.helper\\\":[52,335,309.33333333333331,33.666666666666686],\\\"lock.helper\\\":[52,398.66666666666663,306.66666666666663,33.666666666666686],\\\"persistence.activity\\\":[32,537,320.33333333333331,31.666666666666629],\\\"persistence.background\\\":[32,574.66666666666663,338,63.666666666666742],\\\"persistence.footer\\\":[32,537,338,101.33333333333337],\\\"Privacy.icon\\\":[32,762.33333333333326,24,20.333333333333371],\\\"Privacy.title\\\":[70,762.33333333333326,55.666666666666657,20.333333333333371],\\\"refresh.title\\\":[32,183.99999999999997,146.66666666666666,20.333333333333343],\\\"Sign Out.icon\\\":[32,677.16666666666663,24,20],\\\"Sign Out.title\\\":[70,677,66,20.333333333333371],\\\"Support.icon\\\":[32,863.66666666666663,24,19],\\\"Support.title\\\":[70,863,61.666666666666657,20.333333333333371],\\\"Terms.icon\\\":[32,812.83333333333326,24,20],\\\"Terms.title\\\":[70,812.66666666666663,47,20.333333333333371],\\\"widget.helper\\\":[52,462.33333333333326,298.33333333333331,51.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 91160,\n  \"hittable\": true,\n  \"ref\": \"e55\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888270.6650891
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-default-expanded-guidance.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-default-expanded-guidance.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888271.319319
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "scroll",
+        "bottom",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled to bottom with 1 down passes\nsettled after 2330ms: +18 -38 (~17 unchanged)\n- @e8 [cell]\n- @e9 [text] \"Keep Your Board Visible\"\n- @e10 [cell]\n- @e11 [text] \"Live Activities\"\n- @e12 [text] \"Live Activities, Allowed\"\n- @e13 [cell]\n- @e14 [text] \"Background App Refresh\"\n- @e15 [text] \"Background App Refresh, Available\"\n- @e16 [cell]\n- @e17 [button] \"Refresh Board Now\"\n- @e18 [cell]\n- @e19 [button] \"Open App Settings\"\n- @e20 [cell]\n- @e21 [button] \"Add a lasting widget\"\n- @e22 [disclosuretriangle] \"Add a lasting widget\"\n- @e23 [button]\n- @e24 [image] \"expanded\"\n- @e25 [cell]\n- @e26 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n- @e27 [cell]\n- @e28 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n- @e29 [cell]\n- @e30 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n- @e31 [cell]\n- @e32 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n+ @e8~s738089 [cell] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n+ @e9~s738089 [cell] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n- @e34 [cell]\n- @e35 [button] \"Sign Out\"\n- @e36 [image] \"rectangle.portrait.and.arrow.right\"\n- @e37 [text] \"Sign Out\"\n- @e38 [cell]\n+ @e11~s738089 [cell] \"Sign Out\"\n+ @e12~s738089 [cell] \"Privacy\"\n- @e41 [text] \"Privacy\"\n- @e43 [cell]\n+ @e16~s738089 [cell] \"Terms\"\n- @e46 [text] \"Terms\"\n- @e48 [cell]\n+ @e20~s738089 [cell] \"Support\"\n- @e51 [text] \"Support\"\n- @e53 [other] \"Vertical scroll bar, 2 pages\"\n- @e54 [other] \"Vertical scroll bar, 2 pages\"\n- @e55 [other] \"{\"disclosure.title\":[32,284.66666666666663,154.33333333333331,20.333333333333314],\"home.helper\":[52,335,309.33333333333331,33.666666666666686],\"lock.helper\":[52,398.66666666666663,306.66666666666663,33.666666666666686],\"persistence.activity\":[32,537,320.33333333333331,31.666666666666629],\"persistence.background\":[32,574.66666666666663,338,63.666666666666742],\"persistence.footer\":[32,537,338,101.33333333333337],\"Privacy.icon\":[32,762.33333333333326,24,20.333333333333371],\"Privacy.title\":[70,762.33333333333326,55.666666666666657,20.333333333333371],\"refresh.title\":[32,183.99999999999997,146.66666666666666,20.333333333333343],\"Sign Out.icon\":[32,677.16666666666663,24,20],\"Sign Out.title\":[70,677,66,20.333333333333371],\"Support.icon\":[32,863.66666666666663,24,19],\"Support.title\":[70,863,61.666666666666657,20.333333333333371],\"Terms.icon\":[32,812.83333333333326,24,20],\"Terms.title\":[70,812.66666666666663,47,20.333333333333371],\"widget.helper\":[52,462.33333333333326,298.33333333333331,51.666666666666629]}\"\n+ @e24~s738089 [cell] \"Download My Data\"\n+ @e25~s738089 [link] \"Download My Data\"\n+ @e26~s738089 [image] \"Download\"\n+ @e27~s738089 [image] \"arrow.up.right\"\n+ @e28~s738089 [cell] \"Send Feedback\"\n+ @e29~s738089 [link] \"Send Feedback\"\n+ @e30~s738089 [image] \"Get Mail\"\n+ @e31~s738089 [image] \"arrow.up.right\"\n+ @e32~s738089 [cell] \"Or email hello@edmundlim.systems\"\n+ @e33~s738089 [cell] \"Delete Account\u2026\"\n+ @e34~s738089 [cell] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n+ @e35~s738089 [other] \"{\"Delete Account\u2026.icon\":[32,730.83333333333326,24,20.666666666666742],\"Delete Account\u2026.title\":[70,731,130,20.333333333333258],\"delete.footer\":[32,774.66666666666663,319.33333333333331,31.666666666666629],\"Download My Data.icon\":[32,547.00000000000011,24,21.333333333333371],\"Download My Data.title\":[70,547.50000000000011,143.66666666666666,20.333333333333371],\"feedback.footer\":[32,676.66666666666663,215.66666666666666,15.666666666666629],\"lock.helper\":[52,32.333333333333371,306.66666666666663,33.666666666666671],\"persistence.activity\":[32,170.66666666666674,320.33333333333331,31.666666666666657],\"persistence.background\":[32,208.33333333333343,338,63.666666666666686],\"persistence.footer\":[32,170.66666666666674,338,101.33333333333331],\"Privacy.icon\":[32,396,24,20.333333333333314],\"Privacy.title\":[70,396,55.666666666666657,20.333333333333314],\"Send Feedback.icon\":[32,635.33333333333337,24,16.333333333333371],\"Send Feedback.title\":[70,633.33333333333337,118.33333333333331,20.333333333333371],\"Sign Out.icon\":[32,310.83333333333343,24,20],\"Sign Out.title\":[70,310.66666666666674,66,20.333333333333314],\"Support.icon\":[32,497.33333333333343,24,18.999999999999943],\"Support.title\":[70,496.66666666666674,61.666666666666657,20.333333333333371],\"Terms.icon\":[32,446.50000000000006,24,20],\"Terms.title\":[70,446.33333333333337,47,20.333333333333314],\"version.footer\":[32,818.33333333333326,91,15.666666666666742],\"widget.helper\":[52,96,298.33333333333331,51.666666666666657]}\"\n",
+      "stderr": "",
+      "time": 1793888275.778352
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888277.1544478
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 55 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e8 [cell]\n      @e9 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n    @e10 [cell]\n      @e11 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n    @e12 [cell]\n      @e13 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n      @e14 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e15 [cell]\n      @e16 [button] \"Sign Out\"\n        @e17 [image] \"rectangle.portrait.and.arrow.right\"\n        @e18 [text] \"Sign Out\"\n    @e19 [cell]\n      @e20 [link] \"Privacy\"\n        @e21 [image] \"Block\"\n        @e22 [text] \"Privacy\"\n        @e23 [image] \"arrow.up.right\"\n    @e24 [cell]\n      @e25 [link] \"Terms\"\n        @e26 [image] \"Plain Text\"\n        @e27 [text] \"Terms\"\n        @e28 [image] \"arrow.up.right\"\n    @e29 [cell]\n      @e30 [link] \"Support\"\n        @e31 [image] \"questionmark.circle\"\n        @e32 [text] \"Support\"\n        @e33 [image] \"arrow.up.right\"\n    @e34 [cell]\n      @e35 [link] \"Download My Data\"\n        @e36 [image] \"Download\"\n        @e37 [text] \"Download My Data\"\n        @e38 [image] \"arrow.up.right\"\n    @e39 [cell]\n      @e40 [link] \"Send Feedback\"\n        @e41 [image] \"Get Mail\"\n        @e42 [text] \"Send Feedback\"\n        @e43 [image] \"arrow.up.right\"\n    @e44 [cell]\n      @e45 [text] \"Or email hello@edmundlim.systems\"\n    @e46 [cell]\n      @e47 [button] \"Delete Account\u2026\"\n        @e48 [image] \"Trash\"\n        @e49 [text] \"Delete Account\u2026\"\n    @e50 [cell]\n      @e51 [text] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n      @e52 [text] \"App Version 1.0 (11)\"\n    @e53 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    @e54 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n  @e55 [other] \"{\"Delete Account\u2026.icon\":[32,730.83333333333326,24,20.666666666666742],\"Delete Account\u2026.title\":[70,731,130,20.333333333333258],\"delete.footer\":[32,774.66666666666663,319.33333333333331,31.666666666666629],\"Download My Data.icon\":[32,547.00000000000011,24,21.333333333333371],\"Download My Data.title\":[70,547.50000000000011,143.66666666666666,20.333333333333371],\"feedback.footer\":[32,676.66666666666663,215.66666666666666,15.666666666666629],\"lock.helper\":[52,32.333333333333371,306.66666666666663,33.666666666666671],\"persistence.activity\":[32,170.66666666666674,320.33333333333331,31.666666666666657],\"persistence.background\":[32,208.33333333333343,338,63.666666666666686],\"persistence.footer\":[32,170.66666666666674,338,101.33333333333331],\"Privacy.icon\":[32,396,24,20.333333333333314],\"Privacy.title\":[70,396,55.666666666666657,20.333333333333314],\"Send Feedback.icon\":[32,635.33333333333337,24,16.333333333333371],\"Send Feedback.title\":[70,633.33333333333337,118.33333333333331,20.333333333333371],\"Sign Out.icon\":[32,310.83333333333343,24,20],\"Sign Out.title\":[70,310.66666666666674,66,20.333333333333314],\"Support.icon\":[32,497.33333333333343,24,18.999999999999943],\"Support.title\":[70,496.66666666666674,61.666666666666657,20.333333333333371],\"Terms.icon\":[32,446.50000000000006,24,20],\"Terms.title\":[70,446.33333333333337,47,20.333333333333314],\"version.footer\":[32,818.33333333333326,91,15.666666666666742],\"widget.helper\":[52,96,298.33333333333331,51.666666666666657]}\"\n",
+      "stderr": "",
+      "time": 1793888277.427448
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 54,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[32,730.83333333333326,24,20.666666666666742],\\\"Delete Account\u2026.title\\\":[70,731,130,20.333333333333258],\\\"delete.footer\\\":[32,774.66666666666663,319.33333333333331,31.666666666666629],\\\"Download My Data.icon\\\":[32,547.00000000000011,24,21.333333333333371],\\\"Download My Data.title\\\":[70,547.50000000000011,143.66666666666666,20.333333333333371],\\\"feedback.footer\\\":[32,676.66666666666663,215.66666666666666,15.666666666666629],\\\"lock.helper\\\":[52,32.333333333333371,306.66666666666663,33.666666666666671],\\\"persistence.activity\\\":[32,170.66666666666674,320.33333333333331,31.666666666666657],\\\"persistence.background\\\":[32,208.33333333333343,338,63.666666666666686],\\\"persistence.footer\\\":[32,170.66666666666674,338,101.33333333333331],\\\"Privacy.icon\\\":[32,396,24,20.333333333333314],\\\"Privacy.title\\\":[70,396,55.666666666666657,20.333333333333314],\\\"Send Feedback.icon\\\":[32,635.33333333333337,24,16.333333333333371],\\\"Send Feedback.title\\\":[70,633.33333333333337,118.33333333333331,20.333333333333371],\\\"Sign Out.icon\\\":[32,310.83333333333343,24,20],\\\"Sign Out.title\\\":[70,310.66666666666674,66,20.333333333333314],\\\"Support.icon\\\":[32,497.33333333333343,24,18.999999999999943],\\\"Support.title\\\":[70,496.66666666666674,61.666666666666657,20.333333333333371],\\\"Terms.icon\\\":[32,446.50000000000006,24,20],\\\"Terms.title\\\":[70,446.33333333333337,47,20.333333333333314],\\\"version.footer\\\":[32,818.33333333333326,91,15.666666666666742],\\\"widget.helper\\\":[52,96,298.33333333333331,51.666666666666657]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 91160,\n  \"hittable\": true,\n  \"ref\": \"e55\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888277.609407
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-default-expanded-lower.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-default-expanded-lower.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888278.2653708
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "settings",
+        "appearance",
+        "dark"
+      ],
+      "exit": 0,
+      "stdout": "Updated setting: appearance\n",
+      "stderr": "",
+      "time": 1793888278.6585011
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "settings",
+        "text-size",
+        "extra-extra-extra-large"
+      ],
+      "exit": 0,
+      "stdout": "Text size set to extra-extra-extra-large\n",
+      "stderr": "",
+      "time": 1793888278.933273
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "open",
+        "systems.edmundlim.NotepadHillclimb",
+        "--relaunch",
+        "--launch-args=--hillclimb-demo",
+        "--launch-args=account",
+        "--launch-args=--hillclimb-style",
+        "--launch-args=dark",
+        "--launch-args=--hillclimb-size",
+        "--launch-args=XXXL",
+        "--launch-args=--hillclimb-account-appearance",
+        "--launch-args=enabled"
+      ],
+      "exit": 0,
+      "stdout": "Opened: systems.edmundlim.NotepadHillclimb\nSession state: /Users/limboenedmund/.t3/userdata/device/agent-device/sessions/t3-23bb48939566ebc32a337197\n",
+      "stderr": "",
+      "time": 1793888280.592266
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888281.920376
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 38 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    @e8 [cell]\n      @e9 [text] \"Account, signed in\"\n        @e10 [text] \"S\"\n        @e11 [text] \"Signed In\"\n    @e12 [cell]\n      @e13 [button] \"Allow Notifications\"\n    @e14 [cell]\n      @e15 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e16 [cell]\n      @e17 [text] \"Keep Your Board Visible\"\n    @e18 [cell]\n      @e19 [text] \"Live Activities\"\n      @e20 [text] \"Live Activities, Allowed\"\n    @e21 [cell]\n      @e22 [text] \"Background App Refresh\"\n      @e23 [text] \"Background App Refresh, Available\"\n    @e24 [cell]\n      @e25 [button] \"Refresh Board Now\"\n    @e26 [cell]\n      @e27 [button] \"Open App Settings\"\n    @e28 [cell]\n      @e29 [button] \"Add a lasting widget\"\n        @e30 [disclosuretriangle] \"Add a lasting widget\"\n        @e31 [button]\n          @e32 [image] \"collapsed\"\n    @e33 [cell]\n      @e34 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n      @e35 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e36 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    @e37 [other] \"Vertical scroll bar, 2 pages\" [scrollable]\n    [content below collection hidden]\n  @e38 [other] \"{\"disclosure.title\":[32,674.33333333333337,201,27.666666666666629],\"identity.row\":[32,155,145,27.666666666666657],\"notifications.footer\":[32,298.33333333333337,312.66666666666663,45],\"persistence.activity\":[32,725,331.33333333333331,67],\"persistence.background\":[32,798,329.33333333333331,133],\"persistence.footer\":[32,725,331.33333333333331,206],\"refresh.title\":[32,559,191,27.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793888282.180012
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 37,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,674.33333333333337,201,27.666666666666629],\\\"identity.row\\\":[32,155,145,27.666666666666657],\\\"notifications.footer\\\":[32,298.33333333333337,312.66666666666663,45],\\\"persistence.activity\\\":[32,725,331.33333333333331,67],\\\"persistence.background\\\":[32,798,329.33333333333331,133],\\\"persistence.footer\\\":[32,725,331.33333333333331,206],\\\"refresh.title\\\":[32,559,191,27.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 94306,\n  \"hittable\": true,\n  \"ref\": \"e38\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888282.347224
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-XXXL-large-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-XXXL-large-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888283.01075
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "press",
+        "role=button label=\"Add a lasting widget\"",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Tapped role=button label=\"Add a lasting widget\" (201, 688)\nsettled after 965ms: +2 -3 (~26 unchanged)\n- @e27 [cell] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n- @e28 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n- @e29 [other] \"{\"disclosure.title\":[32,674.33333333333337,201,27.666666666666629],\"identity.row\":[32,155,145,27.666666666666657],\"notifications.footer\":[32,298.33333333333337,312.66666666666663,45],\"persistence.activity\":[32,725,331.33333333333331,67],\"persistence.background\":[32,798,329.33333333333331,133],\"persistence.footer\":[32,725,331.33333333333331,206],\"refresh.title\":[32,559,191,27.666666666666629]}\"\n+ @e27~s738103 [cell] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n+ @e28~s738103 [other] \"{\"disclosure.title\":[32,674.33333333333337,201,27.666666666666629],\"home.helper\":[52,732,280.66666666666663,71],\"identity.row\":[32,155,145,27.666666666666657],\"lock.helper\":[52,833,313.33333333333331,71],\"notifications.footer\":[32,298.33333333333337,312.66666666666663,45],\"refresh.title\":[32,559,191,27.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793888284.792903
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888286.176621
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 39 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    @e8 [cell]\n      @e9 [text] \"Account, signed in\"\n        @e10 [text] \"S\"\n        @e11 [text] \"Signed In\"\n    @e12 [cell]\n      @e13 [button] \"Allow Notifications\"\n    @e14 [cell]\n      @e15 [text] \"Allow notifications so new reminders can appear as banners.\"\n    @e16 [cell]\n      @e17 [text] \"Keep Your Board Visible\"\n    @e18 [cell]\n      @e19 [text] \"Live Activities\"\n      @e20 [text] \"Live Activities, Allowed\"\n    @e21 [cell]\n      @e22 [text] \"Background App Refresh\"\n      @e23 [text] \"Background App Refresh, Available\"\n    @e24 [cell]\n      @e25 [button] \"Refresh Board Now\"\n    @e26 [cell]\n      @e27 [button] \"Open App Settings\"\n    @e28 [cell]\n      @e29 [button] \"Add a lasting widget\"\n        @e30 [disclosuretriangle] \"Add a lasting widget\"\n        @e31 [button]\n          @e32 [image] \"expanded\"\n    @e33 [cell]\n      @e34 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n    @e35 [cell]\n      @e36 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n    @e37 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    @e38 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    [content below collection hidden]\n  @e39 [other] \"{\"disclosure.title\":[32,674.33333333333337,201,27.666666666666629],\"home.helper\":[52,732,280.66666666666663,71],\"identity.row\":[32,155,145,27.666666666666657],\"lock.helper\":[52,833,313.33333333333331,71],\"notifications.footer\":[32,298.33333333333337,312.66666666666663,45],\"refresh.title\":[32,559,191,27.666666666666629]}\"\n",
+      "stderr": "",
+      "time": 1793888286.434726
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 38,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,674.33333333333337,201,27.666666666666629],\\\"home.helper\\\":[52,732,280.66666666666663,71],\\\"identity.row\\\":[32,155,145,27.666666666666657],\\\"lock.helper\\\":[52,833,313.33333333333331,71],\\\"notifications.footer\\\":[32,298.33333333333337,312.66666666666663,45],\\\"refresh.title\\\":[32,559,191,27.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 94306,\n  \"hittable\": true,\n  \"ref\": \"e39\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888286.6085482
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-XXXL-expanded-top.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-XXXL-expanded-top.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888287.303461
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "scroll",
+        "down",
+        "0.5",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled down by 0.5 of the viewport (437px)\nsettled after 2300ms: +7 -22 (~17 unchanged)\n- @e8 [cell]\n- @e9 [text] \"Account, signed in\"\n- @e10 [text] \"S\"\n- @e11 [text] \"Signed In\"\n- @e12 [cell]\n- @e13 [button] \"Allow Notifications\"\n- @e14 [cell]\n- @e15 [text] \"Allow notifications so new reminders can appear as banners.\"\n- @e16 [cell]\n- @e17 [text] \"Keep Your Board Visible\"\n- @e18 [cell]\n- @e19 [text] \"Live Activities\"\n+ @e8~s738113 [cell] \"Live Activities\"\n- @e21 [cell]\n- @e22 [text] \"Background App Refresh\"\n+ @e10~s738113 [cell] \"Background App Refresh\"\n- @e32 [image] \"expanded\"\n- @e33 [cell]\n- @e34 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n- @e35 [cell]\n- @e36 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n- @e37 [other] \"Vertical scroll bar, 3 pages\"\n- @e38 [other] \"Vertical scroll bar, 3 pages\"\n- @e39 [other] \"{\"disclosure.title\":[32,674.33333333333337,201,27.666666666666629],\"home.helper\":[52,732,280.66666666666663,71],\"identity.row\":[32,155,145,27.666666666666657],\"lock.helper\":[52,833,313.33333333333331,71],\"notifications.footer\":[32,298.33333333333337,312.66666666666663,45],\"refresh.title\":[32,559,191,27.666666666666629]}\"\n+ @e20~s738113 [cell] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n+ @e21~s738113 [cell] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n+ @e22~s738113 [cell] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n+ @e23~s738113 [cell] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n+ @e24~s738113 [other] \"{\"disclosure.title\":[32,381,201,27.666666666666686],\"home.helper\":[52,438.66666666666663,280.66666666666663,71],\"lock.helper\":[52,539.66666666666663,313.33333333333331,71],\"persistence.activity\":[32,758.66666666666663,331.33333333333331,67],\"persistence.background\":[32,831.66666666666663,329.33333333333331,133],\"persistence.footer\":[32,758.66666666666663,331.33333333333331,206],\"refresh.title\":[32,265.66666666666663,191,27.666666666666686],\"widget.helper\":[52,640.66666666666663,315.33333333333331,95]}\"\n",
+      "stderr": "",
+      "time": 1793888290.432518
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888291.823682
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 36 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e8 [cell]\n      @e9 [text] \"Keep Your Board Visible\"\n    @e10 [cell]\n      @e11 [text] \"Live Activities\"\n      @e12 [text] \"Live Activities, Allowed\"\n    @e13 [cell]\n      @e14 [text] \"Background App Refresh\"\n      @e15 [text] \"Background App Refresh, Available\"\n    @e16 [cell]\n      @e17 [button] \"Refresh Board Now\"\n    @e18 [cell]\n      @e19 [button] \"Open App Settings\"\n    @e20 [cell]\n      @e21 [button] \"Add a lasting widget\"\n        @e22 [disclosuretriangle] \"Add a lasting widget\"\n        @e23 [button]\n          @e24 [image] \"expanded\"\n    @e25 [cell]\n      @e26 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n    @e27 [cell]\n      @e28 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n    @e29 [cell]\n      @e30 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n    @e31 [cell]\n      @e32 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n      @e33 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e34 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    @e35 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    [content below collection hidden]\n  @e36 [other] \"{\"disclosure.title\":[32,381,201,27.666666666666686],\"home.helper\":[52,438.66666666666663,280.66666666666663,71],\"lock.helper\":[52,539.66666666666663,313.33333333333331,71],\"persistence.activity\":[32,758.66666666666663,331.33333333333331,67],\"persistence.background\":[32,831.66666666666663,329.33333333333331,133],\"persistence.footer\":[32,758.66666666666663,331.33333333333331,206],\"refresh.title\":[32,265.66666666666663,191,27.666666666666686],\"widget.helper\":[52,640.66666666666663,315.33333333333331,95]}\"\n",
+      "stderr": "",
+      "time": 1793888292.091838
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 35,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,381,201,27.666666666666686],\\\"home.helper\\\":[52,438.66666666666663,280.66666666666663,71],\\\"lock.helper\\\":[52,539.66666666666663,313.33333333333331,71],\\\"persistence.activity\\\":[32,758.66666666666663,331.33333333333331,67],\\\"persistence.background\\\":[32,831.66666666666663,329.33333333333331,133],\\\"persistence.footer\\\":[32,758.66666666666663,331.33333333333331,206],\\\"refresh.title\\\":[32,265.66666666666663,191,27.666666666666686],\\\"widget.helper\\\":[52,640.66666666666663,315.33333333333331,95]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 94306,\n  \"hittable\": true,\n  \"ref\": \"e36\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888292.254612
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-XXXL-expanded-guidance.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-XXXL-expanded-guidance.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888310.48149
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "scroll",
+        "bottom",
+        "--settle"
+      ],
+      "exit": 0,
+      "stdout": "Scrolled to bottom with 1 down passes\nsettled after 2330ms: +27 -29 (~7 unchanged)\n- @e8 [cell]\n- @e9 [text] \"Keep Your Board Visible\"\n- @e10 [cell]\n- @e11 [text] \"Live Activities\"\n- @e12 [text] \"Live Activities, Allowed\"\n- @e13 [cell]\n- @e14 [text] \"Background App Refresh\"\n- @e15 [text] \"Background App Refresh, Available\"\n- @e16 [cell]\n- @e17 [button] \"Refresh Board Now\"\n- @e18 [cell]\n- @e19 [button] \"Open App Settings\"\n- @e20 [cell]\n- @e21 [button] \"Add a lasting widget\"\n- @e22 [disclosuretriangle] \"Add a lasting widget\"\n- @e23 [button]\n- @e24 [image] \"expanded\"\n- @e25 [cell]\n- @e26 [text] \"Home Screen: touch and hold an empty area, choose Edit \u2192 Add Widget, then Notepad \u2192 Board.\"\n- @e27 [cell]\n- @e28 [text] \"Lock Screen: touch and hold it, choose Customize \u2192 Lock Screen \u2192 Add Widgets, then Notepad.\"\n- @e29 [cell]\n- @e30 [text] \"Widgets keep the last synced board visible. iOS decides when they refresh, so changes may take time to appear.\"\n- @e31 [cell]\n- @e32 [text] \"iOS limits each Live Activity to eight hours. We try to renew it automatically, but renewal can be delayed.\"\n- @e33 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n- @e34 [other] \"Vertical scroll bar, 3 pages\"\n- @e35 [other] \"Vertical scroll bar, 3 pages\"\n- @e36 [other] \"{\"disclosure.title\":[32,381,201,27.666666666666686],\"home.helper\":[52,438.66666666666663,280.66666666666663,71],\"lock.helper\":[52,539.66666666666663,313.33333333333331,71],\"persistence.activity\":[32,758.66666666666663,331.33333333333331,67],\"persistence.background\":[32,831.66666666666663,329.33333333333331,133],\"persistence.footer\":[32,758.66666666666663,331.33333333333331,206],\"refresh.title\":[32,265.66666666666663,191,27.666666666666686],\"widget.helper\":[52,640.66666666666663,315.33333333333331,95]}\"\n+ @e8~s738123 [cell] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n+ @e9~s738123 [cell] \"Sign Out\"\n+ @e10~s738123 [cell] \"Privacy\"\n+ @e11~s738123 [link] \"Privacy\"\n+ @e12~s738123 [image] \"Block\"\n+ @e13~s738123 [image] \"arrow.up.right\"\n+ @e14~s738123 [cell] \"Terms\"\n+ @e15~s738123 [link] \"Terms\"\n+ @e16~s738123 [image] \"Plain Text\"\n+ @e17~s738123 [image] \"arrow.up.right\"\n+ @e18~s738123 [cell] \"Support\"\n+ @e19~s738123 [link] \"Support\"\n+ @e20~s738123 [image] \"questionmark.circle\"\n+ @e21~s738123 [image] \"arrow.up.right\"\n+ @e22~s738123 [cell] \"Download My Data\"\n+ @e23~s738123 [link] \"Download My Data\"\n+ @e24~s738123 [image] \"Download\"\n+ @e25~s738123 [image] \"arrow.up.right\"\n+ @e26~s738123 [cell] \"Send Feedback\"\n+ @e27~s738123 [link] \"Send Feedback\"\n+ @e28~s738123 [image] \"Get Mail\"\n+ @e29~s738123 [image] \"arrow.up.right\"\n+ @e30~s738123 [cell] \"Or email hello@edmundlim.systems\"\n+ @e31~s738123 [cell] \"Delete Account\u2026\"\n+ @e32~s738123 [cell] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n+ @e33~s738123 [text] \"App Version 1.0 (11)\"\n+ @e34~s738123 [other] \"{\"Delete Account\u2026.icon\":[32,680.16666666666652,24,28.666666666666742],\"Delete Account\u2026.title\":[69.999999999999986,680.66666666666652,167.66666666666663,27.666666666666742],\"delete.footer\":[32,731.99999999999989,338,67],\"Download My Data.icon\":[32,473.16666666666657,24,29.666666666666629],\"Download My Data.title\":[70,474.16666666666657,188,27.666666666666629],\"feedback.footer\":[32,618.66666666666663,301.33333333333331,23],\"persistence.activity\":[32,-38.333333333333371,331.33333333333331,67],\"persistence.background\":[32,34.666666666666629,329.33333333333331,133],\"persistence.footer\":[32,-38.333333333333371,331.33333333333331,206],\"Privacy.icon\":[32,299.33333333333337,24,28],\"Privacy.title\":[70,299.50000000000006,72.666666666666657,27.666666666666629],\"Send Feedback.icon\":[32,570.33333333333326,24,23],\"Send Feedback.title\":[69.999999999999986,567.99999999999989,154.66666666666663,27.666666666666629],\"Sign Out.icon\":[32,206.50000000000003,24,27.666666666666686],\"Sign Out.title\":[70,206.50000000000003,86.333333333333314,27.666666666666657],\"Support.icon\":[32,416.00000000000006,24,26.333333333333314],\"Support.title\":[70,415.33333333333337,80.333333333333314,27.666666666666686],\"Terms.icon\":[32,357.50000000000006,24,27.666666666666629],\"Terms.title\":[70,357.50000000000006,60.666666666666657,27.666666666666629],\"version.footer\":[31.999999999999993,810.99999999999989,126.33333333333331,23]}\"\n",
+      "stderr": "",
+      "time": 1793888315.4165351
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "wait",
+        "stable",
+        "1000",
+        "10000"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "time": 1793888316.789978
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "snapshot"
+      ],
+      "exit": 0,
+      "stdout": "Page: systems.edmundlim.NotepadHillclimb\nApp: systems.edmundlim.NotepadHillclimb\nSnapshot: 50 visible nodes\n@e1 [other] \"Notepad\"\n  @e2 [button] \"Sheet Grabber\"\n  @e3 [navigation-bar] \"Account\"\n    @e4 [text] \"Account\"\n    @e5 [other] \"Done\"\n      @e6 [button] \"Done\"\n  @e7 [collection] \"account.settings\"\n    [content above collection hidden]\n    @e8 [cell]\n      @e9 [text] \"Background App Refresh helps sync when iOS allows; it does not keep the app running. Leave the app in the background instead of swiping it away. Use a widget for reminders you want visible overnight.\"\n    @e10 [cell]\n      @e11 [button] \"Sign Out\"\n        @e12 [image] \"rectangle.portrait.and.arrow.right\"\n        @e13 [text] \"Sign Out\"\n    @e14 [cell]\n      @e15 [link] \"Privacy\"\n        @e16 [image] \"Block\"\n        @e17 [text] \"Privacy\"\n        @e18 [image] \"arrow.up.right\"\n    @e19 [cell]\n      @e20 [link] \"Terms\"\n        @e21 [image] \"Plain Text\"\n        @e22 [text] \"Terms\"\n        @e23 [image] \"arrow.up.right\"\n    @e24 [cell]\n      @e25 [link] \"Support\"\n        @e26 [image] \"questionmark.circle\"\n        @e27 [text] \"Support\"\n        @e28 [image] \"arrow.up.right\"\n    @e29 [cell]\n      @e30 [link] \"Download My Data\"\n        @e31 [image] \"Download\"\n        @e32 [text] \"Download My Data\"\n        @e33 [image] \"arrow.up.right\"\n    @e34 [cell]\n      @e35 [link] \"Send Feedback\"\n        @e36 [image] \"Get Mail\"\n        @e37 [text] \"Send Feedback\"\n        @e38 [image] \"arrow.up.right\"\n    @e39 [cell]\n      @e40 [text] \"Or email hello@edmundlim.systems\"\n    @e41 [cell]\n      @e42 [button] \"Delete Account\u2026\"\n        @e43 [image] \"Trash\"\n        @e44 [text] \"Delete Account\u2026\"\n    @e45 [cell]\n      @e46 [text] \"Deletes reminders, device registrations, lock-screen prefs, agent access, and this sign-in.\"\n      @e47 [text] \"App Version 1.0 (11)\"\n    @e48 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n    @e49 [other] \"Vertical scroll bar, 3 pages\" [scrollable]\n  @e50 [other] \"{\"Delete Account\u2026.icon\":[32,680.16666666666652,24,28.666666666666742],\"Delete Account\u2026.title\":[69.999999999999986,680.66666666666652,167.66666666666663,27.666666666666742],\"delete.footer\":[32,731.99999999999989,338,67],\"Download My Data.icon\":[32,473.16666666666657,24,29.666666666666629],\"Download My Data.title\":[70,474.16666666666657,188,27.666666666666629],\"feedback.footer\":[32,618.66666666666663,301.33333333333331,23],\"persistence.activity\":[32,-38.333333333333371,331.33333333333331,67],\"persistence.background\":[32,34.666666666666629,329.33333333333331,133],\"persistence.footer\":[32,-38.333333333333371,331.33333333333331,206],\"Privacy.icon\":[32,299.33333333333337,24,28],\"Privacy.title\":[70,299.50000000000006,72.666666666666657,27.666666666666629],\"Send Feedback.icon\":[32,570.33333333333326,24,23],\"Send Feedback.title\":[69.999999999999986,567.99999999999989,154.66666666666663,27.666666666666629],\"Sign Out.icon\":[32,206.50000000000003,24,27.666666666666686],\"Sign Out.title\":[70,206.50000000000003,86.333333333333314,27.666666666666657],\"Support.icon\":[32,416.00000000000006,24,26.333333333333314],\"Support.title\":[70,415.33333333333337,80.333333333333314,27.666666666666686],\"Terms.icon\":[32,357.50000000000006,24,27.666666666666629],\"Terms.title\":[70,357.50000000000006,60.666666666666657,27.666666666666629],\"version.footer\":[31.999999999999993,810.99999999999989,126.33333333333331,23]}\"\n",
+      "stderr": "",
+      "time": 1793888317.053637
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "get",
+        "attrs",
+        "id=\"account.geometry\""
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"index\": 49,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[32,680.16666666666652,24,28.666666666666742],\\\"Delete Account\u2026.title\\\":[69.999999999999986,680.66666666666652,167.66666666666663,27.666666666666742],\\\"delete.footer\\\":[32,731.99999999999989,338,67],\\\"Download My Data.icon\\\":[32,473.16666666666657,24,29.666666666666629],\\\"Download My Data.title\\\":[70,474.16666666666657,188,27.666666666666629],\\\"feedback.footer\\\":[32,618.66666666666663,301.33333333333331,23],\\\"persistence.activity\\\":[32,-38.333333333333371,331.33333333333331,67],\\\"persistence.background\\\":[32,34.666666666666629,329.33333333333331,133],\\\"persistence.footer\\\":[32,-38.333333333333371,331.33333333333331,206],\\\"Privacy.icon\\\":[32,299.33333333333337,24,28],\\\"Privacy.title\\\":[70,299.50000000000006,72.666666666666657,27.666666666666629],\\\"Send Feedback.icon\\\":[32,570.33333333333326,24,23],\\\"Send Feedback.title\\\":[69.999999999999986,567.99999999999989,154.66666666666663,27.666666666666629],\\\"Sign Out.icon\\\":[32,206.50000000000003,24,27.666666666666686],\\\"Sign Out.title\\\":[70,206.50000000000003,86.333333333333314,27.666666666666657],\\\"Support.icon\\\":[32,416.00000000000006,24,26.333333333333314],\\\"Support.title\\\":[70,415.33333333333337,80.333333333333314,27.666666666666686],\\\"Terms.icon\\\":[32,357.50000000000006,24,27.666666666666629],\\\"Terms.title\\\":[70,357.50000000000006,60.666666666666657,27.666666666666629],\\\"version.footer\\\":[31.999999999999993,810.99999999999989,126.33333333333331,23]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 94306,\n  \"hittable\": true,\n  \"ref\": \"e50\",\n  \"kind\": \"other\"\n}\n",
+      "stderr": "",
+      "time": 1793888317.227013
+    },
+    {
+      "argv": [
+        "/Users/limboenedmund/.t3/userdata/device/targets/t3-23bb48939566ebc32a337197/agent-device",
+        "screenshot",
+        "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-XXXL-expanded-lower.png",
+        "--pixel-density",
+        "3"
+      ],
+      "exit": 0,
+      "stdout": "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-4f0718bc/hillclimb/rounds/7/account-enabled/screens/normal-dark-XXXL-expanded-lower.png (1206x2622 @3x)\n",
+      "stderr": "",
+      "time": 1793888317.9997382
+    }
+  ],
+  "images": [
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-light-default-large-top.png",
+      "geometry": "{\n  \"index\": 46,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,578,154.33333333333331,20.333333333333371],\\\"identity.row\\\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\\\"notifications.footer\\\":[32,283.66666666666663,296,31.666666666666686],\\\"persistence.activity\\\":[32,621.33333333333326,320.33333333333331,31.666666666666629],\\\"persistence.background\\\":[32,658.99999999999989,338,63.666666666666742],\\\"persistence.footer\\\":[32,621.33333333333326,338,101.33333333333337],\\\"Privacy.icon\\\":[32,846.66666666666663,24,20.333333333333371],\\\"Privacy.title\\\":[70,846.66666666666663,55.666666666666657,20.333333333333371],\\\"refresh.title\\\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\\\"Sign Out.icon\\\":[32,761.5,24,20],\\\"Sign Out.title\\\":[70,761.33333333333337,66,20.333333333333371]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 83638,\n  \"hittable\": true,\n  \"ref\": \"e47\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "0578be2799634729cfc819bc4127195e5542d1d93e2f0ba52c95ffbfa15b0c3d"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-light-default-expanded-top.png",
+      "geometry": "{\n  \"index\": 43,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,578,154.33333333333331,20.333333333333371],\\\"home.helper\\\":[52,628.33333333333326,309.33333333333331,33.666666666666629],\\\"identity.row\\\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\\\"lock.helper\\\":[52,692,306.66666666666663,33.666666666666629],\\\"notifications.footer\\\":[32,283.66666666666663,296,31.666666666666686],\\\"persistence.activity\\\":[32,830.33333333333337,320.33333333333331,31.666666666666629],\\\"persistence.background\\\":[32,868,338,63.666666666666742],\\\"persistence.footer\\\":[32,830.33333333333337,338,101.33333333333337],\\\"refresh.title\\\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\\\"widget.helper\\\":[52,755.66666666666663,298.33333333333331,51.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 83638,\n  \"hittable\": true,\n  \"ref\": \"e44\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "85f152bac53853659e41d4057c3dcafce4f206ad4970d1974a190d913351a59f"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-light-default-expanded-guidance.png",
+      "geometry": "{\n  \"index\": 55,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,240.66666666666669,154.33333333333331,20.333333333333314],\\\"Download My Data.icon\\\":[32,869.33333333333348,24,21.333333333333371],\\\"Download My Data.title\\\":[70,869.83333333333348,143.66666666666666,20.333333333333371],\\\"home.helper\\\":[52,291,309.33333333333331,33.666666666666686],\\\"lock.helper\\\":[52,354.66666666666669,306.66666666666663,33.666666666666686],\\\"persistence.activity\\\":[32,493.00000000000006,320.33333333333331,31.666666666666686],\\\"persistence.background\\\":[32,530.66666666666674,338,63.666666666666629],\\\"persistence.footer\\\":[32,493.00000000000006,338,101.33333333333331],\\\"Privacy.icon\\\":[32,718.33333333333326,24,20.333333333333371],\\\"Privacy.title\\\":[70,718.33333333333326,55.666666666666657,20.333333333333371],\\\"refresh.title\\\":[32,140,146.66666666666666,20.333333333333314],\\\"Sign Out.icon\\\":[32,633.16666666666663,24,20],\\\"Sign Out.title\\\":[70,633,66,20.333333333333371],\\\"Support.icon\\\":[32,819.66666666666663,24,19],\\\"Support.title\\\":[70,819,61.666666666666657,20.333333333333371],\\\"Terms.icon\\\":[32,768.83333333333337,24,20],\\\"Terms.title\\\":[70,768.66666666666674,47,20.333333333333371],\\\"widget.helper\\\":[52,418.33333333333331,298.33333333333331,51.666666666666686]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 83638,\n  \"hittable\": true,\n  \"ref\": \"e56\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "8aa006a28ab6a0bba296158f764982e077b84b962eefb06117df34a79f731e86"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-light-default-expanded-lower.png",
+      "geometry": "{\n  \"index\": 54,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[32,730.83333333333326,24,20.666666666666742],\\\"Delete Account\u2026.title\\\":[70,731,130,20.333333333333258],\\\"delete.footer\\\":[32,774.66666666666663,319.33333333333331,31.666666666666629],\\\"Download My Data.icon\\\":[32,547.00000000000011,24,21.333333333333371],\\\"Download My Data.title\\\":[70,547.50000000000011,143.66666666666666,20.333333333333371],\\\"feedback.footer\\\":[32,676.66666666666663,215.66666666666666,15.666666666666629],\\\"lock.helper\\\":[52,32.333333333333371,306.66666666666663,33.666666666666671],\\\"persistence.activity\\\":[32,170.66666666666674,320.33333333333331,31.666666666666657],\\\"persistence.background\\\":[32,208.33333333333343,338,63.666666666666686],\\\"persistence.footer\\\":[32,170.66666666666674,338,101.33333333333331],\\\"Privacy.icon\\\":[32,396,24,20.333333333333314],\\\"Privacy.title\\\":[70,396,55.666666666666657,20.333333333333314],\\\"Send Feedback.icon\\\":[32,635.33333333333337,24,16.333333333333371],\\\"Send Feedback.title\\\":[70,633.33333333333337,118.33333333333331,20.333333333333371],\\\"Sign Out.icon\\\":[32,310.83333333333343,24,20],\\\"Sign Out.title\\\":[70,310.66666666666674,66,20.333333333333314],\\\"Support.icon\\\":[32,497.33333333333343,24,18.999999999999943],\\\"Support.title\\\":[70,496.66666666666674,61.666666666666657,20.333333333333371],\\\"Terms.icon\\\":[32,446.50000000000006,24,20],\\\"Terms.title\\\":[70,446.33333333333337,47,20.333333333333314],\\\"version.footer\\\":[32,818.33333333333326,91,15.666666666666742],\\\"widget.helper\\\":[52,96,298.33333333333331,51.666666666666657]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 83638,\n  \"hittable\": true,\n  \"ref\": \"e55\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "8fb9949303802b1e09aa0c16f776b3a1e2402067cf5694a4f4f459f13d0db4fd"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-light-XXXL-large-top.png",
+      "geometry": "{\n  \"index\": 37,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,674.33333333333337,201,27.666666666666629],\\\"identity.row\\\":[32,155,145,27.666666666666657],\\\"notifications.footer\\\":[32,298.33333333333337,312.66666666666663,45],\\\"persistence.activity\\\":[32,725,331.33333333333331,67],\\\"persistence.background\\\":[32,798,329.33333333333331,133],\\\"persistence.footer\\\":[32,725,331.33333333333331,206],\\\"refresh.title\\\":[32,559,191,27.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 87006,\n  \"hittable\": true,\n  \"ref\": \"e38\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "af804fa64407f2b2a2d766828102ee2f612cc4bfeea8ff01d35b2848b8506375"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-light-XXXL-expanded-top.png",
+      "geometry": "{\n  \"index\": 38,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,674.33333333333337,201,27.666666666666629],\\\"home.helper\\\":[52,732,280.66666666666663,71],\\\"identity.row\\\":[32,155,145,27.666666666666657],\\\"lock.helper\\\":[52,833,313.33333333333331,71],\\\"notifications.footer\\\":[32,298.33333333333337,312.66666666666663,45],\\\"refresh.title\\\":[32,559,191,27.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 87006,\n  \"hittable\": true,\n  \"ref\": \"e39\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "6bcd3dcb8abe9fc2fe6c9db36e6d5746a7fb660c6a5f03130241655072fb7350"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-light-XXXL-expanded-guidance.png",
+      "geometry": "{\n  \"index\": 33,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,337.00000000000006,201,27.666666666666686],\\\"home.helper\\\":[52,394.66666666666669,280.66666666666663,71],\\\"lock.helper\\\":[52,495.66666666666669,313.33333333333331,71.000000000000057],\\\"persistence.activity\\\":[32,714.66666666666674,331.33333333333331,67],\\\"persistence.background\\\":[32,787.66666666666674,329.33333333333331,133],\\\"persistence.footer\\\":[32,714.66666666666674,331.33333333333331,206],\\\"refresh.title\\\":[32,221.66666666666669,191,27.666666666666657],\\\"widget.helper\\\":[52,596.66666666666674,315.33333333333331,95]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 87006,\n  \"hittable\": true,\n  \"ref\": \"e34\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "77965d83d0d4eaa412c2fa5d55415e75c59b19b1018aa3163a67b6d8a3600472"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-light-XXXL-expanded-lower.png",
+      "geometry": "{\n  \"index\": 49,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[32,680.16666666666652,24,28.666666666666742],\\\"Delete Account\u2026.title\\\":[69.999999999999986,680.66666666666652,167.66666666666663,27.666666666666742],\\\"delete.footer\\\":[32,731.99999999999989,338,67],\\\"Download My Data.icon\\\":[32,473.16666666666657,24,29.666666666666629],\\\"Download My Data.title\\\":[70,474.16666666666657,188,27.666666666666629],\\\"feedback.footer\\\":[32,618.66666666666663,301.33333333333331,23],\\\"persistence.activity\\\":[32,-38.333333333333371,331.33333333333331,67],\\\"persistence.background\\\":[32,34.666666666666629,329.33333333333331,133],\\\"persistence.footer\\\":[32,-38.333333333333371,331.33333333333331,206],\\\"Privacy.icon\\\":[32,299.33333333333337,24,28],\\\"Privacy.title\\\":[70,299.50000000000006,72.666666666666657,27.666666666666629],\\\"Send Feedback.icon\\\":[32,570.33333333333326,24,23],\\\"Send Feedback.title\\\":[69.999999999999986,567.99999999999989,154.66666666666663,27.666666666666629],\\\"Sign Out.icon\\\":[32,206.50000000000003,24,27.666666666666686],\\\"Sign Out.title\\\":[70,206.50000000000003,86.333333333333314,27.666666666666657],\\\"Support.icon\\\":[32,416.00000000000006,24,26.333333333333314],\\\"Support.title\\\":[70,415.33333333333337,80.333333333333314,27.666666666666686],\\\"Terms.icon\\\":[32,357.50000000000006,24,27.666666666666629],\\\"Terms.title\\\":[70,357.50000000000006,60.666666666666657,27.666666666666629],\\\"version.footer\\\":[31.999999999999993,810.99999999999989,126.33333333333331,23]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 87006,\n  \"hittable\": true,\n  \"ref\": \"e50\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "d139ffb036f4c18c18a3a0f47d7a9078cf19811f6db70d92e272d56b8dbd5bea"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-dark-default-large-top.png",
+      "geometry": "{\n  \"index\": 46,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,578,154.33333333333331,20.333333333333371],\\\"identity.row\\\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\\\"notifications.footer\\\":[32,283.66666666666663,296,31.666666666666686],\\\"persistence.activity\\\":[32,621.33333333333326,320.33333333333331,31.666666666666629],\\\"persistence.background\\\":[32,658.99999999999989,338,63.666666666666742],\\\"persistence.footer\\\":[32,621.33333333333326,338,101.33333333333337],\\\"Privacy.icon\\\":[32,846.66666666666663,24,20.333333333333371],\\\"Privacy.title\\\":[70,846.66666666666663,55.666666666666657,20.333333333333371],\\\"refresh.title\\\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\\\"Sign Out.icon\\\":[32,761.5,24,20],\\\"Sign Out.title\\\":[70,761.33333333333337,66,20.333333333333371]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 91160,\n  \"hittable\": true,\n  \"ref\": \"e47\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "a41f83f704d032b8b71d1575bb7700a97eded5afdc41f7792aa189ab7cce76ce"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-dark-default-expanded-top.png",
+      "geometry": "{\n  \"index\": 43,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,578,154.33333333333331,20.333333333333371],\\\"home.helper\\\":[52,628.33333333333326,309.33333333333331,33.666666666666629],\\\"identity.row\\\":[31.999999999999993,155,114.33333333333331,20.333333333333314],\\\"lock.helper\\\":[52,692,306.66666666666663,33.666666666666629],\\\"notifications.footer\\\":[32,283.66666666666663,296,31.666666666666686],\\\"persistence.activity\\\":[32,830.33333333333337,320.33333333333331,31.666666666666629],\\\"persistence.background\\\":[32,868,338,63.666666666666742],\\\"persistence.footer\\\":[32,830.33333333333337,338,101.33333333333337],\\\"refresh.title\\\":[32,477.33333333333331,146.66666666666666,20.333333333333314],\\\"widget.helper\\\":[52,755.66666666666663,298.33333333333331,51.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 91160,\n  \"hittable\": true,\n  \"ref\": \"e44\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "08b57999b9ff5c6fd6ae78854445b05df08a2b4886b27f879d837f91411dfad9"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-dark-default-expanded-guidance.png",
+      "geometry": "{\n  \"index\": 54,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,284.66666666666663,154.33333333333331,20.333333333333314],\\\"home.helper\\\":[52,335,309.33333333333331,33.666666666666686],\\\"lock.helper\\\":[52,398.66666666666663,306.66666666666663,33.666666666666686],\\\"persistence.activity\\\":[32,537,320.33333333333331,31.666666666666629],\\\"persistence.background\\\":[32,574.66666666666663,338,63.666666666666742],\\\"persistence.footer\\\":[32,537,338,101.33333333333337],\\\"Privacy.icon\\\":[32,762.33333333333326,24,20.333333333333371],\\\"Privacy.title\\\":[70,762.33333333333326,55.666666666666657,20.333333333333371],\\\"refresh.title\\\":[32,183.99999999999997,146.66666666666666,20.333333333333343],\\\"Sign Out.icon\\\":[32,677.16666666666663,24,20],\\\"Sign Out.title\\\":[70,677,66,20.333333333333371],\\\"Support.icon\\\":[32,863.66666666666663,24,19],\\\"Support.title\\\":[70,863,61.666666666666657,20.333333333333371],\\\"Terms.icon\\\":[32,812.83333333333326,24,20],\\\"Terms.title\\\":[70,812.66666666666663,47,20.333333333333371],\\\"widget.helper\\\":[52,462.33333333333326,298.33333333333331,51.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 91160,\n  \"hittable\": true,\n  \"ref\": \"e55\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "283479768fafdc84f89a7ef97a37afbc5cc52666921a8ea2bd83a7436bcf5bfe"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-dark-default-expanded-lower.png",
+      "geometry": "{\n  \"index\": 54,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[32,730.83333333333326,24,20.666666666666742],\\\"Delete Account\u2026.title\\\":[70,731,130,20.333333333333258],\\\"delete.footer\\\":[32,774.66666666666663,319.33333333333331,31.666666666666629],\\\"Download My Data.icon\\\":[32,547.00000000000011,24,21.333333333333371],\\\"Download My Data.title\\\":[70,547.50000000000011,143.66666666666666,20.333333333333371],\\\"feedback.footer\\\":[32,676.66666666666663,215.66666666666666,15.666666666666629],\\\"lock.helper\\\":[52,32.333333333333371,306.66666666666663,33.666666666666671],\\\"persistence.activity\\\":[32,170.66666666666674,320.33333333333331,31.666666666666657],\\\"persistence.background\\\":[32,208.33333333333343,338,63.666666666666686],\\\"persistence.footer\\\":[32,170.66666666666674,338,101.33333333333331],\\\"Privacy.icon\\\":[32,396,24,20.333333333333314],\\\"Privacy.title\\\":[70,396,55.666666666666657,20.333333333333314],\\\"Send Feedback.icon\\\":[32,635.33333333333337,24,16.333333333333371],\\\"Send Feedback.title\\\":[70,633.33333333333337,118.33333333333331,20.333333333333371],\\\"Sign Out.icon\\\":[32,310.83333333333343,24,20],\\\"Sign Out.title\\\":[70,310.66666666666674,66,20.333333333333314],\\\"Support.icon\\\":[32,497.33333333333343,24,18.999999999999943],\\\"Support.title\\\":[70,496.66666666666674,61.666666666666657,20.333333333333371],\\\"Terms.icon\\\":[32,446.50000000000006,24,20],\\\"Terms.title\\\":[70,446.33333333333337,47,20.333333333333314],\\\"version.footer\\\":[32,818.33333333333326,91,15.666666666666742],\\\"widget.helper\\\":[52,96,298.33333333333331,51.666666666666657]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 91160,\n  \"hittable\": true,\n  \"ref\": \"e55\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "ae432bfa0fd9ef93c68f061d28483618bd55f347f170c5f834d38746b7c6217d"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-dark-XXXL-large-top.png",
+      "geometry": "{\n  \"index\": 37,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,674.33333333333337,201,27.666666666666629],\\\"identity.row\\\":[32,155,145,27.666666666666657],\\\"notifications.footer\\\":[32,298.33333333333337,312.66666666666663,45],\\\"persistence.activity\\\":[32,725,331.33333333333331,67],\\\"persistence.background\\\":[32,798,329.33333333333331,133],\\\"persistence.footer\\\":[32,725,331.33333333333331,206],\\\"refresh.title\\\":[32,559,191,27.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 94306,\n  \"hittable\": true,\n  \"ref\": \"e38\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "6815bc50b3f4e6b64a4cb8dc26066eb07fbac080bf9a193d079ac4af07f5668a"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-dark-XXXL-expanded-top.png",
+      "geometry": "{\n  \"index\": 38,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,674.33333333333337,201,27.666666666666629],\\\"home.helper\\\":[52,732,280.66666666666663,71],\\\"identity.row\\\":[32,155,145,27.666666666666657],\\\"lock.helper\\\":[52,833,313.33333333333331,71],\\\"notifications.footer\\\":[32,298.33333333333337,312.66666666666663,45],\\\"refresh.title\\\":[32,559,191,27.666666666666629]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 94306,\n  \"hittable\": true,\n  \"ref\": \"e39\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "d4911e6c58b3f90c7ebbf8151a145b798cc1451016c7160f7a9e4a2584a40deb"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-dark-XXXL-expanded-guidance.png",
+      "geometry": "{\n  \"index\": 35,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"disclosure.title\\\":[32,381,201,27.666666666666686],\\\"home.helper\\\":[52,438.66666666666663,280.66666666666663,71],\\\"lock.helper\\\":[52,539.66666666666663,313.33333333333331,71],\\\"persistence.activity\\\":[32,758.66666666666663,331.33333333333331,67],\\\"persistence.background\\\":[32,831.66666666666663,329.33333333333331,133],\\\"persistence.footer\\\":[32,758.66666666666663,331.33333333333331,206],\\\"refresh.title\\\":[32,265.66666666666663,191,27.666666666666686],\\\"widget.helper\\\":[52,640.66666666666663,315.33333333333331,95]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 94306,\n  \"hittable\": true,\n  \"ref\": \"e36\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "0184658727813802f7a945fefbbc75ae0f14d06ae4e405052c1ed6b56aafe90f"
+    },
+    {
+      "path": "hillclimb/rounds/7/account-enabled/screens/normal-dark-XXXL-expanded-lower.png",
+      "geometry": "{\n  \"index\": 49,\n  \"parentIndex\": 0,\n  \"type\": \"Other\",\n  \"role\": \"SwiftUI.AccessibilityNode\",\n  \"subrole\": \"UIResponder\",\n  \"value\": \"{\\\"Delete Account\u2026.icon\\\":[32,680.16666666666652,24,28.666666666666742],\\\"Delete Account\u2026.title\\\":[69.999999999999986,680.66666666666652,167.66666666666663,27.666666666666742],\\\"delete.footer\\\":[32,731.99999999999989,338,67],\\\"Download My Data.icon\\\":[32,473.16666666666657,24,29.666666666666629],\\\"Download My Data.title\\\":[70,474.16666666666657,188,27.666666666666629],\\\"feedback.footer\\\":[32,618.66666666666663,301.33333333333331,23],\\\"persistence.activity\\\":[32,-38.333333333333371,331.33333333333331,67],\\\"persistence.background\\\":[32,34.666666666666629,329.33333333333331,133],\\\"persistence.footer\\\":[32,-38.333333333333371,331.33333333333331,206],\\\"Privacy.icon\\\":[32,299.33333333333337,24,28],\\\"Privacy.title\\\":[70,299.50000000000006,72.666666666666657,27.666666666666629],\\\"Send Feedback.icon\\\":[32,570.33333333333326,24,23],\\\"Send Feedback.title\\\":[69.999999999999986,567.99999999999989,154.66666666666663,27.666666666666629],\\\"Sign Out.icon\\\":[32,206.50000000000003,24,27.666666666666686],\\\"Sign Out.title\\\":[70,206.50000000000003,86.333333333333314,27.666666666666657],\\\"Support.icon\\\":[32,416.00000000000006,24,26.333333333333314],\\\"Support.title\\\":[70,415.33333333333337,80.333333333333314,27.666666666666686],\\\"Terms.icon\\\":[32,357.50000000000006,24,27.666666666666629],\\\"Terms.title\\\":[70,357.50000000000006,60.666666666666657,27.666666666666629],\\\"version.footer\\\":[31.999999999999993,810.99999999999989,126.33333333333331,23]}\",\n  \"identifier\": \"account.geometry\",\n  \"rect\": {\n    \"x\": 0,\n    \"y\": 62,\n    \"width\": 1,\n    \"height\": 1\n  },\n  \"enabled\": true,\n  \"depth\": 1,\n  \"pid\": 94306,\n  \"hittable\": true,\n  \"ref\": \"e50\",\n  \"kind\": \"other\"\n}\n",
+      "sha256": "089e45cd30a08d8204370dc366c7d6e1b835ffe72a71b6673e0a138ec198f725"
+    }
+  ],
+  "acquisitionReportedHead": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+  "sourceIdentity": "sha256:8dbe9d6966c05a098491adb9e172fb20bf1b7edcad72d4dd9e201f2159dd2434",
+  "sourceSHA": null,
+  "parentSourceSHA": "be23d7e92e008971ef6bb97b9ab6fbf528bbe466",
+  "correctedSourceUncommitted": true,
+  "freeze": "hillclimb/tasks/login-composition/freeze.json",
+  "binaryIdentity": "hillclimb/tasks/login-composition/tested-artifacts.json"
+}

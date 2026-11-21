@@ -1,0 +1,43 @@
+{
+  "command": [
+    "xcodebuild",
+    "test-without-building",
+    "-xctestrun",
+    "/tmp/notepad-signin-native-90ae0aca-dd/Build/Products/LazyMansReminders_iphonesimulator27.1-arm64.xctestrun",
+    "-destination",
+    "platform=iOS Simulator,id=8E8380DE-364D-4899-99B8-D15ED0494FFD",
+    "-parallel-testing-enabled",
+    "NO",
+    "-test-timeouts-enabled",
+    "YES",
+    "-default-test-execution-time-allowance",
+    "180",
+    "-maximum-test-execution-time-allowance",
+    "240",
+    "-collect-test-diagnostics",
+    "never",
+    "-disableAutomaticPackageResolution",
+    "-skipPackageUpdates",
+    "-resultBundlePath",
+    "/tmp/notepad-signin-native-90ae0aca-matrix1.xcresult",
+    "CODE_SIGNING_ALLOWED=NO",
+    "-only-testing:HillclimbUITests/SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances"
+  ],
+  "exit": 0,
+  "startedUTC": "2026-11-04T17:11:14.932425+00:00",
+  "endedUTC": "2026-11-04T17:13:30.913568+00:00",
+  "observations": [
+    "2026-11-05 01:11:18.254 xcodebuild[40198:3027735] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 01:11:37.606 xcodebuild[40198:3027735] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 01:11:53.185 xcodebuild[40198:3027735] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 01:12:10.170 xcodebuild[40198:3027735] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 01:12:25.470 xcodebuild[40198:3027735] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 01:12:42.936 xcodebuild[40198:3027735] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 01:12:58.387 xcodebuild[40198:3027735] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "2026-11-05 01:13:15.606 xcodebuild[40198:3027735] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "Executed 1 test, with 0 failures (0 unexpected) in 132.404 (132.405) seconds",
+    "Executed 1 test, with 0 failures (0 unexpected) in 132.404 (132.405) seconds",
+    "Executed 1 test, with 0 failures (0 unexpected) in 132.404 (132.406) seconds",
+    "** TEST EXECUTE SUCCEEDED **"
+  ]
+}

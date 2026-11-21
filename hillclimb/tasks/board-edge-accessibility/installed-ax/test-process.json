@@ -1,0 +1,40 @@
+{
+  "command": [
+    "xcodebuild",
+    "test-without-building",
+    "-xctestrun",
+    "/tmp/notepad-board-edge-L-dd/Build/Products/LazyMansReminders_iphonesimulator27.1-arm64.xctestrun",
+    "-destination",
+    "platform=iOS Simulator,id=066ECE57-46B4-414A-B53E-523775329360",
+    "-parallel-testing-enabled",
+    "NO",
+    "-test-timeouts-enabled",
+    "YES",
+    "-default-test-execution-time-allowance",
+    "180",
+    "-maximum-test-execution-time-allowance",
+    "240",
+    "-collect-test-diagnostics",
+    "never",
+    "-disableAutomaticPackageResolution",
+    "-skipPackageUpdates",
+    "-resultBundlePath",
+    "/tmp/notepad-board-edge-L-installed-ax.xcresult",
+    "CODE_SIGNING_ALLOWED=NO",
+    "-only-testing:HillclimbUITests/BoardMultilineUITests/testOnlyCircleCompletesLocalFixtureAndGripStillReordersMatrix"
+  ],
+  "exit": 65,
+  "startedUTC": "2026-11-04T19:41:11.674529+00:00",
+  "observations": [
+    "2026-11-05 03:41:13.467 xcodebuild[73606:4021388] [MT] IDELaunchParametersSnapshot: debugger version lookup failed for path '<nil>': noURL",
+    "/Users/limboenedmund/.t3/worktrees/lazy-mans-reminders/t3-8b1b439e/ios/UITests/BoardMultilineUITests.swift:180: error: -[HillclimbUITests.BoardMultilineUITests testOnlyCircleCompletesLocalFixtureAndGripStillReordersMatrix] : XCTAssertFalse failed - Hidden paragraph must not create a second interactive reading stop",
+    "Test Case '-[HillclimbUITests.BoardMultilineUITests testOnlyCircleCompletesLocalFixtureAndGripStillReordersMatrix]' failed (4.020 seconds).",
+    "Test Suite 'BoardMultilineUITests' failed at 2026-11-05 03:41:17.411.",
+    "Executed 1 test, with 1 failure (0 unexpected) in 4.020 (4.021) seconds",
+    "Test Suite 'HillclimbUITests.xctest' failed at 2026-11-05 03:41:17.411.",
+    "Executed 1 test, with 1 failure (0 unexpected) in 4.020 (4.021) seconds",
+    "Test Suite 'Selected tests' failed at 2026-11-05 03:41:17.411.",
+    "Executed 1 test, with 1 failure (0 unexpected) in 4.020 (4.022) seconds",
+    "** TEST EXECUTE FAILED **"
+  ]
+}

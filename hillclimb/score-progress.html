@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html,body{margin:0;background:transparent;color:var(--foreground);font-family:var(--font-sans)}
+#notepad-scores figure{margin:0}
+#notepad-scores figcaption{font-weight:500;margin-bottom:20px}
+#notepad-scores .model{font-weight:500;margin:18px 0 10px}
+#notepad-scores .plot{display:grid;grid-template-columns:30px minmax(0,1fr) 44px;gap:10px;align-items:center}
+#notepad-scores .track{height:18px;background:var(--muted)}
+#notepad-scores .mark{height:18px}
+#notepad-scores .sol{background:var(--chart-1)}
+#notepad-scores .astra{background:var(--chart-2)}
+#notepad-scores .opus{background:var(--chart-3)}
+#notepad-scores .before{opacity:.35}
+#notepad-scores .value{text-align:right;font-variant-numeric:tabular-nums}
+#notepad-scores .axis{display:flex;justify-content:space-between;margin:10px 44px 0 40px;color:var(--muted-foreground)}
+#notepad-scores .note{margin-top:18px;color:var(--muted-foreground)}
+</style>
+</head>
+<body>
+<div id="notepad-scores">
+<figure aria-label="UI ratings out of ten: Sol 6.88, 8.11, 8.78, 8.97, 9.06, 8.83, 8.50, 8.57; Astra 6.70, 8.16, 8.76, 8.95, 9.15, 8.92, 8.13, 8.40. Opus round three 8.25; round four 8.51; round five 8.69. Round six Opus deferred; rounds seven and eight ineligible. Three rounds without a new Codex best;target unmet.">
+<figcaption>UI grades · score out of 10</figcaption>
+<div class="model">gpt-6.1-sol</div>
+<div class="plot">
+<span>R1</span><div class="track"><div class="mark sol before" style="width:68.8%"></div></div><span class="value">6.88</span>
+<span>R2</span><div class="track"><div class="mark sol" style="width:81.1%"></div></div><span class="value">8.11</span>
+<span>R3</span><div class="track"><div class="mark sol" style="width:87.8%"></div></div><span class="value">8.78</span>
+<span>R4</span><div class="track"><div class="mark sol" style="width:89.7%"></div></div><span class="value">8.97</span>
+<span>R5</span><div class="track"><div class="mark sol" style="width:90.6%"></div></div><span class="value">9.06</span>
+<span>R6</span><div class="track"><div class="mark sol" style="width:88.3%"></div></div><span class="value">8.83</span>
+<span>R7</span><div class="track"><div class="mark sol" style="width:85%"></div></div><span class="value">8.50</span>
+<span>R8</span><div class="track"><div class="mark sol" style="width:85.7%"></div></div><span class="value">8.57</span>
+</div>
+<div class="model">gpt-6-astra</div>
+<div class="plot">
+<span>R1</span><div class="track"><div class="mark astra before" style="width:67%"></div></div><span class="value">6.70</span>
+<span>R2</span><div class="track"><div class="mark astra" style="width:81.6%"></div></div><span class="value">8.16</span>
+<span>R3</span><div class="track"><div class="mark astra" style="width:87.6%"></div></div><span class="value">8.76</span>
+<span>R4</span><div class="track"><div class="mark astra" style="width:89.5%"></div></div><span class="value">8.95</span>
+<span>R5</span><div class="track"><div class="mark astra" style="width:91.5%"></div></div><span class="value">9.15</span>
+<span>R6</span><div class="track"><div class="mark astra" style="width:89.2%"></div></div><span class="value">8.92</span>
+<span>R7</span><div class="track"><div class="mark astra" style="width:81.3%"></div></div><span class="value">8.13</span>
+<span>R8</span><div class="track"><div class="mark astra" style="width:84%"></div></div><span class="value">8.40</span>
+</div>
+<div class="model">Claude Opus 5.5</div>
+<div class="plot">
+<span>R3</span><div class="track"><div class="mark opus" style="width:82.5%"></div></div><span class="value">8.25</span>
+<span>R4</span><div class="track"><div class="mark opus" style="width:85.1%"></div></div><span class="value">8.51</span>
+<span>R5</span><div class="track"><div class="mark opus" style="width:86.9%"></div></div><span class="value">8.69</span>
+</div>
+<div class="axis" aria-hidden="true"><span>0</span><span>5</span><span>10</span></div>
+<div class="note">R6 Opus deferred; R7/R8 ineligible (Astra &lt;8.5). Three rounds without a new Codex best; target unmet.</div>
+</figure>
+</div>
+</body>
+</html>

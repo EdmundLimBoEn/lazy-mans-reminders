@@ -1,0 +1,333 @@
+{
+  "model": "gpt-6.1-sol",
+  "source_sha": "8dbf6a8e07a5b88dd6748b77a5c8030740eb5309",
+  "overall": 8.11,
+  "categories": [
+    {
+      "name": "Visual hierarchy",
+      "score": 8.5,
+      "rationale": "Persistent inline board title/count, readable body and restrained primary actions establish a coherent hierarchy. The empty guide remains disproportionately prominent.",
+      "previous_score": 7.5
+    },
+    {
+      "name": "Spacing/grid",
+      "score": 8.0,
+      "rationale": "Consistent outer gutters and native grouped settings work well. Paragraph-centered row controls and the sign-in keyboard accessory collision reduce precision.",
+      "previous_score": 7.0
+    },
+    {
+      "name": "Typography scale",
+      "score": 8.5,
+      "rationale": "System text styles preserve clear title/body/helper relationships in both appearances. Main reminder paragraphs stay full size; the capacity placeholder still ellipsizes at XXXL.",
+      "previous_score": 8.5
+    },
+    {
+      "name": "Dynamic Type",
+      "score": 7.8,
+      "rationale": "Native XXXL board, sign-in, guide and account evidence now exists and text-height gates pass. Capacity-message truncation and keyboard crowding remain; larger accessibility sizes are not native-screen certified.",
+      "previous_score": 7.5
+    },
+    {
+      "name": "Light contrast",
+      "score": 8.2,
+      "rationale": "Main text and final-row ink remain crisp on semantic white surfaces. Helpers are quiet; disabled fixture controls and disabled capacity input are not enabled-production contrast failures. No numerical contrast audit was performed.",
+      "previous_score": 7.0
+    },
+    {
+      "name": "Dark contrast",
+      "score": 8.3,
+      "rationale": "White board text and final-row ink are strong on black; dark sheet separation is stable. Native Activity text is readable on the captured wallpaper. Disabled fixture dimming is excluded from enabled-control judgments.",
+      "previous_score": 6.5
+    },
+    {
+      "name": "Iconography",
+      "score": 8.4,
+      "rationale": "Preserved SF Symbols, restrained indigo setup icons and monochrome navigation are coherent. Circle/grip placement beside long paragraphs still weakens association with the task beginning.",
+      "previous_score": 8.0
+    },
+    {
+      "name": "Safe area / Dynamic Island",
+      "score": 8.0,
+      "rationale": "Actual top-control safe-area assertions pass and native expanded footer frames fit. Collapsed stills omit the overlay and neither screenshots nor simulator frames certify physical sensor-cutout geometry.",
+      "previous_score": 8.0
+    },
+    {
+      "name": "Scroll/pull-down / last row",
+      "score": 9.0,
+      "rationale": "Real pull/settled-bottom tests now pass with final-text bounds and pixel ink in both appearances, including XXXL. All four bottom captures retain crisp final text above the composer.",
+      "previous_score": 4.0
+    },
+    {
+      "name": "List rows",
+      "score": 7.5,
+      "rationale": "Plain separators, native virtualization and full wrapping are sound. Completion circles and persistent grips remain vertically centered many lines below the beginning of long tasks.",
+      "previous_score": 6.5
+    },
+    {
+      "name": "Empty states",
+      "score": 8.0,
+      "rationale": "All Clear and the permanent composer communicate the next action; all three setup instructions fit at XXXL. The large guide competes with the empty result and is left as clipped fragments during composition.",
+      "previous_score": 7.0
+    },
+    {
+      "name": "Composer ergonomics",
+      "score": 8.2,
+      "rationale": "Actual 44pt field/add/dismiss geometry and focus/dismiss interaction now pass, with bottom anchoring above the keyboard. Disabled capacity text remains truncated at XXXL.",
+      "previous_score": 6.0
+    },
+    {
+      "name": "Keyboard handling",
+      "score": 7.0,
+      "rationale": "Focused email/password and composer clear the keyboard in measured tests. XXXL sign-in Done crowds or overlaps the lower secondary action, and an invalid-frame runtime warning recurs.",
+      "previous_score": 7.0
+    },
+    {
+      "name": "Sheet presentation/detents",
+      "score": 9.0,
+      "rationale": "Account opens large, moves to medium and back, scrolls all actions, dismisses with Done and reopens large in the tested default/XXXL light/dark matrix. Stable semantic grouped backgrounds match native surface discipline.",
+      "previous_score": 7.0
+    },
+    {
+      "name": "Navigation clarity",
+      "score": 8.5,
+      "rationale": "Your Board/count persist at top and bottom; Account and Done are direct and native. Sign-in alternatives remain clear, although their keyboard-adjacent placement needs refinement.",
+      "previous_score": 7.5
+    },
+    {
+      "name": "Touch targets",
+      "score": 9.0,
+      "rationale": "Measured board, composer and account targets now meet 44pt, with actual edge taps, focus and dismissal gates. Sign-in control bounds are tested; simultaneous action/accessory separation is still missing.",
+      "previous_score": 4.5
+    },
+    {
+      "name": "Haptics",
+      "score": 7.5,
+      "rationale": "Source triggers success/error feedback after operations and selection feedback on drag start. Physical perception, timing and duplicate-event behavior remain unobserved; this is a provisional implementation score.",
+      "previous_score": 7.0
+    },
+    {
+      "name": "Animation/transitions",
+      "score": 7.5,
+      "rationale": "Short board transitions respect Reduce Motion and the earlier idle timeout is resolved by the full passing suite. UIKit reloadData continuity and actual motion quality were not observed in a reviewer interaction session.",
+      "previous_score": 6.5
+    },
+    {
+      "name": "Loading states",
+      "score": 7.5,
+      "rationale": "Source has initial loading, retry progress, completion and submit progress with duplicate-operation guards. Native loading layouts and delayed-network timing are still uncaptured.",
+      "previous_score": 7.5
+    },
+    {
+      "name": "Error states",
+      "score": 7.8,
+      "rationale": "Native XXXL auth error wraps fully with recovery guidance. Initial-board, populated-board and account failure surfaces exist in source but are uncaptured; error announcement/focus behavior needs runtime validation.",
+      "previous_score": 7.5
+    },
+    {
+      "name": "VoiceOver/labels",
+      "score": 7.8,
+      "rationale": "Source supplies explicit labels, reorder actions/positions, completion announcements and inbox announcement. Actual traversal/focus after reloads and failure announcement are unobserved; updatesFrequently alone does not prove an error is announced.",
+      "previous_score": 7.5
+    },
+    {
+      "name": "iOS HIG consistency",
+      "score": 8.4,
+      "rationale": "System navigation, grouped sheets, native keyboards and plain collection rows now have appropriate measured targets. Keyboard accessory crowding and paragraph-centered controls remain below native polish.",
+      "previous_score": 7.5
+    },
+    {
+      "name": "Lock Screen / Live Activity",
+      "score": 7.7,
+      "rationale": "New native expanded and Notification Center banners show readable text and intact overflow footer at default/XXXL. Source can undercount hidden lines when an already summarized payload is capped again; true lock, arbitrary wallpaper and physical geometry remain unverified.",
+      "previous_score": 6.0
+    },
+    {
+      "name": "Sign-in/onboarding",
+      "score": 8.0,
+      "rationale": "Unboxed sections remove the previous nested-card problem. Provider/email/password/inbox/error layouts are clearer and wrap at XXXL; keyboard accessory collision and oversized in-board guidance remain.",
+      "previous_score": 6.5
+    },
+    {
+      "name": "Settings/account",
+      "score": 8.7,
+      "rationale": "Native grouped Account is stable at both detents and lower actions/footer are reachable at XXXL. Useful status/value alignment and confirmations are present; actual enabled network/destructive workflows were intentionally not exercised.",
+      "previous_score": 7.0
+    },
+    {
+      "name": "Performance feel",
+      "score": 7.5,
+      "rationale": "The combined suite reaches idle after real pulls and all 261 tests pass; native virtualization and operation guards are sensible. No frame-time, launch-time or perceived interaction recording was assessed, so this is provisional.",
+      "previous_score": 6.5
+    },
+    {
+      "name": "Delight",
+      "score": 7.4,
+      "rationale": "The quiet monochrome board, legible final line and stable compact context feel more precise. Misaligned paragraph controls, capacity ellipsis and keyboard crowding remain conspicuous small rough edges; tactile delight is unobserved.",
+      "previous_score": 6.5
+    },
+    {
+      "name": "Long text",
+      "score": 8.4,
+      "rationale": "Actual-vs-intrinsic reminder height and final-ink gates now pass; XXXL account, error and inbox text remain readable. Capacity-placeholder completeness and Activity summary-count composition remain unresolved.",
+      "previous_score": 7.0
+    },
+    {
+      "name": "Reduced Motion / Transparency",
+      "score": 8.0,
+      "rationale": "Source gates explicit board/tip animations and uses solid composer/error alternatives; unconditional bottom fading has been removed. Real accessibility-setting interaction across app and Activity surfaces is unobserved.",
+      "previous_score": 7.0
+    },
+    {
+      "name": "Palette / minimalism",
+      "score": 9.2,
+      "rationale": "Monochrome board and account, restrained indigo actions, and flattened sign-in honor the requested clean direction. Red is confined to an actual error state; existing wording, branding and icons are preserved.",
+      "previous_score": 7.0
+    }
+  ],
+  "findings": [
+    {
+      "id": "SOL2-01",
+      "severity": "medium",
+      "screen": "extras/signin-light-XXXL-password-keyboard.png; extras/signin-dark-XXXL-password-keyboard.png",
+      "evidence": "The floating Done accessory sits immediately against the lower Use a Sign-In Link Instead action; in dark appearance its upper-left edge overlaps the action’s lower-right text region. Paired Reminders compose references have a dedicated accessory band, but differ semantically and use default type. SignInView.swift scrolls only the focused field to center; current keyboard test checks field maxY and existence of Done, not accessory/action separation.",
+      "fix": "Reserve a real keyboard-accessory inset or scroll the entire email/password action group above the accessory. Keep Done and Use a Sign-In Link Instead, all icons and wording unchanged; retain at least 44pt hit regions.",
+      "confidence": "high",
+      "basis": "observed + source-derived coverage gap; exact layout cause not isolated",
+      "check": "Extend SignInSurfaceUITests/testFocusedEmailAndPasswordClearKeyboardInBothAppearances with settled default/XXXL email/password states in both appearances: assert secondary-action frame does not intersect Done or keyboard, leaves an optical gap, and can be edge-tapped independently. Tap Done and require keyboard dismissal. Run all existing iOS tests."
+    },
+    {
+      "id": "SOL2-02",
+      "severity": "medium",
+      "screen": "long-text-light-XXXL-top.png; long-text-dark-XXXL-top.png; both XXXL bottom-after-pull captures",
+      "evidence": "Capacity field visibly reads Board full — combine lines i… at XXXL. Reminder text-height tests cover reminder labels, not this placeholder. The field uses a multiline TextField but its placeholder remains an ellipsized single line; same-size Apple reference is absent.",
+      "fix": "When at capacity render the exact existing Board full — combine lines instead text as an intrinsic-height wrapping label in the disabled composer treatment. Preserve the separate hint, wording and add glyph; do not shrink the type.",
+      "confidence": "high",
+      "basis": "observed + source-derived",
+      "check": "Add a native capacity-message geometry/raster check at XXXL and accessibility sizes in light/dark: full exact string must wrap without ellipsis or clipping, allocated height must meet intrinsic height, and final-row ink must still clear the expanded composer. Keep current 44pt and final-ink gates; run existing suite."
+    },
+    {
+      "id": "SOL2-03",
+      "severity": "medium",
+      "screen": "full-light-default-top.png; full-dark-default-top.png; long-text-light-XXXL-top.png; long-text-dark-XXXL-top.png",
+      "evidence": "Circles and six-dot grips remain near paragraph centers, several lines below each task beginning. The paired native Reminders top images align completion circles with first-line regions. The source Label and hosting HStack retain default center alignment; app fixture paragraphs are substantially longer than the Apple tasks.",
+      "fix": "Top-align the existing completion-circle and drag-grip containers to the first-line region with a consistent optical inset. Keep the exact symbols, wording, full text height and at least 44pt target geometry.",
+      "confidence": "high",
+      "basis": "observed + source-derived",
+      "check": "Capture one-line, three-line and twelve-line rows at default/XXXL in both appearances. Assert control centers align with first-line region rather than paragraph midpoint, targets remain at least 44pt, and completion/reorder gestures and accessibility Move up/Move down still work. Run existing suite."
+    },
+    {
+      "id": "SOL2-04",
+      "severity": "low",
+      "screen": "empty-light-default-top.png; empty-dark-default-top.png; extras/empty-light-XXXL.png; extras/empty-dark-XXXL.png; all composer captures",
+      "evidence": "The setup guide dominates the lower empty canvas; keyboard-focused composer captures leave only partial first/second instruction fragments directly above the field. Empty-light Reminders is far quieter, although it has no equivalent setup instructions. The app guide is scrollable and dismissible, so the clipped viewport is not proof that text is unreachable.",
+      "fix": "Retain every existing instruction and Dismiss tip action, but reduce the guide’s initial visual weight and move it wholly out of the focused-composer viewport while the keyboard is visible; restore it when focus ends unless permanently dismissed. Avoid adding nested cards or new copy.",
+      "confidence": "medium-high",
+      "basis": "observed + source-derived; severity is visual hierarchy, not data loss",
+      "check": "Capture first-empty, dismissed-empty and focused/unfocused composer at default/XXXL in light/dark. Verify every instruction remains reachable when appropriate, dismissal persists, and keyboard focus never leaves a severed instruction fragment adjacent to composer. Run BoardSetupTip tests and existing suite."
+    },
+    {
+      "id": "SOL2-05",
+      "severity": "medium",
+      "screen": "Source: ios/Shared/ReminderAttributes.swift lines(from:), surfaceLines(_:limit:), capped(_:limit:); ios/Shared/LockScreenLineBudget.swift ReminderActivityLinesView",
+      "evidence": "Production lines(from:) first caps flattened reminder lines and can insert +N more. ReminderActivityLinesView later calls surfaceLines, which caps that array again and counts the prior summary as one line. Example: five visible lines plus +5 more, capped to four rows, yields three visible lines plus +3 more although seven original lines are hidden. Multiline reminders can reach this path within the board’s reminder-count limit. Native Activity fixtures inject eight raw lines directly, so their correct +5/+6 footers do not cover this case.",
+      "fix": "Preserve the total hidden-line count as structured presentation data through payload and surface caps, or otherwise make repeated capping account for an existing summary without treating user text as metadata. Keep the exact +N more wording and all visible reminder text unchanged.",
+      "confidence": "high",
+      "basis": "source-derived conditional defect; not observed in the eight-raw-line capture fixture; no new test executed by reviewer",
+      "check": "Add a production-pipeline regression using multiline Reminder values: after payload cap and smaller island/lock-screen cap, assert displayed original lines plus hidden count equals total flattened originals. Include the five-visible-plus-five-hidden then limit-four example expecting +7 more. Keep payload <=4096 bytes, Unicode cases, native footer geometry and existing 261-test suite."
+    },
+    {
+      "id": "SOL2-06",
+      "severity": "medium",
+      "screen": "Sign-in keyboard matrix; ../../validation/round2/combined-summary.json and signin-keyboard-details.json",
+      "evidence": "Invalid frame dimension (negative or non-finite) recurred once in testFocusedEmailAndPasswordClearKeyboardInBothAppearances. The test passed; the warning is unresolved and is separate from assertion results. No captured still proves a negative-frame visual failure, and the precise originating view is not isolated.",
+      "fix": "Isolate the warning during keyboard show/focus scrolling and correct the non-finite/negative layout proposal at its source without suppressing the diagnostic or changing any copy. Keep the actual field/keyboard and action separation checks.",
+      "confidence": "high for warning occurrence; medium for user-visible impact",
+      "basis": "observed structured runtime diagnostic; causal attribution unconfirmed",
+      "check": "Run the complete sign-in default/XXXL, light/dark email/password keyboard matrix with runtime issue collection and require zero invalid-frame diagnostics alongside all geometry assertions. Repeat transitions enough to reproduce the prior warning and record command/source SHA. Run existing suite."
+    },
+    {
+      "id": "SOL2-07",
+      "severity": "low",
+      "screen": "Source: SignInView.swift auth.notice observer; ReminderListView.swift presentError/BoardErrorBanner; AccountView.swift error section",
+      "evidence": "Success/inbox and reminder completion explicitly post announcements; new auth and board/account errors rely on updatesFrequently traits and haptics. That is insufficient evidence that a user whose VoiceOver focus remains in an input hears the new failure. No VoiceOver session was supplied, so missed announcement is a risk, not an observed accessibility failure.",
+      "fix": "Use a deliberate announcement or accessible focus policy for newly presented errors while retaining existing error wording and avoiding duplicate announcements. Keep the user’s editing context when recovery is local.",
+      "confidence": "medium",
+      "basis": "source-derived; VoiceOver runtime unobserved",
+      "check": "With VoiceOver enabled, trigger first-load, populated-board, auth and account errors from a controlled offline fixture. Require the existing error text to be announced once and recovery control reachable in a predictable order; verify focus after retry, list reload and sheet dismissal. Run existing suite."
+    }
+  ],
+  "screenshots": [
+    "account-dark-default-top.png",
+    "account-light-default-top.png",
+    "activity/long-dark-XXXL-expanded.png",
+    "activity/long-dark-XXXL-notification-center.png",
+    "activity/long-light-XXXL-expanded.png",
+    "activity/long-light-XXXL-notification-center.png",
+    "activity/short-dark-default-collapsed.png",
+    "activity/short-dark-default-expanded.png",
+    "activity/short-dark-default-notification-center.png",
+    "activity/short-light-default-collapsed.png",
+    "activity/short-light-default-expanded.png",
+    "activity/short-light-default-notification-center.png",
+    "composer-dark-default-top.png",
+    "composer-light-default-top.png",
+    "empty-dark-default-top.png",
+    "empty-light-default-top.png",
+    "extras/account-dark-XXXL-large-lower.png",
+    "extras/account-dark-XXXL-large-top.png",
+    "extras/account-dark-XXXL-medium-top.png",
+    "extras/account-dark-default-medium-top.png",
+    "extras/account-light-XXXL-large-lower.png",
+    "extras/account-light-XXXL-large-top.png",
+    "extras/account-light-XXXL-medium-top.png",
+    "extras/account-light-default-medium-top.png",
+    "extras/composer-dark-XXXL.png",
+    "extras/composer-light-XXXL.png",
+    "extras/empty-dark-XXXL.png",
+    "extras/empty-light-XXXL.png",
+    "extras/signin-dark-XXXL-default.png",
+    "extras/signin-dark-XXXL-error.png",
+    "extras/signin-dark-XXXL-inbox.png",
+    "extras/signin-dark-XXXL-password-keyboard.png",
+    "extras/signin-light-XXXL-default.png",
+    "extras/signin-light-XXXL-error.png",
+    "extras/signin-light-XXXL-inbox.png",
+    "extras/signin-light-XXXL-password-keyboard.png",
+    "full-dark-default-bottom-after-pull.png",
+    "full-dark-default-top.png",
+    "full-light-default-bottom-after-pull.png",
+    "full-light-default-top.png",
+    "long-text-dark-XXXL-bottom-after-pull.png",
+    "long-text-dark-XXXL-top.png",
+    "long-text-dark-default-top.png",
+    "long-text-light-XXXL-bottom-after-pull.png",
+    "long-text-light-XXXL-top.png",
+    "long-text-light-default-top.png",
+    "signin-dark-default-top.png",
+    "signin-light-default-top.png"
+  ],
+  "references": [
+    "../../reference/reminders-bottom-dark.png",
+    "../../reference/reminders-compose-light.png",
+    "../../reference/reminders-empty-light.png",
+    "../../reference/reminders-sheet-dark.png",
+    "../../reference/reminders-top-light.png",
+    "../../reference/round2/reminders-bottom-light.png",
+    "../../reference/round2/reminders-compose-dark.png",
+    "../../reference/round2/reminders-sheet-light.png",
+    "../../reference/round2/reminders-top-dark.png"
+  ],
+  "evidence_gaps": [
+    "Apple Notes unavailable/not installed: no Notes reference was used. All nine usable Reminders references were inspected; original four transition_rejected files were never opened or used. New round2 references close dark top/compose and light bottom/sheet gaps.",
+    "Every app PNG is 1206x2622, logical402x874, regular iPhone17 Pro simulator on iOS26.2 build23C54. Same-device references are default type; XXXL comparisons have a size mismatch. Sign-in, Account-vs-Details, Activity-vs-list and dark-empty pairings have semantic limitations documented per state below.",
+    "True locked-device Activity capture unavailable. Notification Center banners are native but are not a truly locked device. Expanded PNGs are unmodified native recording frames; collapsed stills omit the Island overlay and establish home/status state only. Hardware sensor-cutout geometry remains uncertified.",
+    "No native Home Screen/accessory widget screenshots. Widget source was reviewed. SwiftUI unit-rendered Activity attachments are distinct from native captures and do not certify ActivityKit chrome or hardware geometry.",
+    "Native Activity fixture bypasses production lines(from:) and injects eight raw lines. It validates surface layout, not nested payload-summary correctness or authenticated Activity lifecycle/network refresh.",
+    "Physical haptics, animation continuity, VoiceOver traversal/focus, perceived responsiveness, frame times and arbitrary wallpapers/increased contrast were not observed by this reviewer. Stills and source cannot establish those behaviors; related scores are provisional.",
+    "Native loading/progress, board/account failure, enabled authentication success and account destructive/network workflows were not captured. Auth and Account fixtures intentionally disable network controls; their dimming is not enabled-production contrast evidence.",
+    "XXXL is extraExtraExtraLarge, not the largest accessibility size. Unit-rendered accessibility5 Activity checks do not substitute for native app coverage at accessibility sizes. Reduce Motion/Transparency settings lack native interaction evidence.",
+    "261 combined tests passed with zero failure/skip, but an invalid-frame runtime warning remains in sign-in keyboard matrix. No complete exported console is claimed. Existing compiler/APNs/surface/test-runner diagnostics remain recorded.",
+    "Original Release command exited0 and produced an artifact despite unusual SwiftCompile exit0/no-output diagnostics. Fresh arm64-only clean-derived-data confirmation exited0 with BUILD SUCCEEDED and artifact, resolving build confirmation; existing AuthManager warnings remain.",
+    "Reviewer performed read-only evidence/source inspection and no runtime tests/device operations. Captured source SHA is 8dbf6a8e07a5b88dd6748b77a5c8030740eb5309; inventory/provenance hashes and parent verification establish production-source equivalence after artifact-only commits. No claim that current git HEAD itself is the capture SHA."
+  ]
+}

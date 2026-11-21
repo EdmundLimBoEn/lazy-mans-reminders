@@ -1,0 +1,16 @@
+{
+  "command": [
+    "xcrun",
+    "simctl",
+    "get_app_container",
+    "78F5A64F-7B2E-4562-8EF9-10F3312CC694",
+    "systems.edmundlim.NotepadHillclimb",
+    "data"
+  ],
+  "ownedIDs": [
+    "FA29C1BB-F7C0-45AC-A31A-F912D6441049"
+  ],
+  "observationTiming": "Read occurred after activity capture helper started, not a before-prepare baseline",
+  "pipelineFirstID": "FA29C1BB-F7C0-45AC-A31A-F912D6441049",
+  "onlyObservedOwnedIDMatchesThisWorkerPipeline": true
+}
