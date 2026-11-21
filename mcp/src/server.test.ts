@@ -21,20 +21,20 @@ const session = sessionFromProps({ userId: '11111111-1111-4111-8111-111111111111
 const id = '22222222-2222-4222-8222-222222222222'
 const active = Array.from({ length: 16 }, (_, i) => ({
   id: `active-${i}`, text: `Reminder ${i}`, is_done: false,
-  sort_order: i, created_at: '2026-10-28T00:00:00Z', completed_at: null,
+  sort_order: i, created_at: '2026-10-28T00:00:00Z', completed_at: null, snoozed_until: null,
 }))
 const quotaError = { message: 'You can have at most 16 active reminders. Complete or delete a reminder before adding another.', details: '16 LMR_CAPACITY_REACHED' }
 
 function setup(error: typeof quotaError | null = quotaError, listFails = false) {
   const changed = { ...active[0], id, is_done: false }
-  const update = { update: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), select: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: error ? null : changed, error }) }
-  const count = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), then: (resolve: (value: unknown) => unknown) => Promise.resolve({ count: active.length, error: null }).then(resolve) }
-  const list = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), gt: vi.fn().mockReturnThis(), order: vi.fn().mockReturnThis(), range: vi.fn().mockResolvedValue({ data: [], error: null }).mockResolvedValueOnce({
+  const update = { update: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), or: vi.fn().mockReturnThis(), select: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: error ? null : changed, error }) }
+  const count = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), or: vi.fn().mockReturnThis(), then: (resolve: (value: unknown) => unknown) => Promise.resolve({ count: active.length, error: null }).then(resolve) }
+  const list = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), or: vi.fn().mockReturnThis(), gt: vi.fn().mockReturnThis(), order: vi.fn().mockReturnThis(), range: vi.fn().mockResolvedValue({ data: [], error: null }).mockResolvedValueOnce({
     data: active,
     count: active.length,
     error: listFails ? { message: 'read failed' } : null,
   }) }
-  const prefs = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: { max_lines: 6 }, error: null }) }
+  const prefs = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), or: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: { max_lines: 6 }, error: null }) }
   const rpc = vi.fn().mockReturnValue(update)
   const from = vi.fn().mockReturnValueOnce(count).mockReturnValueOnce(prefs).mockReturnValue(list)
   vi.mocked(createServiceRoleClient).mockReturnValue({ from, rpc } as unknown as SupabaseClient)
@@ -95,9 +95,9 @@ describe('add_reminder capacity message', () => {
   it.each([6, 9, 16])('preserves JSON and includes plain language at a %i-line budget', async maximum => {
     const { rpc, from } = setup()
     rpc.mockResolvedValue({ data: null, error: { message: 'LMR_CAPACITY_REACHED', details: String(maximum) } })
-    const count = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), then: (resolve: (value: unknown) => unknown) => Promise.resolve({ count: maximum, error: null }).then(resolve) }
+    const count = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), or: vi.fn().mockReturnThis(), then: (resolve: (value: unknown) => unknown) => Promise.resolve({ count: maximum, error: null }).then(resolve) }
     const prefs = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), maybeSingle: vi.fn().mockResolvedValue({ data: { max_lines: maximum }, error: null }) }
-    const list = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), gt: vi.fn().mockReturnThis(), order: vi.fn().mockReturnThis(), range: vi.fn().mockResolvedValue({ data: [], error: null }).mockResolvedValueOnce({ data: active.slice(0, maximum), error: null }) }
+    const list = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), or: vi.fn().mockReturnThis(), gt: vi.fn().mockReturnThis(), order: vi.fn().mockReturnThis(), range: vi.fn().mockResolvedValue({ data: [], error: null }).mockResolvedValueOnce({ data: active.slice(0, maximum), error: null }) }
     from.mockReset().mockReturnValueOnce(count).mockReturnValueOnce(prefs).mockReturnValue(list)
     const result = await handlers.get('add_reminder')!({ text: 'New' })
     expect(result.isError).toBe(true)
@@ -133,4 +133,13 @@ describe('edit_reminder', () => {
       isError: true, content: [{ type: 'text', text: 'Text must be 1–500 characters including any agent name prefix' }],
     })
   })
+})
+
+it('includes the snooze timestamp in the MCP all-status tool response', async () => {
+  const { list } = setup(null)
+  const sleeping = { ...active[0], snoozed_until: '2999-01-01T00:00:00Z' }
+  list.range.mockReset().mockResolvedValueOnce({ data: [sleeping], error: null }).mockResolvedValue({ data: [], error: null })
+  const args = { id: '', status: 'all' }
+  const result = await handlers.get('list_reminders')!(args)
+  expect(JSON.parse(result.content[0].text).reminders[0].snoozed_until).toBe(sleeping.snoozed_until)
 })

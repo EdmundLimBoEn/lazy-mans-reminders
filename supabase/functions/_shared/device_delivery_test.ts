@@ -81,6 +81,7 @@ function fixture() {
           filters[key] = value;
           return query;
         },
+        or: () => query,
         order: () => query,
         maybeSingle: () => Promise.resolve(result()),
         then: (resolve: (value: unknown) => unknown) =>

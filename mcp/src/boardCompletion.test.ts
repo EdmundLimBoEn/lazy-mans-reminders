@@ -8,7 +8,7 @@ const id = '00000000-0000-0000-0000-000000000011'
 
 function database(isDone: boolean, budget: number, owner = 'owner', readFails = false) {
   const row = { id, text: 'Reminder', is_done: isDone, sort_order: 0,
-    created_at: '2026-01-01T00:00:00Z', completed_at: isDone ? '2026-01-02T00:00:00Z' : null }
+    created_at: '2026-01-01T00:00:00Z', snoozed_until: null, completed_at: isDone ? '2026-01-02T00:00:00Z' : null }
   let writes = 0
   const client = createClient('https://database.test', 'test-only', {
     auth: { persistSession: false, autoRefreshToken: false },

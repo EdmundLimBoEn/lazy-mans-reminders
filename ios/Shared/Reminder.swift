@@ -7,6 +7,11 @@ struct Reminder: Codable, Identifiable, Hashable {
     var sortOrder: Int
     var isDone: Bool
     let createdAt: Date
+    var snoozedUntil: Date? = nil
+
+    func isVisible(at now: Date = Date()) -> Bool {
+        !isDone && (snoozedUntil.map { $0 <= now } ?? true)
+    }
 
     enum CodingKeys: String, CodingKey {
         case id, text
@@ -14,6 +19,7 @@ struct Reminder: Codable, Identifiable, Hashable {
         case sortOrder = "sort_order"
         case isDone = "is_done"
         case createdAt = "created_at"
+        case snoozedUntil = "snoozed_until"
     }
 }
 

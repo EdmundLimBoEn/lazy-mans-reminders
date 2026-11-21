@@ -6,7 +6,7 @@ import type { AgentSession } from './domain'
 const session = { userId: 'owner', tokenId: 'token', agentName: 'Test' } as AgentSession
 const makeRow = (id: number, isDone: boolean, userId = 'owner') => ({
   id: String(id).padStart(5, '0'), text: 'Reminder', is_done: isDone,
-  sort_order: 0, created_at: '2026-01-01T00:00:00Z', completed_at: null, user_id: userId,
+  sort_order: 0, created_at: '2026-01-01T00:00:00Z', completed_at: null, snoozed_until: null as string | null, user_id: userId,
 })
 
 function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'page' | 'count' | 'missing-count' | 'preferences', afterFirstPage?: () => void) {
@@ -27,7 +27,8 @@ function database(rows: ReturnType<typeof makeRow>[], cap: number, failure?: 'pa
     const filtered = rows.filter(row =>
       (!params.has('user_id') || params.get('user_id') === `eq.${row.user_id}`) &&
       (!params.has('id') || row.id > params.get('id')!.slice(3)) &&
-      (!params.has('is_done') || params.get('is_done') === `eq.${row.is_done}`))
+      (!params.has('is_done') || params.get('is_done') === `eq.${row.is_done}`) &&
+      (!params.has('or') || row.snoozed_until === null || Date.parse(row.snoozed_until) <= Date.now()))
     const offset = Number(params.get('offset') ?? 0)
     const laterPage = offset > 0 || params.has('id')
     if ((failure === 'page' && laterPage) || (failure === 'count' && method === 'HEAD')) {
@@ -149,4 +150,21 @@ describe('MCP reminder listing pagination', () => {
       spy.mockRestore()
     }
   })
+})
+
+it.each(['active', 'all'] as const)('respects snoozes in %s listing and the independent capacity count', async status => {
+  const rows = [makeRow(0, false), { ...makeRow(1, false), snoozed_until: '2999-01-01T00:00:00Z' },
+    { ...makeRow(2, false), snoozed_until: '2000-01-01T00:00:00Z' }, makeRow(3, true)]
+  const { client, requests } = database(rows, 1)
+  const result = await runBoardCommand(client, session, { kind: 'list', status })
+  expect(result).toMatchObject({ kind: 'snapshot', snapshot: { capacity: { used: 2, remaining: 4 } } })
+  if (result.kind !== 'snapshot') throw new Error('Expected snapshot')
+  expect(result.snapshot.reminders.map(row => row.id)).toEqual(status === 'all' ? ['00000', '00001', '00002', '00003'] : ['00000', '00002'])
+  if (status === 'all') expect(result.snapshot.reminders[1].snoozed_until).toBe('2999-01-01T00:00:00Z')
+  const count = requests.find(request => request.method === 'HEAD')!
+  expect(count.url.searchParams.get('or')).toBe('(snoozed_until.is.null,snoozed_until.lte.now)')
+  for (const request of requests.filter(request => request.method === 'GET' && request.url.pathname.endsWith('/reminders'))) {
+    expect(request.url.searchParams.get('select')).toContain('snoozed_until')
+    expect(request.url.searchParams.get('or')).toBe(status === 'active' ? '(snoozed_until.is.null,snoozed_until.lte.now)' : null)
+  }
 })

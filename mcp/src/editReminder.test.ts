@@ -8,6 +8,7 @@ const id = '22222222-2222-4222-8222-222222222222'
 const original: ReminderRow & { user_id: string } = {
   id, user_id: session.userId, text: '[Test] Buy mlk', is_done: false,
   sort_order: 7, created_at: '2026-11-01T00:00:00Z', completed_at: null as string | null,
+  snoozed_until: null,
 }
 
 function setup(row = { ...original }, error?: string) {
@@ -21,7 +22,10 @@ function setup(row = { ...original }, error?: string) {
     if (error) return Response.json({ message: error }, { status: 400 })
     const matches = row.id === id && row.user_id === session.userId
     if (matches) Object.assign(row, JSON.parse(init!.body as string))
-    return Response.json(matches ? [row] : [])
+    const selected = Object.fromEntries(
+      (url.searchParams.get('select') ?? '').split(',').map(column => [column, row[column as keyof typeof row]]),
+    )
+    return Response.json(matches ? [selected] : [])
   })
   const db = createClient('https://database.test', 'test-service-role', {
     global: { fetch }, auth: { persistSession: false, autoRefreshToken: false },
@@ -57,6 +61,16 @@ describe('edit reminder', () => {
       text: '[Test] Buy milk', is_done: true, completed_at: completed.completed_at, sort_order: 7,
     } })
     expect(row.is_done).toBe(true)
+  })
+
+  it('fixes snoozed text without waking the reminder or losing its snooze timestamp', async () => {
+    const sleeping = { ...original, snoozed_until: '2999-01-01T00:00:00Z' }
+    const { edit, fetch, row } = setup(sleeping)
+    expect(await edit('[Test] Buy milk')).toMatchObject({ kind: 'changed', reminder: {
+      text: '[Test] Buy milk', is_done: false, snoozed_until: sleeping.snoozed_until, sort_order: 7,
+    } })
+    expect(JSON.parse(fetch.mock.calls[0][1]!.body as string)).toEqual({ text: '[Test] Buy milk' })
+    expect(row.snoozed_until).toBe(sleeping.snoozed_until)
   })
 
   it('hides other owners rows and leaves them unchanged', async () => {

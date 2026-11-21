@@ -2,6 +2,7 @@ export type ReminderLike = {
   id: string
   sort_order: number
   is_done: boolean
+  snoozed_until?: string | null
   created_at: string
 }
 
@@ -62,4 +63,13 @@ export function reminderErrorMessage(error: { message: string; details?: string 
   return [error.message, error.details, error.hint].some(value => value?.includes('LMR_CAPACITY_REACHED'))
     ? POST_IT_HINT
     : error.message
+}
+
+/** Expired snoozes are visible immediately, even before the minute cron clears them. */
+export function isCurrentlySnoozed(reminder: { snoozed_until?: string | null }, now = Date.now()): boolean {
+  return reminder.snoozed_until != null && Date.parse(reminder.snoozed_until) > now
+}
+
+export function isActiveReminder(reminder: Pick<ReminderLike, 'is_done' | 'snoozed_until'>, now = Date.now()): boolean {
+  return !reminder.is_done && !isCurrentlySnoozed(reminder, now)
 }
