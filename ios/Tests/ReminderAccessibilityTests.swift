@@ -47,6 +47,23 @@ final class ReminderAccessibilityTests: XCTestCase {
         XCTAssertEqual(ReminderActivityPresentation.accessibilitySummary(lines: ["Milk", "+7 more"]), "Milk; +7 more")
     }
 
+    func testClearMomentSpeaksExactCopyAndKeepsWidgetEmptySpeech() {
+        let state = ReminderActivityPresentation.finalState(for: .boardEmpty)
+        XCTAssertEqual(ReminderActivityPresentation.accessibilitySummary(lines: state.lines), "Nothing to do.")
+        XCTAssertEqual(ReminderActivityPresentation.accessibilitySummary(from: []), "Nothing to remember")
+    }
+
+    func testLastCompletionAnnouncesTheClearMomentAfterTheReminder() {
+        XCTAssertEqual(
+            ReminderAccessibility.completionAnnouncement(text: "Milk", boardIsEmpty: true),
+            "Completed Milk\nNothing to do."
+        )
+        XCTAssertEqual(
+            ReminderAccessibility.completionAnnouncement(text: "Milk", boardIsEmpty: false),
+            "Completed Milk"
+        )
+    }
+
     func testLockScreenScalingNeverExceedsTheExistingMeasuredHeight() {
         let baseHeight = ceil(UIFont.systemFont(ofSize: LockScreenLineBudget.pointSize, weight: .semibold).lineHeight)
         for baseCount in [1, 3, 6, 16] {

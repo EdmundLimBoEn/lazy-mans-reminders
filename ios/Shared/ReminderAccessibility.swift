@@ -21,6 +21,12 @@ enum ReminderAccessibility {
     static func progressValue(isBusy: Bool) -> String {
         isBusy ? "In progress" : ""
     }
+
+    static func completionAnnouncement(text: String, boardIsEmpty: Bool) -> String {
+        let completed = "Completed \(text)"
+        // One announcement preserves the order without interrupting the reminder text.
+        return boardIsEmpty ? completed + "\n" + ReminderActivityPresentation.boardClearMessage : completed
+    }
 }
 
 /// Retain a visible busy indicator without ongoing spinning under Reduce Motion.

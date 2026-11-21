@@ -68,7 +68,9 @@ enum ReminderBoardSync {
         WidgetCenter.shared.reloadAllTimelines()
         let allowStart: Bool
         if case .board(_, let requested) = publication { allowStart = requested } else { allowStart = false }
-        await ReminderLiveActivityController.sync(reminders: reminders, allowStart: allowStart)
+        await ReminderLiveActivityController.sync(
+            reminders: reminders, allowStart: allowStart, isClearing: publication == .clear
+        )
         do {
 #if LMR_REMINDERS_SCHEMA
             if #available(iOS 27.0, *) {

@@ -59,6 +59,15 @@ final class ReminderIntentUpdateTests: XCTestCase {
                 publish: { board in
                     await publicationCount.increment()
                     XCTAssertEqual(board, expectedBoard)
+                    let count = ReminderActivityPresentation.lines(from: board).count
+                    XCTAssertEqual(
+                        LiveActivityPolicy.action(lineCount: count, activityExists: true),
+                        acknowledged.isDone ? .end(.boardEmpty) : .update
+                    )
+                    XCTAssertEqual(
+                        LiveActivityPolicy.action(lineCount: count, activityExists: false),
+                        acknowledged.isDone ? .none : .start
+                    )
                 }
             )
             XCTAssertEqual(result, acknowledged, "Return server metadata even when completion removes the row")

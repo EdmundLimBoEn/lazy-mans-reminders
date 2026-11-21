@@ -13,6 +13,12 @@ struct ReminderAttributes: ActivityAttributes {
 }
 
 enum ReminderActivityPresentation {
+    static let boardClearMessage = "Nothing to do."
+
+    static func finalState(for reason: LiveActivityPolicy.EndReason) -> ReminderAttributes.ContentState {
+        ReminderAttributes.ContentState(lines: reason == .boardEmpty ? [boardClearMessage] : [])
+    }
+
     /// Flatten reminder text into display lines for the Live Activity banner.
     static let activityPayloadByteLimit = 4096
 

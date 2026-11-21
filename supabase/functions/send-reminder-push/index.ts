@@ -21,6 +21,7 @@ import { createDeliveryClient } from "../_shared/delivery_client.ts";
 import {
   buildLiveActivityHeaders,
   buildLiveActivityPayload,
+  liveActivityEventContent,
   liveActivityStaleDateUnix,
   parseLiveActivityToken,
 } from "../_shared/live_activity.ts";
@@ -309,7 +310,12 @@ async function sendLiveActivityEvent(input: {
     }),
     body: buildLiveActivityPayload({
       event: input.event,
-      lines: input.lines,
+      ...liveActivityEventContent({
+        event: input.event,
+        destination: input.destination,
+        lines: input.lines,
+        nowUnix,
+      }),
       timestamp: nowUnix,
       alertBody: input.alertBody,
       staleDate: liveActivityStaleDateUnix(nowUnix),
