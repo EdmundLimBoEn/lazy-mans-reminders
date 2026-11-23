@@ -8,6 +8,7 @@ import {
   prefersDarkScheme,
   readStoredPreference,
   resolveTheme,
+  THEME_STORAGE_KEY,
   type ThemePreference,
 } from './theme'
 
@@ -21,8 +22,17 @@ export function ThemeToggle() {
   const [preference, setPreference] = useState<ThemePreference>(readStoredPreference)
 
   useEffect(() => {
+    const onStorage = (event: StorageEvent) => {
+      if ((event.key === THEME_STORAGE_KEY || event.key === null) && event.storageArea === window.localStorage) {
+        setPreference(readStoredPreference())
+      }
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
+
+  useEffect(() => {
     applyResolvedTheme(resolveTheme(preference, prefersDarkScheme()))
-    persistPreference(preference)
     if (preference !== 'system') return
     const media = window.matchMedia('(prefers-color-scheme: dark)')
     const onChange = () => applyResolvedTheme(resolveTheme('system', media.matches))
@@ -37,7 +47,12 @@ export function ThemeToggle() {
       size="sm"
       aria-label="Theme"
       value={preference}
-      onValueChange={(value) => { if (isThemePreference(value)) setPreference(value) }}
+      onValueChange={(value) => {
+        if (isThemePreference(value)) {
+          persistPreference(value)
+          setPreference(value)
+        }
+      }}
     >
       {OPTIONS.map(({ value, label, Icon }) => (
         <ToggleGroupItem
